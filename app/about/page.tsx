@@ -59,7 +59,7 @@ export default function AboutPage() {
         {/* Professional Activities */}
         <section className="border-b border-divider about-page-section" style={{ padding: '56px 40px' }}>
           <div className="about-page-grid grid" style={{ gridTemplateColumns: '200px 1fr', gap: '48px' }}>
-            <span className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.16em', color: '#444444', paddingTop: '4px' }}>
+            <span className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.16em', color: '#f5f2ed', paddingTop: '4px' }}>
               PROFESSIONAL<br />ACTIVITIES
             </span>
             <div className="flex flex-col" style={{ gap: '40px' }}>
@@ -88,7 +88,7 @@ export default function AboutPage() {
         {/* Education */}
         <section className="border-b border-divider about-page-section" style={{ padding: '56px 40px' }}>
           <div className="about-page-grid grid" style={{ gridTemplateColumns: '200px 1fr', gap: '48px' }}>
-            <span className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.16em', color: '#444444', paddingTop: '4px' }}>
+            <span className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.16em', color: '#f5f2ed', paddingTop: '4px' }}>
               EDUCATION
             </span>
             <div>
@@ -113,7 +113,7 @@ export default function AboutPage() {
         {/* Tools */}
         <section className="border-b border-divider about-page-section" style={{ padding: '56px 40px' }}>
           <div className="about-page-grid grid" style={{ gridTemplateColumns: '200px 1fr', gap: '48px' }}>
-            <span className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.16em', color: '#444444', paddingTop: '4px' }}>
+            <span className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.16em', color: '#f5f2ed', paddingTop: '4px' }}>
               TOOLS
             </span>
             <div className="flex flex-wrap" style={{ gap: '8px' }}>
