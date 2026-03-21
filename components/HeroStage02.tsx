@@ -14,11 +14,11 @@ export function HeroStage02() {
       ([entry]) => {
         if (entry.isIntersecting) {
           setTimeout(() => tagRef.current?.classList.add('revealed'), 0)
-          setTimeout(() => descRef.current?.classList.add('revealed'), 300)
+          setTimeout(() => descRef.current?.classList.add('revealed'), 400)
           observer.disconnect()
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.15 }
     )
     observer.observe(el)
     return () => observer.disconnect()
@@ -28,22 +28,23 @@ export function HeroStage02() {
     <section
       ref={secRef}
       className="flex flex-col justify-center border-b border-divider"
-      style={{ minHeight: '200px', padding: '48px 24px' }}
+      style={{ minHeight: '100vh', padding: '48px 24px' }}
     >
       <RuleLabel number="02" />
 
       <h2
         ref={tagRef}
         className="reveal-text font-serif italic"
-        style={{ fontSize: '32px', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.2 }}
+        style={{ fontSize: 'clamp(48px, 9vw, 96px)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05 }}
       >
-        From <span style={{ color: '#FF3120' }}>Film</span> to <span style={{ color: '#FF3120' }}>Figma.</span>
+        From <span style={{ color: '#FF3120' }}>Film</span><br />
+        to <span style={{ color: '#FF3120' }}>Figma.</span>
       </h2>
 
       <p
         ref={descRef}
-        className="reveal-text font-mono mt-4"
-        style={{ fontSize: '10px', letterSpacing: '0.1em', color: '#999999', maxWidth: '340px', lineHeight: 1.8 }}
+        className="reveal-text font-mono mt-8"
+        style={{ fontSize: '11px', letterSpacing: '0.1em', color: '#999999', maxWidth: '380px', lineHeight: 1.9 }}
       >
         A creative background shapes how I see problems. Photography, mixed media, and art — before Figma, before UX.
       </p>

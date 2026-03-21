@@ -14,11 +14,11 @@ export function HeroStage03() {
       ([entry]) => {
         if (entry.isIntersecting) {
           setTimeout(() => tagRef.current?.classList.add('revealed'), 0)
-          setTimeout(() => descRef.current?.classList.add('revealed'), 300)
+          setTimeout(() => descRef.current?.classList.add('revealed'), 400)
           observer.disconnect()
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.15 }
     )
     observer.observe(el)
     return () => observer.disconnect()
@@ -28,14 +28,14 @@ export function HeroStage03() {
     <section
       ref={secRef}
       className="flex flex-col justify-center border-b border-divider"
-      style={{ minHeight: '200px', padding: '48px 24px' }}
+      style={{ minHeight: '100vh', padding: '48px 24px' }}
     >
       <RuleLabel number="03" />
 
       <h2
         ref={tagRef}
         className="reveal-text font-serif italic"
-        style={{ fontSize: '32px', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.2 }}
+        style={{ fontSize: 'clamp(48px, 9vw, 96px)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05 }}
       >
         Design that <span style={{ color: '#FF3120' }}>solves.</span><br />
         Art that <span style={{ color: '#FF3120' }}>questions.</span>
@@ -43,17 +43,17 @@ export function HeroStage03() {
 
       <p
         ref={descRef}
-        className="reveal-text font-mono mt-4"
-        style={{ fontSize: '10px', letterSpacing: '0.1em', color: '#999999', maxWidth: '340px', lineHeight: 1.8 }}
+        className="reveal-text font-mono mt-8"
+        style={{ fontSize: '11px', letterSpacing: '0.1em', color: '#999999', maxWidth: '380px', lineHeight: 1.9 }}
       >
         UX work grounded in research and empathy. Creative work that pushes further.
       </p>
 
-      <div className="flex items-center mt-6" style={{ gap: '10px' }}>
+      <div className="flex items-center mt-12" style={{ gap: '12px' }}>
         <div style={{ flex: 1, height: '1px', backgroundColor: '#1f1f1f' }} />
         <span
           className="font-mono"
-          style={{ fontSize: '9px', color: '#FF3120', letterSpacing: '0.14em', whiteSpace: 'nowrap' }}
+          style={{ fontSize: '9px', color: '#FF3120', letterSpacing: '0.16em', whiteSpace: 'nowrap' }}
         >
           SEE WORK ↓
         </span>
