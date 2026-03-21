@@ -129,25 +129,32 @@ export default function AboutPage() {
         {/* Education */}
         <section className="border-b border-divider about-page-section" style={{ padding: '56px 40px' }}>
           <div className="about-page-grid grid" style={{ gridTemplateColumns: '160px 1fr', gap: '48px' }}>
-            <SectionLabel>EDUCATION</SectionLabel>
-            <div>
-              <h3
-                className="font-serif"
-                style={{ fontSize: 'var(--text-h3)', fontStyle: 'italic', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.2, marginBottom: '8px' }}
-              >
-                Savannah College of Art and Design (SCAD)
-              </h3>
-              <div className="flex items-center justify-between" style={{ gap: '16px', marginBottom: '12px' }}>
-                <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#FF3120' }}>
-                  BFA, UX DESIGN
-                </span>
-                <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#999999' }}>
-                  2024 — PRESENT
-                </span>
+            <SectionLabel>EDUCATION_</SectionLabel>
+            <div className="flex flex-col" style={{ gap: '40px' }}>
+              <div>
+                <h3 className="font-serif" style={{ fontSize: 'var(--text-h3)', fontStyle: 'italic', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.2, marginBottom: '8px' }}>
+                  Savannah College of Art and Design (SCAD)
+                </h3>
+                <div className="flex items-center justify-between" style={{ gap: '16px', marginBottom: '12px' }}>
+                  <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#FF3120' }}>BFA, UX DESIGN</span>
+                  <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#999999' }}>2025 — PRESENT</span>
+                </div>
+                <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.03em', color: '#999999', lineHeight: 1.8 }}>
+                  Bachelor of Fine Arts in UX Design. Freshman year. Coursework spans interaction design, user research, prototyping, and design systems.
+                </p>
               </div>
-              <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.03em', color: '#999999', lineHeight: 1.8 }}>
-                Studying interaction design, user research, and design systems at one of the top art and design universities in the world.
-              </p>
+              <div>
+                <h3 className="font-serif" style={{ fontSize: 'var(--text-h3)', fontStyle: 'italic', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.2, marginBottom: '8px' }}>
+                  Garden International School
+                </h3>
+                <div className="flex items-center justify-between" style={{ gap: '16px', marginBottom: '12px' }}>
+                  <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#FF3120' }}>A LEVELS</span>
+                  <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#999999' }}>SEP 2023 — JUN 2025</span>
+                </div>
+                <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.03em', color: '#999999', lineHeight: 1.8 }}>
+                  Photography · Design and Technology · Business Studies
+                </p>
+              </div>
             </div>
           </div>
         </section>
