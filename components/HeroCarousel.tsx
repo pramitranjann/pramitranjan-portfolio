@@ -53,6 +53,8 @@ export function HeroCarousel() {
   // released = true means page can scroll freely (past stage 3)
   const releasedRef = useRef(false)
   const [released, setReleased] = useState(false)
+  // readyToRelease becomes true after dwelling on stage 3 for 1.2s
+  const readyToRelease = useRef(false)
   const touchStartY = useRef<number | null>(null)
 
   // Lock / unlock page scroll based on carousel state
@@ -74,8 +76,15 @@ export function HeroCarousel() {
     if (next === currentRef.current) return
     currentRef.current = next
     isAnimating.current = true
+    readyToRelease.current = false
     setCurrent(next)
-    setTimeout(() => { isAnimating.current = false }, 900)
+    setTimeout(() => {
+      isAnimating.current = false
+      // After landing on last stage, start dwell timer before allowing release
+      if (currentRef.current === TOTAL - 1) {
+        setTimeout(() => { readyToRelease.current = true }, 1200)
+      }
+    }, 900)
   }
 
   useEffect(() => {
@@ -87,7 +96,8 @@ export function HeroCarousel() {
         e.preventDefault()
 
         if (dir === 'down' && currentRef.current === TOTAL - 1) {
-          // Leaving last stage — release the page
+          // Only release if dwell timer has elapsed
+          if (!readyToRelease.current) return
           releasedRef.current = true
           setReleased(true)
           return
@@ -117,6 +127,7 @@ export function HeroCarousel() {
       if (!releasedRef.current) {
         if (delta > 50) {
           if (currentRef.current === TOTAL - 1) {
+            if (!readyToRelease.current) return
             releasedRef.current = true
             setReleased(true)
           } else {
