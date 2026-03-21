@@ -24,8 +24,6 @@ export function ProjectCard({ title, oneliner, tags, href, variant = 'main', com
     backgroundColor: '#111111',
     border: `1px solid ${hovered && !comingSoon ? '#FF3120' : '#1a1a1a'}`,
     padding: '16px',
-    transition: 'border-color 0.2s ease, transform 0.2s ease, z-index 0s',
-    transform: hovered && !comingSoon ? 'scale(1.025)' : 'scale(1)',
     position: 'relative' as const,
     zIndex: hovered && !comingSoon ? 2 : 1,
     cursor: comingSoon ? 'default' : 'pointer',
@@ -61,6 +59,7 @@ export function ProjectCard({ title, oneliner, tags, href, variant = 'main', com
   ) : (
     <Link
       href={href}
+      className="card-link"
       style={{ display: 'block', textDecoration: 'none', height: '100%' }}
       target="_blank"
       rel="noopener noreferrer"

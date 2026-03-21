@@ -158,7 +158,7 @@ export function HeroCarousel() {
   return (
     <div
       style={{
-        height: 'calc(100vh - 73px)',
+        height: 'calc(100vh - 57px)',
         overflow: 'hidden',
         position: 'relative',
       }}

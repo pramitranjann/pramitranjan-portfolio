@@ -50,7 +50,7 @@ export function SelectedWork() {
 
       <div
         ref={gridRef}
-        className="grid grid-cols-2"
+        className="card-grid grid grid-cols-2"
         style={{ gap: '12px', padding: '0 24px 40px' }}
       >
         {projects.map((p) => (
