@@ -24,6 +24,12 @@ function CVButton() {
 
 const tools = ['FIGMA', 'ADOBE CREATIVE SUITE', 'CLAUDE CODE', 'VIBE CODING']
 
+const experience = [
+  { org: 'Vircle Malaysia',  role: 'GROWTH INTERN',       date: 'JUL 2024 — AUG 2024', desc: 'Designed sticker packs for Vircle × Minions Despicable Me 4 collaboration — included in the packaging of each card sold. Created hero images and prototyped a school landing page.' },
+  { org: 'SOHO Exhibition',  role: 'EXHIBITION DIRECTOR', date: 'SEP 2023 — JAN 2024',  desc: 'Chaired the annual sixth form art exhibition. Responsible for organising all departments, delegating tasks, managing logistics, and producing all branding and marketing materials.' },
+  { org: 'Moving Walls Malaysia', role: 'MARKETING INTERN', date: 'JUL 2023 — AUG 2023', desc: 'Part of the marketing team creating social media content. Tasked with starting and managing the company TikTok page — ideating, filming, and optimising for engagement.' },
+]
+
 const professionalActivities = [
   { org: 'FigBuild 2026',                        role: 'PARTICIPANT', date: '2026',    desc: "Participated in Figma's design challenge to build an app." },
   { org: 'FLUXathon (48-Hour Design Challenge)', role: 'PARTICIPANT', date: '2026',    desc: 'Designed a weather forecasting app using Claude AI. Judged by Google.' },
@@ -56,10 +62,39 @@ export default function AboutPage() {
           <CVButton />
         </section>
 
+        {/* Experience */}
+        <section className="border-b border-divider about-page-section" style={{ padding: '56px 40px' }}>
+          <div className="about-page-grid grid" style={{ gridTemplateColumns: '200px 1fr', gap: '48px' }}>
+            <span className="font-mono" style={{ fontSize: '13px', letterSpacing: '0.16em', color: '#f5f2ed', paddingTop: '4px' }}>
+              EXPERIENCE_
+            </span>
+            <div className="flex flex-col" style={{ gap: '40px' }}>
+              {experience.map((item) => (
+                <div key={item.org}>
+                  <div className="flex items-start justify-between" style={{ gap: '16px', marginBottom: '6px' }}>
+                    <span className="font-mono" style={{ fontSize: '13px', letterSpacing: '0.08em', color: '#FF3120', lineHeight: 1.4 }}>
+                      {item.org}
+                    </span>
+                    <span className="font-mono flex-shrink-0" style={{ fontSize: '10px', letterSpacing: '0.1em', color: '#444444' }}>
+                      {item.date}
+                    </span>
+                  </div>
+                  <p className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.12em', color: '#666666', marginBottom: '10px' }}>
+                    {item.role}
+                  </p>
+                  <p className="font-mono" style={{ fontSize: '14px', letterSpacing: '0.03em', color: '#999999', lineHeight: 1.8 }}>
+                    {item.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Professional Activities */}
         <section className="border-b border-divider about-page-section" style={{ padding: '56px 40px' }}>
           <div className="about-page-grid grid" style={{ gridTemplateColumns: '200px 1fr', gap: '48px' }}>
-            <span className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.16em', color: '#f5f2ed', paddingTop: '4px' }}>
+            <span className="font-mono" style={{ fontSize: '13px', letterSpacing: '0.16em', color: '#f5f2ed', paddingTop: '4px' }}>
               PROFESSIONAL<br />ACTIVITIES
             </span>
             <div className="flex flex-col" style={{ gap: '40px' }}>
@@ -88,7 +123,7 @@ export default function AboutPage() {
         {/* Education */}
         <section className="border-b border-divider about-page-section" style={{ padding: '56px 40px' }}>
           <div className="about-page-grid grid" style={{ gridTemplateColumns: '200px 1fr', gap: '48px' }}>
-            <span className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.16em', color: '#f5f2ed', paddingTop: '4px' }}>
+            <span className="font-mono" style={{ fontSize: '13px', letterSpacing: '0.16em', color: '#f5f2ed', paddingTop: '4px' }}>
               EDUCATION
             </span>
             <div>
@@ -113,7 +148,7 @@ export default function AboutPage() {
         {/* Tools */}
         <section className="border-b border-divider about-page-section" style={{ padding: '56px 40px' }}>
           <div className="about-page-grid grid" style={{ gridTemplateColumns: '200px 1fr', gap: '48px' }}>
-            <span className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.16em', color: '#f5f2ed', paddingTop: '4px' }}>
+            <span className="font-mono" style={{ fontSize: '13px', letterSpacing: '0.16em', color: '#f5f2ed', paddingTop: '4px' }}>
               TOOLS
             </span>
             <div className="flex flex-wrap" style={{ gap: '8px' }}>
