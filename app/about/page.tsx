@@ -107,7 +107,12 @@ export default function AboutPage() {
           >
             UX design student at SCAD, figuring out what good design can actually do. I think like a designer but see like an artist. Still learning. Always curious.
           </p>
-          <CVButton />
+          <div className="flex items-center justify-between">
+            <CVButton />
+            <span className="font-mono select-none" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.14em', color: '#666666' }}>
+              SCROLL ↓
+            </span>
+          </div>
         </section>
 
         {/* Experience */}
