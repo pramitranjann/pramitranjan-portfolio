@@ -45,10 +45,10 @@ export function PhotographyStage() {
             <div style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
             <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.18em', color: '#FF3120' }}>THE EYE CAME FIRST.</span>
           </div>
-          <h2 className="font-serif italic" style={{ fontSize: '48px', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.1, marginBottom: '24px' }}>
+          <h2 className="font-serif" style={{ fontSize: 'var(--text-h2)', fontWeight: 400, fontStyle: 'italic', color: '#f5f2ed', lineHeight: 1.1, marginBottom: '24px' }}>
             Before <span style={{ color: '#FF3120' }}>Figma,</span><br />there was <span style={{ color: '#FF3120' }}>film.</span>
           </h2>
-          <p className="font-mono" style={{ fontSize: '13px', letterSpacing: '0.06em', color: '#999999', lineHeight: 1.9, maxWidth: '340px' }}>
+          <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.06em', color: '#999999', lineHeight: 1.9, maxWidth: '340px' }}>
             Street photography across Southeast Asia. Shot on 35mm and medium format. Always looking.
           </p>
         </div>

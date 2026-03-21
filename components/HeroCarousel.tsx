@@ -8,10 +8,10 @@ const stageContent = [
   // Stage 0
   <>
     <RuleLabel number="01" />
-    <h1 className="font-serif" style={{ fontSize: 'clamp(72px, 13vw, 130px)', fontWeight: 400, color: '#f5f2ed', lineHeight: 0.95 }}>
+    <h1 className="font-serif" style={{ fontSize: 'var(--text-display)', fontWeight: 400, color: '#f5f2ed', lineHeight: 0.95 }}>
       <span style={{ color: '#FF3120' }}>Pramit</span><br />Ranjan
     </h1>
-    <p className="font-mono" style={{ fontSize: '15px', letterSpacing: '0.05em', color: '#999999', maxWidth: '500px', lineHeight: 1.9, marginTop: '44px' }}>
+    <p className="font-mono" style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.05em', color: '#999999', maxWidth: '500px', lineHeight: 1.9, marginTop: '44px' }}>
       UX design student at SCAD. Figuring out what good design can actually do.
     </p>
     <div className="font-mono select-none" style={{ position: 'absolute', right: '40px', bottom: '36px', fontSize: '9px', color: '#2a2a2a', letterSpacing: '0.14em' }}>
@@ -22,10 +22,10 @@ const stageContent = [
   // Stage 1
   <>
     <RuleLabel number="02" />
-    <h2 className="font-serif italic" style={{ fontSize: 'clamp(48px, 9vw, 96px)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05 }}>
+    <h2 className="font-serif" style={{ fontSize: 'var(--text-hero)', fontWeight: 400, fontStyle: 'italic', color: '#f5f2ed', lineHeight: 1.05 }}>
       From <span style={{ color: '#FF3120' }}>Film</span><br />to <span style={{ color: '#FF3120' }}>Figma.</span>
     </h2>
-    <p className="font-mono" style={{ fontSize: '15px', letterSpacing: '0.05em', color: '#999999', maxWidth: '500px', lineHeight: 1.9, marginTop: '44px' }}>
+    <p className="font-mono" style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.05em', color: '#999999', maxWidth: '500px', lineHeight: 1.9, marginTop: '44px' }}>
       A creative background shapes how I see problems. Photography, mixed media, and art — before Figma, before UX.
     </p>
   </>,
@@ -33,10 +33,10 @@ const stageContent = [
   // Stage 2
   <>
     <RuleLabel number="03" />
-    <h2 className="font-serif italic" style={{ fontSize: 'clamp(48px, 9vw, 96px)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05 }}>
+    <h2 className="font-serif" style={{ fontSize: 'var(--text-hero)', fontWeight: 400, fontStyle: 'italic', color: '#f5f2ed', lineHeight: 1.05 }}>
       Design that <span style={{ color: '#FF3120' }}>solves.</span><br />Art that <span style={{ color: '#FF3120' }}>questions.</span>
     </h2>
-    <p className="font-mono" style={{ fontSize: '15px', letterSpacing: '0.05em', color: '#999999', maxWidth: '500px', lineHeight: 1.9, marginTop: '44px' }}>
+    <p className="font-mono" style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.05em', color: '#999999', maxWidth: '500px', lineHeight: 1.9, marginTop: '44px' }}>
       UX work grounded in research and empathy. Creative work that pushes further.
     </p>
     <div className="flex items-center" style={{ gap: '12px', marginTop: '48px' }}>

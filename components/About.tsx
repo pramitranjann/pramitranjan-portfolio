@@ -38,16 +38,15 @@ export function About() {
 
       <h2
         className="reveal-text font-serif"
-        style={{ fontSize: '48px', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '28px' }}
+        style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '28px' }}
       >
         Artist.<br />Designer.<br /><span style={{ color: '#FF3120' }}>Human.</span>
       </h2>
 
       <div className="about-body-row flex justify-between items-end" style={{ gap: '32px' }}>
-        {/* WCAG AA: #999 on #0d0d0d = 6.5:1 ✓ */}
         <p
           className="reveal-text font-mono"
-          style={{ fontSize: '13px', color: '#999999', lineHeight: 1.9, maxWidth: '440px', letterSpacing: '0.04em' }}
+          style={{ fontSize: 'var(--text-body-lg)', color: '#999999', lineHeight: 1.9, maxWidth: '440px', letterSpacing: '0.04em' }}
         >
           UX design student at SCAD, figuring out what good design can actually do. I think like a designer but see like an artist. Still learning. Always curious.
         </p>

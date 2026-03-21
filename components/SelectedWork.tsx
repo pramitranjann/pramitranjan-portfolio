@@ -37,14 +37,13 @@ export function SelectedWork() {
       <div style={{ padding: '40px 24px 24px' }}>
         <h2
           className="font-serif"
-          style={{ fontSize: '36px', fontWeight: 400, color: '#FF3120', lineHeight: 1.1, marginBottom: '12px' }}
+          style={{ fontSize: 'var(--text-h2)', fontWeight: 400, color: '#FF3120', lineHeight: 1.1, marginBottom: '12px' }}
         >
           Research to resolution.
         </h2>
-        {/* WCAG AA compliant: #999 on #0d0d0d = 6.5:1 contrast */}
         <p
           className="font-mono"
-          style={{ fontSize: '13px', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.7, maxWidth: '480px' }}
+          style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.7, maxWidth: '480px' }}
         >
           Four projects in UX — each one starting with a question worth asking.
         </p>

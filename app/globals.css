@@ -25,6 +25,27 @@
   /* Fonts */
   --font-serif: "DM Serif Display", serif;
   --font-mono: "DM Mono", monospace;
+
+  /* ── Type scale ────────────────────────────────────────────────────────────
+     Display  Serif regular   clamp(72px,13vw,130px)  Hero name
+     Hero     Serif italic    clamp(48px,9vw,96px)    Hero stages, Contact CTA
+     H1       Serif regular   52px                    Page titles (/about, /work)
+     H2       Serif regular   38px                    Homepage section headings
+     H3       Serif italic    24px                    Item/org titles
+     Eyebrow  Mono uppercase  9px  0.18em             Section labels (red or #666)
+     Body LG  Mono            15px 0.04em             Primary body copy
+     Body     Mono            13px 0.04em             Standard body copy
+     Meta     Mono uppercase  10px 0.12em             Dates, roles, tags
+  ── ──────────────────────────────────────────────────────────────────────── */
+  --text-display: clamp(72px, 13vw, 130px);
+  --text-hero:    clamp(48px, 9vw, 96px);
+  --text-h1:      52px;
+  --text-h2:      38px;
+  --text-h3:      24px;
+  --text-eyebrow: 9px;
+  --text-body-lg: 15px;
+  --text-body:    13px;
+  --text-meta:    10px;
 }
 
 html, body {

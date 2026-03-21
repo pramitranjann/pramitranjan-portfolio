@@ -1,7 +1,6 @@
 // app/about/page.tsx
 import { Nav } from '@/components/Nav'
 import { Footer } from '@/components/Footer'
-import { RuleLabel } from '@/components/RuleLabel'
 
 function CVButton() {
   return (
@@ -9,7 +8,7 @@ function CVButton() {
       href="#"
       className="font-mono inline-block"
       style={{
-        fontSize: '11px',
+        fontSize: 'var(--text-meta)',
         letterSpacing: '0.14em',
         color: '#FF3120',
         border: '1px solid #FF3120',
@@ -22,12 +21,24 @@ function CVButton() {
   )
 }
 
+// Eyebrow label used for section columns
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <span
+      className="font-mono"
+      style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#666666', paddingTop: '6px', lineHeight: 1.6 }}
+    >
+      {children}
+    </span>
+  )
+}
+
 const tools = ['FIGMA', 'ADOBE CREATIVE SUITE', 'CLAUDE CODE', 'VIBE CODING']
 
 const experience = [
-  { org: 'Vircle Malaysia',  role: 'GROWTH INTERN',       date: 'JUL 2024 — AUG 2024', desc: 'Designed sticker packs for Vircle × Minions Despicable Me 4 collaboration — included in the packaging of each card sold. Created hero images and prototyped a school landing page.' },
-  { org: 'SOHO Exhibition',  role: 'EXHIBITION DIRECTOR', date: 'SEP 2023 — JAN 2024',  desc: 'Chaired the annual sixth form art exhibition. Responsible for organising all departments, delegating tasks, managing logistics, and producing all branding and marketing materials.' },
-  { org: 'Moving Walls Malaysia', role: 'MARKETING INTERN', date: 'JUL 2023 — AUG 2023', desc: 'Part of the marketing team creating social media content. Tasked with starting and managing the company TikTok page — ideating, filming, and optimising for engagement.' },
+  { org: 'Vircle Malaysia',       role: 'GROWTH INTERN',       date: 'JUL 2024 — AUG 2024', desc: 'Designed sticker packs for Vircle × Minions Despicable Me 4 collaboration — included in the packaging of each card sold. Created hero images and prototyped a school landing page.' },
+  { org: 'SOHO Exhibition',       role: 'EXHIBITION DIRECTOR', date: 'SEP 2023 — JAN 2024',  desc: 'Chaired the annual sixth form art exhibition. Responsible for organising all departments, delegating tasks, managing logistics, and producing all branding and marketing materials.' },
+  { org: 'Moving Walls Malaysia', role: 'MARKETING INTERN',    date: 'JUL 2023 — AUG 2023',  desc: 'Part of the marketing team creating social media content. Tasked with starting and managing the company TikTok page — ideating, filming, and optimising for engagement.' },
 ]
 
 const professionalActivities = [
@@ -37,6 +48,37 @@ const professionalActivities = [
   { org: 'Rocket × FLUX (3-Day Design Sprint)',  role: 'PARTICIPANT', date: '2026',    desc: 'Redesigned the Passio Go app using Figma Make — exploring how design ideology is shifting in the age of AI.' },
 ]
 
+function EntryList({ items }: { items: typeof experience }) {
+  return (
+    <div className="flex flex-col" style={{ gap: '40px' }}>
+      {items.map((item) => (
+        <div key={item.org}>
+          {/* H3 — org/institution name */}
+          <h3
+            className="font-serif"
+            style={{ fontSize: 'var(--text-h3)', fontStyle: 'italic', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.2, marginBottom: '8px' }}
+          >
+            {item.org}
+          </h3>
+          {/* Meta row — role + date */}
+          <div className="flex items-center justify-between" style={{ gap: '16px', marginBottom: '12px' }}>
+            <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#FF3120' }}>
+              {item.role}
+            </span>
+            <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#444444' }}>
+              {item.date}
+            </span>
+          </div>
+          {/* Body */}
+          <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.03em', color: '#999999', lineHeight: 1.8 }}>
+            {item.desc}
+          </p>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export default function AboutPage() {
   return (
     <>
@@ -45,17 +87,23 @@ export default function AboutPage() {
 
         {/* Hero */}
         <section className="border-b border-divider" style={{ padding: '64px 40px' }}>
-          <RuleLabel number="ABOUT_" />
+          {/* Eyebrow */}
+          <div className="flex items-center" style={{ gap: '10px', marginBottom: '24px' }}>
+            <div style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
+            <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>ABOUT_</span>
+          </div>
+          {/* H1 */}
           <h1
             className="font-serif"
-            style={{ fontSize: 'clamp(42px, 7vw, 72px)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '28px' }}
+            style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '28px' }}
           >
             Artist. Designer.{' '}
             <span style={{ color: '#FF3120' }}>Human.</span>
           </h1>
+          {/* Body LG */}
           <p
             className="font-mono"
-            style={{ fontSize: '15px', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.9, maxWidth: '560px', marginBottom: '40px' }}
+            style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.9, maxWidth: '560px', marginBottom: '40px' }}
           >
             UX design student at SCAD, figuring out what good design can actually do. I think like a designer but see like an artist. Still learning. Always curious.
           </p>
@@ -64,81 +112,40 @@ export default function AboutPage() {
 
         {/* Experience */}
         <section className="border-b border-divider about-page-section" style={{ padding: '56px 40px' }}>
-          <div className="about-page-grid grid" style={{ gridTemplateColumns: '200px 1fr', gap: '48px' }}>
-            <span className="font-mono" style={{ fontSize: '13px', letterSpacing: '0.16em', color: '#f5f2ed', paddingTop: '4px' }}>
-              EXPERIENCE_
-            </span>
-            <div className="flex flex-col" style={{ gap: '40px' }}>
-              {experience.map((item) => (
-                <div key={item.org}>
-                  <div className="flex items-start justify-between" style={{ gap: '16px', marginBottom: '6px' }}>
-                    <span className="font-mono" style={{ fontSize: '13px', letterSpacing: '0.08em', color: '#FF3120', lineHeight: 1.4 }}>
-                      {item.org}
-                    </span>
-                    <span className="font-mono flex-shrink-0" style={{ fontSize: '10px', letterSpacing: '0.1em', color: '#444444' }}>
-                      {item.date}
-                    </span>
-                  </div>
-                  <p className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.12em', color: '#666666', marginBottom: '10px' }}>
-                    {item.role}
-                  </p>
-                  <p className="font-mono" style={{ fontSize: '14px', letterSpacing: '0.03em', color: '#999999', lineHeight: 1.8 }}>
-                    {item.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
+          <div className="about-page-grid grid" style={{ gridTemplateColumns: '160px 1fr', gap: '48px' }}>
+            <SectionLabel>EXPERIENCE_</SectionLabel>
+            <EntryList items={experience} />
           </div>
         </section>
 
         {/* Professional Activities */}
         <section className="border-b border-divider about-page-section" style={{ padding: '56px 40px' }}>
-          <div className="about-page-grid grid" style={{ gridTemplateColumns: '200px 1fr', gap: '48px' }}>
-            <span className="font-mono" style={{ fontSize: '13px', letterSpacing: '0.16em', color: '#f5f2ed', paddingTop: '4px' }}>
-              PROFESSIONAL<br />ACTIVITIES
-            </span>
-            <div className="flex flex-col" style={{ gap: '40px' }}>
-              {professionalActivities.map((item) => (
-                <div key={item.org}>
-                  <div className="flex items-start justify-between" style={{ gap: '16px', marginBottom: '6px' }}>
-                    <span className="font-mono" style={{ fontSize: '13px', letterSpacing: '0.08em', color: '#FF3120', lineHeight: 1.4 }}>
-                      {item.org}
-                    </span>
-                    <span className="font-mono flex-shrink-0" style={{ fontSize: '10px', letterSpacing: '0.1em', color: '#444444' }}>
-                      {item.date}
-                    </span>
-                  </div>
-                  <p className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.12em', color: '#666666', marginBottom: '10px' }}>
-                    {item.role}
-                  </p>
-                  <p className="font-mono" style={{ fontSize: '14px', letterSpacing: '0.03em', color: '#999999', lineHeight: 1.8 }}>
-                    {item.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
+          <div className="about-page-grid grid" style={{ gridTemplateColumns: '160px 1fr', gap: '48px' }}>
+            <SectionLabel>PROFESSIONAL<br />ACTIVITIES</SectionLabel>
+            <EntryList items={professionalActivities} />
           </div>
         </section>
 
         {/* Education */}
         <section className="border-b border-divider about-page-section" style={{ padding: '56px 40px' }}>
-          <div className="about-page-grid grid" style={{ gridTemplateColumns: '200px 1fr', gap: '48px' }}>
-            <span className="font-mono" style={{ fontSize: '13px', letterSpacing: '0.16em', color: '#f5f2ed', paddingTop: '4px' }}>
-              EDUCATION
-            </span>
+          <div className="about-page-grid grid" style={{ gridTemplateColumns: '160px 1fr', gap: '48px' }}>
+            <SectionLabel>EDUCATION</SectionLabel>
             <div>
-              <div className="flex items-start justify-between" style={{ gap: '16px', marginBottom: '6px' }}>
-                <span className="font-mono" style={{ fontSize: '13px', letterSpacing: '0.08em', color: '#FF3120', lineHeight: 1.4 }}>
-                  Savannah College of Art and Design (SCAD)
+              <h3
+                className="font-serif"
+                style={{ fontSize: 'var(--text-h3)', fontStyle: 'italic', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.2, marginBottom: '8px' }}
+              >
+                Savannah College of Art and Design (SCAD)
+              </h3>
+              <div className="flex items-center justify-between" style={{ gap: '16px', marginBottom: '12px' }}>
+                <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#FF3120' }}>
+                  BFA, UX DESIGN
                 </span>
-                <span className="font-mono flex-shrink-0" style={{ fontSize: '10px', letterSpacing: '0.1em', color: '#444444' }}>
+                <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#444444' }}>
                   2024 — PRESENT
                 </span>
               </div>
-              <p className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.12em', color: '#666666', marginBottom: '10px' }}>
-                BFA, UX DESIGN
-              </p>
-              <p className="font-mono" style={{ fontSize: '14px', letterSpacing: '0.03em', color: '#999999', lineHeight: 1.8 }}>
+              <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.03em', color: '#999999', lineHeight: 1.8 }}>
                 Studying interaction design, user research, and design systems at one of the top art and design universities in the world.
               </p>
             </div>
@@ -147,17 +154,15 @@ export default function AboutPage() {
 
         {/* Tools */}
         <section className="border-b border-divider about-page-section" style={{ padding: '56px 40px' }}>
-          <div className="about-page-grid grid" style={{ gridTemplateColumns: '200px 1fr', gap: '48px' }}>
-            <span className="font-mono" style={{ fontSize: '13px', letterSpacing: '0.16em', color: '#f5f2ed', paddingTop: '4px' }}>
-              TOOLS
-            </span>
+          <div className="about-page-grid grid" style={{ gridTemplateColumns: '160px 1fr', gap: '48px' }}>
+            <SectionLabel>TOOLS</SectionLabel>
             <div className="flex flex-wrap" style={{ gap: '8px' }}>
               {tools.map((tool) => (
                 <span
                   key={tool}
                   className="font-mono"
                   style={{
-                    fontSize: '11px',
+                    fontSize: 'var(--text-meta)',
                     letterSpacing: '0.12em',
                     color: '#999999',
                     border: '1px solid #1f1f1f',
@@ -171,7 +176,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* CV download — repeated */}
+        {/* CV download */}
         <section style={{ padding: '56px 40px' }}>
           <CVButton />
         </section>

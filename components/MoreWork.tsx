@@ -35,11 +35,11 @@ export function MoreWork() {
       <div style={{ padding: '24px 24px 16px' }}>
         <h2
           className="font-serif"
-          style={{ fontSize: '22px', fontWeight: 400, color: '#FF3120', lineHeight: 1.1, marginBottom: '8px' }}
+          style={{ fontSize: 'var(--text-h3)', fontWeight: 400, color: '#FF3120', lineHeight: 1.1, marginBottom: '8px' }}
         >
           Competitions & side projects.
         </h2>
-        <p className="font-mono" style={{ fontSize: '11px', color: '#999999', letterSpacing: '0.04em', lineHeight: 1.6 }}>
+        <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', letterSpacing: '0.04em', lineHeight: 1.6 }}>
           48-hour briefs, weird constraints, and one accessibility tool nobody asked for but needed.
         </p>
       </div>
