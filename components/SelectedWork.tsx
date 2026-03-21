@@ -52,7 +52,7 @@ export function SelectedWork() {
       <div
         ref={gridRef}
         className="card-grid grid grid-cols-1 md:grid-cols-2"
-        style={{ gap: '12px', padding: '0 24px 40px', overflow: 'visible' }}
+        style={{ gap: '12px', padding: '0 24px 40px' }}
       >
         {projects.map((p, i) => (
           <motion.div
