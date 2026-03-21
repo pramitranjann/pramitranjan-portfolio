@@ -119,6 +119,11 @@ export function HeroCarousel() {
       }
     }
 
+    const onTouchMove = (e: TouchEvent) => {
+      // Prevent iOS Safari from scrolling the page while carousel is locked
+      if (!releasedRef.current) e.preventDefault()
+    }
+
     const onTouchStart = (e: TouchEvent) => {
       touchStartY.current = e.touches[0].clientY
     }
@@ -150,10 +155,12 @@ export function HeroCarousel() {
     }
 
     window.addEventListener('wheel', onWheel, { passive: false })
+    window.addEventListener('touchmove', onTouchMove, { passive: false })
     window.addEventListener('touchstart', onTouchStart, { passive: true })
     window.addEventListener('touchend', onTouchEnd, { passive: true })
     return () => {
       window.removeEventListener('wheel', onWheel)
+      window.removeEventListener('touchmove', onTouchMove)
       window.removeEventListener('touchstart', onTouchStart)
       window.removeEventListener('touchend', onTouchEnd)
     }
