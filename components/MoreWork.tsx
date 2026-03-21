@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
+import { motion } from 'motion/react'
 import { ProjectCard } from './ProjectCard'
 
 const projects = [
@@ -49,28 +50,20 @@ export function MoreWork() {
         style={{ gap: '12px', padding: '0 24px 40px', overflow: 'visible' }}
       >
         {projects.map((p, i) => (
-          <div
+          <motion.div
             key={p.title}
             className="reveal"
             style={{ zIndex: hoveredIdx === i ? 2 : 1 }}
+            animate={{
+              scale: hoveredIdx === i ? 1.03 : hoveredIdx !== null ? 0.97 : 1,
+              opacity: hoveredIdx !== null && hoveredIdx !== i ? 0.65 : 1,
+            }}
+            transition={{ type: 'spring', stiffness: 300, damping: 28 }}
             onMouseEnter={() => setHoveredIdx(i)}
             onMouseLeave={() => setHoveredIdx(null)}
           >
-            <div
-              style={{
-                transform: hoveredIdx === i
-                  ? 'scale(1.03)'
-                  : hoveredIdx !== null
-                    ? 'scale(0.97)'
-                    : 'scale(1)',
-                opacity: hoveredIdx !== null && hoveredIdx !== i ? 0.65 : 1,
-                transition: 'transform 0.2s ease, opacity 0.2s ease',
-                height: '100%',
-              }}
-            >
-              <ProjectCard {...p} variant="supporting" hovered={hoveredIdx === i} />
-            </div>
-          </div>
+            <ProjectCard {...p} variant="supporting" hovered={hoveredIdx === i} />
+          </motion.div>
         ))}
       </div>
     </section>
