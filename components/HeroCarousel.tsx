@@ -53,6 +53,8 @@ export function HeroCarousel() {
   // released = true means page can scroll freely (past stage 3)
   const releasedRef = useRef(false)
   const [released, setReleased] = useState(false)
+  // collapsed = true after fade completes — snaps height to 0 without animation
+  const [collapsed, setCollapsed] = useState(false)
   // readyToRelease becomes true after dwelling on stage 3 for 1.2s
   const readyToRelease = useRef(false)
   const touchStartY = useRef<number | null>(null)
@@ -60,13 +62,16 @@ export function HeroCarousel() {
   // Lock / unlock page scroll based on carousel state
   useEffect(() => {
     if (!released) {
+      setCollapsed(false)
       document.body.style.overflow = 'hidden'
       window.scrollTo(0, 0)
     } else {
-      // Hold scroll locked during collapse animation so momentum doesn't
-      // carry past SelectedWork — matches friction of stage transitions
       window.scrollTo(0, 0)
-      const t = setTimeout(() => { document.body.style.overflow = '' }, 380)
+      // After opacity fade (200ms), snap height to 0 and unlock scroll
+      const t = setTimeout(() => {
+        setCollapsed(true)
+        document.body.style.overflow = ''
+      }, 220)
       return () => clearTimeout(t)
     }
     return () => { document.body.style.overflow = '' }
@@ -169,11 +174,11 @@ export function HeroCarousel() {
   return (
     <div
       style={{
-        height: released ? '0' : 'calc(100vh - 57px)',
+        height: collapsed ? '0' : 'calc(100vh - 57px)',
         opacity: released ? 0 : 1,
         overflow: 'hidden',
         position: 'relative',
-        transition: 'height 0.35s ease, opacity 0.25s ease',
+        transition: released && !collapsed ? 'opacity 0.2s ease' : 'none',
       }}
     >
       {stageContent.map((content, i) => (
