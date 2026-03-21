@@ -17,7 +17,7 @@ export function Contact() {
       ([entry]) => {
         if (entry.isIntersecting) {
           const els = Array.from(el.querySelectorAll('.reveal-text')) as HTMLElement[]
-          els.forEach((child, i) => setTimeout(() => child.classList.add('revealed'), i * 300))
+          els.forEach((child, i) => setTimeout(() => child.classList.add('revealed'), i * 200))
           observer.disconnect()
         }
       },
@@ -30,17 +30,16 @@ export function Contact() {
   return (
     <section
       ref={secRef}
-      className="border-b border-divider"
-      style={{ padding: '48px 24px' }}
+      style={{ borderTop: '1px solid #1f1f1f', padding: '48px 24px' }}
     >
       <h2
         className="reveal-text font-serif italic"
-        style={{ fontSize: '38px', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.1 }}
+        style={{ fontSize: '38px', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.1, marginBottom: '24px' }}
       >
-        You made it this far.{' '}
-        <span style={{ color: '#FF3120' }}>Say hello.</span>
+        You made it<br />this far.<br /><span style={{ color: '#FF3120' }}>Say hello.</span>
       </h2>
-      <div className="reveal-text flex gap-6 mt-8">
+
+      <div className="reveal-text flex" style={{ gap: '20px' }}>
         {socialLinks.map(({ label, href }) => (
           <a
             key={label}
@@ -48,11 +47,11 @@ export function Contact() {
             className="font-mono"
             style={{
               fontSize: '9px',
-              letterSpacing: '0.1em',
-              color: '#f5f2ed',
-              textDecoration: 'underline',
-              textDecorationColor: '#FF3120',
-              textUnderlineOffset: '3px',
+              letterSpacing: '0.14em',
+              color: '#888888',
+              textDecoration: 'none',
+              borderBottom: '1px solid #FF3120',
+              paddingBottom: '2px',
             }}
           >
             {label}

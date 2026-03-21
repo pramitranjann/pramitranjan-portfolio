@@ -27,16 +27,9 @@ export function HeroStage02() {
   return (
     <section
       ref={secRef}
-      className="flex flex-col justify-end border-b border-divider"
-      style={{ minHeight: '100vh', padding: '48px 24px' }}
+      className="flex flex-col justify-center border-b border-divider"
+      style={{ minHeight: '200px', padding: '48px 24px' }}
     >
-      <div
-        className="font-mono mb-8 select-none"
-        style={{ fontSize: '9px', letterSpacing: '0.18em', color: '#FF3120' }}
-      >
-        02
-      </div>
-
       <RuleLabel number="02" />
 
       <h2
@@ -44,13 +37,13 @@ export function HeroStage02() {
         className="reveal-text font-serif italic"
         style={{ fontSize: '32px', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.2 }}
       >
-        From <span style={{ color: '#FF3120' }}>Film</span> to <span style={{ color: '#FF3120' }}>Figma</span>.
+        From <span style={{ color: '#FF3120' }}>Film</span> to <span style={{ color: '#FF3120' }}>Figma.</span>
       </h2>
 
       <p
         ref={descRef}
         className="reveal-text font-mono mt-4"
-        style={{ fontSize: '10px', letterSpacing: '0.1em', color: '#999999', maxWidth: '400px' }}
+        style={{ fontSize: '10px', letterSpacing: '0.1em', color: '#999999', maxWidth: '340px', lineHeight: 1.8 }}
       >
         A creative background shapes how I see problems. Photography, mixed media, and art — before Figma, before UX.
       </p>

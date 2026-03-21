@@ -1,5 +1,4 @@
 // components/ProjectCard.tsx
-'use client'
 import Link from 'next/link'
 
 interface ProjectCardProps {
@@ -12,88 +11,95 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ title, oneliner, tags, href, variant = 'main', comingSoon }: ProjectCardProps) {
-  const titleSize = variant === 'main' ? '20px' : '14px'
-  const aspectRatio = variant === 'main' ? '16/9' : '4/3'
+  const category = tags.join(' · ')
 
-  const inner = (
-    <div
-      className="flex flex-col h-full transition-opacity duration-150 hover:opacity-75"
-      style={{
-        backgroundColor: '#111111',
-        border: '1px solid #1a1a1a',
-        padding: '20px',
-      }}
-    >
-      {/* Image placeholder */}
+  const inner =
+    variant === 'supporting' ? (
       <div
-        className="w-full mb-4"
         style={{
-          backgroundColor: '#161616',
+          backgroundColor: '#111111',
           border: '1px solid #1a1a1a',
-          aspectRatio,
+          padding: '20px',
         }}
-      />
-
-      {/* Title */}
-      <h3
-        className="font-serif mb-2"
-        style={{ fontSize: titleSize, fontWeight: 400, color: '#f5f2ed' }}
       >
-        {title}
-      </h3>
-
-      {/* One-liner */}
-      <p
-        className="font-mono mb-4 flex-1"
-        style={{ fontSize: '10px', letterSpacing: '0.1em', color: '#999999' }}
-      >
-        {oneliner}
-      </p>
-
-      {/* Tags + CTA row */}
-      <div className="flex items-end justify-between gap-2 flex-wrap">
-        <div className="flex gap-2 flex-wrap">
-          {tags.map((tag) => (
-            <span
-              key={tag}
-              className="font-mono"
-              style={{
-                fontSize: '9px',
-                letterSpacing: '0.14em',
-                color: '#444444',
-                border: '1px solid #1f1f1f',
-                padding: '4px 10px',
-              }}
-            >
-              {tag}
-            </span>
-          ))}
+        <div
+          style={{
+            height: '60px',
+            backgroundColor: '#161616',
+            border: '1px solid #1f1f1f',
+            marginBottom: '10px',
+          }}
+        />
+        <div
+          className="font-serif"
+          style={{ fontSize: '14px', color: '#999999' }}
+        >
+          {title}
         </div>
-        {comingSoon ? (
-          <span
-            className="font-mono flex-shrink-0"
-            style={{ fontSize: '9px', letterSpacing: '0.1em', color: '#444444' }}
-          >
-            COMING SOON
-          </span>
-        ) : (
-          <span
-            className="font-mono flex-shrink-0 transition-colors duration-150"
-            style={{ fontSize: '9px', letterSpacing: '0.1em', color: '#444444' }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = '#FF3120')}
-            onMouseLeave={(e) => (e.currentTarget.style.color = '#444444')}
+        <div
+          className="font-mono"
+          style={{ fontSize: '8px', color: '#444444', marginTop: '4px', letterSpacing: '0.1em' }}
+        >
+          {category}
+        </div>
+      </div>
+    ) : (
+      <div
+        style={{
+          backgroundColor: '#111111',
+          border: '1px solid #1a1a1a',
+          padding: '20px',
+        }}
+      >
+        <div
+          style={{
+            height: '110px',
+            backgroundColor: '#161616',
+            border: '1px solid #1f1f1f',
+            marginBottom: '16px',
+          }}
+        />
+        <div
+          className="font-mono"
+          style={{ fontSize: '9px', letterSpacing: '0.14em', color: '#444444', marginBottom: '8px' }}
+        >
+          {category}
+        </div>
+        <div
+          className="font-serif"
+          style={{ fontSize: '20px', color: '#f5f2ed', marginBottom: '8px' }}
+        >
+          {title}
+        </div>
+        <div
+          className="font-mono"
+          style={{ fontSize: '11px', color: '#999999', lineHeight: 1.6 }}
+        >
+          {oneliner}
+        </div>
+        {!comingSoon && (
+          <div
+            className="font-mono"
+            style={{ marginTop: '14px', fontSize: '9px', color: '#FF3120', letterSpacing: '0.1em' }}
           >
             VIEW →
-          </span>
+          </div>
+        )}
+        {comingSoon && (
+          <div
+            className="font-mono"
+            style={{ marginTop: '14px', fontSize: '9px', color: '#444444', letterSpacing: '0.1em' }}
+          >
+            COMING SOON
+          </div>
         )}
       </div>
-    </div>
-  )
+    )
 
   return comingSoon ? (
-    <div className="h-full">{inner}</div>
+    <div>{inner}</div>
   ) : (
-    <Link href={href} className="h-full block">
+    <Link href={href} style={{ display: 'block', textDecoration: 'none' }}>
       {inner}
     </Link>
   )
