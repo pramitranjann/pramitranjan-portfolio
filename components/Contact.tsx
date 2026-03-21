@@ -2,9 +2,9 @@
 import { useEffect, useRef } from 'react'
 
 const socialLinks = [
-  { label: 'LINKEDIN',  href: 'https://linkedin.com/in/pramitranjan' },
-  { label: 'GMAIL',     href: 'mailto:pramit@pramitranjan.com' },
-  { label: 'INSTAGRAM', href: 'https://instagram.com/pramitranjan' },
+  { label: 'LINKEDIN',  href: 'https://www.linkedin.com/in/pramitranjann/' },
+  { label: 'GMAIL',     href: 'mailto:pramit@pramitranjann.com' },
+  { label: 'INSTAGRAM', href: 'https://www.instagram.com/pramitranjann/' },
 ]
 
 export function Contact() {
