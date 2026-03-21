@@ -82,7 +82,7 @@ export function PhotoLightbox({ index, total, direction, onClose, onPrev, onNext
             style={{
               position: 'absolute', left: '40px', top: '50%', transform: 'translateY(-50%)',
               background: 'none', border: 'none', cursor: 'pointer',
-              fontSize: '9px', letterSpacing: '0.14em', color: '#666666',
+              fontSize: '11px', letterSpacing: '0.14em', color: '#FF3120',
               padding: '12px',
             }}
           >
@@ -98,7 +98,7 @@ export function PhotoLightbox({ index, total, direction, onClose, onPrev, onNext
             style={{
               position: 'absolute', right: '40px', top: '50%', transform: 'translateY(-50%)',
               background: 'none', border: 'none', cursor: 'pointer',
-              fontSize: '9px', letterSpacing: '0.14em', color: '#666666',
+              fontSize: '11px', letterSpacing: '0.14em', color: '#FF3120',
               padding: '12px',
             }}
           >
@@ -113,7 +113,7 @@ export function PhotoLightbox({ index, total, direction, onClose, onPrev, onNext
           style={{
             position: 'absolute', top: '24px', right: '40px',
             background: 'none', border: 'none', cursor: 'pointer',
-            fontSize: '9px', letterSpacing: '0.14em', color: '#666666',
+            fontSize: '11px', letterSpacing: '0.14em', color: '#666666',
             padding: '8px',
           }}
         >
