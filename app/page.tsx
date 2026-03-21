@@ -13,7 +13,7 @@ export default function HomePage() {
   return (
     <>
       <Nav />
-      <main style={{ paddingTop: '42px' }}>
+      <main style={{ paddingTop: '57px' }}>
         <HeroStage01 />
         <HeroStage02 />
         <HeroStage03 />

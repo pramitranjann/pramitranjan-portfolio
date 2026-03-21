@@ -44,6 +44,8 @@ export function Contact() {
           <a
             key={label}
             href={href}
+            target="_blank"
+            rel="noopener noreferrer"
             className="font-mono"
             style={{
               fontSize: '9px',

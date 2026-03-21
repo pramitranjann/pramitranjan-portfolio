@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useRef } from 'react'
+import { RuleLabel } from './RuleLabel'
 
 export function HeroStage01() {
   const nameRef = useRef<HTMLHeadingElement>(null)
@@ -12,15 +13,10 @@ export function HeroStage01() {
 
   return (
     <section
-      className="flex flex-col justify-center border-b border-divider"
-      style={{ minHeight: '100vh', padding: '48px 24px', position: 'relative' }}
+      className="snap-section flex flex-col justify-center border-b border-divider"
+      style={{ minHeight: '100vh', padding: '80px 32px 64px', position: 'relative' }}
     >
-      <div
-        className="font-mono mb-6 select-none"
-        style={{ fontSize: '9px', letterSpacing: '0.18em', color: '#2a2a2a' }}
-      >
-        01 ——
-      </div>
+      <RuleLabel number="01" />
 
       <h1
         ref={nameRef}
@@ -32,15 +28,15 @@ export function HeroStage01() {
 
       <p
         ref={descRef}
-        className="reveal-text font-mono mt-8"
-        style={{ fontSize: '11px', letterSpacing: '0.12em', color: '#999999', maxWidth: '380px', lineHeight: 1.9 }}
+        className="reveal-text font-mono mt-10"
+        style={{ fontSize: '13px', letterSpacing: '0.08em', color: '#999999', maxWidth: '420px', lineHeight: 1.9 }}
       >
         UX design student at SCAD. Figuring out what good design can actually do.
       </p>
 
       <div
         className="font-mono select-none"
-        style={{ position: 'absolute', right: '24px', bottom: '32px', fontSize: '9px', color: '#2a2a2a', letterSpacing: '0.12em' }}
+        style={{ position: 'absolute', right: '32px', bottom: '36px', fontSize: '9px', color: '#2a2a2a', letterSpacing: '0.14em' }}
       >
         SCROLL ↓
       </div>

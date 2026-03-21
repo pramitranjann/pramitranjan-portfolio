@@ -27,8 +27,8 @@ export function HeroStage03() {
   return (
     <section
       ref={secRef}
-      className="flex flex-col justify-center border-b border-divider"
-      style={{ minHeight: '100vh', padding: '48px 24px' }}
+      className="snap-section flex flex-col justify-center border-b border-divider"
+      style={{ minHeight: '100vh', padding: '80px 32px' }}
     >
       <RuleLabel number="03" />
 
@@ -43,8 +43,8 @@ export function HeroStage03() {
 
       <p
         ref={descRef}
-        className="reveal-text font-mono mt-8"
-        style={{ fontSize: '11px', letterSpacing: '0.1em', color: '#999999', maxWidth: '380px', lineHeight: 1.9 }}
+        className="reveal-text font-mono mt-10"
+        style={{ fontSize: '13px', letterSpacing: '0.08em', color: '#999999', maxWidth: '420px', lineHeight: 1.9 }}
       >
         UX work grounded in research and empathy. Creative work that pushes further.
       </p>

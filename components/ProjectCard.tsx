@@ -24,10 +24,11 @@ export function ProjectCard({ title, oneliner, tags, href, variant = 'main', com
       >
         <div
           style={{
-            height: '60px',
+            aspectRatio: '4 / 3',
+            width: '100%',
             backgroundColor: '#161616',
             border: '1px solid #1f1f1f',
-            marginBottom: '10px',
+            marginBottom: '12px',
           }}
         />
         <div
@@ -53,7 +54,8 @@ export function ProjectCard({ title, oneliner, tags, href, variant = 'main', com
       >
         <div
           style={{
-            height: '110px',
+            aspectRatio: '1 / 1',
+            width: '100%',
             backgroundColor: '#161616',
             border: '1px solid #1f1f1f',
             marginBottom: '16px',
@@ -99,7 +101,7 @@ export function ProjectCard({ title, oneliner, tags, href, variant = 'main', com
   return comingSoon ? (
     <div>{inner}</div>
   ) : (
-    <Link href={href} style={{ display: 'block', textDecoration: 'none' }}>
+    <Link href={href} style={{ display: 'block', textDecoration: 'none' }} target="_blank" rel="noopener noreferrer">
       {inner}
     </Link>
   )
