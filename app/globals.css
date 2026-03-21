@@ -32,15 +32,20 @@ html, body {
   color: #f5f2ed;
 }
 
-/* Group hover: shrink siblings when one card is hovered */
+/* Card hover — pure CSS, no React state */
+.card-link > div {
+  transition: transform 0.15s ease, opacity 0.15s ease, border-color 0.15s ease;
+}
+.card-link:hover > div {
+  transform: scale(1.025);
+  border-color: #FF3120 !important;
+  z-index: 2;
+  position: relative;
+}
+/* Siblings shrink when any card in the grid is hovered */
 .card-grid:has(.card-link:hover) .card-link:not(:hover) > div {
   transform: scale(0.975);
-  opacity: 0.7;
-  border-color: #1a1a1a !important;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-.card-link > div {
-  transition: transform 0.2s ease, opacity 0.2s ease, border-color 0.2s ease;
+  opacity: 0.65;
 }
 
 /* Reveal animations — only hide when JS is available */
