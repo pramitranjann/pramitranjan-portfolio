@@ -31,13 +31,8 @@ export function MoreWork() {
   return (
     <section>
       <div style={{ padding: '48px 24px 0' }}>
-        {/* Label row */}
-        <div className="flex justify-between items-baseline" style={{ marginBottom: '10px' }}>
-          <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.18em', color: '#666666' }}>MORE WORK</span>
-          <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.18em', color: '#FF3120' }}>05</span>
-        </div>
         {/* Section heading — smaller than Selected Work */}
-        <h2 className="font-serif italic" style={{ fontSize: '22px', fontWeight: 400, color: '#999999', lineHeight: 1.1 }}>
+        <h2 className="font-serif italic" style={{ fontSize: '22px', fontWeight: 400, color: '#FF3120', lineHeight: 1.1 }}>
           Competitions & side projects.
         </h2>
       </div>

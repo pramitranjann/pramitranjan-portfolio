@@ -32,13 +32,8 @@ export function SelectedWork() {
   return (
     <section style={{ borderBottom: '1px solid #1f1f1f' }}>
       <div style={{ padding: '48px 24px 0' }}>
-        {/* Label row */}
-        <div className="flex justify-between items-baseline" style={{ marginBottom: '12px' }}>
-          <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.18em', color: '#666666' }}>SELECTED WORK</span>
-          <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.18em', color: '#FF3120' }}>04</span>
-        </div>
         {/* Section heading */}
-        <h2 className="font-serif italic" style={{ fontSize: '36px', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.1, marginBottom: '10px' }}>
+        <h2 className="font-serif italic" style={{ fontSize: '36px', fontWeight: 400, color: '#FF3120', lineHeight: 1.1, marginBottom: '10px' }}>
           Research to resolution.
         </h2>
         {/* Callout */}

@@ -11,7 +11,7 @@ const stageContent = [
     <h1 className="font-serif" style={{ fontSize: 'clamp(72px, 13vw, 130px)', fontWeight: 400, color: '#f5f2ed', lineHeight: 0.95 }}>
       Pramit<br />Ranjan
     </h1>
-    <p className="font-mono" style={{ fontSize: '13px', letterSpacing: '0.08em', color: '#999999', maxWidth: '420px', lineHeight: 1.9, marginTop: '40px' }}>
+    <p className="font-mono" style={{ fontSize: '15px', letterSpacing: '0.05em', color: '#999999', maxWidth: '500px', lineHeight: 1.9, marginTop: '44px' }}>
       UX design student at SCAD. Figuring out what good design can actually do.
     </p>
     <div className="font-mono select-none" style={{ position: 'absolute', right: '40px', bottom: '36px', fontSize: '9px', color: '#2a2a2a', letterSpacing: '0.14em' }}>
@@ -25,7 +25,7 @@ const stageContent = [
     <h2 className="font-serif italic" style={{ fontSize: 'clamp(48px, 9vw, 96px)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05 }}>
       From <span style={{ color: '#FF3120' }}>Film</span><br />to <span style={{ color: '#FF3120' }}>Figma.</span>
     </h2>
-    <p className="font-mono" style={{ fontSize: '13px', letterSpacing: '0.08em', color: '#999999', maxWidth: '420px', lineHeight: 1.9, marginTop: '40px' }}>
+    <p className="font-mono" style={{ fontSize: '15px', letterSpacing: '0.05em', color: '#999999', maxWidth: '500px', lineHeight: 1.9, marginTop: '44px' }}>
       A creative background shapes how I see problems. Photography, mixed media, and art — before Figma, before UX.
     </p>
   </>,
@@ -36,7 +36,7 @@ const stageContent = [
     <h2 className="font-serif italic" style={{ fontSize: 'clamp(48px, 9vw, 96px)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05 }}>
       Design that <span style={{ color: '#FF3120' }}>solves.</span><br />Art that <span style={{ color: '#FF3120' }}>questions.</span>
     </h2>
-    <p className="font-mono" style={{ fontSize: '13px', letterSpacing: '0.08em', color: '#999999', maxWidth: '420px', lineHeight: 1.9, marginTop: '40px' }}>
+    <p className="font-mono" style={{ fontSize: '15px', letterSpacing: '0.05em', color: '#999999', maxWidth: '500px', lineHeight: 1.9, marginTop: '44px' }}>
       UX work grounded in research and empathy. Creative work that pushes further.
     </p>
     <div className="flex items-center" style={{ gap: '12px', marginTop: '48px' }}>
@@ -183,21 +183,6 @@ export function HeroCarousel() {
         </div>
       ))}
 
-      {/* Stage indicator */}
-      <div style={{ position: 'absolute', right: '40px', top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        {Array.from({ length: TOTAL }).map((_, i) => (
-          <div
-            key={i}
-            style={{
-              width: '3px',
-              height: i === current ? '24px' : '3px',
-              borderRadius: '2px',
-              backgroundColor: i === current ? '#FF3120' : '#2a2a2a',
-              transition: 'height 0.4s ease, background-color 0.4s ease',
-            }}
-          />
-        ))}
-      </div>
     </div>
   )
 }
