@@ -48,10 +48,13 @@
   --text-meta:    14px;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 html, body {
   background-color: #0d0d0d;
   color: #f5f2ed;
-  overflow-x: hidden;
 }
 
 
