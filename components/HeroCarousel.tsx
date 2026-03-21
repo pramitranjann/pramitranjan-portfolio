@@ -80,9 +80,9 @@ export function HeroCarousel() {
     setCurrent(next)
     setTimeout(() => {
       isAnimating.current = false
-      // After landing on last stage, start dwell timer before allowing release
+      // Ready to release immediately after animation lands on last stage
       if (currentRef.current === TOTAL - 1) {
-        setTimeout(() => { readyToRelease.current = true }, 1200)
+        readyToRelease.current = true
       }
     }, 900)
   }
@@ -158,9 +158,11 @@ export function HeroCarousel() {
   return (
     <div
       style={{
-        height: 'calc(100vh - 57px)',
+        height: released ? '0' : 'calc(100vh - 57px)',
+        opacity: released ? 0 : 1,
         overflow: 'hidden',
         position: 'relative',
+        transition: 'height 0.5s ease, opacity 0.4s ease',
       }}
     >
       {stageContent.map((content, i) => (
