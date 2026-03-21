@@ -1,15 +1,25 @@
 import Link from 'next/link'
 
+// 5 frames at 90px + 4px gaps + 10px side padding = 486px total
+// 20 holes at 10px + 14px gaps + 10px side padding = 486px — exact match
+const FRAME_W = 90
+const FRAME_H = 195
+const SIDE_PAD = 10
+const FRAME_GAP = 4
+const HOLE_COUNT = 20
+
 const frames = [
-  { label: 'KL · 001', width: 132 },
-  { label: 'KL · 002', width: 132 },
-  { label: 'PG · 003', width: 100 },
+  { label: 'KL · 001' },
+  { label: 'KL · 002' },
+  { label: 'PG · 003' },
+  { label: 'SG · 004' },
+  { label: 'HCM · 001' },
 ]
 
 function Holes() {
   return (
-    <div className="flex" style={{ gap: '14px', padding: '0 14px' }}>
-      {Array.from({ length: 12 }).map((_, i) => (
+    <div className="flex" style={{ gap: '14px', padding: `0 ${SIDE_PAD}px` }}>
+      {Array.from({ length: HOLE_COUNT }).map((_, i) => (
         <div key={i} className="flex-shrink-0" style={{ width: '10px', height: '7px', backgroundColor: '#0d0d0d', border: '1px solid #1f1f1f', borderRadius: '2px' }} />
       ))}
     </div>
@@ -45,18 +55,19 @@ export function PhotographyStage() {
         </Link>
       </div>
 
-      {/* Compact film strip right */}
-      <div style={{ backgroundColor: '#060606', padding: '14px 0' }}>
+      {/* Film strip — sized to exactly 5 frames */}
+      <div style={{ backgroundColor: '#060606', padding: '14px 0', width: 'fit-content' }}>
         <Holes />
-        <div className="flex" style={{ gap: '4px', padding: '8px 14px', overflow: 'hidden' }}>
+        <div className="flex" style={{ gap: `${FRAME_GAP}px`, padding: `8px ${SIDE_PAD}px` }}>
           {frames.map((frame) => (
             <div key={frame.label} className="flex-shrink-0">
-              <div style={{ width: `${frame.width}px`, height: '195px', backgroundColor: '#161616', border: '1px solid #222222' }} />
+              <div style={{ width: `${FRAME_W}px`, height: `${FRAME_H}px`, backgroundColor: '#161616', border: '1px solid #222222' }} />
               <div className="font-mono" style={{ fontSize: '7px', color: '#FF3120', textAlign: 'center', marginTop: '4px', letterSpacing: '0.1em' }}>{frame.label}</div>
             </div>
           ))}
-          <div className="flex-shrink-0" style={{ opacity: 0.3 }}>
-            <div style={{ width: '64px', height: '195px', backgroundColor: '#161616', border: '1px solid #222222' }} />
+          {/* Partial faded frame */}
+          <div className="flex-shrink-0" style={{ opacity: 0.25 }}>
+            <div style={{ width: '45px', height: `${FRAME_H}px`, backgroundColor: '#161616', border: '1px solid #222222' }} />
           </div>
         </div>
         <Holes />

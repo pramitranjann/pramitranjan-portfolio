@@ -49,8 +49,6 @@ export function ProjectCard({ title, oneliner, tags, href, variant = 'main', com
       href={href}
       className="card-link"
       style={{ display: 'block', textDecoration: 'none', height: '100%' }}
-      target="_blank"
-      rel="noopener noreferrer"
     >
       {inner}
     </Link>
