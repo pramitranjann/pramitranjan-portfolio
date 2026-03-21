@@ -59,7 +59,6 @@ export function HeroCarousel() {
   // released = true means page can scroll freely (past stage 3)
   const releasedRef = useRef(false)
   const [released, setReleased] = useState(false)
-  const [visible, setVisible] = useState(true)
   // readyToRelease becomes true as soon as animation to stage 3 completes
   const readyToRelease = useRef(false)
   const touchStartY = useRef<number | null>(null)
@@ -72,9 +71,6 @@ export function HeroCarousel() {
       window.scrollTo(0, 0)
     } else {
       document.body.style.overflow = ''
-      // Unmount after fade completes
-      const t = setTimeout(() => setVisible(false), 450)
-      return () => clearTimeout(t)
     }
     return () => { document.body.style.overflow = '' }
   }, [released, skip])
@@ -167,22 +163,14 @@ export function HeroCarousel() {
     }
   }, []) // stable — all state accessed via refs
 
-  if (skip || !visible) return null
+  if (skip) return null
 
   return (
     <div
       style={{
-        position: 'fixed',
-        top: '57px',
-        left: 0,
-        right: 0,
-        bottom: 0,
+        height: 'calc(100vh - 57px)',
         overflow: 'hidden',
-        backgroundColor: '#0d0d0d',
-        zIndex: 40,
-        opacity: released ? 0 : 1,
-        transition: 'opacity 0.4s ease',
-        pointerEvents: released ? 'none' : 'auto',
+        position: 'relative',
       }}
     >
       {stageContent.map((content, i) => (
