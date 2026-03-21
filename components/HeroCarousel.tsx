@@ -9,7 +9,7 @@ const stageContent = [
   <>
     <RuleLabel number="01" />
     <h1 className="font-serif" style={{ fontSize: 'clamp(72px, 13vw, 130px)', fontWeight: 400, color: '#f5f2ed', lineHeight: 0.95 }}>
-      Pramit<br />Ranjan
+      <span style={{ color: '#FF3120' }}>Pramit</span><br />Ranjan
     </h1>
     <p className="font-mono" style={{ fontSize: '15px', letterSpacing: '0.05em', color: '#999999', maxWidth: '500px', lineHeight: 1.9, marginTop: '44px' }}>
       UX design student at SCAD. Figuring out what good design can actually do.

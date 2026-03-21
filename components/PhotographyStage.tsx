@@ -34,39 +34,43 @@ export function PhotographyStage() {
       display: 'grid',
       gridTemplateColumns: '1fr 1fr',
       minHeight: '360px',
-      alignItems: 'center',
+      alignItems: 'stretch',
       padding: '64px 40px',
       gap: '56px',
     }}>
       {/* Text left */}
-      <div>
-        <div className="flex items-center" style={{ gap: '10px', marginBottom: '22px' }}>
-          <div style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
-          <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.18em', color: '#FF3120' }}>THE EYE CAME FIRST.</span>
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <div>
+          <div className="flex items-center" style={{ gap: '10px', marginBottom: '22px' }}>
+            <div style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
+            <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.18em', color: '#FF3120' }}>THE EYE CAME FIRST.</span>
+          </div>
+          <h2 className="font-serif italic" style={{ fontSize: '48px', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.1, marginBottom: '24px' }}>
+            Before <span style={{ color: '#FF3120' }}>Figma,</span><br />there was <span style={{ color: '#FF3120' }}>film.</span>
+          </h2>
+          <p className="font-mono" style={{ fontSize: '13px', letterSpacing: '0.06em', color: '#999999', lineHeight: 1.9, maxWidth: '340px' }}>
+            Street photography across Southeast Asia. Shot on 35mm and medium format. Always looking.
+          </p>
         </div>
-        <h2 className="font-serif italic" style={{ fontSize: '48px', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.1, marginBottom: '24px' }}>
-          Before <span style={{ color: '#FF3120' }}>Figma,</span><br />there was <span style={{ color: '#FF3120' }}>film.</span>
-        </h2>
-        <p className="font-mono" style={{ fontSize: '13px', letterSpacing: '0.06em', color: '#999999', lineHeight: 1.9, maxWidth: '340px' }}>
-          Street photography across Southeast Asia. Shot on 35mm and medium format. Always looking.
-        </p>
         <Link href="/creative/photography" className="font-mono" style={{ display: 'inline-block', marginTop: '24px', fontSize: '10px', color: '#FF3120', letterSpacing: '0.12em', textDecoration: 'none' }}>
           VIEW ALL →
         </Link>
       </div>
 
-      {/* Film strip — sized to exactly 5 frames */}
-      <div style={{ backgroundColor: '#060606', padding: '14px 0', width: 'fit-content' }}>
-        <Holes />
-        <div className="flex" style={{ gap: `${FRAME_GAP}px`, padding: `8px ${SIDE_PAD}px` }}>
-          {frames.map((frame) => (
-            <div key={frame.label} className="flex-shrink-0">
-              <div style={{ width: `${FRAME_W}px`, height: `${FRAME_H}px`, backgroundColor: '#161616', border: '1px solid #222222' }} />
-              <div className="font-mono" style={{ fontSize: '7px', color: '#FF3120', textAlign: 'center', marginTop: '4px', letterSpacing: '0.1em' }}>{frame.label}</div>
-            </div>
-          ))}
+      {/* Film strip — height matches text column */}
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{ backgroundColor: '#060606', padding: '14px 0', width: 'fit-content', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <Holes />
+          <div className="flex" style={{ gap: `${FRAME_GAP}px`, padding: `8px ${SIDE_PAD}px` }}>
+            {frames.map((frame) => (
+              <div key={frame.label} className="flex-shrink-0">
+                <div style={{ width: `${FRAME_W}px`, height: `${FRAME_H}px`, backgroundColor: '#161616', border: '1px solid #222222' }} />
+                <div className="font-mono" style={{ fontSize: '7px', color: '#FF3120', textAlign: 'center', marginTop: '4px', letterSpacing: '0.1em' }}>{frame.label}</div>
+              </div>
+            ))}
+          </div>
+          <Holes />
         </div>
-        <Holes />
       </div>
     </section>
   )

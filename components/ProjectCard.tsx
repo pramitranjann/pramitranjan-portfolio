@@ -8,14 +8,16 @@ interface ProjectCardProps {
   href: string
   variant?: 'main' | 'supporting'
   comingSoon?: boolean
+  hovered?: boolean
 }
 
-export function ProjectCard({ title, oneliner, tags, href, variant = 'main', comingSoon }: ProjectCardProps) {
+export function ProjectCard({ title, oneliner, tags, href, variant = 'main', comingSoon, hovered }: ProjectCardProps) {
   const category = tags.join(' · ')
 
   const cardBase = {
     backgroundColor: '#111111',
-    border: '1px solid #1a1a1a',
+    border: `1px solid ${hovered ? '#FF3120' : '#1a1a1a'}`,
+    transition: 'border-color 0.15s ease',
     padding: '16px',
     height: '100%',
   }

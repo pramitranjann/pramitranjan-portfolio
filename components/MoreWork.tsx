@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ProjectCard } from './ProjectCard'
 
 const projects = [
@@ -10,6 +10,7 @@ const projects = [
 
 export function MoreWork() {
   const gridRef = useRef<HTMLDivElement>(null)
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
 
   useEffect(() => {
     const grid = gridRef.current
@@ -47,9 +48,25 @@ export function MoreWork() {
         className="card-grid grid grid-cols-3"
         style={{ gap: '12px', padding: '0 24px 40px' }}
       >
-        {projects.map((p) => (
+        {projects.map((p, i) => (
           <div key={p.title} className="reveal">
-            <ProjectCard {...p} variant="supporting" />
+            <div
+              onMouseEnter={() => setHoveredIdx(i)}
+              onMouseLeave={() => setHoveredIdx(null)}
+              style={{
+                transform: hoveredIdx === i
+                  ? 'scale(1.025)'
+                  : hoveredIdx !== null
+                    ? 'scale(0.975)'
+                    : 'scale(1)',
+                zIndex: hoveredIdx === i ? 2 : 1,
+                opacity: hoveredIdx !== null && hoveredIdx !== i ? 0.7 : 1,
+                transition: 'transform 0.15s ease, opacity 0.15s ease',
+                height: '100%',
+              }}
+            >
+              <ProjectCard {...p} variant="supporting" hovered={hoveredIdx === i} />
+            </div>
           </div>
         ))}
       </div>
