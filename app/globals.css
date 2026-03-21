@@ -32,20 +32,31 @@ html, body {
   color: #f5f2ed;
 }
 
-/* Card hover — pure CSS, no React state */
-.card-link > div {
-  transition: transform 0.15s ease, opacity 0.15s ease, border-color 0.15s ease;
-}
-.card-link:hover > div {
-  transform: scale(1.025);
-  border-color: #FF3120 !important;
-  z-index: 2;
+/* Card hover — transforms on the link element so they extend into gap space */
+.card-link {
+  transition: transform 0.15s ease, opacity 0.15s ease;
   position: relative;
 }
-/* Siblings shrink when any card in the grid is hovered */
-.card-grid:has(.card-link:hover) .card-link:not(:hover) > div {
+.card-link:hover {
+  transform: scale(1.025);
+  z-index: 2;
+}
+/* Siblings shrink by the exact inverse — visual gap stays identical */
+.card-grid:has(.card-link:hover) .card-link:not(:hover) {
   transform: scale(0.975);
   opacity: 0.65;
+}
+/* Allow scaled cards to extend visually outside grid cell boundaries */
+.card-grid,
+.card-grid > * {
+  overflow: visible;
+}
+/* Border color on inner div only */
+.card-link > div {
+  transition: border-color 0.15s ease;
+}
+.card-link:hover > div {
+  border-color: #FF3120 !important;
 }
 
 /* Reveal animations — only hide when JS is available */

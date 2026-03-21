@@ -65,10 +65,6 @@ export function PhotographyStage() {
               <div className="font-mono" style={{ fontSize: '7px', color: '#FF3120', textAlign: 'center', marginTop: '4px', letterSpacing: '0.1em' }}>{frame.label}</div>
             </div>
           ))}
-          {/* Partial faded frame */}
-          <div className="flex-shrink-0" style={{ opacity: 0.25 }}>
-            <div style={{ width: '45px', height: `${FRAME_H}px`, backgroundColor: '#161616', border: '1px solid #222222' }} />
-          </div>
         </div>
         <Holes />
       </div>
