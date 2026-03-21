@@ -14,7 +14,7 @@ const stageContent = [
     <p className="font-mono" style={{ fontSize: '13px', letterSpacing: '0.08em', color: '#999999', maxWidth: '420px', lineHeight: 1.9, marginTop: '40px' }}>
       UX design student at SCAD. Figuring out what good design can actually do.
     </p>
-    <div className="font-mono select-none" style={{ position: 'absolute', right: '32px', bottom: '36px', fontSize: '9px', color: '#2a2a2a', letterSpacing: '0.14em' }}>
+    <div className="font-mono select-none" style={{ position: 'absolute', right: '40px', bottom: '36px', fontSize: '9px', color: '#2a2a2a', letterSpacing: '0.14em' }}>
       SCROLL ↓
     </div>
   </>,
@@ -50,8 +50,21 @@ export function HeroCarousel() {
   const [current, setCurrent] = useState(0)
   const currentRef = useRef(0)
   const isAnimating = useRef(false)
-  const containerRef = useRef<HTMLDivElement>(null)
+  // released = true means page can scroll freely (past stage 3)
+  const releasedRef = useRef(false)
+  const [released, setReleased] = useState(false)
   const touchStartY = useRef<number | null>(null)
+
+  // Lock / unlock page scroll based on carousel state
+  useEffect(() => {
+    if (!released) {
+      document.body.style.overflow = 'hidden'
+      window.scrollTo(0, 0)
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => { document.body.style.overflow = '' }
+  }, [released])
 
   const advance = (dir: 'up' | 'down') => {
     if (isAnimating.current) return
@@ -62,23 +75,34 @@ export function HeroCarousel() {
     currentRef.current = next
     isAnimating.current = true
     setCurrent(next)
-    setTimeout(() => { isAnimating.current = false }, 750)
+    setTimeout(() => { isAnimating.current = false }, 900)
   }
 
   useEffect(() => {
     const onWheel = (e: WheelEvent) => {
-      const container = containerRef.current
-      if (!container) return
-      // Only intercept while carousel is at the top of viewport
-      if (container.getBoundingClientRect().top < -10) return
-
       const dir = e.deltaY > 0 ? 'down' : 'up'
-      // At first stage scrolling up, or last stage scrolling down → let page scroll
-      if (dir === 'up' && currentRef.current === 0) return
-      if (dir === 'down' && currentRef.current === TOTAL - 1) return
 
-      e.preventDefault()
-      advance(dir)
+      if (!releasedRef.current) {
+        // Carousel is locked — always stop page scroll
+        e.preventDefault()
+
+        if (dir === 'down' && currentRef.current === TOTAL - 1) {
+          // Leaving last stage — release the page
+          releasedRef.current = true
+          setReleased(true)
+          return
+        }
+        if (dir === 'up' && currentRef.current === 0) return // already at start
+        advance(dir)
+      } else {
+        // Page scrolling freely — re-engage if user scrolls up at the very top
+        if (dir === 'up' && window.scrollY === 0) {
+          e.preventDefault()
+          releasedRef.current = false
+          setReleased(false)
+          advance('up')
+        }
+      }
     }
 
     const onTouchStart = (e: TouchEvent) => {
@@ -87,12 +111,27 @@ export function HeroCarousel() {
 
     const onTouchEnd = (e: TouchEvent) => {
       if (touchStartY.current === null) return
-      const deltaY = touchStartY.current - e.changedTouches[0].clientY
+      const delta = touchStartY.current - e.changedTouches[0].clientY
       touchStartY.current = null
-      const container = containerRef.current
-      if (!container || container.getBoundingClientRect().top < -10) return
-      if (deltaY > 50) advance('down')
-      else if (deltaY < -50) advance('up')
+
+      if (!releasedRef.current) {
+        if (delta > 50) {
+          if (currentRef.current === TOTAL - 1) {
+            releasedRef.current = true
+            setReleased(true)
+          } else {
+            advance('down')
+          }
+        } else if (delta < -50) {
+          advance('up')
+        }
+      } else {
+        if (delta < -50 && window.scrollY === 0) {
+          releasedRef.current = false
+          setReleased(false)
+          advance('up')
+        }
+      }
     }
 
     window.addEventListener('wheel', onWheel, { passive: false })
@@ -103,13 +142,12 @@ export function HeroCarousel() {
       window.removeEventListener('touchstart', onTouchStart)
       window.removeEventListener('touchend', onTouchEnd)
     }
-  }, []) // stable — uses refs, no deps needed
+  }, []) // stable — all state accessed via refs
 
   return (
     <div
-      ref={containerRef}
       style={{
-        height: 'calc(100vh - 73px)', // 73px = nav height (24px*2 padding + ~25px line-height)
+        height: 'calc(100vh - 73px)',
         overflow: 'hidden',
         borderBottom: '1px solid #1f1f1f',
         position: 'relative',
@@ -127,23 +165,21 @@ export function HeroCarousel() {
             padding: '80px 40px',
             transform: i < current ? 'translateY(-100%)' : i === current ? 'translateY(0)' : 'translateY(100%)',
             opacity: i === current ? 1 : 0,
-            transition: 'transform 0.65s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.35s ease',
+            transition: 'transform 0.85s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.4s ease',
           }}
         >
           {content}
         </div>
       ))}
 
-      {/* Stage indicator dots */}
-      <div
-        style={{ position: 'absolute', right: '40px', top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: '8px' }}
-      >
+      {/* Stage indicator */}
+      <div style={{ position: 'absolute', right: '40px', top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {Array.from({ length: TOTAL }).map((_, i) => (
           <div
             key={i}
             style={{
-              width: '4px',
-              height: i === current ? '20px' : '4px',
+              width: '3px',
+              height: i === current ? '24px' : '3px',
               borderRadius: '2px',
               backgroundColor: i === current ? '#FF3120' : '#2a2a2a',
               transition: 'height 0.4s ease, background-color 0.4s ease',
