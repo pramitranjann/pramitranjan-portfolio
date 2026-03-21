@@ -63,7 +63,11 @@ export function HeroCarousel() {
       document.body.style.overflow = 'hidden'
       window.scrollTo(0, 0)
     } else {
-      document.body.style.overflow = ''
+      // Hold scroll locked during collapse animation so momentum doesn't
+      // carry past SelectedWork — matches friction of stage transitions
+      window.scrollTo(0, 0)
+      const t = setTimeout(() => { document.body.style.overflow = '' }, 520)
+      return () => clearTimeout(t)
     }
     return () => { document.body.style.overflow = '' }
   }, [released])
