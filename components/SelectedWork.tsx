@@ -31,18 +31,22 @@ export function SelectedWork() {
 
   return (
     <section style={{ borderBottom: '1px solid #1f1f1f' }}>
-      {/* Section callout */}
-      <div style={{ padding: '40px 24px 0' }}>
-        <div className="flex justify-between items-baseline" style={{ marginBottom: '8px' }}>
-          <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.16em', color: '#666666' }}>SELECTED WORK</span>
-          <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.16em', color: '#FF3120' }}>04</span>
+      <div style={{ padding: '48px 24px 0' }}>
+        {/* Label row */}
+        <div className="flex justify-between items-baseline" style={{ marginBottom: '12px' }}>
+          <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.18em', color: '#666666' }}>SELECTED WORK</span>
+          <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.18em', color: '#FF3120' }}>04</span>
         </div>
+        {/* Section heading */}
+        <h2 className="font-serif italic" style={{ fontSize: '36px', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.1, marginBottom: '10px' }}>
+          Research to resolution.
+        </h2>
+        {/* Callout */}
         <p className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.06em', color: '#444444', lineHeight: 1.7 }}>
-          Research-driven UX — from concept to tested solution.
+          Four projects in UX — each one starting with a question worth asking.
         </p>
       </div>
 
-      {/* 2×2 grid */}
       <div
         ref={gridRef}
         className="grid grid-cols-2"

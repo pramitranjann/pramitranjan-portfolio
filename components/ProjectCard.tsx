@@ -18,7 +18,7 @@ export function ProjectCard({ title, oneliner, tags, href, variant = 'main', com
 
   const cardStyle = {
     backgroundColor: '#111111',
-    border: `1px solid ${hovered && !comingSoon ? '#2a2a2a' : '#1a1a1a'}`,
+    border: `1px solid ${hovered && !comingSoon ? '#FF3120' : '#1a1a1a'}`,
     padding: '16px',
     opacity: hovered && !comingSoon ? 0.85 : 1,
     transition: 'opacity 0.2s ease, border-color 0.2s ease',
