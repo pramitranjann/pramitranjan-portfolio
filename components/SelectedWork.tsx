@@ -52,22 +52,25 @@ export function SelectedWork() {
       <div
         ref={gridRef}
         className="card-grid grid grid-cols-2"
-        style={{ gap: '12px', padding: '0 24px 40px' }}
+        style={{ gap: '12px', padding: '0 24px 40px', overflow: 'visible' }}
       >
         {projects.map((p, i) => (
-          <div key={p.title} className="reveal">
+          <div
+            key={p.title}
+            className="reveal"
+            style={{ zIndex: hoveredIdx === i ? 2 : 1 }}
+            onMouseEnter={() => setHoveredIdx(i)}
+            onMouseLeave={() => setHoveredIdx(null)}
+          >
             <div
-              onMouseEnter={() => setHoveredIdx(i)}
-              onMouseLeave={() => setHoveredIdx(null)}
               style={{
                 transform: hoveredIdx === i
-                  ? 'scale(1.025)'
+                  ? 'scale(1.03)'
                   : hoveredIdx !== null
-                    ? 'scale(0.975)'
+                    ? 'scale(0.97)'
                     : 'scale(1)',
-                zIndex: hoveredIdx === i ? 2 : 1,
-                opacity: hoveredIdx !== null && hoveredIdx !== i ? 0.7 : 1,
-                transition: 'transform 0.15s ease, opacity 0.15s ease',
+                opacity: hoveredIdx !== null && hoveredIdx !== i ? 0.65 : 1,
+                transition: 'transform 0.2s ease, opacity 0.2s ease',
                 height: '100%',
               }}
             >
