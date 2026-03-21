@@ -65,7 +65,7 @@ function EntryList({ items }: { items: typeof experience }) {
             <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#FF3120' }}>
               {item.role}
             </span>
-            <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#444444' }}>
+            <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#999999' }}>
               {item.date}
             </span>
           </div>
@@ -141,7 +141,7 @@ export default function AboutPage() {
                 <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#FF3120' }}>
                   BFA, UX DESIGN
                 </span>
-                <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#444444' }}>
+                <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#999999' }}>
                   2024 — PRESENT
                 </span>
               </div>
