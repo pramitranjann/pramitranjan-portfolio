@@ -66,7 +66,7 @@ export function HeroCarousel() {
       // Hold scroll locked during collapse animation so momentum doesn't
       // carry past SelectedWork — matches friction of stage transitions
       window.scrollTo(0, 0)
-      const t = setTimeout(() => { document.body.style.overflow = '' }, 520)
+      const t = setTimeout(() => { document.body.style.overflow = '' }, 380)
       return () => clearTimeout(t)
     }
     return () => { document.body.style.overflow = '' }
@@ -173,7 +173,7 @@ export function HeroCarousel() {
         opacity: released ? 0 : 1,
         overflow: 'hidden',
         position: 'relative',
-        transition: 'height 0.5s ease, opacity 0.4s ease',
+        transition: 'height 0.35s ease, opacity 0.25s ease',
       }}
     >
       {stageContent.map((content, i) => (
