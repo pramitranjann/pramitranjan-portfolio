@@ -30,7 +30,7 @@ export function SelectedWork() {
   }, [])
 
   return (
-    <section style={{ borderBottom: '1px solid #1f1f1f' }}>
+    <section style={{ borderTop: '1px solid #1f1f1f', borderBottom: '1px solid #1f1f1f' }}>
       <div style={{ padding: '48px 24px 0' }}>
         {/* Section heading */}
         <h2 className="font-serif italic" style={{ fontSize: '36px', fontWeight: 400, color: '#FF3120', lineHeight: 1.1, marginBottom: '10px' }}>

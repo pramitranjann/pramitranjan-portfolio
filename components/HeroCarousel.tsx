@@ -160,7 +160,6 @@ export function HeroCarousel() {
       style={{
         height: 'calc(100vh - 73px)',
         overflow: 'hidden',
-        borderBottom: '1px solid #1f1f1f',
         position: 'relative',
       }}
     >
