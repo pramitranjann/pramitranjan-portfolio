@@ -23,8 +23,8 @@ export function Nav() {
     >
       <Link
         href="/"
-        className="font-mono text-red"
-        style={{ fontSize: '9px', letterSpacing: '0.12em' }}
+        className="font-mono"
+        style={{ fontSize: '9px', letterSpacing: '0.12em', color: '#FF3120', textDecoration: 'none' }}
       >
         PR
       </Link>

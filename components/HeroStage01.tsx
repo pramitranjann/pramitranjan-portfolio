@@ -13,8 +13,8 @@ export function HeroStage01() {
 
   return (
     <section
-      className="min-h-screen flex flex-col justify-end border-b border-divider"
-      style={{ padding: '48px 24px' }}
+      className="flex flex-col justify-end border-b border-divider"
+      style={{ minHeight: '100vh', padding: '48px 24px' }}
     >
       <div
         className="font-mono mb-8 select-none"

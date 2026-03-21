@@ -44,7 +44,7 @@ export default function AboutPage() {
             className="font-serif"
             style={{ fontSize: '42px', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.1, marginBottom: '24px' }}
           >
-            Designer. Student.{' '}
+            Artist. Designer.{' '}
             <span style={{ color: '#FF3120' }}>Human.</span>
           </h1>
           <p

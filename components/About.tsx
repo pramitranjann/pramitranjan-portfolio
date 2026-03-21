@@ -33,7 +33,7 @@ export function About() {
         className="reveal-text font-serif"
         style={{ fontSize: '42px', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.1 }}
       >
-        Designer. Student.{' '}
+        Artist. Designer.{' '}
         <span style={{ color: '#FF3120' }}>Human.</span>
       </h2>
       <p
