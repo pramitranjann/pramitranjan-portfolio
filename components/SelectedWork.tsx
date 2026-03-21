@@ -58,7 +58,7 @@ export function SelectedWork() {
       >
         {projects.map((p) => (
           <div key={p.title} className="reveal">
-            <ProjectCard {...p} variant="main" />
+            <ProjectCard {...p} variant="supporting" />
           </div>
         ))}
       </div>

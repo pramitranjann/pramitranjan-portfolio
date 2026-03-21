@@ -16,7 +16,7 @@ export function Nav() {
     <nav
       className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between border-b border-divider"
       style={{
-        padding: '18px 32px',
+        padding: '24px 40px',
         backgroundColor: 'rgba(13,13,13,0.85)',
         backdropFilter: 'blur(8px)',
       }}
@@ -24,7 +24,7 @@ export function Nav() {
       <Link
         href="/"
         className="font-mono"
-        style={{ fontSize: '12px', letterSpacing: '0.14em', color: '#FF3120', textDecoration: 'none' }}
+        style={{ fontSize: '16px', letterSpacing: '0.14em', color: '#FF3120', textDecoration: 'none' }}
       >
         PR
       </Link>
@@ -37,7 +37,7 @@ export function Nav() {
               href={href}
               className="font-mono transition-colors duration-150"
               style={{
-                fontSize: '10px',
+                fontSize: '13px',
                 letterSpacing: '0.14em',
                 color: active ? '#FF3120' : '#666666',
               }}

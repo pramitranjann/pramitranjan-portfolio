@@ -1,7 +1,5 @@
 import { Nav }              from '@/components/Nav'
-import { HeroStage01 }      from '@/components/HeroStage01'
-import { HeroStage02 }      from '@/components/HeroStage02'
-import { HeroStage03 }      from '@/components/HeroStage03'
+import { HeroCarousel }     from '@/components/HeroCarousel'
 import { SelectedWork }     from '@/components/SelectedWork'
 import { PhotographyStage } from '@/components/PhotographyStage'
 import { MoreWork }         from '@/components/MoreWork'
@@ -14,9 +12,7 @@ export default function HomePage() {
     <>
       <Nav />
       <main style={{ paddingTop: '57px' }}>
-        <HeroStage01 />
-        <HeroStage02 />
-        <HeroStage03 />
+        <HeroCarousel />
         <SelectedWork />
         <PhotographyStage />
         <MoreWork />
