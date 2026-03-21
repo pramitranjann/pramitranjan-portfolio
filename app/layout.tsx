@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${dmSerif.variable} ${dmMono.variable}`}>
+    <html lang="en" className={`${dmSerif.variable} ${dmMono.variable}`} suppressHydrationWarning>
       <body style={{ backgroundColor: '#0d0d0d', color: '#f5f2ed' }}>{children}</body>
     </html>
   )
