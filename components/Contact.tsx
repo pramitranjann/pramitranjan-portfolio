@@ -30,16 +30,22 @@ export function Contact() {
   return (
     <section
       ref={secRef}
-      style={{ borderTop: '1px solid #1f1f1f', padding: '48px 24px' }}
+      style={{ borderTop: '1px solid #1f1f1f', padding: '64px 24px', textAlign: 'center' }}
     >
-      <h2
+      <div
         className="reveal-text font-serif italic"
-        style={{ fontSize: '38px', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.1, marginBottom: '24px' }}
+        style={{ fontSize: 'clamp(32px, 6vw, 52px)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.1 }}
       >
-        You made it<br />this far.<br /><span style={{ color: '#FF3120' }}>Say hello.</span>
-      </h2>
+        You made it this far.
+      </div>
+      <div
+        className="reveal-text font-serif italic"
+        style={{ fontSize: 'clamp(32px, 6vw, 52px)', fontWeight: 400, color: '#FF3120', lineHeight: 1.1, marginBottom: '40px' }}
+      >
+        Say hello.
+      </div>
 
-      <div className="reveal-text flex" style={{ gap: '20px' }}>
+      <div className="reveal-text flex justify-center" style={{ gap: '28px' }}>
         {socialLinks.map(({ label, href }) => (
           <a
             key={label}

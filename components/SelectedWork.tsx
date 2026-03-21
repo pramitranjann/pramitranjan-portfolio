@@ -23,38 +23,30 @@ export function SelectedWork() {
           observer.disconnect()
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.1 }
     )
     observer.observe(grid)
     return () => observer.disconnect()
   }, [])
 
   return (
-    <section>
-      {/* Section header */}
-      <div
-        className="flex justify-between items-baseline"
-        style={{ padding: '32px 24px 8px' }}
-      >
-        <span
-          className="font-mono"
-          style={{ fontSize: '9px', letterSpacing: '0.16em', color: '#666666' }}
-        >
-          SELECTED WORK
-        </span>
-        <span
-          className="font-mono"
-          style={{ fontSize: '9px', letterSpacing: '0.16em', color: '#FF3120' }}
-        >
-          04
-        </span>
+    <section style={{ borderBottom: '1px solid #1f1f1f' }}>
+      {/* Section callout */}
+      <div style={{ padding: '40px 24px 0' }}>
+        <div className="flex justify-between items-baseline" style={{ marginBottom: '8px' }}>
+          <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.16em', color: '#666666' }}>SELECTED WORK</span>
+          <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.16em', color: '#FF3120' }}>04</span>
+        </div>
+        <p className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.06em', color: '#444444', lineHeight: 1.7 }}>
+          Research-driven UX — from concept to tested solution.
+        </p>
       </div>
 
       {/* 2×2 grid */}
       <div
         ref={gridRef}
         className="grid grid-cols-2"
-        style={{ gap: '2px', padding: '12px 24px 40px' }}
+        style={{ gap: '12px', padding: '20px 24px 40px' }}
       >
         {projects.map((p) => (
           <div key={p.title} className="reveal">
