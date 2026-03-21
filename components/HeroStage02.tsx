@@ -32,7 +32,7 @@ export function HeroStage02() {
     >
       <div
         className="font-mono mb-8 select-none"
-        style={{ fontSize: '9px', letterSpacing: '0.18em', color: '#2a2a2a' }}
+        style={{ fontSize: '9px', letterSpacing: '0.18em', color: '#FF3120' }}
       >
         02
       </div>
