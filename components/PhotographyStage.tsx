@@ -57,8 +57,8 @@ export function PhotographyStage() {
         </Link>
       </div>
 
-      {/* Film strip — height matches text column */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+      {/* Film strip — hidden on mobile */}
+      <div className="film-strip" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
         <div style={{ backgroundColor: '#060606', padding: '14px 0', width: 'fit-content', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <Holes />
           <div className="flex" style={{ gap: `${FRAME_GAP}px`, padding: `8px ${SIDE_PAD}px` }}>

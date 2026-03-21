@@ -95,12 +95,15 @@ html, body {
     padding: 60px 24px !important;
   }
 
-  /* Photography section — stack vertically */
+  /* Photography section — stack vertically, hide film strip */
   .photography-section {
     grid-template-columns: 1fr !important;
     padding: 48px 24px !important;
     gap: 40px !important;
     min-height: unset !important;
+  }
+  .film-strip {
+    display: none !important;
   }
 
   /* About section — reduce side padding */
