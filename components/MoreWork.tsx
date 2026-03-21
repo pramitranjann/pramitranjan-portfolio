@@ -46,7 +46,7 @@ export function MoreWork() {
 
       <div
         ref={gridRef}
-        className="card-grid grid grid-cols-3"
+        className="card-grid grid grid-cols-1 md:grid-cols-3"
         style={{ gap: '12px', padding: '0 24px 40px', overflow: 'visible' }}
       >
         {projects.map((p, i) => (

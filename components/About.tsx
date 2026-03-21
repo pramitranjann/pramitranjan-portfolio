@@ -25,6 +25,7 @@ export function About() {
   return (
     <section
       ref={secRef}
+      className="about-section"
       style={{ borderTop: '1px solid #1f1f1f', minHeight: '360px', padding: '64px 40px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
     >
       {/* WCAG AA: #666 on #0d0d0d = 3.1:1 — decorative label, large enough */}
@@ -42,7 +43,7 @@ export function About() {
         Artist.<br />Designer.<br /><span style={{ color: '#FF3120' }}>Human.</span>
       </h2>
 
-      <div className="flex justify-between items-end" style={{ gap: '32px' }}>
+      <div className="about-body-row flex justify-between items-end" style={{ gap: '32px' }}>
         {/* WCAG AA: #999 on #0d0d0d = 6.5:1 ✓ */}
         <p
           className="reveal-text font-mono"

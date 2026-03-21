@@ -172,6 +172,7 @@ export function HeroCarousel() {
       {stageContent.map((content, i) => (
         <div
           key={i}
+          className="hero-stage"
           style={{
             position: 'absolute',
             inset: 0,

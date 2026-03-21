@@ -28,7 +28,7 @@ function Holes() {
 
 export function PhotographyStage() {
   return (
-    <section style={{
+    <section className="photography-section" style={{
       borderTop: '1px solid #1f1f1f',
       borderBottom: '1px solid #1f1f1f',
       display: 'grid',

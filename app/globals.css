@@ -61,3 +61,36 @@ html, body {
   opacity: 1;
   transform: translateX(0);
 }
+
+/* ─── Mobile responsive overrides (< 768px) ──────────────────────────────── */
+@media (max-width: 767px) {
+  /* Nav — reduce side padding */
+  .site-nav {
+    padding: 18px 20px !important;
+  }
+
+  /* Hero stages — reduce side padding so text doesn't clip */
+  .hero-stage {
+    padding: 60px 24px !important;
+  }
+
+  /* Photography section — stack vertically */
+  .photography-section {
+    grid-template-columns: 1fr !important;
+    padding: 48px 24px !important;
+    gap: 40px !important;
+    min-height: unset !important;
+  }
+
+  /* About section — reduce side padding */
+  .about-section {
+    padding: 48px 24px !important;
+  }
+
+  /* About body row — stack body text + READ MORE link */
+  .about-body-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 20px !important;
+  }
+}

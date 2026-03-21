@@ -14,7 +14,7 @@ export function Nav() {
 
   return (
     <nav
-      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between border-b border-divider"
+      className="site-nav fixed top-0 left-0 right-0 z-50 flex items-center justify-between border-b border-divider"
       style={{
         padding: '24px 40px',
         backgroundColor: 'rgba(13,13,13,0.85)',
