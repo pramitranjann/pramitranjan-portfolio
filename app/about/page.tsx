@@ -9,11 +9,11 @@ function CVButton() {
       href="#"
       className="font-mono inline-block"
       style={{
-        fontSize: '9px',
+        fontSize: '11px',
         letterSpacing: '0.14em',
         color: '#FF3120',
         border: '1px solid #FF3120',
-        padding: '8px 16px',
+        padding: '10px 20px',
         textDecoration: 'none',
       }}
     >
@@ -38,18 +38,18 @@ export default function AboutPage() {
       <main style={{ paddingTop: '42px' }}>
 
         {/* Hero */}
-        <section className="border-b border-divider" style={{ padding: '48px 24px' }}>
+        <section className="border-b border-divider" style={{ padding: '64px 40px' }}>
           <RuleLabel number="ABOUT_" />
           <h1
             className="font-serif"
-            style={{ fontSize: '42px', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.1, marginBottom: '24px' }}
+            style={{ fontSize: 'clamp(42px, 7vw, 72px)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '28px' }}
           >
             Artist. Designer.{' '}
             <span style={{ color: '#FF3120' }}>Human.</span>
           </h1>
           <p
             className="font-mono"
-            style={{ fontSize: '12px', letterSpacing: '0.1em', color: '#f5f2ed', lineHeight: 1.7, maxWidth: '560px', marginBottom: '32px' }}
+            style={{ fontSize: '15px', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.9, maxWidth: '560px', marginBottom: '40px' }}
           >
             UX design student at SCAD, figuring out what good design can actually do. I think like a designer but see like an artist. Still learning. Always curious.
           </p>
@@ -57,26 +57,26 @@ export default function AboutPage() {
         </section>
 
         {/* Professional Activities */}
-        <section className="border-b border-divider" style={{ padding: '48px 24px' }}>
-          <div className="grid" style={{ gridTemplateColumns: '1fr 2fr', gap: '48px' }}>
-            <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.16em', color: '#666666' }}>
-              PROFESSIONAL ACTIVITIES
+        <section className="border-b border-divider about-page-section" style={{ padding: '56px 40px' }}>
+          <div className="about-page-grid grid" style={{ gridTemplateColumns: '200px 1fr', gap: '48px' }}>
+            <span className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.16em', color: '#444444', paddingTop: '4px' }}>
+              PROFESSIONAL<br />ACTIVITIES
             </span>
-            <div className="flex flex-col" style={{ gap: '32px' }}>
+            <div className="flex flex-col" style={{ gap: '40px' }}>
               {professionalActivities.map((item) => (
                 <div key={item.org}>
-                  <div className="flex items-start justify-between" style={{ marginBottom: '6px' }}>
-                    <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.12em', color: '#FF3120' }}>
+                  <div className="flex items-start justify-between" style={{ gap: '16px', marginBottom: '6px' }}>
+                    <span className="font-mono" style={{ fontSize: '13px', letterSpacing: '0.08em', color: '#FF3120', lineHeight: 1.4 }}>
                       {item.org}
                     </span>
-                    <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.1em', color: '#666666' }}>
+                    <span className="font-mono flex-shrink-0" style={{ fontSize: '10px', letterSpacing: '0.1em', color: '#444444' }}>
                       {item.date}
                     </span>
                   </div>
-                  <p className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.1em', color: '#666666', marginBottom: '4px' }}>
+                  <p className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.12em', color: '#666666', marginBottom: '10px' }}>
                     {item.role}
                   </p>
-                  <p className="font-mono" style={{ fontSize: '12px', letterSpacing: '0.1em', color: '#f5f2ed', lineHeight: 1.7 }}>
+                  <p className="font-mono" style={{ fontSize: '14px', letterSpacing: '0.03em', color: '#999999', lineHeight: 1.8 }}>
                     {item.desc}
                   </p>
                 </div>
@@ -86,24 +86,24 @@ export default function AboutPage() {
         </section>
 
         {/* Education */}
-        <section className="border-b border-divider" style={{ padding: '48px 24px' }}>
-          <div className="grid" style={{ gridTemplateColumns: '1fr 2fr', gap: '48px' }}>
-            <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.16em', color: '#666666' }}>
+        <section className="border-b border-divider about-page-section" style={{ padding: '56px 40px' }}>
+          <div className="about-page-grid grid" style={{ gridTemplateColumns: '200px 1fr', gap: '48px' }}>
+            <span className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.16em', color: '#444444', paddingTop: '4px' }}>
               EDUCATION
             </span>
             <div>
-              <div className="flex items-start justify-between" style={{ marginBottom: '6px' }}>
-                <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.12em', color: '#FF3120' }}>
+              <div className="flex items-start justify-between" style={{ gap: '16px', marginBottom: '6px' }}>
+                <span className="font-mono" style={{ fontSize: '13px', letterSpacing: '0.08em', color: '#FF3120', lineHeight: 1.4 }}>
                   Savannah College of Art and Design (SCAD)
                 </span>
-                <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.1em', color: '#666666' }}>
+                <span className="font-mono flex-shrink-0" style={{ fontSize: '10px', letterSpacing: '0.1em', color: '#444444' }}>
                   2024 — PRESENT
                 </span>
               </div>
-              <p className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.1em', color: '#666666', marginBottom: '4px' }}>
+              <p className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.12em', color: '#666666', marginBottom: '10px' }}>
                 BFA, UX DESIGN
               </p>
-              <p className="font-mono" style={{ fontSize: '12px', letterSpacing: '0.1em', color: '#f5f2ed', lineHeight: 1.7 }}>
+              <p className="font-mono" style={{ fontSize: '14px', letterSpacing: '0.03em', color: '#999999', lineHeight: 1.8 }}>
                 Studying interaction design, user research, and design systems at one of the top art and design universities in the world.
               </p>
             </div>
@@ -111,9 +111,9 @@ export default function AboutPage() {
         </section>
 
         {/* Tools */}
-        <section className="border-b border-divider" style={{ padding: '48px 24px' }}>
-          <div className="grid" style={{ gridTemplateColumns: '1fr 2fr', gap: '48px' }}>
-            <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.16em', color: '#666666' }}>
+        <section className="border-b border-divider about-page-section" style={{ padding: '56px 40px' }}>
+          <div className="about-page-grid grid" style={{ gridTemplateColumns: '200px 1fr', gap: '48px' }}>
+            <span className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.16em', color: '#444444', paddingTop: '4px' }}>
               TOOLS
             </span>
             <div className="flex flex-wrap" style={{ gap: '8px' }}>
@@ -122,11 +122,11 @@ export default function AboutPage() {
                   key={tool}
                   className="font-mono"
                   style={{
-                    fontSize: '9px',
+                    fontSize: '11px',
                     letterSpacing: '0.12em',
-                    color: '#666666',
+                    color: '#999999',
                     border: '1px solid #1f1f1f',
-                    padding: '4px 10px',
+                    padding: '6px 14px',
                   }}
                 >
                   {tool}
@@ -137,7 +137,7 @@ export default function AboutPage() {
         </section>
 
         {/* CV download — repeated */}
-        <section style={{ padding: '48px 24px' }}>
+        <section style={{ padding: '56px 40px' }}>
           <CVButton />
         </section>
 

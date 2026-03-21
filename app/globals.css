@@ -94,6 +94,15 @@ html, body {
     gap: 20px !important;
   }
 
+  /* About page — collapse 2-col layout to single column */
+  .about-page-section {
+    padding: 48px 24px !important;
+  }
+  .about-page-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
   /* Lightbox — move prev/next out of image area to bottom corners */
   .lightbox-prev {
     top: auto !important;
