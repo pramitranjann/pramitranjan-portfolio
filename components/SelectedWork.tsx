@@ -31,13 +31,19 @@ export function SelectedWork() {
 
   return (
     <section style={{ borderTop: '1px solid #1f1f1f', borderBottom: '1px solid #1f1f1f' }}>
-      <div style={{ padding: '48px 24px 0' }}>
-        {/* Section heading */}
-        <h2 className="font-serif italic" style={{ fontSize: '36px', fontWeight: 400, color: '#FF3120', lineHeight: 1.1, marginBottom: '10px' }}>
+      {/* Section header — 40px top padding, 24px sides */}
+      <div style={{ padding: '40px 24px 24px' }}>
+        <h2
+          className="font-serif"
+          style={{ fontSize: '36px', fontWeight: 400, color: '#FF3120', lineHeight: 1.1, marginBottom: '12px' }}
+        >
           Research to resolution.
         </h2>
-        {/* Callout */}
-        <p className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.06em', color: '#444444', lineHeight: 1.7 }}>
+        {/* WCAG AA compliant: #999 on #0d0d0d = 6.5:1 contrast */}
+        <p
+          className="font-mono"
+          style={{ fontSize: '13px', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.7, maxWidth: '480px' }}
+        >
           Four projects in UX — each one starting with a question worth asking.
         </p>
       </div>
@@ -45,7 +51,7 @@ export function SelectedWork() {
       <div
         ref={gridRef}
         className="grid grid-cols-2"
-        style={{ gap: '12px', padding: '20px 24px 40px' }}
+        style={{ gap: '12px', padding: '0 24px 40px' }}
       >
         {projects.map((p) => (
           <div key={p.title} className="reveal">

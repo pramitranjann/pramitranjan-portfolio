@@ -30,9 +30,11 @@ export function MoreWork() {
 
   return (
     <section>
-      <div style={{ padding: '48px 24px 0' }}>
-        {/* Section heading — smaller than Selected Work */}
-        <h2 className="font-serif italic" style={{ fontSize: '22px', fontWeight: 400, color: '#FF3120', lineHeight: 1.1 }}>
+      <div style={{ padding: '40px 24px 20px' }}>
+        <h2
+          className="font-serif"
+          style={{ fontSize: '22px', fontWeight: 400, color: '#FF3120', lineHeight: 1.1 }}
+        >
           Competitions & side projects.
         </h2>
       </div>
@@ -40,7 +42,7 @@ export function MoreWork() {
       <div
         ref={gridRef}
         className="grid grid-cols-3"
-        style={{ gap: '12px', padding: '16px 24px 40px' }}
+        style={{ gap: '12px', padding: '0 24px 40px' }}
       >
         {projects.map((p) => (
           <div key={p.title} className="reveal">
