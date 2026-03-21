@@ -43,9 +43,9 @@
   --text-h2:      38px;
   --text-h3:      24px;
   --text-eyebrow: 14px;
-  --text-body-lg: 16px;
-  --text-body:    15px;
-  --text-meta:    12px;
+  --text-body-lg: 18px;
+  --text-body:    16px;
+  --text-meta:    14px;
 }
 
 html, body {
