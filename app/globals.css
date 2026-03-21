@@ -93,4 +93,21 @@ html, body {
     align-items: flex-start !important;
     gap: 20px !important;
   }
+
+  /* Lightbox — move prev/next out of image area to bottom corners */
+  .lightbox-prev {
+    top: auto !important;
+    transform: none !important;
+    left: 24px !important;
+    bottom: 40px !important;
+  }
+  .lightbox-next {
+    top: auto !important;
+    transform: none !important;
+    right: 24px !important;
+    bottom: 40px !important;
+  }
+  .lightbox-close {
+    right: 24px !important;
+  }
 }

@@ -78,7 +78,7 @@ export function PhotoLightbox({ index, total, direction, onClose, onPrev, onNext
         {index > 0 && (
           <button
             onClick={(e) => { e.stopPropagation(); onPrev() }}
-            className="font-mono"
+            className="font-mono lightbox-prev"
             style={{
               position: 'absolute', left: '40px', top: '50%', transform: 'translateY(-50%)',
               background: 'none', border: 'none', cursor: 'pointer',
@@ -94,7 +94,7 @@ export function PhotoLightbox({ index, total, direction, onClose, onPrev, onNext
         {index < total - 1 && (
           <button
             onClick={(e) => { e.stopPropagation(); onNext() }}
-            className="font-mono"
+            className="font-mono lightbox-next"
             style={{
               position: 'absolute', right: '40px', top: '50%', transform: 'translateY(-50%)',
               background: 'none', border: 'none', cursor: 'pointer',
@@ -109,7 +109,7 @@ export function PhotoLightbox({ index, total, direction, onClose, onPrev, onNext
         {/* Close */}
         <button
           onClick={(e) => { e.stopPropagation(); onClose() }}
-          className="font-mono"
+          className="font-mono lightbox-close"
           style={{
             position: 'absolute', top: '24px', right: '40px',
             background: 'none', border: 'none', cursor: 'pointer',
