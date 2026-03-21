@@ -22,7 +22,7 @@ export function Nav() {
       }}
     >
       <Link
-        href="/"
+        href="/#selected-work"
         className="font-mono"
         style={{ fontSize: '16px', letterSpacing: '0.14em', color: '#FF3120', textDecoration: 'none' }}
       >
