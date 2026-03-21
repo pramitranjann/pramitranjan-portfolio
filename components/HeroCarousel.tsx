@@ -47,25 +47,18 @@ const stageContent = [
 ]
 
 export function HeroCarousel() {
-  // Skip carousel if user has already seen it this session
-  const [skip] = useState(() => {
-    if (typeof window === 'undefined') return false
-    return !!sessionStorage.getItem('heroSeen')
-  })
-
   const [current, setCurrent] = useState(0)
   const currentRef = useRef(0)
   const isAnimating = useRef(false)
   // released = true means page can scroll freely (past stage 3)
   const releasedRef = useRef(false)
   const [released, setReleased] = useState(false)
-  // readyToRelease becomes true as soon as animation to stage 3 completes
+  // readyToRelease becomes true after dwelling on stage 3 for 1.2s
   const readyToRelease = useRef(false)
   const touchStartY = useRef<number | null>(null)
 
   // Lock / unlock page scroll based on carousel state
   useEffect(() => {
-    if (skip) return
     if (!released) {
       document.body.style.overflow = 'hidden'
       window.scrollTo(0, 0)
@@ -73,7 +66,7 @@ export function HeroCarousel() {
       document.body.style.overflow = ''
     }
     return () => { document.body.style.overflow = '' }
-  }, [released, skip])
+  }, [released])
 
   const advance = (dir: 'up' | 'down') => {
     if (isAnimating.current) return
@@ -87,9 +80,9 @@ export function HeroCarousel() {
     setCurrent(next)
     setTimeout(() => {
       isAnimating.current = false
-      // Ready to release immediately after landing on last stage
+      // After landing on last stage, start dwell timer before allowing release
       if (currentRef.current === TOTAL - 1) {
-        readyToRelease.current = true
+        setTimeout(() => { readyToRelease.current = true }, 1200)
       }
     }, 900)
   }
@@ -103,9 +96,9 @@ export function HeroCarousel() {
         e.preventDefault()
 
         if (dir === 'down' && currentRef.current === TOTAL - 1) {
+          // Only release if dwell timer has elapsed
           if (!readyToRelease.current) return
           releasedRef.current = true
-          sessionStorage.setItem('heroSeen', '1')
           setReleased(true)
           return
         }
@@ -136,7 +129,6 @@ export function HeroCarousel() {
           if (currentRef.current === TOTAL - 1) {
             if (!readyToRelease.current) return
             releasedRef.current = true
-            sessionStorage.setItem('heroSeen', '1')
             setReleased(true)
           } else {
             advance('down')
@@ -162,8 +154,6 @@ export function HeroCarousel() {
       window.removeEventListener('touchend', onTouchEnd)
     }
   }, []) // stable — all state accessed via refs
-
-  if (skip) return null
 
   return (
     <div

@@ -31,7 +31,7 @@ export function SelectedWork() {
   }, [])
 
   return (
-    <section id="selected-work" style={{ borderTop: '1px solid #1f1f1f', borderBottom: '1px solid #1f1f1f' }}>
+    <section style={{ borderTop: '1px solid #1f1f1f', borderBottom: '1px solid #1f1f1f' }}>
       {/* Section header — 40px top padding, 24px sides */}
       <div style={{ padding: '40px 24px 24px' }}>
         <h2
