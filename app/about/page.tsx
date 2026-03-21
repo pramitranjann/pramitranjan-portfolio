@@ -26,7 +26,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <span
       className="font-mono"
-      style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#666666', paddingTop: '6px', lineHeight: 1.6 }}
+      style={{ fontSize: 'var(--text-body)', letterSpacing: '0.14em', color: '#f5f2ed', paddingTop: '6px', lineHeight: 1.6 }}
     >
       {children}
     </span>
