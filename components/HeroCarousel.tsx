@@ -67,6 +67,7 @@ export function HeroCarousel() {
     return () => {
       document.body.classList.remove('carousel-active')
       document.body.classList.remove('carousel-releasing')
+      document.body.classList.remove('carousel-reengaging')
     }
   }, [])
 
@@ -75,10 +76,13 @@ export function HeroCarousel() {
     if (!released) {
       holdingRef.current = false
       document.body.classList.remove('carousel-releasing')
-      // Only push main off-screen on initial load — not on re-engagement
-      // (carousel slides in from above and covers main; no need to hide it)
       if (!hasReleasedRef.current) {
+        // Initial load: push main off-screen below
         document.body.classList.add('carousel-active')
+      } else {
+        // Re-engagement: main slides down as carousel slides in from above
+        document.body.classList.add('carousel-reengaging')
+        setTimeout(() => document.body.classList.remove('carousel-reengaging'), 900)
       }
       document.body.style.overflow = 'hidden'
       window.scrollTo(0, 0)

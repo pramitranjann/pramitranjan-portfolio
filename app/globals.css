@@ -61,6 +61,11 @@ body.carousel-releasing main {
   transform: translateY(0);
   transition: transform 0.85s cubic-bezier(0.77, 0, 0.175, 1);
 }
+/* Re-engagement: main slides down as carousel slides in from above */
+body.carousel-reengaging main {
+  transform: translateY(100vh);
+  transition: transform 0.85s cubic-bezier(0.77, 0, 0.175, 1);
+}
 
 
 /* Reveal animations — only hide when JS is available */
