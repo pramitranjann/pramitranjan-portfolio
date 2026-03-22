@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Site Micro Animations — Portfolio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0d0d0d;
+    color: #f5f2ed;
+    font-family: 'DM Mono', monospace;
+    padding: 40px 24px 80px;
+  }
+
+  h1 { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: 28px; margin-bottom: 6px; }
+  .page-sub { font-size: 11px; color: #555; letter-spacing: 0.12em; margin-bottom: 52px; }
+
+  .section { margin-bottom: 56px; }
+  .section-label {
+    font-size: 10px; letter-spacing: 0.18em; color: #FF3120;
+    margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #1f1f1f;
+  }
+  .desc { font-size: 11px; color: #555; letter-spacing: 0.06em; line-height: 1.7; margin-top: 16px; }
+
+  .row { display: flex; gap: 40px; align-items: center; flex-wrap: wrap; }
+
+  /* ── NAV LINKS ─────────────────────────────────────────── */
+  .nav-bar {
+    background: #0d0d0d;
+    border-bottom: 1px solid #1f1f1f;
+    padding: 18px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 16px; }
+
+  /* Nav A: underline draws in */
+  .nav-a a {
+    font-size: 11px; letter-spacing: 0.14em; color: #999; text-decoration: none;
+    position: relative; padding-bottom: 2px;
+  }
+  .nav-a a::after {
+    content: ''; position: absolute; bottom: 0; left: 0;
+    height: 1px; background: #FF3120; width: 0;
+    transition: width 0.2s ease;
+  }
+  .nav-a a:hover { color: #f5f2ed; }
+  .nav-a a:hover::after { width: 100%; }
+
+  /* Nav B: color slides from red dot */
+  .nav-b a {
+    font-size: 11px; letter-spacing: 0.14em; color: #999; text-decoration: none;
+    transition: color 0.2s ease; display: inline-flex; align-items: center; gap: 0;
+  }
+  .nav-b a::before {
+    content: ''; display: inline-block;
+    width: 0; height: 4px; background: #FF3120; border-radius: 2px;
+    transition: width 0.2s ease, margin-right 0.2s ease;
+    margin-right: 0;
+  }
+  .nav-b a:hover { color: #f5f2ed; }
+  .nav-b a:hover::before { width: 6px; margin-right: 6px; }
+
+  .nav-links { display: flex; gap: 32px; }
+
+  /* ── TEXT LINKS ─────────────────────────────────────────── */
+
+  /* Arrow links: READ MORE →  VIEW →  ← BACK */
+  .link-arrow {
+    font-size: 12px; letter-spacing: 0.12em; color: #FF3120; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+  }
+
+  /* Text link A: arrow nudges (same as card option A) */
+  .tlink-a .arrow { display: inline-block; transition: transform 0.2s ease; }
+  .tlink-a:hover .arrow { transform: translateX(4px); }
+
+  /* Text link B: whole link brightens + small gap opens */
+  .tlink-b {
+    transition: letter-spacing 0.2s ease, opacity 0.2s ease;
+    opacity: 0.8;
+  }
+  .tlink-b:hover { letter-spacing: 0.18em; opacity: 1; }
+
+  /* Back link: arrow nudges LEFT */
+  .tlink-back { font-size: 12px; letter-spacing: 0.12em; color: #666; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; transition: color 0.2s ease; }
+  .tlink-back .arrow { display: inline-block; transition: transform 0.2s ease; }
+  .tlink-back:hover { color: #FF3120; }
+  .tlink-back:hover .arrow { transform: translateX(-4px); }
+
+  /* ── SOCIAL LINKS ─────────────────────────────────────────── */
+  .social-a {
+    font-size: 12px; letter-spacing: 0.14em; color: #888; text-decoration: none;
+    border-bottom: 1px solid #FF3120; padding-bottom: 2px;
+    transition: color 0.2s ease, border-bottom-width 0.2s ease;
+    cursor: pointer;
+  }
+  .social-a:hover { color: #FF3120; border-bottom-width: 2px; }
+
+  .social-b {
+    font-size: 12px; letter-spacing: 0.14em; color: #888; text-decoration: none;
+    position: relative; padding-bottom: 2px; cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  .social-b::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 1px; background: #FF3120;
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.25s ease;
+  }
+  .social-b:hover { color: #FF3120; }
+  .social-b:hover::after { transform: scaleX(1); }
+
+  /* ── EYEBROW LABELS ─────────────────────────────────────────── */
+  .eyebrow-demo {
+    display: flex; align-items: center; gap: 10px;
+    padding: 20px; background: #111; border: 1px solid #1f1f1f;
+    margin-bottom: 12px;
+  }
+  .eyebrow-line { width: 32px; height: 1px; background: #FF3120; }
+  .eyebrow-text { font-size: 12px; letter-spacing: 0.18em; color: #FF3120; }
+
+  /* Eyebrow A: line extends on scroll-in (CSS animation, not hover) */
+  @keyframes lineGrow { from { width: 0; } to { width: 32px; } }
+  @keyframes textFadeIn { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: translateX(0); } }
+  .eyebrow-a .eyebrow-line { animation: lineGrow 0.4s ease forwards; }
+  .eyebrow-a .eyebrow-text { animation: textFadeIn 0.4s ease 0.2s both; }
+
+  /* ── HERO STAGE TEXT ─────────────────────────────────────── */
+  .hero-demo {
+    padding: 40px; background: #111; border: 1px solid #1f1f1f; margin-bottom: 12px;
+  }
+  @keyframes heroReveal {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-demo h2 {
+    font-family: 'DM Serif Display', serif; font-weight: 400; font-style: italic;
+    font-size: 36px; color: #f5f2ed; line-height: 1.1; margin-bottom: 20px;
+    animation: heroReveal 0.6s ease both;
+  }
+  .hero-demo h2 span { color: #FF3120; }
+  .hero-demo p {
+    font-size: 13px; color: #999; line-height: 1.9; max-width: 360px; letter-spacing: 0.04em;
+    animation: heroReveal 0.6s ease 0.15s both;
+  }
+  .replay-btn {
+    margin-top: 12px; font-family: 'DM Mono', monospace; font-size: 10px;
+    letter-spacing: 0.12em; color: #444; background: none; border: 1px solid #222;
+    padding: 6px 12px; cursor: pointer;
+  }
+  .replay-btn:hover { color: #FF3120; border-color: #FF3120; }
+
+</style>
+</head>
+<body>
+
+<h1>Site Micro Animations</h1>
+<p class="page-sub">HOVER ELEMENTS TO PREVIEW — PORTFOLIO / MICRO INTERACTIONS</p>
+
+<!-- NAV LINKS -->
+<div class="section">
+  <div class="section-label">01 — NAV LINKS</div>
+
+  <p style="font-size:11px;color:#555;margin-bottom:12px;letter-spacing:0.06em">Option A: red underline draws in on hover</p>
+  <div class="nav-bar nav-a">
+    <div class="nav-logo">PR</div>
+    <div class="nav-links">
+      <a href="#">WORK</a>
+      <a href="#">CREATIVE</a>
+      <a href="#">ABOUT</a>
+    </div>
+  </div>
+
+  <p style="font-size:11px;color:#555;margin-bottom:12px;letter-spacing:0.06em">Option B: red dot expands before the text</p>
+  <div class="nav-bar nav-b">
+    <div class="nav-logo">PR</div>
+    <div class="nav-links">
+      <a href="#">WORK</a>
+      <a href="#">CREATIVE</a>
+      <a href="#">ABOUT</a>
+    </div>
+  </div>
+  <p class="desc">Nav A is quieter and more typographic. Nav B has more personality — the red dot feels like a cursor or a bullet.</p>
+</div>
+
+<!-- TEXT LINKS -->
+<div class="section">
+  <div class="section-label">02 — TEXT LINKS (READ MORE →  /  VIEW →)</div>
+  <div class="row">
+    <div>
+      <p style="font-size:10px;color:#444;letter-spacing:0.1em;margin-bottom:10px">ARROW NUDGE (matches card)</p>
+      <span class="link-arrow tlink-a">READ MORE <span class="arrow">→</span></span>
+    </div>
+    <div>
+      <p style="font-size:10px;color:#444;letter-spacing:0.1em;margin-bottom:10px">LETTER SPACING EXPANDS</p>
+      <span class="link-arrow tlink-b">READ MORE →</span>
+    </div>
+    <div>
+      <p style="font-size:10px;color:#444;letter-spacing:0.1em;margin-bottom:10px">BACK LINK (arrow nudges left)</p>
+      <span class="tlink-back"><span class="arrow">←</span> CREATIVE</span>
+    </div>
+  </div>
+  <p class="desc">Keeping arrow nudge consistent with cards makes the whole site feel cohesive. Back links nudge the opposite direction.</p>
+</div>
+
+<!-- SOCIAL LINKS -->
+<div class="section">
+  <div class="section-label">03 — SOCIAL LINKS (CONTACT SECTION)</div>
+  <div class="row">
+    <div>
+      <p style="font-size:10px;color:#444;letter-spacing:0.1em;margin-bottom:10px">OPTION A: BORDER THICKENS</p>
+      <span class="social-a">LINKEDIN</span>
+    </div>
+    <div>
+      <p style="font-size:10px;color:#444;letter-spacing:0.1em;margin-bottom:12px">OPTION B: UNDERLINE DRAWS IN FROM LEFT</p>
+      <span class="social-b">LINKEDIN</span>
+    </div>
+  </div>
+  <p class="desc">Option B (underline draws from left) echoes the nav option A — keeps the language consistent across the site.</p>
+</div>
+
+<!-- EYEBROW LABELS -->
+<div class="section">
+  <div class="section-label">04 — SECTION EYEBROW (SCROLL-IN ANIMATION)</div>
+  <div class="eyebrow-demo eyebrow-a">
+    <div class="eyebrow-line"></div>
+    <div class="eyebrow-text">CREATIVE_</div>
+  </div>
+  <button class="replay-btn" onclick="
+    const d = document.querySelector('.eyebrow-a');
+    const line = d.querySelector('.eyebrow-line');
+    const text = d.querySelector('.eyebrow-text');
+    line.style.animation='none'; text.style.animation='none';
+    requestAnimationFrame(() => { line.style.animation=''; text.style.animation=''; });
+  ">↺ REPLAY</button>
+  <p class="desc">The red line grows in, then the label fades in from the left. Plays once on scroll-in — no hover needed. Architectural, deliberate.</p>
+</div>
+
+</body>
+</html>

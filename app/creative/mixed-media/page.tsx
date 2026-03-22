@@ -15,7 +15,7 @@ export default function MixedMediaPage() {
         <section style={{ padding: '48px 40px' }}>
           <div style={{ marginBottom: '16px' }}>
             <Link href="/creative" className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#666666', textDecoration: 'none' }}>
-              ← CREATIVE
+              <span className="arrow-nudge-back">←</span> CREATIVE
             </Link>
           </div>
           <h1 className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '40px' }}>
@@ -28,6 +28,7 @@ export default function MixedMediaPage() {
                 <h2 className="font-serif" style={{ fontSize: 'var(--text-body)', fontWeight: 400, color: '#f5f2ed', marginBottom: '4px' }}>{p.title}</h2>
                 <p className="font-mono flex-1" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.6, marginBottom: '12px' }}>{p.desc}</p>
                 <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#666666' }}>{p.tag}</span>
+                <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#FF3120', marginTop: '6px', display: 'block' }}>VIEW <span className="arrow-nudge">→</span></span>
               </div>
             ))}
           </div>

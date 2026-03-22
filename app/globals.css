@@ -77,6 +77,104 @@ body.carousel-reengaging main {
   border-color: #FF3120;
 }
 
+/* Arrow nudge — forward links */
+.arrow-nudge {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+.portfolio-card:hover .arrow-nudge,
+a:hover .arrow-nudge {
+  transform: translateX(4px);
+}
+
+/* Arrow nudge — back links */
+.arrow-nudge-back {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+a:hover .arrow-nudge-back {
+  transform: translateX(-4px);
+}
+
+/* Nav link — red dot expands on hover */
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  color: #999999;
+  transition: color 0.2s ease;
+  text-decoration: none;
+}
+.nav-link::before {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 6px;
+  border-radius: 3px;
+  background: #FF3120;
+  transition: width 0.2s ease, margin-right 0.2s ease;
+  margin-right: 0;
+}
+.nav-link:hover {
+  color: #f5f2ed;
+}
+.nav-link:hover::before {
+  width: 6px;
+  margin-right: 6px;
+}
+.nav-link.active {
+  color: #FF3120;
+}
+.nav-link.active::before {
+  width: 6px;
+  margin-right: 6px;
+}
+
+/* Social link — underline draws in from left */
+.social-link {
+  position: relative;
+  color: #888888;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.social-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #FF3120;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
+.social-link:hover {
+  color: #FF3120;
+}
+.social-link:hover::after {
+  transform: scaleX(1);
+}
+
+/* Section eyebrow — scroll-in animation */
+@keyframes eyebrow-label {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.eyebrow-line {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+.eyebrow-label {
+  opacity: 0;
+}
+.eyebrow-animate .eyebrow-line {
+  transform: scaleX(1);
+}
+.eyebrow-animate .eyebrow-label {
+  animation: eyebrow-label 0.4s ease 0.2s both;
+}
+
 /* Reveal animations — only hide when JS is available */
 .js-ready .reveal {
   opacity: 0;

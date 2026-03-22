@@ -55,7 +55,7 @@ export function About() {
           className="reveal-text font-mono flex-shrink-0"
           style={{ fontSize: 'var(--text-meta)', color: '#FF3120', letterSpacing: '0.12em', textDecoration: 'none', whiteSpace: 'nowrap' }}
         >
-          READ MORE →
+          READ MORE <span className="arrow-nudge">→</span>
         </Link>
       </div>
     </section>

@@ -35,14 +35,8 @@ export function Nav() {
             <Link
               key={href}
               href={href}
-              className="font-mono transition-colors duration-150"
-              style={{
-                fontSize: '13px',
-                letterSpacing: '0.14em',
-                color: active ? '#FF3120' : '#666666',
-              }}
-              onMouseEnter={(e) => { if (!active) (e.currentTarget as HTMLElement).style.color = '#f5f2ed' }}
-              onMouseLeave={(e) => { if (!active) (e.currentTarget as HTMLElement).style.color = '#666666' }}
+              className={`nav-link font-mono${active ? ' active' : ''}`}
+              style={{ fontSize: '13px', letterSpacing: '0.14em', textDecoration: 'none' }}
             >
               {label}
             </Link>

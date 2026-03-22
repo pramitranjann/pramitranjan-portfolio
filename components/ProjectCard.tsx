@@ -26,6 +26,9 @@ export function ProjectCard({ title, oneliner, tags, href, variant = 'main', ima
         <div className="work-card-image" style={{ aspectRatio: imageRatio ?? '3 / 4', width: '100%', backgroundColor: '#252525', border: '1px solid #333333', marginBottom: '12px' }} />
         <div className="font-serif" style={{ fontSize: 'var(--text-body)', color: '#f5f2ed' }}>{title}</div>
         <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#999999', marginTop: '4px', letterSpacing: '0.1em' }}>{category}</div>
+        <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#FF3120', letterSpacing: '0.1em', marginTop: '8px' }}>
+          VIEW <span className="arrow-nudge">→</span>
+        </div>
       </div>
     ) : (
       <div className="portfolio-card" style={cardBase}>

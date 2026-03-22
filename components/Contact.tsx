@@ -52,13 +52,10 @@ export function Contact() {
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-mono"
+            className="social-link font-mono"
             style={{
               fontSize: 'var(--text-meta)',
               letterSpacing: '0.14em',
-              color: '#888888',
-              textDecoration: 'none',
-              borderBottom: '1px solid #FF3120',
               paddingBottom: '2px',
             }}
           >

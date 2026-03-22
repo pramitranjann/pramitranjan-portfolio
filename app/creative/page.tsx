@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import { Nav } from '@/components/Nav'
 import { Footer } from '@/components/Footer'
 import Link from 'next/link'
@@ -25,7 +26,7 @@ function CreativeCard({ title, desc, tag, href, comingSoon, imageHeight = '240px
         {tag && <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#666666' }}>{tag}</span>}
         {comingSoon
           ? <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#666666' }}>COMING SOON</span>
-          : <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#FF3120' }}>VIEW →</span>
+          : <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#FF3120' }}>VIEW <span className="arrow-nudge">→</span></span>
         }
       </div>
     </div>
@@ -34,6 +35,24 @@ function CreativeCard({ title, desc, tag, href, comingSoon, imageHeight = '240px
 }
 
 export default function CreativePage() {
+  const eyebrowRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const el = eyebrowRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add('eyebrow-animate')
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.1 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <>
       <Nav />
@@ -41,9 +60,9 @@ export default function CreativePage() {
 
         {/* Hero */}
         <section className="creative-hero-section border-b border-divider" style={{ padding: '64px 40px' }}>
-          <div className="flex items-center" style={{ gap: '10px', marginBottom: '24px' }}>
-            <div style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
-            <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>CREATIVE_</span>
+          <div ref={eyebrowRef} className="flex items-center" style={{ gap: '10px', marginBottom: '24px' }}>
+            <div className="eyebrow-line" style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
+            <span className="eyebrow-label font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>CREATIVE_</span>
           </div>
           <h1
             className="font-serif"
