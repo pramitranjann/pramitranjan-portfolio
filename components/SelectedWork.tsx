@@ -3,10 +3,10 @@ import { useEffect, useRef } from 'react'
 import { ProjectCard } from './ProjectCard'
 
 const projects = [
-  { title: 'LoomLearn', oneliner: 'One learning space for students who think differently.',       tags: ['UX', 'ED-TECH'],       href: '/work/loomlearn' },
-  { title: 'HelpOH',    oneliner: 'Connecting homes to trusted help, and workers to fair pay.',   tags: ['UX', 'SOCIAL IMPACT'], href: '/work/helpoh' },
-  { title: 'Atom OS',   oneliner: 'A phone stripped down to what actually matters.',               tags: ['UX', 'PRODUCT'],       href: '/work/atom' },
-  { title: 'Albers',    oneliner: 'Colour theory you can actually play with.',                     tags: ['CREATIVE', 'CODE'],    href: '/work/albers' },
+  { title: "Franklin's", oneliner: 'The experience starts before you walk in.',             tags: ['UX', 'RESEARCH'],   href: '/work/franklins' },
+  { title: 'Albers',     oneliner: 'Colour theory you can actually play with.',             tags: ['UI', 'CODE'],       href: '/work/albers' },
+  { title: 'LoomLearn',  oneliner: 'One learning space for students who think differently.', tags: ['UX', 'ED-TECH'],   href: '/work/loomlearn' },
+  { title: 'Atom OS',    oneliner: 'A phone stripped down to what actually matters.',        tags: ['UI', 'SYSTEMS'],   href: '/work/atom' },
 ]
 
 export function SelectedWork() {

@@ -3,9 +3,9 @@ import { useEffect, useRef } from 'react'
 import { ProjectCard } from './ProjectCard'
 
 const projects = [
-  { title: 'Accord',          oneliner: '', tags: ['UX', 'ACCESSIBILITY'], href: '/work/accord' },
-  { title: 'Design-athon 01', oneliner: '', tags: ['UX', 'COMPETITION'],   href: '/work/designathon-01' },
-  { title: 'Design-athon 02', oneliner: '', tags: ['UX', 'COMPETITION'],   href: '/work/designathon-02' },
+  { title: 'Accord',   oneliner: 'A contract tool built for freelancers.',              tags: ['UX', 'PRODUCT'],     href: '/work/accord' },
+  { title: 'HelpOH',   oneliner: 'Connecting homes to trusted help, and workers to fair work.', tags: ['UX', 'SERVICE DESIGN'], href: '/work/helpoh' },
+  { title: 'Purcast',  oneliner: 'A podcast app designed for the Fluxathon.',           tags: ['UI', 'COMPETITION'], href: '/work/purcast' },
 ]
 
 export function MoreWork() {
