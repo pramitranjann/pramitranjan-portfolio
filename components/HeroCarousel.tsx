@@ -137,7 +137,9 @@ export function HeroCarousel() {
           e.preventDefault()
           releasedRef.current = false
           setReleased(false)
-          advance('up')
+          // Lock for slide-in duration — no stage advance, carousel restores at stage 3
+          isAnimating.current = true
+          setTimeout(() => { isAnimating.current = false }, 900)
         }
       }
     }
@@ -172,7 +174,8 @@ export function HeroCarousel() {
         if (delta < -50 && window.scrollY === 0) {
           releasedRef.current = false
           setReleased(false)
-          advance('up')
+          isAnimating.current = true
+          setTimeout(() => { isAnimating.current = false }, 900)
         }
       }
     }
