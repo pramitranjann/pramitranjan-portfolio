@@ -1,6 +1,7 @@
 'use client'
 import Image from 'next/image'
 import { motion, AnimatePresence, usePresenceData } from 'motion/react'
+import { playLightboxNav } from '@/lib/sounds'
 
 interface PhotoLightboxProps {
   src: string
@@ -78,7 +79,7 @@ export function PhotoLightbox({ src, alt, index, total, direction, onClose, onPr
         {/* Prev */}
         {index > 0 && (
           <button
-            onClick={(e) => { e.stopPropagation(); onPrev() }}
+            onClick={(e) => { e.stopPropagation(); playLightboxNav(); onPrev() }}
             className="font-mono lightbox-prev"
             style={{
               position: 'absolute', left: '40px', top: '50%', transform: 'translateY(-50%)',
@@ -94,7 +95,7 @@ export function PhotoLightbox({ src, alt, index, total, direction, onClose, onPr
         {/* Next */}
         {index < total - 1 && (
           <button
-            onClick={(e) => { e.stopPropagation(); onNext() }}
+            onClick={(e) => { e.stopPropagation(); playLightboxNav(); onNext() }}
             className="font-mono lightbox-next"
             style={{
               position: 'absolute', right: '40px', top: '50%', transform: 'translateY(-50%)',
