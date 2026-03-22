@@ -271,9 +271,9 @@ button:hover .arrow-nudge-back {
     padding: 24px !important;
   }
 
-  /* Work cards — fixed height image on mobile, drop aspect ratio */
+  /* Work cards — fixed height image on mobile, drop padding-bottom ratio */
   .work-card-image {
-    aspect-ratio: unset !important;
+    padding-bottom: 0 !important;
     height: 140px !important;
   }
 
