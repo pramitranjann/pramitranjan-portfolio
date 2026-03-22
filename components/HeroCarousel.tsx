@@ -73,11 +73,11 @@ export function HeroCarousel() {
       window.scrollTo(0, 0)
       // Snap height to 0 after fade (220ms)
       const tCollapse = setTimeout(() => setCollapsed(true), 220)
-      // Unlock scroll after momentum has fully dissipated (650ms)
+      // Unlock scroll after same duration as stage transitions (900ms)
       const tUnlock = setTimeout(() => {
         holdingRef.current = false
         document.body.style.overflow = ''
-      }, 650)
+      }, 900)
       return () => { clearTimeout(tCollapse); clearTimeout(tUnlock) }
     }
     return () => { document.body.style.overflow = '' }
