@@ -58,6 +58,8 @@ export function HeroCarousel() {
   // readyToRelease becomes true after animation lands on last stage
   const readyToRelease = useRef(false)
   const touchStartY = useRef<number | null>(null)
+  // Track whether carousel has ever released so re-engagement doesn't re-hide main
+  const hasReleasedRef = useRef(false)
 
   // Add carousel-active class on mount so main starts off-screen
   useEffect(() => {
@@ -73,11 +75,16 @@ export function HeroCarousel() {
     if (!released) {
       holdingRef.current = false
       document.body.classList.remove('carousel-releasing')
-      document.body.classList.add('carousel-active')
+      // Only push main off-screen on initial load — not on re-engagement
+      // (carousel slides in from above and covers main; no need to hide it)
+      if (!hasReleasedRef.current) {
+        document.body.classList.add('carousel-active')
+      }
       document.body.style.overflow = 'hidden'
       window.scrollTo(0, 0)
     } else {
       holdingRef.current = true
+      hasReleasedRef.current = true
       document.body.classList.remove('carousel-active')
       document.body.classList.add('carousel-releasing')
       window.scrollTo(0, 0)
