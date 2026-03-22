@@ -51,8 +51,8 @@ export function SelectedWork() {
 
       <div
         ref={gridRef}
-        className="card-grid grid grid-cols-1 md:grid-cols-3"
-        style={{ gap: '24px', padding: '0 24px 40px' }}
+        className="card-grid grid grid-cols-2 md:grid-cols-4"
+        style={{ gap: '16px', padding: '0 24px 40px' }}
       >
         {projects.map((p, i) => (
           <motion.div

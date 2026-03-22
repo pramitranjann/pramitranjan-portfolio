@@ -4,48 +4,50 @@ import { Footer } from '@/components/Footer'
 import { ProjectCard } from '@/components/ProjectCard'
 
 const projects = [
-  { title: 'LoomLearn',       oneliner: 'One learning space for students who think differently.',       tags: ['UX', 'RESEARCH'],        href: '/work/loomlearn',      variant: 'main' as const },
-  { title: 'HelpOH',          oneliner: 'Connecting homes to trusted help, and workers to fair pay.',   tags: ['UX', 'SERVICE DESIGN'],  href: '/work/helpoh',         variant: 'main' as const },
-  { title: 'Atom OS',         oneliner: 'A phone stripped down to what actually matters.',               tags: ['UI', 'SYSTEMS'],         href: '/work/atom',           variant: 'main' as const },
-  { title: 'Albers',          oneliner: 'Colour theory you can actually play with.',                     tags: ['UI', 'INTERACTION'],     href: '/work/albers',         variant: 'main' as const },
-  { title: 'Accord',          oneliner: 'A contract tool built for freelancers.',                        tags: ['UX', 'PRODUCT'],         href: '/work/accord',         variant: 'supporting' as const },
-  { title: 'Design-athon 01', oneliner: 'A 48-hour weather app designed with Claude AI.',               tags: ['UI', 'SPRINT'],          href: '/work/designathon-01', variant: 'supporting' as const },
-  { title: 'Design-athon 02', oneliner: 'Redesigning Passio Go with Figma Make.',                       tags: ['UI', 'SPRINT'],          href: '/work/designathon-02', variant: 'supporting' as const },
+  { title: 'LoomLearn',       oneliner: 'One learning space for students who think differently.',       tags: ['UX', 'RESEARCH'],        href: '/work/loomlearn' },
+  { title: 'HelpOH',          oneliner: 'Connecting homes to trusted help, and workers to fair pay.',   tags: ['UX', 'SERVICE DESIGN'],  href: '/work/helpoh' },
+  { title: 'Atom OS',         oneliner: 'A phone stripped down to what actually matters.',               tags: ['UI', 'SYSTEMS'],         href: '/work/atom' },
+  { title: 'Albers',          oneliner: 'Colour theory you can actually play with.',                     tags: ['UI', 'INTERACTION'],     href: '/work/albers' },
+  { title: 'Accord',          oneliner: 'A contract tool built for freelancers.',                        tags: ['UX', 'PRODUCT'],         href: '/work/accord' },
+  { title: 'Design-athon 01', oneliner: 'A 48-hour weather app designed with Claude AI.',               tags: ['UI', 'SPRINT'],          href: '/work/designathon-01' },
+  { title: 'Design-athon 02', oneliner: 'Redesigning Passio Go with Figma Make.',                       tags: ['UI', 'SPRINT'],          href: '/work/designathon-02' },
 ]
 
 export default function WorkPage() {
   return (
     <>
       <Nav />
-      <main style={{ paddingTop: '42px' }}>
-        <section style={{ padding: '48px 24px' }}>
-          {/* Page header */}
-          <div
-            className="flex items-center justify-between border-b border-divider"
-            style={{ marginBottom: '24px', paddingBottom: '16px' }}
+      <main style={{ paddingTop: '57px' }}>
+
+        {/* Hero */}
+        <section className="border-b border-divider" style={{ padding: '64px 40px' }}>
+          <div className="flex items-center" style={{ gap: '10px', marginBottom: '24px' }}>
+            <div style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
+            <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>WORK_</span>
+          </div>
+          <h1
+            className="font-serif"
+            style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '20px' }}
           >
-            <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.16em', color: '#666666' }}>
-              ALL WORK
-            </span>
-            <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.16em', color: '#FF3120' }}>
-              07
-            </span>
-          </div>
+            All projects.
+          </h1>
+          <p
+            className="font-mono"
+            style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.9, maxWidth: '480px' }}
+          >
+            Seven projects across UX, UI, and interaction design.
+          </p>
+        </section>
 
-          {/* Top 4 — 2×2 grid */}
-          <div className="grid grid-cols-2" style={{ gap: '2px', marginBottom: '2px' }}>
-            {projects.slice(0, 4).map((p) => (
-              <ProjectCard key={p.title} {...p} />
-            ))}
-          </div>
-
-          {/* Bottom 3 — 3-col grid */}
-          <div className="grid grid-cols-3" style={{ gap: '2px' }}>
-            {projects.slice(4).map((p) => (
-              <ProjectCard key={p.title} {...p} />
+        {/* Grid */}
+        <section style={{ padding: '40px' }}>
+          <div className="grid grid-cols-2 md:grid-cols-4" style={{ gap: '16px' }}>
+            {projects.map((p) => (
+              <ProjectCard key={p.title} {...p} variant="supporting" />
             ))}
           </div>
         </section>
+
       </main>
       <Footer />
     </>
