@@ -65,8 +65,8 @@ export function CaseStudyLayout({
               {title}
             </h1>
             <p
-              className="font-serif italic mt-3"
-              style={{ fontSize: 'var(--text-body)', fontWeight: 400, color: '#666666' }}
+              className="font-mono mt-3"
+              style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#666666', lineHeight: 1.6 }}
             >
               {oneliner}
             </p>
