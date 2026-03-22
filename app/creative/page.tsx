@@ -18,7 +18,7 @@ function CreativeCard({ title, desc, tag, href, comingSoon }: {
 }) {
   const inner = (
     <div className="flex flex-col h-full transition-opacity duration-150 hover:opacity-75" style={{ backgroundColor: '#1c1c1c', border: '1px solid #2a2a2a', padding: '16px' }}>
-      <div className="w-full" style={{ backgroundColor: '#252525', border: '1px solid #333333', aspectRatio: '3/4', marginBottom: '12px' }} />
+      <div className="w-full" style={{ backgroundColor: '#252525', border: '1px solid #333333', aspectRatio: '4/3', marginBottom: '12px' }} />
       <h3 className="font-serif" style={{ fontSize: 'var(--text-body)', fontWeight: 400, color: '#f5f2ed', marginBottom: '4px' }}>{title}</h3>
       <p className="font-mono flex-1" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.6, marginBottom: '12px' }}>{desc}</p>
       <div className="flex items-end justify-between">
@@ -62,7 +62,7 @@ export default function CreativePage() {
         {/* Photography */}
         <section className="border-b border-divider" style={{ padding: '40px' }}>
           <SectionHeader label="PHOTOGRAPHY" count="04" />
-          <div className="grid grid-cols-2 md:grid-cols-4" style={{ gap: '16px' }}>
+          <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: '16px' }}>
             <CreativeCard title="KL" desc="Street life and quiet corners of a city in motion." href="/creative/photography/kl" />
             <CreativeCard title="Penang" desc="Heritage streets and the texture of an older world." href="/creative/photography/penang" />
             <CreativeCard title="Singapore" desc="The duality of a city-state — dense and lush at once." href="/creative/photography/singapore" />

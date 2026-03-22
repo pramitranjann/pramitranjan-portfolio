@@ -43,7 +43,7 @@ export default function WorkPage() {
         <section style={{ padding: '40px' }}>
           <div className="grid grid-cols-2 md:grid-cols-4" style={{ gap: '16px' }}>
             {projects.map((p) => (
-              <ProjectCard key={p.title} {...p} variant="supporting" />
+              <ProjectCard key={p.title} {...p} variant="supporting" imageRatio="4 / 3" />
             ))}
           </div>
         </section>
