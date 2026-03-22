@@ -62,11 +62,11 @@ export default function CreativePage() {
         {/* Photography */}
         <section className="border-b border-divider" style={{ padding: '40px' }}>
           <SectionHeader label="PHOTOGRAPHY" count="04" />
-          <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: '16px' }}>
-            <CreativeCard title="KL" desc="Street life and quiet corners of a city in motion." href="/creative/photography/kl" imageHeight="360px" />
-            <CreativeCard title="Penang" desc="Heritage streets and the texture of an older world." href="/creative/photography/penang" imageHeight="360px" />
-            <CreativeCard title="Singapore" desc="The duality of a city-state — dense and lush at once." href="/creative/photography/singapore" imageHeight="360px" />
-            <CreativeCard title="Ho Chi Minh" desc="Coming soon." comingSoon imageHeight="360px" />
+          <div className="grid grid-cols-2 md:grid-cols-4" style={{ gap: '16px' }}>
+            <CreativeCard title="KL" desc="Street life and quiet corners of a city in motion." href="/creative/photography/kl" />
+            <CreativeCard title="Penang" desc="Heritage streets and the texture of an older world." href="/creative/photography/penang" />
+            <CreativeCard title="Singapore" desc="The duality of a city-state — dense and lush at once." href="/creative/photography/singapore" />
+            <CreativeCard title="Ho Chi Minh" desc="Coming soon." comingSoon />
           </div>
         </section>
 
