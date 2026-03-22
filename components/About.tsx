@@ -26,7 +26,7 @@ export function About() {
     <section
       ref={secRef}
       className="about-section"
-      style={{ borderTop: '1px solid #1f1f1f', minHeight: 'calc(100vh - 57px)', padding: '48px 40px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
+      style={{ borderTop: '1px solid #1f1f1f', padding: '32px 40px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
     >
       {/* WCAG AA: #666 on #0d0d0d = 3.1:1 — decorative label, large enough */}
       <div

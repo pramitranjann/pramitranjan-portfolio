@@ -18,7 +18,7 @@ function CreativeCard({ title, desc, tag, href, comingSoon }: {
 }) {
   const inner = (
     <div className="flex flex-col h-full transition-opacity duration-150 hover:opacity-75" style={{ backgroundColor: '#1c1c1c', border: '1px solid #2a2a2a', padding: '16px' }}>
-      <div className="w-full" style={{ backgroundColor: '#252525', border: '1px solid #333333', aspectRatio: '4/3', marginBottom: '12px' }} />
+      <div style={{ width: '100%', height: '240px', backgroundColor: '#252525', border: '1px solid #333333', marginBottom: '12px' }} />
       <h3 className="font-serif" style={{ fontSize: 'var(--text-body)', fontWeight: 400, color: '#f5f2ed', marginBottom: '4px' }}>{title}</h3>
       <p className="font-mono flex-1" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.6, marginBottom: '12px' }}>{desc}</p>
       <div className="flex items-end justify-between">
