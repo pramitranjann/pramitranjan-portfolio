@@ -17,9 +17,20 @@ interface CaseStudyLayoutProps {
   next: ProjectLink | null
   backHref?: string
   backLabel?: string
+  overview?: string
+  role?: string
+  research?: string
+  ideation?: string
+  keyDecisions?: string
+  solution?: string
+  reflection?: string
 }
 
-export function CaseStudyLayout({ title, oneliner, type, tags, prev, next, backHref = '/work', backLabel = 'WORK' }: CaseStudyLayoutProps) {
+export function CaseStudyLayout({
+  title, oneliner, type, tags, prev, next,
+  backHref = '/work', backLabel = 'WORK',
+  overview, role, research, ideation, keyDecisions, solution, reflection,
+}: CaseStudyLayoutProps) {
   const basePath = backHref
   return (
     <>
@@ -75,7 +86,7 @@ export function CaseStudyLayout({ title, oneliner, type, tags, prev, next, backH
               OVERVIEW
             </span>
             <p className="font-mono" style={{ fontSize: '12px', letterSpacing: '0.1em', color: '#999999', lineHeight: 1.7 }}>
-              This project focused on understanding user needs and translating them into a cohesive design solution. Through research, ideation, and iteration, the final product addresses real problems with intentional design decisions.
+              {overview ?? 'This project focused on understanding user needs and translating them into a cohesive design solution. Through research, ideation, and iteration, the final product addresses real problems with intentional design decisions.'}
             </p>
           </div>
         </section>
@@ -91,7 +102,7 @@ export function CaseStudyLayout({ title, oneliner, type, tags, prev, next, backH
             </span>
             <div>
               <p className="font-mono mb-6" style={{ fontSize: '12px', letterSpacing: '0.1em', color: '#999999', lineHeight: 1.7 }}>
-                Led end-to-end UX design including research planning, synthesis, interaction design, and high-fidelity prototyping.
+                {role ?? 'Led end-to-end UX design including research planning, synthesis, interaction design, and high-fidelity prototyping.'}
               </p>
               <div className="flex flex-wrap gap-2">
                 {tags.map((tag) => (
@@ -127,9 +138,8 @@ export function CaseStudyLayout({ title, oneliner, type, tags, prev, next, backH
               RESEARCH_
             </p>
             <p className="font-mono" style={{ fontSize: '12px', letterSpacing: '0.1em', color: '#999999', lineHeight: 1.7, maxWidth: '640px' }}>
-              Conducted user interviews and competitive analysis to understand the landscape. Synthesised findings into key themes that informed the design direction.
+              {research ?? 'Conducted user interviews and competitive analysis to understand the landscape. Synthesised findings into key themes that informed the design direction.'}
             </p>
-            {/* Process image placeholder */}
             <div
               className="mt-6 w-full"
               style={{ height: '240px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }}
@@ -142,9 +152,8 @@ export function CaseStudyLayout({ title, oneliner, type, tags, prev, next, backH
               IDEATION_
             </p>
             <p className="font-mono" style={{ fontSize: '12px', letterSpacing: '0.1em', color: '#999999', lineHeight: 1.7, maxWidth: '640px' }}>
-              Explored multiple directions through sketching and low-fidelity wireframes. Narrowed down to the strongest concept based on user feedback and feasibility.
+              {ideation ?? 'Explored multiple directions through sketching and low-fidelity wireframes. Narrowed down to the strongest concept based on user feedback and feasibility.'}
             </p>
-            {/* 2-col image grid */}
             <div className="mt-6 grid grid-cols-2" style={{ gap: '2px' }}>
               <div style={{ height: '200px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
               <div style={{ height: '200px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
@@ -157,7 +166,7 @@ export function CaseStudyLayout({ title, oneliner, type, tags, prev, next, backH
               KEY DECISIONS_
             </p>
             <p className="font-mono" style={{ fontSize: '12px', letterSpacing: '0.1em', color: '#999999', lineHeight: 1.7, maxWidth: '640px' }}>
-              Prioritised clarity over feature richness. Key interaction patterns were validated through usability testing and refined in subsequent iterations.
+              {keyDecisions ?? 'Prioritised clarity over feature richness. Key interaction patterns were validated through usability testing and refined in subsequent iterations.'}
             </p>
           </div>
         </section>
@@ -168,6 +177,9 @@ export function CaseStudyLayout({ title, oneliner, type, tags, prev, next, backH
           style={{ padding: '48px 24px' }}
         >
           <RuleLabel number="SOLUTION_" />
+          <p className="font-mono mb-8" style={{ fontSize: '12px', letterSpacing: '0.1em', color: '#999999', lineHeight: 1.7, maxWidth: '640px' }}>
+            {solution ?? ''}
+          </p>
           {/* Full width hero image */}
           <div
             className="w-full mb-1"
@@ -190,7 +202,7 @@ export function CaseStudyLayout({ title, oneliner, type, tags, prev, next, backH
               REFLECTION
             </span>
             <p className="font-mono" style={{ fontSize: '12px', letterSpacing: '0.1em', color: '#999999', lineHeight: 1.7 }}>
-              This project pushed me to think more carefully about edge cases and accessibility. If I were to revisit it, I would invest more time in testing with a wider range of users. It reinforced how important iteration is — the best ideas rarely survive first contact with real users unchanged.
+              {reflection ?? 'This project pushed me to think more carefully about edge cases and accessibility. If I were to revisit it, I would invest more time in testing with a wider range of users.'}
             </p>
           </div>
         </section>
