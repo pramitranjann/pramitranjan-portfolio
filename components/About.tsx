@@ -26,19 +26,19 @@ export function About() {
     <section
       ref={secRef}
       className="about-section"
-      style={{ borderTop: '1px solid #1f1f1f', minHeight: '360px', padding: '64px 40px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
+      style={{ borderTop: '1px solid #1f1f1f', padding: '48px 40px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
     >
       {/* WCAG AA: #666 on #0d0d0d = 3.1:1 — decorative label, large enough */}
       <div
         className="font-mono"
-        style={{ fontSize: '9px', letterSpacing: '0.18em', color: '#666666', marginBottom: '20px' }}
+        style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#666666', marginBottom: '16px' }}
       >
         ABOUT_
       </div>
 
       <h2
         className="reveal-text font-serif"
-        style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '28px' }}
+        style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '20px' }}
       >
         Artist.<br />Designer.<br /><span style={{ color: '#FF3120' }}>Human.</span>
       </h2>
@@ -53,7 +53,7 @@ export function About() {
         <Link
           href="/about"
           className="reveal-text font-mono flex-shrink-0"
-          style={{ fontSize: '10px', color: '#FF3120', letterSpacing: '0.12em', textDecoration: 'none', whiteSpace: 'nowrap' }}
+          style={{ fontSize: 'var(--text-meta)', color: '#FF3120', letterSpacing: '0.12em', textDecoration: 'none', whiteSpace: 'nowrap' }}
         >
           READ MORE →
         </Link>

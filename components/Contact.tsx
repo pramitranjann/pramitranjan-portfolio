@@ -30,7 +30,7 @@ export function Contact() {
   return (
     <section
       ref={secRef}
-      style={{ borderTop: '1px solid #1f1f1f', padding: '64px 24px', textAlign: 'center' }}
+      style={{ borderTop: '1px solid #1f1f1f', padding: '48px 24px', textAlign: 'center' }}
     >
       <div
         className="reveal-text font-serif italic"
@@ -54,7 +54,7 @@ export function Contact() {
             rel="noopener noreferrer"
             className="font-mono"
             style={{
-              fontSize: '9px',
+              fontSize: 'var(--text-meta)',
               letterSpacing: '0.14em',
               color: '#888888',
               textDecoration: 'none',
