@@ -1,6 +1,5 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
-import { motion } from 'motion/react'
+import { useEffect, useRef } from 'react'
 import { ProjectCard } from './ProjectCard'
 
 const projects = [
@@ -12,7 +11,6 @@ const projects = [
 
 export function SelectedWork() {
   const gridRef = useRef<HTMLDivElement>(null)
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
 
   useEffect(() => {
     const grid = gridRef.current
@@ -33,7 +31,6 @@ export function SelectedWork() {
 
   return (
     <section>
-      {/* Section header — 40px top padding, 24px sides */}
       <div style={{ padding: '40px 24px 24px' }}>
         <h2
           className="font-serif"
@@ -54,21 +51,10 @@ export function SelectedWork() {
         className="card-grid grid grid-cols-2 md:grid-cols-4"
         style={{ gap: '16px', padding: '0 24px 40px' }}
       >
-        {projects.map((p, i) => (
-          <motion.div
-            key={p.title}
-            className="reveal"
-            style={{ zIndex: hoveredIdx === i ? 2 : 1 }}
-            animate={{
-              scale: hoveredIdx === i ? 1.03 : hoveredIdx !== null ? 0.97 : 1,
-              opacity: hoveredIdx !== null && hoveredIdx !== i ? 0.65 : 1,
-            }}
-            transition={{ type: 'spring', stiffness: 300, damping: 28 }}
-            onMouseEnter={() => setHoveredIdx(i)}
-            onMouseLeave={() => setHoveredIdx(null)}
-          >
-            <ProjectCard {...p} variant="supporting" hovered={hoveredIdx === i} />
-          </motion.div>
+        {projects.map((p) => (
+          <div key={p.title} className="reveal">
+            <ProjectCard {...p} variant="supporting" />
+          </div>
         ))}
       </div>
     </section>

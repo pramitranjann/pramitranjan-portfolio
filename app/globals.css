@@ -68,6 +68,15 @@ body.carousel-reengaging main {
 }
 
 
+/* Card hover — red border, smooth transition */
+.portfolio-card {
+  border: 1px solid #2a2a2a;
+  transition: border-color 0.25s ease;
+}
+.portfolio-card:hover {
+  border-color: #FF3120;
+}
+
 /* Reveal animations — only hide when JS is available */
 .js-ready .reveal {
   opacity: 0;
