@@ -172,14 +172,12 @@ export function CaseStudyLayout({
 
         {/* Reflection */}
         <section className="border-b border-divider" style={{ padding: '48px 40px' }}>
-          <div className="grid" style={{ gridTemplateColumns: '1fr 2fr', gap: '48px' }}>
-            <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.16em', color: '#666666' }}>
-              REFLECTION
-            </span>
-            <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
-              {reflection ?? 'This project pushed me to think more carefully about edge cases and accessibility. If I were to revisit it, I would invest more time in testing with a wider range of users.'}
-            </p>
-          </div>
+          <p className="font-mono mb-3" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>
+            REFLECTION_
+          </p>
+          <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
+            {reflection ?? 'This project pushed me to think more carefully about edge cases and accessibility. If I were to revisit it, I would invest more time in testing with a wider range of users.'}
+          </p>
         </section>
 
         {/* Prev / Next */}
