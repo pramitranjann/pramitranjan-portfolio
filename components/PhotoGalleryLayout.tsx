@@ -45,8 +45,8 @@ export function PhotoGalleryLayout({ city, descriptor, images }: PhotoGalleryLay
             {descriptor}
           </p>
 
-          {/* Photo grid — 3 col desktop, 2 col mobile */}
-          <div className="grid grid-cols-2 md:grid-cols-3" style={{ gap: '4px' }}>
+          {/* Photo grid — 4 col desktop, 3 col mobile */}
+          <div className="grid grid-cols-3 md:grid-cols-4" style={{ gap: '12px' }}>
             {images.map((src, i) => (
               <button
                 key={i}
