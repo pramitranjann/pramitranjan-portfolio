@@ -6,19 +6,19 @@ import Link from 'next/link'
 
 function SectionHeader({ label, count }: { label: string; count: string }) {
   return (
-    <div className="flex items-center justify-between border-b border-divider" style={{ marginBottom: '24px', paddingBottom: '16px' }}>
-      <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.16em', color: '#666666' }}>{label}</span>
+    <div className="flex items-center justify-between" style={{ marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid #1f1f1f' }}>
+      <span className="font-serif" style={{ fontSize: 'var(--text-h3)', fontWeight: 400, color: '#f5f2ed' }}>{label}</span>
       <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.16em', color: '#FF3120' }}>{count}</span>
     </div>
   )
 }
 
-function CreativeCard({ title, desc, tag, href, comingSoon }: {
-  title: string; desc: string; tag?: string; href?: string; comingSoon?: boolean
+function CreativeCard({ title, desc, tag, href, comingSoon, imageHeight = '240px' }: {
+  title: string; desc: string; tag?: string; href?: string; comingSoon?: boolean; imageHeight?: string
 }) {
   const inner = (
     <div className="flex flex-col h-full transition-opacity duration-150 hover:opacity-75" style={{ backgroundColor: '#1c1c1c', border: '1px solid #2a2a2a', padding: '16px' }}>
-      <div style={{ width: '100%', height: '240px', backgroundColor: '#252525', border: '1px solid #333333', marginBottom: '12px' }} />
+      <div style={{ width: '100%', height: imageHeight, backgroundColor: '#252525', border: '1px solid #333333', marginBottom: '12px' }} />
       <h3 className="font-serif" style={{ fontSize: 'var(--text-body)', fontWeight: 400, color: '#f5f2ed', marginBottom: '4px' }}>{title}</h3>
       <p className="font-mono flex-1" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.6, marginBottom: '12px' }}>{desc}</p>
       <div className="flex items-end justify-between">
@@ -63,10 +63,10 @@ export default function CreativePage() {
         <section className="border-b border-divider" style={{ padding: '40px' }}>
           <SectionHeader label="PHOTOGRAPHY" count="04" />
           <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: '16px' }}>
-            <CreativeCard title="KL" desc="Street life and quiet corners of a city in motion." href="/creative/photography/kl" />
-            <CreativeCard title="Penang" desc="Heritage streets and the texture of an older world." href="/creative/photography/penang" />
-            <CreativeCard title="Singapore" desc="The duality of a city-state — dense and lush at once." href="/creative/photography/singapore" />
-            <CreativeCard title="Ho Chi Minh" desc="Coming soon." comingSoon />
+            <CreativeCard title="KL" desc="Street life and quiet corners of a city in motion." href="/creative/photography/kl" imageHeight="360px" />
+            <CreativeCard title="Penang" desc="Heritage streets and the texture of an older world." href="/creative/photography/penang" imageHeight="360px" />
+            <CreativeCard title="Singapore" desc="The duality of a city-state — dense and lush at once." href="/creative/photography/singapore" imageHeight="360px" />
+            <CreativeCard title="Ho Chi Minh" desc="Coming soon." comingSoon imageHeight="360px" />
           </div>
         </section>
 
