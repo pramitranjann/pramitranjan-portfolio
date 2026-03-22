@@ -141,6 +141,19 @@ body.carousel-reengaging main {
     gap: 20px !important;
   }
 
+  /* Creative page — reduce section padding and hero padding */
+  .creative-hero-section {
+    padding: 40px 24px !important;
+  }
+  .creative-section {
+    padding: 32px 24px !important;
+  }
+
+  /* Creative cards — shorter image on mobile (2-col layout) */
+  .creative-card-image {
+    height: 140px !important;
+  }
+
   /* Lightbox — move prev/next out of image area to bottom corners */
   .lightbox-prev {
     top: auto !important;
