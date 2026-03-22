@@ -159,7 +159,9 @@ export function CaseStudyLayout({
 
         {/* Solution */}
         <section className="border-b border-divider" style={{ padding: '48px 40px' }}>
-          <RuleLabel number="SOLUTION_" />
+          <p className="font-mono mb-3" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>
+            SOLUTION_
+          </p>
           <p className="font-mono mb-8" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
             {solution ?? ''}
           </p>
