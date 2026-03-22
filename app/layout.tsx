@@ -19,6 +19,10 @@ const dmMono = DM_Mono({
 export const metadata: Metadata = {
   title: 'Pramit Ranjan',
   description: 'UX design student at SCAD.',
+  icons: {
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
