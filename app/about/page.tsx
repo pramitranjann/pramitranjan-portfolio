@@ -42,8 +42,8 @@ const experience = [
 ]
 
 const professionalActivities = [
-  { org: 'FigBuild 2026',                        role: 'PARTICIPANT', date: '2026',    desc: "Participated in Figma's design challenge to build an app." },
-  { org: 'FLUXathon (48-Hour Design Challenge)', role: 'PARTICIPANT', date: '2026',    desc: 'Designed a weather forecasting app using Claude AI. Judged by Google.' },
+  { org: 'FigBuild 2026',                        role: 'PARTICIPANT', date: '2026',    desc: "Participated in Figma's 2026 3 day design challenge to build an app and built Accord." },
+  { org: 'FLUXathon (48-Hour Design Challenge)', role: 'PARTICIPANT', date: '2026',    desc: 'Designed a weather forecasting app for per ownners using Claude AI. Judged by Google.' },
   { org: 'FLUX Club',                            role: 'MEMBER',      date: 'ONGOING', desc: 'Building strong Figma skills through Figma Fridays.' },
   { org: 'Rocket × FLUX (3-Day Design Sprint)',  role: 'PARTICIPANT', date: '2026',    desc: 'Redesigned the Passio Go app using Figma Make — exploring how design ideology is shifting in the age of AI.' },
 ]
