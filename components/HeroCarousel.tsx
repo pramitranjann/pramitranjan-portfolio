@@ -53,11 +53,9 @@ export function HeroCarousel() {
   // released = true means page can scroll freely (past stage 3)
   const releasedRef = useRef(false)
   const [released, setReleased] = useState(false)
-  // collapsed = true after fade completes — snaps height to 0 without animation
-  const [collapsed, setCollapsed] = useState(false)
-  // holdingRef stays true after release to absorb swipe momentum before unlock
+  // holdingRef stays true during the slide-out to absorb residual scroll input
   const holdingRef = useRef(false)
-  // readyToRelease becomes true after dwelling on stage 3 for 1.2s
+  // readyToRelease becomes true after animation lands on last stage
   const readyToRelease = useRef(false)
   const touchStartY = useRef<number | null>(null)
 
@@ -65,20 +63,17 @@ export function HeroCarousel() {
   useEffect(() => {
     if (!released) {
       holdingRef.current = false
-      setCollapsed(false)
       document.body.style.overflow = 'hidden'
       window.scrollTo(0, 0)
     } else {
       holdingRef.current = true
       window.scrollTo(0, 0)
-      // Snap height to 0 after fade (220ms)
-      const tCollapse = setTimeout(() => setCollapsed(true), 220)
-      // Unlock scroll after same duration as stage transitions (900ms)
-      const tUnlock = setTimeout(() => {
+      // Unlock after slide-out completes — same 900ms as stage transitions
+      const t = setTimeout(() => {
         holdingRef.current = false
         document.body.style.overflow = ''
       }, 900)
-      return () => { clearTimeout(tCollapse); clearTimeout(tUnlock) }
+      return () => clearTimeout(t)
     }
     return () => { document.body.style.overflow = '' }
   }, [released])
@@ -183,11 +178,16 @@ export function HeroCarousel() {
   return (
     <div
       style={{
-        height: collapsed ? '0' : 'calc(100vh - 57px)',
-        opacity: released ? 0 : 1,
+        position: 'fixed',
+        top: '57px',
+        left: 0,
+        right: 0,
+        height: 'calc(100vh - 57px)',
         overflow: 'hidden',
-        position: 'relative',
-        transition: released && !collapsed ? 'opacity 0.2s ease' : 'none',
+        zIndex: 10,
+        transform: released ? 'translateY(-100%)' : 'translateY(0)',
+        transition: 'transform 0.85s cubic-bezier(0.77, 0, 0.175, 1)',
+        backgroundColor: '#0d0d0d',
       }}
     >
       {stageContent.map((content, i) => (
