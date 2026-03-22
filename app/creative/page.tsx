@@ -7,7 +7,7 @@ import Link from 'next/link'
 function SectionHeader({ label, count }: { label: string; count: string }) {
   return (
     <div className="flex items-center justify-between" style={{ marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid #1f1f1f' }}>
-      <span className="font-serif" style={{ fontSize: 'var(--text-h3)', fontWeight: 400, color: '#f5f2ed' }}>{label}</span>
+      <span className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.14em', color: '#f5f2ed' }}>{label}</span>
       <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.16em', color: '#FF3120' }}>{count}</span>
     </div>
   )

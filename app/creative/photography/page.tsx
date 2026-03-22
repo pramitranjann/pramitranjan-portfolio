@@ -1,6 +1,5 @@
 import { Nav } from '@/components/Nav'
 import { Footer } from '@/components/Footer'
-import { RuleLabel } from '@/components/RuleLabel'
 import Link from 'next/link'
 
 const cities = [
@@ -14,33 +13,32 @@ export default function PhotographyPage() {
   return (
     <>
       <Nav />
-      <main style={{ paddingTop: '42px' }}>
-        <section style={{ padding: '48px 24px' }}>
+      <main style={{ paddingTop: '57px' }}>
+        <section style={{ padding: '48px 40px' }}>
           <div style={{ marginBottom: '16px' }}>
-            <Link href="/creative" className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.12em', color: '#444444' }}>
+            <Link href="/creative" className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#666666', textDecoration: 'none' }}>
               ← CREATIVE
             </Link>
           </div>
-          <RuleLabel number="PHOTOGRAPHY" />
-          <h1 className="font-serif" style={{ fontSize: '42px', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.1, marginBottom: '48px' }}>
+          <h1 className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '40px' }}>
             Always looking.
           </h1>
-          <div className="grid grid-cols-2" style={{ gap: '2px' }}>
+          <div className="grid grid-cols-2 md:grid-cols-4" style={{ gap: '16px' }}>
             {cities.map((city) => {
               const inner = (
-                <div className="flex flex-col transition-opacity duration-150 hover:opacity-75" style={{ backgroundColor: '#111111', border: '1px solid #1a1a1a', padding: '20px' }}>
-                  <div className="w-full mb-4" style={{ backgroundColor: '#161616', border: '1px solid #1a1a1a', aspectRatio: '4/3' }} />
-                  <h2 className="font-serif mb-2" style={{ fontSize: '20px', fontWeight: 400, color: '#f5f2ed' }}>{city.title}</h2>
-                  <p className="font-mono flex-1" style={{ fontSize: '10px', letterSpacing: '0.1em', color: '#999999', marginBottom: '16px' }}>{city.desc}</p>
-                  <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.1em', color: '#444444' }}>
+                <div className="flex flex-col h-full transition-opacity duration-150 hover:opacity-75" style={{ backgroundColor: '#1c1c1c', border: '1px solid #2a2a2a', padding: '16px' }}>
+                  <div style={{ width: '100%', height: '240px', backgroundColor: '#252525', border: '1px solid #333333', marginBottom: '12px' }} />
+                  <h2 className="font-serif" style={{ fontSize: 'var(--text-body)', fontWeight: 400, color: '#f5f2ed', marginBottom: '4px' }}>{city.title}</h2>
+                  <p className="font-mono flex-1" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.6, marginBottom: '12px' }}>{city.desc}</p>
+                  <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: city.comingSoon ? '#666666' : '#FF3120' }}>
                     {city.comingSoon ? 'COMING SOON' : 'VIEW →'}
                   </span>
                 </div>
               )
               return city.comingSoon ? (
-                <div key={city.slug}>{inner}</div>
+                <div key={city.slug} className="h-full">{inner}</div>
               ) : (
-                <Link key={city.slug} href={`/creative/photography/${city.slug}`}>{inner}</Link>
+                <Link key={city.slug} href={`/creative/photography/${city.slug}`} className="h-full block">{inner}</Link>
               )
             })}
           </div>
