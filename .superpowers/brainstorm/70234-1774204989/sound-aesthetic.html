@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sound refinement — Soft digital</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0d0d0d;
+    color: #f5f2ed;
+    font-family: "DM Mono", "Courier New", monospace;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 24px 80px;
+    gap: 40px;
+  }
+
+  .header { text-align: center; }
+  h2 { font-size: 26px; font-weight: 400; font-family: Georgia, serif; margin-bottom: 10px; }
+  .subtitle { font-size: 12px; color: #555; letter-spacing: 0.06em; line-height: 1.7; max-width: 480px; }
+
+  /* ── Interaction rows ──────────────────────────────────────────── */
+  .interactions { width: 100%; max-width: 680px; display: flex; flex-direction: column; gap: 2px; }
+
+  .row {
+    display: grid;
+    grid-template-columns: 180px 1fr auto;
+    align-items: center;
+    gap: 24px;
+    padding: 20px 24px;
+    border: 1px solid #1a1a1a;
+    background: #111;
+    transition: border-color 0.2s;
+  }
+  .row:hover { border-color: #2a2a2a; }
+
+  .row-meta {}
+  .row-trigger {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: #f5f2ed;
+    margin-bottom: 4px;
+  }
+  .row-when {
+    font-size: 11px;
+    color: #444;
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+  }
+
+  .row-wave { display: flex; align-items: center; }
+
+  .play-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: 1px solid #2a2a2a;
+    color: #666;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .play-btn:hover { border-color: #555; color: #f5f2ed; }
+  .play-btn.playing { border-color: #FF3120; color: #FF3120; }
+
+  /* ── Variant selector ──────────────────────────────────────────── */
+  .variants {
+    width: 100%;
+    max-width: 680px;
+  }
+  .variant-label {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: #444;
+    margin-bottom: 12px;
+  }
+  .variant-tabs {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 2px;
+  }
+  .vtab {
+    flex: 1;
+    padding: 10px;
+    background: #111;
+    border: 1px solid #1a1a1a;
+    color: #555;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+  }
+  .vtab:hover { color: #f5f2ed; border-color: #333; }
+  .vtab.active { border-color: #FF3120; color: #FF3120; background: #0d0d0d; }
+  .variant-desc {
+    font-size: 11px;
+    color: #444;
+    letter-spacing: 0.04em;
+    line-height: 1.7;
+    padding: 14px 0 0;
+  }
+
+  /* ── Sequence ──────────────────────────────────────────────────── */
+  .sequence-row {
+    width: 100%;
+    max-width: 680px;
+    border: 1px solid #1a1a1a;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .seq-label { font-size: 11px; color: #555; letter-spacing: 0.08em; line-height: 1.6; }
+  .seq-label strong { color: #888; display: block; margin-bottom: 4px; font-weight: 400; letter-spacing: 0.14em; }
+  .seq-btn {
+    background: #FF3120;
+    border: none;
+    color: #fff;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .seq-btn:hover { opacity: 0.85; }
+  .seq-btn:disabled { opacity: 0.4; cursor: default; }
+
+  .divider { width: 100%; max-width: 680px; border: none; border-top: 1px solid #1a1a1a; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h2>Soft digital — refined</h2>
+  <p class="subtitle">Three variant tunings. Each plays the same four interactions so you can compare the overall feel. Pick the one that fits best, then we'll lock it in.</p>
+</div>
+
+<!-- ── Variant selector ─────────────────────────────────────────── -->
+<div class="variants">
+  <div class="variant-label">VARIANT</div>
+  <div class="variant-tabs">
+    <button class="vtab active" onclick="setVariant('a', this)">A — PRECISE</button>
+    <button class="vtab" onclick="setVariant('b', this)">B — WARM</button>
+    <button class="vtab" onclick="setVariant('c', this)">C — AIRY</button>
+  </div>
+  <div class="variant-desc" id="vdesc">
+    Very short, clean tones. Higher pitch (~1100 Hz), tight 80ms decay. Clinical and confident — like a high-end instrument panel.
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ── Interaction rows ────────────────────────────────────────── -->
+<div class="interactions">
+
+  <div class="row">
+    <div class="row-meta">
+      <div class="row-trigger">NAV CLICK</div>
+      <div class="row-when">Clicking a nav link.<br>Triggers 0.2s dot expand.</div>
+    </div>
+    <div class="row-wave">
+      <svg width="120" height="32" viewBox="0 0 120 32" opacity="0.4">
+        <path d="M0,16 L8,16 L10,4 L14,4 L16,16 L120,16" fill="none" stroke="#FF3120" stroke-width="1.2"/>
+      </svg>
+    </div>
+    <button class="play-btn" onclick="play('nav', this)">▶ PLAY</button>
+  </div>
+
+  <div class="row">
+    <div class="row-meta">
+      <div class="row-trigger">FILM FRAME</div>
+      <div class="row-when">Carousel advances to next film frame. 0.85s cubic-bezier slide.</div>
+    </div>
+    <div class="row-wave">
+      <svg width="120" height="32" viewBox="0 0 120 32" opacity="0.4">
+        <path d="M0,16 C20,16 30,4 40,4 C50,4 60,28 70,28 C80,28 90,16 120,16" fill="none" stroke="#FF3120" stroke-width="1.2"/>
+      </svg>
+    </div>
+    <button class="play-btn" onclick="play('film', this)">▶ PLAY</button>
+  </div>
+
+  <div class="row">
+    <div class="row-meta">
+      <div class="row-trigger">CARD ENTER</div>
+      <div class="row-when">Clicking VIEW → to open a project. Page navigation.</div>
+    </div>
+    <div class="row-wave">
+      <svg width="120" height="32" viewBox="0 0 120 32" opacity="0.4">
+        <path d="M0,16 L10,16 L12,6 L16,6 L18,16 L50,16 L52,3 L56,3 L58,16 L120,16" fill="none" stroke="#FF3120" stroke-width="1.2"/>
+      </svg>
+    </div>
+    <button class="play-btn" onclick="play('view', this)">▶ PLAY</button>
+  </div>
+
+  <div class="row">
+    <div class="row-meta">
+      <div class="row-trigger">PAGE ARRIVE</div>
+      <div class="row-when">New page finishes loading and content reveals in.</div>
+    </div>
+    <div class="row-wave">
+      <svg width="120" height="32" viewBox="0 0 120 32" opacity="0.4">
+        <path d="M0,16 C30,16 40,10 60,8 C80,6 100,10 120,16" fill="none" stroke="#FF3120" stroke-width="1.2"/>
+      </svg>
+    </div>
+    <button class="play-btn" onclick="play('arrive', this)">▶ PLAY</button>
+  </div>
+
+</div>
+
+<!-- ── Full sequence ───────────────────────────────────────────── -->
+<div class="sequence-row">
+  <div class="seq-label">
+    <strong>SIMULATE FLOW</strong>
+    Plays all four in realistic sequence — nav click → page arrive → film frame × 2 → card enter. Hear how they feel together.
+  </div>
+  <button class="seq-btn" id="seqBtn" onclick="playSequence()">PLAY ALL →</button>
+</div>
+
+<script>
+let ctx = null;
+let currentVariant = 'a';
+
+function getCtx() {
+  if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+  if (ctx.state === 'suspended') ctx.resume();
+  return ctx;
+}
+
+// ── Variant descriptions ───────────────────────────────────────────────────
+const variantDescs = {
+  a: 'Very short, clean tones. Higher pitch (~1100 Hz), tight 80ms decay. Clinical and confident — like a high-end instrument panel.',
+  b: 'Two slightly detuned sines create gentle beating warmth. Mid pitch (~750 Hz), 130ms decay. Feels more analogue — closer to a quality synth UI.',
+  c: 'Soft triangle wave with slow attack and long tail. Lower pitch (~600 Hz), 200ms decay with subtle reverb. Almost inaudible — felt more than heard.',
+};
+
+function setVariant(v, el) {
+  currentVariant = v;
+  document.querySelectorAll('.vtab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('vdesc').textContent = variantDescs[v];
+}
+
+// ── Core synth helpers ─────────────────────────────────────────────────────
+function sine(ac, freq, gainVal, startTime, duration, attackTime) {
+  const osc = ac.createOscillator();
+  const gain = ac.createGain();
+  osc.type = 'sine';
+  osc.frequency.value = freq;
+  const t = startTime ?? ac.currentTime;
+  const att = attackTime ?? 0.01;
+  gain.gain.setValueAtTime(0, t);
+  gain.gain.linearRampToValueAtTime(gainVal, t + att);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+  osc.connect(gain); gain.connect(ac.destination);
+  osc.start(t); osc.stop(t + duration + 0.01);
+}
+
+function triangle(ac, freq, gainVal, startTime, duration, attackTime) {
+  const osc = ac.createOscillator();
+  const gain = ac.createGain();
+  osc.type = 'triangle';
+  osc.frequency.value = freq;
+  const t = startTime ?? ac.currentTime;
+  const att = attackTime ?? 0.02;
+  gain.gain.setValueAtTime(0, t);
+  gain.gain.linearRampToValueAtTime(gainVal, t + att);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+  osc.connect(gain); gain.connect(ac.destination);
+  osc.start(t); osc.stop(t + duration + 0.01);
+}
+
+function detunedPair(ac, freq, spread, gainVal, startTime, duration, attackTime) {
+  sine(ac, freq - spread, gainVal * 0.55, startTime, duration, attackTime);
+  sine(ac, freq + spread, gainVal * 0.55, startTime, duration, attackTime);
+}
+
+// Tiny soft reverb — two short delays
+function withReverb(ac, fn) {
+  const dry = ac.createGain(); dry.gain.value = 0.8; dry.connect(ac.destination);
+  const wet = ac.createGain(); wet.gain.value = 0.22; wet.connect(ac.destination);
+  const d1 = ac.createDelay(); d1.delayTime.value = 0.04;
+  const d2 = ac.createDelay(); d2.delayTime.value = 0.09;
+  const g1 = ac.createGain(); g1.gain.value = 0.4;
+  const g2 = ac.createGain(); g2.gain.value = 0.25;
+  d1.connect(g1); g1.connect(wet);
+  d2.connect(g2); g2.connect(wet);
+  // Patch: return a destination node that routes to dry + both delays
+  const splitter = ac.createGain(); splitter.gain.value = 1;
+  splitter.connect(dry);
+  splitter.connect(d1);
+  splitter.connect(d2);
+  return splitter;
+}
+
+// ── Sound library ──────────────────────────────────────────────────────────
+const sounds = {
+
+  // ── Variant A: Precise ─────────────────────────────────────────
+  a: {
+    nav(ac, t) {
+      // Single clean sine, high, tight
+      sine(ac, 1100, 0.09, t, 0.09, 0.008);
+    },
+    film(ac, t) {
+      // Two tones — slight descend, like something sliding in
+      sine(ac, 1050, 0.07, t, 0.12, 0.01);
+      sine(ac, 880,  0.05, t + 0.06, 0.1, 0.008);
+    },
+    view(ac, t) {
+      // Ascending pair — affirmative
+      sine(ac, 880,  0.08, t, 0.09, 0.008);
+      sine(ac, 1320, 0.07, t + 0.055, 0.1, 0.008);
+    },
+    arrive(ac, t) {
+      // Very soft, slightly longer — room settling
+      sine(ac, 660, 0.05, t, 0.22, 0.04);
+      sine(ac, 990, 0.03, t + 0.03, 0.18, 0.04);
+    },
+  },
+
+  // ── Variant B: Warm ────────────────────────────────────────────
+  b: {
+    nav(ac, t) {
+      // Two detuned sines — gentle beating warmth
+      detunedPair(ac, 750, 3, 0.1, t, 0.13, 0.01);
+    },
+    film(ac, t) {
+      // Warm glide — pitch sweeps down slightly
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(820, t);
+      osc.frequency.exponentialRampToValueAtTime(680, t + 0.18);
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.09, t + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
+      osc.connect(gain); gain.connect(ac.destination);
+      osc.start(t); osc.stop(t + 0.22);
+    },
+    view(ac, t) {
+      // Warm rising chord
+      detunedPair(ac, 680, 2, 0.09, t, 0.14, 0.012);
+      detunedPair(ac, 1020, 3, 0.07, t + 0.07, 0.14, 0.012);
+    },
+    arrive(ac, t) {
+      // Warm ambient triad
+      [440, 660, 880].forEach((f, i) => {
+        detunedPair(ac, f, 2, 0.04, t + i * 0.04, 0.28, 0.05);
+      });
+    },
+  },
+
+  // ── Variant C: Airy ────────────────────────────────────────────
+  c: {
+    nav(ac, t) {
+      // Triangle wave — softer timbre, slow attack
+      triangle(ac, 620, 0.08, t, 0.2, 0.025);
+    },
+    film(ac, t) {
+      // Two triangles, long tail — like a breath
+      triangle(ac, 580, 0.07, t, 0.25, 0.03);
+      triangle(ac, 870, 0.04, t + 0.05, 0.22, 0.03);
+    },
+    view(ac, t) {
+      // Gentle ascending triangles
+      triangle(ac, 520, 0.07, t, 0.2, 0.025);
+      triangle(ac, 780, 0.06, t + 0.08, 0.22, 0.025);
+      triangle(ac, 1040, 0.04, t + 0.16, 0.2, 0.025);
+    },
+    arrive(ac, t) {
+      // Very slow, almost subliminal — 350ms total
+      triangle(ac, 440, 0.04, t, 0.35, 0.1);
+      triangle(ac, 660, 0.025, t + 0.06, 0.32, 0.1);
+    },
+  },
+};
+
+// ── Dispatch ───────────────────────────────────────────────────────────────
+function play(interaction, btn) {
+  const ac = getCtx();
+  sounds[currentVariant][interaction](ac, ac.currentTime);
+  if (btn) {
+    btn.classList.add('playing');
+    setTimeout(() => btn.classList.remove('playing'), 300);
+  }
+}
+
+async function playSequence() {
+  const ac = getCtx();
+  const btn = document.getElementById('seqBtn');
+  btn.disabled = true;
+  btn.textContent = 'PLAYING…';
+
+  const t = ac.currentTime;
+  sounds[currentVariant].nav(ac, t);
+  sounds[currentVariant].arrive(ac, t + 0.35);
+  sounds[currentVariant].film(ac, t + 1.1);
+  sounds[currentVariant].film(ac, t + 1.7);
+  sounds[currentVariant].view(ac, t + 2.5);
+
+  setTimeout(() => {
+    btn.disabled = false;
+    btn.textContent = 'PLAY ALL →';
+  }, 3200);
+}
+</script>
+</body>
+</html>

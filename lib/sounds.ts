@@ -3,37 +3,45 @@
 // No audio files. No dependencies. SSR safe.
 //
 // iOS unlock strategy:
-//   Everything must stay synchronous inside the gesture handler —
-//   any `await` breaks iOS's user-gesture detection chain.
-//   1. On first call: play a 1-sample silent BufferSource synchronously.
-//      This is the iOS "warm up" that gates future playback.
-//   2. Call resume() (fire-and-forget, no await).
-//   3. Schedule tones 100ms ahead so they fire after resume() completes.
+//   `touchstart` fires before `click` and is still a user gesture.
+//   We pre-unlock the AudioContext there so it's already running
+//   by the time any play function is called — avoiding issues with
+//   Next.js routing microtasks breaking iOS's gesture detection chain.
 
 let _ctx: AudioContext | null = null
 let _unlocked = false
 
+function unlock() {
+  if (_unlocked) return
+  try {
+    if (!_ctx) _ctx = new AudioContext()
+    const buf = _ctx.createBuffer(1, 1, _ctx.sampleRate)
+    const src = _ctx.createBufferSource()
+    src.buffer = buf
+    src.connect(_ctx.destination)
+    src.start()
+    _ctx.resume()
+    _unlocked = true
+  } catch {}
+}
+
+// Pre-unlock on first touch — runs before any click handler
+if (typeof window !== 'undefined') {
+  const handler = () => {
+    unlock()
+    document.removeEventListener('touchstart', handler)
+    document.removeEventListener('touchend', handler)
+  }
+  document.addEventListener('touchstart', handler, { passive: true })
+  document.addEventListener('touchend', handler, { passive: true })
+}
+
 function getCtx(): AudioContext | null {
   if (typeof window === 'undefined') return null
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return null
-  try {
-    if (!_ctx) _ctx = new AudioContext()
-
-    // First call: play a silent buffer synchronously to unlock iOS audio output
-    if (!_unlocked) {
-      const buf = _ctx.createBuffer(1, 1, _ctx.sampleRate)
-      const src = _ctx.createBufferSource()
-      src.buffer = buf
-      src.connect(_ctx.destination)
-      src.start(0)
-      _unlocked = true
-    }
-
-    if (_ctx.state === 'suspended') _ctx.resume()
-    return _ctx
-  } catch {
-    return null
-  }
+  // Fallback unlock for non-touch devices (desktop)
+  unlock()
+  return _ctx
 }
 
 function tone(
@@ -57,9 +65,8 @@ function tone(
   osc.stop(startTime + decaySec + 0.01)
 }
 
-// 100ms scheduling offset — gives resume() time to complete on iOS
-// without needing await (which would break gesture detection)
-const OFFSET = 0.1
+// Small offset ensures tones fire after resume() completes
+const OFFSET = 0.05
 
 // Single clean tone — tight nav confirmation
 export function playNav() {
