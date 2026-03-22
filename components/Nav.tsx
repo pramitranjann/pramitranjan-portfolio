@@ -2,6 +2,7 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { playNav } from '@/lib/sounds'
 
 const links = [
   { href: '/work',     label: 'WORK' },
@@ -25,6 +26,7 @@ export function Nav() {
         href="/"
         className="font-mono"
         style={{ fontSize: '16px', letterSpacing: '0.14em', color: '#FF3120', textDecoration: 'none' }}
+        onClick={playNav}
       >
         PR
       </Link>
@@ -37,6 +39,7 @@ export function Nav() {
               href={href}
               className={`nav-link font-mono${active ? ' active' : ''}`}
               style={{ fontSize: '13px', letterSpacing: '0.14em', textDecoration: 'none' }}
+              onClick={playNav}
             >
               {label}
             </Link>
