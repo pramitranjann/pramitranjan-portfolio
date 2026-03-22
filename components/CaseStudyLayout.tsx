@@ -53,55 +53,47 @@ export function CaseStudyLayout({
           className="grid grid-cols-2 border-b border-divider"
           style={{ minHeight: '280px' }}
         >
-          {/* Left: text */}
           <div
             className="flex flex-col justify-end border-r border-divider"
-            style={{ padding: '48px 24px' }}
+            style={{ padding: '48px 40px' }}
           >
             <RuleLabel number={type} />
             <h1
               className="font-serif"
-              style={{ fontSize: '42px', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.1 }}
+              style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.1 }}
             >
               {title}
             </h1>
             <p
               className="font-serif italic mt-3"
-              style={{ fontSize: '16px', fontWeight: 400, color: '#666666' }}
+              style={{ fontSize: 'var(--text-body)', fontWeight: 400, color: '#666666' }}
             >
               {oneliner}
             </p>
           </div>
-          {/* Right: image placeholder — full bleed */}
           <div style={{ backgroundColor: '#161616' }} />
         </section>
 
         {/* Overview */}
-        <section
-          className="border-b border-divider"
-          style={{ padding: '48px 24px' }}
-        >
+        <section className="border-b border-divider" style={{ padding: '48px 40px' }}>
           <div className="grid" style={{ gridTemplateColumns: '1fr 2fr', gap: '48px' }}>
-            <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.16em', color: '#666666' }}>
+            <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.16em', color: '#666666' }}>
               OVERVIEW
             </span>
-            <p className="font-mono" style={{ fontSize: '12px', letterSpacing: '0.1em', color: '#999999', lineHeight: 1.7 }}>
+            <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8 }}>
               {overview ?? 'This project focused on understanding user needs and translating them into a cohesive design solution. Through research, ideation, and iteration, the final product addresses real problems with intentional design decisions.'}
             </p>
           </div>
         </section>
 
         {/* My Role */}
-        <section
-          className="border-b border-divider"
-          style={{ padding: '48px 24px' }}
-        >
+        <section className="border-b border-divider" style={{ padding: '48px 40px' }}>
           <div className="grid" style={{ gridTemplateColumns: '1fr 2fr', gap: '48px' }}>
-            <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.16em', color: '#666666' }}>
+            <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.16em', color: '#666666' }}>
               MY ROLE
             </span>
             <div>
-              <p className="font-mono mb-6" style={{ fontSize: '12px', letterSpacing: '0.1em', color: '#999999', lineHeight: 1.7 }}>
+              <p className="font-mono mb-6" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8 }}>
                 {role ?? 'Led end-to-end UX design including research planning, synthesis, interaction design, and high-fidelity prototyping.'}
               </p>
               <div className="flex flex-wrap gap-2">
@@ -110,9 +102,9 @@ export function CaseStudyLayout({
                     key={tag}
                     className="font-mono"
                     style={{
-                      fontSize: '9px',
+                      fontSize: 'var(--text-eyebrow)',
                       letterSpacing: '0.12em',
-                      color: '#444444',
+                      color: '#666666',
                       border: '1px solid #1f1f1f',
                       padding: '4px 10px',
                     }}
@@ -126,32 +118,26 @@ export function CaseStudyLayout({
         </section>
 
         {/* Process */}
-        <section
-          className="border-b border-divider"
-          style={{ padding: '48px 24px' }}
-        >
+        <section className="border-b border-divider" style={{ padding: '48px 40px' }}>
           <RuleLabel number="PROCESS_" />
 
           {/* Research */}
           <div className="mb-10">
-            <p className="font-mono mb-3" style={{ fontSize: '9px', letterSpacing: '0.18em', color: '#FF3120' }}>
+            <p className="font-mono mb-3" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>
               RESEARCH_
             </p>
-            <p className="font-mono" style={{ fontSize: '12px', letterSpacing: '0.1em', color: '#999999', lineHeight: 1.7, maxWidth: '640px' }}>
+            <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '640px' }}>
               {research ?? 'Conducted user interviews and competitive analysis to understand the landscape. Synthesised findings into key themes that informed the design direction.'}
             </p>
-            <div
-              className="mt-6 w-full"
-              style={{ height: '240px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }}
-            />
+            <div className="mt-6 w-full" style={{ height: '240px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
           </div>
 
           {/* Ideation */}
           <div className="mb-10">
-            <p className="font-mono mb-3" style={{ fontSize: '9px', letterSpacing: '0.18em', color: '#FF3120' }}>
+            <p className="font-mono mb-3" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>
               IDEATION_
             </p>
-            <p className="font-mono" style={{ fontSize: '12px', letterSpacing: '0.1em', color: '#999999', lineHeight: 1.7, maxWidth: '640px' }}>
+            <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '640px' }}>
               {ideation ?? 'Explored multiple directions through sketching and low-fidelity wireframes. Narrowed down to the strongest concept based on user feedback and feasibility.'}
             </p>
             <div className="mt-6 grid grid-cols-2" style={{ gap: '2px' }}>
@@ -162,30 +148,22 @@ export function CaseStudyLayout({
 
           {/* Key Decisions */}
           <div>
-            <p className="font-mono mb-3" style={{ fontSize: '9px', letterSpacing: '0.18em', color: '#FF3120' }}>
+            <p className="font-mono mb-3" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>
               KEY DECISIONS_
             </p>
-            <p className="font-mono" style={{ fontSize: '12px', letterSpacing: '0.1em', color: '#999999', lineHeight: 1.7, maxWidth: '640px' }}>
+            <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '640px' }}>
               {keyDecisions ?? 'Prioritised clarity over feature richness. Key interaction patterns were validated through usability testing and refined in subsequent iterations.'}
             </p>
           </div>
         </section>
 
         {/* Solution */}
-        <section
-          className="border-b border-divider"
-          style={{ padding: '48px 24px' }}
-        >
+        <section className="border-b border-divider" style={{ padding: '48px 40px' }}>
           <RuleLabel number="SOLUTION_" />
-          <p className="font-mono mb-8" style={{ fontSize: '12px', letterSpacing: '0.1em', color: '#999999', lineHeight: 1.7, maxWidth: '640px' }}>
+          <p className="font-mono mb-8" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '640px' }}>
             {solution ?? ''}
           </p>
-          {/* Full width hero image */}
-          <div
-            className="w-full mb-1"
-            style={{ height: '360px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }}
-          />
-          {/* 2-col image grid */}
+          <div className="w-full mb-1" style={{ height: '360px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
           <div className="grid grid-cols-2" style={{ gap: '2px' }}>
             <div style={{ height: '240px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
             <div style={{ height: '240px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
@@ -193,15 +171,12 @@ export function CaseStudyLayout({
         </section>
 
         {/* Reflection */}
-        <section
-          className="border-b border-divider"
-          style={{ padding: '48px 24px' }}
-        >
+        <section className="border-b border-divider" style={{ padding: '48px 40px' }}>
           <div className="grid" style={{ gridTemplateColumns: '1fr 2fr', gap: '48px' }}>
-            <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.16em', color: '#666666' }}>
+            <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.16em', color: '#666666' }}>
               REFLECTION
             </span>
-            <p className="font-mono" style={{ fontSize: '12px', letterSpacing: '0.1em', color: '#999999', lineHeight: 1.7 }}>
+            <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8 }}>
               {reflection ?? 'This project pushed me to think more carefully about edge cases and accessibility. If I were to revisit it, I would invest more time in testing with a wider range of users.'}
             </p>
           </div>
@@ -209,34 +184,32 @@ export function CaseStudyLayout({
 
         {/* Prev / Next */}
         <div className="grid grid-cols-2 border-b border-divider">
-          {/* Prev */}
-          <div className="border-r border-divider" style={{ padding: '28px 24px' }}>
+          <div className="border-r border-divider" style={{ padding: '28px 40px' }}>
             {prev ? (
               <Link href={`${basePath}/${prev.slug}`} className="block">
-                <p className="font-mono mb-2" style={{ fontSize: '9px', letterSpacing: '0.12em', color: '#FF3120' }}>
+                <p className="font-mono mb-2" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.12em', color: '#FF3120' }}>
                   <span className="arrow-nudge-back">←</span> PREV
                 </p>
-                <p className="font-serif" style={{ fontSize: '16px', fontWeight: 400, color: '#666666' }}>
+                <p className="font-serif" style={{ fontSize: 'var(--text-body)', fontWeight: 400, color: '#666666' }}>
                   {prev.title}
                 </p>
               </Link>
             ) : (
-              <span className="font-mono" style={{ fontSize: '9px', color: '#2a2a2a' }}>—</span>
+              <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', color: '#2a2a2a' }}>—</span>
             )}
           </div>
-          {/* Next */}
-          <div className="text-right" style={{ padding: '28px 24px' }}>
+          <div className="text-right" style={{ padding: '28px 40px' }}>
             {next ? (
               <Link href={`${basePath}/${next.slug}`} className="block">
-                <p className="font-mono mb-2" style={{ fontSize: '9px', letterSpacing: '0.12em', color: '#FF3120' }}>
+                <p className="font-mono mb-2" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.12em', color: '#FF3120' }}>
                   NEXT <span className="arrow-nudge">→</span>
                 </p>
-                <p className="font-serif" style={{ fontSize: '16px', fontWeight: 400, color: '#666666' }}>
+                <p className="font-serif" style={{ fontSize: 'var(--text-body)', fontWeight: 400, color: '#666666' }}>
                   {next.title}
                 </p>
               </Link>
             ) : (
-              <span className="font-mono" style={{ fontSize: '9px', color: '#2a2a2a' }}>—</span>
+              <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', color: '#2a2a2a' }}>—</span>
             )}
           </div>
         </div>
