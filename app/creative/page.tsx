@@ -85,7 +85,7 @@ export default function CreativePage() {
             <CreativeCard title="KL" desc="Street life and quiet corners of a city in motion." href="/creative/photography/kl" />
             <CreativeCard title="Penang" desc="Heritage streets and the texture of an older world." href="/creative/photography/penang" />
             <CreativeCard title="Singapore" desc="The duality of a city-state — dense and lush at once." href="/creative/photography/singapore" />
-            <CreativeCard title="Ho Chi Minh" desc="Coming soon." comingSoon />
+            <CreativeCard title="Ho Chi Minh" desc="Noise, heat, and the city that never slows down." href="/creative/photography/hcmc" />
           </div>
         </section>
 

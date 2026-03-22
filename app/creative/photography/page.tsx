@@ -3,10 +3,10 @@ import { Footer } from '@/components/Footer'
 import Link from 'next/link'
 
 const cities = [
-  { slug: 'kl',        title: 'KL',          desc: 'Street life and quiet corners of a city in motion.' },
-  { slug: 'penang',    title: 'Penang',       desc: 'Heritage streets and the texture of an older world.' },
-  { slug: 'singapore', title: 'Singapore',    desc: 'The duality of a city-state — dense and lush at once.' },
-  { slug: 'hcmc',      title: 'Ho Chi Minh',  desc: 'Coming soon.', comingSoon: true },
+  { slug: 'kl',        title: 'KL',          desc: 'Street life and quiet corners of a city in motion.',      comingSoon: false },
+  { slug: 'penang',    title: 'Penang',       desc: 'Heritage streets and the texture of an older world.',     comingSoon: false },
+  { slug: 'singapore', title: 'Singapore',    desc: 'The duality of a city-state — dense and lush at once.',  comingSoon: true },
+  { slug: 'hcmc',      title: 'Ho Chi Minh',  desc: 'Noise, heat, and the city that never slows down.',       comingSoon: false },
 ]
 
 export default function PhotographyPage() {

@@ -1,7 +1,10 @@
 'use client'
+import Image from 'next/image'
 import { motion, AnimatePresence, usePresenceData } from 'motion/react'
 
 interface PhotoLightboxProps {
+  src: string
+  alt: string
   index: number
   total: number
   direction: number
@@ -10,9 +13,7 @@ interface PhotoLightboxProps {
   onNext: () => void
 }
 
-// Reads direction from AnimatePresence custom data — works even during exit
-// because usePresenceData holds the value from when the element was removed
-function PhotoSlide({ index, total }: { index: number; total: number }) {
+function PhotoSlide({ src, alt, index, total }: { src: string; alt: string; index: number; total: number }) {
   const direction = (usePresenceData() as number) ?? 1
 
   return (
@@ -31,15 +32,16 @@ function PhotoSlide({ index, total }: { index: number; total: number }) {
         gap: '16px',
       }}
     >
-      {/* Placeholder — replace with <img> when images are ready */}
-      <div
-        style={{
-          width: 'min(60vw, 420px)',
-          aspectRatio: '2 / 3',
-          backgroundColor: '#161616',
-          border: '1px solid #222222',
-        }}
-      />
+      <div style={{ position: 'relative', width: 'min(60vw, 480px)', height: 'min(80vh, 720px)' }}>
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          style={{ objectFit: 'contain' }}
+          sizes="(max-width: 768px) 90vw, 60vw"
+          priority
+        />
+      </div>
       <div className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.14em', color: '#444444' }}>
         {String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
       </div>
@@ -47,7 +49,7 @@ function PhotoSlide({ index, total }: { index: number; total: number }) {
   )
 }
 
-export function PhotoLightbox({ index, total, direction, onClose, onPrev, onNext }: PhotoLightboxProps) {
+export function PhotoLightbox({ src, alt, index, total, direction, onClose, onPrev, onNext }: PhotoLightboxProps) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -65,13 +67,12 @@ export function PhotoLightbox({ index, total, direction, onClose, onPrev, onNext
         justifyContent: 'center',
       }}
     >
-      {/* Slide area — stop propagation so clicking slide doesn't close */}
       <div
         onClick={(e) => e.stopPropagation()}
         style={{ position: 'relative', width: '100%', height: '100%' }}
       >
         <AnimatePresence custom={direction} mode="popLayout">
-          <PhotoSlide key={index} index={index} total={total} />
+          <PhotoSlide key={index} src={src} alt={alt} index={index} total={total} />
         </AnimatePresence>
 
         {/* Prev */}
