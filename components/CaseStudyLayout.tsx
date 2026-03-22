@@ -30,7 +30,7 @@ export function CaseStudyLayout({ title, oneliner, type, tags, prev, next }: Cas
             className="font-mono"
             style={{ fontSize: '9px', letterSpacing: '0.12em', color: '#444444' }}
           >
-            ← WORK
+            <span className="arrow-nudge-back">←</span> WORK
           </Link>
         </div>
 
@@ -199,7 +199,7 @@ export function CaseStudyLayout({ title, oneliner, type, tags, prev, next }: Cas
             {prev ? (
               <Link href={`/work/${prev.slug}`} className="block">
                 <p className="font-mono mb-2" style={{ fontSize: '9px', letterSpacing: '0.12em', color: '#FF3120' }}>
-                  ← PREV
+                  <span className="arrow-nudge-back">←</span> PREV
                 </p>
                 <p className="font-serif" style={{ fontSize: '16px', fontWeight: 400, color: '#666666' }}>
                   {prev.title}
@@ -214,7 +214,7 @@ export function CaseStudyLayout({ title, oneliner, type, tags, prev, next }: Cas
             {next ? (
               <Link href={`/work/${next.slug}`} className="block">
                 <p className="font-mono mb-2" style={{ fontSize: '9px', letterSpacing: '0.12em', color: '#FF3120' }}>
-                  NEXT →
+                  NEXT <span className="arrow-nudge">→</span>
                 </p>
                 <p className="font-serif" style={{ fontSize: '16px', fontWeight: 400, color: '#666666' }}>
                   {next.title}

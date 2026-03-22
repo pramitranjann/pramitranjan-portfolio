@@ -86,7 +86,7 @@ export function PhotoLightbox({ index, total, direction, onClose, onPrev, onNext
               padding: '12px',
             }}
           >
-            ← PREV
+            <span className="arrow-nudge-back">←</span> PREV
           </button>
         )}
 
@@ -102,7 +102,7 @@ export function PhotoLightbox({ index, total, direction, onClose, onPrev, onNext
               padding: '12px',
             }}
           >
-            NEXT →
+            NEXT <span className="arrow-nudge">→</span>
           </button>
         )}
 

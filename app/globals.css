@@ -83,7 +83,8 @@ body.carousel-reengaging main {
   transition: transform 0.2s ease;
 }
 .portfolio-card:hover .arrow-nudge,
-a:hover .arrow-nudge {
+a:hover .arrow-nudge,
+button:hover .arrow-nudge {
   transform: translateX(4px);
 }
 
@@ -92,7 +93,8 @@ a:hover .arrow-nudge {
   display: inline-block;
   transition: transform 0.2s ease;
 }
-a:hover .arrow-nudge-back {
+a:hover .arrow-nudge-back,
+button:hover .arrow-nudge-back {
   transform: translateX(-4px);
 }
 
