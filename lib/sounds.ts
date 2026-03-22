@@ -4,6 +4,10 @@
 
 let _ctx: AudioContext | null = null
 
+// iOS: resume() is async. We schedule tones 50ms ahead so they fire
+// after the context has had time to actually resume.
+const IOS_OFFSET = 0.05
+
 function getCtx(): AudioContext | null {
   if (typeof window === 'undefined') return null
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return null
@@ -41,14 +45,15 @@ function tone(
 export function playNav() {
   const ctx = getCtx()
   if (!ctx) return
-  tone(ctx, 1100, 0.09, ctx.currentTime, 0.008, 0.09)
+  const t = ctx.currentTime + IOS_OFFSET
+  tone(ctx, 1100, 0.09, t, 0.008, 0.09)
 }
 
 // Two-tone slide — lightbox frame change
 export function playLightboxNav() {
   const ctx = getCtx()
   if (!ctx) return
-  const t = ctx.currentTime
+  const t = ctx.currentTime + IOS_OFFSET
   tone(ctx, 1050, 0.07, t,        0.008, 0.12)
   tone(ctx, 880,  0.05, t + 0.06, 0.008, 0.10)
 }
@@ -57,7 +62,7 @@ export function playLightboxNav() {
 export function playCardEnter() {
   const ctx = getCtx()
   if (!ctx) return
-  const t = ctx.currentTime
+  const t = ctx.currentTime + IOS_OFFSET
   tone(ctx, 880,  0.08, t,         0.008, 0.09)
   tone(ctx, 1320, 0.07, t + 0.055, 0.008, 0.10)
 }
@@ -67,7 +72,7 @@ export function playCardEnter() {
 export function playPageArrive() {
   const ctx = getCtx()
   if (!ctx || ctx.state !== 'running') return
-  const t = ctx.currentTime
+  const t = ctx.currentTime + IOS_OFFSET
   tone(ctx, 660, 0.05, t,        0.04, 0.22)
   tone(ctx, 990, 0.03, t + 0.03, 0.04, 0.18)
 }
