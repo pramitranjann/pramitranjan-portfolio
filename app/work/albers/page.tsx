@@ -16,6 +16,11 @@ export default function AlbersPage() {
       keyDecisions="The biggest decision was the development process. Rather than writing SwiftUI from scratch traditionally, I used vibe coding — working with Claude Code in terminal and Codex to move fast between design intent and working code. This changed the design process significantly: Figma was used for visual direction and layout, but iteration happened directly in the app, with AI handling implementation while I focused on what the interaction should feel like. It made the gap between design and build much smaller than it would have been otherwise."
       solution="A nine-mode macOS application where each mode isolates one perceptual color phenomenon and gives the user real-time controls to manipulate it. The amber HUD aesthetic frames the app as an instrument of observation rather than a creative canvas. Built in SwiftUI with AppKit, targeting macOS 13+."
       reflection="ALBERS was the first project where the design process itself was the discovery. Vibe coding is genuinely a different way of working — faster in some places, disorienting in others. It pushed me to be more precise about design intent upfront, because the AI needs clarity to move in the right direction. The HUD aesthetic also taught me something: constraint as identity. When an interface commits fully to one visual language, every decision becomes easier. I'd like to eventually publish it — there's a version of ALBERS that lives on the Mac App Store as a genuine teaching tool."
+      heroImage="/work/albers/img-3.png"
+      researchImage="/work/albers/img-7.png"
+      ideationImages={['/work/albers/img-1.png', '/work/albers/img-2.png']}
+      solutionHeroImage="/work/albers/img-6.png"
+      solutionImages={['/work/albers/img-4.png', '/work/albers/img-5.png']}
     />
   )
 }
