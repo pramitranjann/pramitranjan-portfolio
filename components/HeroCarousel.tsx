@@ -104,6 +104,9 @@ export function HeroCarousel() {
 
   useEffect(() => {
     const onWheel = (e: WheelEvent) => {
+      // Absorb trackpad momentum during hold period after carousel release
+      if (holdingRef.current) { e.preventDefault(); return }
+
       const dir = e.deltaY > 0 ? 'down' : 'up'
 
       if (!releasedRef.current) {
