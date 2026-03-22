@@ -293,4 +293,62 @@ button:hover .arrow-nudge-back {
   .lightbox-close {
     right: 24px !important;
   }
+
+  /* Case study — back link padding */
+  .case-study-back {
+    padding: 20px 24px 0 !important;
+  }
+
+  /* Case study — hero collapses to single column, image hidden */
+  .case-study-hero {
+    grid-template-columns: 1fr !important;
+    min-height: unset !important;
+  }
+  .case-study-hero-text {
+    padding: 32px 24px !important;
+    border-right: none !important;
+  }
+  .case-study-hero-image {
+    display: none !important;
+  }
+
+  /* Case study — all content sections reduce padding */
+  .case-study-section {
+    padding: 32px 24px !important;
+  }
+
+  /* Case study — meta grids (OVERVIEW, MY ROLE) collapse to single column */
+  .case-study-meta-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  /* Case study — body text maxWidth removed on mobile */
+  .case-study-body {
+    max-width: 100% !important;
+  }
+
+  /* Case study — 2-col image grids collapse to single column */
+  .case-study-image-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Case study — image heights reduced on mobile */
+  .case-study-research-image {
+    height: 200px !important;
+  }
+  .case-study-ideation-image {
+    height: 180px !important;
+  }
+  .case-study-solution-hero {
+    height: 240px !important;
+  }
+  .case-study-solution-image {
+    height: 200px !important;
+  }
+
+  /* Case study — prev/next padding */
+  .case-study-prev-next {
+    padding: 20px 24px !important;
+  }
 }
