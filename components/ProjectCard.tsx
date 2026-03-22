@@ -1,5 +1,7 @@
 // components/ProjectCard.tsx
+'use client'
 import Link from 'next/link'
+import { playCardEnter } from '@/lib/sounds'
 
 interface ProjectCardProps {
   title: string
@@ -92,6 +94,7 @@ export function ProjectCard({ title, oneliner, tags, href, variant = 'main', ima
       href={href}
       className="card-link"
       style={{ display: 'block', textDecoration: 'none', height: '100%' }}
+      onClick={playCardEnter}
     >
       {inner}
     </Link>
