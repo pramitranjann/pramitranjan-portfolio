@@ -1,7 +1,6 @@
+import Image from 'next/image'
 import Link from 'next/link'
 
-// 5 frames at 90px + 4px gaps + 10px side padding = 486px total
-// 20 holes at 10px + 14px gaps + 10px side padding = 486px — exact match
 const FRAME_W = 90
 const FRAME_H = 195
 const SIDE_PAD = 10
@@ -9,11 +8,11 @@ const FRAME_GAP = 4
 const HOLE_COUNT = 20
 
 const frames = [
-  { label: 'KL · 001' },
-  { label: 'KL · 002' },
-  { label: 'PG · 003' },
-  { label: 'SG · 004' },
-  { label: 'HCM · 001' },
+  { label: 'KL · 001',  href: '/creative/photography/kl',        cover: '/creative/photography/kl/41.jpg' },
+  { label: 'KL · 002',  href: '/creative/photography/kl',        cover: '/creative/photography/kl/12.jpg' },
+  { label: 'PG · 003',  href: '/creative/photography/penang',    cover: '/creative/photography/penang/07.jpg' },
+  { label: 'SG · 004',  href: '/creative/photography/singapore', cover: '/creative/photography/singapore/03.jpg' },
+  { label: 'HCM · 001', href: '/creative/photography/hcmc',      cover: '/creative/photography/hcmc/01.jpg' },
 ]
 
 function Holes() {
@@ -63,10 +62,18 @@ export function PhotographyStage() {
           <Holes />
           <div className="flex" style={{ gap: `${FRAME_GAP}px`, padding: `8px ${SIDE_PAD}px` }}>
             {frames.map((frame) => (
-              <div key={frame.label} className="flex-shrink-0">
-                <div style={{ width: `${FRAME_W}px`, height: `${FRAME_H}px`, backgroundColor: '#161616', border: '1px solid #222222' }} />
+              <Link key={frame.label} href={frame.href} className="portfolio-card flex-shrink-0" style={{ display: 'block' }}>
+                <div style={{ position: 'relative', width: `${FRAME_W}px`, height: `${FRAME_H}px`, backgroundColor: '#161616', border: '1px solid #222222', overflow: 'hidden' }}>
+                  <Image
+                    src={frame.cover}
+                    alt={frame.label}
+                    fill
+                    style={{ objectFit: 'cover' }}
+                    sizes="90px"
+                  />
+                </div>
                 <div className="font-mono" style={{ fontSize: '7px', color: '#FF3120', textAlign: 'center', marginTop: '4px', letterSpacing: '0.1em' }}>{frame.label}</div>
-              </div>
+              </Link>
             ))}
           </div>
           <Holes />

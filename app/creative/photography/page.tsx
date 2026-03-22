@@ -1,6 +1,5 @@
 import { Nav } from '@/components/Nav'
 import { Footer } from '@/components/Footer'
-import { FilmStrip } from '@/components/FilmStrip'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -16,7 +15,6 @@ export default function PhotographyPage() {
     <>
       <Nav />
       <main style={{ paddingTop: '57px' }}>
-        <FilmStrip />
         <section style={{ padding: '48px 40px' }}>
           <div style={{ marginBottom: '16px' }}>
             <Link href="/creative" className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#666666', textDecoration: 'none' }}>
