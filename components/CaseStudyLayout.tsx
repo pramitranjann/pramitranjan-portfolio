@@ -80,7 +80,7 @@ export function CaseStudyLayout({
             </p>
           </div>
           <div style={{ position: 'relative', backgroundColor: '#161616', overflow: 'hidden' }}>
-            {heroImage && <Image src={heroImage} alt={title} fill style={{ objectFit: 'cover' }} sizes="50vw" />}
+            {heroImage && <Image src={heroImage} alt={title} fill style={{ objectFit: 'contain' }} sizes="50vw" />}
           </div>
         </section>
 
@@ -140,7 +140,7 @@ export function CaseStudyLayout({
               {research ?? 'Conducted user interviews and competitive analysis to understand the landscape. Synthesised findings into key themes that informed the design direction.'}
             </p>
             <div className="mt-6 w-full" style={{ position: 'relative', height: '320px', backgroundColor: '#161616', border: '1px solid #1a1a1a', overflow: 'hidden' }}>
-              {researchImage && <Image src={researchImage} alt="Research" fill style={{ objectFit: 'cover' }} sizes="100vw" />}
+              {researchImage && <Image src={researchImage} alt="Research" fill style={{ objectFit: 'contain' }} sizes="100vw" />}
             </div>
           </div>
 
@@ -154,10 +154,10 @@ export function CaseStudyLayout({
             </p>
             <div className="mt-6 grid grid-cols-2" style={{ gap: '2px' }}>
               <div style={{ position: 'relative', height: '267px', backgroundColor: '#161616', border: '1px solid #1a1a1a', overflow: 'hidden' }}>
-                {ideationImages?.[0] && <Image src={ideationImages[0]} alt="Ideation 1" fill style={{ objectFit: 'cover' }} sizes="50vw" />}
+                {ideationImages?.[0] && <Image src={ideationImages[0]} alt="Ideation 1" fill style={{ objectFit: 'contain' }} sizes="50vw" />}
               </div>
               <div style={{ position: 'relative', height: '267px', backgroundColor: '#161616', border: '1px solid #1a1a1a', overflow: 'hidden' }}>
-                {ideationImages?.[1] && <Image src={ideationImages[1]} alt="Ideation 2" fill style={{ objectFit: 'cover' }} sizes="50vw" />}
+                {ideationImages?.[1] && <Image src={ideationImages[1]} alt="Ideation 2" fill style={{ objectFit: 'contain' }} sizes="50vw" />}
               </div>
             </div>
           </div>
@@ -194,14 +194,14 @@ export function CaseStudyLayout({
             {solution ?? ''}
           </p>
           <div className="w-full mb-1" style={{ position: 'relative', height: '480px', backgroundColor: '#161616', border: '1px solid #1a1a1a', overflow: 'hidden' }}>
-            {solutionHeroImage && <Image src={solutionHeroImage} alt="Solution" fill style={{ objectFit: 'cover' }} sizes="100vw" />}
+            {solutionHeroImage && <Image src={solutionHeroImage} alt="Solution" fill style={{ objectFit: 'contain' }} sizes="100vw" />}
           </div>
           <div className="grid grid-cols-2" style={{ gap: '2px' }}>
             <div style={{ position: 'relative', height: '320px', backgroundColor: '#161616', border: '1px solid #1a1a1a', overflow: 'hidden' }}>
-              {solutionImages?.[0] && <Image src={solutionImages[0]} alt="Solution 1" fill style={{ objectFit: 'cover' }} sizes="50vw" />}
+              {solutionImages?.[0] && <Image src={solutionImages[0]} alt="Solution 1" fill style={{ objectFit: 'contain' }} sizes="50vw" />}
             </div>
             <div style={{ position: 'relative', height: '320px', backgroundColor: '#161616', border: '1px solid #1a1a1a', overflow: 'hidden' }}>
-              {solutionImages?.[1] && <Image src={solutionImages[1]} alt="Solution 2" fill style={{ objectFit: 'cover' }} sizes="50vw" />}
+              {solutionImages?.[1] && <Image src={solutionImages[1]} alt="Solution 2" fill style={{ objectFit: 'contain' }} sizes="50vw" />}
             </div>
           </div>
         </section>
