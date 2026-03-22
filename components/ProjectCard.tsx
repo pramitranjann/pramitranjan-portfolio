@@ -7,11 +7,12 @@ interface ProjectCardProps {
   tags: string[]
   href: string
   variant?: 'main' | 'supporting'
+  imageRatio?: string
   comingSoon?: boolean
   hovered?: boolean
 }
 
-export function ProjectCard({ title, oneliner, tags, href, variant = 'main', comingSoon, hovered }: ProjectCardProps) {
+export function ProjectCard({ title, oneliner, tags, href, variant = 'main', imageRatio, comingSoon, hovered }: ProjectCardProps) {
   const category = tags.join(' · ')
 
   const cardBase = {
@@ -25,7 +26,7 @@ export function ProjectCard({ title, oneliner, tags, href, variant = 'main', com
   const inner =
     variant === 'supporting' ? (
       <div style={cardBase}>
-        <div style={{ aspectRatio: '3 / 4', width: '100%', backgroundColor: '#252525', border: '1px solid #333333', marginBottom: '12px' }} />
+        <div style={{ aspectRatio: imageRatio ?? '3 / 4', width: '100%', backgroundColor: '#252525', border: '1px solid #333333', marginBottom: '12px' }} />
         <div className="font-serif" style={{ fontSize: 'var(--text-body)', color: '#f5f2ed' }}>{title}</div>
         <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#999999', marginTop: '4px', letterSpacing: '0.1em' }}>{category}</div>
       </div>

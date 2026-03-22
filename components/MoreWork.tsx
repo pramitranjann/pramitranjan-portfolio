@@ -62,7 +62,7 @@ export function MoreWork() {
             onMouseEnter={() => setHoveredIdx(i)}
             onMouseLeave={() => setHoveredIdx(null)}
           >
-            <ProjectCard {...p} variant="supporting" hovered={hoveredIdx === i} />
+            <ProjectCard {...p} variant="supporting" imageRatio="4 / 3" hovered={hoveredIdx === i} />
           </motion.div>
         ))}
       </div>
