@@ -55,6 +55,8 @@ export function HeroCarousel() {
   const [released, setReleased] = useState(false)
   // collapsed = true after fade completes — snaps height to 0 without animation
   const [collapsed, setCollapsed] = useState(false)
+  // holdingRef stays true after release to absorb swipe momentum before unlock
+  const holdingRef = useRef(false)
   // readyToRelease becomes true after dwelling on stage 3 for 1.2s
   const readyToRelease = useRef(false)
   const touchStartY = useRef<number | null>(null)
@@ -62,17 +64,21 @@ export function HeroCarousel() {
   // Lock / unlock page scroll based on carousel state
   useEffect(() => {
     if (!released) {
+      holdingRef.current = false
       setCollapsed(false)
       document.body.style.overflow = 'hidden'
       window.scrollTo(0, 0)
     } else {
+      holdingRef.current = true
       window.scrollTo(0, 0)
-      // After opacity fade (200ms), snap height to 0 and unlock scroll
-      const t = setTimeout(() => {
-        setCollapsed(true)
+      // Snap height to 0 after fade (220ms)
+      const tCollapse = setTimeout(() => setCollapsed(true), 220)
+      // Unlock scroll after momentum has fully dissipated (650ms)
+      const tUnlock = setTimeout(() => {
+        holdingRef.current = false
         document.body.style.overflow = ''
-      }, 220)
-      return () => clearTimeout(t)
+      }, 650)
+      return () => { clearTimeout(tCollapse); clearTimeout(tUnlock) }
     }
     return () => { document.body.style.overflow = '' }
   }, [released])
@@ -125,8 +131,8 @@ export function HeroCarousel() {
     }
 
     const onTouchMove = (e: TouchEvent) => {
-      // Prevent iOS Safari from scrolling the page while carousel is locked
-      if (!releasedRef.current) e.preventDefault()
+      // Block touch scroll while carousel is active OR during momentum hold after release
+      if (!releasedRef.current || holdingRef.current) e.preventDefault()
     }
 
     const onTouchStart = (e: TouchEvent) => {
