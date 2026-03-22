@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import Image from 'next/image'
 import { Nav } from '@/components/Nav'
 import { Footer } from '@/components/Footer'
 import Link from 'next/link'
@@ -14,12 +15,14 @@ function SectionHeader({ label, count }: { label: string; count: string }) {
   )
 }
 
-function CreativeCard({ title, desc, tag, href, comingSoon, imageHeight = '240px' }: {
-  title: string; desc: string; tag?: string; href?: string; comingSoon?: boolean; imageHeight?: string
+function CreativeCard({ title, desc, tag, href, cover, comingSoon, imageHeight = '240px' }: {
+  title: string; desc: string; tag?: string; href?: string; cover?: string; comingSoon?: boolean; imageHeight?: string
 }) {
   const inner = (
     <div className="portfolio-card flex flex-col h-full" style={{ backgroundColor: '#1c1c1c', padding: '16px' }}>
-      <div className="creative-card-image" style={{ width: '100%', height: imageHeight, backgroundColor: '#252525', border: '1px solid #333333', marginBottom: '12px' }} />
+      <div className="creative-card-image" style={{ position: 'relative', width: '100%', height: imageHeight, backgroundColor: '#252525', border: '1px solid #333333', marginBottom: '12px', overflow: 'hidden' }}>
+        {cover && <Image src={cover} alt={title} fill style={{ objectFit: 'cover' }} sizes="(max-width: 768px) 50vw, 25vw" />}
+      </div>
       <h3 className="font-serif" style={{ fontSize: 'var(--text-body)', fontWeight: 400, color: '#f5f2ed', marginBottom: '4px' }}>{title}</h3>
       <p className="font-mono flex-1" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.6, marginBottom: '12px' }}>{desc}</p>
       <div className="flex flex-col" style={{ gap: '6px' }}>
@@ -82,10 +85,10 @@ export default function CreativePage() {
         <section className="creative-section border-b border-divider" style={{ padding: '40px' }}>
           <SectionHeader label="PHOTOGRAPHY" count="04" />
           <div className="grid grid-cols-2 md:grid-cols-4" style={{ gap: '16px' }}>
-            <CreativeCard title="KL" desc="Street life and quiet corners of a city in motion." href="/creative/photography/kl" />
-            <CreativeCard title="Penang" desc="Heritage streets and the texture of an older world." href="/creative/photography/penang" />
-            <CreativeCard title="Singapore" desc="The duality of a city-state — dense and lush at once." href="/creative/photography/singapore" />
-            <CreativeCard title="Ho Chi Minh" desc="Noise, heat, and the city that never slows down." href="/creative/photography/hcmc" />
+            <CreativeCard title="KL" desc="Street life and quiet corners of a city in motion." href="/creative/photography/kl" cover="/creative/photography/kl/01.jpg" />
+            <CreativeCard title="Penang" desc="Heritage streets and the texture of an older world." href="/creative/photography/penang" cover="/creative/photography/penang/01.jpg" />
+            <CreativeCard title="Singapore" desc="The duality of a city-state — dense and lush at once." comingSoon />
+            <CreativeCard title="Ho Chi Minh" desc="Noise, heat, and the city that never slows down." href="/creative/photography/hcmc" cover="/creative/photography/hcmc/01.jpg" />
           </div>
         </section>
 
