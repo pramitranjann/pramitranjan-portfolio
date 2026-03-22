@@ -154,6 +154,20 @@ body.carousel-reengaging main {
     height: 140px !important;
   }
 
+  /* Work page — reduce hero and grid padding on mobile */
+  .work-hero-section {
+    padding: 40px 24px !important;
+  }
+  .work-grid-section {
+    padding: 24px !important;
+  }
+
+  /* Work cards — fixed height image on mobile, drop aspect ratio */
+  .work-card-image {
+    aspect-ratio: unset !important;
+    height: 140px !important;
+  }
+
   /* Lightbox — move prev/next out of image area to bottom corners */
   .lightbox-prev {
     top: auto !important;

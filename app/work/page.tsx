@@ -20,7 +20,7 @@ export default function WorkPage() {
       <main style={{ paddingTop: '57px' }}>
 
         {/* Hero */}
-        <section className="border-b border-divider" style={{ padding: '64px 40px' }}>
+        <section className="work-hero-section border-b border-divider" style={{ padding: '64px 40px' }}>
           <div className="flex items-center" style={{ gap: '10px', marginBottom: '24px' }}>
             <div style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
             <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>WORK_</span>
@@ -40,7 +40,7 @@ export default function WorkPage() {
         </section>
 
         {/* Grid */}
-        <section style={{ padding: '40px' }}>
+        <section className="work-grid-section" style={{ padding: '40px' }}>
           <div className="grid grid-cols-2 md:grid-cols-4" style={{ gap: '16px' }}>
             {projects.map((p) => (
               <ProjectCard key={p.title} {...p} variant="supporting" imageRatio="4 / 3" />
