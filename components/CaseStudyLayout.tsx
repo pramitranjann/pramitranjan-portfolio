@@ -126,7 +126,7 @@ export function CaseStudyLayout({
             <p className="font-mono mb-3" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>
               RESEARCH_
             </p>
-            <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '640px' }}>
+            <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8 }}>
               {research ?? 'Conducted user interviews and competitive analysis to understand the landscape. Synthesised findings into key themes that informed the design direction.'}
             </p>
             <div className="mt-6 w-full" style={{ height: '240px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
@@ -137,7 +137,7 @@ export function CaseStudyLayout({
             <p className="font-mono mb-3" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>
               IDEATION_
             </p>
-            <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '640px' }}>
+            <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8 }}>
               {ideation ?? 'Explored multiple directions through sketching and low-fidelity wireframes. Narrowed down to the strongest concept based on user feedback and feasibility.'}
             </p>
             <div className="mt-6 grid grid-cols-2" style={{ gap: '2px' }}>
@@ -151,7 +151,7 @@ export function CaseStudyLayout({
             <p className="font-mono mb-3" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>
               KEY DECISIONS_
             </p>
-            <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '640px' }}>
+            <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8 }}>
               {keyDecisions ?? 'Prioritised clarity over feature richness. Key interaction patterns were validated through usability testing and refined in subsequent iterations.'}
             </p>
           </div>
@@ -160,7 +160,7 @@ export function CaseStudyLayout({
         {/* Solution */}
         <section className="border-b border-divider" style={{ padding: '48px 40px' }}>
           <RuleLabel number="SOLUTION_" />
-          <p className="font-mono mb-8" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '640px' }}>
+          <p className="font-mono mb-8" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8 }}>
             {solution ?? ''}
           </p>
           <div className="w-full mb-1" style={{ height: '360px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
