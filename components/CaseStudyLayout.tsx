@@ -15,22 +15,25 @@ interface CaseStudyLayoutProps {
   tags: string[]
   prev: ProjectLink | null
   next: ProjectLink | null
+  backHref?: string
+  backLabel?: string
 }
 
-export function CaseStudyLayout({ title, oneliner, type, tags, prev, next }: CaseStudyLayoutProps) {
+export function CaseStudyLayout({ title, oneliner, type, tags, prev, next, backHref = '/work', backLabel = 'WORK' }: CaseStudyLayoutProps) {
+  const basePath = backHref
   return (
     <>
       <Nav />
-      <main style={{ paddingTop: '42px' }}>
+      <main style={{ paddingTop: '57px' }}>
 
         {/* Back link */}
-        <div style={{ padding: '24px 24px 0' }}>
+        <div style={{ padding: '24px 40px 0' }}>
           <Link
-            href="/work"
+            href={backHref}
             className="font-mono"
-            style={{ fontSize: '9px', letterSpacing: '0.12em', color: '#444444' }}
+            style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#666666', textDecoration: 'none' }}
           >
-            <span className="arrow-nudge-back">←</span> WORK
+            <span className="arrow-nudge-back">←</span> {backLabel}
           </Link>
         </div>
 
@@ -197,7 +200,7 @@ export function CaseStudyLayout({ title, oneliner, type, tags, prev, next }: Cas
           {/* Prev */}
           <div className="border-r border-divider" style={{ padding: '28px 24px' }}>
             {prev ? (
-              <Link href={`/work/${prev.slug}`} className="block">
+              <Link href={`${basePath}/${prev.slug}`} className="block">
                 <p className="font-mono mb-2" style={{ fontSize: '9px', letterSpacing: '0.12em', color: '#FF3120' }}>
                   <span className="arrow-nudge-back">←</span> PREV
                 </p>
@@ -212,7 +215,7 @@ export function CaseStudyLayout({ title, oneliner, type, tags, prev, next }: Cas
           {/* Next */}
           <div className="text-right" style={{ padding: '28px 24px' }}>
             {next ? (
-              <Link href={`/work/${next.slug}`} className="block">
+              <Link href={`${basePath}/${next.slug}`} className="block">
                 <p className="font-mono mb-2" style={{ fontSize: '9px', letterSpacing: '0.12em', color: '#FF3120' }}>
                   NEXT <span className="arrow-nudge">→</span>
                 </p>
