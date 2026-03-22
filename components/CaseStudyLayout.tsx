@@ -22,6 +22,7 @@ interface CaseStudyLayoutProps {
   research?: string
   ideation?: string
   keyDecisions?: string
+  usabilityTesting?: string
   solution?: string
   reflection?: string
 }
@@ -29,7 +30,7 @@ interface CaseStudyLayoutProps {
 export function CaseStudyLayout({
   title, oneliner, type, tags, prev, next,
   backHref = '/work', backLabel = 'WORK',
-  overview, role, research, ideation, keyDecisions, solution, reflection,
+  overview, role, research, ideation, keyDecisions, usabilityTesting, solution, reflection,
 }: CaseStudyLayoutProps) {
   const basePath = backHref
   return (
@@ -147,7 +148,7 @@ export function CaseStudyLayout({
           </div>
 
           {/* Key Decisions */}
-          <div>
+          <div className={usabilityTesting ? 'mb-10' : ''}>
             <p className="font-mono mb-3" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>
               KEY DECISIONS_
             </p>
@@ -155,6 +156,18 @@ export function CaseStudyLayout({
               {keyDecisions ?? 'Prioritised clarity over feature richness. Key interaction patterns were validated through usability testing and refined in subsequent iterations.'}
             </p>
           </div>
+
+          {/* Usability Testing (optional) */}
+          {usabilityTesting && (
+            <div>
+              <p className="font-mono mb-3" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>
+                USABILITY TESTING_
+              </p>
+              <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
+                {usabilityTesting}
+              </p>
+            </div>
+          )}
         </section>
 
         {/* Solution */}

@@ -1,12 +1,13 @@
 import { Nav } from '@/components/Nav'
 import { Footer } from '@/components/Footer'
+import { FilmStrip } from '@/components/FilmStrip'
 import Image from 'next/image'
 import Link from 'next/link'
 
 const cities = [
   { slug: 'kl',        title: 'KL',          desc: 'Street life and quiet corners of a city in motion.',      cover: '/creative/photography/kl/41.jpg',     comingSoon: false },
   { slug: 'penang',    title: 'Penang',       desc: 'Heritage streets and the texture of an older world.',     cover: '/creative/photography/penang/07.jpg',  comingSoon: false },
-  { slug: 'singapore', title: 'Singapore',    desc: 'The duality of a city-state — dense and lush at once.',  cover: null,                                   comingSoon: true },
+  { slug: 'singapore', title: 'Singapore',    desc: 'The duality of a city-state — dense and lush at once.',  cover: '/creative/photography/singapore/03.jpg', comingSoon: false },
   { slug: 'hcmc',      title: 'Ho Chi Minh',  desc: 'Noise, heat, and the city that never slows down.',       cover: '/creative/photography/hcmc/01.jpg',    comingSoon: false },
 ]
 
@@ -15,6 +16,7 @@ export default function PhotographyPage() {
     <>
       <Nav />
       <main style={{ paddingTop: '57px' }}>
+        <FilmStrip />
         <section style={{ padding: '48px 40px' }}>
           <div style={{ marginBottom: '16px' }}>
             <Link href="/creative" className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#666666', textDecoration: 'none' }}>

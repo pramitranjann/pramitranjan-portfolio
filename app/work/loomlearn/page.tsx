@@ -7,7 +7,7 @@ export default function LoomLearnPage() {
       oneliner="One learning space for students who think differently."
       type="UX DESIGN · 2024"
       tags={['UI/UX', 'Figma', 'Accessibility', 'Interaction Design', 'Prototyping']}
-      prev={null}
+      prev={{ slug: 'franklins', title: "Franklin's" }}
       next={{ slug: 'helpoh', title: 'HelpOH' }}
       overview="LoomLearn integrates Cornell note-taking, Pomodoro timers, mind maps, spider charts, and flashcards into a single drag-and-drop platform. It emerged from a personal need — designed specifically with dyslexic learners in mind, but built for anyone who switches between too many tools to study effectively."
       role="Sole designer across research, UX, UI design, and prototyping."

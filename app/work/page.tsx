@@ -6,8 +6,9 @@ import { Footer } from '@/components/Footer'
 import { ProjectCard } from '@/components/ProjectCard'
 
 const projects = [
+  { title: "Franklin's",      oneliner: "The experience starts before you walk in.",                    tags: ['UX', 'RESEARCH'],        href: '/work/franklins' },
   { title: 'LoomLearn',       oneliner: 'One learning space for students who think differently.',       tags: ['UX', 'RESEARCH'],        href: '/work/loomlearn' },
-  { title: 'HelpOH',          oneliner: 'Connecting homes to trusted help, and workers to fair pay.',   tags: ['UX', 'SERVICE DESIGN'],  href: '/work/helpoh' },
+  { title: 'HelpOH',          oneliner: 'Connecting homes to trusted help, and workers to fair work.',  tags: ['UX', 'SERVICE DESIGN'],  href: '/work/helpoh' },
   { title: 'Atom OS',         oneliner: 'A phone stripped down to what actually matters.',               tags: ['UI', 'SYSTEMS'],         href: '/work/atom' },
   { title: 'Albers',          oneliner: 'Colour theory you can actually play with.',                     tags: ['UI', 'INTERACTION'],     href: '/work/albers' },
   { title: 'Accord',          oneliner: 'A contract tool built for freelancers.',                        tags: ['UX', 'PRODUCT'],         href: '/work/accord' },
