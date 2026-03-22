@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { DM_Serif_Display, DM_Mono } from 'next/font/google'
 import './globals.css'
+import { SoundRouteListener } from '@/components/SoundRouteListener'
 
 const dmSerif = DM_Serif_Display({
   weight: '400',
@@ -27,7 +28,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
 <script dangerouslySetInnerHTML={{ __html: `document.documentElement.classList.add('js-ready')` }} />
       </head>
-      <body style={{ backgroundColor: '#0d0d0d', color: '#f5f2ed' }}>{children}</body>
+      <body style={{ backgroundColor: '#0d0d0d', color: '#f5f2ed' }}>
+        <SoundRouteListener />
+        {children}
+      </body>
     </html>
   )
 }
