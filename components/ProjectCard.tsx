@@ -1,5 +1,4 @@
 // components/ProjectCard.tsx
-import Image from 'next/image'
 import Link from 'next/link'
 
 interface ProjectCardProps {
@@ -44,9 +43,12 @@ export function ProjectCard({ title, oneliner, tags, href, variant = 'main', ima
           }}
         >
           {cover && (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={cover}
               alt={title}
+              loading="lazy"
+              decoding="async"
               style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }}
             />
           )}
@@ -61,9 +63,12 @@ export function ProjectCard({ title, oneliner, tags, href, variant = 'main', ima
       <div className="portfolio-card" style={cardBase}>
         <div style={{ position: 'relative', width: '100%', height: 0, paddingBottom: '100%', backgroundColor: '#252525', border: '1px solid #333333', marginBottom: '14px', overflow: 'hidden' }}>
           {cover && (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={cover}
               alt={title}
+              loading="lazy"
+              decoding="async"
               style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }}
             />
           )}
