@@ -9,6 +9,7 @@ export default function HelpOHPage() {
       tags={['UI/UX', 'Figma', 'Service Design', 'Prototyping']}
       prev={{ slug: 'loomlearn', title: 'LoomLearn' }}
       next={{ slug: 'atom', title: 'Atom OS' }}
+      heroImage="/work/helpoh/cover.png"
       overview="HelpOH is a service-to-doorstep platform designed for Malaysia's rapidly growing economy. It connects users with vetted professionals for household and personal services, while providing workers with legal protections, training, and consistent income."
       role="Sole designer across research, UX strategy, UI design, and prototyping."
       research="Identified a two-sided problem: users struggling to find reliable, affordable help, and workers facing inconsistent pay and limited legal protections. Mapped both personas — a busy professional (Farah) and a skilled tradesman (Arif) — to ensure the platform served both sides equitably."

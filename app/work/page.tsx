@@ -6,11 +6,11 @@ import { Footer } from '@/components/Footer'
 import { ProjectCard } from '@/components/ProjectCard'
 
 const projects = [
-  { title: "Franklin's",      oneliner: "The experience starts before you walk in.",                    tags: ['UX', 'RESEARCH'],        href: '/work/franklins',       cover: undefined },
-  { title: 'LoomLearn',       oneliner: 'One learning space for students who think differently.',       tags: ['UX', 'RESEARCH'],        href: '/work/loomlearn',       cover: '/work/loomlearn/hero-1.png' },
-  { title: 'HelpOH',          oneliner: 'Connecting homes to trusted help, and workers to fair work.',  tags: ['UX', 'SERVICE DESIGN'],  href: '/work/helpoh',          cover: '/work/helpoh/solution-hero.png' },
-  { title: 'Atom OS',         oneliner: 'A phone stripped down to what actually matters.',               tags: ['UI', 'SYSTEMS'],         href: '/work/atom',            cover: '/work/atom/hero-1.png' },
-  { title: 'Albers',          oneliner: 'Colour theory you can actually play with.',                     tags: ['UI', 'INTERACTION'],     href: '/work/albers',          cover: '/work/albers/img-3.png' },
+  { title: "Franklin's",      oneliner: "The experience starts before you walk in.",                    tags: ['UX', 'RESEARCH'],        href: '/work/franklins',       cover: '/work/franklins/cover-hor.png' },
+  { title: 'LoomLearn',       oneliner: 'One learning space for students who think differently.',       tags: ['UX', 'RESEARCH'],        href: '/work/loomlearn',       cover: '/work/loomlearn/cover-hor.png' },
+  { title: 'HelpOH',          oneliner: 'Connecting homes to trusted help, and workers to fair work.',  tags: ['UX', 'SERVICE DESIGN'],  href: '/work/helpoh',          cover: '/work/helpoh/cover-hor.png' },
+  { title: 'Atom OS',         oneliner: 'A phone stripped down to what actually matters.',               tags: ['UI', 'SYSTEMS'],         href: '/work/atom',            cover: '/work/atom/cover-hor.png' },
+  { title: 'Albers',          oneliner: 'Colour theory you can actually play with.',                     tags: ['UI', 'INTERACTION'],     href: '/work/albers',          cover: '/work/albers/cover-hor.png' },
   { title: 'Accord',          oneliner: 'A contract tool built for freelancers.',                        tags: ['UX', 'PRODUCT'],         href: '/work/accord',          cover: undefined },
   { title: 'Purcast',         oneliner: 'A podcast app designed for the Fluxathon.',                    tags: ['UI', 'COMPETITION'],     href: '/work/purcast',         cover: undefined },
   { title: 'Design-athon 01', oneliner: 'A 48-hour weather app designed with Claude AI.',               tags: ['UI', 'SPRINT'],          href: '/work/designathon-01',  cover: undefined },
