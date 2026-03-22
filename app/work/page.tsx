@@ -45,6 +45,9 @@ export default function WorkPage() {
             {projects.map((p) => (
               <ProjectCard key={p.title} {...p} variant="supporting" imageRatio="4 / 3" />
             ))}
+            <div className="flex items-center justify-center" style={{ backgroundColor: '#1c1c1c', border: '1px solid #2a2a2a', padding: '16px', minHeight: '160px' }}>
+              <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.14em', color: '#444444', textAlign: 'center' }}>MORE ON THE WAY_</span>
+            </div>
           </div>
         </section>
 
