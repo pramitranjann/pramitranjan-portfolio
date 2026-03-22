@@ -129,7 +129,7 @@ export function CaseStudyLayout({
             <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
               {research ?? 'Conducted user interviews and competitive analysis to understand the landscape. Synthesised findings into key themes that informed the design direction.'}
             </p>
-            <div className="mt-6 w-full" style={{ height: '240px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
+            <div className="mt-6 w-full" style={{ height: '320px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
           </div>
 
           {/* Ideation */}
@@ -141,8 +141,8 @@ export function CaseStudyLayout({
               {ideation ?? 'Explored multiple directions through sketching and low-fidelity wireframes. Narrowed down to the strongest concept based on user feedback and feasibility.'}
             </p>
             <div className="mt-6 grid grid-cols-2" style={{ gap: '2px' }}>
-              <div style={{ height: '200px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
-              <div style={{ height: '200px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
+              <div style={{ height: '267px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
+              <div style={{ height: '267px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
             </div>
           </div>
 
@@ -163,10 +163,10 @@ export function CaseStudyLayout({
           <p className="font-mono mb-8" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
             {solution ?? ''}
           </p>
-          <div className="w-full mb-1" style={{ height: '360px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
+          <div className="w-full mb-1" style={{ height: '480px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
           <div className="grid grid-cols-2" style={{ gap: '2px' }}>
-            <div style={{ height: '240px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
-            <div style={{ height: '240px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
+            <div style={{ height: '320px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
+            <div style={{ height: '320px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
           </div>
         </section>
 
