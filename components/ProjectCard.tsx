@@ -15,8 +15,8 @@ export function ProjectCard({ title, oneliner, tags, href, variant = 'main', com
   const category = tags.join(' · ')
 
   const cardBase = {
-    backgroundColor: '#111111',
-    border: `1px solid ${hovered ? '#FF3120' : '#1a1a1a'}`,
+    backgroundColor: '#1c1c1c',
+    border: `1px solid ${hovered ? '#FF3120' : '#2a2a2a'}`,
     transition: 'border-color 0.15s ease',
     padding: '16px',
     height: '100%',
@@ -25,13 +25,13 @@ export function ProjectCard({ title, oneliner, tags, href, variant = 'main', com
   const inner =
     variant === 'supporting' ? (
       <div style={cardBase}>
-        <div style={{ aspectRatio: '4 / 3', width: '100%', backgroundColor: '#161616', border: '1px solid #1f1f1f', marginBottom: '12px' }} />
+        <div style={{ aspectRatio: '4 / 3', width: '100%', backgroundColor: '#252525', border: '1px solid #333333', marginBottom: '12px' }} />
         <div className="font-serif" style={{ fontSize: '14px', color: '#f5f2ed' }}>{title}</div>
         <div className="font-mono" style={{ fontSize: '9px', color: '#999999', marginTop: '4px', letterSpacing: '0.1em' }}>{category}</div>
       </div>
     ) : (
       <div style={cardBase}>
-        <div style={{ aspectRatio: '1 / 1', width: '100%', backgroundColor: '#161616', border: '1px solid #1f1f1f', marginBottom: '14px' }} />
+        <div style={{ aspectRatio: '1 / 1', width: '100%', backgroundColor: '#252525', border: '1px solid #333333', marginBottom: '14px' }} />
         <div className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.14em', color: '#999999', marginBottom: '8px' }}>{category}</div>
         <div className="font-serif" style={{ fontSize: '20px', color: '#f5f2ed', marginBottom: '8px' }}>{title}</div>
         <div className="font-mono" style={{ fontSize: '11px', color: '#999999', lineHeight: 1.6 }}>{oneliner}</div>
