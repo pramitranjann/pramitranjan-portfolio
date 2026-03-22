@@ -11,8 +11,8 @@ export default function HomePage() {
   return (
     <>
       <Nav />
+      <HeroCarousel />
       <main style={{ paddingTop: '57px' }}>
-        <HeroCarousel />
         <SelectedWork />
         <PhotographyStage />
         <MoreWork />

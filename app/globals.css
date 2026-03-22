@@ -53,6 +53,15 @@ html, body {
   color: #f5f2ed;
 }
 
+/* Carousel roll-in: main waits below, slides up with the carousel exit */
+body.carousel-active main {
+  transform: translateY(100vh);
+}
+body.carousel-releasing main {
+  transform: translateY(0);
+  transition: transform 0.85s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
 
 /* Reveal animations — only hide when JS is available */
 .js-ready .reveal {

@@ -59,18 +59,32 @@ export function HeroCarousel() {
   const readyToRelease = useRef(false)
   const touchStartY = useRef<number | null>(null)
 
+  // Add carousel-active class on mount so main starts off-screen
+  useEffect(() => {
+    document.body.classList.add('carousel-active')
+    return () => {
+      document.body.classList.remove('carousel-active')
+      document.body.classList.remove('carousel-releasing')
+    }
+  }, [])
+
   // Lock / unlock page scroll based on carousel state
   useEffect(() => {
     if (!released) {
       holdingRef.current = false
+      document.body.classList.remove('carousel-releasing')
+      document.body.classList.add('carousel-active')
       document.body.style.overflow = 'hidden'
       window.scrollTo(0, 0)
     } else {
       holdingRef.current = true
+      document.body.classList.remove('carousel-active')
+      document.body.classList.add('carousel-releasing')
       window.scrollTo(0, 0)
-      // Unlock after slide-out completes — same 900ms as stage transitions
+      // Unlock after slide completes — same 900ms as stage transitions
       const t = setTimeout(() => {
         holdingRef.current = false
+        document.body.classList.remove('carousel-releasing')
         document.body.style.overflow = ''
       }, 900)
       return () => clearTimeout(t)
