@@ -18,6 +18,11 @@ export default function FacesOfPowerPage() {
       keyDecisions="Chose to layer multiple identities into single images using acetate and a custom-built A4 lightbox, referencing the phrase 'together we are one.' Gelli printing added a propaganda aesthetic through paint transfer. Photograms stripped context entirely, leaving figures open to interpretation."
       solution="A multi-part installation combining Mod Roc masks, acetate lightbox prints, gelli prints, and photograms — each exploring a different facet of how power is constructed, projected, and concealed."
       reflection="The most powerful moment was realising that removing colour and context (the photograms) made the images feel more universal — anyone could be in power. I'd push the interview component further in a future iteration, potentially making it part of the installation itself."
+      heroImage="/creative/mixed-media/faces-of-power/hero.png"
+      researchImage="/creative/mixed-media/faces-of-power/research.png"
+      ideationImages={['/creative/mixed-media/faces-of-power/ideation-1.png', '/creative/mixed-media/faces-of-power/ideation-2.png']}
+      solutionHeroImage="/creative/mixed-media/faces-of-power/solution-hero.png"
+      solutionImages={['/creative/mixed-media/faces-of-power/solution-1.png', '/creative/mixed-media/faces-of-power/solution-2.png']}
     />
   )
 }

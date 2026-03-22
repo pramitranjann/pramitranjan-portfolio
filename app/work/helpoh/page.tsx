@@ -16,6 +16,8 @@ export default function HelpOHPage() {
       keyDecisions="Green and white palette was chosen deliberately to evoke trust and familiarity. The booking flow — service, location, date, time — was kept to a single surface to minimise friction and build confidence in first-time users."
       solution="A desktop platform with a streamlined search-and-book interface, transparent pricing, time selection, and service categorisation. The design prioritises clarity over density."
       reflection="HelpOH pushed me to design for two very different users simultaneously. The worker-side of the platform deserved more screen time than I gave it — in a next iteration, I'd build out a dedicated worker dashboard with job management and training access."
+      solutionHeroImage="/work/helpoh/solution-hero.png"
+      solutionImages={['/work/helpoh/solution-1.png', '/work/helpoh/solution-1.png']}
     />
   )
 }

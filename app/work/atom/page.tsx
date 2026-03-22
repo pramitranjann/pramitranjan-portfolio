@@ -16,6 +16,11 @@ export default function AtomPage() {
       keyDecisions="Kept micro-interactions minimal by design. The colour gradient in the screen time dashboard was used to signal which apps help vs. harm, without being prescriptive. Focus mode was made user-configured, not automatic, to preserve autonomy."
       solution="A four-widget home screen with a settings panel featuring screen time visualisation, app usage breakdowns, and a toggleable Focus mode that blocks selected apps for user-defined time periods."
       reflection="Atom OS taught me that subtraction is a design decision. The hardest part wasn't adding features — it was deciding what to withhold. I'd revisit the onboarding flow to help users understand the philosophy before they start using it."
+      heroImage="/work/atom/hero-1.png"
+      researchImage="/work/atom/research.png"
+      ideationImages={['/work/atom/ideation-1.png', '/work/atom/ideation-2.png']}
+      solutionHeroImage="/work/atom/solution-hero.png"
+      solutionImages={['/work/atom/hero-2.png', '/work/atom/solution-2.png']}
     />
   )
 }

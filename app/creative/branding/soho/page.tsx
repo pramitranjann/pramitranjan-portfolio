@@ -18,6 +18,10 @@ export default function SohoPage() {
       keyDecisions="Used a bold typographic lockup with the sensory collage to make the branding feel layered and alive, not institutional. The A3 poster, email banner, and postcard set were designed as a cohesive system, not separate assets."
       solution="Full exhibition identity including A3 poster, email banner, and a postcard series featuring each participating artist's work — all cohesive under the SOHO visual system."
       reflection="Chairing the exhibition taught me that design leadership is as much about coordination as craft. Getting peers to hit deadlines and contribute materials was harder than the visual work. I'd build a clearer production timeline from day one in any future project like this."
+      heroImage="/creative/branding/soho/hero.png"
+      researchImage="/creative/branding/soho/research.png"
+      solutionHeroImage="/creative/branding/soho/solution-hero.png"
+      solutionImages={['/creative/branding/soho/solution-1.png', '/creative/branding/soho/solution-1.png']}
     />
   )
 }

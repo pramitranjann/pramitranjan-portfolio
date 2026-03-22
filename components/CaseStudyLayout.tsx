@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { Nav } from './Nav'
 import { Footer } from './Footer'
@@ -25,12 +26,18 @@ interface CaseStudyLayoutProps {
   usabilityTesting?: string
   solution?: string
   reflection?: string
+  heroImage?: string
+  researchImage?: string
+  ideationImages?: [string, string]
+  solutionHeroImage?: string
+  solutionImages?: [string] | [string, string]
 }
 
 export function CaseStudyLayout({
   title, oneliner, type, tags, prev, next,
   backHref = '/work', backLabel = 'WORK',
   overview, role, research, ideation, keyDecisions, usabilityTesting, solution, reflection,
+  heroImage, researchImage, ideationImages, solutionHeroImage, solutionImages,
 }: CaseStudyLayoutProps) {
   const basePath = backHref
   return (
@@ -72,7 +79,9 @@ export function CaseStudyLayout({
               {oneliner}
             </p>
           </div>
-          <div style={{ backgroundColor: '#161616' }} />
+          <div style={{ position: 'relative', backgroundColor: '#161616', overflow: 'hidden' }}>
+            {heroImage && <Image src={heroImage} alt={title} fill style={{ objectFit: 'cover' }} sizes="50vw" />}
+          </div>
         </section>
 
         {/* Overview */}
@@ -130,7 +139,9 @@ export function CaseStudyLayout({
             <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
               {research ?? 'Conducted user interviews and competitive analysis to understand the landscape. Synthesised findings into key themes that informed the design direction.'}
             </p>
-            <div className="mt-6 w-full" style={{ height: '320px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
+            <div className="mt-6 w-full" style={{ position: 'relative', height: '320px', backgroundColor: '#161616', border: '1px solid #1a1a1a', overflow: 'hidden' }}>
+              {researchImage && <Image src={researchImage} alt="Research" fill style={{ objectFit: 'cover' }} sizes="100vw" />}
+            </div>
           </div>
 
           {/* Ideation */}
@@ -142,8 +153,12 @@ export function CaseStudyLayout({
               {ideation ?? 'Explored multiple directions through sketching and low-fidelity wireframes. Narrowed down to the strongest concept based on user feedback and feasibility.'}
             </p>
             <div className="mt-6 grid grid-cols-2" style={{ gap: '2px' }}>
-              <div style={{ height: '267px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
-              <div style={{ height: '267px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
+              <div style={{ position: 'relative', height: '267px', backgroundColor: '#161616', border: '1px solid #1a1a1a', overflow: 'hidden' }}>
+                {ideationImages?.[0] && <Image src={ideationImages[0]} alt="Ideation 1" fill style={{ objectFit: 'cover' }} sizes="50vw" />}
+              </div>
+              <div style={{ position: 'relative', height: '267px', backgroundColor: '#161616', border: '1px solid #1a1a1a', overflow: 'hidden' }}>
+                {ideationImages?.[1] && <Image src={ideationImages[1]} alt="Ideation 2" fill style={{ objectFit: 'cover' }} sizes="50vw" />}
+              </div>
             </div>
           </div>
 
@@ -178,10 +193,16 @@ export function CaseStudyLayout({
           <p className="font-mono mb-8" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
             {solution ?? ''}
           </p>
-          <div className="w-full mb-1" style={{ height: '480px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
+          <div className="w-full mb-1" style={{ position: 'relative', height: '480px', backgroundColor: '#161616', border: '1px solid #1a1a1a', overflow: 'hidden' }}>
+            {solutionHeroImage && <Image src={solutionHeroImage} alt="Solution" fill style={{ objectFit: 'cover' }} sizes="100vw" />}
+          </div>
           <div className="grid grid-cols-2" style={{ gap: '2px' }}>
-            <div style={{ height: '320px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
-            <div style={{ height: '320px', backgroundColor: '#161616', border: '1px solid #1a1a1a' }} />
+            <div style={{ position: 'relative', height: '320px', backgroundColor: '#161616', border: '1px solid #1a1a1a', overflow: 'hidden' }}>
+              {solutionImages?.[0] && <Image src={solutionImages[0]} alt="Solution 1" fill style={{ objectFit: 'cover' }} sizes="50vw" />}
+            </div>
+            <div style={{ position: 'relative', height: '320px', backgroundColor: '#161616', border: '1px solid #1a1a1a', overflow: 'hidden' }}>
+              {solutionImages?.[1] && <Image src={solutionImages[1]} alt="Solution 2" fill style={{ objectFit: 'cover' }} sizes="50vw" />}
+            </div>
           </div>
         </section>
 
