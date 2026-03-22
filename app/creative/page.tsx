@@ -93,8 +93,8 @@ export default function CreativePage() {
         <section className="creative-section border-b border-divider" style={{ padding: '40px' }}>
           <SectionHeader label="MIXED MEDIA" count="03" />
           <div className="grid grid-cols-2 md:grid-cols-3" style={{ gap: '16px' }}>
-            <CreativeCard title="Faces of Power" desc="Portraits, power, and the masks we wear." tag="GELLI PRINT · PHOTOGRAPHY" href="/creative/mixed-media" />
-            <CreativeCard title="South China Sea" desc="Conflict, naivety, and the decisions of the few." tag="CYANOTYPE · PHOTOGRAM" href="/creative/mixed-media" />
+            <CreativeCard title="Faces of Power" desc="Portraits, power, and the masks we wear." tag="GELLI PRINT · PHOTOGRAPHY" href="/creative/mixed-media/faces-of-power" />
+            <CreativeCard title="South China Sea" desc="Conflict, naivety, and the decisions of the few." tag="CYANOTYPE · PHOTOGRAM" href="/creative/mixed-media/south-china-sea" />
             <CreativeCard title="Project 03" desc="TBC" comingSoon />
           </div>
         </section>
@@ -103,8 +103,8 @@ export default function CreativePage() {
         <section className="creative-section" style={{ padding: '40px' }}>
           <SectionHeader label="BRANDING" count="02" />
           <div className="grid grid-cols-2" style={{ gap: '16px' }}>
-            <CreativeCard title="Oracle" desc="A Matrix-inspired clothing brand built from scratch." tag="CLOTHING · BRANDING" href="/creative/branding" />
-            <CreativeCard title="SOHO" desc="Directed and branded a sixth form art exhibition." tag="EXHIBITION · BRANDING" href="/creative/branding" />
+            <CreativeCard title="Oracle" desc="A Matrix-inspired clothing brand built from scratch." tag="CLOTHING · BRANDING" href="/creative/branding/oracle" />
+            <CreativeCard title="SOHO" desc="Directed and branded a sixth form art exhibition." tag="EXHIBITION · BRANDING" href="/creative/branding/soho" />
           </div>
         </section>
 
