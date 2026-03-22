@@ -85,8 +85,8 @@ export default function CreativePage() {
         <section className="creative-section border-b border-divider" style={{ padding: '40px' }}>
           <SectionHeader label="PHOTOGRAPHY" count="04" />
           <div className="grid grid-cols-2 md:grid-cols-4" style={{ gap: '16px' }}>
-            <CreativeCard title="KL" desc="Street life and quiet corners of a city in motion." href="/creative/photography/kl" cover="/creative/photography/kl/01.jpg" />
-            <CreativeCard title="Penang" desc="Heritage streets and the texture of an older world." href="/creative/photography/penang" cover="/creative/photography/penang/01.jpg" />
+            <CreativeCard title="KL" desc="Street life and quiet corners of a city in motion." href="/creative/photography/kl" cover="/creative/photography/kl/41.jpg" />
+            <CreativeCard title="Penang" desc="Heritage streets and the texture of an older world." href="/creative/photography/penang" cover="/creative/photography/penang/07.jpg" />
             <CreativeCard title="Singapore" desc="The duality of a city-state — dense and lush at once." comingSoon />
             <CreativeCard title="Ho Chi Minh" desc="Noise, heat, and the city that never slows down." href="/creative/photography/hcmc" cover="/creative/photography/hcmc/01.jpg" />
           </div>

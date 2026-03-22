@@ -4,8 +4,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 const cities = [
-  { slug: 'kl',        title: 'KL',          desc: 'Street life and quiet corners of a city in motion.',      cover: '/creative/photography/kl/01.jpg',     comingSoon: false },
-  { slug: 'penang',    title: 'Penang',       desc: 'Heritage streets and the texture of an older world.',     cover: '/creative/photography/penang/01.jpg',  comingSoon: false },
+  { slug: 'kl',        title: 'KL',          desc: 'Street life and quiet corners of a city in motion.',      cover: '/creative/photography/kl/41.jpg',     comingSoon: false },
+  { slug: 'penang',    title: 'Penang',       desc: 'Heritage streets and the texture of an older world.',     cover: '/creative/photography/penang/07.jpg',  comingSoon: false },
   { slug: 'singapore', title: 'Singapore',    desc: 'The duality of a city-state — dense and lush at once.',  cover: null,                                   comingSoon: true },
   { slug: 'hcmc',      title: 'Ho Chi Minh',  desc: 'Noise, heat, and the city that never slows down.',       cover: '/creative/photography/hcmc/01.jpg',    comingSoon: false },
 ]
