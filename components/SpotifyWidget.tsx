@@ -31,7 +31,7 @@ export function SpotifyWidget({ variant }: SpotifyWidgetProps) {
 
   if (!track) return null  // parent renders static content as fallback
 
-  const pct = track.progress && track.duration
+  const pct = track.progress !== undefined && track.duration !== undefined
     ? Math.round((track.progress / track.duration) * 100)
     : 0
 
@@ -107,9 +107,11 @@ function CellVariant({ track, pct }: { track: Track; pct: number }) {
       <div className="font-mono" style={{ fontSize: '8px', letterSpacing: '0.1em', color: '#999999' }}>
         {track.artist.toUpperCase()}
       </div>
-      <div style={{ height: '1px', background: '#1f1f1f', position: 'relative', marginTop: '8px' }}>
-        <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${pct}%`, background: '#FF3120' }} />
-      </div>
+      {track.isPlaying && (
+        <div style={{ height: '1px', background: '#1f1f1f', position: 'relative', marginTop: '8px' }}>
+          <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${pct}%`, background: '#FF3120' }} />
+        </div>
+      )}
     </div>
   )
 }
