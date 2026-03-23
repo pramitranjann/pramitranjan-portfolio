@@ -19,7 +19,19 @@ const dmMono = DM_Mono({
 
 export const metadata: Metadata = {
   title: 'Pramit Ranjan',
-  description: 'UX design student at SCAD.',
+  description: 'UX designer and photographer. Portfolio of case studies, creative work, and photography.',
+  openGraph: {
+    title: 'Pramit Ranjan',
+    description: 'UX designer and photographer.',
+    url: 'https://pramitranjan.com',
+    siteName: 'Pramit Ranjan',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Pramit Ranjan',
+    description: 'UX designer and photographer.',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
