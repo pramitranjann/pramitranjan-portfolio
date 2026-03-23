@@ -274,7 +274,7 @@ button:hover .arrow-nudge-back {
   /* Work cards — fixed height image on mobile, drop padding-bottom ratio */
   .work-card-image {
     padding-bottom: 0 !important;
-    height: 140px !important;
+    height: 160px !important;
   }
 
   /* Lightbox — move prev/next out of image area to bottom corners */

@@ -37,7 +37,7 @@ export function ProjectCard({ title, oneliner, tags, href, variant = 'main', ima
             position: 'relative',
             width: '100%',
             height: 0,
-            paddingBottom: ratioPadding(imageRatio ?? '3 / 4'),
+            paddingBottom: ratioPadding(imageRatio ?? '1 / 1'),
             backgroundColor: '#252525',
             border: '1px solid #333333',
             marginBottom: '12px',
