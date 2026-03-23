@@ -1,6 +1,7 @@
 // app/about/page.tsx
 import { Nav } from '@/components/Nav'
 import { Footer } from '@/components/Footer'
+import { SpotifyWidget } from '@/components/SpotifyWidget'
 
 function CVButton() {
   return (
@@ -80,6 +81,16 @@ function EntryList({ items }: { items: typeof experience }) {
   )
 }
 
+function NowCell({ label, value, sub }: { label: string; value: string; sub: string }) {
+  return (
+    <div style={{ background: '#0d0d0d', padding: '20px' }}>
+      <span className="font-mono" style={{ fontSize: '8px', letterSpacing: '0.18em', color: '#FF3120', display: 'block', marginBottom: '10px' }}>{label}</span>
+      <div className="font-serif" style={{ fontSize: '15px', fontStyle: 'italic', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.3, marginBottom: '6px' }}>{value}</div>
+      <div className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.08em', color: '#999999', lineHeight: 1.6 }}>{sub}</div>
+    </div>
+  )
+}
+
 export default function AboutPage() {
   return (
     <>
@@ -113,6 +124,20 @@ export default function AboutPage() {
             <span className="font-mono select-none" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.14em', color: '#666666' }}>
               SCROLL ↓
             </span>
+          </div>
+        </section>
+
+        {/* WHO I AM + Spotify sidebar */}
+        <section className="border-b border-divider about-who-sidebar" style={{ display: 'grid', gridTemplateColumns: '1fr 260px' }}>
+          <div style={{ padding: '48px 40px', borderRight: '1px solid #1f1f1f' }}>
+            <span className="font-mono" style={{ fontSize: '8px', letterSpacing: '0.18em', color: '#666666', display: 'block', marginBottom: '12px' }}>WHO I AM_</span>
+            <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.9, maxWidth: '420px' }}>
+              I think like a designer but see like an artist — photography came first, then Figma. I care about the stuff between the pixels: tone, feeling, timing. Design that knows it's talking to a person.
+            </p>
+          </div>
+          <div style={{ padding: '28px 24px' }}>
+            <span className="font-mono" style={{ fontSize: '8px', letterSpacing: '0.18em', color: '#666666', display: 'block', marginBottom: '10px' }}>ON ROTATION_</span>
+            <SpotifyWidget variant="sidebar" />
           </div>
         </section>
 
@@ -186,6 +211,26 @@ export default function AboutPage() {
                 </span>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* /Now */}
+        <section className="border-b border-divider about-page-section" style={{ padding: '56px 40px' }}>
+          <div className="flex items-center" style={{ gap: '10px', marginBottom: '8px' }}>
+            <div style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
+            <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>RIGHT NOW_</span>
+          </div>
+          <p className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.04em', color: '#666666', lineHeight: 1.8, marginBottom: '24px' }}>
+            A snapshot of what I'm into this month. Updated manually.
+          </p>
+          <div className="now-grid-mobile" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1px', background: '#1f1f1f', border: '1px solid #1f1f1f' }}>
+            <div style={{ background: '#0d0d0d', padding: '20px' }}>
+              <span className="font-mono" style={{ fontSize: '8px', letterSpacing: '0.18em', color: '#FF3120', display: 'block', marginBottom: '10px' }}>LISTENING_</span>
+              <SpotifyWidget variant="cell" />
+            </div>
+            <NowCell label="MOVING_" value="5 days / week lift + run" sub="Chasing a sub-22min 5K. Not there yet." />
+            <NowCell label="EATING_" value="Attempting biryani" sub="Ramadan meal prep. Elevated chicken rice." />
+            <NowCell label="BUILDING_" value="This portfolio (obviously)" sub="Plus Accord — contracts for freelancers." />
           </div>
         </section>
 

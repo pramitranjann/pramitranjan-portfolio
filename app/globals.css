@@ -355,4 +355,18 @@ button:hover .arrow-nudge-back {
   .case-study-prev-next {
     padding: 20px 24px !important;
   }
+
+  /* About page — WHO I AM sidebar collapses to single column on mobile */
+  .about-who-sidebar {
+    grid-template-columns: 1fr !important;
+  }
+  .about-who-sidebar > div:first-child {
+    border-right: none !important;
+    border-bottom: 1px solid #1f1f1f !important;
+  }
+
+  /* /Now grid — 2x2 on mobile */
+  .now-grid-mobile {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
 }
