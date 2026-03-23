@@ -86,7 +86,9 @@ export async function GET() {
       duration: now.item.duration_ms,
     }
     return NextResponse.json(track, { headers: { 'Cache-Control': 'no-store' } })
-  } catch {
-    return NextResponse.json({ error: 'failed' }, { status: 500 })
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e)
+    console.error('[spotify]', msg)
+    return NextResponse.json({ error: 'failed', detail: msg }, { status: 500 })
   }
 }
