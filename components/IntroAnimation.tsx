@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 export function IntroAnimation() {
   // Skip animation on returning visits — lazy initializer avoids one-frame flash.
@@ -14,7 +14,10 @@ export function IntroAnimation() {
 
   // Computed at component body level so it's available in both useEffect closure and JSX.
   // Always runs on the client (ssr: false), so matchMedia is safe without a typeof guard.
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const reducedMotion = useMemo(
+    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    []
+  )
 
   useEffect(() => {
     // done=true means sessionStorage guard fired — no animation needed
