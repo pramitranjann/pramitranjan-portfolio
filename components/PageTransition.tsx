@@ -47,8 +47,8 @@ export function PageTransition() {
 
     gsap.timeline({ onComplete: () => { isAnimating.current = false } })
       .set(panel, { xPercent: -100, autoAlpha: 1 })
-      .to(panel, { xPercent: 0, duration: 0.25, ease: 'wipeIn' })   // fast cover
-      .to(panel, { xPercent: 100, duration: 0.7, ease: 'wipeOut', delay: 0.1 })  // slow reveal
+      .to(panel, { xPercent: 0, duration: 0.35, ease: 'wipeIn' })   // cover
+      .to(panel, { xPercent: 100, duration: 0.9, ease: 'wipeOut', delay: 0.5 })  // hold + slow reveal
       .set(panel, { autoAlpha: 0 })
 
     return () => {
