@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curtain — full experience</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0d0d0d;
+    color: #f5f2ed;
+    font-family: "DM Mono", "Courier New", monospace;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Controls bar ── */
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    border-bottom: 1px solid #1a1a1a;
+    flex-shrink: 0;
+    background: #0d0d0d;
+    z-index: 200;
+  }
+  .controls-left { font-size: 10px; letter-spacing: 0.12em; color: #444; }
+  .tabs { display: flex; gap: 6px; }
+  .tab {
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    padding: 5px 12px;
+    border: 1px solid #252525;
+    background: transparent;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tab:hover { border-color: #444; color: #ccc; }
+  .tab.active { border-color: #FF3120; color: #FF3120; }
+  .replay-btn {
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    padding: 5px 14px;
+    border: 1px solid #252525;
+    background: transparent;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .replay-btn:hover { border-color: #555; color: #f5f2ed; }
+
+  /* ── Browser chrome ── */
+  .browser {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ── Simulated nav ── */
+  .sim-nav {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    z-index: 50;
+    border-bottom: 1px solid #1a1a1a;
+    background: #0d0d0d;
+  }
+  .sim-nav-logo { font-family: "DM Mono", monospace; font-size: 13px; letter-spacing: 0.1em; color: #f5f2ed; }
+  .sim-nav-links { display: flex; gap: 28px; }
+  .sim-nav-links span { font-family: "DM Mono", monospace; font-size: 10px; letter-spacing: 0.12em; color: #666; }
+
+  /* ── Stage 0 — the "Pramit Ranjan" hero ── */
+  .hero-stage {
+    position: absolute;
+    top: 52px; left: 0; right: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 56px 0 56px;
+  }
+  .rule-label {
+    font-size: 10px; letter-spacing: 0.16em; color: #666;
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 20px;
+  }
+  .rule-label::before {
+    content: '';
+    display: block;
+    width: 28px; height: 1px;
+    background: #FF3120;
+  }
+  .hero-name {
+    font-family: Georgia, serif;
+    font-size: clamp(58px, 8vw, 96px);
+    font-weight: 400;
+    line-height: 0.93;
+    color: #f5f2ed;
+  }
+  .hero-name .red { color: #FF3120; }
+  .hero-sub {
+    font-family: "DM Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    color: #999;
+    max-width: 460px;
+    line-height: 1.9;
+    margin-top: 40px;
+  }
+  .scroll-hint {
+    position: absolute;
+    right: 40px; bottom: 32px;
+    font-size: 9px; letter-spacing: 0.14em; color: #2a2a2a;
+  }
+
+  /* ── Curtain overlay ── */
+  .curtain {
+    position: absolute;
+    top: 52px; left: 0; right: 0; bottom: 0;
+    background: #060606;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    padding: 0 56px;
+    /* transform set by JS */
+  }
+  .pr-text {
+    font-family: "DM Mono", monospace;
+    font-size: clamp(80px, 11vw, 130px);
+    letter-spacing: 0.14em;
+    color: #FF3120;
+    font-weight: 400;
+    line-height: 1;
+    will-change: transform, opacity;
+  }
+
+  /* Typewriter cursor */
+  .cursor {
+    display: inline-block;
+    width: 5px;
+    height: 0.8em;
+    background: #FF3120;
+    vertical-align: middle;
+    margin-left: 6px;
+    animation: blink 0.7s step-end infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+  .cursor.hidden { opacity: 0; animation: none; }
+</style>
+</head>
+<body>
+
+<!-- Controls -->
+<div class="controls">
+  <span class="controls-left">FULL EXPERIENCE PREVIEW — curtain → stage 0</span>
+  <div class="tabs">
+    <button class="tab active" onclick="switchVariant(1)">A·1 PULSE</button>
+    <button class="tab"        onclick="switchVariant(2)">A·2 RIDES UP</button>
+    <button class="tab"        onclick="switchVariant(3)">A·3 GHOST</button>
+    <button class="tab"        onclick="switchVariant(4)">A·4 TYPE</button>
+  </div>
+  <button class="replay-btn" onclick="replay()">↺ REPLAY</button>
+</div>
+
+<!-- Browser window simulation -->
+<div class="browser">
+
+  <!-- Nav -->
+  <div class="sim-nav">
+    <span class="sim-nav-logo">PR</span>
+    <div class="sim-nav-links">
+      <span>WORK</span>
+      <span>CREATIVE</span>
+      <span>ABOUT</span>
+    </div>
+  </div>
+
+  <!-- Stage 0 hero content -->
+  <div class="hero-stage">
+    <div class="rule-label">01</div>
+    <div class="hero-name">
+      <span class="red">Pramit</span><br>Ranjan
+    </div>
+    <p class="hero-sub">UX design student at SCAD. Figuring out what good design can actually do.</p>
+    <span class="scroll-hint">SCROLL ↓</span>
+  </div>
+
+  <!-- Curtain -->
+  <div class="curtain" id="curtain">
+    <!-- V1 & V2: plain PR -->
+    <span class="pr-text" id="pr-plain">PR</span>
+    <!-- V3: ghost PR -->
+    <span class="pr-text" id="pr-ghost" style="display:none">PR</span>
+    <!-- V4: typewriter PR -->
+    <span class="pr-text" id="pr-type" style="display:none"><span id="type-text"></span><span class="cursor hidden" id="type-cursor"></span></span>
+  </div>
+
+</div>
+
+<script>
+let current = 1;
+let busy = false;
+
+function switchVariant(v) {
+  current = v;
+  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i + 1 === v));
+  replay();
+}
+
+function reset() {
+  const c = document.getElementById('curtain');
+  // Snap curtain back instantly
+  c.style.transition = 'none';
+  c.style.transform = 'translateY(0)';
+
+  // Reset V1/V2 PR
+  const plain = document.getElementById('pr-plain');
+  plain.style.transition = 'none';
+  plain.style.transform = 'scale(1)';
+
+  // Reset V3
+  const ghost = document.getElementById('pr-ghost');
+  ghost.style.transition = 'none';
+  ghost.style.opacity = '0';
+  ghost.style.transform = 'scale(0.85)';
+
+  // Reset V4
+  document.getElementById('type-text').textContent = '';
+  const cur = document.getElementById('type-cursor');
+  cur.classList.remove('hidden');
+  cur.style.animation = '';
+
+  // Show correct element
+  plain.style.display = (current === 1 || current === 2) ? 'block' : 'none';
+  ghost.style.display = current === 3 ? 'block' : 'none';
+  document.getElementById('pr-type').style.display = current === 4 ? 'inline' : 'none';
+
+  void c.offsetWidth; // force reflow
+}
+
+function liftCurtain(delay) {
+  setTimeout(() => {
+    const c = document.getElementById('curtain');
+    c.style.transition = 'transform 0.85s cubic-bezier(0.77, 0, 0.175, 1)';
+    c.style.transform = 'translateY(-100%)';
+  }, delay);
+}
+
+function replay() {
+  if (busy) return;
+  busy = true;
+  reset();
+
+  const v = current;
+
+  if (v === 1) {
+    // Pulse then lift
+    setTimeout(() => {
+      const plain = document.getElementById('pr-plain');
+      plain.style.transition = 'transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)';
+      plain.style.transform = 'scale(1.12)';
+    }, 500);
+    liftCurtain(1050);
+  }
+
+  else if (v === 2) {
+    // PR rides curtain straight up
+    liftCurtain(700);
+  }
+
+  else if (v === 3) {
+    // Ghost: fade in, pause, fade out + curtain lifts
+    const ghost = document.getElementById('pr-ghost');
+    setTimeout(() => {
+      ghost.style.transition = 'opacity 0.45s ease, transform 0.55s cubic-bezier(0.34, 1.3, 0.64, 1)';
+      ghost.style.opacity = '1';
+      ghost.style.transform = 'scale(1)';
+    }, 200);
+    setTimeout(() => {
+      ghost.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+      ghost.style.opacity = '0';
+      ghost.style.transform = 'scale(1.08)';
+    }, 950);
+    liftCurtain(1050);
+  }
+
+  else if (v === 4) {
+    // Typewriter: cursor blinks alone → P (pause, human-like) → R → cursor blinks → curtain lifts
+    const cursor = document.getElementById('type-cursor');
+    cursor.classList.remove('hidden');
+    cursor.style.animation = '';
+    // Long pause before first keystroke — feels like someone about to type
+    setTimeout(() => { document.getElementById('type-text').textContent = 'P'; }, 1100);
+    // Slightly uneven gap between P and R — not robotic
+    setTimeout(() => { document.getElementById('type-text').textContent = 'PR'; }, 1650);
+    // Cursor blinks a beat after R lands, then hides
+    setTimeout(() => { cursor.classList.add('hidden'); }, 2200);
+    liftCurtain(2450);
+  }
+
+  setTimeout(() => { busy = false; }, 4000);
+}
+
+window.addEventListener('load', () => setTimeout(replay, 500));
+</script>
+</body>
+</html>

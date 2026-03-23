@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Intro animation options</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0d0d0d;
+    color: #f5f2ed;
+    font-family: "DM Mono", "Courier New", monospace;
+    padding: 40px 24px 80px;
+  }
+  h2 { font-size: 22px; font-weight: 400; font-family: Georgia, serif; margin-bottom: 8px; }
+  .subtitle { font-size: 12px; color: #555; letter-spacing: 0.06em; line-height: 1.7; margin-bottom: 40px; }
+
+  .options { display: flex; flex-direction: column; gap: 24px; max-width: 860px; margin: 0 auto; }
+
+  .option {
+    border: 1px solid #222;
+    background: #111;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    overflow: hidden;
+  }
+  .option:hover { border-color: #444; }
+  .option.selected { border-color: #FF3120; }
+
+  .option-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid #1a1a1a;
+  }
+  .option-label { font-size: 10px; letter-spacing: 0.16em; color: #FF3120; }
+  .option-title { font-size: 15px; color: #f5f2ed; font-family: Georgia, serif; }
+  .option-desc { font-size: 11px; color: #555; letter-spacing: 0.04em; }
+
+  .preview-area {
+    height: 260px;
+    position: relative;
+    background: #0d0d0d;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 40px 48px;
+    overflow: hidden;
+  }
+
+  .play-btn {
+    position: absolute;
+    bottom: 16px;
+    right: 20px;
+    background: transparent;
+    border: 1px solid #333;
+    color: #666;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .play-btn:hover { border-color: #555; color: #f5f2ed; }
+
+  /* ── Shared hero text styles ── */
+  .hero-name {
+    font-family: Georgia, serif;
+    font-size: clamp(52px, 8vw, 80px);
+    font-weight: 400;
+    line-height: 0.95;
+    color: #f5f2ed;
+  }
+  .hero-name .red { color: #FF3120; }
+  .rule-label {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: #666;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .rule-label::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: #FF3120;
+  }
+  .subtitle-text {
+    font-size: 13px;
+    color: #666;
+    letter-spacing: 0.05em;
+    margin-top: 24px;
+    max-width: 300px;
+    line-height: 1.8;
+  }
+
+  /* ════════════════════════════════════
+     OPTION A — CURTAIN LIFT
+     Full-screen dark overlay slides up to reveal
+  ════════════════════════════════════ */
+  .curtain-demo { position: relative; width: 100%; height: 100%; }
+  .curtain {
+    position: absolute;
+    inset: 0;
+    background: #060606;
+    z-index: 10;
+    transform: translateY(0);
+    transition: transform 0.9s cubic-bezier(0.77, 0, 0.175, 1);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 40px 48px;
+  }
+  .curtain.lifted { transform: translateY(-100%); }
+  .curtain-pr {
+    font-family: "DM Mono", monospace;
+    font-size: 14px;
+    letter-spacing: 0.16em;
+    color: #FF3120;
+  }
+  .curtain-content { opacity: 0; transition: opacity 0.4s ease 0.6s; }
+  .curtain-content.visible { opacity: 1; }
+
+  /* ════════════════════════════════════
+     OPTION B — STAGGERED TEXT BUILD
+     Each element fades + rises in sequence
+  ════════════════════════════════════ */
+  .stagger-demo .hero-name, .stagger-demo .rule-label, .stagger-demo .subtitle-text {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .stagger-demo.playing .rule-label {
+    opacity: 1; transform: translateY(0);
+    transition-delay: 0.05s;
+  }
+  .stagger-demo.playing .hero-name {
+    opacity: 1; transform: translateY(0);
+    transition-delay: 0.2s;
+  }
+  .stagger-demo.playing .subtitle-text {
+    opacity: 1; transform: translateY(0);
+    transition-delay: 0.5s;
+  }
+
+  /* ════════════════════════════════════
+     OPTION C — NAME DRAWS IN
+     "Pramit" slides from left, "Ranjan" from right, then subtitle fades
+  ════════════════════════════════════ */
+  .draw-demo { overflow: hidden; }
+  .draw-pramit {
+    color: #FF3120;
+    display: block;
+    opacity: 0;
+    transform: translateX(-32px);
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.25, 0, 0.25, 1);
+  }
+  .draw-ranjan {
+    display: block;
+    opacity: 0;
+    transform: translateX(32px);
+    transition: opacity 0.5s ease 0.15s, transform 0.5s cubic-bezier(0.25, 0, 0.25, 1) 0.15s;
+  }
+  .draw-sub {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease 0.4s, transform 0.5s ease 0.4s;
+  }
+  .draw-rule {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .draw-demo.playing .draw-pramit,
+  .draw-demo.playing .draw-ranjan {
+    opacity: 1; transform: translate(0, 0);
+  }
+  .draw-demo.playing .draw-sub {
+    opacity: 1; transform: translateY(0);
+  }
+  .draw-demo.playing .draw-rule { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div style="max-width:860px;margin:0 auto 32px;">
+  <h2>Intro animation</h2>
+  <p class="subtitle">Each option animates the opening "Pramit Ranjan" stage differently. Hit REPLAY to see it again. Click a card to select.</p>
+</div>
+
+<div class="options">
+
+  <!-- OPTION A: Curtain lift -->
+  <div class="option" data-choice="a" onclick="selectOption(this)">
+    <div class="option-header">
+      <span class="option-label">OPTION A</span>
+      <span class="option-title">Curtain lift</span>
+      <span class="option-desc">Dark screen holds briefly, then slides up to reveal everything at once</span>
+    </div>
+    <div class="preview-area">
+      <div class="curtain-demo" id="demoA">
+        <!-- Content under curtain -->
+        <div class="curtain-content" id="contentA">
+          <div class="rule-label">01</div>
+          <div class="hero-name"><span class="red">Pramit</span><br>Ranjan</div>
+          <div class="subtitle-text">UX design student at SCAD.</div>
+        </div>
+        <!-- Curtain overlay -->
+        <div class="curtain" id="curtainA">
+          <span class="curtain-pr">PR</span>
+        </div>
+      </div>
+      <button class="play-btn" onclick="event.stopPropagation(); playA()">↺ REPLAY</button>
+    </div>
+  </div>
+
+  <!-- OPTION B: Staggered build -->
+  <div class="option" data-choice="b" onclick="selectOption(this)">
+    <div class="option-header">
+      <span class="option-label">OPTION B</span>
+      <span class="option-title">Staggered build</span>
+      <span class="option-desc">Label → name → subtitle each fade up in sequence, 200ms apart</span>
+    </div>
+    <div class="preview-area">
+      <div class="stagger-demo" id="demoB">
+        <div>
+          <div class="rule-label">01</div>
+          <div class="hero-name"><span class="red">Pramit</span><br>Ranjan</div>
+          <div class="subtitle-text">UX design student at SCAD.</div>
+        </div>
+      </div>
+      <button class="play-btn" onclick="event.stopPropagation(); playB()">↺ REPLAY</button>
+    </div>
+  </div>
+
+  <!-- OPTION C: Name draws in -->
+  <div class="option" data-choice="c" onclick="selectOption(this)">
+    <div class="option-header">
+      <span class="option-label">OPTION C</span>
+      <span class="option-title">Name slides in</span>
+      <span class="option-desc">"Pramit" enters from left, "Ranjan" from right, subtitle fades below</span>
+    </div>
+    <div class="preview-area">
+      <div class="draw-demo" id="demoC">
+        <div>
+          <div class="rule-label draw-rule">01</div>
+          <div class="hero-name">
+            <span class="draw-pramit red">Pramit</span>
+            <span class="draw-ranjan">Ranjan</span>
+          </div>
+          <div class="subtitle-text draw-sub">UX design student at SCAD.</div>
+        </div>
+      </div>
+      <button class="play-btn" onclick="event.stopPropagation(); playC()">↺ REPLAY</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function selectOption(el) {
+    document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    // Record choice
+    const choice = el.dataset.choice;
+    const label = el.querySelector('.option-title').textContent;
+    console.log('Selected:', choice, label);
+  }
+
+  // ── Option A: Curtain lift ──
+  function playA() {
+    const curtain = document.getElementById('curtainA');
+    const content = document.getElementById('contentA');
+    // Reset
+    curtain.classList.remove('lifted');
+    content.classList.remove('visible');
+    // Hold briefly, then lift
+    setTimeout(() => {
+      curtain.classList.add('lifted');
+      content.classList.add('visible');
+    }, 600);
+  }
+
+  // ── Option B: Staggered build ──
+  function playB() {
+    const demo = document.getElementById('demoB');
+    demo.classList.remove('playing');
+    void demo.offsetWidth; // force reflow
+    setTimeout(() => demo.classList.add('playing'), 50);
+  }
+
+  // ── Option C: Name draws in ──
+  function playC() {
+    const demo = document.getElementById('demoC');
+    demo.classList.remove('playing');
+    void demo.offsetWidth;
+    setTimeout(() => demo.classList.add('playing'), 50);
+  }
+
+  // Auto-play all on load
+  window.addEventListener('load', () => {
+    setTimeout(playA, 200);
+    setTimeout(playB, 200);
+    setTimeout(playC, 200);
+  });
+</script>
+</body>
+</html>
