@@ -2,6 +2,7 @@
 import { Nav } from '@/components/Nav'
 import { Footer } from '@/components/Footer'
 import { SpotifyWidget } from '@/components/SpotifyWidget'
+import { GsapReveal } from '@/components/GsapReveal'
 
 function CVButton() {
   return (
@@ -99,41 +100,47 @@ export default function AboutPage() {
 
         {/* Hero */}
         <section className="border-b border-divider" style={{ padding: '64px 40px' }}>
-          {/* Eyebrow */}
-          <div className="flex items-center" style={{ gap: '10px', marginBottom: '24px' }}>
-            <div style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
-            <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>ABOUT_</span>
-          </div>
-          {/* H1 */}
-          <h1
-            className="font-serif"
-            style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '28px' }}
-          >
-            Artist. Designer.{' '}
-            <span style={{ color: '#FF3120' }}>Human.</span>
-          </h1>
-          {/* Body LG */}
-          <p
-            className="font-mono"
-            style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.9, maxWidth: '560px', marginBottom: '40px' }}
-          >
-            UX design student at SCAD, figuring out what good design can actually do. I think like a designer but see like an artist. Still learning. Always curious.
-          </p>
-          <div className="flex items-center justify-between">
-            <CVButton />
-            <span className="font-mono select-none" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.14em', color: '#666666' }}>
-              SCROLL ↓
-            </span>
-          </div>
+          <GsapReveal>
+            {/* Eyebrow */}
+            <div data-reveal className="flex items-center" style={{ gap: '10px', marginBottom: '24px' }}>
+              <div style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
+              <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>ABOUT_</span>
+            </div>
+            {/* H1 */}
+            <h1
+              data-reveal
+              className="font-serif"
+              style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '28px' }}
+            >
+              Artist. Designer.{' '}
+              <span style={{ color: '#FF3120' }}>Human.</span>
+            </h1>
+            {/* Body LG */}
+            <p
+              data-reveal
+              className="font-mono"
+              style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.9, maxWidth: '560px', marginBottom: '40px' }}
+            >
+              UX design student at SCAD, figuring out what good design can actually do. I think like a designer but see like an artist. Still learning. Always curious.
+            </p>
+            <div data-reveal className="flex items-center justify-between">
+              <CVButton />
+              <span className="font-mono select-none" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.14em', color: '#666666' }}>
+                SCROLL ↓
+              </span>
+            </div>
+          </GsapReveal>
         </section>
 
         {/* WHO I AM + Spotify sidebar */}
         <section className="border-b border-divider about-who-sidebar" style={{ display: 'grid', gridTemplateColumns: '1fr 320px' }}>
           <div style={{ padding: '28px 40px', borderRight: '1px solid #1f1f1f' }}>
-            <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#666666', display: 'block', marginBottom: '12px' }}>WHO I AM_</span>
-            <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.03em', color: '#999999', lineHeight: 1.8 }}>
-              From KL, currently surviving Savannah. I picked up a camera before I picked up Figma — film photography across Southeast Asia will do that. I think about design the same way: light, framing, what to cut. Still figuring out the rest.
-            </p>
+            <GsapReveal>
+              <span data-reveal className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#666666', display: 'block', marginBottom: '12px' }}>WHO I AM_</span>
+              <p data-reveal className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.03em', color: '#999999', lineHeight: 1.8 }}>
+                From KL, currently surviving Savannah. I picked up a camera before I picked up Figma — film photography across Southeast Asia will do that. I think about design the same way: light, framing, what to cut. Still figuring out the rest.
+              </p>
+            </GsapReveal>
           </div>
           <div style={{ padding: '28px 24px' }}>
             <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#666666', display: 'block', marginBottom: '10px' }}>ON ROTATION_</span>
@@ -143,136 +150,150 @@ export default function AboutPage() {
 
         {/* Experience */}
         <section className="border-b border-divider about-page-section" style={{ padding: '56px 40px' }}>
-          <div className="about-page-grid grid" style={{ gridTemplateColumns: '160px 1fr', gap: '48px' }}>
-            <SectionLabel>EXPERIENCE_</SectionLabel>
-            <EntryList items={experience} />
-          </div>
+          <GsapReveal>
+            <div data-reveal className="about-page-grid grid" style={{ gridTemplateColumns: '160px 1fr', gap: '48px' }}>
+              <SectionLabel>EXPERIENCE_</SectionLabel>
+              <EntryList items={experience} />
+            </div>
+          </GsapReveal>
         </section>
 
         {/* Professional Activities */}
         <section className="border-b border-divider about-page-section" style={{ padding: '56px 40px' }}>
-          <div className="about-page-grid grid" style={{ gridTemplateColumns: '160px 1fr', gap: '48px' }}>
-            <SectionLabel>PROFESSIONAL<br />ACTIVITIES</SectionLabel>
-            <EntryList items={professionalActivities} />
-          </div>
+          <GsapReveal>
+            <div data-reveal className="about-page-grid grid" style={{ gridTemplateColumns: '160px 1fr', gap: '48px' }}>
+              <SectionLabel>PROFESSIONAL<br />ACTIVITIES</SectionLabel>
+              <EntryList items={professionalActivities} />
+            </div>
+          </GsapReveal>
         </section>
 
         {/* Education */}
         <section className="border-b border-divider about-page-section" style={{ padding: '56px 40px' }}>
-          <div className="about-page-grid grid" style={{ gridTemplateColumns: '160px 1fr', gap: '48px' }}>
-            <SectionLabel>EDUCATION_</SectionLabel>
-            <div className="flex flex-col" style={{ gap: '40px' }}>
-              <div>
-                <h3 className="font-serif" style={{ fontSize: 'var(--text-h3)', fontStyle: 'italic', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.2, marginBottom: '8px' }}>
-                  Savannah College of Art and Design (SCAD)
-                </h3>
-                <div className="flex items-center justify-between" style={{ gap: '16px', marginBottom: '12px' }}>
-                  <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#FF3120' }}>BFA, UX DESIGN</span>
-                  <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#999999' }}>2025 — PRESENT</span>
+          <GsapReveal>
+            <div data-reveal className="about-page-grid grid" style={{ gridTemplateColumns: '160px 1fr', gap: '48px' }}>
+              <SectionLabel>EDUCATION_</SectionLabel>
+              <div className="flex flex-col" style={{ gap: '40px' }}>
+                <div>
+                  <h3 className="font-serif" style={{ fontSize: 'var(--text-h3)', fontStyle: 'italic', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.2, marginBottom: '8px' }}>
+                    Savannah College of Art and Design (SCAD)
+                  </h3>
+                  <div className="flex items-center justify-between" style={{ gap: '16px', marginBottom: '12px' }}>
+                    <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#FF3120' }}>BFA, UX DESIGN</span>
+                    <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#999999' }}>2025 — PRESENT</span>
+                  </div>
+                  <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.03em', color: '#999999', lineHeight: 1.8 }}>
+                    Bachelor of Fine Arts in UX Design. Freshman year. Coursework spans interaction design, user research, prototyping, and design systems.
+                  </p>
                 </div>
-                <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.03em', color: '#999999', lineHeight: 1.8 }}>
-                  Bachelor of Fine Arts in UX Design. Freshman year. Coursework spans interaction design, user research, prototyping, and design systems.
-                </p>
-              </div>
-              <div>
-                <h3 className="font-serif" style={{ fontSize: 'var(--text-h3)', fontStyle: 'italic', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.2, marginBottom: '8px' }}>
-                  Garden International School
-                </h3>
-                <div className="flex items-center justify-between" style={{ gap: '16px', marginBottom: '12px' }}>
-                  <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#FF3120' }}>A LEVELS</span>
-                  <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#999999' }}>SEP 2023 — JUN 2025</span>
+                <div>
+                  <h3 className="font-serif" style={{ fontSize: 'var(--text-h3)', fontStyle: 'italic', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.2, marginBottom: '8px' }}>
+                    Garden International School
+                  </h3>
+                  <div className="flex items-center justify-between" style={{ gap: '16px', marginBottom: '12px' }}>
+                    <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#FF3120' }}>A LEVELS</span>
+                    <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#999999' }}>SEP 2023 — JUN 2025</span>
+                  </div>
+                  <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.03em', color: '#999999', lineHeight: 1.8 }}>
+                    Photography · Design and Technology · Business Studies
+                  </p>
                 </div>
-                <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.03em', color: '#999999', lineHeight: 1.8 }}>
-                  Photography · Design and Technology · Business Studies
-                </p>
               </div>
             </div>
-          </div>
+          </GsapReveal>
         </section>
 
         {/* Tools */}
         <section className="border-b border-divider about-page-section" style={{ padding: '56px 40px' }}>
-          <div className="about-page-grid grid" style={{ gridTemplateColumns: '160px 1fr', gap: '48px' }}>
-            <SectionLabel>TOOLS</SectionLabel>
-            <div className="flex flex-wrap" style={{ gap: '8px' }}>
-              {tools.map((tool) => (
-                <span
-                  key={tool}
-                  className="font-mono"
-                  style={{
-                    fontSize: 'var(--text-meta)',
-                    letterSpacing: '0.12em',
-                    color: '#999999',
-                    border: '1px solid #1f1f1f',
-                    padding: '6px 14px',
-                  }}
-                >
-                  {tool}
-                </span>
-              ))}
+          <GsapReveal>
+            <div data-reveal className="about-page-grid grid" style={{ gridTemplateColumns: '160px 1fr', gap: '48px' }}>
+              <SectionLabel>TOOLS</SectionLabel>
+              <div className="flex flex-wrap" style={{ gap: '8px' }}>
+                {tools.map((tool) => (
+                  <span
+                    key={tool}
+                    className="font-mono"
+                    style={{
+                      fontSize: 'var(--text-meta)',
+                      letterSpacing: '0.12em',
+                      color: '#999999',
+                      border: '1px solid #1f1f1f',
+                      padding: '6px 14px',
+                    }}
+                  >
+                    {tool}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
+          </GsapReveal>
         </section>
 
         {/* /Now */}
         <section className="border-b border-divider about-page-section" style={{ padding: '56px 40px' }}>
-          <div className="flex items-center" style={{ gap: '10px', marginBottom: '8px' }}>
-            <div style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
-            <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>RIGHT NOW_</span>
-          </div>
-          <p className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.04em', color: '#666666', lineHeight: 1.8, marginBottom: '24px' }}>
-            A snapshot of what I'm into this month. Updated manually.
-          </p>
-          <div className="now-grid-mobile" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1px', background: '#1f1f1f', border: '1px solid #1f1f1f' }}>
-            <div style={{ background: '#0d0d0d', padding: '20px' }}>
-              <span className="font-mono" style={{ fontSize: '8px', letterSpacing: '0.18em', color: '#FF3120', display: 'block', marginBottom: '10px' }}>LISTENING_</span>
-              <div style={{ position: 'relative' }}>
-                <div className="font-serif" style={{ fontSize: '13px', fontStyle: 'italic', color: '#555555', lineHeight: 1.2, marginBottom: '3px' }}>Something good,</div>
-                <div className="font-mono" style={{ fontSize: '8px', letterSpacing: '0.1em', color: '#444444' }}>PROBABLY</div>
-                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: '#0d0d0d' }}>
-                  <SpotifyWidget variant="cell" />
+          <GsapReveal>
+            <div data-reveal className="flex items-center" style={{ gap: '10px', marginBottom: '8px' }}>
+              <div style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
+              <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>RIGHT NOW_</span>
+            </div>
+            <p data-reveal className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.04em', color: '#666666', lineHeight: 1.8, marginBottom: '24px' }}>
+              A snapshot of what I'm into this month. Updated manually.
+            </p>
+            <div data-reveal className="now-grid-mobile" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1px', background: '#1f1f1f', border: '1px solid #1f1f1f' }}>
+              <div style={{ background: '#0d0d0d', padding: '20px' }}>
+                <span className="font-mono" style={{ fontSize: '8px', letterSpacing: '0.18em', color: '#FF3120', display: 'block', marginBottom: '10px' }}>LISTENING_</span>
+                <div style={{ position: 'relative' }}>
+                  <div className="font-serif" style={{ fontSize: '13px', fontStyle: 'italic', color: '#555555', lineHeight: 1.2, marginBottom: '3px' }}>Something good,</div>
+                  <div className="font-mono" style={{ fontSize: '8px', letterSpacing: '0.1em', color: '#444444' }}>PROBABLY</div>
+                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: '#0d0d0d' }}>
+                    <SpotifyWidget variant="cell" />
+                  </div>
                 </div>
               </div>
+              <NowCell label="MOVING_" value="5 days / week lift + run" sub="Chasing a sub-22min 5K and a 250lbs bench. Not there yet." />
+              <NowCell label="EATING_" value="Craving everything Malaysian" sub="So done with SCAD food." />
+              <NowCell label="BUILDING_" value="This portfolio (obviously)" sub="Plus Albers — a colour theory tool." />
             </div>
-            <NowCell label="MOVING_" value="5 days / week lift + run" sub="Chasing a sub-22min 5K and a 250lbs bench. Not there yet." />
-            <NowCell label="EATING_" value="Craving everything Malaysian" sub="So done with SCAD food." />
-            <NowCell label="BUILDING_" value="This portfolio (obviously)" sub="Plus Albers — a colour theory tool." />
-          </div>
+          </GsapReveal>
         </section>
 
         {/* Contact CTA */}
         <section className="about-page-section" style={{ padding: '72px 40px' }}>
           <div style={{ maxWidth: '560px' }}>
-            <h2
-              className="font-serif"
-              style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '20px' }}
-            >
-              Let's make something{' '}
-              <span style={{ color: '#FF3120' }}>worth making.</span>
-            </h2>
-            <p
-              className="font-mono"
-              style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: '#666666', lineHeight: 1.9, marginBottom: '36px' }}
-            >
-              Or just say hello. Either works.
-            </p>
-            <div className="flex items-center" style={{ gap: '16px', flexWrap: 'wrap' }}>
-              <a
-                href="https://www.instagram.com/pramitranjann/"
-                className="font-mono"
-                style={{
-                  fontSize: 'var(--text-meta)',
-                  letterSpacing: '0.14em',
-                  color: '#FF3120',
-                  border: '1px solid #FF3120',
-                  padding: '10px 20px',
-                  textDecoration: 'none',
-                }}
+            <GsapReveal>
+              <h2
+                data-reveal
+                className="font-serif"
+                style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '20px' }}
               >
-                SAY HELLO →
-              </a>
-              <CVButton />
-            </div>
+                Let's make something{' '}
+                <span style={{ color: '#FF3120' }}>worth making.</span>
+              </h2>
+              <p
+                data-reveal
+                className="font-mono"
+                style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: '#666666', lineHeight: 1.9, marginBottom: '36px' }}
+              >
+                Or just say hello. Either works.
+              </p>
+              <div data-reveal className="flex items-center" style={{ gap: '16px', flexWrap: 'wrap' }}>
+                <a
+                  href="https://www.instagram.com/pramitranjann/"
+                  className="font-mono"
+                  style={{
+                    fontSize: 'var(--text-meta)',
+                    letterSpacing: '0.14em',
+                    color: '#FF3120',
+                    border: '1px solid #FF3120',
+                    padding: '10px 20px',
+                    textDecoration: 'none',
+                  }}
+                >
+                  SAY HELLO →
+                </a>
+                <CVButton />
+              </div>
+            </GsapReveal>
           </div>
         </section>
 

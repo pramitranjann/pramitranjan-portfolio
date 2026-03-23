@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react'
 import { Nav } from '@/components/Nav'
 import { Footer } from '@/components/Footer'
 import { ProjectCard } from '@/components/ProjectCard'
+import { GsapReveal } from '@/components/GsapReveal'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -80,18 +81,22 @@ export default function WorkPage() {
             <div className="eyebrow-line" style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
             <span className="eyebrow-label font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>WORK_</span>
           </div>
-          <h1
-            className="font-serif"
-            style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '20px' }}
-          >
-            All projects.
-          </h1>
-          <p
-            className="font-mono"
-            style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.9, maxWidth: '480px' }}
-          >
-            Five projects across UX, UI, and interaction design.
-          </p>
+          <GsapReveal>
+            <h1
+              data-reveal
+              className="font-serif"
+              style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '20px' }}
+            >
+              All projects.
+            </h1>
+            <p
+              data-reveal
+              className="font-mono"
+              style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.9, maxWidth: '480px' }}
+            >
+              Five projects across UX, UI, and interaction design.
+            </p>
+          </GsapReveal>
         </section>
 
         {/* Grid */}
