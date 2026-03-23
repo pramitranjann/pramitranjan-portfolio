@@ -49,7 +49,7 @@ export function MoreWork() {
       >
         {projects.map((p) => (
           <div key={p.title} className="reveal">
-            <ProjectCard {...p} variant="supporting" imageRatio="4 / 3" />
+            <ProjectCard {...p} variant="supporting" imageRatio="1 / 1" />
           </div>
         ))}
       </div>
