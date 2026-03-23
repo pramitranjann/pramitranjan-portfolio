@@ -4,6 +4,8 @@ import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
+gsap.registerPlugin(ScrollTrigger)
+
 interface GsapRevealProps {
   children: React.ReactNode
   stagger?: number
@@ -13,14 +15,14 @@ interface GsapRevealProps {
 
 export function GsapReveal({ children, stagger = 0.08, className, style }: GsapRevealProps) {
   const ref = useRef<HTMLDivElement>(null)
+  const staggerRef = useRef(stagger)
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger)
     const el = ref.current
     if (!el) return
 
-    const items = el.querySelectorAll('[data-reveal]')
-    if (items.length === 0) return
+    const items = el.querySelectorAll(':scope > [data-reveal]')
+    if (items.length === 0) return () => {}
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       const ctx = gsap.context(() => {
@@ -40,7 +42,7 @@ export function GsapReveal({ children, stagger = 0.08, className, style }: GsapR
             y: 0,
             duration: 0.6,
             ease: 'power2.out',
-            stagger,
+            stagger: staggerRef.current,
           })
         },
         once: true,
@@ -48,7 +50,7 @@ export function GsapReveal({ children, stagger = 0.08, className, style }: GsapR
     }, el)
 
     return () => ctx.revert()
-  }, [stagger])
+  }, [])
 
   return (
     <div ref={ref} className={className} style={style}>
