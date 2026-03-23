@@ -87,8 +87,7 @@ export async function GET() {
     }
     return NextResponse.json(track, { headers: { 'Cache-Control': 'no-store' } })
   } catch (e) {
-    const msg = e instanceof Error ? e.message : String(e)
-    console.error('[spotify]', msg)
-    return NextResponse.json({ error: 'failed', detail: msg }, { status: 500 })
+    console.error('[spotify]', e instanceof Error ? e.message : String(e))
+    return NextResponse.json({ error: 'failed' }, { status: 500 })
   }
 }
