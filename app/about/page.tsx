@@ -132,7 +132,7 @@ export default function AboutPage() {
           <div style={{ padding: '48px 40px', borderRight: '1px solid #1f1f1f' }}>
             <span className="font-mono" style={{ fontSize: '8px', letterSpacing: '0.18em', color: '#666666', display: 'block', marginBottom: '12px' }}>WHO I AM_</span>
             <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.9, maxWidth: '420px' }}>
-              I think like a designer but see like an artist — photography came first, then Figma. I care about the stuff between the pixels: tone, feeling, timing. Design that knows it's talking to a person.
+              Photography came before Figma. Growing up shooting film taught me to see before I act — light, framing, what to leave out. I bring that into design: I care about the stuff between the pixels. Tone, feeling, timing. The things you notice when they're wrong.
             </p>
           </div>
           <div style={{ padding: '28px 24px' }}>
@@ -226,7 +226,13 @@ export default function AboutPage() {
           <div className="now-grid-mobile" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1px', background: '#1f1f1f', border: '1px solid #1f1f1f' }}>
             <div style={{ background: '#0d0d0d', padding: '20px' }}>
               <span className="font-mono" style={{ fontSize: '8px', letterSpacing: '0.18em', color: '#FF3120', display: 'block', marginBottom: '10px' }}>LISTENING_</span>
-              <SpotifyWidget variant="cell" />
+              <div style={{ position: 'relative' }}>
+                <div className="font-serif" style={{ fontSize: '13px', fontStyle: 'italic', color: '#555555', lineHeight: 1.2, marginBottom: '3px' }}>Something good,</div>
+                <div className="font-mono" style={{ fontSize: '8px', letterSpacing: '0.1em', color: '#444444' }}>PROBABLY</div>
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
+                  <SpotifyWidget variant="cell" />
+                </div>
+              </div>
             </div>
             <NowCell label="MOVING_" value="5 days / week lift + run" sub="Chasing a sub-22min 5K. Not there yet." />
             <NowCell label="EATING_" value="Attempting biryani" sub="Ramadan meal prep. Elevated chicken rice." />
