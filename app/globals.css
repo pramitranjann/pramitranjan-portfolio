@@ -76,14 +76,47 @@ body.carousel-reengaging main {
 }
 
 
-/* Card hover — red border + glow */
+/* Card hover — lift + red border + glow */
 .portfolio-card {
   border: 1px solid #2a2a2a;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 .portfolio-card:hover {
   border-color: #FF3120;
-  box-shadow: 0 0 0 1px #FF3120, 0 0 32px rgba(255, 49, 32, 0.1);
+  transform: translateY(-4px);
+  box-shadow: 0 0 0 1px #FF3120,
+              0 0 32px rgba(255, 49, 32, 0.1),
+              0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Card title underline — draws in from left on hover (same pattern as .social-link::after) */
+.card-title-inner {
+  position: relative;
+  display: inline;
+}
+.card-title-inner::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #FF3120;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.portfolio-card:hover .card-title-inner::after {
+  transform: scaleX(1);
+}
+
+/* Card CTA letter-spacing expand */
+.card-cta-inner {
+  display: inline;
+  transition: letter-spacing 0.25s ease;
+}
+.portfolio-card:hover .card-cta-inner {
+  letter-spacing: 0.2em;
 }
 
 /* Arrow nudge — forward links */

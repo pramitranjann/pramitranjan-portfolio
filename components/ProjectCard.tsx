@@ -55,10 +55,12 @@ export function ProjectCard({ title, oneliner, tags, href, variant = 'main', ima
             />
           )}
         </div>
-        <div className="font-serif" style={{ fontSize: 'var(--text-body)', color: '#f5f2ed' }}>{title}</div>
+        <div className="font-serif" style={{ fontSize: 'var(--text-body)', color: '#f5f2ed' }}>
+          <span className="card-title-inner">{title}</span>
+        </div>
         <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#999999', marginTop: '4px', letterSpacing: '0.1em' }}>{category}</div>
         <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#FF3120', letterSpacing: '0.1em', marginTop: '8px' }}>
-          VIEW <span className="arrow-nudge">→</span>
+          <span className="card-cta-inner">VIEW</span> <span className="arrow-nudge">→</span>
         </div>
       </div>
     ) : (
@@ -76,10 +78,14 @@ export function ProjectCard({ title, oneliner, tags, href, variant = 'main', ima
           )}
         </div>
         <div className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.14em', color: '#999999', marginBottom: '8px' }}>{category}</div>
-        <div className="font-serif" style={{ fontSize: 'var(--text-h3)', color: '#f5f2ed', marginBottom: '8px' }}>{title}</div>
+        <div className="font-serif" style={{ fontSize: 'var(--text-h3)', color: '#f5f2ed', marginBottom: '8px' }}>
+          <span className="card-title-inner">{title}</span>
+        </div>
         <div className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.6 }}>{oneliner}</div>
         {!comingSoon && (
-          <div className="font-mono" style={{ marginTop: '14px', fontSize: 'var(--text-meta)', color: '#FF3120', letterSpacing: '0.1em' }}>VIEW →</div>
+          <div className="font-mono" style={{ marginTop: '14px', fontSize: 'var(--text-meta)', color: '#FF3120', letterSpacing: '0.1em' }}>
+            <span className="card-cta-inner">VIEW</span> →
+          </div>
         )}
         {comingSoon && (
           <div className="font-mono" style={{ marginTop: '14px', fontSize: 'var(--text-meta)', color: '#999999', letterSpacing: '0.1em' }}>COMING SOON</div>

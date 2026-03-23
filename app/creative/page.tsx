@@ -24,13 +24,17 @@ function CreativeCard({ title, desc, tag, href, cover, comingSoon, imageHeight =
       <div className="creative-card-image" style={{ position: 'relative', width: '100%', height: imageHeight, backgroundColor: '#252525', border: '1px solid #333333', marginBottom: '12px', overflow: 'hidden' }}>
         {cover && <Image src={cover} alt={title} fill style={{ objectFit: 'cover' }} sizes="(max-width: 768px) 50vw, 25vw" />}
       </div>
-      <h3 className="font-serif" style={{ fontSize: 'var(--text-body)', fontWeight: 400, color: '#f5f2ed', marginBottom: '4px' }}>{title}</h3>
+      <h3 className="font-serif" style={{ fontSize: 'var(--text-body)', fontWeight: 400, color: '#f5f2ed', marginBottom: '4px' }}>
+        <span className="card-title-inner">{title}</span>
+      </h3>
       <p className="font-mono flex-1" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.6, marginBottom: '12px' }}>{desc}</p>
       <div className="flex flex-col" style={{ gap: '6px' }}>
         {tag && <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#666666' }}>{tag}</span>}
         {comingSoon
           ? <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#666666' }}>COMING SOON</span>
-          : <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#FF3120' }}>VIEW <span className="arrow-nudge">→</span></span>
+          : <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#FF3120' }}>
+              <span className="card-cta-inner">VIEW</span> <span className="arrow-nudge">→</span>
+            </span>
         }
       </div>
     </div>
