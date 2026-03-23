@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 interface Track {
   isPlaying: boolean
@@ -16,12 +16,19 @@ interface SpotifyWidgetProps {
 
 export function SpotifyWidget({ variant }: SpotifyWidgetProps) {
   const [track, setTrack] = useState<Track | null>(null)
+  const [liveProgress, setLiveProgress] = useState<number | undefined>(undefined)
+  const tickRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   useEffect(() => {
     const fetch_ = () =>
       fetch('/api/spotify')
         .then(r => r.ok ? r.json() : null)
-        .then(data => data && !data.error && setTrack(data))
+        .then(data => {
+          if (data && !data.error) {
+            setTrack(data)
+            setLiveProgress(data.progress)
+          }
+        })
         .catch(() => null)
 
     fetch_()
@@ -29,17 +36,32 @@ export function SpotifyWidget({ variant }: SpotifyWidgetProps) {
     return () => clearInterval(id)
   }, [])
 
+  // Tick liveProgress every second when playing
+  useEffect(() => {
+    if (tickRef.current) clearInterval(tickRef.current)
+    if (track?.isPlaying && track.duration !== undefined) {
+      tickRef.current = setInterval(() => {
+        setLiveProgress(prev => {
+          if (prev === undefined || track.duration === undefined) return prev
+          return Math.min(prev + 1000, track.duration)
+        })
+      }, 1000)
+    }
+    return () => { if (tickRef.current) clearInterval(tickRef.current) }
+  }, [track?.isPlaying, track?.duration, track?.title])
+
   if (!track) return null  // parent renders static content as fallback
 
-  const pct = track.progress !== undefined && track.duration !== undefined
-    ? Math.round((track.progress / track.duration) * 100)
+  const progress = liveProgress ?? track.progress
+  const pct = progress !== undefined && track.duration !== undefined
+    ? Math.min(Math.round((progress / track.duration) * 100), 100)
     : 0
 
   if (variant === 'cell') return <CellVariant track={track} pct={pct} />
-  return <SidebarVariant track={track} pct={pct} />
+  return <SidebarVariant track={track} progress={progress} pct={pct} />
 }
 
-function SidebarVariant({ track, pct }: { track: Track; pct: number }) {
+function SidebarVariant({ track, progress, pct }: { track: Track; progress: number | undefined; pct: number }) {
   return (
     <div style={{ background: '#111111', border: '1px solid #1f1f1f', padding: '14px' }}>
       <div className="flex items-center" style={{ gap: '8px', marginBottom: '12px' }}>
@@ -75,7 +97,7 @@ function SidebarVariant({ track, pct }: { track: Track; pct: number }) {
           </div>
           <div className="flex justify-between" style={{ marginTop: '4px' }}>
             <span className="font-mono" style={{ fontSize: '7px', letterSpacing: '0.1em', color: '#444444' }}>
-              {track.progress ? formatMs(track.progress) : '0:00'}
+              {progress ? formatMs(progress) : '0:00'}
             </span>
             <span className="font-mono" style={{ fontSize: '7px', letterSpacing: '0.1em', color: '#444444' }}>
               {track.duration ? formatMs(track.duration) : '0:00'}
