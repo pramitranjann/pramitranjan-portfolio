@@ -1,7 +1,9 @@
+'use client'
 import { Nav } from '@/components/Nav'
 import { Footer } from '@/components/Footer'
 import Image from 'next/image'
 import Link from 'next/link'
+import { playCardEnter, playNav } from '@/lib/sounds'
 
 const cities = [
   { slug: 'kl',        title: 'KL',          desc: 'Street life and quiet corners of a city in motion.',      cover: '/creative/photography/kl/41.jpg',     comingSoon: false },
@@ -17,7 +19,7 @@ export default function PhotographyPage() {
       <main style={{ paddingTop: '57px' }}>
         <section style={{ padding: '48px 40px' }}>
           <div style={{ marginBottom: '16px' }}>
-            <Link href="/creative" className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#666666', textDecoration: 'none' }}>
+            <Link href="/creative" className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#666666', textDecoration: 'none' }} onClick={playNav}>
               <span className="arrow-nudge-back">←</span> CREATIVE
             </Link>
           </div>
@@ -49,7 +51,7 @@ export default function PhotographyPage() {
               return city.comingSoon ? (
                 <div key={city.slug} className="h-full">{inner}</div>
               ) : (
-                <Link key={city.slug} href={`/creative/photography/${city.slug}`} className="h-full block">{inner}</Link>
+                <Link key={city.slug} href={`/creative/photography/${city.slug}`} className="h-full block" onClick={playCardEnter}>{inner}</Link>
               )
             })}
           </div>

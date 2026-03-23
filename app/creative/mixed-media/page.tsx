@@ -1,6 +1,8 @@
+'use client'
 import { Nav } from '@/components/Nav'
 import { Footer } from '@/components/Footer'
 import Link from 'next/link'
+import { playCardEnter, playNav } from '@/lib/sounds'
 
 const projects = [
   { slug: 'faces-of-power',  title: 'Faces of Power',  desc: 'Portraits, power, and the masks we wear.',        tag: 'GELLI PRINT · PHOTOGRAPHY', cover: '/creative/mixed-media/faces-of-power/hero.png' },
@@ -14,7 +16,7 @@ export default function MixedMediaPage() {
       <main style={{ paddingTop: '57px' }}>
         <section style={{ padding: '48px 40px' }}>
           <div style={{ marginBottom: '16px' }}>
-            <Link href="/creative" className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#666666', textDecoration: 'none' }}>
+            <Link href="/creative" className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#666666', textDecoration: 'none' }} onClick={playNav}>
               <span className="arrow-nudge-back">←</span> CREATIVE
             </Link>
           </div>
@@ -23,7 +25,7 @@ export default function MixedMediaPage() {
           </h1>
           <div className="grid grid-cols-2 md:grid-cols-3" style={{ gap: '16px' }}>
             {projects.map((p) => (
-              <Link key={p.slug} href={`/creative/mixed-media/${p.slug}`} className="h-full block">
+              <Link key={p.slug} href={`/creative/mixed-media/${p.slug}`} className="h-full block" onClick={playCardEnter}>
                 <div className="portfolio-card flex flex-col h-full" style={{ backgroundColor: '#1c1c1c', padding: '16px' }}>
                   <div style={{ position: 'relative', width: '100%', height: 0, paddingBottom: '66.67%', backgroundColor: '#252525', border: '1px solid #333333', marginBottom: '12px', overflow: 'hidden' }}>
                     <img src={p.cover} alt={p.title} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }} />

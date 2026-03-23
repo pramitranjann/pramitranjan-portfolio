@@ -110,7 +110,7 @@ export function PhotoLightbox({ src, alt, index, total, direction, onClose, onPr
 
         {/* Close */}
         <button
-          onClick={(e) => { e.stopPropagation(); onClose() }}
+          onClick={(e) => { e.stopPropagation(); playLightboxNav(); onClose() }}
           className="font-mono lightbox-close"
           style={{
             position: 'absolute', top: '24px', right: '40px',

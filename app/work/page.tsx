@@ -13,8 +13,6 @@ const projects = [
   { title: 'Albers',          oneliner: 'Colour theory you can actually play with.',                     tags: ['UI', 'INTERACTION'],     href: '/work/albers',          cover: '/work/albers/cover-hor.png' },
   { title: 'Accord',          oneliner: 'A contract tool built for freelancers.',                        tags: ['UX', 'PRODUCT'],         href: '/work/accord',          cover: undefined },
   { title: 'Purcast',         oneliner: 'A podcast app designed for the Fluxathon.',                    tags: ['UI', 'COMPETITION'],     href: '/work/purcast',         cover: undefined },
-  { title: 'Design-athon 01', oneliner: 'A 48-hour weather app designed with Claude AI.',               tags: ['UI', 'SPRINT'],          href: '/work/designathon-01',  cover: undefined },
-  { title: 'Design-athon 02', oneliner: 'Redesigning Passio Go with Figma Make.',                       tags: ['UI', 'SPRINT'],          href: '/work/designathon-02',  cover: undefined },
 ]
 
 export default function WorkPage() {
@@ -57,7 +55,7 @@ export default function WorkPage() {
             className="font-mono"
             style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.9, maxWidth: '480px' }}
           >
-            Seven projects across UX, UI, and interaction design.
+            Five projects across UX, UI, and interaction design.
           </p>
         </section>
 

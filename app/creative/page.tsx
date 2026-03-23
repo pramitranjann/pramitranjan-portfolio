@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { Nav } from '@/components/Nav'
 import { Footer } from '@/components/Footer'
 import Link from 'next/link'
+import { playCardEnter } from '@/lib/sounds'
 
 function SectionHeader({ label, count }: { label: string; count: string }) {
   return (
@@ -34,7 +35,7 @@ function CreativeCard({ title, desc, tag, href, cover, comingSoon, imageHeight =
       </div>
     </div>
   )
-  return comingSoon || !href ? <div className="h-full">{inner}</div> : <Link href={href} className="h-full block">{inner}</Link>
+  return comingSoon || !href ? <div className="h-full">{inner}</div> : <Link href={href} className="h-full block" onClick={playCardEnter}>{inner}</Link>
 }
 
 export default function CreativePage() {
