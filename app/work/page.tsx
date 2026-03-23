@@ -4,6 +4,9 @@ import { useEffect, useRef } from 'react'
 import { Nav } from '@/components/Nav'
 import { Footer } from '@/components/Footer'
 import { ProjectCard } from '@/components/ProjectCard'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+gsap.registerPlugin(ScrollTrigger)
 
 const projects = [
   { title: "Franklin's",      oneliner: "The experience starts before you walk in.",                    tags: ['UX', 'RESEARCH'],        href: '/work/franklins',       cover: '/work/franklins/cover-hor.png' },
@@ -17,6 +20,7 @@ const projects = [
 
 export default function WorkPage() {
   const eyebrowRef = useRef<HTMLDivElement>(null)
+  const gridRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const el = eyebrowRef.current
@@ -32,6 +36,35 @@ export default function WorkPage() {
     )
     observer.observe(el)
     return () => observer.disconnect()
+  }, [])
+
+  // Card entrance animation — SECOND useEffect (do not merge with eyebrow observer above)
+  useEffect(() => {
+    const grid = gridRef.current
+    if (!grid) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      gsap.set(grid.querySelectorAll('.portfolio-card'), { opacity: 1, scale: 1 })
+      return
+    }
+    const ctx = gsap.context(() => {
+      const cards = grid.querySelectorAll('.portfolio-card')
+      gsap.set(cards, { opacity: 0, scale: 0.93 })
+      ScrollTrigger.create({
+        trigger: grid,
+        start: 'top 85%',
+        onEnter: () => {
+          gsap.to(cards, {
+            opacity: 1,
+            scale: 1,
+            duration: 0.5,
+            ease: 'power2.out',
+            stagger: 0.11,
+          })
+        },
+        once: true,
+      })
+    }, grid)
+    return () => ctx.revert()
   }, [])
 
   return (
@@ -61,7 +94,7 @@ export default function WorkPage() {
 
         {/* Grid */}
         <section className="work-grid-section" style={{ padding: '40px' }}>
-          <div className="grid grid-cols-2 md:grid-cols-4" style={{ gap: '16px' }}>
+          <div ref={gridRef} className="grid grid-cols-2 md:grid-cols-4" style={{ gap: '16px' }}>
             {projects.map((p) => (
               <ProjectCard key={p.title} {...p} variant="supporting" imageRatio="4 / 3" />
             ))}

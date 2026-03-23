@@ -6,6 +6,9 @@ import { Nav } from '@/components/Nav'
 import { Footer } from '@/components/Footer'
 import Link from 'next/link'
 import { playCardEnter } from '@/lib/sounds'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+gsap.registerPlugin(ScrollTrigger)
 
 function SectionHeader({ label, count }: { label: string; count: string }) {
   return (
@@ -44,6 +47,9 @@ function CreativeCard({ title, desc, tag, href, cover, comingSoon, imageHeight =
 
 export default function CreativePage() {
   const eyebrowRef = useRef<HTMLDivElement>(null)
+  const photoGridRef = useRef<HTMLDivElement>(null)
+  const mixedGridRef  = useRef<HTMLDivElement>(null)
+  const brandingGridRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const el = eyebrowRef.current
@@ -59,6 +65,42 @@ export default function CreativePage() {
     )
     observer.observe(el)
     return () => observer.disconnect()
+  }, [])
+
+  // Card entrance animation — SECOND useEffect
+  useEffect(() => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const grids = [photoGridRef.current, mixedGridRef.current, brandingGridRef.current]
+      .filter((g): g is HTMLDivElement => g !== null)
+
+    if (reduced) {
+      grids.forEach(grid =>
+        gsap.set(grid.querySelectorAll('.portfolio-card'), { opacity: 1, scale: 1 })
+      )
+      return
+    }
+
+    const ctxs = grids.map(grid => {
+      return gsap.context(() => {
+        const cards = grid.querySelectorAll('.portfolio-card')
+        gsap.set(cards, { opacity: 0, scale: 0.93 })
+        ScrollTrigger.create({
+          trigger: grid,
+          start: 'top 85%',
+          onEnter: () => {
+            gsap.to(cards, {
+              opacity: 1,
+              scale: 1,
+              duration: 0.5,
+              ease: 'power2.out',
+              stagger: 0.11,
+            })
+          },
+          once: true,
+        })
+      }, grid)
+    })
+    return () => ctxs.forEach(ctx => ctx.revert())
   }, [])
 
   return (
@@ -89,7 +131,7 @@ export default function CreativePage() {
         {/* Photography */}
         <section className="creative-section border-b border-divider" style={{ padding: '40px' }}>
           <SectionHeader label="PHOTOGRAPHY" count="04" />
-          <div className="grid grid-cols-2 md:grid-cols-4" style={{ gap: '16px' }}>
+          <div ref={photoGridRef} className="grid grid-cols-2 md:grid-cols-4" style={{ gap: '16px' }}>
             <CreativeCard title="KL" desc="Street life and quiet corners of a city in motion." href="/creative/photography/kl" cover="/creative/photography/kl/41.jpg" />
             <CreativeCard title="Penang" desc="Heritage streets and the texture of an older world." href="/creative/photography/penang" cover="/creative/photography/penang/07.jpg" />
             <CreativeCard title="Singapore" desc="The duality of a city-state — dense and lush at once." href="/creative/photography/singapore" cover="/creative/photography/singapore/03.jpg" />
@@ -100,7 +142,7 @@ export default function CreativePage() {
         {/* Mixed Media */}
         <section className="creative-section border-b border-divider" style={{ padding: '40px' }}>
           <SectionHeader label="MIXED MEDIA" count="03" />
-          <div className="grid grid-cols-2 md:grid-cols-3" style={{ gap: '16px' }}>
+          <div ref={mixedGridRef} className="grid grid-cols-2 md:grid-cols-3" style={{ gap: '16px' }}>
             <CreativeCard title="Faces of Power" desc="Portraits, power, and the masks we wear." tag="GELLI PRINT · PHOTOGRAPHY" href="/creative/mixed-media/faces-of-power" cover="/creative/mixed-media/faces-of-power/hero.png" />
             <CreativeCard title="South China Sea" desc="Conflict, naivety, and the decisions of the few." tag="CYANOTYPE · PHOTOGRAM" href="/creative/mixed-media/south-china-sea" cover="/creative/mixed-media/south-china-sea/hero.png" />
             <CreativeCard title="Project 03" desc="TBC" comingSoon />
@@ -110,7 +152,7 @@ export default function CreativePage() {
         {/* Branding */}
         <section className="creative-section" style={{ padding: '40px' }}>
           <SectionHeader label="BRANDING" count="02" />
-          <div className="grid grid-cols-2" style={{ gap: '16px' }}>
+          <div ref={brandingGridRef} className="grid grid-cols-2" style={{ gap: '16px' }}>
             <CreativeCard title="Oracle" desc="A Matrix-inspired clothing brand built from scratch." tag="CLOTHING · BRANDING" href="/creative/branding/oracle" />
             <CreativeCard title="SOHO" desc="Directed and branded a sixth form art exhibition." tag="EXHIBITION · BRANDING" href="/creative/branding/soho" cover="/creative/branding/soho/cover.png" />
           </div>
