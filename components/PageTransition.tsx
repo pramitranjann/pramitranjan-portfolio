@@ -25,11 +25,14 @@ export function PageTransition() {
 
   useEffect(() => {
     const prev = prevPathname.current
+    // Update unconditionally before all guards — keeps prevPathname coherent even for skipped transitions.
     prevPathname.current = pathname
 
     // Skip: same page, or homepage involved in either direction, or already animating
     if (prev === pathname) return
     if (prev === '/' || pathname === '/') return
+    // Intentional: if already animating, drop the new transition rather than queue it.
+    // prevPathname has already advanced, so the component stays coherent after this animation completes.
     if (isAnimating.current) return
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
@@ -45,6 +48,11 @@ export function PageTransition() {
       .to(panel, { xPercent: 0, duration: 0.45, ease: 'wipe' })
       .to(panel, { xPercent: 100, duration: 0.45, ease: 'wipe', delay: 0.1 })
       .set(panel, { autoAlpha: 0 })
+
+    return () => {
+      if (panelRef.current) gsap.killTweensOf(panelRef.current)
+      isAnimating.current = false
+    }
   }, [pathname])
 
   return (
