@@ -1,8 +1,10 @@
+'use client'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Nav } from './Nav'
 import { Footer } from './Footer'
 import { RuleLabel } from './RuleLabel'
+import { playNav } from '@/lib/sounds'
 
 interface ProjectLink {
   slug: string
@@ -51,6 +53,7 @@ export function CaseStudyLayout({
             href={backHref}
             className="font-mono"
             style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#666666', textDecoration: 'none' }}
+            onClick={playNav}
           >
             <span className="arrow-nudge-back">←</span> {backLabel}
           </Link>
@@ -220,7 +223,7 @@ export function CaseStudyLayout({
         <div className="grid grid-cols-2 border-b border-divider">
           <div className="case-study-prev-next border-r border-divider" style={{ padding: '28px 40px' }}>
             {prev ? (
-              <Link href={`${basePath}/${prev.slug}`} className="block">
+              <Link href={`${basePath}/${prev.slug}`} className="block" onClick={playNav}>
                 <p className="font-mono mb-2" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.12em', color: '#FF3120' }}>
                   <span className="arrow-nudge-back">←</span> PREV
                 </p>
@@ -234,7 +237,7 @@ export function CaseStudyLayout({
           </div>
           <div className="case-study-prev-next text-right" style={{ padding: '28px 40px' }}>
             {next ? (
-              <Link href={`${basePath}/${next.slug}`} className="block">
+              <Link href={`${basePath}/${next.slug}`} className="block" onClick={playNav}>
                 <p className="font-mono mb-2" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.12em', color: '#FF3120' }}>
                   NEXT <span className="arrow-nudge">→</span>
                 </p>
