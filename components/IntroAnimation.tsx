@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useMemo, useState } from 'react'
+import { playIntroKey, playIntroLift } from '@/lib/sounds'
 
 // Module-level flag: resets on every hard reload, persists through SPA navigation.
 // This means the animation plays once per page load but not on navigating back.
@@ -22,10 +23,10 @@ export function IntroAnimation() {
 
     const ids: ReturnType<typeof setTimeout>[] = []
 
-    ids.push(setTimeout(() => setText('P'), 1100))
-    ids.push(setTimeout(() => setText('PR'), 1650))
+    ids.push(setTimeout(() => { setText('P'); playIntroKey('P') }, 1100))
+    ids.push(setTimeout(() => { setText('PR'); playIntroKey('R') }, 1650))
     ids.push(setTimeout(() => setCursorHidden(true), 2200))
-    ids.push(setTimeout(() => setLifting(true), 2450))
+    ids.push(setTimeout(() => { setLifting(true); playIntroLift() }, 2450))
     ids.push(
       setTimeout(() => {
         _played = true

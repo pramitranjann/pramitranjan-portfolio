@@ -1,47 +1,35 @@
 // lib/sounds.ts
-// Web Audio API micro-sounds — Soft Digital / Variant A (Precise)
+// Web Audio API micro-sounds — Soft Digital / Precise
 // No audio files. No dependencies. SSR safe.
 //
 // iOS unlock strategy:
-//   `touchstart` fires before `click` and is still a user gesture.
-//   We pre-unlock the AudioContext there so it's already running
-//   by the time any play function is called — avoiding issues with
-//   Next.js routing microtasks breaking iOS's gesture detection chain.
+//   AudioContext.resume() is called in every play function (fire-and-forget).
+//   Tones are scheduled OFFSET seconds in the future — enough time for resume()
+//   to complete on iOS before the scheduled audio fires.
+//   touchstart pre-unlock is a bonus for the very first interaction.
 
 let _ctx: AudioContext | null = null
-let _unlocked = false
-
-function unlock() {
-  if (_unlocked) return
-  try {
-    if (!_ctx) _ctx = new AudioContext()
-    const buf = _ctx.createBuffer(1, 1, _ctx.sampleRate)
-    const src = _ctx.createBufferSource()
-    src.buffer = buf
-    src.connect(_ctx.destination)
-    src.start()
-    _ctx.resume()
-    _unlocked = true
-  } catch {}
-}
-
-// Pre-unlock on first touch — runs before any click handler
-if (typeof window !== 'undefined') {
-  const handler = () => {
-    unlock()
-    document.removeEventListener('touchstart', handler)
-    document.removeEventListener('touchend', handler)
-  }
-  document.addEventListener('touchstart', handler, { passive: true })
-  document.addEventListener('touchend', handler, { passive: true })
-}
 
 function getCtx(): AudioContext | null {
   if (typeof window === 'undefined') return null
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return null
-  // Fallback unlock for non-touch devices (desktop)
-  unlock()
-  return _ctx
+  try {
+    if (!_ctx) _ctx = new AudioContext()
+    // Always call resume — no-op if already running, unblocks iOS if suspended
+    _ctx.resume()
+    return _ctx
+  } catch {
+    return null
+  }
+}
+
+// Pre-unlock on first touch (bonus — fires before any click handler on iOS)
+if (typeof window !== 'undefined') {
+  const handler = () => {
+    getCtx()
+    document.removeEventListener('touchstart', handler)
+  }
+  document.addEventListener('touchstart', handler, { passive: true })
 }
 
 function tone(
@@ -65,10 +53,10 @@ function tone(
   osc.stop(startTime + decaySec + 0.01)
 }
 
-// Small offset ensures tones fire after resume() completes
-const OFFSET = 0.05
+// 0.3s offset — enough for iOS resume() to complete before tones fire
+const OFFSET = 0.3
 
-// Single clean tone — tight nav confirmation
+// Single clean tone — nav / back links
 export function playNav() {
   const ctx = getCtx()
   if (!ctx) return
@@ -84,7 +72,7 @@ export function playLightboxNav() {
   tone(ctx, 880,  0.05, t + 0.06, 0.008, 0.10)
 }
 
-// Ascending pair — entering a project
+// Ascending pair — entering a project card
 export function playCardEnter() {
   const ctx = getCtx()
   if (!ctx) return
@@ -94,11 +82,28 @@ export function playCardEnter() {
 }
 
 // Soft layered arrival — new page settled
-// SoundRouteListener skips first mount via prevPathname ref.
 export function playPageArrive() {
   const ctx = getCtx()
   if (!ctx || ctx.state !== 'running') return
   const t = ctx.currentTime + OFFSET
   tone(ctx, 660, 0.05, t,        0.04, 0.22)
   tone(ctx, 990, 0.03, t + 0.03, 0.04, 0.18)
+}
+
+// Soft typewriter tick — intro animation keystroke (P or R)
+// Fires from setTimeout so only plays if context already running (iOS: silent on first load)
+export function playIntroKey(pitch: 'P' | 'R') {
+  const ctx = getCtx()
+  if (!ctx || ctx.state !== 'running') return
+  const freq = pitch === 'P' ? 820 : 960
+  tone(ctx, freq, 0.06, ctx.currentTime + 0.01, 0.006, 0.07)
+}
+
+// Subtle lift tone — curtain begins to rise
+export function playIntroLift() {
+  const ctx = getCtx()
+  if (!ctx || ctx.state !== 'running') return
+  const t = ctx.currentTime + 0.01
+  tone(ctx, 440, 0.04, t,        0.06, 0.30)
+  tone(ctx, 660, 0.03, t + 0.08, 0.04, 0.25)
 }
