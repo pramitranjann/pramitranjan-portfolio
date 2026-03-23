@@ -1,12 +1,12 @@
 'use client'
 import { useEffect, useMemo, useState } from 'react'
 
+// Module-level flag: resets on every hard reload, persists through SPA navigation.
+// This means the animation plays once per page load but not on navigating back.
+let _played = false
+
 export function IntroAnimation() {
-  // Skip animation on returning visits — lazy initializer avoids one-frame flash.
-  // Safe here because this component is loaded with { ssr: false } — window always exists.
-  const [done, setDone] = useState(
-    () => sessionStorage.getItem('pr-intro-v1') === '1'
-  )
+  const [done, setDone] = useState(() => _played)
 
   const [text, setText] = useState('')
   const [cursorHidden, setCursorHidden] = useState(false)
@@ -20,7 +20,6 @@ export function IntroAnimation() {
   )
 
   useEffect(() => {
-    // done=true means sessionStorage guard fired — no animation needed
     if (done) return
 
     const ids: ReturnType<typeof setTimeout>[] = []
@@ -31,8 +30,8 @@ export function IntroAnimation() {
     ids.push(setTimeout(() => setLifting(true), 2450))
     ids.push(
       setTimeout(() => {
+        _played = true
         setDone(true)
-        sessionStorage.setItem('pr-intro-v1', '1')
       }, 3350) // 50ms buffer after lift ends (2450 + 850 = 3300, +50 = 3350)
     )
 
