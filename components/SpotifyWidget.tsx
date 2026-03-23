@@ -101,11 +101,21 @@ function CellVariant({ track, pct }: { track: Track; pct: number }) {
           {track.isPlaying ? 'LIVE' : 'LAST'}
         </span>
       </div>
-      <div className="font-serif" style={{ fontSize: '13px', fontStyle: 'italic', color: '#f5f2ed', lineHeight: 1.2, marginBottom: '3px' }}>
-        {track.title}
-      </div>
-      <div className="font-mono" style={{ fontSize: '8px', letterSpacing: '0.1em', color: '#999999' }}>
-        {track.artist.toUpperCase()}
+      <div className="flex" style={{ gap: '8px', alignItems: 'flex-start' }}>
+        {track.albumArt ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={track.albumArt} alt={track.title} style={{ width: '32px', height: '32px', objectFit: 'cover', border: '1px solid #2a2a2a', flexShrink: 0 }} />
+        ) : (
+          <div style={{ width: '32px', height: '32px', background: '#1f1f1f', border: '1px solid #2a2a2a', flexShrink: 0 }} />
+        )}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div className="font-serif" style={{ fontSize: '13px', fontStyle: 'italic', color: '#f5f2ed', lineHeight: 1.2, marginBottom: '3px' }}>
+            {track.title}
+          </div>
+          <div className="font-mono" style={{ fontSize: '8px', letterSpacing: '0.1em', color: '#999999' }}>
+            {track.artist.toUpperCase()}
+          </div>
+        </div>
       </div>
       {track.isPlaying && (
         <div style={{ height: '1px', background: '#1f1f1f', position: 'relative', marginTop: '8px' }}>
