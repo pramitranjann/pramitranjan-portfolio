@@ -7,7 +7,7 @@ import { CustomEase } from 'gsap/CustomEase'
 
 gsap.registerPlugin(CustomEase)
 // Matches the spec's cubic-bezier(0.77, 0, 0.175, 1) — the same curve used in the intro animation
-CustomEase.create('wipe', '0.77, 0, 0.175, 1')
+CustomEase.create('wipe', '0.76, 0, 0.24, 1')
 
 function getLabel(path: string): string {
   if (path.startsWith('/work')) return 'WORK_'
@@ -45,8 +45,8 @@ export function PageTransition() {
 
     gsap.timeline({ onComplete: () => { isAnimating.current = false } })
       .set(panel, { xPercent: -100, autoAlpha: 1 })
-      .to(panel, { xPercent: 0, duration: 0.45, ease: 'wipe' })
-      .to(panel, { xPercent: 100, duration: 0.45, ease: 'wipe', delay: 0.1 })
+      .to(panel, { xPercent: 0, duration: 0.65, ease: 'wipe' })
+      .to(panel, { xPercent: 100, duration: 0.65, ease: 'wipe', delay: 0.15 })
       .set(panel, { autoAlpha: 0 })
 
     return () => {
