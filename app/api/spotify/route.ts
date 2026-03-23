@@ -28,6 +28,9 @@ async function getAccessToken(): Promise<string> {
     }),
   })
   const data = await res.json()
+  if (!res.ok || !data.access_token) {
+    throw new Error(`Spotify token error: ${data?.error ?? res.status}`)
+  }
   return data.access_token
 }
 
@@ -36,6 +39,9 @@ async function getLastPlayed(token: string): Promise<NextResponse> {
     headers: { Authorization: `Bearer ${token}` },
     next: { revalidate: 0 },
   })
+  if (!res.ok) {
+    throw new Error(`Spotify recently-played error: ${res.status}`)
+  }
   const data = await res.json()
   const item = data?.items?.[0]?.track
   if (!item) return NextResponse.json({ error: 'no data' }, { status: 404 })
@@ -47,7 +53,7 @@ async function getLastPlayed(token: string): Promise<NextResponse> {
     album: item.album.name,
     albumArt: item.album.images?.[1]?.url ?? item.album.images?.[0]?.url ?? null,
   }
-  return NextResponse.json(track)
+  return NextResponse.json(track, { headers: { 'Cache-Control': 'no-store' } })
 }
 
 export async function GET() {
@@ -63,6 +69,10 @@ export async function GET() {
       return getLastPlayed(token)
     }
 
+    if (!nowRes.ok) {
+      throw new Error(`Spotify currently-playing error: ${nowRes.status}`)
+    }
+
     const now = await nowRes.json()
     if (!now?.item) return getLastPlayed(token)
 
@@ -75,7 +85,7 @@ export async function GET() {
       progress: now.progress_ms,
       duration: now.item.duration_ms,
     }
-    return NextResponse.json(track)
+    return NextResponse.json(track, { headers: { 'Cache-Control': 'no-store' } })
   } catch {
     return NextResponse.json({ error: 'failed' }, { status: 500 })
   }
