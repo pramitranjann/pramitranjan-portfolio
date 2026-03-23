@@ -6,7 +6,6 @@ import { Footer } from '@/components/Footer'
 import { ProjectCard } from '@/components/ProjectCard'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-gsap.registerPlugin(ScrollTrigger)
 
 const projects = [
   { title: "Franklin's",      oneliner: "The experience starts before you walk in.",                    tags: ['UX', 'RESEARCH'],        href: '/work/franklins',       cover: '/work/franklins/cover-hor.png' },
@@ -40,11 +39,14 @@ export default function WorkPage() {
 
   // Card entrance animation — SECOND useEffect (do not merge with eyebrow observer above)
   useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger)
     const grid = gridRef.current
     if (!grid) return
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      gsap.set(grid.querySelectorAll('.portfolio-card'), { opacity: 1, scale: 1 })
-      return
+      const ctx = gsap.context(() => {
+        gsap.set(grid.querySelectorAll('.portfolio-card'), { opacity: 1, scale: 1 })
+      }, grid)
+      return () => ctx.revert()
     }
     const ctx = gsap.context(() => {
       const cards = grid.querySelectorAll('.portfolio-card')

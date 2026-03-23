@@ -8,7 +8,6 @@ import Link from 'next/link'
 import { playCardEnter } from '@/lib/sounds'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-gsap.registerPlugin(ScrollTrigger)
 
 function SectionHeader({ label, count }: { label: string; count: string }) {
   return (
@@ -69,15 +68,18 @@ export default function CreativePage() {
 
   // Card entrance animation — SECOND useEffect
   useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger)
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const grids = [photoGridRef.current, mixedGridRef.current, brandingGridRef.current]
       .filter((g): g is HTMLDivElement => g !== null)
 
     if (reduced) {
-      grids.forEach(grid =>
-        gsap.set(grid.querySelectorAll('.portfolio-card'), { opacity: 1, scale: 1 })
+      const ctxs = grids.map(grid =>
+        gsap.context(() => {
+          gsap.set(grid.querySelectorAll('.portfolio-card'), { opacity: 1, scale: 1 })
+        }, grid)
       )
-      return
+      return () => ctxs.forEach(ctx => ctx.revert())
     }
 
     const ctxs = grids.map(grid => {
