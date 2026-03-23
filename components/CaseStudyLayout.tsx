@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Nav } from './Nav'
 import { Footer } from './Footer'
 import { RuleLabel } from './RuleLabel'
+import { ReadingProgress } from './ReadingProgress'
 import { playNav } from '@/lib/sounds'
 
 interface ProjectLink {
@@ -44,6 +45,7 @@ export function CaseStudyLayout({
   const basePath = backHref
   return (
     <>
+      <ReadingProgress />
       <Nav />
       <main style={{ paddingTop: '57px' }}>
 
