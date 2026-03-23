@@ -45,11 +45,11 @@ export function MoreWork() {
       <div
         ref={gridRef}
         className="card-grid grid grid-cols-2 md:grid-cols-3"
-        style={{ gap: '12px', padding: '0 24px 32px', maxWidth: '680px' }}
+        style={{ gap: '12px', padding: '0 24px 40px' }}
       >
         {projects.map((p) => (
           <div key={p.title} className="reveal">
-            <ProjectCard {...p} variant="supporting" imageRatio="3 / 2" />
+            <ProjectCard {...p} variant="supporting" imageRatio="16 / 9" />
           </div>
         ))}
       </div>
