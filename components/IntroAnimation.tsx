@@ -12,10 +12,8 @@ export function IntroAnimation() {
   const [cursorHidden, setCursorHidden] = useState(false)
   const [lifting, setLifting] = useState(false)
 
-  // Computed at component body level so it's available in both useEffect closure and JSX.
-  // Always runs on the client (ssr: false), so matchMedia is safe without a typeof guard.
   const reducedMotion = useMemo(
-    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
     []
   )
 

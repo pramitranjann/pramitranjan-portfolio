@@ -5,14 +5,14 @@ import { PhotographyStage } from '@/components/PhotographyStage'
 import { MoreWork }         from '@/components/MoreWork'
 import { About }            from '@/components/About'
 import { Contact }          from '@/components/Contact'
-import { Footer }               from '@/components/Footer'
-import { IntroAnimationDynamic } from '@/components/IntroAnimationDynamic'
+import { Footer }          from '@/components/Footer'
+import { IntroAnimation }  from '@/components/IntroAnimation'
 
 export default function HomePage() {
   return (
     <>
       <Nav />
-      <IntroAnimationDynamic />
+      <IntroAnimation />
       <HeroCarousel />
       <main style={{ paddingTop: '57px' }}>
         <SelectedWork />
