@@ -6,6 +6,7 @@ import { Footer } from './Footer'
 import { RuleLabel } from './RuleLabel'
 import { ReadingProgress } from './ReadingProgress'
 import { playNav } from '@/lib/sounds'
+import { GsapReveal } from './GsapReveal'
 
 interface ProjectLink {
   slug: string
@@ -91,134 +92,150 @@ export function CaseStudyLayout({
 
         {/* Overview */}
         <section className="case-study-section border-b border-divider" style={{ padding: '48px 40px' }}>
-          <div className="case-study-meta-grid grid" style={{ gridTemplateColumns: '1fr 2fr', gap: '48px' }}>
-            <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.16em', color: '#666666' }}>
-              OVERVIEW
-            </span>
-            <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
-              {overview ?? 'This project focused on understanding user needs and translating them into a cohesive design solution. Through research, ideation, and iteration, the final product addresses real problems with intentional design decisions.'}
-            </p>
-          </div>
+          <GsapReveal>
+            <div data-reveal className="case-study-meta-grid grid" style={{ gridTemplateColumns: '1fr 2fr', gap: '48px' }}>
+              <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.16em', color: '#666666' }}>
+                OVERVIEW
+              </span>
+              <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
+                {overview ?? 'This project focused on understanding user needs and translating them into a cohesive design solution. Through research, ideation, and iteration, the final product addresses real problems with intentional design decisions.'}
+              </p>
+            </div>
+          </GsapReveal>
         </section>
 
         {/* My Role */}
         <section className="case-study-section border-b border-divider" style={{ padding: '48px 40px' }}>
-          <div className="case-study-meta-grid grid" style={{ gridTemplateColumns: '1fr 2fr', gap: '48px' }}>
-            <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.16em', color: '#666666' }}>
-              MY ROLE
-            </span>
-            <div>
-              <p className="case-study-body font-mono mb-6" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
-                {role ?? 'Led end-to-end UX design including research planning, synthesis, interaction design, and high-fidelity prototyping.'}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="font-mono"
-                    style={{
-                      fontSize: 'var(--text-eyebrow)',
-                      letterSpacing: '0.12em',
-                      color: '#666666',
-                      border: '1px solid #1f1f1f',
-                      padding: '4px 10px',
-                    }}
-                  >
-                    {tag}
-                  </span>
-                ))}
+          <GsapReveal>
+            <div data-reveal className="case-study-meta-grid grid" style={{ gridTemplateColumns: '1fr 2fr', gap: '48px' }}>
+              <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.16em', color: '#666666' }}>
+                MY ROLE
+              </span>
+              <div>
+                <p className="case-study-body font-mono mb-6" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
+                  {role ?? 'Led end-to-end UX design including research planning, synthesis, interaction design, and high-fidelity prototyping.'}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="font-mono"
+                      style={{
+                        fontSize: 'var(--text-eyebrow)',
+                        letterSpacing: '0.12em',
+                        color: '#666666',
+                        border: '1px solid #1f1f1f',
+                        padding: '4px 10px',
+                      }}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
+          </GsapReveal>
         </section>
 
         {/* Process */}
         <section className="case-study-section border-b border-divider" style={{ padding: '48px 40px' }}>
-          <RuleLabel number="PROCESS_" />
-
-          {/* Research */}
-          <div className="mb-10">
-            <p className="font-mono mb-3" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>
-              RESEARCH_
-            </p>
-            <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
-              {research ?? 'Conducted user interviews and competitive analysis to understand the landscape. Synthesised findings into key themes that informed the design direction.'}
-            </p>
-            <div className="case-study-research-image mt-6 w-full" style={{ position: 'relative', height: '320px', backgroundColor: '#161616', border: '1px solid #1a1a1a', overflow: 'hidden' }}>
-              {researchImage && <Image src={researchImage} alt="Research" fill style={{ objectFit: 'contain' }} sizes="100vw" />}
+          <GsapReveal>
+            <div data-reveal>
+              <RuleLabel number="PROCESS_" />
             </div>
-          </div>
 
-          {/* Ideation */}
-          <div className="mb-10">
-            <p className="font-mono mb-3" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>
-              IDEATION_
-            </p>
-            <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
-              {ideation ?? 'Explored multiple directions through sketching and low-fidelity wireframes. Narrowed down to the strongest concept based on user feedback and feasibility.'}
-            </p>
-            <div className="case-study-image-grid mt-6 grid grid-cols-2" style={{ gap: '2px' }}>
-              <div className="case-study-ideation-image" style={{ position: 'relative', height: '267px', backgroundColor: '#161616', border: '1px solid #1a1a1a', overflow: 'hidden' }}>
-                {ideationImages?.[0] && <Image src={ideationImages[0]} alt="Ideation 1" fill style={{ objectFit: 'contain' }} sizes="50vw" />}
-              </div>
-              <div className="case-study-ideation-image" style={{ position: 'relative', height: '267px', backgroundColor: '#161616', border: '1px solid #1a1a1a', overflow: 'hidden' }}>
-                {ideationImages?.[1] && <Image src={ideationImages[1]} alt="Ideation 2" fill style={{ objectFit: 'contain' }} sizes="50vw" />}
-              </div>
-            </div>
-          </div>
-
-          {/* Key Decisions */}
-          <div className={usabilityTesting ? 'mb-10' : ''}>
-            <p className="font-mono mb-3" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>
-              KEY DECISIONS_
-            </p>
-            <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
-              {keyDecisions ?? 'Prioritised clarity over feature richness. Key interaction patterns were validated through usability testing and refined in subsequent iterations.'}
-            </p>
-          </div>
-
-          {/* Usability Testing (optional) */}
-          {usabilityTesting && (
-            <div>
+            {/* Research */}
+            <div data-reveal className="mb-10">
               <p className="font-mono mb-3" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>
-                USABILITY TESTING_
+                RESEARCH_
               </p>
               <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
-                {usabilityTesting}
+                {research ?? 'Conducted user interviews and competitive analysis to understand the landscape. Synthesised findings into key themes that informed the design direction.'}
+              </p>
+              <div className="case-study-research-image mt-6 w-full" style={{ position: 'relative', height: '320px', backgroundColor: '#161616', border: '1px solid #1a1a1a', overflow: 'hidden' }}>
+                {researchImage && <Image src={researchImage} alt="Research" fill style={{ objectFit: 'contain' }} sizes="100vw" />}
+              </div>
+            </div>
+
+            {/* Ideation */}
+            <div data-reveal className="mb-10">
+              <p className="font-mono mb-3" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>
+                IDEATION_
+              </p>
+              <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
+                {ideation ?? 'Explored multiple directions through sketching and low-fidelity wireframes. Narrowed down to the strongest concept based on user feedback and feasibility.'}
+              </p>
+              <div className="case-study-image-grid mt-6 grid grid-cols-2" style={{ gap: '2px' }}>
+                <div className="case-study-ideation-image" style={{ position: 'relative', height: '267px', backgroundColor: '#161616', border: '1px solid #1a1a1a', overflow: 'hidden' }}>
+                  {ideationImages?.[0] && <Image src={ideationImages[0]} alt="Ideation 1" fill style={{ objectFit: 'contain' }} sizes="50vw" />}
+                </div>
+                <div className="case-study-ideation-image" style={{ position: 'relative', height: '267px', backgroundColor: '#161616', border: '1px solid #1a1a1a', overflow: 'hidden' }}>
+                  {ideationImages?.[1] && <Image src={ideationImages[1]} alt="Ideation 2" fill style={{ objectFit: 'contain' }} sizes="50vw" />}
+                </div>
+              </div>
+            </div>
+
+            {/* Key Decisions */}
+            <div data-reveal className={usabilityTesting ? 'mb-10' : ''}>
+              <p className="font-mono mb-3" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>
+                KEY DECISIONS_
+              </p>
+              <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
+                {keyDecisions ?? 'Prioritised clarity over feature richness. Key interaction patterns were validated through usability testing and refined in subsequent iterations.'}
               </p>
             </div>
-          )}
+
+            {/* Usability Testing (optional) */}
+            {usabilityTesting && (
+              <div data-reveal>
+                <p className="font-mono mb-3" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>
+                  USABILITY TESTING_
+                </p>
+                <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
+                  {usabilityTesting}
+                </p>
+              </div>
+            )}
+          </GsapReveal>
         </section>
 
         {/* Solution */}
         <section className="case-study-section border-b border-divider" style={{ padding: '48px 40px' }}>
-          <p className="font-mono mb-3" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>
-            SOLUTION_
-          </p>
-          <p className="case-study-body font-mono mb-8" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
-            {solution ?? ''}
-          </p>
-          <div className="case-study-solution-hero w-full mb-1" style={{ position: 'relative', height: '480px', backgroundColor: '#161616', border: '1px solid #1a1a1a', overflow: 'hidden' }}>
-            {solutionHeroImage && <Image src={solutionHeroImage} alt="Solution" fill style={{ objectFit: 'contain' }} sizes="100vw" />}
-          </div>
-          <div className="case-study-image-grid grid grid-cols-2" style={{ gap: '2px' }}>
-            <div className="case-study-solution-image" style={{ position: 'relative', height: '320px', backgroundColor: '#161616', border: '1px solid #1a1a1a', overflow: 'hidden' }}>
-              {solutionImages?.[0] && <Image src={solutionImages[0]} alt="Solution 1" fill style={{ objectFit: 'contain' }} sizes="50vw" />}
+          <GsapReveal>
+            <div data-reveal>
+              <p className="font-mono mb-3" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>
+                SOLUTION_
+              </p>
+              <p className="case-study-body font-mono mb-8" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
+                {solution ?? ''}
+              </p>
             </div>
-            <div className="case-study-solution-image" style={{ position: 'relative', height: '320px', backgroundColor: '#161616', border: '1px solid #1a1a1a', overflow: 'hidden' }}>
-              {solutionImages?.[1] && <Image src={solutionImages[1]} alt="Solution 2" fill style={{ objectFit: 'contain' }} sizes="50vw" />}
+            <div data-reveal className="case-study-solution-hero w-full mb-1" style={{ position: 'relative', height: '480px', backgroundColor: '#161616', border: '1px solid #1a1a1a', overflow: 'hidden' }}>
+              {solutionHeroImage && <Image src={solutionHeroImage} alt="Solution" fill style={{ objectFit: 'contain' }} sizes="100vw" />}
             </div>
-          </div>
+            <div data-reveal className="case-study-image-grid grid grid-cols-2" style={{ gap: '2px' }}>
+              <div className="case-study-solution-image" style={{ position: 'relative', height: '320px', backgroundColor: '#161616', border: '1px solid #1a1a1a', overflow: 'hidden' }}>
+                {solutionImages?.[0] && <Image src={solutionImages[0]} alt="Solution 1" fill style={{ objectFit: 'contain' }} sizes="50vw" />}
+              </div>
+              <div className="case-study-solution-image" style={{ position: 'relative', height: '320px', backgroundColor: '#161616', border: '1px solid #1a1a1a', overflow: 'hidden' }}>
+                {solutionImages?.[1] && <Image src={solutionImages[1]} alt="Solution 2" fill style={{ objectFit: 'contain' }} sizes="50vw" />}
+              </div>
+            </div>
+          </GsapReveal>
         </section>
 
         {/* Reflection */}
         <section className="case-study-section border-b border-divider" style={{ padding: '48px 40px' }}>
-          <p className="font-mono mb-3" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>
-            REFLECTION_
-          </p>
-          <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
-            {reflection ?? 'This project pushed me to think more carefully about edge cases and accessibility. If I were to revisit it, I would invest more time in testing with a wider range of users.'}
-          </p>
+          <GsapReveal>
+            <div data-reveal>
+              <p className="font-mono mb-3" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>
+                REFLECTION_
+              </p>
+              <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
+                {reflection ?? 'This project pushed me to think more carefully about edge cases and accessibility. If I were to revisit it, I would invest more time in testing with a wider range of users.'}
+              </p>
+            </div>
+          </GsapReveal>
         </section>
 
         {/* Prev / Next */}
