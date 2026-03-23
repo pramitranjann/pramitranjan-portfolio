@@ -207,7 +207,7 @@ export default function AboutPage() {
             </p>
             <div className="flex items-center" style={{ gap: '16px', flexWrap: 'wrap' }}>
               <a
-                href="mailto:pramit@pramitranjann.com"
+                href="https://www.instagram.com/pramitranjann/"
                 className="font-mono"
                 style={{
                   fontSize: 'var(--text-meta)',
