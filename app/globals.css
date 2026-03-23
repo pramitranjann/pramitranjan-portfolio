@@ -53,6 +53,14 @@ html, body {
   color: #f5f2ed;
 }
 
+/* Hide scrollbar — prevents layout shift on the fixed nav */
+html {
+  scrollbar-width: none;
+}
+html::-webkit-scrollbar {
+  display: none;
+}
+
 /* Carousel roll-in: main waits below, slides up with the carousel exit */
 body.carousel-active main {
   transform: translateY(100vh);
@@ -68,13 +76,14 @@ body.carousel-reengaging main {
 }
 
 
-/* Card hover — red border, smooth transition */
+/* Card hover — red border + glow */
 .portfolio-card {
   border: 1px solid #2a2a2a;
-  transition: border-color 0.25s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .portfolio-card:hover {
   border-color: #FF3120;
+  box-shadow: 0 0 0 1px #FF3120, 0 0 32px rgba(255, 49, 32, 0.1);
 }
 
 /* Arrow nudge — forward links */
