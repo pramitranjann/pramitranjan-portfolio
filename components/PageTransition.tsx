@@ -1,13 +1,15 @@
 // components/PageTransition.tsx
 'use client'
-import { useLayoutEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import gsap from 'gsap'
 import { CustomEase } from 'gsap/CustomEase'
 
 gsap.registerPlugin(CustomEase)
 // Matches the spec's cubic-bezier(0.77, 0, 0.175, 1) — the same curve used in the intro animation
-CustomEase.create('wipe', '0.76, 0, 0.24, 1')
+// Fast-in curve for cover, slow-out for reveal
+CustomEase.create('wipeIn',  '0.55, 0, 1, 1')
+CustomEase.create('wipeOut', '0, 0, 0.2, 1')
 
 function getLabel(path: string): string {
   if (path.startsWith('/work')) return 'WORK_'
@@ -23,7 +25,7 @@ export function PageTransition() {
   const labelRef = useRef<HTMLSpanElement>(null)
   const isAnimating = useRef(false)
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const prev = prevPathname.current
     // Update unconditionally before all guards — keeps prevPathname coherent even for skipped transitions.
     prevPathname.current = pathname
@@ -43,10 +45,10 @@ export function PageTransition() {
     label.textContent = getLabel(pathname)
     isAnimating.current = true
 
-    // Instantly cover the viewport (before browser paints the new page), then wipe out
     gsap.timeline({ onComplete: () => { isAnimating.current = false } })
-      .set(panel, { xPercent: 0, autoAlpha: 1 })
-      .to(panel, { xPercent: 100, duration: 0.65, ease: 'wipe', delay: 0.15 })
+      .set(panel, { xPercent: -100, autoAlpha: 1 })
+      .to(panel, { xPercent: 0, duration: 0.25, ease: 'wipeIn' })   // fast cover
+      .to(panel, { xPercent: 100, duration: 0.7, ease: 'wipeOut', delay: 0.1 })  // slow reveal
       .set(panel, { autoAlpha: 0 })
 
     return () => {
