@@ -189,9 +189,40 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* CV download */}
-        <section style={{ padding: '56px 40px' }}>
-          <CVButton />
+        {/* Contact CTA */}
+        <section className="about-page-section" style={{ padding: '72px 40px' }}>
+          <div style={{ maxWidth: '560px' }}>
+            <h2
+              className="font-serif"
+              style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '20px' }}
+            >
+              Let's make something{' '}
+              <span style={{ color: '#FF3120' }}>worth making.</span>
+            </h2>
+            <p
+              className="font-mono"
+              style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: '#666666', lineHeight: 1.9, marginBottom: '36px' }}
+            >
+              Or just say hello. Either works.
+            </p>
+            <div className="flex items-center" style={{ gap: '16px', flexWrap: 'wrap' }}>
+              <a
+                href="mailto:pramit@pramitranjann.com"
+                className="font-mono"
+                style={{
+                  fontSize: 'var(--text-meta)',
+                  letterSpacing: '0.14em',
+                  color: '#FF3120',
+                  border: '1px solid #FF3120',
+                  padding: '10px 20px',
+                  textDecoration: 'none',
+                }}
+              >
+                SAY HELLO →
+              </a>
+              <CVButton />
+            </div>
+          </div>
         </section>
 
       </main>
