@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { DM_Serif_Display, DM_Mono } from 'next/font/google'
 import './globals.css'
 import { SoundRouteListener } from '@/components/SoundRouteListener'
-import { PageTransition } from '@/components/PageTransition'
 
 const dmSerif = DM_Serif_Display({
   weight: '400',
@@ -43,7 +42,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body style={{ backgroundColor: '#0d0d0d', color: '#f5f2ed' }}>
         <SoundRouteListener />
-        <PageTransition />
         {children}
       </body>
     </html>
