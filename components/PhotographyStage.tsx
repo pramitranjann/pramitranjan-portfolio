@@ -1,11 +1,11 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-const FRAME_W = 90
-const FRAME_H = 195
-const SIDE_PAD = 10
-const FRAME_GAP = 4
-const HOLE_COUNT = 20
+const FRAME_W = 124
+const FRAME_H = 268
+const SIDE_PAD = 12
+const FRAME_GAP = 5
+const HOLE_COUNT = 26
 
 const frames = [
   { label: 'KL · 001',  href: '/creative/photography/kl',        cover: '/creative/photography/kl/41.jpg' },
@@ -32,7 +32,7 @@ export function PhotographyStage() {
       borderBottom: '1px solid #1f1f1f',
       display: 'grid',
       gridTemplateColumns: '1fr 1fr',
-      minHeight: '360px',
+      minHeight: '480px',
       alignItems: 'stretch',
       padding: '64px 40px',
       gap: '56px',
@@ -69,7 +69,7 @@ export function PhotographyStage() {
                     alt={frame.label}
                     fill
                     style={{ objectFit: 'cover' }}
-                    sizes="90px"
+                    sizes="124px"
                   />
                 </div>
                 <div className="font-mono" style={{ fontSize: '7px', color: '#FF3120', textAlign: 'center', marginTop: '4px', letterSpacing: '0.1em' }}>{frame.label}</div>
