@@ -5,7 +5,8 @@ import { Footer } from '@/components/Footer'
 function CVButton() {
   return (
     <a
-      href="#"
+      href="/pramit-ranjan-cv.pdf"
+      download
       className="font-mono inline-block"
       style={{
         fontSize: 'var(--text-meta)',
