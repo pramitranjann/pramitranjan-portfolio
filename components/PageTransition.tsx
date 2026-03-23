@@ -1,6 +1,6 @@
 // components/PageTransition.tsx
 'use client'
-import { useEffect, useRef } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import gsap from 'gsap'
 import { CustomEase } from 'gsap/CustomEase'
@@ -23,7 +23,7 @@ export function PageTransition() {
   const labelRef = useRef<HTMLSpanElement>(null)
   const isAnimating = useRef(false)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const prev = prevPathname.current
     // Update unconditionally before all guards — keeps prevPathname coherent even for skipped transitions.
     prevPathname.current = pathname
@@ -43,9 +43,9 @@ export function PageTransition() {
     label.textContent = getLabel(pathname)
     isAnimating.current = true
 
+    // Instantly cover the viewport (before browser paints the new page), then wipe out
     gsap.timeline({ onComplete: () => { isAnimating.current = false } })
-      .set(panel, { xPercent: -100, autoAlpha: 1 })
-      .to(panel, { xPercent: 0, duration: 0.65, ease: 'wipe' })
+      .set(panel, { xPercent: 0, autoAlpha: 1 })
       .to(panel, { xPercent: 100, duration: 0.65, ease: 'wipe', delay: 0.15 })
       .set(panel, { autoAlpha: 0 })
 
