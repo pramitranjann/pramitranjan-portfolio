@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Nav } from './Nav'
@@ -90,19 +90,20 @@ export function CaseStudyLayout({
 
   const [navVisible, setNavVisible] = useState(false)
   const [activeId, setActiveId]     = useState('')
+  const scrollLocked = useRef(false)
+  const lockTimer    = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     const getActiveSection = () => {
       const sections = Array.from(document.querySelectorAll('section[id^="sec-"]'))
         .filter(el => el.id !== 'sec-hero')
       // Pick the section with the most pixels visible in the top 60% of the viewport.
-      // This handles short sections and works identically scrolling up or down.
       const band = window.innerHeight * 0.6
       let best: Element | null = null
       let bestPx = -1
       for (const el of sections) {
         const rect = el.getBoundingClientRect()
-        const visTop = Math.max(rect.top, 65)   // below fixed nav
+        const visTop = Math.max(rect.top, 65)
         const visBot = Math.min(rect.bottom, band)
         const px = Math.max(0, visBot - visTop)
         if (px > bestPx) { bestPx = px; best = el }
@@ -112,6 +113,9 @@ export function CaseStudyLayout({
 
     const onScroll = () => {
       setNavVisible(window.scrollY > 100)
+      // Don't update active section while a programmatic scroll is animating —
+      // that's what causes the flickering between items on click.
+      if (scrollLocked.current) return
       const active = getActiveSection()
       if (active) setActiveId(active.id)
     }
@@ -121,6 +125,7 @@ export function CaseStudyLayout({
 
     return () => {
       window.removeEventListener('scroll', onScroll)
+      if (lockTimer.current) clearTimeout(lockTimer.current)
     }
   }, [])
 
@@ -423,7 +428,11 @@ export function CaseStudyLayout({
                 const el = document.getElementById(item.id)
                 if (el) {
                   setActiveId(item.id)
+                  scrollLocked.current = true
+                  if (lockTimer.current) clearTimeout(lockTimer.current)
                   el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                  // Release lock after smooth scroll finishes (~600ms)
+                  lockTimer.current = setTimeout(() => { scrollLocked.current = false }, 600)
                 }
               }}
               className="font-mono"
