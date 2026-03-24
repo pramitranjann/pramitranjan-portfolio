@@ -389,7 +389,7 @@ export function CaseStudyLayout({
         </div>
 
         {/* Section Nav */}
-        <nav style={{
+        <nav aria-label="Page sections" style={{
           position: 'fixed',
           bottom: '28px',
           left: '50%',
