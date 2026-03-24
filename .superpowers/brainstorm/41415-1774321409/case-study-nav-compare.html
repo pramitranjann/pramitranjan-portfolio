@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Franklin's — Nav Compare</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500&family=DM+Serif+Display:ital@0;1&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0d; --card: #111111; --white: #f5f2ed;
+    --body: #999999; --label: #666666; --meta: #444444;
+    --red: #FF3120; --divider: #1f1f1f; --border: #1a1a1a;
+  }
+
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--white); font-family: 'DM Mono', monospace; }
+
+  /* ── SWITCHER (top right, always visible) ── */
+  #switcher {
+    position: fixed; top: 12px; right: 16px; z-index: 2000;
+    display: flex; gap: 2px;
+  }
+  .sw-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.14em;
+    padding: 7px 14px;
+    background: #111; border: 1px solid #2a2a2a;
+    color: #444; cursor: pointer;
+    transition: color .15s, border-color .15s;
+  }
+  .sw-btn.active { color: var(--red); border-color: var(--red); }
+  .sw-btn:hover:not(.active) { color: var(--white); }
+
+  /* ── PROGRESS ── */
+  #progress-bar {
+    position: fixed; top: 0; left: 0; height: 1px;
+    background: var(--red); z-index: 1500; width: 0%;
+  }
+
+  /* ── MAIN NAV ── */
+  nav.sitenav {
+    position: fixed; top: 1px; left: 0; right: 0; z-index: 1000;
+    background: rgba(13,13,13,.92); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--divider);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px; height: 56px;
+  }
+  .nav-logo { font-size: 13px; letter-spacing: 0.1em; }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a { font-size: 11px; letter-spacing: 0.12em; color: var(--label); text-decoration: none; }
+
+  main { padding-top: 57px; }
+
+  .back { display: block; padding: 20px 40px 0;
+    font-size: 11px; letter-spacing: 0.12em; color: var(--label); text-decoration: none; }
+
+  /* ── HERO ── */
+  .hero { display: grid; grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--divider); min-height: 260px; }
+  .hero-text { padding: 48px 40px; border-right: 1px solid var(--divider);
+    display: flex; flex-direction: column; justify-content: flex-end; gap: 10px; }
+  .hero-type { font-size: 10px; letter-spacing: .18em; color: var(--red);
+    display: flex; align-items: center; gap: 10px; }
+  .hero-type::before { content:''; width: 28px; height: 1px; background: var(--red); flex-shrink:0; }
+  h1 { font-family: 'DM Serif Display', serif; font-size: 48px; font-weight: 400; line-height: 1.05; }
+  .hero-sub { font-size: 14px; letter-spacing: .04em; color: var(--label); line-height: 1.6; }
+  .hero-img { background: #161616; display: flex; align-items: center; justify-content: center; }
+  .hero-img span { font-size: 10px; letter-spacing: .14em; color: #2a2a2a; }
+
+  /* ── SECTIONS ── */
+  .cs-section { display: grid; grid-template-columns: 1fr 2fr; gap: 48px;
+    padding: 32px 40px; border-bottom: 1px solid var(--divider); }
+  .sec-label { font-size: 10px; letter-spacing: .16em; color: var(--red); padding-top: 3px; }
+  .sec-headline { font-size: 16px; line-height: 1.55; color: var(--white); margin-bottom: 10px; }
+  .sec-body { font-size: 13px; line-height: 1.8; color: var(--body); letter-spacing: .03em; max-width: 640px; }
+  .sec-body + .sec-body { margin-top: 12px; color: #555; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .tag { font-size: 10px; letter-spacing: .12em; color: var(--label); border: 1px solid var(--divider); padding: 4px 10px; }
+
+  /* ── PULL QUOTE ── */
+  .pull-quote { padding: 44px 40px; border-bottom: 1px solid var(--divider); border-left: 2px solid var(--red); }
+  .pq-text { font-family: 'DM Serif Display', serif; font-style: italic;
+    font-size: 26px; line-height: 1.45; color: var(--white); max-width: 660px; }
+  .pq-attr { font-size: 10px; letter-spacing: .16em; color: var(--red); margin-top: 14px; }
+
+  /* ── IMAGES ── */
+  .img-block { background: #161616; border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center; }
+  .img-block span { font-size: 10px; letter-spacing: .14em; color: #2a2a2a; }
+  .img-full { width: 100%; height: 320px; margin-top: 20px; }
+  .img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 20px; }
+  .img-grid .img-block { height: 220px; }
+  .sol-wrap { padding: 0 40px 32px; border-bottom: 1px solid var(--divider); }
+  .sol-hero { width: 100%; height: 360px; }
+
+  /* ── PREV/NEXT ── */
+  .prevnext { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--divider); margin-bottom: 100px; }
+  .pn { padding: 28px 40px; border-right: 1px solid var(--divider); }
+  .pn:last-child { border-right: none; text-align: right; }
+  .pn-dir { font-size: 10px; letter-spacing: .12em; color: var(--red); margin-bottom: 6px; }
+  .pn-title { font-family: 'DM Serif Display', serif; font-size: 14px; color: var(--label); }
+
+  /* ══════════════════════════════════════════
+     OPTION A — floating bottom bar
+  ══════════════════════════════════════════ */
+  #nav-a {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+    z-index: 990; display: none;
+    background: rgba(17,17,17,.96); backdrop-filter: blur(12px);
+    border: 1px solid #222;
+    opacity: 0; pointer-events: none; transition: opacity .3s ease;
+  }
+  #nav-a.show { display: flex; }
+  #nav-a.visible { opacity: 1; pointer-events: all; }
+  #nav-a .sni { font-size: 10px; letter-spacing: .14em; color: #3a3a3a;
+    padding: 11px 16px; border-right: 1px solid #1a1a1a;
+    cursor: pointer; text-decoration: none; white-space: nowrap;
+    position: relative; transition: color .15s; }
+  #nav-a .sni:last-child { border-right: none; }
+  #nav-a .sni:hover { color: var(--body); }
+  #nav-a .sni.active { color: var(--white); }
+  #nav-a .sni.active::after { content:''; position: absolute; bottom:0; left:0; right:0; height:1px; background:var(--red); }
+
+  /* ══════════════════════════════════════════
+     OPTION B — left rail
+  ══════════════════════════════════════════ */
+  #nav-b {
+    position: fixed; left: 0; top: 50%; transform: translateY(-50%);
+    z-index: 990; display: none; flex-direction: column;
+    background: rgba(17,17,17,.96); backdrop-filter: blur(12px);
+    border: 1px solid #222; border-left: none;
+    opacity: 0; pointer-events: none; transition: opacity .3s ease;
+  }
+  #nav-b.show { display: flex; }
+  #nav-b.visible { opacity: 1; pointer-events: all; }
+  #nav-b .sni { font-size: 10px; letter-spacing: .14em; color: #3a3a3a;
+    padding: 10px 16px; border-bottom: 1px solid #1a1a1a;
+    cursor: pointer; text-decoration: none; white-space: nowrap;
+    display: flex; align-items: center; gap: 8px;
+    position: relative; transition: color .15s; }
+  #nav-b .sni:last-child { border-bottom: none; }
+  #nav-b .sni .dot { width: 4px; height: 4px; border-radius: 50%; background: #333; flex-shrink: 0; transition: background .15s; }
+  #nav-b .sni:hover { color: var(--body); }
+  #nav-b .sni.active { color: var(--white); }
+  #nav-b .sni.active .dot { background: var(--red); }
+  #nav-b .sni.active::after { content:''; position: absolute; left:0; top:0; bottom:0; width:1px; background:var(--red); }
+
+  /* ══════════════════════════════════════════
+     OPTION C — top strip (below sitenav)
+  ══════════════════════════════════════════ */
+  #nav-c {
+    position: fixed; top: 57px; left: 0; right: 0;
+    z-index: 990; display: none;
+    background: rgba(13,13,13,.96); backdrop-filter: blur(8px);
+    border-bottom: 1px solid #222;
+    opacity: 0; pointer-events: none; transition: opacity .3s ease;
+  }
+  #nav-c.show { display: block; }
+  #nav-c.visible { opacity: 1; pointer-events: all; }
+  #nav-c .strip { display: flex; }
+  #nav-c .sni { font-size: 10px; letter-spacing: .12em; color: #3a3a3a;
+    padding: 9px 16px; border-right: 1px solid #1a1a1a;
+    cursor: pointer; text-decoration: none; white-space: nowrap;
+    position: relative; transition: color .15s; flex: 1; text-align: center; }
+  #nav-c .sni:last-child { border-right: none; }
+  #nav-c .sni:hover { color: var(--body); }
+  #nav-c .sni.active { color: var(--red); }
+  #nav-c .sni.active::after { content:''; position:absolute; bottom:0; left:0; right:0; height:1px; background:var(--red); }
+  /* when C is active, push main content down */
+  body.nav-c-on main { padding-top: calc(57px + 37px); }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- switcher -->
+<div id="switcher">
+  <button class="sw-btn active" onclick="setNav('a')">A — BOTTOM</button>
+  <button class="sw-btn" onclick="setNav('b')">B — LEFT RAIL</button>
+  <button class="sw-btn" onclick="setNav('c')">C — TOP STRIP</button>
+</div>
+
+<!-- site nav -->
+<nav class="sitenav">
+  <span class="nav-logo">PR</span>
+  <div class="nav-links"><a href="#">WORK</a><a href="#">CREATIVE</a><a href="#">ABOUT</a></div>
+</nav>
+
+<!-- ── OPTION A ── -->
+<nav id="nav-a" class="show">
+  <a class="sni" href="#sec-problem">PROBLEM_</a>
+  <a class="sni" href="#sec-role">MY ROLE_</a>
+  <a class="sni" href="#sec-research">RESEARCH_</a>
+  <a class="sni" href="#sec-challenge">CHALLENGE_</a>
+  <a class="sni" href="#sec-process">PROCESS_</a>
+  <a class="sni" href="#sec-solution">SOLUTION_</a>
+  <a class="sni" href="#sec-outcomes">OUTCOMES_</a>
+</nav>
+
+<!-- ── OPTION B ── -->
+<nav id="nav-b">
+  <a class="sni" href="#sec-problem"><span class="dot"></span>PROBLEM_</a>
+  <a class="sni" href="#sec-role"><span class="dot"></span>MY ROLE_</a>
+  <a class="sni" href="#sec-research"><span class="dot"></span>RESEARCH_</a>
+  <a class="sni" href="#sec-challenge"><span class="dot"></span>CHALLENGE_</a>
+  <a class="sni" href="#sec-process"><span class="dot"></span>PROCESS_</a>
+  <a class="sni" href="#sec-solution"><span class="dot"></span>SOLUTION_</a>
+  <a class="sni" href="#sec-outcomes"><span class="dot"></span>OUTCOMES_</a>
+</nav>
+
+<!-- ── OPTION C ── -->
+<nav id="nav-c">
+  <div class="strip">
+    <a class="sni" href="#sec-problem">PROBLEM_</a>
+    <a class="sni" href="#sec-role">MY ROLE_</a>
+    <a class="sni" href="#sec-research">RESEARCH_</a>
+    <a class="sni" href="#sec-challenge">CHALLENGE_</a>
+    <a class="sni" href="#sec-process">PROCESS_</a>
+    <a class="sni" href="#sec-solution">SOLUTION_</a>
+    <a class="sni" href="#sec-outcomes">OUTCOMES_</a>
+  </div>
+</nav>
+
+<main>
+  <a class="back" href="#">← WORK</a>
+
+  <section class="hero">
+    <div class="hero-text">
+      <div class="hero-type">UX DESIGN · 2025</div>
+      <h1>Franklin's</h1>
+      <p class="hero-sub">The experience starts before you walk in.</p>
+    </div>
+    <div class="hero-img"><span>HERO IMAGE</span></div>
+  </section>
+
+  <section class="cs-section" id="sec-problem" data-section>
+    <span class="sec-label">PROBLEM_</span>
+    <div>
+      <p class="sec-headline">The warmth was real — it just wasn't reaching people before they arrived.</p>
+      <p class="sec-body">Franklin's has a strong in-store experience. The brief: close the gap between what first-time visitors expected digitally and what they actually found when they walked in.</p>
+    </div>
+  </section>
+
+  <section class="cs-section" id="sec-role" data-section>
+    <span class="sec-label">MY ROLE_</span>
+    <div>
+      <p class="sec-headline">Team lead on a five-person UXDG 101 project — from fieldwork to final prototype.</p>
+      <p class="sec-body">Led and contributed across every stage: research, synthesis, IA definition, and the high-fidelity Figma prototype.</p>
+      <div class="tags">
+        <span class="tag">UX RESEARCH</span><span class="tag">CONTEXTUAL INQUIRY</span>
+        <span class="tag">INFORMATION ARCHITECTURE</span><span class="tag">FIGMA</span>
+        <span class="tag">USABILITY TESTING</span><span class="tag">TEAM LEADERSHIP</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-section" id="sec-research" data-section>
+    <span class="sec-label">RESEARCH_</span>
+    <div>
+      <p class="sec-headline">Most friction started before anyone walked through the door.</p>
+      <p class="sec-body">Contextual inquiry at the café — barista and customer interviews, plus a SCAD student survey. The website was outdated, the service model unclear, and the in-store warmth had no digital equivalent.</p>
+      <div class="img-block img-full"><span>RESEARCH IMAGE</span></div>
+    </div>
+  </section>
+
+  <div class="pull-quote">
+    <p class="pq-text">"Their warmth was real. It just wasn't reaching people before they arrived."</p>
+    <p class="pq-attr">KEY INSIGHT_</p>
+  </div>
+
+  <section class="cs-section" id="sec-challenge" data-section>
+    <span class="sec-label">CHALLENGE_</span>
+    <div>
+      <p class="sec-headline">Users don't think in business categories — they think in tasks.</p>
+      <p class="sec-body">Card sorting on FigJam revealed four natural buckets: Menu, Order, About, Contact. That structure became the backbone of the redesigned IA.</p>
+      <div class="img-grid">
+        <div class="img-block"><span>JOURNEY MAP</span></div>
+        <div class="img-block"><span>CARD SORT</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-section" id="sec-process" data-section>
+    <span class="sec-label">PROCESS_</span>
+    <div>
+      <p class="sec-headline">Every design decision traces directly back to a research finding.</p>
+      <p class="sec-body">Homepage restructured to surface practical info earlier. Navigation reduced to four items. Order flow redesigned as a clear sequence with explicit progress cues.</p>
+      <p class="sec-body">Usability test: users completed a full order with no major breakdowns. The flow held — we didn't iterate.</p>
+    </div>
+  </section>
+
+  <section class="cs-section" id="sec-solution" data-section>
+    <span class="sec-label">SOLUTION_</span>
+    <div>
+      <p class="sec-headline">The redesign didn't change Franklin's identity — it made it clearer, more honest, and more welcoming upfront.</p>
+      <p class="sec-body">Task-based navigation, a restructured homepage, a cleaner menu, and a step-by-step order flow from discovery to checkout.</p>
+    </div>
+  </section>
+
+  <div class="sol-wrap">
+    <div class="img-block sol-hero"><span>SOLUTION HERO</span></div>
+    <div class="img-grid">
+      <div class="img-block"><span>SOLUTION 1</span></div>
+      <div class="img-block"><span>SOLUTION 2</span></div>
+    </div>
+  </div>
+
+  <section class="cs-section" id="sec-outcomes" data-section>
+    <span class="sec-label">OUTCOMES_</span>
+    <div>
+      <p class="sec-headline">The most important job of a team lead is keeping the work honest.</p>
+      <p class="sec-body">The experience gap wasn't a design problem — it was an information problem. If I were to continue, I'd explore in-context digital touchpoints at the storefront itself.</p>
+    </div>
+  </section>
+
+  <div class="prevnext">
+    <div class="pn"><p class="pn-dir">← PREV</p><p class="pn-title">LoomLearn</p></div>
+    <div class="pn"><p class="pn-dir">NEXT →</p><p class="pn-title">HelpOH</p></div>
+  </div>
+</main>
+
+<script>
+  const bar = document.getElementById('progress-bar');
+  const navA = document.getElementById('nav-a');
+  const navB = document.getElementById('nav-b');
+  const navC = document.getElementById('nav-c');
+  const sections = [...document.querySelectorAll('[data-section]')];
+  const heroH = document.querySelector('.hero').offsetHeight + 57;
+  let current = 'a';
+
+  function setNav(v) {
+    current = v;
+    document.querySelectorAll('.sw-btn').forEach((b,i) => b.classList.toggle('active', ['a','b','c'][i] === v));
+    navA.className = v==='a' ? 'show' : '';
+    navB.className = v==='b' ? 'show' : '';
+    navC.className = v==='c' ? 'show' : '';
+    document.body.className = v==='c' ? 'nav-c-on' : '';
+    onScroll();
+  }
+
+  function onScroll() {
+    const sy = window.scrollY;
+    const total = document.body.scrollHeight - window.innerHeight;
+    bar.style.width = (sy/total*100)+'%';
+
+    const show = sy > heroH;
+    [navA, navB, navC].forEach(n => {
+      if (n.classList.contains('show')) n.classList.toggle('visible', show);
+    });
+
+    let active = null;
+    sections.forEach(s => { if (s.getBoundingClientRect().top <= 140) active = s.id; });
+
+    document.querySelectorAll('.sni').forEach(el => {
+      el.classList.toggle('active', el.getAttribute('href') === '#'+active);
+    });
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>
+</body>
+</html>

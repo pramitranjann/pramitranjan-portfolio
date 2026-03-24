@@ -1,0 +1,6 @@
+{"type":"server-started","port":49318,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:49318","screen_dir":"/Users/pramitranjan/portfolio/.superpowers/brainstorm/41415-1774321409"}
+{"type":"screen-added","file":"/Users/pramitranjan/portfolio/.superpowers/brainstorm/41415-1774321409/case-study-narrative.html"}
+{"type":"screen-added","file":"/Users/pramitranjan/portfolio/.superpowers/brainstorm/41415-1774321409/section-nav.html"}
+{"type":"screen-added","file":"/Users/pramitranjan/portfolio/.superpowers/brainstorm/41415-1774321409/case-study-full.html"}
+{"type":"screen-added","file":"/Users/pramitranjan/portfolio/.superpowers/brainstorm/41415-1774321409/case-study-nav-compare.html"}
+{"type":"server-stopped","reason":"idle timeout"}

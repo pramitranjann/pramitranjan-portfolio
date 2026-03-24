@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Study Narrative Design</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0d0d0d; color: #f5f2ed; font-family: 'DM Mono', 'Courier New', monospace; }
+
+  .page-label {
+    font-size: 10px; letter-spacing: 0.18em; color: #FF3120;
+    padding: 20px 32px; border-bottom: 1px solid #1f1f1f;
+  }
+
+  .split { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
+
+  .col { border-right: 1px solid #1f1f1f; }
+  .col:last-child { border-right: none; }
+
+  .col-header {
+    font-size: 10px; letter-spacing: 0.18em; color: #444;
+    padding: 16px 32px; border-bottom: 1px solid #1f1f1f;
+    text-transform: uppercase;
+  }
+
+  /* ── SHARED SECTION ── */
+  .section {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 32px;
+    padding: 28px 32px;
+    border-bottom: 1px solid #1f1f1f;
+  }
+
+  .sec-label {
+    font-size: 10px; letter-spacing: 0.16em; color: #FF3120;
+    padding-top: 3px;
+  }
+
+  .sec-body { }
+
+  /* BEFORE: just body text */
+  .before-text {
+    font-size: 12px; line-height: 1.8; color: #999; letter-spacing: 0.02em;
+  }
+
+  /* AFTER: headline + body */
+  .after-headline {
+    font-size: 15px; line-height: 1.5; color: #f5f2ed;
+    letter-spacing: 0.01em; margin-bottom: 10px;
+  }
+  .after-text {
+    font-size: 12px; line-height: 1.8; color: #666; letter-spacing: 0.02em;
+  }
+
+  /* Pull quote — full-width break */
+  .pull-quote-wrap {
+    padding: 36px 32px;
+    border-bottom: 1px solid #1f1f1f;
+    border-left: 2px solid #FF3120;
+    margin: 0;
+  }
+  .pull-quote-text {
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    font-size: 22px;
+    line-height: 1.45;
+    color: #f5f2ed;
+    max-width: 520px;
+  }
+  .pull-quote-attr {
+    font-size: 10px; letter-spacing: 0.14em; color: #FF3120;
+    margin-top: 14px;
+  }
+
+  /* Image placeholder */
+  .img-placeholder {
+    width: 100%; height: 140px;
+    background: #161616; border: 1px solid #1a1a1a;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 14px;
+  }
+  .img-placeholder span {
+    font-size: 10px; letter-spacing: 0.12em; color: #333;
+  }
+
+  .caption {
+    font-size: 10px; letter-spacing: 0.1em; color: #444;
+    margin-top: 6px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-label">CASE STUDY NARRATIVE — BEFORE vs AFTER</div>
+
+<div class="split">
+
+  <!-- ── BEFORE ── -->
+  <div class="col">
+    <div class="col-header">BEFORE — text heavy, uniform weight</div>
+
+    <div class="section">
+      <div class="sec-label">PROBLEM_</div>
+      <div class="sec-body">
+        <p class="before-text">Franklin's is a neighbourhood café in Savannah with a strong in-store experience — warm staff, good coffee, a chic art-deco environment. The problem was that none of that warmth carried through digitally. First-time visitors, especially tourists and SCAD students, were arriving with mismatched expectations: wrong assumptions about seating, service style, and how ordering worked.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sec-label">RESEARCH_</div>
+      <div class="sec-body">
+        <p class="before-text">We used contextual inquiry as our primary method — short in-context conversations and direct observation at the café. I led the team in conducting both barista and customer interviews, and ran a survey with SCAD students to understand pre-visit behaviour. The pattern that emerged quickly: most friction started before anyone walked through the door. The website was outdated, the service model wasn't communicated, and the warmth that defined the in-store experience had no digital equivalent.</p>
+        <div class="img-placeholder"><span>RESEARCH IMAGE</span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sec-label">CHALLENGE_</div>
+      <div class="sec-body">
+        <p class="before-text">I led synthesis across a journey map, aggregate empathy map, and business model canvas before moving the team into IA. Card sorting on FigJam revealed that users expected task-based navigation, not business categories. They naturally organised content into four buckets: Menu, Order, About, and Contact. That became the backbone of the redesigned IA.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sec-label">SOLUTION_</div>
+      <div class="sec-body">
+        <p class="before-text">A redesigned Franklin's website and online ordering experience with task-based navigation, a restructured homepage that sets expectations before arrival, a cleaner menu page that supports decision-making, and a step-by-step order flow that reduces friction from discovery through to checkout.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── AFTER ── -->
+  <div class="col">
+    <div class="col-header">AFTER — headline + condensed body + pull quote</div>
+
+    <div class="section">
+      <div class="sec-label">PROBLEM_</div>
+      <div class="sec-body">
+        <p class="after-headline">The warmth was real — it just wasn't reaching people before they arrived.</p>
+        <p class="after-text">Franklin's has strong in-store experience. The redesign brief: close the gap between what visitors expected digitally and what they found in person.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sec-label">RESEARCH_</div>
+      <div class="sec-body">
+        <p class="after-headline">Most friction started before anyone walked through the door.</p>
+        <p class="after-text">Contextual inquiry at the café — barista and customer interviews, plus a SCAD student survey. The website was outdated, the service model unclear, and the in-store warmth had no digital equivalent.</p>
+        <div class="img-placeholder"><span>RESEARCH IMAGE</span></div>
+      </div>
+    </div>
+
+    <!-- Pull quote break -->
+    <div class="pull-quote-wrap">
+      <p class="pull-quote-text">"Their warmth was real. It just wasn't reaching people before they arrived."</p>
+      <p class="pull-quote-attr">KEY INSIGHT_</p>
+    </div>
+
+    <div class="section">
+      <div class="sec-label">CHALLENGE_</div>
+      <div class="sec-body">
+        <p class="after-headline">Users don't think in business categories — they think in tasks.</p>
+        <p class="after-text">Card sorting on FigJam revealed four natural buckets: Menu, Order, About, Contact. That became the IA backbone.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sec-label">SOLUTION_</div>
+      <div class="sec-body">
+        <p class="after-headline">The redesign didn't change Franklin's identity — it made it clearer upfront.</p>
+        <p class="after-text">Task-based navigation, a homepage that sets expectations before arrival, and a step-by-step order flow that removes first-time hesitation.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

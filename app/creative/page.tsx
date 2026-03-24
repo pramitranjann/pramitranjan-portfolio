@@ -137,7 +137,7 @@ export default function CreativePage() {
 
         {/* Photography */}
         <section className="creative-section border-b border-divider" style={{ padding: '40px' }}>
-          <SectionHeader label="PHOTOGRAPHY" count="04" />
+          <SectionHeader label="PHOTOGRAPHY" count="01" />
           <div ref={photoGridRef} className="grid grid-cols-2 md:grid-cols-4" style={{ gap: '16px' }}>
             <CreativeCard title="KL" desc="Street life and quiet corners of a city in motion." href="/creative/photography/kl" cover="/creative/photography/kl/41.jpg" />
             <CreativeCard title="Penang" desc="Heritage streets and the texture of an older world." href="/creative/photography/penang" cover="/creative/photography/penang/07.jpg" />
@@ -148,7 +148,7 @@ export default function CreativePage() {
 
         {/* Mixed Media */}
         <section className="creative-section border-b border-divider" style={{ padding: '40px' }}>
-          <SectionHeader label="MIXED MEDIA" count="03" />
+          <SectionHeader label="MIXED MEDIA" count="02" />
           <div ref={mixedGridRef} className="grid grid-cols-2 md:grid-cols-3" style={{ gap: '16px' }}>
             <CreativeCard title="Faces of Power" desc="Portraits, power, and the masks we wear." tag="GELLI PRINT · PHOTOGRAPHY" href="/creative/mixed-media/faces-of-power" cover="/creative/mixed-media/faces-of-power/hero-processed.png" />
             <CreativeCard title="South China Sea" desc="Conflict, naivety, and the decisions of the few." tag="CYANOTYPE · PHOTOGRAM" href="/creative/mixed-media/south-china-sea" cover="/creative/mixed-media/south-china-sea/hero-processed.png" />
@@ -158,7 +158,7 @@ export default function CreativePage() {
 
         {/* Branding */}
         <section className="creative-section" style={{ padding: '40px' }}>
-          <SectionHeader label="BRANDING" count="02" />
+          <SectionHeader label="BRANDING" count="03" />
           <div ref={brandingGridRef} className="grid grid-cols-2" style={{ gap: '16px' }}>
             <CreativeCard title="Oracle" desc="A Matrix-inspired clothing brand built from scratch." tag="CLOTHING · BRANDING" href="/creative/branding/oracle" />
             <CreativeCard title="SOHO" desc="Directed and branded a sixth form art exhibition." tag="EXHIBITION · BRANDING" href="/creative/branding/soho" cover="/creative/branding/soho/cover-processed.png" />
