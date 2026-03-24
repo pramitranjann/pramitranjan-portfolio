@@ -1,3 +1,4 @@
+import { revalidatePath } from 'next/cache'
 import { NextResponse } from 'next/server'
 import { isValidAdminSessionToken, getAdminCookieName } from '@/lib/admin-auth'
 import { getSiteContent, saveSiteContent } from '@/lib/site-content'
@@ -36,5 +37,6 @@ export async function PUT(request: Request) {
   }
 
   await saveSiteContent(body)
+  revalidatePath('/', 'layout')
   return NextResponse.json({ ok: true })
 }

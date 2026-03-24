@@ -39,6 +39,47 @@ export interface PhotographyCity {
   comingSoon: boolean
 }
 
+export interface ProjectLink {
+  slug: string
+  title: string
+}
+
+export type CaseStudySection = 'work' | 'mixed-media' | 'branding'
+
+export interface CaseStudyContent {
+  slug: string
+  section: CaseStudySection
+  title: string
+  oneliner: string
+  type: string
+  tags: string[]
+  prev: ProjectLink | null
+  next: ProjectLink | null
+  backHref?: string
+  backLabel?: string
+  problem?: string
+  role?: string
+  research?: string
+  challenge?: string
+  process?: string
+  usabilityTesting?: string
+  solution?: string
+  outcomes?: string
+  problemHeadline?: string
+  roleHeadline?: string
+  researchHeadline?: string
+  challengeHeadline?: string
+  processHeadline?: string
+  solutionHeadline?: string
+  outcomesHeadline?: string
+  pullQuote?: string
+  heroImage?: string
+  researchImage?: string
+  challengeImages?: string[]
+  solutionHeroImage?: string
+  solutionImages?: string[]
+}
+
 export interface SiteContent {
   home: {
     selectedWork: HomeSection
@@ -62,6 +103,7 @@ export interface SiteContent {
     heroTitle: string
     cities: PhotographyCity[]
   }
+  caseStudies: CaseStudyContent[]
 }
 
 function isString(value: unknown): value is string {
@@ -70,6 +112,10 @@ function isString(value: unknown): value is string {
 
 function isStringArray(value: unknown): value is string[] {
   return Array.isArray(value) && value.every(isString)
+}
+
+function isNullable<T>(value: unknown, predicate: (value: unknown) => value is T): value is T | null {
+  return value === null || predicate(value)
 }
 
 function isWorkProject(value: unknown): value is WorkProject {
@@ -115,6 +161,63 @@ function isHomeSection(value: unknown): value is HomeSection {
   return isString(item.heading) && isString(item.body) && Array.isArray(item.items) && item.items.every(isWorkProject)
 }
 
+function isProjectLink(value: unknown): value is ProjectLink {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return isString(item.slug) && isString(item.title)
+}
+
+function isCaseStudySection(value: unknown): value is CaseStudySection {
+  return value === 'work' || value === 'mixed-media' || value === 'branding'
+}
+
+function isOptionalString(value: unknown) {
+  return value === undefined || isString(value)
+}
+
+function isOptionalStringArray(value: unknown) {
+  return value === undefined || isStringArray(value)
+}
+
+function isCaseStudyContent(value: unknown): value is CaseStudyContent {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+
+  return (
+    isString(item.slug) &&
+    isCaseStudySection(item.section) &&
+    isString(item.title) &&
+    isString(item.oneliner) &&
+    isString(item.type) &&
+    isStringArray(item.tags) &&
+    isNullable(item.prev, isProjectLink) &&
+    isNullable(item.next, isProjectLink) &&
+    isOptionalString(item.backHref) &&
+    isOptionalString(item.backLabel) &&
+    isOptionalString(item.problem) &&
+    isOptionalString(item.role) &&
+    isOptionalString(item.research) &&
+    isOptionalString(item.challenge) &&
+    isOptionalString(item.process) &&
+    isOptionalString(item.usabilityTesting) &&
+    isOptionalString(item.solution) &&
+    isOptionalString(item.outcomes) &&
+    isOptionalString(item.problemHeadline) &&
+    isOptionalString(item.roleHeadline) &&
+    isOptionalString(item.researchHeadline) &&
+    isOptionalString(item.challengeHeadline) &&
+    isOptionalString(item.processHeadline) &&
+    isOptionalString(item.solutionHeadline) &&
+    isOptionalString(item.outcomesHeadline) &&
+    isOptionalString(item.pullQuote) &&
+    isOptionalString(item.heroImage) &&
+    isOptionalString(item.researchImage) &&
+    isOptionalStringArray(item.challengeImages) &&
+    isOptionalString(item.solutionHeroImage) &&
+    isOptionalStringArray(item.solutionImages)
+  )
+}
+
 export function isSiteContent(value: unknown): value is SiteContent {
   if (!value || typeof value !== 'object') return false
   const content = value as Record<string, unknown>
@@ -151,6 +254,8 @@ export function isSiteContent(value: unknown): value is SiteContent {
     workPage.projects.every(isWorkProject) &&
     isString(photography.heroTitle) &&
     Array.isArray(photography.cities) &&
-    photography.cities.every(isPhotographyCity)
+    photography.cities.every(isPhotographyCity) &&
+    Array.isArray(content.caseStudies) &&
+    content.caseStudies.every(isCaseStudyContent)
   )
 }

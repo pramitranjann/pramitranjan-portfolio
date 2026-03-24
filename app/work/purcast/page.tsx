@@ -1,14 +1,7 @@
 import { CaseStudyLayout } from '@/components/CaseStudyLayout'
+import { getCaseStudyContent } from '@/lib/site-content'
 
-export default function PurcastPage() {
-  return (
-    <CaseStudyLayout
-      title="Purcast"
-      oneliner="A podcast app designed for the Fluxathon."
-      type="UI DESIGN · 2025"
-      tags={['UI Design', 'Figma', 'Competition', 'Sprint']}
-      prev={{ slug: 'helpoh', title: 'HelpOH' }}
-      next={null}
-    />
-  )
+export default async function PurcastPage() {
+  const caseStudy = await getCaseStudyContent('purcast')
+  return <CaseStudyLayout {...caseStudy} />
 }

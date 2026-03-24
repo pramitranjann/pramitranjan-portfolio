@@ -43,9 +43,9 @@ interface CaseStudyLayoutProps {
   // Images — unchanged
   heroImage?: string
   researchImage?: string
-  challengeImages?: [string, string]
+  challengeImages?: string[]
   solutionHeroImage?: string
-  solutionImages?: [string] | [string, string]
+  solutionImages?: string[]
 }
 
 const labelStyle: React.CSSProperties = {

@@ -2,8 +2,7 @@ import 'server-only'
 
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
-import { cache } from 'react'
-import { isSiteContent, type SiteContent } from '@/lib/site-content-schema'
+import { type CaseStudyContent, isSiteContent, type SiteContent } from '@/lib/site-content-schema'
 
 const contentPath = path.join(process.cwd(), 'content', 'site-content.json')
 
@@ -18,7 +17,25 @@ async function readSiteContentFile(): Promise<SiteContent> {
   return parsed
 }
 
-export const getSiteContent = cache(readSiteContentFile)
+export async function getSiteContent() {
+  return readSiteContentFile()
+}
+
+export async function getCaseStudyContent(slug: string) {
+  const content = await getSiteContent()
+  const caseStudy = content.caseStudies.find((item) => item.slug === slug)
+
+  if (!caseStudy) {
+    throw new Error(`Case study not found: ${slug}`)
+  }
+
+  return caseStudy
+}
+
+export async function getCaseStudiesBySection(section: CaseStudyContent['section']) {
+  const content = await getSiteContent()
+  return content.caseStudies.filter((item) => item.section === section)
+}
 
 export async function saveSiteContent(content: SiteContent) {
   if (!isSiteContent(content)) {

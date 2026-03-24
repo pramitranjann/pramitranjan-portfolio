@@ -1,44 +1,7 @@
 import { CaseStudyLayout } from '@/components/CaseStudyLayout'
+import { getCaseStudyContent } from '@/lib/site-content'
 
-export default function FacesOfPowerPage() {
-  return (
-    <CaseStudyLayout
-      title="Faces of Power"
-      oneliner="What does power look like up close?"
-      type="MIXED MEDIA · 2024"
-      tags={['Mixed Media', 'Photography', 'Conceptual Art', 'Installation']}
-      prev={null}
-      next={{ slug: 'south-china-sea', title: 'South China Sea' }}
-      backHref="/creative/mixed-media"
-      backLabel="MIXED MEDIA"
-      heroImage="/creative/mixed-media/faces-of-power/hero-processed.png"
-      researchImage="/creative/mixed-media/faces-of-power/research-processed.png"
-      challengeImages={['/creative/mixed-media/faces-of-power/ideation-1-processed.png', '/creative/mixed-media/faces-of-power/ideation-2-processed.png']}
-      solutionHeroImage="/creative/mixed-media/faces-of-power/solution-hero-processed.png"
-      solutionImages={['/creative/mixed-media/faces-of-power/solution-1-processed.png', '/creative/mixed-media/faces-of-power/solution-2-processed.png']}
-
-      problemHeadline="What does power look like up close?"
-      problem="A mixed media art project exploring how leaders make decisions that impact millions. Using close-up portraiture, interviews, and layered physical materials, the work interrogates themes of privacy, intimacy, and authority."
-
-      roleHeadline="Sole artist — concept, photography, material fabrication, and installation."
-      role="Sole artist — concept, photography, material fabrication, and installation."
-
-      researchHeadline="Shifting focus from geopolitics to the human actors behind it."
-      research="This work extended the South China Sea piece, shifting focus from geopolitics to the human actors behind it. I was interested in what it means to hold power — and what gets hidden behind a public face."
-
-      pullQuote="Removing colour and context made the images feel universal — anyone could be in power."
-
-      challengeHeadline="Close-up portraits and discomforting questions — the kind powerful people are rarely asked."
-      challenge="Took close-up portraits and conducted interviews asking discomforting personal questions — the kind powerful people are rarely asked publicly. Explored masks (literal and metaphorical) as a recurring motif, inspired by Brian Cattle."
-
-      processHeadline="Layering identities through acetate and light — together we are one."
-      process="Layered multiple identities into single images using acetate and a custom-built A4 lightbox. Gelli printing added a propaganda aesthetic through paint transfer. Photograms stripped context entirely, leaving figures open to interpretation."
-
-      solutionHeadline="A multi-part installation where power is constructed, projected, and concealed."
-      solution="A multi-part installation combining Mod Roc masks, acetate lightbox prints, gelli prints, and photograms — each exploring a different facet of how power is constructed, projected, and concealed."
-
-      outcomesHeadline="Removing colour and context made the images feel universal — anyone could be in power."
-      outcomes="The most powerful moment was realising that removing colour and context — the photograms — made the images feel universal: anyone could be in power. I'd push the interview component further, potentially making it part of the installation itself."
-    />
-  )
+export default async function FacesOfPowerPage() {
+  const caseStudy = await getCaseStudyContent('faces-of-power')
+  return <CaseStudyLayout {...caseStudy} />
 }

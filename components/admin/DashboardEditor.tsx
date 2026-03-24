@@ -1,10 +1,32 @@
 'use client'
 
-import { useState } from 'react'
-import type { EntryItem, NowCard, PhotographyCity, SiteContent, WorkProject } from '@/lib/site-content-schema'
+import { useMemo, useState } from 'react'
+import type {
+  CaseStudyContent,
+  CaseStudySection,
+  EntryItem,
+  NowCard,
+  PhotographyCity,
+  ProjectLink,
+  SiteContent,
+  WorkProject,
+} from '@/lib/site-content-schema'
 
 type EditorProps = {
   initialContent: SiteContent
+}
+
+type PageKey = 'homepage' | 'about-page' | 'work-page' | 'photography-page' | `case-study:${string}`
+
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <label style={{ display: 'grid', gap: '8px' }}>
+      <span className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#999999', letterSpacing: '0.1em' }}>
+        {label}
+      </span>
+      {children}
+    </label>
+  )
 }
 
 function SectionFrame({ title, children }: { title: string; children: React.ReactNode }) {
@@ -17,17 +39,6 @@ function SectionFrame({ title, children }: { title: string; children: React.Reac
         {children}
       </div>
     </section>
-  )
-}
-
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <label style={{ display: 'grid', gap: '8px' }}>
-      <span className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#999999', letterSpacing: '0.1em' }}>
-        {label}
-      </span>
-      {children}
-    </label>
   )
 }
 
@@ -44,35 +55,106 @@ function inputStyle(multiline = false) {
   }
 }
 
+function textToTags(value: string) {
+  return value.split(',').map((tag) => tag.trim()).filter(Boolean)
+}
+
 function tagsToText(tags: string[]) {
   return tags.join(', ')
 }
 
-function textToTags(value: string) {
-  return value
-    .split(',')
-    .map((tag) => tag.trim())
-    .filter(Boolean)
+function textToTools(value: string) {
+  return value.split('\n').map((tool) => tool.trim()).filter(Boolean)
 }
 
 function toolsToText(tools: string[]) {
   return tools.join('\n')
 }
 
-function textToTools(value: string) {
-  return value
-    .split('\n')
-    .map((tool) => tool.trim())
-    .filter(Boolean)
+function updateAt<T>(items: T[], index: number, value: T) {
+  return items.map((item, itemIndex) => (itemIndex === index ? value : item))
+}
+
+function removeAt<T>(items: T[], index: number) {
+  return items.filter((_, itemIndex) => itemIndex !== index)
+}
+
+function toPair(first: string, second: string) {
+  return [first, second].filter(Boolean)
+}
+
+function SidebarGroup({
+  title,
+  children,
+}: {
+  title: string
+  children: React.ReactNode
+}) {
+  return (
+    <div style={{ display: 'grid', gap: '10px' }}>
+      <div className="font-mono" style={{ fontSize: '11px', color: '#666666', letterSpacing: '0.14em' }}>
+        {title}
+      </div>
+      <div style={{ display: 'grid', gap: '8px' }}>
+        {children}
+      </div>
+    </div>
+  )
+}
+
+function SidebarButton({
+  active,
+  label,
+  onClick,
+}: {
+  active: boolean
+  label: string
+  onClick: () => void
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="font-mono"
+      style={{
+        textAlign: 'left',
+        background: active ? '#181818' : 'transparent',
+        border: `1px solid ${active ? '#FF3120' : '#1f1f1f'}`,
+        color: active ? '#f5f2ed' : '#999999',
+        padding: '10px 12px',
+        letterSpacing: '0.08em',
+        cursor: 'pointer',
+      }}
+    >
+      {label}
+    </button>
+  )
 }
 
 export function DashboardEditor({ initialContent }: EditorProps) {
   const [content, setContent] = useState(initialContent)
   const [status, setStatus] = useState('Ready')
   const [saving, setSaving] = useState(false)
+  const [activePage, setActivePage] = useState<PageKey>('homepage')
+
+  const groupedCaseStudies = useMemo(
+    () => ({
+      work: content.caseStudies.filter((item) => item.section === 'work'),
+      mixedMedia: content.caseStudies.filter((item) => item.section === 'mixed-media'),
+      branding: content.caseStudies.filter((item) => item.section === 'branding'),
+    }),
+    [content.caseStudies]
+  )
 
   function updateSection<K extends keyof SiteContent>(key: K, value: SiteContent[K]) {
     setContent((current) => ({ ...current, [key]: value }))
+  }
+
+  function updateCaseStudy(slug: string, updater: (item: CaseStudyContent) => CaseStudyContent) {
+    setContent((current) => ({
+      ...current,
+      caseStudies: current.caseStudies.map((item) => (item.slug === slug ? updater(item) : item)),
+    }))
   }
 
   async function handleSave() {
@@ -101,6 +183,10 @@ export function DashboardEditor({ initialContent }: EditorProps) {
     window.location.href = '/dashboard/login'
   }
 
+  const activeCaseStudy = activePage.startsWith('case-study:')
+    ? content.caseStudies.find((item) => item.slug === activePage.replace('case-study:', '')) ?? null
+    : null
+
   return (
     <div style={{ display: 'grid', gap: '24px' }}>
       <div className="flex items-center justify-between" style={{ gap: '16px', flexWrap: 'wrap' }}>
@@ -128,6 +214,82 @@ export function DashboardEditor({ initialContent }: EditorProps) {
         </div>
       </div>
 
+      <div className="dashboard-grid" style={{ display: 'grid', gridTemplateColumns: '260px minmax(0, 1fr)', gap: '24px', alignItems: 'start' }}>
+        <aside style={{ border: '1px solid #1f1f1f', background: '#111111', padding: '16px', position: 'sticky', top: '96px' }}>
+          <div style={{ display: 'grid', gap: '18px' }}>
+            <SidebarGroup title="SITE PAGES">
+              <SidebarButton active={activePage === 'homepage'} label="Homepage" onClick={() => setActivePage('homepage')} />
+              <SidebarButton active={activePage === 'about-page'} label="About Page" onClick={() => setActivePage('about-page')} />
+              <SidebarButton active={activePage === 'work-page'} label="Work Page" onClick={() => setActivePage('work-page')} />
+              <SidebarButton active={activePage === 'photography-page'} label="Photography Page" onClick={() => setActivePage('photography-page')} />
+            </SidebarGroup>
+
+            <SidebarGroup title="WORK CASE STUDIES">
+              {groupedCaseStudies.work.map((item) => (
+                <SidebarButton
+                  key={item.slug}
+                  active={activePage === `case-study:${item.slug}`}
+                  label={item.title}
+                  onClick={() => setActivePage(`case-study:${item.slug}` as PageKey)}
+                />
+              ))}
+            </SidebarGroup>
+
+            <SidebarGroup title="MIXED MEDIA">
+              {groupedCaseStudies.mixedMedia.map((item) => (
+                <SidebarButton
+                  key={item.slug}
+                  active={activePage === `case-study:${item.slug}`}
+                  label={item.title}
+                  onClick={() => setActivePage(`case-study:${item.slug}` as PageKey)}
+                />
+              ))}
+            </SidebarGroup>
+
+            <SidebarGroup title="BRANDING">
+              {groupedCaseStudies.branding.map((item) => (
+                <SidebarButton
+                  key={item.slug}
+                  active={activePage === `case-study:${item.slug}`}
+                  label={item.title}
+                  onClick={() => setActivePage(`case-study:${item.slug}` as PageKey)}
+                />
+              ))}
+            </SidebarGroup>
+          </div>
+        </aside>
+
+        <div style={{ display: 'grid', gap: '24px' }}>
+          {activePage === 'homepage' ? (
+            <HomepageEditor content={content} updateSection={updateSection} />
+          ) : null}
+          {activePage === 'about-page' ? (
+            <AboutPageEditor content={content} updateSection={updateSection} />
+          ) : null}
+          {activePage === 'work-page' ? (
+            <WorkPageEditor content={content} updateSection={updateSection} />
+          ) : null}
+          {activePage === 'photography-page' ? (
+            <PhotographyPageEditor content={content} updateSection={updateSection} />
+          ) : null}
+          {activeCaseStudy ? (
+            <CaseStudyEditor caseStudy={activeCaseStudy} onChange={(updater) => updateCaseStudy(activeCaseStudy.slug, updater)} />
+          ) : null}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function HomepageEditor({
+  content,
+  updateSection,
+}: {
+  content: SiteContent
+  updateSection: <K extends keyof SiteContent>(key: K, value: SiteContent[K]) => void
+}) {
+  return (
+    <>
       <SectionFrame title="Homepage">
         <Field label="Selected Work Heading">
           <input
@@ -157,6 +319,9 @@ export function DashboardEditor({ initialContent }: EditorProps) {
             selectedWork: { ...content.home.selectedWork, items },
           })}
         />
+      </SectionFrame>
+
+      <SectionFrame title="Homepage More Work">
         <Field label="More Work Heading">
           <input
             value={content.home.moreWork.heading}
@@ -185,7 +350,10 @@ export function DashboardEditor({ initialContent }: EditorProps) {
             moreWork: { ...content.home.moreWork, items },
           })}
         />
-        <Field label="Homepage About Body">
+      </SectionFrame>
+
+      <SectionFrame title="Homepage About Block">
+        <Field label="Body Copy">
           <textarea
             value={content.home.about.body}
             onChange={(event) => updateSection('home', {
@@ -195,19 +363,21 @@ export function DashboardEditor({ initialContent }: EditorProps) {
             style={inputStyle(true)}
           />
         </Field>
-        <Field label="Homepage Spotify Label">
-          <input
-            value={content.home.about.spotifyLabel}
-            onChange={(event) => updateSection('home', {
-              ...content.home,
-              about: { ...content.home.about, spotifyLabel: event.target.value },
-            })}
-            style={inputStyle()}
-          />
-        </Field>
       </SectionFrame>
+    </>
+  )
+}
 
-      <SectionFrame title="About Page">
+function AboutPageEditor({
+  content,
+  updateSection,
+}: {
+  content: SiteContent
+  updateSection: <K extends keyof SiteContent>(key: K, value: SiteContent[K]) => void
+}) {
+  return (
+    <>
+      <SectionFrame title="About Page Hero">
         <Field label="Hero Body">
           <textarea
             value={content.aboutPage.heroBody}
@@ -222,6 +392,9 @@ export function DashboardEditor({ initialContent }: EditorProps) {
             style={inputStyle(true)}
           />
         </Field>
+      </SectionFrame>
+
+      <SectionFrame title="About Page Lists">
         <EntryListEditor
           title="Experience"
           items={content.aboutPage.experience}
@@ -232,6 +405,9 @@ export function DashboardEditor({ initialContent }: EditorProps) {
           items={content.aboutPage.professionalActivities}
           onChange={(items) => updateSection('aboutPage', { ...content.aboutPage, professionalActivities: items })}
         />
+      </SectionFrame>
+
+      <SectionFrame title="About Page Extras">
         <Field label="Tools (one per line)">
           <textarea
             value={toolsToText(content.aboutPage.tools)}
@@ -244,7 +420,19 @@ export function DashboardEditor({ initialContent }: EditorProps) {
           onChange={(items) => updateSection('aboutPage', { ...content.aboutPage, nowCards: items })}
         />
       </SectionFrame>
+    </>
+  )
+}
 
+function WorkPageEditor({
+  content,
+  updateSection,
+}: {
+  content: SiteContent
+  updateSection: <K extends keyof SiteContent>(key: K, value: SiteContent[K]) => void
+}) {
+  return (
+    <>
       <SectionFrame title="Work Page">
         <Field label="Hero Title">
           <input
@@ -266,20 +454,254 @@ export function DashboardEditor({ initialContent }: EditorProps) {
           onChange={(items) => updateSection('workPage', { ...content.workPage, projects: items })}
         />
       </SectionFrame>
+    </>
+  )
+}
 
-      <SectionFrame title="Photography">
-        <Field label="Photography Hero Title">
-          <input
-            value={content.photography.heroTitle}
-            onChange={(event) => updateSection('photography', { ...content.photography, heroTitle: event.target.value })}
+function PhotographyPageEditor({
+  content,
+  updateSection,
+}: {
+  content: SiteContent
+  updateSection: <K extends keyof SiteContent>(key: K, value: SiteContent[K]) => void
+}) {
+  return (
+    <SectionFrame title="Photography Page">
+      <Field label="Hero Title">
+        <input
+          value={content.photography.heroTitle}
+          onChange={(event) => updateSection('photography', { ...content.photography, heroTitle: event.target.value })}
+          style={inputStyle()}
+        />
+      </Field>
+      <PhotographyCityListEditor
+        items={content.photography.cities}
+        onChange={(items) => updateSection('photography', { ...content.photography, cities: items })}
+      />
+    </SectionFrame>
+  )
+}
+
+function CaseStudyEditor({
+  caseStudy,
+  onChange,
+}: {
+  caseStudy: CaseStudyContent
+  onChange: (updater: (item: CaseStudyContent) => CaseStudyContent) => void
+}) {
+  return (
+    <>
+      <SectionFrame title={`${caseStudy.title} · Basics`}>
+        <Field label="Section">
+          <select
+            value={caseStudy.section}
+            onChange={(event) => onChange((current) => ({ ...current, section: event.target.value as CaseStudySection }))}
             style={inputStyle()}
-          />
+          >
+            <option value="work">Work</option>
+            <option value="mixed-media">Mixed Media</option>
+            <option value="branding">Branding</option>
+          </select>
         </Field>
-        <PhotographyCityListEditor
-          items={content.photography.cities}
-          onChange={(items) => updateSection('photography', { ...content.photography, cities: items })}
+        <Field label="Slug">
+          <input value={caseStudy.slug} onChange={(event) => onChange((current) => ({ ...current, slug: event.target.value }))} style={inputStyle()} />
+        </Field>
+        <Field label="Title">
+          <input value={caseStudy.title} onChange={(event) => onChange((current) => ({ ...current, title: event.target.value }))} style={inputStyle()} />
+        </Field>
+        <Field label="One-liner">
+          <textarea value={caseStudy.oneliner} onChange={(event) => onChange((current) => ({ ...current, oneliner: event.target.value }))} style={inputStyle(true)} />
+        </Field>
+        <Field label="Type">
+          <input value={caseStudy.type} onChange={(event) => onChange((current) => ({ ...current, type: event.target.value }))} style={inputStyle()} />
+        </Field>
+        <Field label="Tags (comma separated)">
+          <input value={tagsToText(caseStudy.tags)} onChange={(event) => onChange((current) => ({ ...current, tags: textToTags(event.target.value) }))} style={inputStyle()} />
+        </Field>
+      </SectionFrame>
+
+      <SectionFrame title={`${caseStudy.title} · Navigation`}>
+        <ProjectLinkEditor
+          label="Previous Project"
+          value={caseStudy.prev}
+          onChange={(value) => onChange((current) => ({ ...current, prev: value }))}
+        />
+        <ProjectLinkEditor
+          label="Next Project"
+          value={caseStudy.next}
+          onChange={(value) => onChange((current) => ({ ...current, next: value }))}
+        />
+        <Field label="Back Href">
+          <input value={caseStudy.backHref ?? ''} onChange={(event) => onChange((current) => ({ ...current, backHref: event.target.value || undefined }))} style={inputStyle()} />
+        </Field>
+        <Field label="Back Label">
+          <input value={caseStudy.backLabel ?? ''} onChange={(event) => onChange((current) => ({ ...current, backLabel: event.target.value || undefined }))} style={inputStyle()} />
+        </Field>
+      </SectionFrame>
+
+      <SectionFrame title={`${caseStudy.title} · Media`}>
+        <Field label="Hero Image">
+          <input value={caseStudy.heroImage ?? ''} onChange={(event) => onChange((current) => ({ ...current, heroImage: event.target.value || undefined }))} style={inputStyle()} />
+        </Field>
+        <Field label="Research Image">
+          <input value={caseStudy.researchImage ?? ''} onChange={(event) => onChange((current) => ({ ...current, researchImage: event.target.value || undefined }))} style={inputStyle()} />
+        </Field>
+        <ImagePairEditor
+          label="Challenge Images"
+          images={caseStudy.challengeImages ?? []}
+          onChange={(images) => onChange((current) => ({ ...current, challengeImages: images.length ? images : undefined }))}
+        />
+        <Field label="Solution Hero Image">
+          <input value={caseStudy.solutionHeroImage ?? ''} onChange={(event) => onChange((current) => ({ ...current, solutionHeroImage: event.target.value || undefined }))} style={inputStyle()} />
+        </Field>
+        <ImagePairEditor
+          label="Solution Images"
+          images={caseStudy.solutionImages ?? []}
+          onChange={(images) => onChange((current) => ({ ...current, solutionImages: images.length ? images : undefined }))}
         />
       </SectionFrame>
+
+      <SectionFrame title={`${caseStudy.title} · Narrative`}>
+        <HeadlineBodyEditor
+          title="Problem"
+          headline={caseStudy.problemHeadline ?? ''}
+          body={caseStudy.problem ?? ''}
+          onHeadlineChange={(value) => onChange((current) => ({ ...current, problemHeadline: value || undefined }))}
+          onBodyChange={(value) => onChange((current) => ({ ...current, problem: value || undefined }))}
+        />
+        <HeadlineBodyEditor
+          title="Role"
+          headline={caseStudy.roleHeadline ?? ''}
+          body={caseStudy.role ?? ''}
+          onHeadlineChange={(value) => onChange((current) => ({ ...current, roleHeadline: value || undefined }))}
+          onBodyChange={(value) => onChange((current) => ({ ...current, role: value || undefined }))}
+        />
+        <HeadlineBodyEditor
+          title="Research"
+          headline={caseStudy.researchHeadline ?? ''}
+          body={caseStudy.research ?? ''}
+          onHeadlineChange={(value) => onChange((current) => ({ ...current, researchHeadline: value || undefined }))}
+          onBodyChange={(value) => onChange((current) => ({ ...current, research: value || undefined }))}
+        />
+        <Field label="Pull Quote">
+          <textarea value={caseStudy.pullQuote ?? ''} onChange={(event) => onChange((current) => ({ ...current, pullQuote: event.target.value || undefined }))} style={inputStyle(true)} />
+        </Field>
+        <HeadlineBodyEditor
+          title="Challenge"
+          headline={caseStudy.challengeHeadline ?? ''}
+          body={caseStudy.challenge ?? ''}
+          onHeadlineChange={(value) => onChange((current) => ({ ...current, challengeHeadline: value || undefined }))}
+          onBodyChange={(value) => onChange((current) => ({ ...current, challenge: value || undefined }))}
+        />
+        <HeadlineBodyEditor
+          title="Process"
+          headline={caseStudy.processHeadline ?? ''}
+          body={caseStudy.process ?? ''}
+          onHeadlineChange={(value) => onChange((current) => ({ ...current, processHeadline: value || undefined }))}
+          onBodyChange={(value) => onChange((current) => ({ ...current, process: value || undefined }))}
+        />
+        <Field label="Usability Testing">
+          <textarea value={caseStudy.usabilityTesting ?? ''} onChange={(event) => onChange((current) => ({ ...current, usabilityTesting: event.target.value || undefined }))} style={inputStyle(true)} />
+        </Field>
+        <HeadlineBodyEditor
+          title="Solution"
+          headline={caseStudy.solutionHeadline ?? ''}
+          body={caseStudy.solution ?? ''}
+          onHeadlineChange={(value) => onChange((current) => ({ ...current, solutionHeadline: value || undefined }))}
+          onBodyChange={(value) => onChange((current) => ({ ...current, solution: value || undefined }))}
+        />
+        <HeadlineBodyEditor
+          title="Outcomes"
+          headline={caseStudy.outcomesHeadline ?? ''}
+          body={caseStudy.outcomes ?? ''}
+          onHeadlineChange={(value) => onChange((current) => ({ ...current, outcomesHeadline: value || undefined }))}
+          onBodyChange={(value) => onChange((current) => ({ ...current, outcomes: value || undefined }))}
+        />
+      </SectionFrame>
+    </>
+  )
+}
+
+function HeadlineBodyEditor({
+  title,
+  headline,
+  body,
+  onHeadlineChange,
+  onBodyChange,
+}: {
+  title: string
+  headline: string
+  body: string
+  onHeadlineChange: (value: string) => void
+  onBodyChange: (value: string) => void
+}) {
+  return (
+    <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
+      <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.1em' }}>
+        {title.toUpperCase()}
+      </div>
+      <Field label={`${title} Headline`}>
+        <textarea value={headline} onChange={(event) => onHeadlineChange(event.target.value)} style={inputStyle(true)} />
+      </Field>
+      <Field label={`${title} Body`}>
+        <textarea value={body} onChange={(event) => onBodyChange(event.target.value)} style={inputStyle(true)} />
+      </Field>
+    </div>
+  )
+}
+
+function ProjectLinkEditor({
+  label,
+  value,
+  onChange,
+}: {
+  label: string
+  value: ProjectLink | null
+  onChange: (value: ProjectLink | null) => void
+}) {
+  return (
+    <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
+      <label className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#999999', letterSpacing: '0.1em', display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <input type="checkbox" checked={value !== null} onChange={(event) => onChange(event.target.checked ? { slug: '', title: '' } : null)} />
+        {label}
+      </label>
+      {value ? (
+        <>
+          <Field label={`${label} Slug`}>
+            <input value={value.slug} onChange={(event) => onChange({ ...value, slug: event.target.value })} style={inputStyle()} />
+          </Field>
+          <Field label={`${label} Title`}>
+            <input value={value.title} onChange={(event) => onChange({ ...value, title: event.target.value })} style={inputStyle()} />
+          </Field>
+        </>
+      ) : null}
+    </div>
+  )
+}
+
+function ImagePairEditor({
+  label,
+  images,
+  onChange,
+}: {
+  label: string
+  images: string[]
+  onChange: (images: string[]) => void
+}) {
+  const first = images[0] ?? ''
+  const second = images[1] ?? ''
+
+  return (
+    <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
+      <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.1em' }}>
+        {label.toUpperCase()}
+      </div>
+      <Field label={`${label} 1`}>
+        <input value={first} onChange={(event) => onChange(toPair(event.target.value, second))} style={inputStyle()} />
+      </Field>
+      <Field label={`${label} 2`}>
+        <input value={second} onChange={(event) => onChange(toPair(first, event.target.value))} style={inputStyle()} />
+      </Field>
     </div>
   )
 }
@@ -487,12 +909,4 @@ function PhotographyCityListEditor({
       ))}
     </div>
   )
-}
-
-function updateAt<T>(items: T[], index: number, value: T) {
-  return items.map((item, itemIndex) => (itemIndex === index ? value : item))
-}
-
-function removeAt<T>(items: T[], index: number) {
-  return items.filter((_, itemIndex) => itemIndex !== index)
 }
