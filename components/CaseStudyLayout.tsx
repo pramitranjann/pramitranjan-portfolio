@@ -42,9 +42,15 @@ const labelStyle: React.CSSProperties = {
   fontSize: 'var(--text-h3)',
   fontWeight: 400,
   fontStyle: 'italic',
-  color: '#666666',
+  color: '#f5f2ed',
   lineHeight: 1,
   paddingTop: '4px',
+}
+
+// Narrow fixed left column so body text sits close to the left edge
+const gridStyle: React.CSSProperties = {
+  gridTemplateColumns: '160px 1fr',
+  gap: '32px',
 }
 
 export function CaseStudyLayout({
@@ -103,7 +109,7 @@ export function CaseStudyLayout({
         {/* Problem */}
         <section className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
           <GsapReveal>
-            <div data-reveal className="case-study-meta-grid grid" style={{ gridTemplateColumns: '1fr 2fr', gap: '48px' }}>
+            <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
               <span className="font-serif" style={labelStyle}>Problem</span>
               <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
                 {problem ?? 'This project focused on understanding user needs and translating them into a cohesive design solution. Through research, ideation, and iteration, the final product addresses real problems with intentional design decisions.'}
@@ -115,7 +121,7 @@ export function CaseStudyLayout({
         {/* My Role */}
         <section className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
           <GsapReveal>
-            <div data-reveal className="case-study-meta-grid grid" style={{ gridTemplateColumns: '1fr 2fr', gap: '48px' }}>
+            <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
               <span className="font-serif" style={labelStyle}>My Role</span>
               <div>
                 <p className="case-study-body font-mono mb-6" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
@@ -147,7 +153,7 @@ export function CaseStudyLayout({
         {research && (
           <section className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
             <GsapReveal>
-              <div data-reveal className="case-study-meta-grid grid" style={{ gridTemplateColumns: '1fr 2fr', gap: '48px' }}>
+              <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
                 <span className="font-serif" style={labelStyle}>Research</span>
                 <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
                   {research}
@@ -166,7 +172,7 @@ export function CaseStudyLayout({
         {challenge && (
           <section className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
             <GsapReveal>
-              <div data-reveal className="case-study-meta-grid grid" style={{ gridTemplateColumns: '1fr 2fr', gap: '48px' }}>
+              <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
                 <span className="font-serif" style={labelStyle}>Challenge</span>
                 <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
                   {challenge}
@@ -190,7 +196,7 @@ export function CaseStudyLayout({
         {(process || usabilityTesting) && (
           <section className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
             <GsapReveal>
-              <div data-reveal className="case-study-meta-grid grid" style={{ gridTemplateColumns: '1fr 2fr', gap: '48px' }}>
+              <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
                 <span className="font-serif" style={labelStyle}>Process</span>
                 <div>
                   {process && (
@@ -212,7 +218,7 @@ export function CaseStudyLayout({
         {/* Solution */}
         <section className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
           <GsapReveal>
-            <div data-reveal className="case-study-meta-grid grid" style={{ gridTemplateColumns: '1fr 2fr', gap: '48px' }}>
+            <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
               <span className="font-serif" style={labelStyle}>Solution</span>
               <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
                 {solution ?? ''}
@@ -240,7 +246,7 @@ export function CaseStudyLayout({
         {outcomes && (
           <section className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
             <GsapReveal>
-              <div data-reveal className="case-study-meta-grid grid" style={{ gridTemplateColumns: '1fr 2fr', gap: '48px' }}>
+              <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
                 <span className="font-serif" style={labelStyle}>Outcomes</span>
                 <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '66%' }}>
                   {outcomes}
