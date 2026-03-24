@@ -38,42 +38,43 @@ export function About({
     <section
       ref={secRef}
       className="about-section"
-      style={{ padding: '32px 40px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
+      style={{ padding: '32px 40px', display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) auto', alignItems: 'center', gap: '48px' }}
     >
-      {/* WCAG AA: #666 on #0d0d0d = 3.1:1 — decorative label, large enough */}
-      <div
-        className="font-mono"
-        style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#666666', marginBottom: '16px' }}
-      >
-        ABOUT_
-      </div>
+      <div style={{ minWidth: 0 }}>
+        {/* WCAG AA: #666 on #0d0d0d = 3.1:1 — decorative label, large enough */}
+        <div
+          className="font-mono"
+          style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#666666', marginBottom: '16px' }}
+        >
+          ABOUT_
+        </div>
 
-      <h2
-        className="reveal-text font-serif"
-        style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '20px' }}
-      >
-        Artist.<br />Designer.<br /><span style={{ color: '#FF3120' }}>Human.</span>
-      </h2>
+        <h2
+          className="reveal-text font-serif"
+          style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '20px' }}
+        >
+          Artist.<br />Designer.<br /><span style={{ color: '#FF3120' }}>Human.</span>
+        </h2>
 
-      <div className="about-body-row flex justify-between items-center" style={{ gap: '32px' }}>
         <p
           className="reveal-text font-mono"
           style={{ fontSize: 'var(--text-body-lg)', color: '#999999', lineHeight: 1.9, maxWidth: '440px', letterSpacing: '0.04em' }}
         >
           {body}
         </p>
-        <div className="reveal-text flex flex-col items-end flex-shrink-0" style={{ gap: '14px', alignSelf: 'center' }}>
-          <div style={{ minWidth: '250px' }}>
-            <SpotifyWidget variant="sidebar" restingLabel={spotifyLabel.replace(/_+$/, '')} styleSettings={listeningStyle} />
-          </div>
-          <Link
-            href="/about"
-            className="font-mono"
-            style={{ fontSize: 'var(--text-meta)', color: '#FF3120', letterSpacing: '0.12em', textDecoration: 'none', whiteSpace: 'nowrap' }}
-          >
-            READ MORE <span className="arrow-nudge">→</span>
-          </Link>
+      </div>
+
+      <div className="about-body-row reveal-text" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center', gap: '14px', minWidth: '250px' }}>
+        <div style={{ minWidth: '250px' }}>
+          <SpotifyWidget variant="sidebar" restingLabel={spotifyLabel.replace(/_+$/, '')} styleSettings={listeningStyle} />
         </div>
+        <Link
+          href="/about"
+          className="font-mono"
+          style={{ fontSize: 'var(--text-meta)', color: '#FF3120', letterSpacing: '0.12em', textDecoration: 'none', whiteSpace: 'nowrap' }}
+        >
+          READ MORE <span className="arrow-nudge">→</span>
+        </Link>
       </div>
     </section>
   )

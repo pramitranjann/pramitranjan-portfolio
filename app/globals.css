@@ -305,12 +305,14 @@ button:hover .arrow-nudge-back {
 
   /* About section — reduce side padding */
   .about-section {
+    grid-template-columns: 1fr !important;
     padding: 48px 24px !important;
+    gap: 24px !important;
   }
 
-  /* About body row — stack body text + READ MORE link */
+  /* About card column — stack card + link */
   .about-body-row {
-    flex-direction: column !important;
+    width: 100% !important;
     align-items: flex-start !important;
     gap: 20px !important;
   }

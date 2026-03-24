@@ -239,9 +239,7 @@ export default async function AboutPage() {
               A snapshot of what I'm into this month. Updated manually.
             </p>
             <div data-reveal className="now-grid-mobile" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1px', background: '#1f1f1f', border: '1px solid #1f1f1f' }}>
-              <div style={{ background: '#0d0d0d', padding: '0' }}>
-                <SpotifyWidget variant="sidebar" styleSettings={content.design.listeningCard} />
-              </div>
+              <SpotifyWidget variant="cell" styleSettings={content.design.listeningCard} />
               {content.aboutPage.nowCards.map((card) => (
                 <NowCell key={card.label} label={card.label} value={card.value} sub={card.sub} styleSettings={content.design.nowCards} />
               ))}

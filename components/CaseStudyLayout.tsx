@@ -417,9 +417,10 @@ export function CaseStudyLayout({
           zIndex: 998,
           display: 'flex',
           alignItems: 'stretch',
-          background: 'rgba(17,17,17,0.96)',
-          backdropFilter: 'blur(12px)',
-          border: '1px solid rgba(245, 242, 237, 0.22)',
+          background: 'rgba(13,13,13,0.98)',
+          backdropFilter: 'blur(16px)',
+          border: '1px solid rgba(245, 242, 237, 0.34)',
+          boxShadow: '0 10px 36px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(245, 242, 237, 0.06)',
           opacity: navVisible ? 1 : 0,
           pointerEvents: navVisible ? 'auto' : 'none',
           transition: 'opacity 0.3s ease',
@@ -440,21 +441,22 @@ export function CaseStudyLayout({
               }}
               className="font-mono"
               style={{
-                fontSize: '10px',
+                fontSize: '11px',
                 letterSpacing: '0.14em',
-                color: activeId === item.id ? '#f5f2ed' : '#3a3a3a',
-                padding: '11px 16px',
-                background: 'none',
+                color: activeId === item.id ? '#f5f2ed' : '#9a9a9a',
+                padding: '12px 18px',
+                background: activeId === item.id ? 'rgba(245, 242, 237, 0.08)' : 'none',
                 border: 'none',
                 cursor: 'pointer',
                 position: 'relative',
-                borderRight: i < navItems.length - 1 ? '1px solid rgba(245, 242, 237, 0.12)' : 'none',
-                transition: 'color 0.15s ease',
+                borderRight: i < navItems.length - 1 ? '1px solid rgba(245, 242, 237, 0.16)' : 'none',
+                textShadow: activeId === item.id ? '0 0 10px rgba(245, 242, 237, 0.18)' : 'none',
+                transition: 'color 0.15s ease, background 0.15s ease',
               }}
             >
               {item.label}
               {activeId === item.id && (
-                <span style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '1px', background: '#FF3120' }} />
+                <span style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '2px', background: '#FF3120' }} />
               )}
             </button>
           ))}
