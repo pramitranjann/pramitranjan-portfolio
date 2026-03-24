@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useMotionSettings } from '@/components/MotionSettingsProvider'
+import { useSiteCopy } from '@/components/SiteCopyProvider'
 import Link from 'next/link'
 import { SpotifyWidget } from '@/components/SpotifyWidget'
 import type { ListeningCardStyleSettings } from '@/lib/site-content-schema'
@@ -16,6 +17,7 @@ export function About({
 }) {
   const secRef = useRef<HTMLElement>(null)
   const motion = useMotionSettings()
+  const copy = useSiteCopy().home
 
   useEffect(() => {
     const el = secRef.current
@@ -46,15 +48,14 @@ export function About({
           className="font-mono"
           style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#666666', marginBottom: '16px' }}
         >
-          ABOUT_
+          {copy.aboutEyebrow}
         </div>
 
         <h2
           className="reveal-text font-serif"
           style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '20px' }}
-        >
-          Artist.<br />Designer.<br /><span style={{ color: '#FF3120' }}>Human.</span>
-        </h2>
+          dangerouslySetInnerHTML={{ __html: copy.aboutTitleHtml }}
+        />
 
         <p
           className="reveal-text font-mono"
@@ -64,16 +65,16 @@ export function About({
         </p>
       </div>
 
-      <div className="about-body-row reveal-text" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center', gap: '14px', minWidth: '250px' }}>
-        <div style={{ minWidth: '250px' }}>
+      <div style={{ display: 'grid', alignSelf: 'stretch', minWidth: '250px' }}>
+        <div className="reveal-text" style={{ alignSelf: 'center', minWidth: '250px' }}>
           <SpotifyWidget variant="sidebar" restingLabel={spotifyLabel.replace(/_+$/, '')} styleSettings={listeningStyle} />
         </div>
         <Link
           href="/about"
           className="font-mono"
-          style={{ fontSize: 'var(--text-meta)', color: '#FF3120', letterSpacing: '0.12em', textDecoration: 'none', whiteSpace: 'nowrap' }}
+          style={{ fontSize: 'var(--text-meta)', color: '#FF3120', letterSpacing: '0.12em', textDecoration: 'none', whiteSpace: 'nowrap', justifySelf: 'end', alignSelf: 'end', marginTop: '14px' }}
         >
-          READ MORE <span className="arrow-nudge">→</span>
+          {copy.aboutReadMoreLabel} <span className="arrow-nudge">→</span>
         </Link>
       </div>
     </section>

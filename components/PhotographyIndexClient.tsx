@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Footer } from '@/components/Footer'
 import { Nav } from '@/components/Nav'
+import { useSiteCopy } from '@/components/SiteCopyProvider'
 import { playCardEnter, playNav } from '@/lib/sounds'
 import type { PhotographyCardStyleSettings, PhotographyCity } from '@/lib/site-content-schema'
 
@@ -16,14 +17,16 @@ export function PhotographyIndexClient({
   cities: PhotographyCity[]
   cardStyle: PhotographyCardStyleSettings
 }) {
+  const copy = useSiteCopy().creativePage
+
   return (
     <>
       <Nav />
       <main style={{ paddingTop: '57px' }}>
         <section style={{ padding: '48px 40px' }}>
           <div style={{ marginBottom: '16px' }}>
-            <Link href="/creative" className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#666666', textDecoration: 'none' }} onClick={playNav}>
-              <span className="arrow-nudge-back">←</span> CREATIVE
+            <Link href="/creative" className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#666666', textDecoration: 'none' }} onPointerDown={playNav}>
+              <span className="arrow-nudge-back">←</span> {copy.backLabel}
             </Link>
           </div>
           <h1 className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '40px' }}>
@@ -47,7 +50,7 @@ export function PhotographyIndexClient({
               return city.comingSoon ? (
                 <div key={city.slug} className="h-full">{inner}</div>
               ) : (
-                <Link key={city.slug} href={`/creative/photography/${city.slug}`} className="h-full block" onClick={playCardEnter}>{inner}</Link>
+                <Link key={city.slug} href={`/creative/photography/${city.slug}`} className="h-full block" onPointerDown={playCardEnter}>{inner}</Link>
               )
             })}
           </div>

@@ -25,6 +25,11 @@ export interface EntryItem {
   desc: string
 }
 
+export interface LinkItem {
+  label: string
+  href: string
+}
+
 export interface NowCard {
   label: string
   value: string
@@ -104,6 +109,83 @@ export interface MotionSettings {
   introLiftDuration: number
 }
 
+export interface HeroStageCopy {
+  number: string
+  titleHtml: string
+  body: string
+  footerLabel?: string
+}
+
+export interface HomePageCopy {
+  heroStages: HeroStageCopy[]
+  aboutEyebrow: string
+  aboutTitleHtml: string
+  aboutReadMoreLabel: string
+  photographyEyebrow: string
+  photographyTitleHtml: string
+  photographyBody: string
+  photographyCtaLabel: string
+  contactTitle: string
+  contactAccent: string
+  contactLinks: LinkItem[]
+}
+
+export interface AboutPageCopy {
+  heroEyebrow: string
+  heroTitleHtml: string
+  cvLabel: string
+  scrollLabel: string
+  whoIAmLabel: string
+  onRotationLabel: string
+  experienceLabel: string
+  professionalActivitiesLabel: string
+  educationLabel: string
+  toolsLabel: string
+}
+
+export interface WorkPageCopy {
+  eyebrow: string
+  emptyStateLabel: string
+}
+
+export interface CreativePageCopy {
+  eyebrow: string
+  heroTitle: string
+  heroBody: string
+  photographyLabel: string
+  photographyCount: string
+  mixedMediaLabel: string
+  mixedMediaCount: string
+  brandingLabel: string
+  brandingCount: string
+  mixedMediaIndexTitle: string
+  brandingIndexTitle: string
+  backLabel: string
+  photoBackLabel: string
+}
+
+export interface CaseStudyUiCopy {
+  problemLabel: string
+  roleLabel: string
+  researchLabel: string
+  challengeLabel: string
+  processLabel: string
+  solutionLabel: string
+  outcomesLabel: string
+  keyInsightLabel: string
+  prevLabel: string
+  nextLabel: string
+  navProblemLabel: string
+  navRoleLabel: string
+  navResearchLabel: string
+  navChallengeLabel: string
+  navProcessLabel: string
+  navSolutionLabel: string
+  navOutcomesLabel: string
+  defaultProblem: string
+  defaultRole: string
+}
+
 export interface ProjectLink {
   slug: string
   title: string
@@ -156,8 +238,14 @@ export interface SiteContent {
     whoIAm: string
     experience: EntryItem[]
     professionalActivities: EntryItem[]
+    education: EntryItem[]
     tools: string[]
+    nowHeading: string
+    nowDescription: string
     nowCards: NowCard[]
+    contactTitleHtml: string
+    contactBody: string
+    contactLinks: LinkItem[]
   }
   workPage: {
     heroTitle: string
@@ -176,6 +264,13 @@ export interface SiteContent {
     nowCards: NowCardStyleSettings
     listeningCard: ListeningCardStyleSettings
     motion: MotionSettings
+  }
+  copy: {
+    home: HomePageCopy
+    aboutPage: AboutPageCopy
+    workPage: WorkPageCopy
+    creativePage: CreativePageCopy
+    caseStudy: CaseStudyUiCopy
   }
   caseStudies: CaseStudyContent[]
 }
@@ -209,6 +304,12 @@ function isEntryItem(value: unknown): value is EntryItem {
   if (!value || typeof value !== 'object') return false
   const item = value as Record<string, unknown>
   return isString(item.org) && isString(item.role) && isString(item.date) && isString(item.desc)
+}
+
+function isLinkItem(value: unknown): value is LinkItem {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return isString(item.label) && isString(item.href)
 }
 
 function isNowCard(value: unknown): value is NowCard {
@@ -282,6 +383,101 @@ function isListeningCardStyleSettings(value: unknown): value is ListeningCardSty
     isString(item.cardPadding) &&
     isString(item.artworkSize) &&
     isString(item.progressMetaSize)
+  )
+}
+
+function isHeroStageCopy(value: unknown): value is HeroStageCopy {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return isString(item.number) && isString(item.titleHtml) && isString(item.body) && isOptionalString(item.footerLabel)
+}
+
+function isHomePageCopy(value: unknown): value is HomePageCopy {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return (
+    Array.isArray(item.heroStages) &&
+    item.heroStages.every(isHeroStageCopy) &&
+    isString(item.aboutEyebrow) &&
+    isString(item.aboutTitleHtml) &&
+    isString(item.aboutReadMoreLabel) &&
+    isString(item.photographyEyebrow) &&
+    isString(item.photographyTitleHtml) &&
+    isString(item.photographyBody) &&
+    isString(item.photographyCtaLabel) &&
+    isString(item.contactTitle) &&
+    isString(item.contactAccent) &&
+    Array.isArray(item.contactLinks) &&
+    item.contactLinks.every(isLinkItem)
+  )
+}
+
+function isAboutPageCopy(value: unknown): value is AboutPageCopy {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return (
+    isString(item.heroEyebrow) &&
+    isString(item.heroTitleHtml) &&
+    isString(item.cvLabel) &&
+    isString(item.scrollLabel) &&
+    isString(item.whoIAmLabel) &&
+    isString(item.onRotationLabel) &&
+    isString(item.experienceLabel) &&
+    isString(item.professionalActivitiesLabel) &&
+    isString(item.educationLabel) &&
+    isString(item.toolsLabel)
+  )
+}
+
+function isWorkPageCopy(value: unknown): value is WorkPageCopy {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return isString(item.eyebrow) && isString(item.emptyStateLabel)
+}
+
+function isCreativePageCopy(value: unknown): value is CreativePageCopy {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return (
+    isString(item.eyebrow) &&
+    isString(item.heroTitle) &&
+    isString(item.heroBody) &&
+    isString(item.photographyLabel) &&
+    isString(item.photographyCount) &&
+    isString(item.mixedMediaLabel) &&
+    isString(item.mixedMediaCount) &&
+    isString(item.brandingLabel) &&
+    isString(item.brandingCount) &&
+    isString(item.mixedMediaIndexTitle) &&
+    isString(item.brandingIndexTitle) &&
+    isString(item.backLabel) &&
+    isString(item.photoBackLabel)
+  )
+}
+
+function isCaseStudyUiCopy(value: unknown): value is CaseStudyUiCopy {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return (
+    isString(item.problemLabel) &&
+    isString(item.roleLabel) &&
+    isString(item.researchLabel) &&
+    isString(item.challengeLabel) &&
+    isString(item.processLabel) &&
+    isString(item.solutionLabel) &&
+    isString(item.outcomesLabel) &&
+    isString(item.keyInsightLabel) &&
+    isString(item.prevLabel) &&
+    isString(item.nextLabel) &&
+    isString(item.navProblemLabel) &&
+    isString(item.navRoleLabel) &&
+    isString(item.navResearchLabel) &&
+    isString(item.navChallengeLabel) &&
+    isString(item.navProcessLabel) &&
+    isString(item.navSolutionLabel) &&
+    isString(item.navOutcomesLabel) &&
+    isString(item.defaultProblem) &&
+    isString(item.defaultRole)
   )
 }
 
@@ -375,12 +571,14 @@ export function isSiteContent(value: unknown): value is SiteContent {
   if (!content.workPage || typeof content.workPage !== 'object') return false
   if (!content.photography || typeof content.photography !== 'object') return false
   if (!content.design || typeof content.design !== 'object') return false
+  if (!content.copy || typeof content.copy !== 'object') return false
 
   const home = content.home as Record<string, unknown>
   const aboutPage = content.aboutPage as Record<string, unknown>
   const workPage = content.workPage as Record<string, unknown>
   const photography = content.photography as Record<string, unknown>
   const design = content.design as Record<string, unknown>
+  const copy = content.copy as Record<string, unknown>
 
   return (
     isHomeSection(home.selectedWork) &&
@@ -395,9 +593,17 @@ export function isSiteContent(value: unknown): value is SiteContent {
     aboutPage.experience.every(isEntryItem) &&
     Array.isArray(aboutPage.professionalActivities) &&
     aboutPage.professionalActivities.every(isEntryItem) &&
+    Array.isArray(aboutPage.education) &&
+    aboutPage.education.every(isEntryItem) &&
     isStringArray(aboutPage.tools) &&
+    isString(aboutPage.nowHeading) &&
+    isString(aboutPage.nowDescription) &&
     Array.isArray(aboutPage.nowCards) &&
     aboutPage.nowCards.every(isNowCard) &&
+    isString(aboutPage.contactTitleHtml) &&
+    isString(aboutPage.contactBody) &&
+    Array.isArray(aboutPage.contactLinks) &&
+    aboutPage.contactLinks.every(isLinkItem) &&
     isString(workPage.heroTitle) &&
     isString(workPage.heroBody) &&
     Array.isArray(workPage.projects) &&
@@ -413,6 +619,11 @@ export function isSiteContent(value: unknown): value is SiteContent {
     isNowCardStyleSettings(design.nowCards) &&
     isListeningCardStyleSettings(design.listeningCard) &&
     isMotionSettings(design.motion) &&
+    isHomePageCopy(copy.home) &&
+    isAboutPageCopy(copy.aboutPage) &&
+    isWorkPageCopy(copy.workPage) &&
+    isCreativePageCopy(copy.creativePage) &&
+    isCaseStudyUiCopy(copy.caseStudy) &&
     Array.isArray(content.caseStudies) &&
     content.caseStudies.every(isCaseStudyContent)
   )

@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react'
 import { Footer } from '@/components/Footer'
 import { GsapReveal } from '@/components/GsapReveal'
 import { useMotionSettings } from '@/components/MotionSettingsProvider'
+import { useSiteCopy } from '@/components/SiteCopyProvider'
 import { Nav } from '@/components/Nav'
 import { CreativeListingCard } from '@/components/CreativeListingCard'
 import type { CaseStudyContent, PhotographyCardStyleSettings, PhotographyCity } from '@/lib/site-content-schema'
@@ -35,6 +36,7 @@ export function CreativePageClient({
   const mixedGridRef = useRef<HTMLDivElement>(null)
   const brandingGridRef = useRef<HTMLDivElement>(null)
   const motion = useMotionSettings()
+  const copy = useSiteCopy().creativePage
 
   useEffect(() => {
     const el = eyebrowRef.current
@@ -87,20 +89,20 @@ export function CreativePageClient({
         <section className="creative-hero-section border-b border-divider" style={{ padding: '64px 40px' }}>
           <div ref={eyebrowRef} className="flex items-center" style={{ gap: '10px', marginBottom: '24px' }}>
             <div className="eyebrow-line" style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
-            <span className="eyebrow-label font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>CREATIVE_</span>
+            <span className="eyebrow-label font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>{copy.eyebrow}</span>
           </div>
           <GsapReveal>
             <h1 data-reveal className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '20px' }}>
-              The other half.
+              {copy.heroTitle}
             </h1>
             <p data-reveal className="font-mono" style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.9, maxWidth: '480px' }}>
-              Photography, mixed media, and branding — the work that exists outside of UX.
+              {copy.heroBody}
             </p>
           </GsapReveal>
         </section>
 
         <section className="creative-section border-b border-divider" style={{ padding: '40px' }}>
-          <SectionHeader label="PHOTOGRAPHY" count="01" />
+          <SectionHeader label={copy.photographyLabel} count={copy.photographyCount} />
           <div ref={photoGridRef} className="grid grid-cols-2 md:grid-cols-4" style={{ gap: '16px' }}>
             {cities.map((city) => (
               <CreativeListingCard
@@ -118,7 +120,7 @@ export function CreativePageClient({
         </section>
 
         <section className="creative-section border-b border-divider" style={{ padding: '40px' }}>
-          <SectionHeader label="MIXED MEDIA" count="02" />
+          <SectionHeader label={copy.mixedMediaLabel} count={copy.mixedMediaCount} />
           <div ref={mixedGridRef} className="grid grid-cols-2 md:grid-cols-3" style={{ gap: '16px' }}>
             {mixedMediaProjects.map((project) => (
               <CreativeListingCard
@@ -135,7 +137,7 @@ export function CreativePageClient({
         </section>
 
         <section className="creative-section" style={{ padding: '40px' }}>
-          <SectionHeader label="BRANDING" count="03" />
+          <SectionHeader label={copy.brandingLabel} count={copy.brandingCount} />
           <div ref={brandingGridRef} className="grid grid-cols-2" style={{ gap: '16px' }}>
             {brandingProjects.map((project) => (
               <CreativeListingCard

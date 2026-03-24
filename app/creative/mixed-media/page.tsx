@@ -9,9 +9,9 @@ export default async function MixedMediaPage() {
 
   return (
     <CreativeSectionIndexClient
-      title="Beyond the screen."
+      title={content.copy.creativePage.mixedMediaIndexTitle}
       backHref="/creative"
-      backLabel="CREATIVE"
+      backLabel={content.copy.creativePage.backLabel}
       columnsClass="grid grid-cols-2 md:grid-cols-3"
       projects={projects}
       cardStyle={content.design.photographyCards}

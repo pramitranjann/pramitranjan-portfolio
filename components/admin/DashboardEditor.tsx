@@ -7,7 +7,9 @@ import type {
   CaseStudySection,
   EntryItem,
   GalleryStyleSettings,
+  HeroStageCopy,
   ListeningCardStyleSettings,
+  LinkItem,
   MotionSettings,
   NowCard,
   NowCardStyleSettings,
@@ -23,7 +25,16 @@ type EditorProps = {
   initialContent: SiteContent
 }
 
-type PageKey = 'homepage' | 'about-page' | 'work-page' | 'photography-page' | 'design-system' | 'motion' | `case-study:${string}`
+type PageKey =
+  | 'homepage'
+  | 'about-page'
+  | 'work-page'
+  | 'creative-page'
+  | 'photography-page'
+  | 'case-study-ui'
+  | 'design-system'
+  | 'motion'
+  | `case-study:${string}`
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -458,7 +469,9 @@ export function DashboardEditor({ initialContent }: EditorProps) {
               <SidebarButton active={activePage === 'homepage'} label="Homepage" onClick={() => setActivePage('homepage')} />
               <SidebarButton active={activePage === 'about-page'} label="About Page" onClick={() => setActivePage('about-page')} />
               <SidebarButton active={activePage === 'work-page'} label="Work Page" onClick={() => setActivePage('work-page')} />
+              <SidebarButton active={activePage === 'creative-page'} label="Creative Page" onClick={() => setActivePage('creative-page')} />
               <SidebarButton active={activePage === 'photography-page'} label="Photography Page" onClick={() => setActivePage('photography-page')} />
+              <SidebarButton active={activePage === 'case-study-ui'} label="Case Study UI" onClick={() => setActivePage('case-study-ui')} />
               <SidebarButton active={activePage === 'design-system'} label="Design System" onClick={() => setActivePage('design-system')} />
               <SidebarButton active={activePage === 'motion'} label="Motion" onClick={() => setActivePage('motion')} />
             </SidebarGroup>
@@ -511,8 +524,14 @@ export function DashboardEditor({ initialContent }: EditorProps) {
           {activePage === 'work-page' ? (
             <WorkPageEditor content={content} updateSection={updateSection} />
           ) : null}
+          {activePage === 'creative-page' ? (
+            <CreativePageEditor content={content} updateSection={updateSection} />
+          ) : null}
           {activePage === 'photography-page' ? (
             <PhotographyPageEditor content={content} updateSection={updateSection} />
+          ) : null}
+          {activePage === 'case-study-ui' ? (
+            <CaseStudyUiEditor content={content} updateSection={updateSection} />
           ) : null}
           {activePage === 'design-system' ? (
             <DesignSystemEditor content={content} updateSection={updateSection} />
@@ -542,6 +561,16 @@ function HomepageEditor({
 }) {
   return (
     <>
+      <SectionFrame title="Homepage Hero">
+        <HeroStageListEditor
+          items={content.copy.home.heroStages}
+          onChange={(heroStages) => updateSection('copy', {
+            ...content.copy,
+            home: { ...content.copy.home, heroStages },
+          })}
+        />
+      </SectionFrame>
+
       <SectionFrame title="Homepage">
         <Field label="Selected Work Heading">
           <input
@@ -605,6 +634,26 @@ function HomepageEditor({
       </SectionFrame>
 
       <SectionFrame title="Homepage About Block">
+        <Field label="About Eyebrow">
+          <input
+            value={content.copy.home.aboutEyebrow}
+            onChange={(event) => updateSection('copy', {
+              ...content.copy,
+              home: { ...content.copy.home, aboutEyebrow: event.target.value },
+            })}
+            style={inputStyle()}
+          />
+        </Field>
+        <Field label="About Title HTML">
+          <textarea
+            value={content.copy.home.aboutTitleHtml}
+            onChange={(event) => updateSection('copy', {
+              ...content.copy,
+              home: { ...content.copy.home, aboutTitleHtml: event.target.value },
+            })}
+            style={inputStyle(true)}
+          />
+        </Field>
         <Field label="Body Copy">
           <textarea
             value={content.home.about.body}
@@ -625,6 +674,16 @@ function HomepageEditor({
             style={inputStyle()}
           />
         </Field>
+        <Field label="Read More Label">
+          <input
+            value={content.copy.home.aboutReadMoreLabel}
+            onChange={(event) => updateSection('copy', {
+              ...content.copy,
+              home: { ...content.copy.home, aboutReadMoreLabel: event.target.value },
+            })}
+            style={inputStyle()}
+          />
+        </Field>
         <ListeningCardStyleEditor
           title="Listening Card Style"
           styleSettings={content.design.listeningCard}
@@ -634,6 +693,80 @@ function HomepageEditor({
           title="Supporting Card Style"
           styleSettings={content.design.supportingCards}
           onChange={(styleSettings) => updateSection('design', { ...content.design, supportingCards: styleSettings })}
+        />
+      </SectionFrame>
+
+      <SectionFrame title="Homepage Photography Block">
+        <Field label="Photography Eyebrow">
+          <input
+            value={content.copy.home.photographyEyebrow}
+            onChange={(event) => updateSection('copy', {
+              ...content.copy,
+              home: { ...content.copy.home, photographyEyebrow: event.target.value },
+            })}
+            style={inputStyle()}
+          />
+        </Field>
+        <Field label="Photography Title HTML">
+          <textarea
+            value={content.copy.home.photographyTitleHtml}
+            onChange={(event) => updateSection('copy', {
+              ...content.copy,
+              home: { ...content.copy.home, photographyTitleHtml: event.target.value },
+            })}
+            style={inputStyle(true)}
+          />
+        </Field>
+        <Field label="Photography Body">
+          <textarea
+            value={content.copy.home.photographyBody}
+            onChange={(event) => updateSection('copy', {
+              ...content.copy,
+              home: { ...content.copy.home, photographyBody: event.target.value },
+            })}
+            style={inputStyle(true)}
+          />
+        </Field>
+        <Field label="Photography CTA Label">
+          <input
+            value={content.copy.home.photographyCtaLabel}
+            onChange={(event) => updateSection('copy', {
+              ...content.copy,
+              home: { ...content.copy.home, photographyCtaLabel: event.target.value },
+            })}
+            style={inputStyle()}
+          />
+        </Field>
+      </SectionFrame>
+
+      <SectionFrame title="Homepage Contact Block">
+        <Field label="Contact Title">
+          <input
+            value={content.copy.home.contactTitle}
+            onChange={(event) => updateSection('copy', {
+              ...content.copy,
+              home: { ...content.copy.home, contactTitle: event.target.value },
+            })}
+            style={inputStyle()}
+          />
+        </Field>
+        <Field label="Contact Accent">
+          <input
+            value={content.copy.home.contactAccent}
+            onChange={(event) => updateSection('copy', {
+              ...content.copy,
+              home: { ...content.copy.home, contactAccent: event.target.value },
+            })}
+            style={inputStyle()}
+          />
+        </Field>
+        <LinkItemListEditor
+          title="Contact Links"
+          items={content.copy.home.contactLinks}
+          onChange={(contactLinks) => updateSection('copy', {
+            ...content.copy,
+            home: { ...content.copy.home, contactLinks },
+          })}
         />
       </SectionFrame>
     </>
@@ -650,11 +783,61 @@ function AboutPageEditor({
   return (
     <>
       <SectionFrame title="About Page Hero">
+        <Field label="Hero Eyebrow">
+          <input
+            value={content.copy.aboutPage.heroEyebrow}
+            onChange={(event) => updateSection('copy', {
+              ...content.copy,
+              aboutPage: { ...content.copy.aboutPage, heroEyebrow: event.target.value },
+            })}
+            style={inputStyle()}
+          />
+        </Field>
+        <Field label="Hero Title HTML">
+          <textarea
+            value={content.copy.aboutPage.heroTitleHtml}
+            onChange={(event) => updateSection('copy', {
+              ...content.copy,
+              aboutPage: { ...content.copy.aboutPage, heroTitleHtml: event.target.value },
+            })}
+            style={inputStyle(true)}
+          />
+        </Field>
         <Field label="Hero Body">
           <textarea
             value={content.aboutPage.heroBody}
             onChange={(event) => updateSection('aboutPage', { ...content.aboutPage, heroBody: event.target.value })}
             style={inputStyle(true)}
+          />
+        </Field>
+        <Field label="CV Button Label">
+          <input
+            value={content.copy.aboutPage.cvLabel}
+            onChange={(event) => updateSection('copy', {
+              ...content.copy,
+              aboutPage: { ...content.copy.aboutPage, cvLabel: event.target.value },
+            })}
+            style={inputStyle()}
+          />
+        </Field>
+        <Field label="Scroll Label">
+          <input
+            value={content.copy.aboutPage.scrollLabel}
+            onChange={(event) => updateSection('copy', {
+              ...content.copy,
+              aboutPage: { ...content.copy.aboutPage, scrollLabel: event.target.value },
+            })}
+            style={inputStyle()}
+          />
+        </Field>
+        <Field label="Who I Am Label">
+          <input
+            value={content.copy.aboutPage.whoIAmLabel}
+            onChange={(event) => updateSection('copy', {
+              ...content.copy,
+              aboutPage: { ...content.copy.aboutPage, whoIAmLabel: event.target.value },
+            })}
+            style={inputStyle()}
           />
         </Field>
         <Field label="Who I Am Body">
@@ -664,26 +847,95 @@ function AboutPageEditor({
             style={inputStyle(true)}
           />
         </Field>
+        <Field label="On Rotation Label">
+          <input
+            value={content.copy.aboutPage.onRotationLabel}
+            onChange={(event) => updateSection('copy', {
+              ...content.copy,
+              aboutPage: { ...content.copy.aboutPage, onRotationLabel: event.target.value },
+            })}
+            style={inputStyle()}
+          />
+        </Field>
       </SectionFrame>
 
       <SectionFrame title="About Page Lists">
+        <Field label="Experience Label">
+          <input
+            value={content.copy.aboutPage.experienceLabel}
+            onChange={(event) => updateSection('copy', {
+              ...content.copy,
+              aboutPage: { ...content.copy.aboutPage, experienceLabel: event.target.value },
+            })}
+            style={inputStyle()}
+          />
+        </Field>
         <EntryListEditor
           title="Experience"
           items={content.aboutPage.experience}
           onChange={(items) => updateSection('aboutPage', { ...content.aboutPage, experience: items })}
         />
+        <Field label="Professional Activities Label HTML">
+          <textarea
+            value={content.copy.aboutPage.professionalActivitiesLabel}
+            onChange={(event) => updateSection('copy', {
+              ...content.copy,
+              aboutPage: { ...content.copy.aboutPage, professionalActivitiesLabel: event.target.value },
+            })}
+            style={inputStyle(true)}
+          />
+        </Field>
         <EntryListEditor
           title="Professional Activities"
           items={content.aboutPage.professionalActivities}
           onChange={(items) => updateSection('aboutPage', { ...content.aboutPage, professionalActivities: items })}
         />
+        <Field label="Education Label">
+          <input
+            value={content.copy.aboutPage.educationLabel}
+            onChange={(event) => updateSection('copy', {
+              ...content.copy,
+              aboutPage: { ...content.copy.aboutPage, educationLabel: event.target.value },
+            })}
+            style={inputStyle()}
+          />
+        </Field>
+        <EntryListEditor
+          title="Education"
+          items={content.aboutPage.education}
+          onChange={(items) => updateSection('aboutPage', { ...content.aboutPage, education: items })}
+        />
       </SectionFrame>
 
       <SectionFrame title="About Page Extras">
+        <Field label="Tools Label">
+          <input
+            value={content.copy.aboutPage.toolsLabel}
+            onChange={(event) => updateSection('copy', {
+              ...content.copy,
+              aboutPage: { ...content.copy.aboutPage, toolsLabel: event.target.value },
+            })}
+            style={inputStyle()}
+          />
+        </Field>
         <Field label="Tools (one per line)">
           <textarea
             value={toolsToText(content.aboutPage.tools)}
             onChange={(event) => updateSection('aboutPage', { ...content.aboutPage, tools: textToTools(event.target.value) })}
+            style={inputStyle(true)}
+          />
+        </Field>
+        <Field label="Right Now Heading">
+          <input
+            value={content.aboutPage.nowHeading}
+            onChange={(event) => updateSection('aboutPage', { ...content.aboutPage, nowHeading: event.target.value })}
+            style={inputStyle()}
+          />
+        </Field>
+        <Field label="Right Now Description">
+          <textarea
+            value={content.aboutPage.nowDescription}
+            onChange={(event) => updateSection('aboutPage', { ...content.aboutPage, nowDescription: event.target.value })}
             style={inputStyle(true)}
           />
         </Field>
@@ -701,6 +953,28 @@ function AboutPageEditor({
           onChange={(items) => updateSection('aboutPage', { ...content.aboutPage, nowCards: items })}
         />
       </SectionFrame>
+
+      <SectionFrame title="About Page Contact">
+        <Field label="Contact Title HTML">
+          <textarea
+            value={content.aboutPage.contactTitleHtml}
+            onChange={(event) => updateSection('aboutPage', { ...content.aboutPage, contactTitleHtml: event.target.value })}
+            style={inputStyle(true)}
+          />
+        </Field>
+        <Field label="Contact Body">
+          <textarea
+            value={content.aboutPage.contactBody}
+            onChange={(event) => updateSection('aboutPage', { ...content.aboutPage, contactBody: event.target.value })}
+            style={inputStyle(true)}
+          />
+        </Field>
+        <LinkItemListEditor
+          title="Contact Links"
+          items={content.aboutPage.contactLinks}
+          onChange={(contactLinks) => updateSection('aboutPage', { ...content.aboutPage, contactLinks })}
+        />
+      </SectionFrame>
     </>
   )
 }
@@ -715,6 +989,16 @@ function WorkPageEditor({
   return (
     <>
       <SectionFrame title="Work Page">
+        <Field label="Eyebrow">
+          <input
+            value={content.copy.workPage.eyebrow}
+            onChange={(event) => updateSection('copy', {
+              ...content.copy,
+              workPage: { ...content.copy.workPage, eyebrow: event.target.value },
+            })}
+            style={inputStyle()}
+          />
+        </Field>
         <Field label="Hero Title">
           <input
             value={content.workPage.heroTitle}
@@ -734,6 +1018,16 @@ function WorkPageEditor({
           items={content.workPage.projects}
           onChange={(items) => updateSection('workPage', { ...content.workPage, projects: items })}
         />
+        <Field label="Empty State Label">
+          <input
+            value={content.copy.workPage.emptyStateLabel}
+            onChange={(event) => updateSection('copy', {
+              ...content.copy,
+              workPage: { ...content.copy.workPage, emptyStateLabel: event.target.value },
+            })}
+            style={inputStyle()}
+          />
+        </Field>
         <CardStyleEditor
           title="Work Card Style"
           styleSettings={content.design.supportingCards}
@@ -741,6 +1035,149 @@ function WorkPageEditor({
         />
       </SectionFrame>
     </>
+  )
+}
+
+function CreativePageEditor({
+  content,
+  updateSection,
+}: {
+  content: SiteContent
+  updateSection: <K extends keyof SiteContent>(key: K, value: SiteContent[K]) => void
+}) {
+  return (
+    <SectionFrame title="Creative Page">
+      <Field label="Eyebrow">
+        <input
+          value={content.copy.creativePage.eyebrow}
+          onChange={(event) => updateSection('copy', {
+            ...content.copy,
+            creativePage: { ...content.copy.creativePage, eyebrow: event.target.value },
+          })}
+          style={inputStyle()}
+        />
+      </Field>
+      <Field label="Hero Title">
+        <input
+          value={content.copy.creativePage.heroTitle}
+          onChange={(event) => updateSection('copy', {
+            ...content.copy,
+            creativePage: { ...content.copy.creativePage, heroTitle: event.target.value },
+          })}
+          style={inputStyle()}
+        />
+      </Field>
+      <Field label="Hero Body">
+        <textarea
+          value={content.copy.creativePage.heroBody}
+          onChange={(event) => updateSection('copy', {
+            ...content.copy,
+            creativePage: { ...content.copy.creativePage, heroBody: event.target.value },
+          })}
+          style={inputStyle(true)}
+        />
+      </Field>
+      <Field label="Photography Label">
+        <input
+          value={content.copy.creativePage.photographyLabel}
+          onChange={(event) => updateSection('copy', {
+            ...content.copy,
+            creativePage: { ...content.copy.creativePage, photographyLabel: event.target.value },
+          })}
+          style={inputStyle()}
+        />
+      </Field>
+      <Field label="Photography Count">
+        <input
+          value={content.copy.creativePage.photographyCount}
+          onChange={(event) => updateSection('copy', {
+            ...content.copy,
+            creativePage: { ...content.copy.creativePage, photographyCount: event.target.value },
+          })}
+          style={inputStyle()}
+        />
+      </Field>
+      <Field label="Mixed Media Label">
+        <input
+          value={content.copy.creativePage.mixedMediaLabel}
+          onChange={(event) => updateSection('copy', {
+            ...content.copy,
+            creativePage: { ...content.copy.creativePage, mixedMediaLabel: event.target.value },
+          })}
+          style={inputStyle()}
+        />
+      </Field>
+      <Field label="Mixed Media Count">
+        <input
+          value={content.copy.creativePage.mixedMediaCount}
+          onChange={(event) => updateSection('copy', {
+            ...content.copy,
+            creativePage: { ...content.copy.creativePage, mixedMediaCount: event.target.value },
+          })}
+          style={inputStyle()}
+        />
+      </Field>
+      <Field label="Branding Label">
+        <input
+          value={content.copy.creativePage.brandingLabel}
+          onChange={(event) => updateSection('copy', {
+            ...content.copy,
+            creativePage: { ...content.copy.creativePage, brandingLabel: event.target.value },
+          })}
+          style={inputStyle()}
+        />
+      </Field>
+      <Field label="Branding Count">
+        <input
+          value={content.copy.creativePage.brandingCount}
+          onChange={(event) => updateSection('copy', {
+            ...content.copy,
+            creativePage: { ...content.copy.creativePage, brandingCount: event.target.value },
+          })}
+          style={inputStyle()}
+        />
+      </Field>
+      <Field label="Mixed Media Index Title">
+        <input
+          value={content.copy.creativePage.mixedMediaIndexTitle}
+          onChange={(event) => updateSection('copy', {
+            ...content.copy,
+            creativePage: { ...content.copy.creativePage, mixedMediaIndexTitle: event.target.value },
+          })}
+          style={inputStyle()}
+        />
+      </Field>
+      <Field label="Branding Index Title">
+        <input
+          value={content.copy.creativePage.brandingIndexTitle}
+          onChange={(event) => updateSection('copy', {
+            ...content.copy,
+            creativePage: { ...content.copy.creativePage, brandingIndexTitle: event.target.value },
+          })}
+          style={inputStyle()}
+        />
+      </Field>
+      <Field label="Creative Back Label">
+        <input
+          value={content.copy.creativePage.backLabel}
+          onChange={(event) => updateSection('copy', {
+            ...content.copy,
+            creativePage: { ...content.copy.creativePage, backLabel: event.target.value },
+          })}
+          style={inputStyle()}
+        />
+      </Field>
+      <Field label="Photography Back Label">
+        <input
+          value={content.copy.creativePage.photoBackLabel}
+          onChange={(event) => updateSection('copy', {
+            ...content.copy,
+            creativePage: { ...content.copy.creativePage, photoBackLabel: event.target.value },
+          })}
+          style={inputStyle()}
+        />
+      </Field>
+    </SectionFrame>
   )
 }
 
@@ -778,6 +1215,90 @@ function PhotographyPageEditor({
         onChange={(styleSettings) => updateSection('design', { ...content.design, gallery: styleSettings })}
       />
     </SectionFrame>
+  )
+}
+
+function CaseStudyUiEditor({
+  content,
+  updateSection,
+}: {
+  content: SiteContent
+  updateSection: <K extends keyof SiteContent>(key: K, value: SiteContent[K]) => void
+}) {
+  const ui = content.copy.caseStudy
+
+  function updateCaseStudyCopy(next: typeof ui) {
+    updateSection('copy', { ...content.copy, caseStudy: next })
+  }
+
+  return (
+    <>
+      <SectionFrame title="Case Study Section Labels">
+        <Field label="Problem Label">
+          <input value={ui.problemLabel} onChange={(event) => updateCaseStudyCopy({ ...ui, problemLabel: event.target.value })} style={inputStyle()} />
+        </Field>
+        <Field label="Role Label">
+          <input value={ui.roleLabel} onChange={(event) => updateCaseStudyCopy({ ...ui, roleLabel: event.target.value })} style={inputStyle()} />
+        </Field>
+        <Field label="Research Label">
+          <input value={ui.researchLabel} onChange={(event) => updateCaseStudyCopy({ ...ui, researchLabel: event.target.value })} style={inputStyle()} />
+        </Field>
+        <Field label="Challenge Label">
+          <input value={ui.challengeLabel} onChange={(event) => updateCaseStudyCopy({ ...ui, challengeLabel: event.target.value })} style={inputStyle()} />
+        </Field>
+        <Field label="Process Label">
+          <input value={ui.processLabel} onChange={(event) => updateCaseStudyCopy({ ...ui, processLabel: event.target.value })} style={inputStyle()} />
+        </Field>
+        <Field label="Solution Label">
+          <input value={ui.solutionLabel} onChange={(event) => updateCaseStudyCopy({ ...ui, solutionLabel: event.target.value })} style={inputStyle()} />
+        </Field>
+        <Field label="Outcomes Label">
+          <input value={ui.outcomesLabel} onChange={(event) => updateCaseStudyCopy({ ...ui, outcomesLabel: event.target.value })} style={inputStyle()} />
+        </Field>
+        <Field label="Key Insight Label">
+          <input value={ui.keyInsightLabel} onChange={(event) => updateCaseStudyCopy({ ...ui, keyInsightLabel: event.target.value })} style={inputStyle()} />
+        </Field>
+      </SectionFrame>
+
+      <SectionFrame title="Case Study Nav Labels">
+        <Field label="Nav Problem Label">
+          <input value={ui.navProblemLabel} onChange={(event) => updateCaseStudyCopy({ ...ui, navProblemLabel: event.target.value })} style={inputStyle()} />
+        </Field>
+        <Field label="Nav Role Label">
+          <input value={ui.navRoleLabel} onChange={(event) => updateCaseStudyCopy({ ...ui, navRoleLabel: event.target.value })} style={inputStyle()} />
+        </Field>
+        <Field label="Nav Research Label">
+          <input value={ui.navResearchLabel} onChange={(event) => updateCaseStudyCopy({ ...ui, navResearchLabel: event.target.value })} style={inputStyle()} />
+        </Field>
+        <Field label="Nav Challenge Label">
+          <input value={ui.navChallengeLabel} onChange={(event) => updateCaseStudyCopy({ ...ui, navChallengeLabel: event.target.value })} style={inputStyle()} />
+        </Field>
+        <Field label="Nav Process Label">
+          <input value={ui.navProcessLabel} onChange={(event) => updateCaseStudyCopy({ ...ui, navProcessLabel: event.target.value })} style={inputStyle()} />
+        </Field>
+        <Field label="Nav Solution Label">
+          <input value={ui.navSolutionLabel} onChange={(event) => updateCaseStudyCopy({ ...ui, navSolutionLabel: event.target.value })} style={inputStyle()} />
+        </Field>
+        <Field label="Nav Outcomes Label">
+          <input value={ui.navOutcomesLabel} onChange={(event) => updateCaseStudyCopy({ ...ui, navOutcomesLabel: event.target.value })} style={inputStyle()} />
+        </Field>
+      </SectionFrame>
+
+      <SectionFrame title="Case Study Defaults">
+        <Field label="Previous Label">
+          <input value={ui.prevLabel} onChange={(event) => updateCaseStudyCopy({ ...ui, prevLabel: event.target.value })} style={inputStyle()} />
+        </Field>
+        <Field label="Next Label">
+          <input value={ui.nextLabel} onChange={(event) => updateCaseStudyCopy({ ...ui, nextLabel: event.target.value })} style={inputStyle()} />
+        </Field>
+        <Field label="Default Problem Copy">
+          <textarea value={ui.defaultProblem} onChange={(event) => updateCaseStudyCopy({ ...ui, defaultProblem: event.target.value })} style={inputStyle(true)} />
+        </Field>
+        <Field label="Default Role Copy">
+          <textarea value={ui.defaultRole} onChange={(event) => updateCaseStudyCopy({ ...ui, defaultRole: event.target.value })} style={inputStyle(true)} />
+        </Field>
+      </SectionFrame>
+    </>
   )
 }
 
@@ -1102,6 +1623,104 @@ function ImagePairEditor({
       <Field label={`${label} 2`}>
         <input value={second} onChange={(event) => onChange(toPair(first, event.target.value))} style={inputStyle()} />
       </Field>
+    </div>
+  )
+}
+
+function HeroStageListEditor({
+  items,
+  onChange,
+}: {
+  items: HeroStageCopy[]
+  onChange: (items: HeroStageCopy[]) => void
+}) {
+  return (
+    <div style={{ display: 'grid', gap: '12px' }}>
+      <div className="flex items-center justify-between" style={{ gap: '12px' }}>
+        <span className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#999999', letterSpacing: '0.1em' }}>
+          Hero Stages
+        </span>
+        <button
+          type="button"
+          onClick={() => onChange([...items, { number: String(items.length + 1).padStart(2, '0'), titleHtml: '', body: '', footerLabel: '' }])}
+          className="font-mono"
+          style={{ background: 'transparent', border: '1px solid #2a2a2a', color: '#FF3120', padding: '8px 12px', cursor: 'pointer', letterSpacing: '0.1em' }}
+        >
+          ADD STAGE
+        </button>
+      </div>
+      {items.map((item, index) => (
+        <div key={`${item.number}-${index}`} style={{ border: '1px solid #1f1f1f', padding: '16px', display: 'grid', gap: '12px' }}>
+          <ReorderButtons index={index} length={items.length} onMove={(direction) => onChange(moveItem(items, index, direction))} />
+          <Field label="Stage Number">
+            <input value={item.number} onChange={(event) => onChange(updateAt(items, index, { ...item, number: event.target.value }))} style={inputStyle()} />
+          </Field>
+          <Field label="Title HTML">
+            <textarea value={item.titleHtml} onChange={(event) => onChange(updateAt(items, index, { ...item, titleHtml: event.target.value }))} style={inputStyle(true)} />
+          </Field>
+          <Field label="Body">
+            <textarea value={item.body} onChange={(event) => onChange(updateAt(items, index, { ...item, body: event.target.value }))} style={inputStyle(true)} />
+          </Field>
+          <Field label="Footer Label">
+            <input value={item.footerLabel ?? ''} onChange={(event) => onChange(updateAt(items, index, { ...item, footerLabel: event.target.value || undefined }))} style={inputStyle()} />
+          </Field>
+          <button
+            type="button"
+            onClick={() => onChange(removeAt(items, index))}
+            className="font-mono"
+            style={{ justifySelf: 'start', background: 'transparent', border: '1px solid #2a2a2a', color: '#999999', padding: '8px 12px', cursor: 'pointer', letterSpacing: '0.1em' }}
+          >
+            REMOVE STAGE
+          </button>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function LinkItemListEditor({
+  title,
+  items,
+  onChange,
+}: {
+  title: string
+  items: LinkItem[]
+  onChange: (items: LinkItem[]) => void
+}) {
+  return (
+    <div style={{ display: 'grid', gap: '12px' }}>
+      <div className="flex items-center justify-between" style={{ gap: '12px' }}>
+        <span className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#999999', letterSpacing: '0.1em' }}>
+          {title}
+        </span>
+        <button
+          type="button"
+          onClick={() => onChange([...items, { label: '', href: '' }])}
+          className="font-mono"
+          style={{ background: 'transparent', border: '1px solid #2a2a2a', color: '#FF3120', padding: '8px 12px', cursor: 'pointer', letterSpacing: '0.1em' }}
+        >
+          ADD LINK
+        </button>
+      </div>
+      {items.map((item, index) => (
+        <div key={`${item.label}-${index}`} style={{ border: '1px solid #1f1f1f', padding: '16px', display: 'grid', gap: '12px' }}>
+          <ReorderButtons index={index} length={items.length} onMove={(direction) => onChange(moveItem(items, index, direction))} />
+          <Field label="Label">
+            <input value={item.label} onChange={(event) => onChange(updateAt(items, index, { ...item, label: event.target.value }))} style={inputStyle()} />
+          </Field>
+          <Field label="Href">
+            <input value={item.href} onChange={(event) => onChange(updateAt(items, index, { ...item, href: event.target.value }))} style={inputStyle()} />
+          </Field>
+          <button
+            type="button"
+            onClick={() => onChange(removeAt(items, index))}
+            className="font-mono"
+            style={{ justifySelf: 'start', background: 'transparent', border: '1px solid #2a2a2a', color: '#999999', padding: '8px 12px', cursor: 'pointer', letterSpacing: '0.1em' }}
+          >
+            REMOVE LINK
+          </button>
+        </div>
+      ))}
     </div>
   )
 }

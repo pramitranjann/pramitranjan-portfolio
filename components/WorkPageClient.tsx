@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react'
 import { Footer } from '@/components/Footer'
 import { GsapReveal } from '@/components/GsapReveal'
 import { useMotionSettings } from '@/components/MotionSettingsProvider'
+import { useSiteCopy } from '@/components/SiteCopyProvider'
 import { Nav } from '@/components/Nav'
 import { ProjectCard } from '@/components/ProjectCard'
 import type { CardStyleSettings, WorkProject } from '@/lib/site-content-schema'
@@ -24,6 +25,7 @@ export function WorkPageClient({
   const eyebrowRef = useRef<HTMLDivElement>(null)
   const gridRef = useRef<HTMLDivElement>(null)
   const motion = useMotionSettings()
+  const copy = useSiteCopy().workPage
 
   useEffect(() => {
     const el = eyebrowRef.current
@@ -79,7 +81,7 @@ export function WorkPageClient({
         <section className="work-hero-section border-b border-divider" style={{ padding: '64px 40px' }}>
           <div ref={eyebrowRef} className="flex items-center" style={{ gap: '10px', marginBottom: '24px' }}>
             <div className="eyebrow-line" style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
-            <span className="eyebrow-label font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>WORK_</span>
+            <span className="eyebrow-label font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>{copy.eyebrow}</span>
           </div>
           <GsapReveal>
             <h1 data-reveal className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '20px' }}>
@@ -105,7 +107,7 @@ export function WorkPageClient({
               />
             ))}
             <div className="flex items-center justify-center" style={{ backgroundColor: '#1c1c1c', border: '1px solid #2a2a2a', padding: '16px', minHeight: '160px' }}>
-              <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.14em', color: '#444444', textAlign: 'center' }}>MORE ON THE WAY_</span>
+              <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.14em', color: '#444444', textAlign: 'center' }}>{copy.emptyStateLabel}</span>
             </div>
           </div>
         </section>

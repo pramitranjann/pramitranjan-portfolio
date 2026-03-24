@@ -115,7 +115,7 @@ export function ProjectCard({ title, oneliner, tags, href, variant = 'main', ima
       href={href}
       className="card-link"
       style={{ display: 'block', textDecoration: 'none', height: '100%' }}
-      onClick={playCardEnter}
+      onPointerDown={playCardEnter}
     >
       {inner}
     </Link>

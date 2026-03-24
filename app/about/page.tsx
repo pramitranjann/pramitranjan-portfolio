@@ -7,7 +7,7 @@ import { getSiteContent } from '@/lib/site-content'
 import { AnimatedEyebrow } from '@/components/AnimatedEyebrow'
 import type { NowCardStyleSettings } from '@/lib/site-content-schema'
 
-function CVButton() {
+function CVButton({ label }: { label: string }) {
   return (
     <a
       href="/pramit-ranjan-cv.pdf"
@@ -22,20 +22,19 @@ function CVButton() {
         textDecoration: 'none',
       }}
     >
-      DOWNLOAD CV →
+      {label} →
     </a>
   )
 }
 
 // Eyebrow label used for section columns
-function SectionLabel({ children }: { children: React.ReactNode }) {
+function SectionLabel({ html }: { html: string }) {
   return (
     <span
       className="font-mono"
       style={{ fontSize: 'var(--text-body)', letterSpacing: '0.14em', color: '#f5f2ed', paddingTop: '6px', lineHeight: 1.6 }}
-    >
-      {children}
-    </span>
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
   )
 }
 
@@ -92,6 +91,7 @@ function NowCell({
 
 export default async function AboutPage() {
   const content = await getSiteContent()
+  const copy = content.copy.aboutPage
 
   return (
     <>
@@ -103,17 +103,15 @@ export default async function AboutPage() {
           <GsapReveal>
             {/* Eyebrow */}
             <div data-reveal>
-              <AnimatedEyebrow label="ABOUT_" />
+              <AnimatedEyebrow label={copy.heroEyebrow} />
             </div>
             {/* H1 */}
             <h1
               data-reveal
               className="font-serif"
               style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '28px' }}
-            >
-              Artist. Designer.{' '}
-              <span style={{ color: '#FF3120' }}>Human.</span>
-            </h1>
+              dangerouslySetInnerHTML={{ __html: copy.heroTitleHtml }}
+            />
             {/* Body LG */}
             <p
               data-reveal
@@ -123,9 +121,9 @@ export default async function AboutPage() {
               {content.aboutPage.heroBody}
             </p>
             <div data-reveal className="flex items-center justify-between">
-              <CVButton />
+              <CVButton label={copy.cvLabel} />
               <span className="font-mono select-none" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.14em', color: '#666666' }}>
-                SCROLL ↓
+                {copy.scrollLabel}
               </span>
             </div>
           </GsapReveal>
@@ -135,14 +133,14 @@ export default async function AboutPage() {
         <section className="border-b border-divider about-who-sidebar" style={{ display: 'grid', gridTemplateColumns: '1fr 320px' }}>
           <div style={{ padding: '28px 40px', borderRight: '1px solid #1f1f1f' }}>
             <GsapReveal>
-              <span data-reveal className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#666666', display: 'block', marginBottom: '12px' }}>WHO I AM_</span>
+              <span data-reveal className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#666666', display: 'block', marginBottom: '12px' }}>{copy.whoIAmLabel}</span>
               <p data-reveal className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.03em', color: '#999999', lineHeight: 1.8 }}>
                 {content.aboutPage.whoIAm}
               </p>
             </GsapReveal>
           </div>
           <div style={{ padding: '28px 24px' }}>
-            <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#666666', display: 'block', marginBottom: '10px' }}>ON ROTATION_</span>
+            <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#666666', display: 'block', marginBottom: '10px' }}>{copy.onRotationLabel}</span>
             <SpotifyWidget variant="sidebar" styleSettings={content.design.listeningCard} />
           </div>
         </section>
@@ -151,7 +149,7 @@ export default async function AboutPage() {
         <section className="border-b border-divider about-page-section" style={{ padding: '56px 40px' }}>
           <GsapReveal>
             <div data-reveal className="about-page-grid grid" style={{ gridTemplateColumns: '160px 1fr', gap: '48px' }}>
-              <SectionLabel>EXPERIENCE_</SectionLabel>
+              <SectionLabel html={copy.experienceLabel} />
               <EntryList items={content.aboutPage.experience} />
             </div>
           </GsapReveal>
@@ -161,7 +159,7 @@ export default async function AboutPage() {
         <section className="border-b border-divider about-page-section" style={{ padding: '56px 40px' }}>
           <GsapReveal>
             <div data-reveal className="about-page-grid grid" style={{ gridTemplateColumns: '160px 1fr', gap: '48px' }}>
-              <SectionLabel>PROFESSIONAL<br />ACTIVITIES</SectionLabel>
+              <SectionLabel html={copy.professionalActivitiesLabel} />
               <EntryList items={content.aboutPage.professionalActivities} />
             </div>
           </GsapReveal>
@@ -171,33 +169,8 @@ export default async function AboutPage() {
         <section className="border-b border-divider about-page-section" style={{ padding: '56px 40px' }}>
           <GsapReveal>
             <div data-reveal className="about-page-grid grid" style={{ gridTemplateColumns: '160px 1fr', gap: '48px' }}>
-              <SectionLabel>EDUCATION_</SectionLabel>
-              <div className="flex flex-col" style={{ gap: '40px' }}>
-                <div>
-                  <h3 className="font-serif" style={{ fontSize: 'var(--text-h3)', fontStyle: 'italic', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.2, marginBottom: '8px' }}>
-                    Savannah College of Art and Design (SCAD)
-                  </h3>
-                  <div className="flex items-center justify-between" style={{ gap: '16px', marginBottom: '12px' }}>
-                    <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#FF3120' }}>BFA, UX DESIGN</span>
-                    <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#999999' }}>2025 — PRESENT</span>
-                  </div>
-                  <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.03em', color: '#999999', lineHeight: 1.8 }}>
-                    Bachelor of Fine Arts in UX Design. Freshman year. Coursework spans interaction design, user research, prototyping, and design systems.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="font-serif" style={{ fontSize: 'var(--text-h3)', fontStyle: 'italic', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.2, marginBottom: '8px' }}>
-                    Garden International School
-                  </h3>
-                  <div className="flex items-center justify-between" style={{ gap: '16px', marginBottom: '12px' }}>
-                    <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#FF3120' }}>A LEVELS</span>
-                    <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#999999' }}>SEP 2023 — JUN 2025</span>
-                  </div>
-                  <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.03em', color: '#999999', lineHeight: 1.8 }}>
-                    Photography · Design and Technology · Business Studies
-                  </p>
-                </div>
-              </div>
+              <SectionLabel html={copy.educationLabel} />
+              <EntryList items={content.aboutPage.education} />
             </div>
           </GsapReveal>
         </section>
@@ -206,7 +179,7 @@ export default async function AboutPage() {
         <section className="border-b border-divider about-page-section" style={{ padding: '56px 40px' }}>
           <GsapReveal>
             <div data-reveal className="about-page-grid grid" style={{ gridTemplateColumns: '160px 1fr', gap: '48px' }}>
-              <SectionLabel>TOOLS</SectionLabel>
+              <SectionLabel html={copy.toolsLabel} />
               <div className="flex flex-wrap" style={{ gap: '8px' }}>
                 {content.aboutPage.tools.map((tool) => (
                   <span
@@ -233,10 +206,10 @@ export default async function AboutPage() {
           <GsapReveal>
             <div data-reveal className="flex items-center" style={{ gap: '10px', marginBottom: '8px' }}>
               <div style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
-              <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>RIGHT NOW_</span>
+              <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>{content.aboutPage.nowHeading}</span>
             </div>
             <p data-reveal className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.04em', color: '#666666', lineHeight: 1.8, marginBottom: '24px' }}>
-              A snapshot of what I'm into this month. Updated manually.
+              {content.aboutPage.nowDescription}
             </p>
             <div data-reveal className="now-grid-mobile" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1px', background: '#1f1f1f', border: '1px solid #1f1f1f' }}>
               <SpotifyWidget variant="cell" styleSettings={content.design.listeningCard} />
@@ -255,33 +228,33 @@ export default async function AboutPage() {
                 data-reveal
                 className="font-serif"
                 style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '20px' }}
-              >
-                Let's make something{' '}
-                <span style={{ color: '#FF3120' }}>worth making.</span>
-              </h2>
+                dangerouslySetInnerHTML={{ __html: content.aboutPage.contactTitleHtml }}
+              />
               <p
                 data-reveal
                 className="font-mono"
                 style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: '#666666', lineHeight: 1.9, marginBottom: '36px' }}
               >
-                Or just say hello. Either works.
+                {content.aboutPage.contactBody}
               </p>
               <div data-reveal className="flex items-center" style={{ gap: '16px', flexWrap: 'wrap' }}>
-                <a
-                  href="https://www.instagram.com/pramitranjann/"
-                  className="font-mono"
-                  style={{
-                    fontSize: 'var(--text-meta)',
-                    letterSpacing: '0.14em',
-                    color: '#FF3120',
-                    border: '1px solid #FF3120',
-                    padding: '10px 20px',
-                    textDecoration: 'none',
-                  }}
-                >
-                  SAY HELLO →
-                </a>
-                <CVButton />
+                {content.aboutPage.contactLinks.map((link, index) => (
+                  <a
+                    key={`${link.label}-${link.href}`}
+                    href={link.href}
+                    className="font-mono"
+                    style={{
+                      fontSize: 'var(--text-meta)',
+                      letterSpacing: '0.14em',
+                      color: index === 0 ? '#FF3120' : '#999999',
+                      border: index === 0 ? '1px solid #FF3120' : '1px solid #1f1f1f',
+                      padding: '10px 20px',
+                      textDecoration: 'none',
+                    }}
+                  >
+                    {link.label}{index === 0 ? ' →' : ''}
+                  </a>
+                ))}
               </div>
             </GsapReveal>
           </div>

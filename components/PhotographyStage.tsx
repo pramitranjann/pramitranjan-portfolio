@@ -1,5 +1,8 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
+import { useSiteCopy } from '@/components/SiteCopyProvider'
 
 const FRAME_W = 124
 const FRAME_H = 268
@@ -26,6 +29,8 @@ function Holes() {
 }
 
 export function PhotographyStage() {
+  const copy = useSiteCopy().home
+
   return (
     <section className="photography-section" style={{
       borderTop: '1px solid #1f1f1f',
@@ -42,17 +47,19 @@ export function PhotographyStage() {
         <div>
           <div className="flex items-center" style={{ gap: '10px', marginBottom: '22px' }}>
             <div style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
-            <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.18em', color: '#FF3120' }}>THE EYE CAME FIRST.</span>
+            <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.18em', color: '#FF3120' }}>{copy.photographyEyebrow}</span>
           </div>
-          <h2 className="font-serif" style={{ fontSize: 'var(--text-h2)', fontWeight: 400, fontStyle: 'italic', color: '#f5f2ed', lineHeight: 1.1, marginBottom: '24px' }}>
-            Before <span style={{ color: '#FF3120' }}>Figma,</span><br />there was <span style={{ color: '#FF3120' }}>film.</span>
-          </h2>
+          <h2
+            className="font-serif"
+            style={{ fontSize: 'var(--text-h2)', fontWeight: 400, fontStyle: 'italic', color: '#f5f2ed', lineHeight: 1.1, marginBottom: '24px' }}
+            dangerouslySetInnerHTML={{ __html: copy.photographyTitleHtml }}
+          />
           <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.06em', color: '#999999', lineHeight: 1.9, maxWidth: '340px' }}>
-            Street photography across Southeast Asia. Shot on 35mm and medium format. Always looking.
+            {copy.photographyBody}
           </p>
         </div>
         <Link href="/creative/photography" className="font-mono" style={{ display: 'inline-block', marginTop: '24px', fontSize: '10px', color: '#FF3120', letterSpacing: '0.12em', textDecoration: 'none' }}>
-          VIEW ALL →
+          {copy.photographyCtaLabel} →
         </Link>
       </div>
 

@@ -59,5 +59,5 @@ export function CreativeListingCard({
     </div>
   )
 
-  return comingSoon || !href ? <div className="h-full">{inner}</div> : <Link href={href} className="h-full block" onClick={playCardEnter}>{inner}</Link>
+  return comingSoon || !href ? <div className="h-full">{inner}</div> : <Link href={href} className="h-full block" onPointerDown={playCardEnter}>{inner}</Link>
 }

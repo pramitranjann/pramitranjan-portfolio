@@ -8,6 +8,7 @@
 
 let _ctx: AudioContext | null = null
 let _unlocking: Promise<void> | null = null
+const IMMEDIATE_SOUND_WINDOW_MS = 120
 
 function getCtx(): AudioContext | null {
   if (typeof window === 'undefined') return null
@@ -108,18 +109,47 @@ async function withRunningCtx(run: (ctx: AudioContext) => void) {
   run(ctx)
 }
 
+async function withImmediateCtx(run: (ctx: AudioContext) => void) {
+  const ctx = getCtx()
+  if (!ctx) return
+
+  const startedAt = typeof performance !== 'undefined' ? performance.now() : Date.now()
+
+  if (ctx.state !== 'running') {
+    if (!_unlocking) {
+      _unlocking = unlockCtx().finally(() => {
+        _unlocking = null
+      })
+    }
+    await _unlocking
+  }
+
+  if (ctx.state !== 'running') return
+
+  const finishedAt = typeof performance !== 'undefined' ? performance.now() : Date.now()
+  if (finishedAt - startedAt > IMMEDIATE_SOUND_WINDOW_MS) return
+
+  run(ctx)
+}
+
+function withHotCtx(run: (ctx: AudioContext) => void) {
+  const ctx = getCtx()
+  if (!ctx || ctx.state !== 'running') return
+  run(ctx)
+}
+
 const OFFSET = 0.02
 
 // Single clean tone — nav / back links
 export function playNav() {
-  void withRunningCtx((ctx) => {
+  void withImmediateCtx((ctx) => {
     tone(ctx, 1100, 0.09, ctx.currentTime + OFFSET, 0.008, 0.09)
   })
 }
 
 // Two-tone slide — lightbox frame change
 export function playLightboxNav() {
-  void withRunningCtx((ctx) => {
+  void withImmediateCtx((ctx) => {
     const t = ctx.currentTime + OFFSET
     tone(ctx, 1050, 0.07, t,        0.008, 0.12)
     tone(ctx, 880,  0.05, t + 0.06, 0.008, 0.10)
@@ -128,7 +158,7 @@ export function playLightboxNav() {
 
 // Ascending pair — entering a project card
 export function playCardEnter() {
-  void withRunningCtx((ctx) => {
+  void withImmediateCtx((ctx) => {
     const t = ctx.currentTime + OFFSET
     tone(ctx, 880,  0.08, t,         0.008, 0.09)
     tone(ctx, 1320, 0.07, t + 0.055, 0.008, 0.10)
@@ -137,7 +167,7 @@ export function playCardEnter() {
 
 // Soft layered arrival — new page settled
 export function playPageArrive() {
-  void withRunningCtx((ctx) => {
+  withHotCtx((ctx) => {
     const t = ctx.currentTime + OFFSET
     tone(ctx, 660, 0.05, t,        0.04, 0.22)
     tone(ctx, 990, 0.03, t + 0.03, 0.04, 0.18)
@@ -147,7 +177,7 @@ export function playPageArrive() {
 // Soft typewriter tick — intro animation keystroke (P or R)
 // Fires from setTimeout so only plays if context already running (iOS: silent on first load)
 export function playIntroKey(pitch: 'P' | 'R') {
-  void withRunningCtx((ctx) => {
+  withHotCtx((ctx) => {
     const freq = pitch === 'P' ? 820 : 960
     tone(ctx, freq, 0.06, ctx.currentTime + 0.01, 0.006, 0.07)
   })
@@ -155,7 +185,7 @@ export function playIntroKey(pitch: 'P' | 'R') {
 
 // Subtle lift tone — curtain begins to rise
 export function playIntroLift() {
-  void withRunningCtx((ctx) => {
+  withHotCtx((ctx) => {
     const t = ctx.currentTime + 0.01
     tone(ctx, 440, 0.04, t,        0.06, 0.30)
     tone(ctx, 660, 0.03, t + 0.08, 0.04, 0.25)

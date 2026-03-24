@@ -26,7 +26,7 @@ export function Nav() {
         href="/"
         className="font-mono"
         style={{ fontSize: '16px', letterSpacing: '0.14em', color: '#FF3120', textDecoration: 'none' }}
-        onClick={playNav}
+        onPointerDown={playNav}
       >
         PR
       </Link>
@@ -39,7 +39,7 @@ export function Nav() {
               href={href}
               className={`nav-link font-mono${active ? ' active' : ''}`}
               style={{ fontSize: '13px', letterSpacing: '0.14em', textDecoration: 'none' }}
-              onClick={playNav}
+              onPointerDown={playNav}
             >
               {label}
             </Link>

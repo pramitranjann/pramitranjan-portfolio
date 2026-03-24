@@ -9,9 +9,9 @@ export default async function BrandingPage() {
 
   return (
     <CreativeSectionIndexClient
-      title="Identity work."
+      title={content.copy.creativePage.brandingIndexTitle}
       backHref="/creative"
-      backLabel="CREATIVE"
+      backLabel={content.copy.creativePage.backLabel}
       columnsClass="grid grid-cols-2"
       projects={projects}
       cardStyle={content.design.photographyCards}

@@ -6,6 +6,7 @@ import { Nav } from './Nav'
 import { Footer } from './Footer'
 import { RuleLabel } from './RuleLabel'
 import { ReadingProgress } from './ReadingProgress'
+import { useSiteCopy } from '@/components/SiteCopyProvider'
 import { playNav } from '@/lib/sounds'
 import { GsapReveal } from './GsapReveal'
 
@@ -77,15 +78,16 @@ export function CaseStudyLayout({
   heroImage, researchImage, challengeImages, solutionHeroImage, solutionImages,
 }: CaseStudyLayoutProps) {
   const basePath = backHref
+  const copy = useSiteCopy().caseStudy
 
   const navItems = [
-    { id: 'sec-problem',  label: 'PROBLEM_',   show: true },
-    { id: 'sec-role',     label: 'MY ROLE_',   show: true },
-    { id: 'sec-research', label: 'RESEARCH_',  show: !!research },
-    { id: 'sec-challenge',label: 'CHALLENGE_', show: !!challenge },
-    { id: 'sec-process',  label: 'PROCESS_',   show: !!(process || usabilityTesting) },
-    { id: 'sec-solution', label: 'SOLUTION_',  show: true },
-    { id: 'sec-outcomes', label: 'OUTCOMES_',  show: !!outcomes },
+    { id: 'sec-problem', label: copy.navProblemLabel, show: true },
+    { id: 'sec-role', label: copy.navRoleLabel, show: true },
+    { id: 'sec-research', label: copy.navResearchLabel, show: !!research },
+    { id: 'sec-challenge', label: copy.navChallengeLabel, show: !!challenge },
+    { id: 'sec-process', label: copy.navProcessLabel, show: !!(process || usabilityTesting) },
+    { id: 'sec-solution', label: copy.navSolutionLabel, show: true },
+    { id: 'sec-outcomes', label: copy.navOutcomesLabel, show: !!outcomes },
   ].filter(item => item.show)
 
   const [navVisible, setNavVisible] = useState(false)
@@ -132,7 +134,7 @@ export function CaseStudyLayout({
       window.removeEventListener('scroll', onScroll)
       if (lockTimer.current) clearTimeout(lockTimer.current)
     }
-  }, [])
+  }, [copy.navChallengeLabel, copy.navOutcomesLabel, copy.navProblemLabel, copy.navProcessLabel, copy.navResearchLabel, copy.navRoleLabel, copy.navSolutionLabel])
 
   return (
     <>
@@ -146,7 +148,7 @@ export function CaseStudyLayout({
             href={backHref}
             className="font-mono"
             style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#666666', textDecoration: 'none' }}
-            onClick={playNav}
+            onPointerDown={playNav}
           >
             <span className="arrow-nudge-back">←</span> {backLabel}
           </Link>
@@ -182,16 +184,16 @@ export function CaseStudyLayout({
         </section>
 
         {/* Problem */}
-        <section id="sec-problem" data-section="PROBLEM_" className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
+        <section id="sec-problem" data-section={copy.problemLabel} className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
           <GsapReveal>
             <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
-              <span className="font-mono" style={labelStyle}>PROBLEM_</span>
+              <span className="font-mono" style={labelStyle}>{copy.problemLabel}</span>
               <div style={{ maxWidth: '640px' }}>
                 {problemHeadline && (
                   <p className="font-mono" style={headlineStyle}>{problemHeadline}</p>
                 )}
                 <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8 }}>
-                  {problem ?? 'This project focused on understanding user needs and translating them into a cohesive design solution. Through research, ideation, and iteration, the final product addresses real problems with intentional design decisions.'}
+                  {problem ?? copy.defaultProblem}
                 </p>
               </div>
             </div>
@@ -199,16 +201,16 @@ export function CaseStudyLayout({
         </section>
 
         {/* My Role */}
-        <section id="sec-role" data-section="MY ROLE_" className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
+        <section id="sec-role" data-section={copy.roleLabel} className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
           <GsapReveal>
             <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
-              <span className="font-mono" style={labelStyle}>MY ROLE_</span>
+              <span className="font-mono" style={labelStyle}>{copy.roleLabel}</span>
               <div>
                 {roleHeadline && (
                   <p className="font-mono" style={headlineStyle}>{roleHeadline}</p>
                 )}
                 <p className="case-study-body font-mono mb-6" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '640px' }}>
-                  {role ?? 'Led end-to-end UX design including research planning, synthesis, interaction design, and high-fidelity prototyping.'}
+                  {role ?? copy.defaultRole}
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {tags.map((tag) => (
@@ -234,10 +236,10 @@ export function CaseStudyLayout({
 
         {/* Research */}
         {research && (
-          <section id="sec-research" data-section="RESEARCH_" className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
+          <section id="sec-research" data-section={copy.researchLabel} className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
             <GsapReveal>
               <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
-                <span className="font-mono" style={labelStyle}>RESEARCH_</span>
+                <span className="font-mono" style={labelStyle}>{copy.researchLabel}</span>
                 <div style={{ maxWidth: '640px' }}>
                   {researchHeadline && (
                     <p className="font-mono" style={headlineStyle}>{researchHeadline}</p>
@@ -267,17 +269,17 @@ export function CaseStudyLayout({
               {pullQuote}
             </p>
             <p className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', color: '#FF3120', letterSpacing: '0.16em', marginTop: '16px' }}>
-              KEY INSIGHT_
+              {copy.keyInsightLabel}
             </p>
           </div>
         )}
 
         {/* Challenge */}
         {challenge && (
-          <section id="sec-challenge" data-section="CHALLENGE_" className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
+          <section id="sec-challenge" data-section={copy.challengeLabel} className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
             <GsapReveal>
               <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
-                <span className="font-mono" style={labelStyle}>CHALLENGE_</span>
+                <span className="font-mono" style={labelStyle}>{copy.challengeLabel}</span>
                 <div style={{ maxWidth: '640px' }}>
                   {challengeHeadline && (
                     <p className="font-mono" style={headlineStyle}>{challengeHeadline}</p>
@@ -303,10 +305,10 @@ export function CaseStudyLayout({
 
         {/* Process */}
         {(process || usabilityTesting) && (
-          <section id="sec-process" data-section="PROCESS_" className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
+          <section id="sec-process" data-section={copy.processLabel} className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
             <GsapReveal>
               <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
-                <span className="font-mono" style={labelStyle}>PROCESS_</span>
+                <span className="font-mono" style={labelStyle}>{copy.processLabel}</span>
                 <div>
                   {processHeadline && (
                     <p className="font-mono" style={{ ...headlineStyle, maxWidth: '640px' }}>{processHeadline}</p>
@@ -328,10 +330,10 @@ export function CaseStudyLayout({
         )}
 
         {/* Solution */}
-        <section id="sec-solution" data-section="SOLUTION_" className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
+        <section id="sec-solution" data-section={copy.solutionLabel} className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
           <GsapReveal>
             <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
-              <span className="font-mono" style={labelStyle}>SOLUTION_</span>
+              <span className="font-mono" style={labelStyle}>{copy.solutionLabel}</span>
               <div style={{ maxWidth: '640px' }}>
                 {solutionHeadline && (
                   <p className="font-mono" style={headlineStyle}>{solutionHeadline}</p>
@@ -361,10 +363,10 @@ export function CaseStudyLayout({
 
         {/* Outcomes */}
         {outcomes && (
-          <section id="sec-outcomes" data-section="OUTCOMES_" className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
+          <section id="sec-outcomes" data-section={copy.outcomesLabel} className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
             <GsapReveal>
               <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
-                <span className="font-mono" style={labelStyle}>OUTCOMES_</span>
+                <span className="font-mono" style={labelStyle}>{copy.outcomesLabel}</span>
                 <div style={{ maxWidth: '640px' }}>
                   {outcomesHeadline && (
                     <p className="font-mono" style={headlineStyle}>{outcomesHeadline}</p>
@@ -382,9 +384,9 @@ export function CaseStudyLayout({
         <div className="grid grid-cols-2 border-b border-divider">
           <div className="case-study-prev-next border-r border-divider" style={{ padding: '28px 40px' }}>
             {prev ? (
-              <Link href={`${basePath}/${prev.slug}`} className="block" onClick={playNav}>
+              <Link href={`${basePath}/${prev.slug}`} className="block" onPointerDown={playNav}>
                 <p className="font-mono mb-2" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.12em', color: '#FF3120' }}>
-                  <span className="arrow-nudge-back">←</span> PREV
+                  <span className="arrow-nudge-back">←</span> {copy.prevLabel}
                 </p>
                 <p className="font-serif" style={{ fontSize: 'var(--text-body)', fontWeight: 400, color: '#666666' }}>
                   {prev.title}
@@ -396,9 +398,9 @@ export function CaseStudyLayout({
           </div>
           <div className="case-study-prev-next text-right" style={{ padding: '28px 40px' }}>
             {next ? (
-              <Link href={`${basePath}/${next.slug}`} className="block" onClick={playNav}>
+              <Link href={`${basePath}/${next.slug}`} className="block" onPointerDown={playNav}>
                 <p className="font-mono mb-2" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.12em', color: '#FF3120' }}>
-                  NEXT <span className="arrow-nudge">→</span>
+                  {copy.nextLabel} <span className="arrow-nudge">→</span>
                 </p>
                 <p className="font-serif" style={{ fontSize: 'var(--text-body)', fontWeight: 400, color: '#666666' }}>
                   {next.title}

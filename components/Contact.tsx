@@ -1,16 +1,12 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { useMotionSettings } from '@/components/MotionSettingsProvider'
-
-const socialLinks = [
-  { label: 'LINKEDIN',  href: 'https://www.linkedin.com/in/pramitranjann/' },
-  { label: 'GMAIL',     href: 'mailto:pramit@pramitranjann.com' },
-  { label: 'INSTAGRAM', href: 'https://www.instagram.com/pramitranjann/' },
-]
+import { useSiteCopy } from '@/components/SiteCopyProvider'
 
 export function Contact() {
   const secRef = useRef<HTMLElement>(null)
   const motion = useMotionSettings()
+  const copy = useSiteCopy().home
 
   useEffect(() => {
     const el = secRef.current
@@ -38,17 +34,17 @@ export function Contact() {
         className="reveal-text font-serif italic"
         style={{ fontSize: 'clamp(32px, 6vw, 52px)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.1 }}
       >
-        You made it this far.
+        {copy.contactTitle}
       </div>
       <div
         className="reveal-text font-serif italic"
         style={{ fontSize: 'clamp(32px, 6vw, 52px)', fontWeight: 400, color: '#FF3120', lineHeight: 1.1, marginBottom: '40px' }}
       >
-        Say hello.
+        {copy.contactAccent}
       </div>
 
       <div className="reveal-text flex justify-center" style={{ gap: '28px' }}>
-        {socialLinks.map(({ label, href }) => (
+        {copy.contactLinks.map(({ label, href }) => (
           <a
             key={label}
             href={href}

@@ -3,6 +3,7 @@ import type { CSSProperties } from 'react'
 import { DM_Serif_Display, DM_Mono } from 'next/font/google'
 import './globals.css'
 import { MotionSettingsProvider } from '@/components/MotionSettingsProvider'
+import { SiteCopyProvider } from '@/components/SiteCopyProvider'
 import { SoundRouteListener } from '@/components/SoundRouteListener'
 import { ScrollToTopOnRouteChange } from '@/components/ScrollToTopOnRouteChange'
 import { getSiteContent } from '@/lib/site-content'
@@ -61,7 +62,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <SoundRouteListener />
         <ScrollToTopOnRouteChange />
         <MotionSettingsProvider settings={motion}>
-          {children}
+          <SiteCopyProvider copy={content.copy}>
+            {children}
+          </SiteCopyProvider>
         </MotionSettingsProvider>
       </body>
     </html>

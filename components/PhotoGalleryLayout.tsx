@@ -6,6 +6,8 @@ import { AnimatePresence } from 'motion/react'
 import { Nav } from './Nav'
 import { Footer } from './Footer'
 import { PhotoLightbox } from './PhotoLightbox'
+import { useSiteCopy } from '@/components/SiteCopyProvider'
+import { playNav } from '@/lib/sounds'
 import type { GalleryStyleSettings } from '@/lib/site-content-schema'
 
 interface PhotoGalleryLayoutProps {
@@ -18,6 +20,7 @@ interface PhotoGalleryLayoutProps {
 export function PhotoGalleryLayout({ city, descriptor, images, styleSettings }: PhotoGalleryLayoutProps) {
   const [selected, setSelected] = useState<number | null>(null)
   const [direction, setDirection] = useState(1)
+  const copy = useSiteCopy().creativePage
 
   function open(i: number) { setSelected(i) }
   function close() { setSelected(null) }
@@ -36,8 +39,8 @@ export function PhotoGalleryLayout({ city, descriptor, images, styleSettings }: 
       <main style={{ paddingTop: '57px' }}>
         <section style={{ padding: '48px 40px' }}>
           <div style={{ marginBottom: '16px' }}>
-            <Link href="/creative/photography" className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#666666', textDecoration: 'none' }}>
-              <span className="arrow-nudge-back">←</span> PHOTOGRAPHY
+            <Link href="/creative/photography" className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#666666', textDecoration: 'none' }} onPointerDown={playNav}>
+              <span className="arrow-nudge-back">←</span> {copy.photoBackLabel}
             </Link>
           </div>
           <h1 className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '8px' }}>

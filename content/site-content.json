@@ -118,7 +118,23 @@
         "desc": "Redesigned the Passio Go app using Figma Make — exploring how design ideology is shifting in the age of AI."
       }
     ],
+    "education": [
+      {
+        "org": "Savannah College of Art and Design (SCAD)",
+        "role": "BFA, UX DESIGN",
+        "date": "2025 — PRESENT",
+        "desc": "Bachelor of Fine Arts in UX Design. Freshman year. Coursework spans interaction design, user research, prototyping, and design systems."
+      },
+      {
+        "org": "Garden International School",
+        "role": "A LEVELS",
+        "date": "SEP 2023 — JUN 2025",
+        "desc": "Photography · Design and Technology · Business Studies"
+      }
+    ],
     "tools": ["FIGMA", "ADOBE CREATIVE SUITE", "CLAUDE CODE", "VIBE CODING"],
+    "nowHeading": "RIGHT NOW_",
+    "nowDescription": "A snapshot of what I'm into this month. Updated manually.",
     "nowCards": [
       {
         "label": "MOVING_",
@@ -134,6 +150,18 @@
         "label": "BUILDING_",
         "value": "This portfolio (obviously)",
         "sub": "Plus Albers — a colour theory tool."
+      }
+    ],
+    "contactTitleHtml": "Let's make something <span style=\"color: #FF3120\">worth making.</span>",
+    "contactBody": "Or just say hello. Either works.",
+    "contactLinks": [
+      {
+        "label": "INSTAGRAM",
+        "href": "https://www.instagram.com/pramitranjann/"
+      },
+      {
+        "label": "EMAIL",
+        "href": "mailto:pramit@pramitranjann.com"
       }
     ]
   },
@@ -326,6 +354,104 @@
       "introKeyGap": 550,
       "introPauseBeforeLift": 250,
       "introLiftDuration": 850
+    }
+  },
+  "copy": {
+    "home": {
+      "heroStages": [
+        {
+          "number": "01",
+          "titleHtml": "<span style=\"color: #FF3120\">Pramit</span><br />Ranjan",
+          "body": "UX design student at SCAD. Figuring out what good design can actually do.",
+          "footerLabel": "SCROLL ↓"
+        },
+        {
+          "number": "02",
+          "titleHtml": "From <span style=\"color: #FF3120\">Film</span><br />to <span style=\"color: #FF3120\">Figma.</span>",
+          "body": "A creative background shapes how I see problems. Photography, mixed media, and art — before Figma, before UX."
+        },
+        {
+          "number": "03",
+          "titleHtml": "Design that <span style=\"color: #FF3120\">solves.</span><br />Art that <span style=\"color: #FF3120\">questions.</span>",
+          "body": "UX work grounded in research and empathy. Creative work that pushes further.",
+          "footerLabel": "SEE WORK ↓"
+        }
+      ],
+      "aboutEyebrow": "ABOUT_",
+      "aboutTitleHtml": "Artist.<br />Designer.<br /><span style=\"color: #FF3120\">Human.</span>",
+      "aboutReadMoreLabel": "READ MORE →",
+      "photographyEyebrow": "THE EYE CAME FIRST.",
+      "photographyTitleHtml": "Before <span style=\"color: #FF3120\">Figma,</span><br />there was <span style=\"color: #FF3120\">film.</span>",
+      "photographyBody": "Street photography across Southeast Asia. Shot on 35mm and medium format. Always looking.",
+      "photographyCtaLabel": "VIEW ALL →",
+      "contactTitle": "You made it this far.",
+      "contactAccent": "Say hello.",
+      "contactLinks": [
+        {
+          "label": "LINKEDIN",
+          "href": "https://www.linkedin.com/in/pramitranjann/"
+        },
+        {
+          "label": "GMAIL",
+          "href": "mailto:pramit@pramitranjann.com"
+        },
+        {
+          "label": "INSTAGRAM",
+          "href": "https://www.instagram.com/pramitranjann/"
+        }
+      ]
+    },
+    "aboutPage": {
+      "heroEyebrow": "ABOUT_",
+      "heroTitleHtml": "Artist. Designer. <span style=\"color: #FF3120\">Human.</span>",
+      "cvLabel": "DOWNLOAD CV",
+      "scrollLabel": "SCROLL ↓",
+      "whoIAmLabel": "WHO I AM_",
+      "onRotationLabel": "ON ROTATION_",
+      "experienceLabel": "EXPERIENCE_",
+      "professionalActivitiesLabel": "PROFESSIONAL<br />ACTIVITIES",
+      "educationLabel": "EDUCATION_",
+      "toolsLabel": "TOOLS"
+    },
+    "workPage": {
+      "eyebrow": "WORK_",
+      "emptyStateLabel": "MORE ON THE WAY_"
+    },
+    "creativePage": {
+      "eyebrow": "CREATIVE_",
+      "heroTitle": "The other half.",
+      "heroBody": "Photography, mixed media, and branding — the work that exists outside of UX.",
+      "photographyLabel": "PHOTOGRAPHY",
+      "photographyCount": "01",
+      "mixedMediaLabel": "MIXED MEDIA",
+      "mixedMediaCount": "02",
+      "brandingLabel": "BRANDING",
+      "brandingCount": "03",
+      "mixedMediaIndexTitle": "Beyond the screen.",
+      "brandingIndexTitle": "Identity work.",
+      "backLabel": "CREATIVE",
+      "photoBackLabel": "PHOTOGRAPHY"
+    },
+    "caseStudy": {
+      "problemLabel": "PROBLEM_",
+      "roleLabel": "MY ROLE_",
+      "researchLabel": "RESEARCH_",
+      "challengeLabel": "CHALLENGE_",
+      "processLabel": "PROCESS_",
+      "solutionLabel": "SOLUTION_",
+      "outcomesLabel": "OUTCOMES_",
+      "keyInsightLabel": "KEY INSIGHT_",
+      "prevLabel": "PREV",
+      "nextLabel": "NEXT",
+      "navProblemLabel": "PROBLEM_",
+      "navRoleLabel": "MY ROLE_",
+      "navResearchLabel": "RESEARCH_",
+      "navChallengeLabel": "CHALLENGE_",
+      "navProcessLabel": "PROCESS_",
+      "navSolutionLabel": "SOLUTION_",
+      "navOutcomesLabel": "OUTCOMES_",
+      "defaultProblem": "This project focused on understanding user needs and translating them into a cohesive design solution. Through research, ideation, and iteration, the final product addresses real problems with intentional design decisions.",
+      "defaultRole": "Led end-to-end UX design including research planning, synthesis, interaction design, and high-fidelity prototyping."
     }
   },
   "caseStudies": [

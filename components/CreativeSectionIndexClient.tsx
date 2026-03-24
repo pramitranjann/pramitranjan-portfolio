@@ -28,7 +28,7 @@ export function CreativeSectionIndexClient({
       <main style={{ paddingTop: '57px' }}>
         <section style={{ padding: '48px 40px' }}>
           <div style={{ marginBottom: '16px' }}>
-            <Link href={backHref} className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#666666', textDecoration: 'none' }} onClick={playNav}>
+            <Link href={backHref} className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#666666', textDecoration: 'none' }} onPointerDown={playNav}>
               <span className="arrow-nudge-back">←</span> {backLabel}
             </Link>
           </div>
