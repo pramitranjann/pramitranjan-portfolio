@@ -12,6 +12,11 @@ interface ProjectCardProps {
   imageRatio?: string
   comingSoon?: boolean
   cover?: string
+  coverPosition?: string
+  titleSize?: string
+  metaSize?: string
+  bodySize?: string
+  cardPadding?: string
 }
 
 function ratioPadding(ratio: string): string {
@@ -19,12 +24,12 @@ function ratioPadding(ratio: string): string {
   return `${(h / w) * 100}%`
 }
 
-export function ProjectCard({ title, oneliner, tags, href, variant = 'main', imageRatio, comingSoon, cover }: ProjectCardProps) {
+export function ProjectCard({ title, oneliner, tags, href, variant = 'main', imageRatio, comingSoon, cover, coverPosition, titleSize, metaSize, bodySize, cardPadding }: ProjectCardProps) {
   const category = tags.join(' · ')
 
   const cardBase = {
     backgroundColor: '#1c1c1c',
-    padding: '16px',
+    padding: cardPadding ?? '16px',
     height: '100%',
   }
 
@@ -51,7 +56,7 @@ export function ProjectCard({ title, oneliner, tags, href, variant = 'main', ima
               alt={title}
               loading="lazy"
               decoding="async"
-              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: coverPosition ?? 'center' }}
             />
           ) : (
             <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', padding: '16px', backgroundColor: '#111111' }}>
@@ -60,11 +65,11 @@ export function ProjectCard({ title, oneliner, tags, href, variant = 'main', ima
             </div>
           )}
         </div>
-        <div className="font-serif" style={{ fontSize: 'var(--text-body)', color: '#f5f2ed' }}>
+        <div className="font-serif" style={{ fontSize: titleSize ?? 'var(--text-body)', color: '#f5f2ed' }}>
           <span className="card-title-inner">{title}</span>
         </div>
-        <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#999999', marginTop: '4px', letterSpacing: '0.1em' }}>{category}</div>
-        <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#FF3120', letterSpacing: '0.1em', marginTop: '8px' }}>
+        <div className="font-mono" style={{ fontSize: metaSize ?? 'var(--text-meta)', color: '#999999', marginTop: '4px', letterSpacing: '0.1em' }}>{category}</div>
+        <div className="font-mono" style={{ fontSize: metaSize ?? 'var(--text-meta)', color: '#FF3120', letterSpacing: '0.1em', marginTop: '8px' }}>
           <span className="card-cta-inner">VIEW</span> <span className="arrow-nudge">→</span>
         </div>
       </div>
@@ -78,7 +83,7 @@ export function ProjectCard({ title, oneliner, tags, href, variant = 'main', ima
               alt={title}
               loading="lazy"
               decoding="async"
-              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: coverPosition ?? 'center' }}
             />
           ) : (
             <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', padding: '16px', backgroundColor: '#111111' }}>
@@ -87,18 +92,18 @@ export function ProjectCard({ title, oneliner, tags, href, variant = 'main', ima
             </div>
           )}
         </div>
-        <div className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.14em', color: '#999999', marginBottom: '8px' }}>{category}</div>
-        <div className="font-serif" style={{ fontSize: 'var(--text-h3)', color: '#f5f2ed', marginBottom: '8px' }}>
+        <div className="font-mono" style={{ fontSize: metaSize ?? 'var(--text-meta)', letterSpacing: '0.14em', color: '#999999', marginBottom: '8px' }}>{category}</div>
+        <div className="font-serif" style={{ fontSize: titleSize ?? 'var(--text-h3)', color: '#f5f2ed', marginBottom: '8px' }}>
           <span className="card-title-inner">{title}</span>
         </div>
-        <div className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.6 }}>{oneliner}</div>
+        <div className="font-mono" style={{ fontSize: bodySize ?? 'var(--text-body)', color: '#999999', lineHeight: 1.6 }}>{oneliner}</div>
         {!comingSoon && (
-          <div className="font-mono" style={{ marginTop: '14px', fontSize: 'var(--text-meta)', color: '#FF3120', letterSpacing: '0.1em' }}>
+          <div className="font-mono" style={{ marginTop: '14px', fontSize: metaSize ?? 'var(--text-meta)', color: '#FF3120', letterSpacing: '0.1em' }}>
             <span className="card-cta-inner">VIEW</span> →
           </div>
         )}
         {comingSoon && (
-          <div className="font-mono" style={{ marginTop: '14px', fontSize: 'var(--text-meta)', color: '#999999', letterSpacing: '0.1em' }}>COMING SOON</div>
+          <div className="font-mono" style={{ marginTop: '14px', fontSize: metaSize ?? 'var(--text-meta)', color: '#999999', letterSpacing: '0.1em' }}>COMING SOON</div>
         )}
       </div>
     )

@@ -1,10 +1,12 @@
 'use client'
 import { useEffect, useRef } from 'react'
+import { useMotionSettings } from '@/components/MotionSettingsProvider'
 import { ProjectCard } from './ProjectCard'
-import type { HomeSection } from '@/lib/site-content-schema'
+import type { CardStyleSettings, HomeSection } from '@/lib/site-content-schema'
 
-export function SelectedWork({ content }: { content: HomeSection }) {
+export function SelectedWork({ content, cardStyle }: { content: HomeSection; cardStyle: CardStyleSettings }) {
   const gridRef = useRef<HTMLDivElement>(null)
+  const motion = useMotionSettings()
 
   useEffect(() => {
     const grid = gridRef.current
@@ -13,7 +15,7 @@ export function SelectedWork({ content }: { content: HomeSection }) {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          cards.forEach((card, i) => setTimeout(() => card.classList.add('revealed'), i * 100))
+          cards.forEach((card, i) => setTimeout(() => card.classList.add('revealed'), i * motion.simpleRevealStagger * 1000))
           observer.disconnect()
         }
       },
@@ -21,7 +23,7 @@ export function SelectedWork({ content }: { content: HomeSection }) {
     )
     observer.observe(grid)
     return () => observer.disconnect()
-  }, [])
+  }, [motion.simpleRevealStagger])
 
   return (
     <section>
@@ -47,7 +49,14 @@ export function SelectedWork({ content }: { content: HomeSection }) {
       >
         {content.items.map((p) => (
           <div key={p.title} className="reveal">
-            <ProjectCard {...p} variant="supporting" />
+            <ProjectCard
+              {...p}
+              variant="supporting"
+              imageRatio={cardStyle.imageRatio}
+              titleSize={cardStyle.titleSize}
+              metaSize={cardStyle.metaSize}
+              cardPadding={cardStyle.cardPadding}
+            />
           </div>
         ))}
       </div>

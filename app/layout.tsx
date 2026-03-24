@@ -1,8 +1,11 @@
 import type { Metadata } from 'next'
+import type { CSSProperties } from 'react'
 import { DM_Serif_Display, DM_Mono } from 'next/font/google'
 import './globals.css'
+import { MotionSettingsProvider } from '@/components/MotionSettingsProvider'
 import { SoundRouteListener } from '@/components/SoundRouteListener'
 import { ScrollToTopOnRouteChange } from '@/components/ScrollToTopOnRouteChange'
+import { getSiteContent } from '@/lib/site-content'
 
 const dmSerif = DM_Serif_Display({
   weight: '400',
@@ -35,16 +38,31 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const content = await getSiteContent()
+  const motion = content.design.motion
+  const motionCssVars = {
+    '--motion-page-reveal-distance': `${motion.pageRevealDistance}px`,
+    '--motion-page-reveal-duration': `${motion.pageRevealDuration}s`,
+    '--motion-simple-reveal-distance': `${motion.simpleRevealDistance}px`,
+    '--motion-simple-reveal-duration': `${motion.simpleRevealDuration}s`,
+    '--motion-eyebrow-offset': `${motion.eyebrowOffset}px`,
+    '--motion-eyebrow-line-duration': `${motion.eyebrowLineDuration}s`,
+    '--motion-eyebrow-label-duration': `${motion.eyebrowLabelDuration}s`,
+    '--motion-eyebrow-label-delay': `${motion.eyebrowLabelDelay}s`,
+  } as CSSProperties
+
   return (
     <html lang="en" className={`${dmSerif.variable} ${dmMono.variable}`} suppressHydrationWarning>
       <head>
 <script dangerouslySetInnerHTML={{ __html: `document.documentElement.classList.add('js-ready')` }} />
       </head>
-      <body style={{ backgroundColor: '#0d0d0d', color: '#f5f2ed' }}>
+      <body style={{ backgroundColor: '#0d0d0d', color: '#f5f2ed', ...motionCssVars }}>
         <SoundRouteListener />
         <ScrollToTopOnRouteChange />
-        {children}
+        <MotionSettingsProvider settings={motion}>
+          {children}
+        </MotionSettingsProvider>
       </body>
     </html>
   )

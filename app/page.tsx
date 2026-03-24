@@ -18,10 +18,14 @@ export default async function HomePage() {
       <IntroAnimation />
       <HeroCarousel />
       <main style={{ paddingTop: '57px' }}>
-        <SelectedWork content={content.home.selectedWork} />
+        <SelectedWork content={content.home.selectedWork} cardStyle={content.design.supportingCards} />
         <PhotographyStage />
-        <MoreWork content={content.home.moreWork} />
-        <About body={content.home.about.body} spotifyLabel={content.home.about.spotifyLabel} />
+        <MoreWork content={content.home.moreWork} cardStyle={content.design.supportingCards} />
+        <About
+          body={content.home.about.body}
+          spotifyLabel={content.home.about.spotifyLabel}
+          listeningStyle={content.design.listeningCard}
+        />
         <Contact />
       </main>
       <Footer />

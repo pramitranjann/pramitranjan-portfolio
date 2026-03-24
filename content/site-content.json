@@ -9,28 +9,32 @@
           "oneliner": "The experience starts before you walk in.",
           "tags": ["UX", "RESEARCH"],
           "href": "/work/franklins",
-          "cover": "/work/franklins/cover-processed.png"
+          "cover": "/work/franklins/cover-processed.png",
+          "coverPosition": "center"
         },
         {
           "title": "Albers",
           "oneliner": "Colour theory you can actually play with.",
           "tags": ["UI", "CODE"],
           "href": "/work/albers",
-          "cover": "/work/albers/cover-processed.png"
+          "cover": "/work/albers/cover-processed.png",
+          "coverPosition": "center"
         },
         {
           "title": "LoomLearn",
           "oneliner": "One learning space for students who think differently.",
           "tags": ["UX", "ED-TECH"],
           "href": "/work/loomlearn",
-          "cover": "/work/loomlearn/cover-processed.png"
+          "cover": "/work/loomlearn/cover-processed.png",
+          "coverPosition": "center"
         },
         {
           "title": "Atom OS",
           "oneliner": "A phone stripped down to what actually matters.",
           "tags": ["UI", "SYSTEMS"],
           "href": "/work/atom",
-          "cover": "/work/atom/cover-processed.png"
+          "cover": "/work/atom/cover-processed.png",
+          "coverPosition": "center"
         }
       ]
     },
@@ -49,7 +53,8 @@
           "oneliner": "Connecting homes to trusted help, and workers to fair work.",
           "tags": ["UX", "SERVICE DESIGN"],
           "href": "/work/helpoh",
-          "cover": "/work/helpoh/cover-hor-processed.png"
+          "cover": "/work/helpoh/cover-hor-processed.png",
+          "coverPosition": "center"
         },
         {
           "title": "Purcast",
@@ -139,38 +144,43 @@
       {
         "title": "Franklin's",
         "oneliner": "The experience starts before you walk in.",
-        "tags": ["UX", "RESEARCH"],
-        "href": "/work/franklins",
-        "cover": "/work/franklins/cover-hor-processed.png"
-      },
+          "tags": ["UX", "RESEARCH"],
+          "href": "/work/franklins",
+          "cover": "/work/franklins/cover-hor-processed.png",
+          "coverPosition": "center"
+        },
       {
         "title": "LoomLearn",
         "oneliner": "One learning space for students who think differently.",
-        "tags": ["UX", "RESEARCH"],
-        "href": "/work/loomlearn",
-        "cover": "/work/loomlearn/cover-hor-processed.png"
-      },
+          "tags": ["UX", "RESEARCH"],
+          "href": "/work/loomlearn",
+          "cover": "/work/loomlearn/cover-hor-processed.png",
+          "coverPosition": "center"
+        },
       {
         "title": "HelpOH",
         "oneliner": "Connecting homes to trusted help, and workers to fair work.",
-        "tags": ["UX", "SERVICE DESIGN"],
-        "href": "/work/helpoh",
-        "cover": "/work/helpoh/cover-hor-processed.png"
-      },
+          "tags": ["UX", "SERVICE DESIGN"],
+          "href": "/work/helpoh",
+          "cover": "/work/helpoh/cover-hor-processed.png",
+          "coverPosition": "center"
+        },
       {
         "title": "Atom OS",
         "oneliner": "A phone stripped down to what actually matters.",
-        "tags": ["UI", "SYSTEMS"],
-        "href": "/work/atom",
-        "cover": "/work/atom/cover-hor-processed.png"
-      },
+          "tags": ["UI", "SYSTEMS"],
+          "href": "/work/atom",
+          "cover": "/work/atom/cover-hor-processed.png",
+          "coverPosition": "center"
+        },
       {
         "title": "Albers",
         "oneliner": "Colour theory you can actually play with.",
-        "tags": ["UI", "INTERACTION"],
-        "href": "/work/albers",
-        "cover": "/work/albers/cover-hor-processed.png"
-      },
+          "tags": ["UI", "INTERACTION"],
+          "href": "/work/albers",
+          "cover": "/work/albers/cover-hor-processed.png",
+          "coverPosition": "center"
+        },
       {
         "title": "Accord",
         "oneliner": "A contract tool built for freelancers.",
@@ -219,7 +229,104 @@
         "imagePosition": "center 42%",
         "comingSoon": false
       }
+    ],
+    "galleries": [
+      {
+        "slug": "kl",
+        "city": "KL",
+        "descriptor": "Street life and quiet corners of a city in motion.",
+        "images": [
+          "/creative/photography/kl/01.jpg", "/creative/photography/kl/02.jpg", "/creative/photography/kl/03.jpg", "/creative/photography/kl/04.jpg", "/creative/photography/kl/05.jpg", "/creative/photography/kl/06.jpg", "/creative/photography/kl/07.jpg", "/creative/photography/kl/08.jpg", "/creative/photography/kl/09.jpg", "/creative/photography/kl/10.jpg",
+          "/creative/photography/kl/11.jpg", "/creative/photography/kl/12.jpg", "/creative/photography/kl/13.jpg", "/creative/photography/kl/14.jpg", "/creative/photography/kl/15.jpg", "/creative/photography/kl/16.jpg", "/creative/photography/kl/17.jpg", "/creative/photography/kl/18.jpg", "/creative/photography/kl/19.jpg", "/creative/photography/kl/20.jpg",
+          "/creative/photography/kl/21.jpg", "/creative/photography/kl/22.jpg", "/creative/photography/kl/23.jpg", "/creative/photography/kl/24.jpg", "/creative/photography/kl/25.jpg", "/creative/photography/kl/26.jpg", "/creative/photography/kl/27.jpg", "/creative/photography/kl/28.jpg", "/creative/photography/kl/29.jpg", "/creative/photography/kl/30.jpg",
+          "/creative/photography/kl/31.jpg", "/creative/photography/kl/32.jpg", "/creative/photography/kl/33.jpg", "/creative/photography/kl/34.jpg", "/creative/photography/kl/35.jpg", "/creative/photography/kl/36.jpg", "/creative/photography/kl/37.jpg", "/creative/photography/kl/38.jpg", "/creative/photography/kl/39.jpg", "/creative/photography/kl/40.jpg",
+          "/creative/photography/kl/41.jpg", "/creative/photography/kl/42.jpg", "/creative/photography/kl/43.jpg", "/creative/photography/kl/44.jpg", "/creative/photography/kl/45.jpg", "/creative/photography/kl/46.jpg", "/creative/photography/kl/47.jpg", "/creative/photography/kl/48.jpg", "/creative/photography/kl/49.jpg", "/creative/photography/kl/50.jpg",
+          "/creative/photography/kl/51.jpg", "/creative/photography/kl/52.jpg", "/creative/photography/kl/53.jpg", "/creative/photography/kl/54.jpg", "/creative/photography/kl/55.jpg", "/creative/photography/kl/56.jpg", "/creative/photography/kl/57.jpg", "/creative/photography/kl/58.jpg", "/creative/photography/kl/59.jpg", "/creative/photography/kl/60.jpg",
+          "/creative/photography/kl/61.jpg", "/creative/photography/kl/62.jpg", "/creative/photography/kl/63.jpg", "/creative/photography/kl/64.jpg", "/creative/photography/kl/65.jpg", "/creative/photography/kl/66.jpg", "/creative/photography/kl/67.jpg", "/creative/photography/kl/68.jpg", "/creative/photography/kl/69.jpg", "/creative/photography/kl/70.jpg",
+          "/creative/photography/kl/71.jpg", "/creative/photography/kl/72.jpg", "/creative/photography/kl/73.jpg", "/creative/photography/kl/74.jpg", "/creative/photography/kl/75.jpg", "/creative/photography/kl/76.jpg", "/creative/photography/kl/77.jpg", "/creative/photography/kl/78.jpg", "/creative/photography/kl/79.jpg"
+        ]
+      },
+      {
+        "slug": "penang",
+        "city": "Penang",
+        "descriptor": "Heritage streets and the texture of an older world.",
+        "images": [
+          "/creative/photography/penang/01.jpg", "/creative/photography/penang/02.jpg", "/creative/photography/penang/03.jpg", "/creative/photography/penang/04.jpg", "/creative/photography/penang/05.jpg", "/creative/photography/penang/06.jpg", "/creative/photography/penang/07.jpg", "/creative/photography/penang/08.jpg", "/creative/photography/penang/09.jpg", "/creative/photography/penang/10.jpg",
+          "/creative/photography/penang/11.jpg", "/creative/photography/penang/12.jpg", "/creative/photography/penang/13.jpg", "/creative/photography/penang/14.jpg", "/creative/photography/penang/15.jpg", "/creative/photography/penang/16.jpg", "/creative/photography/penang/17.jpg", "/creative/photography/penang/18.jpg", "/creative/photography/penang/19.jpg", "/creative/photography/penang/20.jpg",
+          "/creative/photography/penang/21.jpg", "/creative/photography/penang/22.jpg", "/creative/photography/penang/23.jpg", "/creative/photography/penang/24.jpg", "/creative/photography/penang/25.jpg", "/creative/photography/penang/26.jpg", "/creative/photography/penang/27.jpg", "/creative/photography/penang/28.jpg", "/creative/photography/penang/29.jpg", "/creative/photography/penang/30.jpg",
+          "/creative/photography/penang/31.jpg", "/creative/photography/penang/32.jpg", "/creative/photography/penang/33.jpg", "/creative/photography/penang/34.jpg", "/creative/photography/penang/35.jpg", "/creative/photography/penang/36.jpg"
+        ]
+      },
+      {
+        "slug": "singapore",
+        "city": "Singapore",
+        "descriptor": "The duality of a city-state — dense and lush at once.",
+        "images": [
+          "/creative/photography/singapore/01.jpg", "/creative/photography/singapore/02.jpg", "/creative/photography/singapore/03.jpg", "/creative/photography/singapore/04.jpg", "/creative/photography/singapore/05.jpg", "/creative/photography/singapore/06.jpg", "/creative/photography/singapore/07.jpg", "/creative/photography/singapore/08.jpg", "/creative/photography/singapore/09.jpg"
+        ]
+      },
+      {
+        "slug": "hcmc",
+        "city": "Ho Chi Minh",
+        "descriptor": "Noise, heat, and the city that never slows down.",
+        "images": [
+          "/creative/photography/hcmc/01.jpg", "/creative/photography/hcmc/02.jpg", "/creative/photography/hcmc/03.jpg", "/creative/photography/hcmc/04.jpg", "/creative/photography/hcmc/05.jpg", "/creative/photography/hcmc/06.jpg", "/creative/photography/hcmc/07.jpg", "/creative/photography/hcmc/08.jpg", "/creative/photography/hcmc/09.jpg", "/creative/photography/hcmc/10.jpg",
+          "/creative/photography/hcmc/11.jpg", "/creative/photography/hcmc/12.jpg", "/creative/photography/hcmc/13.jpg", "/creative/photography/hcmc/14.jpg", "/creative/photography/hcmc/15.jpg", "/creative/photography/hcmc/16.jpg", "/creative/photography/hcmc/17.jpg"
+        ]
+      }
     ]
+  },
+  "design": {
+    "supportingCards": {
+      "titleSize": "var(--text-body)",
+      "metaSize": "var(--text-meta)",
+      "imageRatio": "4 / 3",
+      "cardPadding": "16px"
+    },
+    "photographyCards": {
+      "titleSize": "var(--text-body)",
+      "bodySize": "var(--text-meta)",
+      "imageAspectRatio": "3 / 2",
+      "cardPadding": "16px"
+    },
+    "gallery": {
+      "imageAspectRatio": "2 / 3",
+      "gridGap": "12px",
+      "descriptorSize": "var(--text-meta)"
+    },
+    "nowCards": {
+      "labelSize": "10px",
+      "titleSize": "18px",
+      "bodySize": "11px",
+      "cardPadding": "20px"
+    },
+    "listeningCard": {
+      "labelSize": "11px",
+      "titleSize": "15px",
+      "artistSize": "10px",
+      "cardPadding": "14px",
+      "artworkSize": "36px",
+      "progressMetaSize": "7px"
+    },
+    "motion": {
+      "pageRevealDistance": 16,
+      "pageRevealDuration": 0.6,
+      "pageRevealStagger": 0.08,
+      "simpleRevealDistance": 20,
+      "simpleRevealDuration": 0.5,
+      "simpleRevealStagger": 0.2,
+      "gridStartScale": 0.93,
+      "gridRevealDuration": 0.5,
+      "gridRevealStagger": 0.11,
+      "eyebrowOffset": 8,
+      "eyebrowLineDuration": 0.4,
+      "eyebrowLabelDuration": 0.4,
+      "eyebrowLabelDelay": 0.2,
+      "introStartDelay": 1100,
+      "introKeyGap": 550,
+      "introPauseBeforeLift": 250,
+      "introLiftDuration": 850
+    }
   },
   "caseStudies": [
     {

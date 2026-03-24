@@ -3,9 +3,10 @@
 import { useEffect, useRef } from 'react'
 import { Footer } from '@/components/Footer'
 import { GsapReveal } from '@/components/GsapReveal'
+import { useMotionSettings } from '@/components/MotionSettingsProvider'
 import { Nav } from '@/components/Nav'
 import { ProjectCard } from '@/components/ProjectCard'
-import type { WorkProject } from '@/lib/site-content-schema'
+import type { CardStyleSettings, WorkProject } from '@/lib/site-content-schema'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -13,13 +14,16 @@ export function WorkPageClient({
   heroTitle,
   heroBody,
   projects,
+  cardStyle,
 }: {
   heroTitle: string
   heroBody: string
   projects: WorkProject[]
+  cardStyle: CardStyleSettings
 }) {
   const eyebrowRef = useRef<HTMLDivElement>(null)
   const gridRef = useRef<HTMLDivElement>(null)
+  const motion = useMotionSettings()
 
   useEffect(() => {
     const el = eyebrowRef.current
@@ -49,7 +53,7 @@ export function WorkPageClient({
     }
     const ctx = gsap.context(() => {
       const cards = grid.querySelectorAll('.portfolio-card')
-      gsap.set(cards, { opacity: 0, scale: 0.93 })
+      gsap.set(cards, { opacity: 0, scale: motion.gridStartScale })
       ScrollTrigger.create({
         trigger: grid,
         start: 'top 85%',
@@ -57,16 +61,16 @@ export function WorkPageClient({
           gsap.to(cards, {
             opacity: 1,
             scale: 1,
-            duration: 0.5,
+            duration: motion.gridRevealDuration,
             ease: 'power2.out',
-            stagger: 0.11,
+            stagger: motion.gridRevealStagger,
           })
         },
         once: true,
       })
     }, grid)
     return () => ctx.revert()
-  }, [])
+  }, [motion.gridRevealDuration, motion.gridRevealStagger, motion.gridStartScale])
 
   return (
     <>
@@ -90,7 +94,15 @@ export function WorkPageClient({
         <section className="work-grid-section" style={{ padding: '40px' }}>
           <div ref={gridRef} className="grid grid-cols-2 md:grid-cols-4" style={{ gap: '16px' }}>
             {projects.map((project) => (
-              <ProjectCard key={`${project.href}-${project.title}`} {...project} variant="supporting" imageRatio="4 / 3" />
+              <ProjectCard
+                key={`${project.href}-${project.title}`}
+                {...project}
+                variant="supporting"
+                imageRatio={cardStyle.imageRatio}
+                titleSize={cardStyle.titleSize}
+                metaSize={cardStyle.metaSize}
+                cardPadding={cardStyle.cardPadding}
+              />
             ))}
             <div className="flex items-center justify-center" style={{ backgroundColor: '#1c1c1c', border: '1px solid #2a2a2a', padding: '16px', minHeight: '160px' }}>
               <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.14em', color: '#444444', textAlign: 'center' }}>MORE ON THE WAY_</span>

@@ -1,9 +1,7 @@
 import { PhotoGalleryLayout } from '@/components/PhotoGalleryLayout'
+import { getPhotographyGallery, getSiteContent } from '@/lib/site-content'
 
-const images = Array.from({ length: 79 }, (_, i) =>
-  `/creative/photography/kl/${String(i + 1).padStart(2, '0')}.jpg`
-)
-
-export default function KLPage() {
-  return <PhotoGalleryLayout city="KL" descriptor="Street life and quiet corners of a city in motion." images={images} />
+export default async function KLPage() {
+  const [gallery, content] = await Promise.all([getPhotographyGallery('kl'), getSiteContent()])
+  return <PhotoGalleryLayout city={gallery.city} descriptor={gallery.descriptor} images={gallery.images} styleSettings={content.design.gallery} />
 }

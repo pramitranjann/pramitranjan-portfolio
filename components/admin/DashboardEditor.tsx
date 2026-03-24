@@ -2,11 +2,18 @@
 
 import { useMemo, useState } from 'react'
 import type {
+  CardStyleSettings,
   CaseStudyContent,
   CaseStudySection,
   EntryItem,
+  GalleryStyleSettings,
+  ListeningCardStyleSettings,
+  MotionSettings,
   NowCard,
+  NowCardStyleSettings,
+  PhotographyCardStyleSettings,
   PhotographyCity,
+  PhotographyGallery,
   ProjectLink,
   SiteContent,
   WorkProject,
@@ -16,7 +23,7 @@ type EditorProps = {
   initialContent: SiteContent
 }
 
-type PageKey = 'homepage' | 'about-page' | 'work-page' | 'photography-page' | `case-study:${string}`
+type PageKey = 'homepage' | 'about-page' | 'work-page' | 'photography-page' | 'design-system' | 'motion' | `case-study:${string}`
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -79,8 +86,47 @@ function removeAt<T>(items: T[], index: number) {
   return items.filter((_, itemIndex) => itemIndex !== index)
 }
 
+function moveItem<T>(items: T[], index: number, direction: -1 | 1) {
+  const targetIndex = index + direction
+  if (targetIndex < 0 || targetIndex >= items.length) return items
+  const nextItems = [...items]
+  const [item] = nextItems.splice(index, 1)
+  nextItems.splice(targetIndex, 0, item)
+  return nextItems
+}
+
 function toPair(first: string, second: string) {
   return [first, second].filter(Boolean)
+}
+
+function slugify(value: string) {
+  return value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+}
+
+function createCaseStudyDraft(section: CaseStudySection, existing: CaseStudyContent[]) {
+  const baseSlug = slugify(`${section}-project`) || 'case-study'
+  let slug = baseSlug
+  let counter = 2
+
+  while (existing.some((item) => item.slug === slug)) {
+    slug = `${baseSlug}-${counter}`
+    counter += 1
+  }
+
+  return {
+    slug,
+    section,
+    title: 'Untitled project',
+    oneliner: '',
+    type: '',
+    tags: [],
+    prev: null,
+    next: null,
+  } satisfies CaseStudyContent
+}
+
+function serializeContent(content: SiteContent) {
+  return JSON.stringify(content)
 }
 
 function SidebarGroup({
@@ -131,11 +177,54 @@ function SidebarButton({
   )
 }
 
+function ReorderButtons({
+  index,
+  length,
+  onMove,
+}: {
+  index: number
+  length: number
+  onMove: (direction: -1 | 1) => void
+}) {
+  return (
+    <div className="flex" style={{ gap: '8px', flexWrap: 'wrap' }}>
+      <button
+        type="button"
+        onClick={() => onMove(-1)}
+        disabled={index === 0}
+        className="font-mono"
+        style={{ background: 'transparent', border: '1px solid #2a2a2a', color: index === 0 ? '#444444' : '#999999', padding: '8px 12px', cursor: index === 0 ? 'default' : 'pointer', letterSpacing: '0.1em' }}
+      >
+        MOVE UP
+      </button>
+      <button
+        type="button"
+        onClick={() => onMove(1)}
+        disabled={index === length - 1}
+        className="font-mono"
+        style={{ background: 'transparent', border: '1px solid #2a2a2a', color: index === length - 1 ? '#444444' : '#999999', padding: '8px 12px', cursor: index === length - 1 ? 'default' : 'pointer', letterSpacing: '0.1em' }}
+      >
+        MOVE DOWN
+      </button>
+    </div>
+  )
+}
+
 export function DashboardEditor({ initialContent }: EditorProps) {
-  const [content, setContent] = useState(initialContent)
+  const [history, setHistory] = useState({
+    past: [] as SiteContent[],
+    present: initialContent,
+    future: [] as SiteContent[],
+  })
+  const [savedContent, setSavedContent] = useState(initialContent)
   const [status, setStatus] = useState('Ready')
   const [saving, setSaving] = useState(false)
   const [activePage, setActivePage] = useState<PageKey>('homepage')
+  const [editingEnabled, setEditingEnabled] = useState(false)
+  const [saveHovered, setSaveHovered] = useState(false)
+
+  const content = history.present
+  const isDirty = useMemo(() => serializeContent(content) !== serializeContent(savedContent), [content, savedContent])
 
   const groupedCaseStudies = useMemo(
     () => ({
@@ -146,18 +235,119 @@ export function DashboardEditor({ initialContent }: EditorProps) {
     [content.caseStudies]
   )
 
+  function requestEditingAccess() {
+    if (editingEnabled) return true
+
+    const confirmed = window.confirm('Enable editing mode? Changes will stay local until you save them.')
+    if (!confirmed) {
+      setStatus('Edit cancelled')
+      return false
+    }
+
+    setEditingEnabled(true)
+    setStatus('Editing enabled')
+    return true
+  }
+
+  function applyContentChange(updater: (current: SiteContent) => SiteContent) {
+    if (!requestEditingAccess()) return
+
+    setHistory((current) => {
+      const next = updater(current.present)
+      if (serializeContent(next) === serializeContent(current.present)) {
+        return current
+      }
+
+      return {
+        past: [...current.past, current.present].slice(-100),
+        present: next,
+        future: [],
+      }
+    })
+    setStatus('Unsaved changes')
+  }
+
   function updateSection<K extends keyof SiteContent>(key: K, value: SiteContent[K]) {
-    setContent((current) => ({ ...current, [key]: value }))
+    applyContentChange((current) => ({ ...current, [key]: value }))
   }
 
   function updateCaseStudy(slug: string, updater: (item: CaseStudyContent) => CaseStudyContent) {
-    setContent((current) => ({
+    applyContentChange((current) => {
+      let nextSlug = slug
+      const caseStudies = current.caseStudies.map((item) => {
+        if (item.slug !== slug) return item
+        const updated = updater(item)
+        nextSlug = updated.slug
+        return updated
+      })
+      setActivePage(`case-study:${nextSlug}`)
+      return {
+        ...current,
+        caseStudies,
+      }
+    })
+  }
+
+  function addCaseStudy(section: CaseStudySection) {
+    applyContentChange((current) => {
+      const draft = createCaseStudyDraft(section, current.caseStudies)
+      setActivePage(`case-study:${draft.slug}`)
+      return {
+        ...current,
+        caseStudies: [...current.caseStudies, draft],
+      }
+    })
+  }
+
+  function removeCaseStudy(slug: string) {
+    if (!requestEditingAccess()) return
+    const confirmed = window.confirm('Remove this case study? This can be undone before saving.')
+    if (!confirmed) {
+      setStatus('Removal cancelled')
+      return
+    }
+
+    applyContentChange((current) => ({
       ...current,
-      caseStudies: current.caseStudies.map((item) => (item.slug === slug ? updater(item) : item)),
+      caseStudies: current.caseStudies.filter((item) => item.slug !== slug),
     }))
+    setActivePage('homepage')
+  }
+
+  function handleUndo() {
+    setHistory((current) => {
+      if (current.past.length === 0) return current
+      const previous = current.past[current.past.length - 1]
+      return {
+        past: current.past.slice(0, -1),
+        present: previous,
+        future: [current.present, ...current.future].slice(0, 100),
+      }
+    })
+    setStatus('Undid last change')
+    setEditingEnabled(true)
+  }
+
+  function handleRedo() {
+    setHistory((current) => {
+      if (current.future.length === 0) return current
+      const next = current.future[0]
+      return {
+        past: [...current.past, current.present].slice(-100),
+        present: next,
+        future: current.future.slice(1),
+      }
+    })
+    setStatus('Redid change')
+    setEditingEnabled(true)
   }
 
   async function handleSave() {
+    if (!editingEnabled) {
+      setStatus('Enable editing before saving')
+      return
+    }
+
     setSaving(true)
     setStatus('Saving...')
 
@@ -174,6 +364,7 @@ export function DashboardEditor({ initialContent }: EditorProps) {
       return
     }
 
+    setSavedContent(content)
     setStatus('Saved')
     setSaving(false)
   }
@@ -191,9 +382,35 @@ export function DashboardEditor({ initialContent }: EditorProps) {
     <div style={{ display: 'grid', gap: '24px' }}>
       <div className="flex items-center justify-between" style={{ gap: '16px', flexWrap: 'wrap' }}>
         <p className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.08em' }}>
-          {status}
+          {isDirty ? `${status} · UNSAVED` : status}
         </p>
         <div className="flex" style={{ gap: '12px', flexWrap: 'wrap' }}>
+          <button
+            type="button"
+            onClick={requestEditingAccess}
+            className="font-mono"
+            style={{ background: editingEnabled ? '#181818' : 'transparent', border: '1px solid #2a2a2a', color: editingEnabled ? '#f5f2ed' : '#999999', padding: '12px 16px', letterSpacing: '0.1em', cursor: 'pointer' }}
+          >
+            {editingEnabled ? 'EDITING ON' : 'ENABLE EDITING'}
+          </button>
+          <button
+            type="button"
+            onClick={handleUndo}
+            disabled={history.past.length === 0}
+            className="font-mono"
+            style={{ background: 'transparent', border: '1px solid #2a2a2a', color: history.past.length === 0 ? '#444444' : '#999999', padding: '12px 16px', letterSpacing: '0.1em', cursor: history.past.length === 0 ? 'default' : 'pointer' }}
+          >
+            UNDO
+          </button>
+          <button
+            type="button"
+            onClick={handleRedo}
+            disabled={history.future.length === 0}
+            className="font-mono"
+            style={{ background: 'transparent', border: '1px solid #2a2a2a', color: history.future.length === 0 ? '#444444' : '#999999', padding: '12px 16px', letterSpacing: '0.1em', cursor: history.future.length === 0 ? 'default' : 'pointer' }}
+          >
+            REDO
+          </button>
           <button
             type="button"
             onClick={handleLogout}
@@ -205,23 +422,45 @@ export function DashboardEditor({ initialContent }: EditorProps) {
           <button
             type="button"
             onClick={handleSave}
-            disabled={saving}
+            disabled={saving || !editingEnabled || !isDirty}
             className="font-mono"
-            style={{ background: '#FF3120', border: 'none', color: '#0d0d0d', padding: '12px 16px', letterSpacing: '0.1em', cursor: 'pointer' }}
+            onMouseEnter={() => setSaveHovered(true)}
+            onMouseLeave={() => setSaveHovered(false)}
+            style={{
+              background: saving || !editingEnabled || !isDirty ? '#3a1d18' : saveHovered ? '#ff5a4d' : '#FF3120',
+              border: 'none',
+              color: saving || !editingEnabled || !isDirty ? '#7a5a55' : '#0d0d0d',
+              padding: '12px 16px',
+              letterSpacing: '0.1em',
+              cursor: saving || !editingEnabled || !isDirty ? 'default' : 'pointer',
+              boxShadow: saveHovered && editingEnabled && isDirty ? '0 0 0 1px rgba(255, 49, 32, 0.45), 0 8px 28px rgba(255, 49, 32, 0.22)' : 'none',
+              transform: saveHovered && editingEnabled && isDirty ? 'translateY(-1px)' : 'none',
+              transition: 'background 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease',
+            }}
           >
             {saving ? 'SAVING...' : 'SAVE CHANGES'}
           </button>
         </div>
       </div>
 
+      {!editingEnabled ? (
+        <div style={{ border: '1px solid #1f1f1f', background: '#111111', padding: '16px 18px' }}>
+          <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.7 }}>
+            Dashboard is currently read-only. Use <span style={{ color: '#f5f2ed' }}>ENABLE EDITING</span> to confirm you want to make changes before any field becomes editable.
+          </p>
+        </div>
+      ) : null}
+
       <div className="dashboard-grid" style={{ display: 'grid', gridTemplateColumns: '260px minmax(0, 1fr)', gap: '24px', alignItems: 'start' }}>
-        <aside style={{ border: '1px solid #1f1f1f', background: '#111111', padding: '16px', position: 'sticky', top: '96px' }}>
+        <aside style={{ border: '1px solid #1f1f1f', background: '#111111', padding: '16px', position: 'sticky', top: '96px', maxHeight: 'calc(100vh - 112px)', overflowY: 'auto' }}>
           <div style={{ display: 'grid', gap: '18px' }}>
             <SidebarGroup title="SITE PAGES">
               <SidebarButton active={activePage === 'homepage'} label="Homepage" onClick={() => setActivePage('homepage')} />
               <SidebarButton active={activePage === 'about-page'} label="About Page" onClick={() => setActivePage('about-page')} />
               <SidebarButton active={activePage === 'work-page'} label="Work Page" onClick={() => setActivePage('work-page')} />
               <SidebarButton active={activePage === 'photography-page'} label="Photography Page" onClick={() => setActivePage('photography-page')} />
+              <SidebarButton active={activePage === 'design-system'} label="Design System" onClick={() => setActivePage('design-system')} />
+              <SidebarButton active={activePage === 'motion'} label="Motion" onClick={() => setActivePage('motion')} />
             </SidebarGroup>
 
             <SidebarGroup title="WORK CASE STUDIES">
@@ -233,6 +472,7 @@ export function DashboardEditor({ initialContent }: EditorProps) {
                   onClick={() => setActivePage(`case-study:${item.slug}` as PageKey)}
                 />
               ))}
+              <SidebarButton active={false} label="+ Add Work Case Study" onClick={() => addCaseStudy('work')} />
             </SidebarGroup>
 
             <SidebarGroup title="MIXED MEDIA">
@@ -244,6 +484,7 @@ export function DashboardEditor({ initialContent }: EditorProps) {
                   onClick={() => setActivePage(`case-study:${item.slug}` as PageKey)}
                 />
               ))}
+              <SidebarButton active={false} label="+ Add Mixed Media" onClick={() => addCaseStudy('mixed-media')} />
             </SidebarGroup>
 
             <SidebarGroup title="BRANDING">
@@ -255,11 +496,12 @@ export function DashboardEditor({ initialContent }: EditorProps) {
                   onClick={() => setActivePage(`case-study:${item.slug}` as PageKey)}
                 />
               ))}
+              <SidebarButton active={false} label="+ Add Branding" onClick={() => addCaseStudy('branding')} />
             </SidebarGroup>
           </div>
         </aside>
 
-        <div style={{ display: 'grid', gap: '24px' }}>
+        <fieldset disabled={!editingEnabled || saving} style={{ display: 'grid', gap: '24px', opacity: !editingEnabled ? 0.58 : 1, transition: 'opacity 0.18s ease', minWidth: 0 }}>
           {activePage === 'homepage' ? (
             <HomepageEditor content={content} updateSection={updateSection} />
           ) : null}
@@ -272,10 +514,20 @@ export function DashboardEditor({ initialContent }: EditorProps) {
           {activePage === 'photography-page' ? (
             <PhotographyPageEditor content={content} updateSection={updateSection} />
           ) : null}
-          {activeCaseStudy ? (
-            <CaseStudyEditor caseStudy={activeCaseStudy} onChange={(updater) => updateCaseStudy(activeCaseStudy.slug, updater)} />
+          {activePage === 'design-system' ? (
+            <DesignSystemEditor content={content} updateSection={updateSection} />
           ) : null}
-        </div>
+          {activePage === 'motion' ? (
+            <MotionEditor content={content} updateSection={updateSection} />
+          ) : null}
+          {activeCaseStudy ? (
+            <CaseStudyEditor
+              caseStudy={activeCaseStudy}
+              onChange={(updater) => updateCaseStudy(activeCaseStudy.slug, updater)}
+              onDelete={() => removeCaseStudy(activeCaseStudy.slug)}
+            />
+          ) : null}
+        </fieldset>
       </div>
     </div>
   )
@@ -363,6 +615,26 @@ function HomepageEditor({
             style={inputStyle(true)}
           />
         </Field>
+        <Field label="Spotify Resting Label">
+          <input
+            value={content.home.about.spotifyLabel}
+            onChange={(event) => updateSection('home', {
+              ...content.home,
+              about: { ...content.home.about, spotifyLabel: event.target.value },
+            })}
+            style={inputStyle()}
+          />
+        </Field>
+        <ListeningCardStyleEditor
+          title="Listening Card Style"
+          styleSettings={content.design.listeningCard}
+          onChange={(styleSettings) => updateSection('design', { ...content.design, listeningCard: styleSettings })}
+        />
+        <CardStyleEditor
+          title="Supporting Card Style"
+          styleSettings={content.design.supportingCards}
+          onChange={(styleSettings) => updateSection('design', { ...content.design, supportingCards: styleSettings })}
+        />
       </SectionFrame>
     </>
   )
@@ -415,6 +687,15 @@ function AboutPageEditor({
             style={inputStyle(true)}
           />
         </Field>
+        <ListeningCardStyleEditor
+          title="Listening Card Style"
+          styleSettings={content.design.listeningCard}
+          onChange={(styleSettings) => updateSection('design', { ...content.design, listeningCard: styleSettings })}
+        />
+        <NowCardStyleEditor
+          styleSettings={content.design.nowCards}
+          onChange={(styleSettings) => updateSection('design', { ...content.design, nowCards: styleSettings })}
+        />
         <NowCardListEditor
           items={content.aboutPage.nowCards}
           onChange={(items) => updateSection('aboutPage', { ...content.aboutPage, nowCards: items })}
@@ -453,6 +734,11 @@ function WorkPageEditor({
           items={content.workPage.projects}
           onChange={(items) => updateSection('workPage', { ...content.workPage, projects: items })}
         />
+        <CardStyleEditor
+          title="Work Card Style"
+          styleSettings={content.design.supportingCards}
+          onChange={(styleSettings) => updateSection('design', { ...content.design, supportingCards: styleSettings })}
+        />
       </SectionFrame>
     </>
   )
@@ -478,20 +764,134 @@ function PhotographyPageEditor({
         items={content.photography.cities}
         onChange={(items) => updateSection('photography', { ...content.photography, cities: items })}
       />
+      <PhotographyGalleryListEditor
+        items={content.photography.galleries}
+        onChange={(items) => updateSection('photography', { ...content.photography, galleries: items })}
+      />
+      <PhotographyCardStyleEditor
+        title="Photography Card Style"
+        styleSettings={content.design.photographyCards}
+        onChange={(styleSettings) => updateSection('design', { ...content.design, photographyCards: styleSettings })}
+      />
+      <GalleryStyleEditor
+        styleSettings={content.design.gallery}
+        onChange={(styleSettings) => updateSection('design', { ...content.design, gallery: styleSettings })}
+      />
     </SectionFrame>
+  )
+}
+
+function DesignSystemEditor({
+  content,
+  updateSection,
+}: {
+  content: SiteContent
+  updateSection: <K extends keyof SiteContent>(key: K, value: SiteContent[K]) => void
+}) {
+  const tokens = [
+    ['--color-bg', '#0d0d0d'],
+    ['--color-card', '#111111'],
+    ['--color-white', '#f5f2ed'],
+    ['--color-body', '#999999'],
+    ['--color-label', '#666666'],
+    ['--color-red', '#FF3120'],
+    ['--color-divider', '#1f1f1f'],
+    ['--text-h1', '52px'],
+    ['--text-h2', '38px'],
+    ['--text-h3', '24px'],
+    ['--text-eyebrow', '14px'],
+    ['--text-body-lg', '18px'],
+    ['--text-body', '16px'],
+    ['--text-meta', '14px'],
+  ]
+
+  return (
+    <>
+      <SectionFrame title="Design System Reference">
+        <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.7 }}>
+          These are the current design-system tokens from the site. Use them directly in the style fields below if you want cards and galleries to stay aligned with the existing visual system.
+        </p>
+        <div style={{ display: 'grid', gap: '10px' }}>
+          {tokens.map(([name, value]) => (
+            <div key={name} className="flex items-center justify-between" style={{ gap: '16px', border: '1px solid #1f1f1f', padding: '12px 14px' }}>
+              <span className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#f5f2ed' }}>{name}</span>
+              <span className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#999999' }}>{value}</span>
+            </div>
+          ))}
+        </div>
+      </SectionFrame>
+
+      <SectionFrame title="Global Card Controls">
+        <CardStyleEditor
+          title="Supporting Cards"
+          styleSettings={content.design.supportingCards}
+          onChange={(styleSettings) => updateSection('design', { ...content.design, supportingCards: styleSettings })}
+        />
+        <PhotographyCardStyleEditor
+          title="Photography Cards"
+          styleSettings={content.design.photographyCards}
+          onChange={(styleSettings) => updateSection('design', { ...content.design, photographyCards: styleSettings })}
+        />
+        <GalleryStyleEditor
+          styleSettings={content.design.gallery}
+          onChange={(styleSettings) => updateSection('design', { ...content.design, gallery: styleSettings })}
+        />
+        <NowCardStyleEditor
+          styleSettings={content.design.nowCards}
+          onChange={(styleSettings) => updateSection('design', { ...content.design, nowCards: styleSettings })}
+        />
+        <ListeningCardStyleEditor
+          title="Listening Cards"
+          styleSettings={content.design.listeningCard}
+          onChange={(styleSettings) => updateSection('design', { ...content.design, listeningCard: styleSettings })}
+        />
+      </SectionFrame>
+    </>
+  )
+}
+
+function MotionEditor({
+  content,
+  updateSection,
+}: {
+  content: SiteContent
+  updateSection: <K extends keyof SiteContent>(key: K, value: SiteContent[K]) => void
+}) {
+  return (
+    <>
+      <SectionFrame title="Motion Controls">
+        <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.8 }}>
+          These sliders control the live timing and movement values used across reveals, card entrances, eyebrows, and the homepage intro overlay.
+        </p>
+        <MotionSettingsEditor
+          settings={content.design.motion}
+          onChange={(motion) => updateSection('design', { ...content.design, motion })}
+        />
+      </SectionFrame>
+    </>
   )
 }
 
 function CaseStudyEditor({
   caseStudy,
   onChange,
+  onDelete,
 }: {
   caseStudy: CaseStudyContent
   onChange: (updater: (item: CaseStudyContent) => CaseStudyContent) => void
+  onDelete: () => void
 }) {
   return (
     <>
       <SectionFrame title={`${caseStudy.title} · Basics`}>
+        <button
+          type="button"
+          onClick={onDelete}
+          className="font-mono"
+          style={{ justifySelf: 'start', background: 'transparent', border: '1px solid #2a2a2a', color: '#999999', padding: '8px 12px', cursor: 'pointer', letterSpacing: '0.1em' }}
+        >
+          REMOVE CASE STUDY
+        </button>
         <Field label="Section">
           <select
             value={caseStudy.section}
@@ -732,6 +1132,7 @@ function WorkProjectListEditor({
       </div>
       {items.map((item, index) => (
         <div key={`${item.title}-${index}`} style={{ border: '1px solid #1f1f1f', padding: '16px', display: 'grid', gap: '12px' }}>
+          <ReorderButtons index={index} length={items.length} onMove={(direction) => onChange(moveItem(items, index, direction))} />
           <Field label="Title">
             <input value={item.title} onChange={(event) => onChange(updateAt(items, index, { ...item, title: event.target.value }))} style={inputStyle()} />
           </Field>
@@ -746,6 +1147,9 @@ function WorkProjectListEditor({
           </Field>
           <Field label="Cover Image Path">
             <input value={item.cover ?? ''} onChange={(event) => onChange(updateAt(items, index, { ...item, cover: event.target.value || undefined }))} style={inputStyle()} />
+          </Field>
+          <Field label="Cover Object Position">
+            <input value={item.coverPosition ?? ''} onChange={(event) => onChange(updateAt(items, index, { ...item, coverPosition: event.target.value || undefined }))} style={inputStyle()} />
           </Field>
           <button
             type="button"
@@ -787,6 +1191,7 @@ function EntryListEditor({
       </div>
       {items.map((item, index) => (
         <div key={`${item.org}-${index}`} style={{ border: '1px solid #1f1f1f', padding: '16px', display: 'grid', gap: '12px' }}>
+          <ReorderButtons index={index} length={items.length} onMove={(direction) => onChange(moveItem(items, index, direction))} />
           <Field label="Organisation">
             <input value={item.org} onChange={(event) => onChange(updateAt(items, index, { ...item, org: event.target.value }))} style={inputStyle()} />
           </Field>
@@ -831,6 +1236,7 @@ function NowCardListEditor({ items, onChange }: { items: NowCard[]; onChange: (i
       </div>
       {items.map((item, index) => (
         <div key={`${item.label}-${index}`} style={{ border: '1px solid #1f1f1f', padding: '16px', display: 'grid', gap: '12px' }}>
+          <ReorderButtons index={index} length={items.length} onMove={(direction) => onChange(moveItem(items, index, direction))} />
           <Field label="Label">
             <input value={item.label} onChange={(event) => onChange(updateAt(items, index, { ...item, label: event.target.value }))} style={inputStyle()} />
           </Field>
@@ -878,6 +1284,7 @@ function PhotographyCityListEditor({
       </div>
       {items.map((item, index) => (
         <div key={`${item.slug}-${index}`} style={{ border: '1px solid #1f1f1f', padding: '16px', display: 'grid', gap: '12px' }}>
+          <ReorderButtons index={index} length={items.length} onMove={(direction) => onChange(moveItem(items, index, direction))} />
           <Field label="Slug">
             <input value={item.slug} onChange={(event) => onChange(updateAt(items, index, { ...item, slug: event.target.value }))} style={inputStyle()} />
           </Field>
@@ -907,6 +1314,347 @@ function PhotographyCityListEditor({
           </button>
         </div>
       ))}
+    </div>
+  )
+}
+
+function PhotographyGalleryListEditor({
+  items,
+  onChange,
+}: {
+  items: PhotographyGallery[]
+  onChange: (items: PhotographyGallery[]) => void
+}) {
+  return (
+    <div style={{ display: 'grid', gap: '12px' }}>
+      <div className="flex items-center justify-between" style={{ gap: '12px' }}>
+        <span className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#999999', letterSpacing: '0.1em' }}>
+          Photography Galleries
+        </span>
+        <button
+          type="button"
+          onClick={() => onChange([...items, { slug: '', city: '', descriptor: '', images: [] }])}
+          className="font-mono"
+          style={{ background: 'transparent', border: '1px solid #2a2a2a', color: '#FF3120', padding: '8px 12px', cursor: 'pointer', letterSpacing: '0.1em' }}
+        >
+          ADD GALLERY
+        </button>
+      </div>
+      {items.map((item, index) => (
+        <div key={`${item.slug}-${index}`} style={{ border: '1px solid #1f1f1f', padding: '16px', display: 'grid', gap: '12px' }}>
+          <ReorderButtons index={index} length={items.length} onMove={(direction) => onChange(moveItem(items, index, direction))} />
+          <Field label="Slug">
+            <input value={item.slug} onChange={(event) => onChange(updateAt(items, index, { ...item, slug: event.target.value }))} style={inputStyle()} />
+          </Field>
+          <Field label="City">
+            <input value={item.city} onChange={(event) => onChange(updateAt(items, index, { ...item, city: event.target.value }))} style={inputStyle()} />
+          </Field>
+          <Field label="Descriptor">
+            <textarea value={item.descriptor} onChange={(event) => onChange(updateAt(items, index, { ...item, descriptor: event.target.value }))} style={inputStyle(true)} />
+          </Field>
+          <ImageListEditor images={item.images} onChange={(images) => onChange(updateAt(items, index, { ...item, images }))} />
+          <button
+            type="button"
+            onClick={() => onChange(removeAt(items, index))}
+            className="font-mono"
+            style={{ justifySelf: 'start', background: 'transparent', border: '1px solid #2a2a2a', color: '#999999', padding: '8px 12px', cursor: 'pointer', letterSpacing: '0.1em' }}
+          >
+            REMOVE GALLERY
+          </button>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function ImageListEditor({
+  images,
+  onChange,
+}: {
+  images: string[]
+  onChange: (images: string[]) => void
+}) {
+  return (
+    <div style={{ display: 'grid', gap: '12px' }}>
+      <div className="flex items-center justify-between" style={{ gap: '12px' }}>
+        <span className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#999999', letterSpacing: '0.1em' }}>
+          Gallery Images
+        </span>
+        <button
+          type="button"
+          onClick={() => onChange([...images, ''])}
+          className="font-mono"
+          style={{ background: 'transparent', border: '1px solid #2a2a2a', color: '#FF3120', padding: '8px 12px', cursor: 'pointer', letterSpacing: '0.1em' }}
+        >
+          ADD IMAGE
+        </button>
+      </div>
+      {images.map((image, index) => (
+        <div key={`${image}-${index}`} style={{ border: '1px solid #1f1f1f', padding: '16px', display: 'grid', gap: '12px' }}>
+          <ReorderButtons index={index} length={images.length} onMove={(direction) => onChange(moveItem(images, index, direction))} />
+          <Field label={`Image ${index + 1}`}>
+            <input value={image} onChange={(event) => onChange(updateAt(images, index, event.target.value))} style={inputStyle()} />
+          </Field>
+          <button
+            type="button"
+            onClick={() => onChange(removeAt(images, index))}
+            className="font-mono"
+            style={{ justifySelf: 'start', background: 'transparent', border: '1px solid #2a2a2a', color: '#999999', padding: '8px 12px', cursor: 'pointer', letterSpacing: '0.1em' }}
+          >
+            REMOVE IMAGE
+          </button>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function CardStyleEditor({
+  title,
+  styleSettings,
+  onChange,
+}: {
+  title: string
+  styleSettings: CardStyleSettings
+  onChange: (value: CardStyleSettings) => void
+}) {
+  return (
+    <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
+      <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.1em' }}>
+        {title.toUpperCase()}
+      </div>
+      <Field label="Title Size">
+        <input value={styleSettings.titleSize} onChange={(event) => onChange({ ...styleSettings, titleSize: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Meta Size">
+        <input value={styleSettings.metaSize} onChange={(event) => onChange({ ...styleSettings, metaSize: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Body Size">
+        <input value={styleSettings.bodySize ?? ''} onChange={(event) => onChange({ ...styleSettings, bodySize: event.target.value || undefined })} style={inputStyle()} />
+      </Field>
+      <Field label="Image Ratio">
+        <input value={styleSettings.imageRatio} onChange={(event) => onChange({ ...styleSettings, imageRatio: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Card Padding">
+        <input value={styleSettings.cardPadding} onChange={(event) => onChange({ ...styleSettings, cardPadding: event.target.value })} style={inputStyle()} />
+      </Field>
+    </div>
+  )
+}
+
+function PhotographyCardStyleEditor({
+  title,
+  styleSettings,
+  onChange,
+}: {
+  title: string
+  styleSettings: PhotographyCardStyleSettings
+  onChange: (value: PhotographyCardStyleSettings) => void
+}) {
+  return (
+    <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
+      <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.1em' }}>
+        {title.toUpperCase()}
+      </div>
+      <Field label="Title Size">
+        <input value={styleSettings.titleSize} onChange={(event) => onChange({ ...styleSettings, titleSize: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Body Size">
+        <input value={styleSettings.bodySize} onChange={(event) => onChange({ ...styleSettings, bodySize: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Image Aspect Ratio">
+        <input value={styleSettings.imageAspectRatio} onChange={(event) => onChange({ ...styleSettings, imageAspectRatio: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Card Padding">
+        <input value={styleSettings.cardPadding} onChange={(event) => onChange({ ...styleSettings, cardPadding: event.target.value })} style={inputStyle()} />
+      </Field>
+    </div>
+  )
+}
+
+function GalleryStyleEditor({
+  styleSettings,
+  onChange,
+}: {
+  styleSettings: GalleryStyleSettings
+  onChange: (value: GalleryStyleSettings) => void
+}) {
+  return (
+    <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
+      <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.1em' }}>
+        GALLERY STYLE
+      </div>
+      <Field label="Image Aspect Ratio">
+        <input value={styleSettings.imageAspectRatio} onChange={(event) => onChange({ ...styleSettings, imageAspectRatio: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Grid Gap">
+        <input value={styleSettings.gridGap} onChange={(event) => onChange({ ...styleSettings, gridGap: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Descriptor Size">
+        <input value={styleSettings.descriptorSize} onChange={(event) => onChange({ ...styleSettings, descriptorSize: event.target.value })} style={inputStyle()} />
+      </Field>
+    </div>
+  )
+}
+
+function NowCardStyleEditor({
+  styleSettings,
+  onChange,
+}: {
+  styleSettings: NowCardStyleSettings
+  onChange: (value: NowCardStyleSettings) => void
+}) {
+  return (
+    <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
+      <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.1em' }}>
+        RIGHT NOW CARDS
+      </div>
+      <Field label="Label Size">
+        <input value={styleSettings.labelSize} onChange={(event) => onChange({ ...styleSettings, labelSize: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Title Size">
+        <input value={styleSettings.titleSize} onChange={(event) => onChange({ ...styleSettings, titleSize: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Body Size">
+        <input value={styleSettings.bodySize} onChange={(event) => onChange({ ...styleSettings, bodySize: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Card Padding">
+        <input value={styleSettings.cardPadding} onChange={(event) => onChange({ ...styleSettings, cardPadding: event.target.value })} style={inputStyle()} />
+      </Field>
+    </div>
+  )
+}
+
+function ListeningCardStyleEditor({
+  title,
+  styleSettings,
+  onChange,
+}: {
+  title: string
+  styleSettings: ListeningCardStyleSettings
+  onChange: (value: ListeningCardStyleSettings) => void
+}) {
+  return (
+    <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
+      <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.1em' }}>
+        {title.toUpperCase()}
+      </div>
+      <Field label="Label Size">
+        <input value={styleSettings.labelSize} onChange={(event) => onChange({ ...styleSettings, labelSize: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Track Title Size">
+        <input value={styleSettings.titleSize} onChange={(event) => onChange({ ...styleSettings, titleSize: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Artist Size">
+        <input value={styleSettings.artistSize} onChange={(event) => onChange({ ...styleSettings, artistSize: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Card Padding">
+        <input value={styleSettings.cardPadding} onChange={(event) => onChange({ ...styleSettings, cardPadding: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Artwork Size">
+        <input value={styleSettings.artworkSize} onChange={(event) => onChange({ ...styleSettings, artworkSize: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Progress Meta Size">
+        <input value={styleSettings.progressMetaSize} onChange={(event) => onChange({ ...styleSettings, progressMetaSize: event.target.value })} style={inputStyle()} />
+      </Field>
+    </div>
+  )
+}
+
+function SliderField({
+  label,
+  value,
+  min,
+  max,
+  step,
+  suffix = '',
+  onChange,
+}: {
+  label: string
+  value: number
+  min: number
+  max: number
+  step: number
+  suffix?: string
+  onChange: (value: number) => void
+}) {
+  return (
+    <label style={{ display: 'grid', gap: '8px' }}>
+      <div className="flex items-center justify-between" style={{ gap: '16px' }}>
+        <span className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#999999', letterSpacing: '0.1em' }}>
+          {label}
+        </span>
+        <span className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#f5f2ed' }}>
+          {value}{suffix}
+        </span>
+      </div>
+      <input
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={(event) => onChange(Number(event.target.value))}
+      />
+    </label>
+  )
+}
+
+function MotionSettingsEditor({
+  settings,
+  onChange,
+}: {
+  settings: MotionSettings
+  onChange: (value: MotionSettings) => void
+}) {
+  return (
+    <div style={{ display: 'grid', gap: '16px' }}>
+      <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
+        <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.1em' }}>
+          PAGE REVEALS
+        </div>
+        <SliderField label="Reveal Distance" value={settings.pageRevealDistance} min={0} max={60} step={1} suffix="px" onChange={(value) => onChange({ ...settings, pageRevealDistance: value })} />
+        <SliderField label="Reveal Duration" value={settings.pageRevealDuration} min={0.2} max={1.2} step={0.05} suffix="s" onChange={(value) => onChange({ ...settings, pageRevealDuration: value })} />
+        <SliderField label="Reveal Stagger" value={settings.pageRevealStagger} min={0} max={0.3} step={0.01} suffix="s" onChange={(value) => onChange({ ...settings, pageRevealStagger: value })} />
+      </div>
+
+      <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
+        <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.1em' }}>
+          SIMPLE REVEALS
+        </div>
+        <SliderField label="Reveal Distance" value={settings.simpleRevealDistance} min={0} max={40} step={1} suffix="px" onChange={(value) => onChange({ ...settings, simpleRevealDistance: value })} />
+        <SliderField label="Reveal Duration" value={settings.simpleRevealDuration} min={0.2} max={1} step={0.05} suffix="s" onChange={(value) => onChange({ ...settings, simpleRevealDuration: value })} />
+        <SliderField label="Reveal Stagger" value={settings.simpleRevealStagger} min={0} max={0.4} step={0.01} suffix="s" onChange={(value) => onChange({ ...settings, simpleRevealStagger: value })} />
+      </div>
+
+      <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
+        <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.1em' }}>
+          CARD GRID ENTRANCES
+        </div>
+        <SliderField label="Start Scale" value={settings.gridStartScale} min={0.8} max={1} step={0.01} onChange={(value) => onChange({ ...settings, gridStartScale: value })} />
+        <SliderField label="Reveal Duration" value={settings.gridRevealDuration} min={0.2} max={1.2} step={0.05} suffix="s" onChange={(value) => onChange({ ...settings, gridRevealDuration: value })} />
+        <SliderField label="Reveal Stagger" value={settings.gridRevealStagger} min={0} max={0.3} step={0.01} suffix="s" onChange={(value) => onChange({ ...settings, gridRevealStagger: value })} />
+      </div>
+
+      <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
+        <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.1em' }}>
+          EYEBROW ANIMATION
+        </div>
+        <SliderField label="Offset" value={settings.eyebrowOffset} min={0} max={24} step={1} suffix="px" onChange={(value) => onChange({ ...settings, eyebrowOffset: value })} />
+        <SliderField label="Line Duration" value={settings.eyebrowLineDuration} min={0.1} max={1} step={0.05} suffix="s" onChange={(value) => onChange({ ...settings, eyebrowLineDuration: value })} />
+        <SliderField label="Label Duration" value={settings.eyebrowLabelDuration} min={0.1} max={1} step={0.05} suffix="s" onChange={(value) => onChange({ ...settings, eyebrowLabelDuration: value })} />
+        <SliderField label="Label Delay" value={settings.eyebrowLabelDelay} min={0} max={0.8} step={0.05} suffix="s" onChange={(value) => onChange({ ...settings, eyebrowLabelDelay: value })} />
+      </div>
+
+      <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
+        <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.1em' }}>
+          HOMEPAGE INTRO
+        </div>
+        <SliderField label="Start Delay" value={settings.introStartDelay} min={0} max={2000} step={50} suffix="ms" onChange={(value) => onChange({ ...settings, introStartDelay: value })} />
+        <SliderField label="Key Gap" value={settings.introKeyGap} min={50} max={1200} step={50} suffix="ms" onChange={(value) => onChange({ ...settings, introKeyGap: value })} />
+        <SliderField label="Pause Before Lift" value={settings.introPauseBeforeLift} min={0} max={1000} step={50} suffix="ms" onChange={(value) => onChange({ ...settings, introPauseBeforeLift: value })} />
+        <SliderField label="Lift Duration" value={settings.introLiftDuration} min={200} max={1600} step={50} suffix="ms" onChange={(value) => onChange({ ...settings, introLiftDuration: value })} />
+      </div>
     </div>
   )
 }

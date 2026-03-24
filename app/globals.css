@@ -53,6 +53,17 @@ html, body {
   color: #f5f2ed;
 }
 
+:root {
+  --motion-page-reveal-distance: 16px;
+  --motion-page-reveal-duration: 0.6s;
+  --motion-simple-reveal-distance: 20px;
+  --motion-simple-reveal-duration: 0.5s;
+  --motion-eyebrow-offset: 8px;
+  --motion-eyebrow-line-duration: 0.4s;
+  --motion-eyebrow-label-duration: 0.4s;
+  --motion-eyebrow-label-delay: 0.2s;
+}
+
 /* Hide scrollbar — prevents layout shift on the fixed nav */
 html {
   scrollbar-width: none;
@@ -210,7 +221,7 @@ button:hover .arrow-nudge-back {
 
 /* Section eyebrow — scroll-in animation */
 @keyframes eyebrow-label {
-  from { opacity: 0; transform: translateX(-8px); }
+  from { opacity: 0; transform: translateX(calc(var(--motion-eyebrow-offset) * -1)); }
   to   { opacity: 1; transform: translateX(0); }
 }
 @keyframes spotify-pulse {
@@ -220,7 +231,7 @@ button:hover .arrow-nudge-back {
 .eyebrow-line {
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.4s ease;
+  transition: transform var(--motion-eyebrow-line-duration) ease;
 }
 .eyebrow-label {
   opacity: 0;
@@ -229,14 +240,14 @@ button:hover .arrow-nudge-back {
   transform: scaleX(1);
 }
 .eyebrow-animate .eyebrow-label {
-  animation: eyebrow-label 0.4s ease 0.2s both;
+  animation: eyebrow-label var(--motion-eyebrow-label-duration) ease var(--motion-eyebrow-label-delay) both;
 }
 
 /* Reveal animations — only hide when JS is available */
 .js-ready .reveal {
   opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(var(--motion-simple-reveal-distance));
+  transition: opacity var(--motion-simple-reveal-duration) ease, transform var(--motion-simple-reveal-duration) ease;
 }
 .js-ready .reveal.revealed {
   opacity: 1;
@@ -244,8 +255,8 @@ button:hover .arrow-nudge-back {
 }
 .js-ready .reveal-text {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateY(var(--motion-simple-reveal-distance));
+  transition: opacity var(--motion-simple-reveal-duration) ease, transform var(--motion-simple-reveal-duration) ease;
 }
 .js-ready .reveal-text.revealed {
   opacity: 1;

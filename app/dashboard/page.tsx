@@ -21,7 +21,7 @@ export default async function DashboardPage() {
             Edit the site without touching the code.
           </h1>
           <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.8, maxWidth: '720px' }}>
-            This admin panel edits the shared site content source used by the homepage, About page, Work page, and photography listing pages.
+            This admin panel edits the shared content source for the site, including page copy, case studies, card sizing, listening widgets, gallery order, and image placement.
           </p>
         </div>
 

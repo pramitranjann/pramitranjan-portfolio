@@ -5,9 +5,17 @@ import Link from 'next/link'
 import { Footer } from '@/components/Footer'
 import { Nav } from '@/components/Nav'
 import { playCardEnter, playNav } from '@/lib/sounds'
-import type { PhotographyCity } from '@/lib/site-content-schema'
+import type { PhotographyCardStyleSettings, PhotographyCity } from '@/lib/site-content-schema'
 
-export function PhotographyIndexClient({ heroTitle, cities }: { heroTitle: string; cities: PhotographyCity[] }) {
+export function PhotographyIndexClient({
+  heroTitle,
+  cities,
+  cardStyle,
+}: {
+  heroTitle: string
+  cities: PhotographyCity[]
+  cardStyle: PhotographyCardStyleSettings
+}) {
   return (
     <>
       <Nav />
@@ -24,13 +32,13 @@ export function PhotographyIndexClient({ heroTitle, cities }: { heroTitle: strin
           <div className="grid grid-cols-2 md:grid-cols-4" style={{ gap: '16px' }}>
             {cities.map((city) => {
               const inner = (
-                <div className="portfolio-card flex flex-col h-full" style={{ backgroundColor: '#1c1c1c', padding: '16px' }}>
-                  <div style={{ position: 'relative', width: '100%', aspectRatio: '3/2', backgroundColor: '#252525', border: '1px solid #333333', marginBottom: '12px', overflow: 'hidden' }}>
+                <div className="portfolio-card flex flex-col h-full" style={{ backgroundColor: '#1c1c1c', padding: cardStyle.cardPadding }}>
+                  <div style={{ position: 'relative', width: '100%', aspectRatio: cardStyle.imageAspectRatio, backgroundColor: '#252525', border: '1px solid #333333', marginBottom: '12px', overflow: 'hidden' }}>
                     <Image src={city.cover} alt={city.title} fill style={{ objectFit: 'cover', objectPosition: city.imagePosition ?? 'center' }} sizes="(max-width: 768px) 50vw, 25vw" />
                   </div>
-                  <h2 className="font-serif" style={{ fontSize: 'var(--text-body)', fontWeight: 400, color: '#f5f2ed', marginBottom: '4px' }}>{city.title}</h2>
-                  <p className="font-mono flex-1" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.6, marginBottom: '12px' }}>{city.desc}</p>
-                  <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: city.comingSoon ? '#666666' : '#FF3120' }}>
+                  <h2 className="font-serif" style={{ fontSize: cardStyle.titleSize, fontWeight: 400, color: '#f5f2ed', marginBottom: '4px' }}>{city.title}</h2>
+                  <p className="font-mono flex-1" style={{ fontSize: cardStyle.bodySize, letterSpacing: '0.04em', color: '#999999', lineHeight: 1.6, marginBottom: '12px' }}>{city.desc}</p>
+                  <span className="font-mono" style={{ fontSize: cardStyle.bodySize, letterSpacing: '0.1em', color: city.comingSoon ? '#666666' : '#FF3120' }}>
                     {city.comingSoon ? 'COMING SOON' : <>VIEW <span className="arrow-nudge">→</span></>}
                   </span>
                 </div>

@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useMemo, useState } from 'react'
+import { useMotionSettings } from '@/components/MotionSettingsProvider'
 import { playIntroKey, playIntroLift } from '@/lib/sounds'
 
 // Module-level flag: resets on every hard reload, persists through SPA navigation.
@@ -12,6 +13,7 @@ export function IntroAnimation() {
   const [text, setText] = useState('')
   const [cursorHidden, setCursorHidden] = useState(false)
   const [lifting, setLifting] = useState(false)
+  const motion = useMotionSettings()
 
   const reducedMotion = useMemo(
     () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
@@ -22,20 +24,25 @@ export function IntroAnimation() {
     if (done) return
 
     const ids: ReturnType<typeof setTimeout>[] = []
+    const firstKeyDelay = motion.introStartDelay
+    const secondKeyDelay = motion.introStartDelay + motion.introKeyGap
+    const cursorHideDelay = motion.introStartDelay + motion.introKeyGap * 2
+    const liftStartDelay = cursorHideDelay + motion.introPauseBeforeLift
+    const finishDelay = liftStartDelay + motion.introLiftDuration + 50
 
-    ids.push(setTimeout(() => { setText('P'); playIntroKey('P') }, 1100))
-    ids.push(setTimeout(() => { setText('PR'); playIntroKey('R') }, 1650))
-    ids.push(setTimeout(() => setCursorHidden(true), 2200))
-    ids.push(setTimeout(() => { setLifting(true); playIntroLift() }, 2450))
+    ids.push(setTimeout(() => { setText('P'); playIntroKey('P') }, firstKeyDelay))
+    ids.push(setTimeout(() => { setText('PR'); playIntroKey('R') }, secondKeyDelay))
+    ids.push(setTimeout(() => setCursorHidden(true), cursorHideDelay))
+    ids.push(setTimeout(() => { setLifting(true); playIntroLift() }, liftStartDelay))
     ids.push(
       setTimeout(() => {
         _played = true
         setDone(true)
-      }, 3350) // 50ms buffer after lift ends (2450 + 850 = 3300, +50 = 3350)
+      }, finishDelay)
     )
 
     return () => ids.forEach(clearTimeout) // prevents StrictMode double-fire
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [done, motion.introKeyGap, motion.introLiftDuration, motion.introPauseBeforeLift, motion.introStartDelay])
 
   if (done) return null
 
@@ -44,7 +51,7 @@ export function IntroAnimation() {
       ? { opacity: 0, transition: 'opacity 300ms ease' }
       : {
           transform: 'translateY(-100%)',
-          transition: 'transform 850ms cubic-bezier(0.77, 0, 0.175, 1)',
+          transition: `transform ${motion.introLiftDuration}ms cubic-bezier(0.77, 0, 0.175, 1)`,
         }
     : {}
 

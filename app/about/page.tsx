@@ -5,6 +5,7 @@ import { SpotifyWidget } from '@/components/SpotifyWidget'
 import { GsapReveal } from '@/components/GsapReveal'
 import { getSiteContent } from '@/lib/site-content'
 import { AnimatedEyebrow } from '@/components/AnimatedEyebrow'
+import type { NowCardStyleSettings } from '@/lib/site-content-schema'
 
 function CVButton() {
   return (
@@ -69,12 +70,22 @@ function EntryList({ items }: { items: Array<{ org: string; role: string; date: 
   )
 }
 
-function NowCell({ label, value, sub }: { label: string; value: string; sub: string }) {
+function NowCell({
+  label,
+  value,
+  sub,
+  styleSettings,
+}: {
+  label: string
+  value: string
+  sub: string
+  styleSettings: NowCardStyleSettings
+}) {
   return (
-    <div style={{ background: '#0d0d0d', padding: '20px' }}>
-      <span className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.18em', color: '#FF3120', display: 'block', marginBottom: '10px' }}>{label}</span>
-      <div className="font-serif" style={{ fontSize: '18px', fontStyle: 'italic', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.3, marginBottom: '7px' }}>{value}</div>
-      <div className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.08em', color: '#999999', lineHeight: 1.6 }}>{sub}</div>
+    <div style={{ background: '#0d0d0d', padding: styleSettings.cardPadding }}>
+      <span className="font-mono" style={{ fontSize: styleSettings.labelSize, letterSpacing: '0.18em', color: '#FF3120', display: 'block', marginBottom: '10px' }}>{label}</span>
+      <div className="font-serif" style={{ fontSize: styleSettings.titleSize, fontStyle: 'italic', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.3, marginBottom: '7px' }}>{value}</div>
+      <div className="font-mono" style={{ fontSize: styleSettings.bodySize, letterSpacing: '0.08em', color: '#999999', lineHeight: 1.6 }}>{sub}</div>
     </div>
   )
 }
@@ -132,7 +143,7 @@ export default async function AboutPage() {
           </div>
           <div style={{ padding: '28px 24px' }}>
             <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#666666', display: 'block', marginBottom: '10px' }}>ON ROTATION_</span>
-            <SpotifyWidget variant="sidebar" />
+            <SpotifyWidget variant="sidebar" styleSettings={content.design.listeningCard} />
           </div>
         </section>
 
@@ -229,10 +240,10 @@ export default async function AboutPage() {
             </p>
             <div data-reveal className="now-grid-mobile" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1px', background: '#1f1f1f', border: '1px solid #1f1f1f' }}>
               <div style={{ background: '#0d0d0d', padding: '0' }}>
-                <SpotifyWidget variant="sidebar" />
+                <SpotifyWidget variant="sidebar" styleSettings={content.design.listeningCard} />
               </div>
               {content.aboutPage.nowCards.map((card) => (
-                <NowCell key={card.label} label={card.label} value={card.value} sub={card.sub} />
+                <NowCell key={card.label} label={card.label} value={card.value} sub={card.sub} styleSettings={content.design.nowCards} />
               ))}
             </div>
           </GsapReveal>

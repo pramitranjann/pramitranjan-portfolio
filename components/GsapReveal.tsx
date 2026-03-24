@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useMotionSettings } from '@/components/MotionSettingsProvider'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -15,7 +16,9 @@ interface GsapRevealProps {
 
 export function GsapReveal({ children, stagger = 0.08, className, style }: GsapRevealProps) {
   const ref = useRef<HTMLDivElement>(null)
+  const motion = useMotionSettings()
   const staggerRef = useRef(stagger)
+  staggerRef.current = stagger
 
   useEffect(() => {
     const el = ref.current
@@ -32,7 +35,7 @@ export function GsapReveal({ children, stagger = 0.08, className, style }: GsapR
     }
 
     const ctx = gsap.context(() => {
-      gsap.set(items, { opacity: 0, y: 16 })
+      gsap.set(items, { opacity: 0, y: motion.pageRevealDistance })
       ScrollTrigger.create({
         trigger: el,
         start: 'top 85%',
@@ -40,9 +43,9 @@ export function GsapReveal({ children, stagger = 0.08, className, style }: GsapR
           gsap.to(items, {
             opacity: 1,
             y: 0,
-            duration: 0.6,
+            duration: motion.pageRevealDuration,
             ease: 'power2.out',
-            stagger: staggerRef.current,
+            stagger: stagger === 0.08 ? motion.pageRevealStagger : staggerRef.current,
           })
         },
         once: true,
@@ -50,7 +53,7 @@ export function GsapReveal({ children, stagger = 0.08, className, style }: GsapR
     }, el)
 
     return () => ctx.revert()
-  }, [])
+  }, [motion.pageRevealDistance, motion.pageRevealDuration, motion.pageRevealStagger, stagger])
 
   return (
     <div ref={ref} className={className} style={style}>

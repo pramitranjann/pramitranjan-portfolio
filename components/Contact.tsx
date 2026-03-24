@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useRef } from 'react'
+import { useMotionSettings } from '@/components/MotionSettingsProvider'
 
 const socialLinks = [
   { label: 'LINKEDIN',  href: 'https://www.linkedin.com/in/pramitranjann/' },
@@ -9,6 +10,7 @@ const socialLinks = [
 
 export function Contact() {
   const secRef = useRef<HTMLElement>(null)
+  const motion = useMotionSettings()
 
   useEffect(() => {
     const el = secRef.current
@@ -17,7 +19,7 @@ export function Contact() {
       ([entry]) => {
         if (entry.isIntersecting) {
           const els = Array.from(el.querySelectorAll('.reveal-text')) as HTMLElement[]
-          els.forEach((child, i) => setTimeout(() => child.classList.add('revealed'), i * 200))
+          els.forEach((child, i) => setTimeout(() => child.classList.add('revealed'), i * motion.simpleRevealStagger * 1000))
           observer.disconnect()
         }
       },
@@ -25,7 +27,7 @@ export function Contact() {
     )
     observer.observe(el)
     return () => observer.disconnect()
-  }, [])
+  }, [motion.simpleRevealStagger])
 
   return (
     <section

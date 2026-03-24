@@ -1,9 +1,7 @@
 import { PhotoGalleryLayout } from '@/components/PhotoGalleryLayout'
+import { getPhotographyGallery, getSiteContent } from '@/lib/site-content'
 
-const images = Array.from({ length: 36 }, (_, i) =>
-  `/creative/photography/penang/${String(i + 1).padStart(2, '0')}.jpg`
-)
-
-export default function PenangPage() {
-  return <PhotoGalleryLayout city="Penang" descriptor="Heritage streets and the texture of an older world." images={images} />
+export default async function PenangPage() {
+  const [gallery, content] = await Promise.all([getPhotographyGallery('penang'), getSiteContent()])
+  return <PhotoGalleryLayout city={gallery.city} descriptor={gallery.descriptor} images={gallery.images} styleSettings={content.design.gallery} />
 }

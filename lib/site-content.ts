@@ -37,6 +37,17 @@ export async function getCaseStudiesBySection(section: CaseStudyContent['section
   return content.caseStudies.filter((item) => item.section === section)
 }
 
+export async function getPhotographyGallery(slug: string) {
+  const content = await getSiteContent()
+  const gallery = content.photography.galleries.find((item) => item.slug === slug)
+
+  if (!gallery) {
+    throw new Error(`Photography gallery not found: ${slug}`)
+  }
+
+  return gallery
+}
+
 export async function saveSiteContent(content: SiteContent) {
   if (!isSiteContent(content)) {
     throw new Error('Refusing to save invalid site content')

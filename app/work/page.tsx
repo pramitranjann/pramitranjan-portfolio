@@ -9,6 +9,7 @@ export default async function WorkPage() {
       heroTitle={content.workPage.heroTitle}
       heroBody={content.workPage.heroBody}
       projects={content.workPage.projects}
+      cardStyle={content.design.supportingCards}
     />
   )
 }

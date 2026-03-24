@@ -1,10 +1,21 @@
 'use client'
 import { useEffect, useRef } from 'react'
+import { useMotionSettings } from '@/components/MotionSettingsProvider'
 import Link from 'next/link'
 import { SpotifyWidget } from '@/components/SpotifyWidget'
+import type { ListeningCardStyleSettings } from '@/lib/site-content-schema'
 
-export function About({ body, spotifyLabel }: { body: string; spotifyLabel: string }) {
+export function About({
+  body,
+  spotifyLabel,
+  listeningStyle,
+}: {
+  body: string
+  spotifyLabel: string
+  listeningStyle: ListeningCardStyleSettings
+}) {
   const secRef = useRef<HTMLElement>(null)
+  const motion = useMotionSettings()
 
   useEffect(() => {
     const el = secRef.current
@@ -13,7 +24,7 @@ export function About({ body, spotifyLabel }: { body: string; spotifyLabel: stri
       ([entry]) => {
         if (entry.isIntersecting) {
           const els = Array.from(el.querySelectorAll('.reveal-text')) as HTMLElement[]
-          els.forEach((child, i) => setTimeout(() => child.classList.add('revealed'), i * 200))
+          els.forEach((child, i) => setTimeout(() => child.classList.add('revealed'), i * motion.simpleRevealStagger * 1000))
           observer.disconnect()
         }
       },
@@ -21,7 +32,7 @@ export function About({ body, spotifyLabel }: { body: string; spotifyLabel: stri
     )
     observer.observe(el)
     return () => observer.disconnect()
-  }, [])
+  }, [motion.simpleRevealStagger])
 
   return (
     <section
@@ -53,7 +64,7 @@ export function About({ body, spotifyLabel }: { body: string; spotifyLabel: stri
         </p>
         <div className="reveal-text flex flex-col items-end flex-shrink-0" style={{ gap: '14px', alignSelf: 'center' }}>
           <div style={{ minWidth: '250px' }}>
-            <SpotifyWidget variant="sidebar" />
+            <SpotifyWidget variant="sidebar" restingLabel={spotifyLabel.replace(/_+$/, '')} styleSettings={listeningStyle} />
           </div>
           <Link
             href="/about"
