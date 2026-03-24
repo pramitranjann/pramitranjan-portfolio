@@ -97,21 +97,23 @@ export function CaseStudyLayout({
     const getActiveSection = () => {
       const sections = Array.from(document.querySelectorAll('section[id^="sec-"]'))
         .filter(el => el.id !== 'sec-hero')
+      if (sections.length === 0) return null
       if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 120) {
         return sections[sections.length - 1] ?? null
       }
-      // Pick the section with the most pixels visible in the top 60% of the viewport.
-      const band = window.innerHeight * 0.6
-      let best: Element | null = null
-      let bestPx = -1
+      const threshold = 110
+      let active = sections[0] ?? null
+
       for (const el of sections) {
         const rect = el.getBoundingClientRect()
-        const visTop = Math.max(rect.top, 65)
-        const visBot = Math.min(rect.bottom, band)
-        const px = Math.max(0, visBot - visTop)
-        if (px > bestPx) { bestPx = px; best = el }
+        if (rect.top <= threshold) {
+          active = el
+        } else {
+          break
+        }
       }
-      return best
+
+      return active
     }
 
     const onScroll = () => {
