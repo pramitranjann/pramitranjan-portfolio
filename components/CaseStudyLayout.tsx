@@ -97,6 +97,9 @@ export function CaseStudyLayout({
     const getActiveSection = () => {
       const sections = Array.from(document.querySelectorAll('section[id^="sec-"]'))
         .filter(el => el.id !== 'sec-hero')
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 120) {
+        return sections[sections.length - 1] ?? null
+      }
       // Pick the section with the most pixels visible in the top 60% of the viewport.
       const band = window.innerHeight * 0.6
       let best: Element | null = null
@@ -416,7 +419,7 @@ export function CaseStudyLayout({
           alignItems: 'stretch',
           background: 'rgba(17,17,17,0.96)',
           backdropFilter: 'blur(12px)',
-          border: '1px solid #222',
+          border: '1px solid rgba(245, 242, 237, 0.22)',
           opacity: navVisible ? 1 : 0,
           pointerEvents: navVisible ? 'auto' : 'none',
           transition: 'opacity 0.3s ease',
@@ -445,7 +448,7 @@ export function CaseStudyLayout({
                 border: 'none',
                 cursor: 'pointer',
                 position: 'relative',
-                borderRight: i < navItems.length - 1 ? '1px solid #1a1a1a' : 'none',
+                borderRight: i < navItems.length - 1 ? '1px solid rgba(245, 242, 237, 0.12)' : 'none',
                 transition: 'color 0.15s ease',
               }}
             >

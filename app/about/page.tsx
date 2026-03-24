@@ -3,6 +3,8 @@ import { Nav } from '@/components/Nav'
 import { Footer } from '@/components/Footer'
 import { SpotifyWidget } from '@/components/SpotifyWidget'
 import { GsapReveal } from '@/components/GsapReveal'
+import { getSiteContent } from '@/lib/site-content'
+import { AnimatedEyebrow } from '@/components/AnimatedEyebrow'
 
 function CVButton() {
   return (
@@ -36,22 +38,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   )
 }
 
-const tools = ['FIGMA', 'ADOBE CREATIVE SUITE', 'CLAUDE CODE', 'VIBE CODING']
-
-const experience = [
-  { org: 'Vircle Malaysia',       role: 'GROWTH INTERN',       date: 'JUL 2024 — AUG 2024', desc: 'Designed sticker packs for Vircle × Minions Despicable Me 4 collaboration — included in the packaging of each card sold. Created hero images and prototyped a school landing page.' },
-  { org: 'SOHO Exhibition',       role: 'EXHIBITION DIRECTOR', date: 'SEP 2023 — JAN 2024',  desc: 'Chaired the annual sixth form art exhibition. Responsible for organising all departments, delegating tasks, managing logistics, and producing all branding and marketing materials.' },
-  { org: 'Moving Walls Malaysia', role: 'MARKETING INTERN',    date: 'JUL 2023 — AUG 2023',  desc: 'Part of the marketing team creating social media content. Tasked with starting and managing the company TikTok page — ideating, filming, and optimising for engagement.' },
-]
-
-const professionalActivities = [
-  { org: 'FigBuild 2026',                        role: 'PARTICIPANT', date: '2026',    desc: "Participated in Figma's 2026 3 day design challenge to build an app and built Accord." },
-  { org: 'FLUXathon (48-Hour Design Challenge)', role: 'PARTICIPANT', date: '2026',    desc: 'Designed a weather forecasting app for per ownners using Claude AI. Judged by Google.' },
-  { org: 'FLUX Club',                            role: 'MEMBER',      date: 'ONGOING', desc: 'Building strong Figma skills through Figma Fridays.' },
-  { org: 'Rocket × FLUX (3-Day Design Sprint)',  role: 'PARTICIPANT', date: '2026',    desc: 'Redesigned the Passio Go app using Figma Make — exploring how design ideology is shifting in the age of AI.' },
-]
-
-function EntryList({ items }: { items: typeof experience }) {
+function EntryList({ items }: { items: Array<{ org: string; role: string; date: string; desc: string }> }) {
   return (
     <div className="flex flex-col" style={{ gap: '40px' }}>
       {items.map((item) => (
@@ -92,7 +79,9 @@ function NowCell({ label, value, sub }: { label: string; value: string; sub: str
   )
 }
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const content = await getSiteContent()
+
   return (
     <>
       <Nav />
@@ -102,9 +91,8 @@ export default function AboutPage() {
         <section className="border-b border-divider" style={{ padding: '64px 40px' }}>
           <GsapReveal>
             {/* Eyebrow */}
-            <div data-reveal className="flex items-center" style={{ gap: '10px', marginBottom: '24px' }}>
-              <div style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
-              <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>ABOUT_</span>
+            <div data-reveal>
+              <AnimatedEyebrow label="ABOUT_" />
             </div>
             {/* H1 */}
             <h1
@@ -121,7 +109,7 @@ export default function AboutPage() {
               className="font-mono"
               style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.9, maxWidth: '560px', marginBottom: '40px' }}
             >
-              UX design student at SCAD, figuring out what good design can actually do. I think like a designer but see like an artist. Still learning. Always curious.
+              {content.aboutPage.heroBody}
             </p>
             <div data-reveal className="flex items-center justify-between">
               <CVButton />
@@ -138,7 +126,7 @@ export default function AboutPage() {
             <GsapReveal>
               <span data-reveal className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#666666', display: 'block', marginBottom: '12px' }}>WHO I AM_</span>
               <p data-reveal className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.03em', color: '#999999', lineHeight: 1.8 }}>
-                From KL, currently surviving Savannah. I picked up a camera before I picked up Figma — film photography across Southeast Asia will do that. I think about design the same way: light, framing, what to cut. Still figuring out the rest.
+                {content.aboutPage.whoIAm}
               </p>
             </GsapReveal>
           </div>
@@ -153,7 +141,7 @@ export default function AboutPage() {
           <GsapReveal>
             <div data-reveal className="about-page-grid grid" style={{ gridTemplateColumns: '160px 1fr', gap: '48px' }}>
               <SectionLabel>EXPERIENCE_</SectionLabel>
-              <EntryList items={experience} />
+              <EntryList items={content.aboutPage.experience} />
             </div>
           </GsapReveal>
         </section>
@@ -163,7 +151,7 @@ export default function AboutPage() {
           <GsapReveal>
             <div data-reveal className="about-page-grid grid" style={{ gridTemplateColumns: '160px 1fr', gap: '48px' }}>
               <SectionLabel>PROFESSIONAL<br />ACTIVITIES</SectionLabel>
-              <EntryList items={professionalActivities} />
+              <EntryList items={content.aboutPage.professionalActivities} />
             </div>
           </GsapReveal>
         </section>
@@ -209,7 +197,7 @@ export default function AboutPage() {
             <div data-reveal className="about-page-grid grid" style={{ gridTemplateColumns: '160px 1fr', gap: '48px' }}>
               <SectionLabel>TOOLS</SectionLabel>
               <div className="flex flex-wrap" style={{ gap: '8px' }}>
-                {tools.map((tool) => (
+                {content.aboutPage.tools.map((tool) => (
                   <span
                     key={tool}
                     className="font-mono"
@@ -240,19 +228,12 @@ export default function AboutPage() {
               A snapshot of what I'm into this month. Updated manually.
             </p>
             <div data-reveal className="now-grid-mobile" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1px', background: '#1f1f1f', border: '1px solid #1f1f1f' }}>
-              <div style={{ background: '#0d0d0d', padding: '20px' }}>
-                <span className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.18em', color: '#FF3120', display: 'block', marginBottom: '10px' }}>LISTENING_</span>
-                <div style={{ position: 'relative' }}>
-                  <div className="font-serif" style={{ fontSize: '16px', fontStyle: 'italic', color: '#555555', lineHeight: 1.2, marginBottom: '4px' }}>Something good,</div>
-                  <div className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.1em', color: '#444444' }}>PROBABLY</div>
-                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: '#0d0d0d' }}>
-                    <SpotifyWidget variant="cell" />
-                  </div>
-                </div>
+              <div style={{ background: '#0d0d0d', padding: '0' }}>
+                <SpotifyWidget variant="sidebar" />
               </div>
-              <NowCell label="MOVING_" value="5 days / week lift + run" sub="Chasing a sub-22min 5K and a 250lbs bench. Not there yet." />
-              <NowCell label="EATING_" value="Craving everything Malaysian" sub="So done with SCAD food." />
-              <NowCell label="BUILDING_" value="This portfolio (obviously)" sub="Plus Albers — a colour theory tool." />
+              {content.aboutPage.nowCards.map((card) => (
+                <NowCell key={card.label} label={card.label} value={card.value} sub={card.sub} />
+              ))}
             </div>
           </GsapReveal>
         </section>

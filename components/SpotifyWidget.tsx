@@ -70,7 +70,7 @@ function SidebarVariant({ track, progress, pct }: { track: Track; progress: numb
           background: track.isPlaying ? '#FF3120' : '#444444',
           animation: track.isPlaying ? 'spotify-pulse 1.6s ease infinite' : 'none',
         }} />
-        <span className="font-mono" style={{ fontSize: '8px', letterSpacing: '0.14em', color: '#666666' }}>
+        <span className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.14em', color: '#666666' }}>
           {track.isPlaying ? 'NOW PLAYING' : 'LAST PLAYED'}
         </span>
       </div>
@@ -110,42 +110,7 @@ function SidebarVariant({ track, progress, pct }: { track: Track; progress: numb
 }
 
 function CellVariant({ track, pct }: { track: Track; pct: number }) {
-  return (
-    <div>
-      <div className="flex items-center" style={{ gap: '5px', marginBottom: '8px' }}>
-        <div style={{
-          width: '5px', height: '5px', borderRadius: '50%',
-          background: track.isPlaying ? '#FF3120' : '#444444',
-          animation: track.isPlaying ? 'spotify-pulse 1.6s ease infinite' : 'none',
-          flexShrink: 0,
-        }} />
-        <span className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.14em', color: '#666666' }}>
-          {track.isPlaying ? 'LIVE' : 'LAST'}
-        </span>
-      </div>
-      <div className="flex" style={{ gap: '8px', alignItems: 'flex-start' }}>
-        {track.albumArt ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={track.albumArt} alt={track.title} style={{ width: '32px', height: '32px', objectFit: 'cover', border: '1px solid #2a2a2a', flexShrink: 0 }} />
-        ) : (
-          <div style={{ width: '32px', height: '32px', background: '#1f1f1f', border: '1px solid #2a2a2a', flexShrink: 0 }} />
-        )}
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div className="font-serif" style={{ fontSize: '17px', fontStyle: 'italic', color: '#f5f2ed', lineHeight: 1.2, marginBottom: '4px' }}>
-            {track.title}
-          </div>
-          <div className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.1em', color: '#999999' }}>
-            {track.artist.toUpperCase()}
-          </div>
-        </div>
-      </div>
-      {track.isPlaying && (
-        <div style={{ height: '1px', background: '#1f1f1f', position: 'relative', marginTop: '8px' }}>
-          <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${pct}%`, background: '#FF3120' }} />
-        </div>
-      )}
-    </div>
-  )
+  return <SidebarVariant track={track} progress={track.progress} pct={pct} />
 }
 
 function formatMs(ms: number): string {

@@ -1,15 +1,9 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { ProjectCard } from './ProjectCard'
+import type { HomeSection } from '@/lib/site-content-schema'
 
-const projects = [
-  { title: "Franklin's", oneliner: 'The experience starts before you walk in.',             tags: ['UX', 'RESEARCH'],   href: '/work/franklins',  cover: '/work/franklins/cover-processed.png' },
-  { title: 'Albers',     oneliner: 'Colour theory you can actually play with.',             tags: ['UI', 'CODE'],       href: '/work/albers',     cover: '/work/albers/cover-processed.png' },
-  { title: 'LoomLearn',  oneliner: 'One learning space for students who think differently.', tags: ['UX', 'ED-TECH'],  href: '/work/loomlearn',  cover: '/work/loomlearn/cover-processed.png' },
-  { title: 'Atom OS',    oneliner: 'A phone stripped down to what actually matters.',        tags: ['UI', 'SYSTEMS'],   href: '/work/atom',       cover: '/work/atom/cover-processed.png' },
-]
-
-export function SelectedWork() {
+export function SelectedWork({ content }: { content: HomeSection }) {
   const gridRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -36,13 +30,13 @@ export function SelectedWork() {
           className="font-serif"
           style={{ fontSize: 'var(--text-h2)', fontWeight: 400, color: '#FF3120', lineHeight: 1.1, marginBottom: '12px' }}
         >
-          Research to resolution.
+          {content.heading}
         </h2>
         <p
           className="font-mono"
           style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.7, maxWidth: '480px' }}
         >
-          Four projects in UX — each one starting with a question worth asking.
+          {content.body}
         </p>
       </div>
 
@@ -51,7 +45,7 @@ export function SelectedWork() {
         className="card-grid grid grid-cols-2 md:grid-cols-4"
         style={{ gap: '16px', padding: '0 24px 40px' }}
       >
-        {projects.map((p) => (
+        {content.items.map((p) => (
           <div key={p.title} className="reveal">
             <ProjectCard {...p} variant="supporting" />
           </div>

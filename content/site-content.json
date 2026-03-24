@@ -1,0 +1,224 @@
+{
+  "home": {
+    "selectedWork": {
+      "heading": "Research to resolution.",
+      "body": "Four projects in UX — each one starting with a question worth asking.",
+      "items": [
+        {
+          "title": "Franklin's",
+          "oneliner": "The experience starts before you walk in.",
+          "tags": ["UX", "RESEARCH"],
+          "href": "/work/franklins",
+          "cover": "/work/franklins/cover-processed.png"
+        },
+        {
+          "title": "Albers",
+          "oneliner": "Colour theory you can actually play with.",
+          "tags": ["UI", "CODE"],
+          "href": "/work/albers",
+          "cover": "/work/albers/cover-processed.png"
+        },
+        {
+          "title": "LoomLearn",
+          "oneliner": "One learning space for students who think differently.",
+          "tags": ["UX", "ED-TECH"],
+          "href": "/work/loomlearn",
+          "cover": "/work/loomlearn/cover-processed.png"
+        },
+        {
+          "title": "Atom OS",
+          "oneliner": "A phone stripped down to what actually matters.",
+          "tags": ["UI", "SYSTEMS"],
+          "href": "/work/atom",
+          "cover": "/work/atom/cover-processed.png"
+        }
+      ]
+    },
+    "moreWork": {
+      "heading": "Competitions & side projects.",
+      "body": "48-hour briefs, weird constraints, and one accessibility tool nobody asked for but needed.",
+      "items": [
+        {
+          "title": "Accord",
+          "oneliner": "A contract tool built for freelancers.",
+          "tags": ["UX", "PRODUCT"],
+          "href": "/work/accord"
+        },
+        {
+          "title": "HelpOH",
+          "oneliner": "Connecting homes to trusted help, and workers to fair work.",
+          "tags": ["UX", "SERVICE DESIGN"],
+          "href": "/work/helpoh",
+          "cover": "/work/helpoh/cover-hor-processed.png"
+        },
+        {
+          "title": "Purcast",
+          "oneliner": "A podcast app designed for the Fluxathon.",
+          "tags": ["UI", "COMPETITION"],
+          "href": "/work/purcast"
+        }
+      ]
+    },
+    "about": {
+      "body": "UX design student at SCAD, figuring out what good design can actually do. I think like a designer but see like an artist. Still learning. Always curious.",
+      "spotifyLabel": "LAST PLAYED_"
+    }
+  },
+  "aboutPage": {
+    "heroBody": "UX design student at SCAD, figuring out what good design can actually do. I think like a designer but see like an artist. Still learning. Always curious.",
+    "whoIAm": "From KL, currently surviving Savannah. I picked up a camera before I picked up Figma — film photography across Southeast Asia will do that. I think about design the same way: light, framing, what to cut. Still figuring out the rest.",
+    "experience": [
+      {
+        "org": "Vircle Malaysia",
+        "role": "GROWTH INTERN",
+        "date": "JUL 2024 — AUG 2024",
+        "desc": "Designed sticker packs for Vircle × Minions Despicable Me 4 collaboration — included in the packaging of each card sold. Created hero images and prototyped a school landing page."
+      },
+      {
+        "org": "SOHO Exhibition",
+        "role": "EXHIBITION DIRECTOR",
+        "date": "SEP 2023 — JAN 2024",
+        "desc": "Chaired the annual sixth form art exhibition. Responsible for organising all departments, delegating tasks, managing logistics, and producing all branding and marketing materials."
+      },
+      {
+        "org": "Moving Walls Malaysia",
+        "role": "MARKETING INTERN",
+        "date": "JUL 2023 — AUG 2023",
+        "desc": "Part of the marketing team creating social media content. Tasked with starting and managing the company TikTok page — ideating, filming, and optimising for engagement."
+      }
+    ],
+    "professionalActivities": [
+      {
+        "org": "FigBuild 2026",
+        "role": "PARTICIPANT",
+        "date": "2026",
+        "desc": "Participated in Figma's 2026 3 day design challenge to build an app and built Accord."
+      },
+      {
+        "org": "FLUXathon (48-Hour Design Challenge)",
+        "role": "PARTICIPANT",
+        "date": "2026",
+        "desc": "Designed a weather forecasting app for per ownners using Claude AI. Judged by Google."
+      },
+      {
+        "org": "FLUX Club",
+        "role": "MEMBER",
+        "date": "ONGOING",
+        "desc": "Building strong Figma skills through Figma Fridays."
+      },
+      {
+        "org": "Rocket × FLUX (3-Day Design Sprint)",
+        "role": "PARTICIPANT",
+        "date": "2026",
+        "desc": "Redesigned the Passio Go app using Figma Make — exploring how design ideology is shifting in the age of AI."
+      }
+    ],
+    "tools": ["FIGMA", "ADOBE CREATIVE SUITE", "CLAUDE CODE", "VIBE CODING"],
+    "nowCards": [
+      {
+        "label": "MOVING_",
+        "value": "5 days / week lift + run",
+        "sub": "Chasing a sub-22min 5K and a 250lbs bench. Not there yet."
+      },
+      {
+        "label": "EATING_",
+        "value": "Craving everything Malaysian",
+        "sub": "So done with SCAD food."
+      },
+      {
+        "label": "BUILDING_",
+        "value": "This portfolio (obviously)",
+        "sub": "Plus Albers — a colour theory tool."
+      }
+    ]
+  },
+  "workPage": {
+    "heroTitle": "All projects.",
+    "heroBody": "Five projects across UX, UI, and interaction design.",
+    "projects": [
+      {
+        "title": "Franklin's",
+        "oneliner": "The experience starts before you walk in.",
+        "tags": ["UX", "RESEARCH"],
+        "href": "/work/franklins",
+        "cover": "/work/franklins/cover-hor-processed.png"
+      },
+      {
+        "title": "LoomLearn",
+        "oneliner": "One learning space for students who think differently.",
+        "tags": ["UX", "RESEARCH"],
+        "href": "/work/loomlearn",
+        "cover": "/work/loomlearn/cover-hor-processed.png"
+      },
+      {
+        "title": "HelpOH",
+        "oneliner": "Connecting homes to trusted help, and workers to fair work.",
+        "tags": ["UX", "SERVICE DESIGN"],
+        "href": "/work/helpoh",
+        "cover": "/work/helpoh/cover-hor-processed.png"
+      },
+      {
+        "title": "Atom OS",
+        "oneliner": "A phone stripped down to what actually matters.",
+        "tags": ["UI", "SYSTEMS"],
+        "href": "/work/atom",
+        "cover": "/work/atom/cover-hor-processed.png"
+      },
+      {
+        "title": "Albers",
+        "oneliner": "Colour theory you can actually play with.",
+        "tags": ["UI", "INTERACTION"],
+        "href": "/work/albers",
+        "cover": "/work/albers/cover-hor-processed.png"
+      },
+      {
+        "title": "Accord",
+        "oneliner": "A contract tool built for freelancers.",
+        "tags": ["UX", "PRODUCT"],
+        "href": "/work/accord"
+      },
+      {
+        "title": "Purcast",
+        "oneliner": "A podcast app designed for the Fluxathon.",
+        "tags": ["UI", "COMPETITION"],
+        "href": "/work/purcast"
+      }
+    ]
+  },
+  "photography": {
+    "heroTitle": "Always looking.",
+    "cities": [
+      {
+        "slug": "kl",
+        "title": "KL",
+        "desc": "Street life and quiet corners of a city in motion.",
+        "cover": "/creative/photography/kl/41.jpg",
+        "imagePosition": "center 34%",
+        "comingSoon": false
+      },
+      {
+        "slug": "penang",
+        "title": "Penang",
+        "desc": "Heritage streets and the texture of an older world.",
+        "cover": "/creative/photography/penang/07.jpg",
+        "imagePosition": "center center",
+        "comingSoon": false
+      },
+      {
+        "slug": "singapore",
+        "title": "Singapore",
+        "desc": "The duality of a city-state — dense and lush at once.",
+        "cover": "/creative/photography/singapore/03.jpg",
+        "comingSoon": false
+      },
+      {
+        "slug": "hcmc",
+        "title": "Ho Chi Minh",
+        "desc": "Noise, heat, and the city that never slows down.",
+        "cover": "/creative/photography/hcmc/01.jpg",
+        "imagePosition": "center 42%",
+        "comingSoon": false
+      }
+    ]
+  }
+}

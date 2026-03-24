@@ -14,22 +14,28 @@ function getCtx(): AudioContext | null {
   if (typeof window === 'undefined') return null
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return null
   try {
-    if (!_ctx) _ctx = new AudioContext()
+    const AudioContextCtor = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
+    if (!AudioContextCtor) return null
+    if (!_ctx) _ctx = new AudioContextCtor()
     // Always call resume — no-op if already running, unblocks iOS if suspended
-    _ctx.resume()
+    void _ctx.resume()
     return _ctx
   } catch {
     return null
   }
 }
 
-// Pre-unlock on first touch (bonus — fires before any click handler on iOS)
+// Pre-unlock on first input so route/audio clicks keep working on Safari/iOS.
 if (typeof window !== 'undefined') {
   const handler = () => {
     getCtx()
     document.removeEventListener('touchstart', handler)
+    document.removeEventListener('pointerdown', handler)
+    document.removeEventListener('click', handler)
   }
   document.addEventListener('touchstart', handler, { passive: true })
+  document.addEventListener('pointerdown', handler, { passive: true })
+  document.addEventListener('click', handler, { passive: true })
 }
 
 function tone(

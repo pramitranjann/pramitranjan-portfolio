@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { SpotifyWidget } from '@/components/SpotifyWidget'
 
-export function About() {
+export function About({ body, spotifyLabel }: { body: string; spotifyLabel: string }) {
   const secRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -44,19 +44,16 @@ export function About() {
         Artist.<br />Designer.<br /><span style={{ color: '#FF3120' }}>Human.</span>
       </h2>
 
-      <div className="about-body-row flex justify-between items-end" style={{ gap: '32px' }}>
+      <div className="about-body-row flex justify-between items-center" style={{ gap: '32px' }}>
         <p
           className="reveal-text font-mono"
           style={{ fontSize: 'var(--text-body-lg)', color: '#999999', lineHeight: 1.9, maxWidth: '440px', letterSpacing: '0.04em' }}
         >
-          UX design student at SCAD, figuring out what good design can actually do. I think like a designer but see like an artist. Still learning. Always curious.
+          {body}
         </p>
-        <div className="reveal-text flex flex-col items-end flex-shrink-0" style={{ gap: '14px' }}>
-          <div style={{ background: '#0d0d0d', padding: '20px', minWidth: '250px' }}>
-            <span className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.18em', color: '#FF3120', display: 'block', marginBottom: '10px' }}>
-              LAST PLAYED_
-            </span>
-            <SpotifyWidget variant="cell" />
+        <div className="reveal-text flex flex-col items-end flex-shrink-0" style={{ gap: '14px', alignSelf: 'center' }}>
+          <div style={{ minWidth: '250px' }}>
+            <SpotifyWidget variant="sidebar" />
           </div>
           <Link
             href="/about"

@@ -72,7 +72,7 @@ export function PhotographyStage() {
                     sizes="124px"
                   />
                 </div>
-                <div className="font-mono" style={{ fontSize: '7px', color: '#FF3120', textAlign: 'center', marginTop: '4px', letterSpacing: '0.1em' }}>{frame.label}</div>
+                <div className="font-mono" style={{ fontSize: '10px', color: '#FF3120', textAlign: 'center', marginTop: '4px', letterSpacing: '0.1em' }}>{frame.label}</div>
               </Link>
             ))}
           </div>

@@ -7,18 +7,21 @@ import { About }            from '@/components/About'
 import { Contact }          from '@/components/Contact'
 import { Footer }          from '@/components/Footer'
 import { IntroAnimation }  from '@/components/IntroAnimation'
+import { getSiteContent } from '@/lib/site-content'
 
-export default function HomePage() {
+export default async function HomePage() {
+  const content = await getSiteContent()
+
   return (
     <>
       <Nav />
       <IntroAnimation />
       <HeroCarousel />
       <main style={{ paddingTop: '57px' }}>
-        <SelectedWork />
+        <SelectedWork content={content.home.selectedWork} />
         <PhotographyStage />
-        <MoreWork />
-        <About />
+        <MoreWork content={content.home.moreWork} />
+        <About body={content.home.about.body} spotifyLabel={content.home.about.spotifyLabel} />
         <Contact />
       </main>
       <Footer />

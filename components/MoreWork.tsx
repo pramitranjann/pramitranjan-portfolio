@@ -1,14 +1,9 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { ProjectCard } from './ProjectCard'
+import type { HomeSection } from '@/lib/site-content-schema'
 
-const projects = [
-  { title: 'Accord',   oneliner: 'A contract tool built for freelancers.',              tags: ['UX', 'PRODUCT'],        href: '/work/accord',   cover: undefined },
-  { title: 'HelpOH',   oneliner: 'Connecting homes to trusted help, and workers to fair work.', tags: ['UX', 'SERVICE DESIGN'], href: '/work/helpoh', cover: '/work/helpoh/cover-hor-processed.png' },
-  { title: 'Purcast',  oneliner: 'A podcast app designed for the Fluxathon.',           tags: ['UI', 'COMPETITION'],    href: '/work/purcast',  cover: undefined },
-]
-
-export function MoreWork() {
+export function MoreWork({ content }: { content: HomeSection }) {
   const gridRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -35,10 +30,10 @@ export function MoreWork() {
           className="font-serif"
           style={{ fontSize: 'var(--text-h3)', fontWeight: 400, color: '#FF3120', lineHeight: 1.1, marginBottom: '8px' }}
         >
-          Competitions & side projects.
+          {content.heading}
         </h2>
         <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', letterSpacing: '0.04em', lineHeight: 1.6 }}>
-          48-hour briefs, weird constraints, and one accessibility tool nobody asked for but needed.
+          {content.body}
         </p>
       </div>
 
@@ -47,7 +42,7 @@ export function MoreWork() {
         className="card-grid grid grid-cols-2 md:grid-cols-3"
         style={{ gap: '12px', padding: '0 24px 40px' }}
       >
-        {projects.map((p) => (
+        {content.items.map((p) => (
           <div key={p.title} className="reveal">
             <ProjectCard {...p} variant="supporting" imageRatio="16 / 9" />
           </div>
