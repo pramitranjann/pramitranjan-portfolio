@@ -1,4 +1,5 @@
 'use client'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Nav } from './Nav'
@@ -30,6 +31,16 @@ interface CaseStudyLayoutProps {
   usabilityTesting?: string
   solution?: string
   outcomes?: string
+  // Headlines — new
+  problemHeadline?: string
+  roleHeadline?: string
+  researchHeadline?: string
+  challengeHeadline?: string
+  processHeadline?: string
+  solutionHeadline?: string
+  outcomesHeadline?: string
+  pullQuote?: string
+  // Images — unchanged
   heroImage?: string
   researchImage?: string
   challengeImages?: [string, string]
@@ -53,6 +64,8 @@ export function CaseStudyLayout({
   title, oneliner, type, tags, prev, next,
   backHref = '/work', backLabel = 'WORK',
   problem, role, research, challenge, process, usabilityTesting, solution, outcomes,
+  problemHeadline, roleHeadline, researchHeadline, challengeHeadline,
+  processHeadline, solutionHeadline, outcomesHeadline, pullQuote,
   heroImage, researchImage, challengeImages, solutionHeroImage, solutionImages,
 }: CaseStudyLayoutProps) {
   const basePath = backHref
