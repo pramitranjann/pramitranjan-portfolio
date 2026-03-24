@@ -92,30 +92,35 @@ export function CaseStudyLayout({
   const [activeId, setActiveId]     = useState('')
 
   useEffect(() => {
+    const getActiveSection = () => {
+      const sections = Array.from(document.querySelectorAll('section[id^="sec-"]'))
+        .filter(el => el.id !== 'sec-hero')
+      // Pick the section with the most pixels visible in the top 60% of the viewport.
+      // This handles short sections and works identically scrolling up or down.
+      const band = window.innerHeight * 0.6
+      let best: Element | null = null
+      let bestPx = -1
+      for (const el of sections) {
+        const rect = el.getBoundingClientRect()
+        const visTop = Math.max(rect.top, 65)   // below fixed nav
+        const visBot = Math.min(rect.bottom, band)
+        const px = Math.max(0, visBot - visTop)
+        if (px > bestPx) { bestPx = px; best = el }
+      }
+      return best
+    }
+
     const onScroll = () => {
       setNavVisible(window.scrollY > 100)
-      const nearBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 80
-      if (nearBottom) {
-        const last = Array.from(document.querySelectorAll('section[id^="sec-"]'))
-          .filter(el => el.id !== 'sec-hero')
-          .at(-1)
-        if (last) setActiveId(last.id)
-      }
+      const active = getActiveSection()
+      if (active) setActiveId(active.id)
     }
+
     window.addEventListener('scroll', onScroll, { passive: true })
     onScroll()
 
-    const sectionEls = document.querySelectorAll('section[id^="sec-"]')
-    const sectionObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) setActiveId(entry.target.id)
-      })
-    }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 })
-    sectionEls.forEach(el => sectionObserver.observe(el))
-
     return () => {
       window.removeEventListener('scroll', onScroll)
-      sectionObserver.disconnect()
     }
   }, [])
 
@@ -412,16 +417,24 @@ export function CaseStudyLayout({
           transition: 'opacity 0.3s ease',
         }}>
           {navItems.map((item, i) => (
-            <a
+            <button
               key={item.id}
-              href={`#${item.id}`}
+              onClick={() => {
+                const el = document.getElementById(item.id)
+                if (el) {
+                  setActiveId(item.id)
+                  el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                }
+              }}
               className="font-mono"
               style={{
                 fontSize: '10px',
                 letterSpacing: '0.14em',
                 color: activeId === item.id ? '#f5f2ed' : '#3a3a3a',
                 padding: '11px 16px',
-                textDecoration: 'none',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
                 position: 'relative',
                 borderRight: i < navItems.length - 1 ? '1px solid #1a1a1a' : 'none',
                 transition: 'color 0.15s ease',
@@ -431,7 +444,7 @@ export function CaseStudyLayout({
               {activeId === item.id && (
                 <span style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '1px', background: '#FF3120' }} />
               )}
-            </a>
+            </button>
           ))}
         </nav>
 

@@ -56,6 +56,12 @@ html, body {
 /* Hide scrollbar — prevents layout shift on the fixed nav */
 html {
   scrollbar-width: none;
+  scroll-behavior: smooth;
+}
+
+/* Offset anchor-jump targets for the fixed section nav (57px bar + 8px breathing room) */
+section[id^="sec-"] {
+  scroll-margin-top: 65px;
 }
 html::-webkit-scrollbar {
   display: none;
@@ -383,6 +389,7 @@ button:hover .arrow-nudge-back {
   .case-study-section {
     padding: 32px 24px !important;
   }
+
 
   /* Case study — meta grids (OVERVIEW, MY ROLE) collapse to single column */
   .case-study-meta-grid {
