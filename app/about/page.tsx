@@ -125,7 +125,7 @@ export default function AboutPage() {
             </p>
             <div data-reveal className="flex items-center justify-between">
               <CVButton />
-              <span className="font-mono select-none" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.14em', color: '#666666' }}>
+              <span className="font-mono select-none" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.14em', color: '#666666' }}>
                 SCROLL ↓
               </span>
             </div>

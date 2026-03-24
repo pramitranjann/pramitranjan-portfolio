@@ -52,7 +52,12 @@ export function About() {
           UX design student at SCAD, figuring out what good design can actually do. I think like a designer but see like an artist. Still learning. Always curious.
         </p>
         <div className="reveal-text flex flex-col items-end flex-shrink-0" style={{ gap: '14px' }}>
-          <SpotifyWidget variant="minimal" />
+          <div style={{ background: '#0d0d0d', padding: '20px', minWidth: '250px' }}>
+            <span className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.18em', color: '#FF3120', display: 'block', marginBottom: '10px' }}>
+              LAST PLAYED_
+            </span>
+            <SpotifyWidget variant="cell" />
+          </div>
           <Link
             href="/about"
             className="font-mono"

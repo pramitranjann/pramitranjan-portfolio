@@ -11,7 +11,7 @@ interface Track {
 }
 
 interface SpotifyWidgetProps {
-  variant: 'sidebar' | 'cell' | 'minimal'
+  variant: 'sidebar' | 'cell'
 }
 
 export function SpotifyWidget({ variant }: SpotifyWidgetProps) {
@@ -58,7 +58,6 @@ export function SpotifyWidget({ variant }: SpotifyWidgetProps) {
     : 0
 
   if (variant === 'cell') return <CellVariant track={track} pct={pct} />
-  if (variant === 'minimal') return <MinimalVariant track={track} />
   return <SidebarVariant track={track} progress={progress} pct={pct} />
 }
 
@@ -120,7 +119,7 @@ function CellVariant({ track, pct }: { track: Track; pct: number }) {
           animation: track.isPlaying ? 'spotify-pulse 1.6s ease infinite' : 'none',
           flexShrink: 0,
         }} />
-        <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.14em', color: '#666666' }}>
+        <span className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.14em', color: '#666666' }}>
           {track.isPlaying ? 'LIVE' : 'LAST'}
         </span>
       </div>
@@ -132,10 +131,10 @@ function CellVariant({ track, pct }: { track: Track; pct: number }) {
           <div style={{ width: '32px', height: '32px', background: '#1f1f1f', border: '1px solid #2a2a2a', flexShrink: 0 }} />
         )}
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div className="font-serif" style={{ fontSize: '16px', fontStyle: 'italic', color: '#f5f2ed', lineHeight: 1.2, marginBottom: '4px' }}>
+          <div className="font-serif" style={{ fontSize: '17px', fontStyle: 'italic', color: '#f5f2ed', lineHeight: 1.2, marginBottom: '4px' }}>
             {track.title}
           </div>
-          <div className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.1em', color: '#999999' }}>
+          <div className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.1em', color: '#999999' }}>
             {track.artist.toUpperCase()}
           </div>
         </div>
@@ -145,22 +144,6 @@ function CellVariant({ track, pct }: { track: Track; pct: number }) {
           <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${pct}%`, background: '#FF3120' }} />
         </div>
       )}
-    </div>
-  )
-}
-
-function MinimalVariant({ track }: { track: Track }) {
-  return (
-    <div style={{ background: '#0d0d0d', padding: '18px 20px', minWidth: '220px' }}>
-      <span className="font-mono" style={{ fontSize: '8px', letterSpacing: '0.18em', color: '#FF3120', display: 'block', marginBottom: '10px' }}>
-        {track.isPlaying ? 'NOW PLAYING_' : 'LAST PLAYED_'}
-      </span>
-      <div className="font-serif" style={{ fontSize: '16px', fontStyle: 'italic', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.3, marginBottom: '6px' }}>
-        {track.title}
-      </div>
-      <div className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.08em', color: '#999999', lineHeight: 1.6 }}>
-        {track.artist.toUpperCase()}
-      </div>
     </div>
   )
 }

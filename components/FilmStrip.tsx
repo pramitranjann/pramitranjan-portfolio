@@ -65,13 +65,13 @@ export function FilmStrip() {
                 <>
                   <div
                     className="font-mono"
-                    style={{ fontSize: '10px', letterSpacing: '0.1em', color: '#2a2a2a', textAlign: 'center', marginTop: '3px' }}
+                    style={{ fontSize: '12px', letterSpacing: '0.1em', color: '#2a2a2a', textAlign: 'center', marginTop: '4px' }}
                   >
                     {frame.label}
                   </div>
                   <div
                     className="font-mono"
-                    style={{ fontSize: '8px', letterSpacing: '0.08em', color: '#FF3120', textAlign: 'center' }}
+                    style={{ fontSize: '10px', letterSpacing: '0.08em', color: '#FF3120', textAlign: 'center' }}
                   >
                     {frame.stock}
                   </div>
