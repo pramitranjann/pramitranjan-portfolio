@@ -38,13 +38,10 @@ interface CaseStudyLayoutProps {
 }
 
 const labelStyle: React.CSSProperties = {
-  fontSize: 'var(--text-h3)',
-  fontWeight: 400,
+  fontSize: 'var(--text-eyebrow)',
   color: '#FF3120',
-  textTransform: 'uppercase',
-  letterSpacing: '0.14em',
+  letterSpacing: '0.16em',
   lineHeight: 1,
-  paddingTop: '4px',
 }
 
 const gridStyle: React.CSSProperties = {
@@ -109,7 +106,7 @@ export function CaseStudyLayout({
         <section className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
           <GsapReveal>
             <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
-              <span className="font-mono" style={labelStyle}>Problem</span>
+              <span className="font-mono" style={labelStyle}>PROBLEM_</span>
               <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '640px' }}>
                 {problem ?? 'This project focused on understanding user needs and translating them into a cohesive design solution. Through research, ideation, and iteration, the final product addresses real problems with intentional design decisions.'}
               </p>
@@ -121,7 +118,7 @@ export function CaseStudyLayout({
         <section className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
           <GsapReveal>
             <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
-              <span className="font-mono" style={labelStyle}>My Role</span>
+              <span className="font-mono" style={labelStyle}>MY ROLE_</span>
               <div>
                 <p className="case-study-body font-mono mb-6" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '640px' }}>
                   {role ?? 'Led end-to-end UX design including research planning, synthesis, interaction design, and high-fidelity prototyping.'}
@@ -153,7 +150,7 @@ export function CaseStudyLayout({
           <section className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
             <GsapReveal>
               <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
-                <span className="font-mono" style={labelStyle}>Research</span>
+                <span className="font-mono" style={labelStyle}>RESEARCH_</span>
                 <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '640px' }}>
                   {research}
                 </p>
@@ -172,7 +169,7 @@ export function CaseStudyLayout({
           <section className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
             <GsapReveal>
               <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
-                <span className="font-mono" style={labelStyle}>Challenge</span>
+                <span className="font-mono" style={labelStyle}>CHALLENGE_</span>
                 <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '640px' }}>
                   {challenge}
                 </p>
@@ -196,7 +193,7 @@ export function CaseStudyLayout({
           <section className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
             <GsapReveal>
               <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
-                <span className="font-mono" style={labelStyle}>Process</span>
+                <span className="font-mono" style={labelStyle}>PROCESS_</span>
                 <div>
                   {process && (
                     <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '640px' }}>
@@ -218,7 +215,7 @@ export function CaseStudyLayout({
         <section className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
           <GsapReveal>
             <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
-              <span className="font-mono" style={labelStyle}>Solution</span>
+              <span className="font-mono" style={labelStyle}>SOLUTION_</span>
               <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '640px' }}>
                 {solution ?? ''}
               </p>
@@ -246,7 +243,7 @@ export function CaseStudyLayout({
           <section className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
             <GsapReveal>
               <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
-                <span className="font-mono" style={labelStyle}>Outcomes</span>
+                <span className="font-mono" style={labelStyle}>OUTCOMES_</span>
                 <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '640px' }}>
                   {outcomes}
                 </p>
