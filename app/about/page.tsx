@@ -85,9 +85,9 @@ function EntryList({ items }: { items: typeof experience }) {
 function NowCell({ label, value, sub }: { label: string; value: string; sub: string }) {
   return (
     <div style={{ background: '#0d0d0d', padding: '20px' }}>
-      <span className="font-mono" style={{ fontSize: '8px', letterSpacing: '0.18em', color: '#FF3120', display: 'block', marginBottom: '10px' }}>{label}</span>
-      <div className="font-serif" style={{ fontSize: '15px', fontStyle: 'italic', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.3, marginBottom: '6px' }}>{value}</div>
-      <div className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.08em', color: '#999999', lineHeight: 1.6 }}>{sub}</div>
+      <span className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.18em', color: '#FF3120', display: 'block', marginBottom: '10px' }}>{label}</span>
+      <div className="font-serif" style={{ fontSize: '18px', fontStyle: 'italic', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.3, marginBottom: '7px' }}>{value}</div>
+      <div className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.08em', color: '#999999', lineHeight: 1.6 }}>{sub}</div>
     </div>
   )
 }
@@ -125,7 +125,7 @@ export default function AboutPage() {
             </p>
             <div data-reveal className="flex items-center justify-between">
               <CVButton />
-              <span className="font-mono select-none" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.14em', color: '#666666' }}>
+              <span className="font-mono select-none" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.14em', color: '#666666' }}>
                 SCROLL ↓
               </span>
             </div>
@@ -241,10 +241,10 @@ export default function AboutPage() {
             </p>
             <div data-reveal className="now-grid-mobile" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1px', background: '#1f1f1f', border: '1px solid #1f1f1f' }}>
               <div style={{ background: '#0d0d0d', padding: '20px' }}>
-                <span className="font-mono" style={{ fontSize: '8px', letterSpacing: '0.18em', color: '#FF3120', display: 'block', marginBottom: '10px' }}>LISTENING_</span>
+                <span className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.18em', color: '#FF3120', display: 'block', marginBottom: '10px' }}>LISTENING_</span>
                 <div style={{ position: 'relative' }}>
-                  <div className="font-serif" style={{ fontSize: '13px', fontStyle: 'italic', color: '#555555', lineHeight: 1.2, marginBottom: '3px' }}>Something good,</div>
-                  <div className="font-mono" style={{ fontSize: '8px', letterSpacing: '0.1em', color: '#444444' }}>PROBABLY</div>
+                  <div className="font-serif" style={{ fontSize: '16px', fontStyle: 'italic', color: '#555555', lineHeight: 1.2, marginBottom: '4px' }}>Something good,</div>
+                  <div className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.1em', color: '#444444' }}>PROBABLY</div>
                   <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: '#0d0d0d' }}>
                     <SpotifyWidget variant="cell" />
                   </div>

@@ -19,13 +19,13 @@ function SectionHeader({ label, count }: { label: string; count: string }) {
   )
 }
 
-function CreativeCard({ title, desc, tag, href, cover, comingSoon, imageHeight = '240px' }: {
-  title: string; desc: string; tag?: string; href?: string; cover?: string; comingSoon?: boolean; imageHeight?: string
+function CreativeCard({ title, desc, tag, href, cover, comingSoon, imageHeight = '240px', imagePosition = 'center' }: {
+  title: string; desc: string; tag?: string; href?: string; cover?: string; comingSoon?: boolean; imageHeight?: string; imagePosition?: string
 }) {
   const inner = (
     <div className="portfolio-card flex flex-col h-full" style={{ backgroundColor: '#1c1c1c', padding: '16px' }}>
       <div className="creative-card-image" style={{ position: 'relative', width: '100%', height: imageHeight, backgroundColor: '#252525', border: '1px solid #333333', marginBottom: '12px', overflow: 'hidden' }}>
-        {cover && <Image src={cover} alt={title} fill style={{ objectFit: 'cover' }} sizes="(max-width: 768px) 50vw, 25vw" />}
+        {cover && <Image src={cover} alt={title} fill style={{ objectFit: 'cover', objectPosition: imagePosition }} sizes="(max-width: 768px) 50vw, 25vw" />}
       </div>
       <h3 className="font-serif" style={{ fontSize: 'var(--text-body)', fontWeight: 400, color: '#f5f2ed', marginBottom: '4px' }}>
         <span className="card-title-inner">{title}</span>
@@ -139,10 +139,10 @@ export default function CreativePage() {
         <section className="creative-section border-b border-divider" style={{ padding: '40px' }}>
           <SectionHeader label="PHOTOGRAPHY" count="01" />
           <div ref={photoGridRef} className="grid grid-cols-2 md:grid-cols-4" style={{ gap: '16px' }}>
-            <CreativeCard title="KL" desc="Street life and quiet corners of a city in motion." href="/creative/photography/kl" cover="/creative/photography/kl/41.jpg" />
-            <CreativeCard title="Penang" desc="Heritage streets and the texture of an older world." href="/creative/photography/penang" cover="/creative/photography/penang/07.jpg" />
+            <CreativeCard title="KL" desc="Street life and quiet corners of a city in motion." href="/creative/photography/kl" cover="/creative/photography/kl/41.jpg" imagePosition="center 34%" />
+            <CreativeCard title="Penang" desc="Heritage streets and the texture of an older world." href="/creative/photography/penang" cover="/creative/photography/penang/07.jpg" imagePosition="center center" />
             <CreativeCard title="Singapore" desc="The duality of a city-state — dense and lush at once." href="/creative/photography/singapore" cover="/creative/photography/singapore/03.jpg" />
-            <CreativeCard title="Ho Chi Minh" desc="Noise, heat, and the city that never slows down." href="/creative/photography/hcmc" cover="/creative/photography/hcmc/01.jpg" />
+            <CreativeCard title="Ho Chi Minh" desc="Noise, heat, and the city that never slows down." href="/creative/photography/hcmc" cover="/creative/photography/hcmc/01.jpg" imagePosition="center 42%" />
           </div>
         </section>
 

@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { SpotifyWidget } from '@/components/SpotifyWidget'
 
 export function About() {
   const secRef = useRef<HTMLElement>(null)
@@ -50,13 +51,16 @@ export function About() {
         >
           UX design student at SCAD, figuring out what good design can actually do. I think like a designer but see like an artist. Still learning. Always curious.
         </p>
-        <Link
-          href="/about"
-          className="reveal-text font-mono flex-shrink-0"
-          style={{ fontSize: 'var(--text-meta)', color: '#FF3120', letterSpacing: '0.12em', textDecoration: 'none', whiteSpace: 'nowrap' }}
-        >
-          READ MORE <span className="arrow-nudge">→</span>
-        </Link>
+        <div className="reveal-text flex flex-col items-end flex-shrink-0" style={{ gap: '14px' }}>
+          <SpotifyWidget variant="minimal" />
+          <Link
+            href="/about"
+            className="font-mono"
+            style={{ fontSize: 'var(--text-meta)', color: '#FF3120', letterSpacing: '0.12em', textDecoration: 'none', whiteSpace: 'nowrap' }}
+          >
+            READ MORE <span className="arrow-nudge">→</span>
+          </Link>
+        </div>
       </div>
     </section>
   )

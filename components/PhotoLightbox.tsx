@@ -1,5 +1,6 @@
 'use client'
 import Image from 'next/image'
+import { useEffect } from 'react'
 import { motion, AnimatePresence, usePresenceData } from 'motion/react'
 import { playLightboxNav } from '@/lib/sounds'
 
@@ -51,6 +52,17 @@ function PhotoSlide({ src, alt, index, total }: { src: string; alt: string; inde
 }
 
 export function PhotoLightbox({ src, alt, index, total, direction, onClose, onPrev, onNext }: PhotoLightboxProps) {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [onClose])
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
