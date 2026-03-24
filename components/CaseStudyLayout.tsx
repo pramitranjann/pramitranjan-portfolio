@@ -92,11 +92,9 @@ export function CaseStudyLayout({
   const [activeId, setActiveId]     = useState('')
 
   useEffect(() => {
-    const heroEl = document.getElementById('sec-hero')
-    const heroObserver = new IntersectionObserver(([entry]) => {
-      setNavVisible(!entry.isIntersecting)
-    }, { threshold: 0 })
-    if (heroEl) heroObserver.observe(heroEl)
+    const onScroll = () => setNavVisible(window.scrollY > 100)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
 
     const sectionEls = document.querySelectorAll('section[id^="sec-"]')
     const sectionObserver = new IntersectionObserver((entries) => {
@@ -107,7 +105,7 @@ export function CaseStudyLayout({
     sectionEls.forEach(el => sectionObserver.observe(el))
 
     return () => {
-      heroObserver.disconnect()
+      window.removeEventListener('scroll', onScroll)
       sectionObserver.disconnect()
     }
   }, [])
