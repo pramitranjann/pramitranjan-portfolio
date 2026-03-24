@@ -5,8 +5,8 @@ import Link from 'next/link'
 import { playCardEnter, playNav } from '@/lib/sounds'
 
 const projects = [
-  { slug: 'faces-of-power',  title: 'Faces of Power',  desc: 'Portraits, power, and the masks we wear.',        tag: 'GELLI PRINT · PHOTOGRAPHY', cover: '/creative/mixed-media/faces-of-power/hero.png' },
-  { slug: 'south-china-sea', title: 'South China Sea', desc: 'Conflict, naivety, and the decisions of the few.', tag: 'CYANOTYPE · PHOTOGRAM',        cover: '/creative/mixed-media/south-china-sea/hero.png' },
+  { slug: 'faces-of-power',  title: 'Faces of Power',  desc: 'Portraits, power, and the masks we wear.',        tag: 'GELLI PRINT · PHOTOGRAPHY', cover: '/creative/mixed-media/faces-of-power/hero-processed.png' },
+  { slug: 'south-china-sea', title: 'South China Sea', desc: 'Conflict, naivety, and the decisions of the few.', tag: 'CYANOTYPE · PHOTOGRAM',        cover: '/creative/mixed-media/south-china-sea/hero-processed.png' },
 ]
 
 export default function MixedMediaPage() {

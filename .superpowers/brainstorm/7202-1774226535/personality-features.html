@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personality Features — Visual Review</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d0d0d;
+      --card: #111111;
+      --white: #f5f2ed;
+      --body: #999999;
+      --label: #666666;
+      --red: #FF3120;
+      --divider: #1f1f1f;
+      --cardborder: #1a1a1a;
+    }
+    body {
+      background: #161616;
+      color: var(--white);
+      font-family: 'DM Mono', monospace;
+      padding: 40px 24px 80px;
+    }
+    .page-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      color: var(--red);
+      margin-bottom: 6px;
+    }
+    .page-subtitle {
+      font-family: 'DM Serif Display', serif;
+      font-size: 32px;
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 48px;
+      line-height: 1.1;
+    }
+    .feature-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      color: var(--red);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .feature-label::before {
+      content: '';
+      display: block;
+      width: 20px;
+      height: 1px;
+      background: var(--red);
+    }
+    .feature-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+    .feature-desc {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      color: var(--body);
+      line-height: 1.8;
+      margin-bottom: 20px;
+      max-width: 480px;
+    }
+    .section {
+      margin-bottom: 72px;
+    }
+    .mockup-frame {
+      background: var(--bg);
+      border: 1px solid var(--divider);
+      overflow: hidden;
+    }
+
+    /* ── NAV (shared) ── */
+    .nav {
+      border-bottom: 1px solid var(--divider);
+      padding: 18px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      color: var(--white);
+    }
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+    .nav-links li {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--body);
+    }
+    .nav-links li.active { color: var(--red); }
+
+    /* ── FOOTER ── */
+    .footer-mock {
+      border-top: 1px solid var(--divider);
+      padding: 32px 40px;
+    }
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--divider);
+    }
+    .footer-brand {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--white);
+    }
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+    .footer-links span {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: var(--body);
+    }
+
+    /* ═══════════════════════════════
+       FEATURE 1 — FILM GRAIN
+    ═══════════════════════════════ */
+    .grain-comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+    }
+    .grain-panel {
+      position: relative;
+      background: var(--bg);
+      padding: 40px 32px;
+      overflow: hidden;
+    }
+    .grain-panel::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .grain-panel.with-grain::after {
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 160px;
+      opacity: 0.035;
+      mix-blend-mode: overlay;
+    }
+    .grain-tag {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      font-family: 'DM Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 0.16em;
+      color: var(--label);
+      background: rgba(13,13,13,0.8);
+      padding: 3px 6px;
+    }
+    .grain-panel h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 28px;
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+    .grain-panel p {
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: var(--body);
+      line-height: 1.8;
+    }
+    .grain-panel .red { color: var(--red); }
+
+    /* ═══════════════════════════════
+       FEATURE 2 — SPOTIFY WIDGET
+    ═══════════════════════════════ */
+    .about-layout {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 0;
+      min-height: 380px;
+    }
+    .about-main {
+      padding: 48px 40px;
+      border-right: 1px solid var(--divider);
+    }
+    .about-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .eyebrow-line { width: 28px; height: 1px; background: var(--red); }
+    .eyebrow-text {
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      color: var(--red);
+    }
+    .about-h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 38px;
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1.05;
+      margin-bottom: 16px;
+    }
+    .about-body {
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: var(--body);
+      line-height: 1.9;
+      max-width: 380px;
+    }
+    .about-sidebar {
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .sidebar-label {
+      font-size: 8px;
+      letter-spacing: 0.18em;
+      color: var(--label);
+      margin-bottom: 12px;
+    }
+
+    /* Spotify card */
+    .spotify-card {
+      background: #111111;
+      border: 1px solid var(--divider);
+      padding: 14px;
+    }
+    .spotify-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .spotify-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--red);
+      animation: pulse 1.6s ease infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .spotify-status {
+      font-size: 8px;
+      letter-spacing: 0.14em;
+      color: var(--label);
+    }
+    .spotify-track-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .spotify-art {
+      width: 36px;
+      height: 36px;
+      background: #1f1f1f;
+      border: 1px solid #2a2a2a;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    .spotify-info { flex: 1; min-width: 0; }
+    .spotify-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 13px;
+      font-style: italic;
+      color: var(--white);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .spotify-artist {
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      color: var(--body);
+      margin-top: 2px;
+    }
+    .spotify-bar {
+      margin-top: 10px;
+      height: 1px;
+      background: #1f1f1f;
+      position: relative;
+    }
+    .spotify-bar-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 38%;
+      background: var(--red);
+    }
+    .spotify-times {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 4px;
+    }
+    .spotify-times span {
+      font-size: 7px;
+      letter-spacing: 0.1em;
+      color: #444;
+    }
+
+    /* Spotify — last played variant */
+    .spotify-card.last-played .spotify-dot {
+      background: #444;
+      animation: none;
+    }
+    .spotify-card.last-played .spotify-status {
+      color: #444;
+    }
+
+    /* ═══════════════════════════════
+       FEATURE 3 — /NOW SECTION
+    ═══════════════════════════════ */
+    .now-section {
+      padding: 48px 40px;
+      border-top: 1px solid var(--divider);
+    }
+    .now-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--divider);
+      border: 1px solid var(--divider);
+      margin-top: 28px;
+    }
+    .now-cell {
+      background: var(--bg);
+      padding: 20px;
+    }
+    .now-cell-label {
+      font-size: 8px;
+      letter-spacing: 0.18em;
+      color: var(--red);
+      margin-bottom: 10px;
+    }
+    .now-cell-value {
+      font-family: 'DM Serif Display', serif;
+      font-size: 15px;
+      font-style: italic;
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+    .now-cell-sub {
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      color: var(--body);
+      line-height: 1.6;
+    }
+
+    /* ═══════════════════════════════
+       FEATURE 4 — CUSTOM 404
+    ═══════════════════════════════ */
+    .page-404 {
+      background: var(--bg);
+      padding: 80px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-404-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 120px;
+      font-weight: 400;
+      font-style: italic;
+      color: #141414;
+      line-height: 1;
+      margin-bottom: -30px;
+      position: relative;
+      z-index: 0;
+      letter-spacing: -4px;
+    }
+    .page-404-msg {
+      font-family: 'DM Serif Display', serif;
+      font-size: 32px;
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1.1;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+    .page-404-body {
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      color: var(--body);
+      line-height: 1.9;
+      margin-bottom: 32px;
+      max-width: 340px;
+    }
+    .page-404-btn {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--red);
+      border: 1px solid var(--red);
+      padding: 10px 22px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .page-404-frame-strip {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--red) 0px,
+        var(--red) 24px,
+        transparent 24px,
+        transparent 36px
+      );
+      opacity: 0.3;
+    }
+
+    /* ═══════════════════════════════
+       FEATURE 5 — READING PROGRESS
+    ═══════════════════════════════ */
+    .progress-mockup {
+      position: relative;
+    }
+    .progress-bar-top {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--divider);
+      z-index: 10;
+    }
+    .progress-bar-fill-top {
+      height: 100%;
+      width: 42%;
+      background: var(--red);
+    }
+    .case-study-preview {
+      padding: 0;
+    }
+    .cs-nav {
+      border-bottom: 1px solid var(--divider);
+      padding: 18px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .cs-back {
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      color: var(--body);
+    }
+    .cs-back span { color: var(--red); }
+    .cs-hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid var(--divider);
+    }
+    .cs-hero-text {
+      padding: 40px;
+      border-right: 1px solid var(--divider);
+    }
+    .cs-hero-tag {
+      font-size: 8px;
+      letter-spacing: 0.18em;
+      color: var(--red);
+      margin-bottom: 12px;
+    }
+    .cs-hero-h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 36px;
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1.05;
+      margin-bottom: 12px;
+    }
+    .cs-hero-sub {
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      color: var(--body);
+      line-height: 1.8;
+    }
+    .cs-hero-img {
+      background: #131313;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cs-hero-img-placeholder {
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      color: #222;
+    }
+    .cs-body-section {
+      padding: 32px 40px;
+      max-width: 640px;
+    }
+    .cs-body-h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+    .cs-body-p {
+      font-size: 11px;
+      letter-spacing: 0.03em;
+      color: var(--body);
+      line-height: 1.8;
+    }
+    /* Progress indicator variant 2 — inline */
+    .progress-indicator-float {
+      position: absolute;
+      top: 52px;
+      right: 24px;
+      background: rgba(13,13,13,0.9);
+      border: 1px solid var(--divider);
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .progress-circle {
+      width: 24px;
+      height: 24px;
+      position: relative;
+    }
+    .progress-circle svg { transform: rotate(-90deg); }
+    .progress-pct {
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      color: var(--body);
+    }
+
+    /* ═══════════════════════════════
+       FEATURE 6 — COLOPHON FOOTER
+    ═══════════════════════════════ */
+    .footer-full {
+      background: var(--bg);
+      border-top: 1px solid var(--divider);
+    }
+    .footer-main-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 40px 40px 32px;
+      border-bottom: 1px solid var(--divider);
+    }
+    .footer-brand-col { }
+    .footer-brand-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .footer-brand-tagline {
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      color: var(--label);
+    }
+    .footer-nav-cols {
+      display: flex;
+      gap: 48px;
+    }
+    .footer-nav-col { }
+    .footer-nav-col-label {
+      font-size: 8px;
+      letter-spacing: 0.16em;
+      color: var(--red);
+      margin-bottom: 12px;
+    }
+    .footer-nav-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .footer-nav-col li {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--body);
+    }
+
+    /* COLOPHON row */
+    .footer-colophon {
+      padding: 20px 40px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: center;
+    }
+    .colophon-text {
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      color: #444;
+      line-height: 1.9;
+    }
+    .colophon-text span { color: var(--label); }
+    .colophon-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .colophon-badge {
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      color: #333;
+      border: 1px solid #1a1a1a;
+      padding: 4px 8px;
+    }
+
+    /* feature nav */
+    .features-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #111;
+      border-bottom: 1px solid var(--divider);
+      padding: 12px 24px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      margin: -40px -24px 40px;
+    }
+    .features-nav a {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      color: var(--body);
+      text-decoration: none;
+      padding: 6px 12px;
+      white-space: nowrap;
+      border: 1px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .features-nav a:hover {
+      color: var(--white);
+      border-color: var(--divider);
+    }
+    .features-nav a.active {
+      color: var(--red);
+      border-color: var(--red);
+    }
+
+    /* toggle buttons */
+    .toggle-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .toggle-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 0.12em;
+      color: var(--body);
+      border: 1px solid var(--divider);
+      padding: 5px 10px;
+      background: none;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .toggle-btn.on {
+      color: var(--red);
+      border-color: var(--red);
+    }
+  </style>
+</head>
+<body>
+  <!-- sticky nav -->
+  <nav class="features-nav">
+    <a href="#grain" class="active">01 FILM GRAIN</a>
+    <a href="#spotify">02 SPOTIFY WIDGET</a>
+    <a href="#now">03 /NOW SECTION</a>
+    <a href="#404">04 CUSTOM 404</a>
+    <a href="#progress">05 READING PROGRESS</a>
+    <a href="#colophon">06 COLOPHON</a>
+  </nav>
+
+  <div class="page-title">PERSONALITY FEATURES ↗</div>
+  <div class="page-subtitle">Six ways to show<br /><span style="color:var(--red)">who you are.</span></div>
+
+  <!-- ═══════════════════════════════════════
+       01  FILM GRAIN
+  ═══════════════════════════════════════ -->
+  <section class="section" id="grain">
+    <div class="feature-label">01 — ATMOSPHERE</div>
+    <div class="feature-title">Film grain texture</div>
+    <div class="feature-desc">A barely-there SVG noise layer over the whole page. Adds analogue warmth without touching any design elements. Opacity is ~3.5% — you'd notice it if it was gone.</div>
+
+    <div class="toggle-row">
+      <button class="toggle-btn" onclick="toggleGrain(this)">TOGGLE GRAIN</button>
+      <span style="font-size:9px;letter-spacing:0.1em;color:var(--label);align-self:center">← click to feel the difference</span>
+    </div>
+
+    <div class="mockup-frame">
+      <div class="grain-comparison">
+        <div class="grain-panel" id="grain-before">
+          <div class="grain-tag">WITHOUT GRAIN</div>
+          <h2>Artist.<br /><span class="red">Designer.</span></h2>
+          <p>UX design student at SCAD, figuring out<br />what good design can actually do.</p>
+        </div>
+        <div class="grain-panel with-grain" id="grain-after">
+          <div class="grain-tag">WITH GRAIN (3.5%)</div>
+          <h2>Artist.<br /><span class="red">Designer.</span></h2>
+          <p>UX design student at SCAD, figuring out<br />what good design can actually do.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       02  SPOTIFY WIDGET
+  ═══════════════════════════════════════ -->
+  <section class="section" id="spotify">
+    <div class="feature-label">02 — LISTENING</div>
+    <div class="feature-title">Spotify widget</div>
+    <div class="feature-desc">Lives in the about page sidebar. Pulls from Spotify API — shows what's playing live, or falls back to last played if you're not listening. Styled to match the system; no green, no Spotify branding.</div>
+
+    <div class="mockup-frame" style="max-width:680px">
+      <div class="nav">
+        <span class="nav-logo">PR_</span>
+        <ul class="nav-links">
+          <li class="active">ABOUT</li>
+          <li>WORK</li>
+          <li>CREATIVE</li>
+        </ul>
+      </div>
+      <div class="about-layout">
+        <div class="about-main">
+          <div class="about-eyebrow">
+            <div class="eyebrow-line"></div>
+            <span class="eyebrow-text">ABOUT_</span>
+          </div>
+          <div class="about-h1">Artist. Designer.<br /><span style="color:var(--red)">Human.</span></div>
+          <div class="about-body">UX design student at SCAD, figuring out what good design can actually do. I think like a designer but see like an artist. Still learning. Always curious.</div>
+        </div>
+        <div class="about-sidebar">
+
+          <!-- CURRENTLY PLAYING -->
+          <div>
+            <div class="sidebar-label">CURRENTLY PLAYING_</div>
+            <div class="spotify-card">
+              <div class="spotify-header">
+                <div class="spotify-dot"></div>
+                <span class="spotify-status">NOW PLAYING</span>
+              </div>
+              <div class="spotify-track-row">
+                <div class="spotify-art">🎵</div>
+                <div class="spotify-info">
+                  <div class="spotify-title">Blinding Lights</div>
+                  <div class="spotify-artist">THE WEEKND · AFTER HOURS</div>
+                </div>
+              </div>
+              <div class="spotify-bar"><div class="spotify-bar-fill"></div></div>
+              <div class="spotify-times">
+                <span>1:24</span>
+                <span>3:20</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- LAST PLAYED (fallback) -->
+          <div>
+            <div class="sidebar-label">— FALLBACK STATE</div>
+            <div class="spotify-card last-played">
+              <div class="spotify-header">
+                <div class="spotify-dot"></div>
+                <span class="spotify-status">LAST PLAYED</span>
+              </div>
+              <div class="spotify-track-row">
+                <div class="spotify-art" style="font-size:14px">🎸</div>
+                <div class="spotify-info">
+                  <div class="spotify-title">Midnight Rain</div>
+                  <div class="spotify-artist">TAYLOR SWIFT · MIDNIGHTS</div>
+                </div>
+              </div>
+              <div class="spotify-bar"><div class="spotify-bar-fill" style="width:100%;opacity:0.3;"></div></div>
+              <div class="spotify-times">
+                <span style="color:#333">2H AGO</span>
+                <span></span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       03  /NOW SECTION
+  ═══════════════════════════════════════ -->
+  <section class="section" id="now">
+    <div class="feature-label">03 — PRESENCE</div>
+    <div class="feature-title">/now section</div>
+    <div class="feature-desc">Four cells on the about page — what you're listening to, moving toward, eating, and building. Updated manually every few weeks. Gives a snapshot of who you are right now, not just your CV.</div>
+
+    <div class="mockup-frame">
+      <div class="nav">
+        <span class="nav-logo">PR_</span>
+        <ul class="nav-links"><li class="active">ABOUT</li></ul>
+      </div>
+      <div class="now-section">
+        <div class="about-eyebrow" style="margin-bottom:6px">
+          <div class="eyebrow-line"></div>
+          <span class="eyebrow-text">RIGHT NOW_</span>
+        </div>
+        <p style="font-size:11px;letter-spacing:0.04em;color:var(--label);line-height:1.8;max-width:460px">A snapshot of what I'm into this month. Updated manually, roughly every few weeks.</p>
+        <div class="now-grid">
+          <div class="now-cell">
+            <div class="now-cell-label">LISTENING_</div>
+            <div class="now-cell-value">Frank Ocean's<br />Blonde</div>
+            <div class="now-cell-sub">For the fourth month running. Some albums don't leave.</div>
+          </div>
+          <div class="now-cell">
+            <div class="now-cell-label">MOVING_</div>
+            <div class="now-cell-value">5 days / week<br />lift + run</div>
+            <div class="now-cell-sub">Working towards a sub-22min 5K by April.</div>
+          </div>
+          <div class="now-cell">
+            <div class="now-cell-label">EATING_</div>
+            <div class="now-cell-value">Ramadan<br />meal prepping</div>
+            <div class="now-cell-sub">Chicken + rice, elevated. Attempting to learn biryani.</div>
+          </div>
+          <div class="now-cell">
+            <div class="now-cell-label">BUILDING_</div>
+            <div class="now-cell-value">This portfolio<br />(obviously)</div>
+            <div class="now-cell-sub">Plus Accord — a contract tool for freelancers.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       04  CUSTOM 404
+  ═══════════════════════════════════════ -->
+  <section class="section" id="404">
+    <div class="feature-label">04 — PERSONALITY</div>
+    <div class="feature-title">Custom 404 page</div>
+    <div class="feature-desc">Happens when someone types a wrong URL. The giant ghost number sits behind the headline. Film strip motif at the bottom. Copy is self-aware and dry — fits the tone.</div>
+
+    <div class="mockup-frame">
+      <div class="nav">
+        <span class="nav-logo">PR_</span>
+        <ul class="nav-links">
+          <li>ABOUT</li>
+          <li>WORK</li>
+          <li>CREATIVE</li>
+        </ul>
+      </div>
+      <div class="page-404">
+        <div class="page-404-num">404</div>
+        <div class="page-404-msg">Lost in the<br /><span style="color:var(--red)">darkroom.</span></div>
+        <p class="page-404-body">This page doesn't exist. Either you typed something wrong, or I haven't built it yet. Either way — let's get you back.</p>
+        <a href="#" class="page-404-btn">BACK TO HOME →</a>
+        <div class="page-404-frame-strip"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       05  READING PROGRESS BAR
+  ═══════════════════════════════════════ -->
+  <section class="section" id="progress">
+    <div class="feature-label">05 — ORIENTATION</div>
+    <div class="feature-title">Reading progress bar</div>
+    <div class="feature-desc">A 2px red line at the very top of case study pages. Fills as you scroll. Completely invisible on other pages. Tells the reader how deep they are without adding any chrome to the layout.</div>
+
+    <div class="mockup-frame progress-mockup" style="max-width:680px">
+      <div class="progress-bar-top">
+        <div class="progress-bar-fill-top" id="progress-fill"></div>
+      </div>
+      <div class="case-study-preview">
+        <div class="cs-nav">
+          <span class="cs-back"><span>← </span>BACK TO WORK</span>
+          <div style="display:flex;gap:6px;align-items:center">
+            <span style="font-size:8px;letter-spacing:0.12em;color:var(--label)">42% READ</span>
+            <div style="width:48px;height:1px;background:var(--divider);position:relative">
+              <div style="position:absolute;left:0;top:0;width:42%;height:100%;background:var(--red);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="cs-hero">
+          <div class="cs-hero-text">
+            <div class="cs-hero-tag">UX · PRODUCT DESIGN</div>
+            <div class="cs-hero-h1">Accord</div>
+            <div class="cs-hero-sub">A contract tool built for freelancers. Designed in 72 hours for FigBuild 2026.</div>
+          </div>
+          <div class="cs-hero-img">
+            <span class="cs-hero-img-placeholder">COVER IMAGE</span>
+          </div>
+        </div>
+        <div class="cs-body-section">
+          <div class="cs-body-h2">The problem.</div>
+          <div class="cs-body-p">Freelancers lose work to scope creep, late payments, and unclear agreements — not because they're bad at their jobs, but because the tools they use weren't designed for them. Accord fixes that.</div>
+        </div>
+      </div>
+    </div>
+    <p style="margin-top:12px;font-size:9px;letter-spacing:0.1em;color:var(--label)">↑ The 2px red line at the top + "42% READ" counter in the nav. Scroll-driven, no button needed.</p>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       06  COLOPHON
+  ═══════════════════════════════════════ -->
+  <section class="section" id="colophon">
+    <div class="feature-label">06 — CRAFT</div>
+    <div class="feature-title">Colophon in footer</div>
+    <div class="feature-desc">A single line at the bottom of the footer. Tells the reader what the site is made of — typefaces, tools, built-by. It's a designer's detail. Nobody reads it except people who care.</div>
+
+    <div class="mockup-frame">
+      <div class="footer-full">
+        <div class="footer-main-row">
+          <div class="footer-brand-col">
+            <div class="footer-brand-name">Pramit Ranjan</div>
+            <div class="footer-brand-tagline">UX DESIGNER · SCAD '29</div>
+          </div>
+          <div class="footer-nav-cols">
+            <div class="footer-nav-col">
+              <div class="footer-nav-col-label">PAGES_</div>
+              <ul>
+                <li>WORK</li>
+                <li>ABOUT</li>
+                <li>CREATIVE</li>
+              </ul>
+            </div>
+            <div class="footer-nav-col">
+              <div class="footer-nav-col-label">FIND ME_</div>
+              <ul>
+                <li>INSTAGRAM</li>
+                <li>LINKEDIN</li>
+                <li>READ.CV</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="footer-colophon">
+          <div class="colophon-text">
+            Set in <span>DM Serif Display</span> and <span>DM Mono</span> by Colophon Foundry.
+            Built with <span>Next.js</span>, deployed on <span>Vercel</span>.
+            Designed and coded by Pramit Ranjan using Claude Code — a portfolio that codes back.
+            © 2026 PR_
+          </div>
+          <div class="colophon-right">
+            <div class="colophon-badge">BUILT WITH CLAUDE</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // sticky nav highlighting
+    const sections = document.querySelectorAll('section[id]')
+    const navLinks = document.querySelectorAll('.features-nav a')
+    window.addEventListener('scroll', () => {
+      let current = ''
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 80) current = s.id
+      })
+      navLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + current)
+      })
+    })
+
+    // grain toggle
+    let grainOn = false
+    function toggleGrain(btn) {
+      const before = document.getElementById('grain-before')
+      grainOn = !grainOn
+      if (grainOn) {
+        before.classList.add('with-grain')
+        btn.classList.add('on')
+        btn.textContent = 'GRAIN ON'
+      } else {
+        before.classList.remove('with-grain')
+        btn.classList.remove('on')
+        btn.textContent = 'TOGGLE GRAIN'
+      }
+    }
+
+    // progress bar sim (scroll within window)
+    const progressFill = document.getElementById('progress-fill')
+    window.addEventListener('scroll', () => {
+      const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100
+      progressFill.style.width = Math.min(pct, 100) + '%'
+    })
+  </script>
+</body>
+</html>

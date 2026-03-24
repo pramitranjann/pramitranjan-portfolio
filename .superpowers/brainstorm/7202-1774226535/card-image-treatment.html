@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Card image treatment — round 2</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0d0d0d;
+    color: #f5f2ed;
+    font-family: "DM Mono", "Courier New", monospace;
+    padding: 40px 24px 80px;
+  }
+  h2 { font-size: 20px; font-weight: 400; font-family: Georgia, serif; margin-bottom: 6px; }
+  .subtitle { font-size: 11px; color: #555; letter-spacing: 0.06em; line-height: 1.7; margin-bottom: 40px; }
+  .row { margin-bottom: 48px; }
+  .row-label { font-size: 10px; letter-spacing: 0.16em; color: #FF3120; margin-bottom: 6px; }
+  .row-title { font-size: 15px; font-family: Georgia, serif; color: #f5f2ed; margin-bottom: 4px; }
+  .row-desc { font-size: 11px; color: #555; letter-spacing: 0.04em; line-height: 1.6; margin-bottom: 20px; max-width: 620px; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 900px; }
+  .card { background: #1c1c1c; border: 1px solid #2a2a2a; padding: 16px; }
+  .img-wrap {
+    position: relative;
+    width: 100%;
+    background: #252525;
+    border: 1px solid #333;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .img-wrap img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .card-title { font-size: 13px; color: #f5f2ed; font-family: Georgia, serif; }
+  .card-tag { font-size: 10px; color: #999; letter-spacing: 0.1em; margin-top: 4px; }
+  .card-cta { font-size: 10px; color: #FF3120; letter-spacing: 0.1em; margin-top: 8px; }
+  .divider { width: 100%; max-width: 900px; height: 1px; background: #1a1a1a; margin: 48px 0; }
+
+  /* ── BASELINE: current 3/4 ratio ── */
+  .baseline .img-wrap { padding-bottom: 133%; }
+  .baseline .img-wrap img { position: absolute; top: 0; left: 0; }
+
+  /* ── OPTION D: reduced height (16/9 ratio — landscape) ── */
+  .opt-d .img-wrap { padding-bottom: 56%; }
+  .opt-d .img-wrap img { position: absolute; top: 0; left: 0; }
+
+  /* ── OPTION D2: reduced height (1/1 square) ── */
+  .opt-d2 .img-wrap { padding-bottom: 100%; }
+  .opt-d2 .img-wrap img { position: absolute; top: 0; left: 0; }
+
+  /* ── OPTION E: f5f2ed overlay × multiply — white becomes design-system off-white ── */
+  .opt-e .img-wrap { padding-bottom: 133%; }
+  .opt-e .img-wrap img { position: absolute; top: 0; left: 0; }
+  .opt-e .img-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #f5f2ed;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+  }
+
+  /* ── OPTION F: f5f2ed overlay + reduced height ── */
+  .opt-f .img-wrap { padding-bottom: 75%; } /* 4/3 — slightly less tall than 3/4 */
+  .opt-f .img-wrap img { position: absolute; top: 0; left: 0; }
+  .opt-f .img-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #f5f2ed;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<div style="max-width:900px;margin:0 auto 32px;">
+  <h2>Card image treatment — round 2</h2>
+  <p class="subtitle">Exploring reduced image height and matching the white to #f5f2ed (the design system off-white).</p>
+</div>
+
+<!-- BASELINE -->
+<div class="row">
+  <div class="row-label">BASELINE</div>
+  <div class="row-title">Current — 3∶4 portrait ratio</div>
+  <div class="row-desc">Pure white, tall image, lots of visual mass.</div>
+  <div class="grid baseline">
+    <div class="card"><div class="img-wrap"><img src="http://localhost:3000/work/franklins/cover.png" alt="Franklin's"></div><div class="card-title">Franklin's</div><div class="card-tag">UX · RESEARCH</div><div class="card-cta">VIEW →</div></div>
+    <div class="card"><div class="img-wrap"><img src="http://localhost:3000/work/albers/cover.png" alt="Albers"></div><div class="card-title">Albers</div><div class="card-tag">UI · CODE</div><div class="card-cta">VIEW →</div></div>
+    <div class="card"><div class="img-wrap"><img src="http://localhost:3000/work/loomlearn/cover.png" alt="LoomLearn"></div><div class="card-title">LoomLearn</div><div class="card-tag">UX · ED-TECH</div><div class="card-cta">VIEW →</div></div>
+    <div class="card"><div class="img-wrap"><img src="http://localhost:3000/work/atom/cover.png" alt="Atom OS"></div><div class="card-title">Atom OS</div><div class="card-tag">UI · SYSTEMS</div><div class="card-cta">VIEW →</div></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- OPTION D: landscape -->
+<div class="row">
+  <div class="row-label">OPTION D</div>
+  <div class="row-title">Reduced image — 16∶9 landscape</div>
+  <div class="row-desc">Shorter image area, much less visual mass. Cards feel lighter and less dominant on the page.</div>
+  <div class="grid opt-d">
+    <div class="card"><div class="img-wrap"><img src="http://localhost:3000/work/franklins/cover.png" alt="Franklin's"></div><div class="card-title">Franklin's</div><div class="card-tag">UX · RESEARCH</div><div class="card-cta">VIEW →</div></div>
+    <div class="card"><div class="img-wrap"><img src="http://localhost:3000/work/albers/cover.png" alt="Albers"></div><div class="card-title">Albers</div><div class="card-tag">UI · CODE</div><div class="card-cta">VIEW →</div></div>
+    <div class="card"><div class="img-wrap"><img src="http://localhost:3000/work/loomlearn/cover.png" alt="LoomLearn"></div><div class="card-title">LoomLearn</div><div class="card-tag">UX · ED-TECH</div><div class="card-cta">VIEW →</div></div>
+    <div class="card"><div class="img-wrap"><img src="http://localhost:3000/work/atom/cover.png" alt="Atom OS"></div><div class="card-title">Atom OS</div><div class="card-tag">UI · SYSTEMS</div><div class="card-cta">VIEW →</div></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- OPTION D2: square -->
+<div class="row">
+  <div class="row-label">OPTION D2</div>
+  <div class="row-title">Reduced image — 1∶1 square</div>
+  <div class="row-desc">Square is a common portfolio convention. Still shows the image well but less dominant than the tall portrait.</div>
+  <div class="grid opt-d2">
+    <div class="card"><div class="img-wrap"><img src="http://localhost:3000/work/franklins/cover.png" alt="Franklin's"></div><div class="card-title">Franklin's</div><div class="card-tag">UX · RESEARCH</div><div class="card-cta">VIEW →</div></div>
+    <div class="card"><div class="img-wrap"><img src="http://localhost:3000/work/albers/cover.png" alt="Albers"></div><div class="card-title">Albers</div><div class="card-tag">UI · CODE</div><div class="card-cta">VIEW →</div></div>
+    <div class="card"><div class="img-wrap"><img src="http://localhost:3000/work/loomlearn/cover.png" alt="LoomLearn"></div><div class="card-title">LoomLearn</div><div class="card-tag">UX · ED-TECH</div><div class="card-cta">VIEW →</div></div>
+    <div class="card"><div class="img-wrap"><img src="http://localhost:3000/work/atom/cover.png" alt="Atom OS"></div><div class="card-title">Atom OS</div><div class="card-tag">UI · SYSTEMS</div><div class="card-cta">VIEW →</div></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- OPTION E: f5f2ed overlay -->
+<div class="row">
+  <div class="row-label">OPTION E</div>
+  <div class="row-title">#f5f2ed overlay × multiply — design-system white</div>
+  <div class="row-desc">A #f5f2ed layer with mix-blend-mode:multiply. Pure white in the image becomes exactly #f5f2ed — the same off-white the site uses for body text. Dark pixels are barely affected. The image feels like it belongs.</div>
+  <div class="grid opt-e">
+    <div class="card"><div class="img-wrap"><img src="http://localhost:3000/work/franklins/cover.png" alt="Franklin's"></div><div class="card-title">Franklin's</div><div class="card-tag">UX · RESEARCH</div><div class="card-cta">VIEW →</div></div>
+    <div class="card"><div class="img-wrap"><img src="http://localhost:3000/work/albers/cover.png" alt="Albers"></div><div class="card-title">Albers</div><div class="card-tag">UI · CODE</div><div class="card-cta">VIEW →</div></div>
+    <div class="card"><div class="img-wrap"><img src="http://localhost:3000/work/loomlearn/cover.png" alt="LoomLearn"></div><div class="card-title">LoomLearn</div><div class="card-tag">UX · ED-TECH</div><div class="card-cta">VIEW →</div></div>
+    <div class="card"><div class="img-wrap"><img src="http://localhost:3000/work/atom/cover.png" alt="Atom OS"></div><div class="card-title">Atom OS</div><div class="card-tag">UI · SYSTEMS</div><div class="card-cta">VIEW →</div></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- OPTION F: f5f2ed overlay + reduced height -->
+<div class="row">
+  <div class="row-label">OPTION F — recommended</div>
+  <div class="row-title">#f5f2ed overlay + 4∶3 ratio (best of both)</div>
+  <div class="row-desc">The overlay tones the white to match the site, and a slightly shorter ratio reduces image mass. The combination feels intentional rather than like a workaround.</div>
+  <div class="grid opt-f">
+    <div class="card"><div class="img-wrap"><img src="http://localhost:3000/work/franklins/cover.png" alt="Franklin's"></div><div class="card-title">Franklin's</div><div class="card-tag">UX · RESEARCH</div><div class="card-cta">VIEW →</div></div>
+    <div class="card"><div class="img-wrap"><img src="http://localhost:3000/work/albers/cover.png" alt="Albers"></div><div class="card-title">Albers</div><div class="card-tag">UI · CODE</div><div class="card-cta">VIEW →</div></div>
+    <div class="card"><div class="img-wrap"><img src="http://localhost:3000/work/loomlearn/cover.png" alt="LoomLearn"></div><div class="card-title">LoomLearn</div><div class="card-tag">UX · ED-TECH</div><div class="card-cta">VIEW →</div></div>
+    <div class="card"><div class="img-wrap"><img src="http://localhost:3000/work/atom/cover.png" alt="Atom OS"></div><div class="card-title">Atom OS</div><div class="card-tag">UI · SYSTEMS</div><div class="card-cta">VIEW →</div></div>
+  </div>
+</div>
+
+</body>
+</html>

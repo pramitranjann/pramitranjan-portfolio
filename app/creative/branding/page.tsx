@@ -6,7 +6,7 @@ import { playCardEnter, playNav } from '@/lib/sounds'
 
 const projects = [
   { slug: 'oracle', title: 'Oracle', desc: 'A Matrix-inspired clothing brand built from scratch.', tag: 'CLOTHING · BRANDING', cover: null },
-  { slug: 'soho',   title: 'SOHO',   desc: 'Directed and branded a sixth form art exhibition.',     tag: 'EXHIBITION · BRANDING', cover: '/creative/branding/soho/cover.png' },
+  { slug: 'soho',   title: 'SOHO',   desc: 'Directed and branded a sixth form art exhibition.',     tag: 'EXHIBITION · BRANDING', cover: '/creative/branding/soho/cover-processed.png' },
 ]
 
 export default function BrandingPage() {

@@ -1,0 +1,209 @@
+<h2>Page Transition Style</h2>
+<p class="subtitle">Which feel fits your site? Each preview loops automatically.</p>
+
+<style>
+  .preview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .preview-card {
+    background: #111;
+    border: 1px solid #2a2a2a;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .preview-card.selected {
+    border-color: #FF3120;
+    box-shadow: 0 0 0 1px #FF3120, 0 0 20px rgba(255,49,32,0.15);
+  }
+  .preview-card:hover {
+    border-color: #555;
+  }
+  .anim-window {
+    height: 160px;
+    background: #0d0d0d;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Shared fake page content */
+  .page-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    gap: 8px;
+  }
+  .page-bar { height: 10px; background: #222; border-radius: 2px; }
+  .page-bar.red { background: #FF3120; width: 40px; height: 6px; }
+  .page-bar.title { width: 70%; height: 14px; }
+  .page-bar.sub { width: 50%; }
+  .page-bar.body { width: 90%; }
+  .page-bar.body2 { width: 75%; }
+  .card-label {
+    padding: 14px 16px;
+    font-family: monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: #666;
+    border-top: 1px solid #1a1a1a;
+  }
+  .card-desc {
+    padding: 0 16px 14px;
+    font-family: monospace;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    color: #444;
+    line-height: 1.5;
+  }
+
+  /* ── A: Red wipe ─────────────────────────────────── */
+  @keyframes wipe-out {
+    0%   { transform: translateX(-100%); }
+    30%  { transform: translateX(0%); }
+    60%  { transform: translateX(0%); }
+    90%  { transform: translateX(100%); }
+    100% { transform: translateX(100%); }
+  }
+  @keyframes page-swap {
+    0%   { opacity: 1; }
+    29%  { opacity: 1; }
+    30%  { opacity: 0; }
+    59%  { opacity: 0; }
+    60%  { opacity: 1; }
+    100% { opacity: 1; }
+  }
+  .wipe-overlay {
+    position: absolute;
+    inset: 0;
+    background: #FF3120;
+    transform: translateX(-100%);
+    animation: wipe-out 2.4s cubic-bezier(0.77,0,0.175,1) infinite;
+    z-index: 2;
+  }
+  .wipe-page {
+    animation: page-swap 2.4s step-end infinite;
+  }
+  .page-b .page-bar.red { background: #FF3120; }
+  .page-b .page-bar.title { width: 55%; }
+  .page-b .page-bar.sub { width: 35%; }
+
+  /* ── B: Fade through black ───────────────────────── */
+  @keyframes fade-page-a {
+    0%   { opacity: 1; }
+    35%  { opacity: 0; }
+    65%  { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  @keyframes fade-page-b {
+    0%   { opacity: 0; }
+    35%  { opacity: 0; }
+    65%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  .fade-a { animation: fade-page-a 3s ease-in-out infinite; }
+  .fade-b {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    gap: 8px;
+    animation: fade-page-b 3s ease-in-out infinite;
+  }
+
+  /* ── C: Slide ────────────────────────────────────── */
+  @keyframes slide-out {
+    0%   { transform: translateX(0); }
+    40%  { transform: translateX(-100%); }
+    40.01% { transform: translateX(100%); }
+    100% { transform: translateX(0); }
+  }
+  @keyframes slide-in {
+    0%   { transform: translateX(100%); }
+    40%  { transform: translateX(100%); }
+    80%  { transform: translateX(0); }
+    100% { transform: translateX(0); }
+  }
+  .slide-a { animation: slide-out 2.8s cubic-bezier(0.77,0,0.175,1) infinite; }
+  .slide-b {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    gap: 8px;
+    animation: slide-in 2.8s cubic-bezier(0.77,0,0.175,1) infinite;
+  }
+</style>
+
+<div class="preview-grid">
+
+  <!-- A: Red Wipe -->
+  <div class="preview-card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="anim-window">
+      <div class="page-content wipe-page">
+        <div class="page-bar red"></div>
+        <div class="page-bar title"></div>
+        <div class="page-bar sub"></div>
+        <div class="page-bar body"></div>
+        <div class="page-bar body2"></div>
+      </div>
+      <div class="wipe-overlay"></div>
+    </div>
+    <div class="card-label">A — RED WIPE</div>
+    <div class="card-desc">A red panel sweeps across. Hard, editorial, fast. Feels like a shutter.</div>
+  </div>
+
+  <!-- B: Fade through black -->
+  <div class="preview-card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="anim-window">
+      <div class="page-content fade-a">
+        <div class="page-bar red"></div>
+        <div class="page-bar title"></div>
+        <div class="page-bar sub"></div>
+        <div class="page-bar body"></div>
+        <div class="page-bar body2"></div>
+      </div>
+      <div class="fade-b">
+        <div class="page-bar red" style="width:40px"></div>
+        <div class="page-bar title" style="width:55%"></div>
+        <div class="page-bar sub" style="width:35%"></div>
+        <div class="page-bar body"></div>
+        <div class="page-bar body2" style="width:60%"></div>
+      </div>
+    </div>
+    <div class="card-label">B — FADE THROUGH BLACK</div>
+    <div class="card-desc">Page fades to dark, new page fades in. Cinematic, slow, moody.</div>
+  </div>
+
+  <!-- C: Slide -->
+  <div class="preview-card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="anim-window" style="overflow:hidden">
+      <div class="page-content slide-a">
+        <div class="page-bar red"></div>
+        <div class="page-bar title"></div>
+        <div class="page-bar sub"></div>
+        <div class="page-bar body"></div>
+        <div class="page-bar body2"></div>
+      </div>
+      <div class="slide-b">
+        <div class="page-bar red" style="width:40px"></div>
+        <div class="page-bar title" style="width:55%"></div>
+        <div class="page-bar sub" style="width:35%"></div>
+        <div class="page-bar body"></div>
+        <div class="page-bar body2" style="width:60%"></div>
+      </div>
+    </div>
+    <div class="card-label">C — SLIDE</div>
+    <div class="card-desc">Current page exits left, new page enters from right. Directional, like turning pages.</div>
+  </div>
+
+</div>

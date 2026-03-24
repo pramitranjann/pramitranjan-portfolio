@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Page — Final Layout</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d0d0d;
+      --white: #f5f2ed;
+      --body: #999999;
+      --label: #666666;
+      --red: #FF3120;
+      --divider: #1f1f1f;
+    }
+    body {
+      background: #161616;
+      color: var(--white);
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* ── STICKY COLOPHON SWITCHER ── */
+    .switcher {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: #111;
+      border-bottom: 1px solid var(--divider);
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .switcher-label { font-size: 9px; letter-spacing: 0.14em; color: var(--label); margin-right: 4px; }
+    .sw-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px; letter-spacing: 0.12em; color: var(--body);
+      border: 1px solid #2a2a2a; padding: 5px 12px;
+      background: none; cursor: pointer; transition: all 0.2s;
+    }
+    .sw-btn.active { color: var(--red); border-color: var(--red); }
+
+    /* ── PAGE ── */
+    .about-page {
+      background: var(--bg);
+      max-width: 900px;
+      margin: 0 auto;
+      border-left: 1px solid var(--divider);
+      border-right: 1px solid var(--divider);
+    }
+
+    .nav {
+      border-bottom: 1px solid var(--divider);
+      padding: 18px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { font-size: 11px; letter-spacing: 0.14em; color: var(--white); }
+    .nav-links { display: flex; gap: 24px; list-style: none; }
+    .nav-links li { font-size: 10px; letter-spacing: 0.14em; color: var(--body); }
+    .nav-links li.active { color: var(--red); }
+
+    .hero { border-bottom: 1px solid var(--divider); padding: 64px 40px; }
+    .eyebrow-row { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
+    .eyebrow-line { width: 32px; height: 1px; background: var(--red); }
+    .eyebrow-text { font-size: 9px; letter-spacing: 0.18em; color: var(--red); }
+    .h1 { font-family: 'DM Serif Display', serif; font-size: 52px; font-weight: 400; color: var(--white); line-height: 1.05; margin-bottom: 28px; }
+    .h1 .red { color: var(--red); }
+    .body-lg { font-size: 15px; letter-spacing: 0.04em; color: var(--body); line-height: 1.9; max-width: 520px; margin-bottom: 40px; }
+    .hero-btns { display: flex; align-items: center; justify-content: space-between; }
+    .cv-btn { font-size: 10px; letter-spacing: 0.14em; color: var(--red); border: 1px solid var(--red); padding: 10px 20px; text-decoration: none; }
+    .scroll-hint { font-size: 10px; letter-spacing: 0.14em; color: #444; }
+
+    .page-section { border-bottom: 1px solid var(--divider); padding: 56px 40px; }
+    .two-col { display: grid; grid-template-columns: 160px 1fr; gap: 48px; }
+    .section-label { font-size: 13px; letter-spacing: 0.14em; color: var(--white); padding-top: 6px; line-height: 1.6; }
+
+    .entry-list { display: flex; flex-direction: column; gap: 40px; }
+    .entry-org { font-family: 'DM Serif Display', serif; font-size: 24px; font-style: italic; font-weight: 400; color: var(--white); line-height: 1.2; margin-bottom: 8px; }
+    .entry-meta { display: flex; justify-content: space-between; margin-bottom: 12px; }
+    .entry-role { font-size: 10px; letter-spacing: 0.12em; color: var(--red); }
+    .entry-date { font-size: 10px; letter-spacing: 0.1em; color: var(--body); }
+    .entry-desc { font-size: 13px; letter-spacing: 0.03em; color: var(--body); line-height: 1.8; }
+
+    .tools-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tool-tag { font-size: 10px; letter-spacing: 0.12em; color: var(--body); border: 1px solid #1f1f1f; padding: 6px 14px; }
+
+    /* SPOTIFY */
+    .spotify-card { background: #111; border: 1px solid var(--divider); padding: 14px; }
+    .spotify-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .spotify-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); animation: pulse 1.6s ease infinite; }
+    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+    .spotify-status { font-size: 8px; letter-spacing: 0.14em; color: var(--label); }
+    .spotify-track-row { display: flex; gap: 10px; align-items: center; }
+    .spotify-art { width: 36px; height: 36px; background: #1f1f1f; border: 1px solid #2a2a2a; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .spotify-info { flex: 1; min-width: 0; }
+    .spotify-title { font-family: 'DM Serif Display', serif; font-size: 13px; font-style: italic; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .spotify-artist { font-size: 9px; letter-spacing: 0.1em; color: var(--body); margin-top: 2px; }
+    .spotify-bar { margin-top: 10px; height: 1px; background: #1f1f1f; position: relative; }
+    .spotify-bar-fill { position: absolute; left:0; top:0; height:100%; width:38%; background: var(--red); }
+    .spotify-times { display:flex; justify-content:space-between; margin-top:4px; }
+    .spotify-times span { font-size:7px; letter-spacing:0.1em; color:#444; }
+
+    /* C — sidebar panel */
+    .about-with-sidebar {
+      display: grid;
+      grid-template-columns: 1fr 260px;
+      border-bottom: 1px solid var(--divider);
+    }
+    .about-text-panel { padding: 48px 40px; border-right: 1px solid var(--divider); }
+    .about-sidebar-panel { padding: 28px 24px; }
+    .sidebar-eyebrow { font-size: 8px; letter-spacing: 0.18em; color: var(--label); margin-bottom: 10px; }
+
+    /* /NOW */
+    .now-section { border-bottom: 1px solid var(--divider); padding: 48px 40px; }
+    .now-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--divider); border: 1px solid var(--divider); margin-top: 20px; }
+    .now-cell { background: var(--bg); padding: 20px; }
+    .now-cell-label { font-size: 8px; letter-spacing: 0.18em; color: var(--red); margin-bottom: 10px; }
+    .now-cell-value { font-family: 'DM Serif Display', serif; font-size: 15px; font-style: italic; font-weight: 400; color: var(--white); line-height: 1.3; margin-bottom: 6px; }
+    .now-cell-sub { font-size: 9px; letter-spacing: 0.08em; color: var(--body); line-height: 1.6; }
+
+    /* B — spotify in listening cell */
+    .mini-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--red); animation: pulse 1.6s ease infinite; display: inline-block; margin-right: 5px; }
+    .mini-live { font-size: 7px; letter-spacing: 0.14em; color: var(--label); margin-bottom: 8px; display: flex; align-items: center; }
+    .mini-title { font-family: 'DM Serif Display', serif; font-size: 13px; font-style: italic; color: var(--white); line-height: 1.2; margin-bottom: 3px; }
+    .mini-artist { font-size: 8px; letter-spacing: 0.1em; color: var(--body); }
+    .mini-bar { height: 1px; background: #1f1f1f; position: relative; margin-top: 8px; }
+    .mini-bar-fill { position: absolute; left:0; top:0; height:100%; width:38%; background: var(--red); }
+
+    /* CTA */
+    .cta-section { padding: 72px 40px; }
+    .cta-body { font-size: 15px; letter-spacing:0.04em; color:#666; line-height:1.9; margin-bottom:36px; }
+    .cta-btns { display:flex; align-items:center; gap:16px; }
+
+    /* FOOTER */
+    .footer { border-top: 1px solid var(--divider); }
+    .footer-main { display:flex; justify-content:space-between; align-items:flex-start; padding: 40px 40px 32px; border-bottom: 1px solid var(--divider); }
+    .footer-brand-name { font-family: 'DM Serif Display', serif; font-size: 20px; font-weight:400; font-style:italic; color:var(--white); margin-bottom:6px; }
+    .footer-brand-tag { font-size:9px; letter-spacing:0.14em; color:var(--label); }
+    .footer-cols { display:flex; gap:48px; }
+    .footer-col-label { font-size:8px; letter-spacing:0.16em; color:var(--red); margin-bottom:12px; }
+    .footer-col ul { list-style:none; display:flex; flex-direction:column; gap:8px; }
+    .footer-col li { font-size:10px; letter-spacing:0.1em; color:var(--body); }
+    .footer-colophon { padding:16px 40px; }
+    .colophon-text { font-size:9px; letter-spacing:0.06em; color:#444; line-height:1.8; }
+    .colophon-text span { color: #555; }
+
+    /* annotation pill */
+    .pill {
+      display: inline-block;
+      font-size: 8px; letter-spacing: 0.14em;
+      color: var(--red); border: 1px solid rgba(255,49,32,0.3);
+      padding: 3px 8px; margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="switcher">
+    <span class="switcher-label">COLOPHON:</span>
+    <button class="sw-btn active" onclick="setColo(1,this)">WIT A</button>
+    <button class="sw-btn" onclick="setColo(2,this)">WIT B</button>
+    <button class="sw-btn" onclick="setColo(3,this)">WIT C</button>
+    <button class="sw-btn" onclick="setColo(4,this)">WIT D</button>
+    <span style="margin-left:12px;font-size:9px;letter-spacing:0.1em;color:#333">← colophon options only — Spotify is B+C combined</span>
+  </div>
+
+  <div class="about-page">
+
+    <div class="nav">
+      <span class="nav-logo">PR_</span>
+      <ul class="nav-links"><li class="active">ABOUT</li><li>WORK</li><li>CREATIVE</li></ul>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="eyebrow-row">
+        <div class="eyebrow-line"></div>
+        <span class="eyebrow-text">ABOUT_</span>
+      </div>
+      <div class="h1">Artist. Designer. <span class="red">Human.</span></div>
+      <p class="body-lg">UX design student at SCAD, figuring out what good design can actually do. I think like a designer but see like an artist. Still learning. Always curious.</p>
+      <div class="hero-btns">
+        <a href="#" class="cv-btn">DOWNLOAD CV →</a>
+        <span class="scroll-hint">SCROLL ↓</span>
+      </div>
+    </div>
+
+    <!-- OPTION C — Spotify sidebar under hero -->
+    <div class="about-with-sidebar">
+      <div class="about-text-panel">
+        <div style="font-size:9px;letter-spacing:0.18em;color:var(--label);margin-bottom:10px">WHO I AM_</div>
+        <p style="font-size:13px;letter-spacing:0.04em;color:var(--body);line-height:1.9">I think like a designer but see like an artist — photography came first, then Figma. I care about the stuff between the pixels: tone, feeling, timing. Design that knows it's talking to a person.</p>
+      </div>
+      <div class="about-sidebar-panel">
+        <div class="pill">OPTION C — sidebar</div>
+        <div class="sidebar-eyebrow">ON ROTATION_</div>
+        <div class="spotify-card">
+          <div class="spotify-header">
+            <div class="spotify-dot"></div>
+            <span class="spotify-status">NOW PLAYING</span>
+          </div>
+          <div class="spotify-track-row">
+            <div class="spotify-art">🎵</div>
+            <div class="spotify-info">
+              <div class="spotify-title">Ivy</div>
+              <div class="spotify-artist">FRANK OCEAN · BLONDE</div>
+            </div>
+          </div>
+          <div class="spotify-bar"><div class="spotify-bar-fill"></div></div>
+          <div class="spotify-times"><span>1:44</span><span>4:09</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXPERIENCE -->
+    <div class="page-section">
+      <div class="two-col">
+        <span class="section-label">EXPERIENCE_</span>
+        <div class="entry-list">
+          <div>
+            <div class="entry-org">Vircle Malaysia</div>
+            <div class="entry-meta"><span class="entry-role">GROWTH INTERN</span><span class="entry-date">JUL — AUG 2024</span></div>
+            <p class="entry-desc">Designed sticker packs for Vircle × Minions Despicable Me 4 collaboration. Created hero images and prototyped a school landing page.</p>
+          </div>
+          <div>
+            <div class="entry-org">SOHO Exhibition</div>
+            <div class="entry-meta"><span class="entry-role">EXHIBITION DIRECTOR</span><span class="entry-date">SEP 2023 — JAN 2024</span></div>
+            <p class="entry-desc">Chaired the annual sixth form art exhibition. Organised all departments, delegated tasks, managed logistics, and produced all branding and marketing materials.</p>
+          </div>
+          <div>
+            <div class="entry-org">Moving Walls Malaysia</div>
+            <div class="entry-meta"><span class="entry-role">MARKETING INTERN</span><span class="entry-date">JUL — AUG 2023</span></div>
+            <p class="entry-desc">Started and managed the company TikTok page — ideating, filming, and optimising for engagement.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROFESSIONAL ACTIVITIES -->
+    <div class="page-section">
+      <div class="two-col">
+        <span class="section-label">PROFESSIONAL<br />ACTIVITIES</span>
+        <div class="entry-list">
+          <div>
+            <div class="entry-org">FigBuild 2026</div>
+            <div class="entry-meta"><span class="entry-role">PARTICIPANT</span><span class="entry-date">2026</span></div>
+            <p class="entry-desc">Participated in Figma's 3-day design challenge and built Accord.</p>
+          </div>
+          <div>
+            <div class="entry-org">FLUXathon (48-Hour Design Challenge)</div>
+            <div class="entry-meta"><span class="entry-role">PARTICIPANT</span><span class="entry-date">2026</span></div>
+            <p class="entry-desc">Designed a weather forecasting app for pet owners. Judged by Google.</p>
+          </div>
+          <div>
+            <div class="entry-org">Rocket × FLUX (3-Day Design Sprint)</div>
+            <div class="entry-meta"><span class="entry-role">PARTICIPANT</span><span class="entry-date">2026</span></div>
+            <p class="entry-desc">Redesigned the Passio Go app using Figma Make — exploring how design ideology shifts in the age of AI.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EDUCATION -->
+    <div class="page-section">
+      <div class="two-col">
+        <span class="section-label">EDUCATION_</span>
+        <div class="entry-list">
+          <div>
+            <div class="entry-org">Savannah College of Art and Design (SCAD)</div>
+            <div class="entry-meta"><span class="entry-role">BFA, UX DESIGN</span><span class="entry-date">2025 — PRESENT</span></div>
+            <p class="entry-desc">Bachelor of Fine Arts in UX Design. Freshman year. Interaction design, user research, prototyping, and design systems.</p>
+          </div>
+          <div>
+            <div class="entry-org">Garden International School</div>
+            <div class="entry-meta"><span class="entry-role">A LEVELS</span><span class="entry-date">SEP 2023 — JUN 2025</span></div>
+            <p class="entry-desc">Photography · Design and Technology · Business Studies</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOOLS -->
+    <div class="page-section">
+      <div class="two-col">
+        <span class="section-label">TOOLS</span>
+        <div class="tools-wrap">
+          <span class="tool-tag">FIGMA</span>
+          <span class="tool-tag">ADOBE CREATIVE SUITE</span>
+          <span class="tool-tag">CLAUDE CODE</span>
+          <span class="tool-tag">VIBE CODING</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- /NOW — with OPTION B spotify in listening cell -->
+    <div class="now-section">
+      <div class="eyebrow-row" style="margin-bottom:6px">
+        <div class="eyebrow-line"></div>
+        <span class="eyebrow-text">RIGHT NOW_</span>
+      </div>
+      <p style="font-size:11px;letter-spacing:0.04em;color:var(--label);line-height:1.8">A snapshot of what I'm into this month. Updated manually.</p>
+
+      <div class="pill" style="margin-top:16px">OPTION B — listening cell = live Spotify</div>
+
+      <div class="now-grid">
+        <!-- B: live spotify in listening cell -->
+        <div class="now-cell">
+          <div class="now-cell-label">LISTENING_</div>
+          <div class="mini-live"><span class="mini-dot"></span>LIVE</div>
+          <div class="mini-title">Ivy</div>
+          <div class="mini-artist">FRANK OCEAN · BLONDE</div>
+          <div class="mini-bar"><div class="mini-bar-fill"></div></div>
+        </div>
+        <div class="now-cell">
+          <div class="now-cell-label">MOVING_</div>
+          <div class="now-cell-value">5 days / week<br />lift + run</div>
+          <div class="now-cell-sub">Chasing a sub-22min 5K by April.</div>
+        </div>
+        <div class="now-cell">
+          <div class="now-cell-label">EATING_</div>
+          <div class="now-cell-value">Attempting<br />biryani</div>
+          <div class="now-cell-sub">Ramadan meal prep. Elevated chicken rice.</div>
+        </div>
+        <div class="now-cell">
+          <div class="now-cell-label">BUILDING_</div>
+          <div class="now-cell-value">This portfolio<br />(obviously)</div>
+          <div class="now-cell-sub">Plus Accord — contracts for freelancers.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-section">
+      <div class="h1" style="margin-bottom:20px">Let's make something <span class="red">worth making.</span></div>
+      <p class="cta-body">Or just say hello. Either works.</p>
+      <div class="cta-btns">
+        <a href="#" class="cv-btn" style="color:var(--red);border-color:var(--red)">SAY HELLO →</a>
+        <a href="#" class="cv-btn">DOWNLOAD CV →</a>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <div class="footer-main">
+        <div>
+          <div class="footer-brand-name">Pramit Ranjan</div>
+          <div class="footer-brand-tag">UX DESIGNER · SCAD '29</div>
+        </div>
+        <div class="footer-cols">
+          <div class="footer-col">
+            <div class="footer-col-label">PAGES_</div>
+            <ul><li>WORK</li><li>ABOUT</li><li>CREATIVE</li></ul>
+          </div>
+          <div class="footer-col">
+            <div class="footer-col-label">FIND ME_</div>
+            <ul><li>INSTAGRAM</li><li>LINKEDIN</li><li>READ.CV</li></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- COLOPHON — 4 witty options -->
+      <div class="footer-colophon">
+        <div id="c1" class="colophon-text">
+          Set in <span>DM Serif Display</span> and <span>DM Mono</span>. Built in <span>Next.js</span>, deployed on <span>Vercel</span>. Designed by someone who should probably go outside more. © 2026 PR_
+        </div>
+        <div id="c2" class="colophon-text" style="display:none">
+          Set in <span>DM Serif Display</span> and <span>DM Mono</span>. Assembled in <span>Next.js</span>. Shipped on <span>Vercel</span>. Agonised over everywhere else. Designed by Pramit, who has a gym membership and uses it. © 2026 PR_
+        </div>
+        <div id="c3" class="colophon-text" style="display:none">
+          Typeset in <span>DM Serif Display</span> and <span>DM Mono</span>. Over-engineered in <span>Next.js</span>. Deployed on <span>Vercel</span>. My mum thinks it looks nice. © 2026 PR_
+        </div>
+        <div id="c4" class="colophon-text" style="display:none">
+          Set in <span>DM Serif Display</span> and <span>DM Mono</span>. Built in <span>Next.js</span>, shipped on <span>Vercel</span>, refreshed compulsively after launch. Designed by Pramit Ranjan between meals and gym sets. © 2026 PR_
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function setColo(n, btn) {
+      [1,2,3,4].forEach(i => {
+        document.getElementById('c'+i).style.display = i===n ? 'block' : 'none'
+      })
+      document.querySelectorAll('.sw-btn').forEach(b => {
+        b.classList.toggle('active', b === btn)
+      })
+    }
+  </script>
+</body>
+</html>

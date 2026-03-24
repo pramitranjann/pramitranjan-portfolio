@@ -150,8 +150,8 @@ export default function CreativePage() {
         <section className="creative-section border-b border-divider" style={{ padding: '40px' }}>
           <SectionHeader label="MIXED MEDIA" count="03" />
           <div ref={mixedGridRef} className="grid grid-cols-2 md:grid-cols-3" style={{ gap: '16px' }}>
-            <CreativeCard title="Faces of Power" desc="Portraits, power, and the masks we wear." tag="GELLI PRINT · PHOTOGRAPHY" href="/creative/mixed-media/faces-of-power" cover="/creative/mixed-media/faces-of-power/hero.png" />
-            <CreativeCard title="South China Sea" desc="Conflict, naivety, and the decisions of the few." tag="CYANOTYPE · PHOTOGRAM" href="/creative/mixed-media/south-china-sea" cover="/creative/mixed-media/south-china-sea/hero.png" />
+            <CreativeCard title="Faces of Power" desc="Portraits, power, and the masks we wear." tag="GELLI PRINT · PHOTOGRAPHY" href="/creative/mixed-media/faces-of-power" cover="/creative/mixed-media/faces-of-power/hero-processed.png" />
+            <CreativeCard title="South China Sea" desc="Conflict, naivety, and the decisions of the few." tag="CYANOTYPE · PHOTOGRAM" href="/creative/mixed-media/south-china-sea" cover="/creative/mixed-media/south-china-sea/hero-processed.png" />
             <CreativeCard title="Project 03" desc="TBC" comingSoon />
           </div>
         </section>
@@ -161,7 +161,7 @@ export default function CreativePage() {
           <SectionHeader label="BRANDING" count="02" />
           <div ref={brandingGridRef} className="grid grid-cols-2" style={{ gap: '16px' }}>
             <CreativeCard title="Oracle" desc="A Matrix-inspired clothing brand built from scratch." tag="CLOTHING · BRANDING" href="/creative/branding/oracle" />
-            <CreativeCard title="SOHO" desc="Directed and branded a sixth form art exhibition." tag="EXHIBITION · BRANDING" href="/creative/branding/soho" cover="/creative/branding/soho/cover.png" />
+            <CreativeCard title="SOHO" desc="Directed and branded a sixth form art exhibition." tag="EXHIBITION · BRANDING" href="/creative/branding/soho" cover="/creative/branding/soho/cover-processed.png" />
           </div>
         </section>
 

@@ -1,0 +1,10 @@
+{"type":"server-started","port":60703,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:60703","screen_dir":"/Users/pramitranjan/portfolio/.superpowers/brainstorm/30146-1774299011"}
+{"type":"screen-added","file":"/Users/pramitranjan/portfolio/.superpowers/brainstorm/30146-1774299011/page-transitions.html"}
+{"type":"screen-added","file":"/Users/pramitranjan/portfolio/.superpowers/brainstorm/30146-1774299011/page-transitions-v2.html"}
+{"type":"screen-added","file":"/Users/pramitranjan/portfolio/.superpowers/brainstorm/30146-1774299011/page-transitions-v3.html"}
+{"type":"screen-added","file":"/Users/pramitranjan/portfolio/.superpowers/brainstorm/30146-1774299011/wipe-text.html"}
+{"type":"screen-added","file":"/Users/pramitranjan/portfolio/.superpowers/brainstorm/30146-1774299011/card-hover.html"}
+{"type":"screen-added","file":"/Users/pramitranjan/portfolio/.superpowers/brainstorm/30146-1774299011/card-entrance.html"}
+{"type":"screen-added","file":"/Users/pramitranjan/portfolio/.superpowers/brainstorm/30146-1774299011/scroll-reveals.html"}
+{"type":"screen-added","file":"/Users/pramitranjan/portfolio/.superpowers/brainstorm/30146-1774299011/waiting.html"}
+{"type":"server-stopped","reason":"idle timeout"}

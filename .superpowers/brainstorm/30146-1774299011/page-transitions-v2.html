@@ -1,0 +1,190 @@
+<h2>Red Wipe — How Much Red?</h2>
+<p class="subtitle">Same sweeping mechanic, different amounts of red. Each loops automatically.</p>
+
+<style>
+  .preview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .preview-card {
+    background: #111;
+    border: 1px solid #2a2a2a;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .preview-card.selected {
+    border-color: #FF3120;
+    box-shadow: 0 0 0 1px #FF3120, 0 0 20px rgba(255,49,32,0.15);
+  }
+  .preview-card:hover { border-color: #555; }
+  .anim-window {
+    height: 160px;
+    background: #0d0d0d;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    gap: 8px;
+  }
+  .page-bar { height: 10px; background: #222; border-radius: 2px; }
+  .page-bar.red { background: #FF3120; width: 40px; height: 6px; }
+  .page-bar.title { width: 70%; height: 14px; }
+  .page-bar.sub { width: 50%; }
+  .page-bar.body { width: 90%; }
+  .page-bar.body2 { width: 75%; }
+  .card-label {
+    padding: 14px 16px;
+    font-family: monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: #666;
+    border-top: 1px solid #1a1a1a;
+  }
+  .card-desc {
+    padding: 0 16px 14px;
+    font-family: monospace;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    color: #444;
+    line-height: 1.5;
+  }
+
+  @keyframes page-swap {
+    0%,29%  { opacity: 1; }
+    30%,59% { opacity: 0; }
+    60%,100%{ opacity: 1; }
+  }
+  .swap-page { animation: page-swap 2.4s step-end infinite; }
+
+  /* ── A: Black wipe with red leading edge ── */
+  @keyframes wipe-dark-red-edge {
+    0%   { transform: translateX(-100%); }
+    35%  { transform: translateX(0%); }
+    65%  { transform: translateX(0%); }
+    100% { transform: translateX(110%); }
+  }
+  .wipe-dark {
+    position: absolute;
+    inset: 0;
+    background: #080808;
+    transform: translateX(-100%);
+    animation: wipe-dark-red-edge 2.4s cubic-bezier(0.77,0,0.175,1) infinite;
+    z-index: 2;
+  }
+  .wipe-dark::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 3px;
+    background: #FF3120;
+  }
+
+  /* ── B: Dark wipe, small red flash before ── */
+  @keyframes red-flash {
+    0%,18%  { opacity: 0; }
+    19%,28% { opacity: 1; }
+    29%,100%{ opacity: 0; }
+  }
+  @keyframes wipe-dark-after-flash {
+    0%,25%  { transform: translateX(-100%); }
+    55%     { transform: translateX(0%); }
+    80%     { transform: translateX(0%); }
+    100%    { transform: translateX(110%); }
+  }
+  .flash-overlay {
+    position: absolute;
+    inset: 0;
+    background: #FF3120;
+    opacity: 0;
+    animation: red-flash 2.4s ease infinite;
+    z-index: 3;
+  }
+  .wipe-after-flash {
+    position: absolute;
+    inset: 0;
+    background: #080808;
+    transform: translateX(-100%);
+    animation: wipe-dark-after-flash 2.4s cubic-bezier(0.77,0,0.175,1) infinite;
+    z-index: 2;
+  }
+
+  /* ── C: Pure dark wipe, no red ── */
+  @keyframes wipe-pure-dark {
+    0%   { transform: translateX(-100%); }
+    35%  { transform: translateX(0%); }
+    65%  { transform: translateX(0%); }
+    100% { transform: translateX(110%); }
+  }
+  .wipe-pure {
+    position: absolute;
+    inset: 0;
+    background: #060606;
+    transform: translateX(-100%);
+    animation: wipe-pure-dark 2.4s cubic-bezier(0.77,0,0.175,1) infinite;
+    z-index: 2;
+    border-right: 1px solid #1a1a1a;
+  }
+</style>
+
+<div class="preview-grid">
+
+  <!-- A: Dark wipe + red leading edge -->
+  <div class="preview-card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="anim-window">
+      <div class="page-content swap-page">
+        <div class="page-bar red"></div>
+        <div class="page-bar title"></div>
+        <div class="page-bar sub"></div>
+        <div class="page-bar body"></div>
+        <div class="page-bar body2"></div>
+      </div>
+      <div class="wipe-dark"></div>
+    </div>
+    <div class="card-label">A — DARK WIPE + RED EDGE</div>
+    <div class="card-desc">Black panel sweeps across with a 3px red line at the front. Subtle nod to the palette.</div>
+  </div>
+
+  <!-- B: Red flash then dark wipe -->
+  <div class="preview-card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="anim-window">
+      <div class="page-content swap-page"></div>
+        <div class="page-bar red"></div>
+        <div class="page-bar title"></div>
+        <div class="page-bar sub"></div>
+        <div class="page-bar body"></div>
+        <div class="page-bar body2"></div>
+      </div>
+      <div class="flash-overlay"></div>
+      <div class="wipe-after-flash"></div>
+    </div>
+    <div class="card-label">B — FLASH + DARK WIPE</div>
+    <div class="card-desc">Quick red flash (like a shutter firing), then a dark panel wipes through.</div>
+  </div>
+
+  <!-- C: Pure dark, no red -->
+  <div class="preview-card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="anim-window">
+      <div class="page-content swap-page">
+        <div class="page-bar red"></div>
+        <div class="page-bar title"></div>
+        <div class="page-bar sub"></div>
+        <div class="page-bar body"></div>
+        <div class="page-bar body2"></div>
+      </div>
+      <div class="wipe-pure"></div>
+    </div>
+    <div class="card-label">C — PURE DARK WIPE</div>
+    <div class="card-desc">Clean dark panel, no red at all. Fast and editorial without the punch.</div>
+  </div>
+
+</div>

@@ -3,10 +3,10 @@ import { useEffect, useRef } from 'react'
 import { ProjectCard } from './ProjectCard'
 
 const projects = [
-  { title: "Franklin's", oneliner: 'The experience starts before you walk in.',             tags: ['UX', 'RESEARCH'],   href: '/work/franklins',  cover: '/work/franklins/cover.png' },
-  { title: 'Albers',     oneliner: 'Colour theory you can actually play with.',             tags: ['UI', 'CODE'],       href: '/work/albers',     cover: '/work/albers/cover.png' },
-  { title: 'LoomLearn',  oneliner: 'One learning space for students who think differently.', tags: ['UX', 'ED-TECH'],  href: '/work/loomlearn',  cover: '/work/loomlearn/cover.png' },
-  { title: 'Atom OS',    oneliner: 'A phone stripped down to what actually matters.',        tags: ['UI', 'SYSTEMS'],   href: '/work/atom',       cover: '/work/atom/cover.png' },
+  { title: "Franklin's", oneliner: 'The experience starts before you walk in.',             tags: ['UX', 'RESEARCH'],   href: '/work/franklins',  cover: '/work/franklins/cover-processed.png' },
+  { title: 'Albers',     oneliner: 'Colour theory you can actually play with.',             tags: ['UI', 'CODE'],       href: '/work/albers',     cover: '/work/albers/cover-processed.png' },
+  { title: 'LoomLearn',  oneliner: 'One learning space for students who think differently.', tags: ['UX', 'ED-TECH'],  href: '/work/loomlearn',  cover: '/work/loomlearn/cover-processed.png' },
+  { title: 'Atom OS',    oneliner: 'A phone stripped down to what actually matters.',        tags: ['UI', 'SYSTEMS'],   href: '/work/atom',       cover: '/work/atom/cover-processed.png' },
 ]
 
 export function SelectedWork() {

@@ -9,11 +9,11 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 const projects = [
-  { title: "Franklin's",      oneliner: "The experience starts before you walk in.",                    tags: ['UX', 'RESEARCH'],        href: '/work/franklins',       cover: '/work/franklins/cover-hor.png' },
-  { title: 'LoomLearn',       oneliner: 'One learning space for students who think differently.',       tags: ['UX', 'RESEARCH'],        href: '/work/loomlearn',       cover: '/work/loomlearn/cover-hor.png' },
-  { title: 'HelpOH',          oneliner: 'Connecting homes to trusted help, and workers to fair work.',  tags: ['UX', 'SERVICE DESIGN'],  href: '/work/helpoh',          cover: '/work/helpoh/cover-hor.png' },
-  { title: 'Atom OS',         oneliner: 'A phone stripped down to what actually matters.',               tags: ['UI', 'SYSTEMS'],         href: '/work/atom',            cover: '/work/atom/cover-hor.png' },
-  { title: 'Albers',          oneliner: 'Colour theory you can actually play with.',                     tags: ['UI', 'INTERACTION'],     href: '/work/albers',          cover: '/work/albers/cover-hor.png' },
+  { title: "Franklin's",      oneliner: "The experience starts before you walk in.",                    tags: ['UX', 'RESEARCH'],        href: '/work/franklins',       cover: '/work/franklins/cover-hor-processed.png' },
+  { title: 'LoomLearn',       oneliner: 'One learning space for students who think differently.',       tags: ['UX', 'RESEARCH'],        href: '/work/loomlearn',       cover: '/work/loomlearn/cover-hor-processed.png' },
+  { title: 'HelpOH',          oneliner: 'Connecting homes to trusted help, and workers to fair work.',  tags: ['UX', 'SERVICE DESIGN'],  href: '/work/helpoh',          cover: '/work/helpoh/cover-hor-processed.png' },
+  { title: 'Atom OS',         oneliner: 'A phone stripped down to what actually matters.',               tags: ['UI', 'SYSTEMS'],         href: '/work/atom',            cover: '/work/atom/cover-hor-processed.png' },
+  { title: 'Albers',          oneliner: 'Colour theory you can actually play with.',                     tags: ['UI', 'INTERACTION'],     href: '/work/albers',          cover: '/work/albers/cover-hor-processed.png' },
   { title: 'Accord',          oneliner: 'A contract tool built for freelancers.',                        tags: ['UX', 'PRODUCT'],         href: '/work/accord',          cover: undefined },
   { title: 'Purcast',         oneliner: 'A podcast app designed for the Fluxathon.',                    tags: ['UI', 'COMPETITION'],     href: '/work/purcast',         cover: undefined },
 ]

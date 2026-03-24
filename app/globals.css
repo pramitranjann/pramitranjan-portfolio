@@ -76,6 +76,9 @@ body.carousel-reengaging main {
 }
 
 
+/* Card images — fill container correctly regardless of source dimensions */
+.portfolio-card img { object-fit: cover; object-position: top; }
+
 /* Card hover — lift + red border + glow */
 .portfolio-card {
   border: 1px solid #2a2a2a;
@@ -254,6 +257,14 @@ button:hover .arrow-nudge-back {
 
 /* ─── Mobile responsive overrides (< 768px) ──────────────────────────────── */
 @media (max-width: 767px) {
+  /* Type scale — clamp large sizes for small screens */
+  :root {
+    --text-h1:      36px;
+    --text-h2:      28px;
+    --text-h3:      20px;
+    --text-body-lg: 16px;
+  }
+
   /* Nav — reduce side padding */
   .site-nav {
     padding: 18px 20px !important;
@@ -317,10 +328,20 @@ button:hover .arrow-nudge-back {
     padding: 24px !important;
   }
 
+  /* Work grid — single column on mobile */
+  .work-grid-section .grid {
+    grid-template-columns: 1fr !important;
+  }
+
   /* Work cards — fixed height image on mobile, drop padding-bottom ratio */
   .work-card-image {
     padding-bottom: 0 !important;
     height: 160px !important;
+  }
+
+  /* Creative grids — single column on mobile */
+  .creative-section .grid {
+    grid-template-columns: 1fr !important;
   }
 
   /* Lightbox — move prev/next out of image area to bottom corners */

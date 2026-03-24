@@ -4,7 +4,7 @@ import { ProjectCard } from './ProjectCard'
 
 const projects = [
   { title: 'Accord',   oneliner: 'A contract tool built for freelancers.',              tags: ['UX', 'PRODUCT'],        href: '/work/accord',   cover: undefined },
-  { title: 'HelpOH',   oneliner: 'Connecting homes to trusted help, and workers to fair work.', tags: ['UX', 'SERVICE DESIGN'], href: '/work/helpoh', cover: '/work/helpoh/cover-hor.png' },
+  { title: 'HelpOH',   oneliner: 'Connecting homes to trusted help, and workers to fair work.', tags: ['UX', 'SERVICE DESIGN'], href: '/work/helpoh', cover: '/work/helpoh/cover-hor-processed.png' },
   { title: 'Purcast',  oneliner: 'A podcast app designed for the Fluxathon.',           tags: ['UI', 'COMPETITION'],    href: '/work/purcast',  cover: undefined },
 ]
 

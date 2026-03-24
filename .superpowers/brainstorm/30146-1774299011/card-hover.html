@@ -1,0 +1,170 @@
+<h2>Card Hover Animation</h2>
+<p class="subtitle">Hover each card to feel the difference. Pick your favourite.</p>
+
+<style>
+  .cards-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 24px;
+  }
+  .mock-card {
+    background: #1c1c1c;
+    border: 1px solid #2a2a2a;
+    padding: 12px;
+    cursor: pointer;
+    position: relative;
+  }
+  .mock-card.selected {
+    border-color: #FF3120;
+    box-shadow: 0 0 0 1px #FF3120, 0 0 20px rgba(255,49,32,0.1);
+  }
+  .card-img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: #252525;
+    border: 1px solid #333;
+    overflow: hidden;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  /* fake image gradient */
+  .card-img::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 40%, #1f1f1f 100%);
+  }
+  .card-img::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #FF3120 0%, transparent 40%);
+    opacity: 0.08;
+  }
+  .card-cat { font-family: monospace; font-size: 9px; letter-spacing: 0.14em; color: #666; margin-bottom: 6px; }
+  .card-title { font-family: serif; font-size: 16px; color: #f5f2ed; margin-bottom: 6px; font-style: italic; }
+  .card-body { font-family: monospace; font-size: 10px; color: #666; line-height: 1.6; }
+  .card-cta { font-family: monospace; font-size: 10px; color: #FF3120; letter-spacing: 0.1em; margin-top: 10px; }
+  .label {
+    font-family: monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: #444;
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  /* ── A: Lift + image zoom ── */
+  .card-a {
+    transition: transform 0.3s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card-a:hover {
+    transform: translateY(-6px);
+    border-color: #FF3120;
+    box-shadow: 0 0 0 1px #FF3120, 0 12px 32px rgba(0,0,0,0.5), 0 0 24px rgba(255,49,32,0.08);
+  }
+  .card-a .card-img {
+    transition: transform 0.4s ease;
+    overflow: hidden;
+  }
+  .card-a:hover .card-img::before {
+    transform: scale(1.06);
+    transition: transform 0.4s ease;
+  }
+
+  /* ── B: Image zoom + overlay tint ── */
+  .card-b { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+  .card-b:hover {
+    border-color: #FF3120;
+    box-shadow: 0 0 0 1px #FF3120, 0 0 24px rgba(255,49,32,0.1);
+  }
+  .card-b .card-img { transition: none; }
+  .card-b .img-inner {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 40%, #1f1f1f 100%);
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .card-b:hover .img-inner { transform: scale(1.07); }
+  .card-b .img-tint {
+    position: absolute;
+    inset: 0;
+    background: rgba(255,49,32,0.06);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .card-b:hover .img-tint { opacity: 1; }
+
+  /* ── C: Reveal underline + lift ── */
+  .card-c { transition: transform 0.25s ease, border-color 0.2s ease, box-shadow 0.2s ease; }
+  .card-c:hover {
+    transform: translateY(-4px);
+    border-color: #FF3120;
+    box-shadow: 0 0 0 1px #FF3120, 0 8px 24px rgba(0,0,0,0.4), 0 0 20px rgba(255,49,32,0.08);
+  }
+  .card-c .card-title {
+    position: relative;
+    display: inline-block;
+  }
+  .card-c .card-title::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #FF3120;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  .card-c:hover .card-title::after { transform: scaleX(1); }
+  .card-c .card-cta {
+    transition: letter-spacing 0.25s ease;
+  }
+  .card-c:hover .card-cta { letter-spacing: 0.2em; }
+</style>
+
+<div class="cards-row">
+
+  <!-- A: Lift + border glow -->
+  <div>
+    <div class="mock-card card-a" data-choice="a" onclick="toggleSelect(this)">
+      <div class="card-img"></div>
+      <div class="card-cat">UX DESIGN · MOBILE</div>
+      <div class="card-title">Passio Go Redesign</div>
+      <div class="card-body">Transit app rethought for the AI era.</div>
+      <div class="card-cta">VIEW →</div>
+    </div>
+    <div class="label">A — LIFT + GLOW</div>
+  </div>
+
+  <!-- B: Image zoom + red tint -->
+  <div>
+    <div class="mock-card card-b" data-choice="b" onclick="toggleSelect(this)">
+      <div class="card-img">
+        <div class="img-inner"></div>
+        <div class="img-tint"></div>
+      </div>
+      <div class="card-cat">UX DESIGN · MOBILE</div>
+      <div class="card-title">Passio Go Redesign</div>
+      <div class="card-body">Transit app rethought for the AI era.</div>
+      <div class="card-cta">VIEW →</div>
+    </div>
+    <div class="label">B — IMAGE ZOOM + RED TINT</div>
+  </div>
+
+  <!-- C: Lift + title underline + CTA expand -->
+  <div>
+    <div class="mock-card card-c" data-choice="c" onclick="toggleSelect(this)">
+      <div class="card-img"></div>
+      <div class="card-cat">UX DESIGN · MOBILE</div>
+      <div class="card-title">Passio Go Redesign</div>
+      <div class="card-body">Transit app rethought for the AI era.</div>
+      <div class="card-cta">VIEW →</div>
+    </div>
+    <div class="label">C — LIFT + TITLE UNDERLINE</div>
+  </div>
+
+</div>
