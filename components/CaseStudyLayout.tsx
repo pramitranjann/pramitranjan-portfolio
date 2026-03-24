@@ -92,7 +92,16 @@ export function CaseStudyLayout({
   const [activeId, setActiveId]     = useState('')
 
   useEffect(() => {
-    const onScroll = () => setNavVisible(window.scrollY > 100)
+    const onScroll = () => {
+      setNavVisible(window.scrollY > 100)
+      const nearBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 80
+      if (nearBottom) {
+        const last = Array.from(document.querySelectorAll('section[id^="sec-"]'))
+          .filter(el => el.id !== 'sec-hero')
+          .at(-1)
+        if (last) setActiveId(last.id)
+      }
+    }
     window.addEventListener('scroll', onScroll, { passive: true })
     onScroll()
 
