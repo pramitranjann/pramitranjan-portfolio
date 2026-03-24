@@ -37,12 +37,10 @@ interface CaseStudyLayoutProps {
   solutionImages?: [string] | [string, string]
 }
 
-// Shared label style — mono uppercase, H3 size
 const labelStyle: React.CSSProperties = {
   fontSize: 'var(--text-h3)',
   fontWeight: 400,
-  letterSpacing: '0.06em',
-  color: '#f5f2ed',
+  color: '#FF3120',
   lineHeight: 1,
   paddingTop: '4px',
 }
