@@ -10,14 +10,30 @@ export default function FranklinsPage() {
       prev={{ slug: 'loomlearn', title: 'LoomLearn' }}
       next={{ slug: 'helpoh', title: 'HelpOH' }}
       heroImage="/work/franklins/cover-processed.png"
-      problem="Franklin's is a neighbourhood café in Savannah with a strong in-store experience — warm staff, good coffee, a chic art-deco environment. The problem was that none of that warmth carried through digitally. First-time visitors, especially tourists and SCAD students, were arriving with mismatched expectations: wrong assumptions about seating, service style, and how ordering worked. Our team redesigned the Franklin's website and online ordering flow to close the gap between what customers expected and what they actually found."
-      role="Team lead on a five-person team (with Hridya, Cristina, Sebastian, and Yisen) for UXDG 101. Led and contributed across every stage — from structuring the research approach and directing fieldwork, to synthesising findings, defining the IA, and driving the high-fidelity prototype in Figma."
-      research="We used contextual inquiry as our primary method — short in-context conversations and direct observation at the café, structured to fit around a busy service environment without disrupting customers or staff. I led the team in conducting both barista and customer interviews, and ran a survey with SCAD students to understand pre-visit behaviour. The pattern that emerged quickly: most friction started before anyone walked through the door. Customers discovered Franklin's via TikTok or word of mouth, searched online for practical information (hours, location, seating, menu), and arrived having already formed expectations the café couldn't always meet. The website was outdated, the service model wasn't communicated, and the warmth that defined the in-store experience had no digital equivalent."
-      challenge="I led synthesis across a journey map, aggregate empathy map, and business model canvas before moving the team into IA. Card sorting on FigJam — open format, to avoid influencing participant groupings — revealed that users expected task-based navigation, not business categories. They naturally organised content into four buckets: Menu, Order, About, and Contact. That became the backbone of the redesigned IA. The opportunity statement focused on three areas: first-time customer support, clearer pre-visit expectations, and aligning the digital experience with Franklin's warm, human-centred brand."
-      process="Every design move was traced directly back to a research finding. Staff warmth was preserved by keeping the tone welcoming throughout. The homepage was restructured to surface practical expectations earlier — seating limitations, service style, hours — rather than leading with atmosphere. Navigation was reduced to four task-based items. The order flow was redesigned as a clear sequence: item selection, cart, payment, confirmation, with explicit progress cues to reduce the hesitation we'd observed in first-time users. The About page was repositioned as a pre-visit resource, not a brand story."
-      usabilityTesting="We tested whether users could complete a specific order — a small, medium roast cappuccino with skim milk and vanilla syrup — smoothly from discovery to checkout. Users completed the task successfully with no major usability breakdowns. The flow felt clear and intuitive. Constraints were prototype-level: users couldn't type into text fields and only one product path was prototyped. Because the core flow tested well, we made the call not to iterate — the design held."
-      solution="A redesigned Franklin's website and online ordering experience with task-based navigation, a restructured homepage that sets expectations before arrival, a cleaner menu page that supports decision-making, and a step-by-step order flow that reduces friction from discovery through to checkout. The redesign didn't change Franklin's identity — it made it clearer, more honest, and more welcoming upfront."
-      outcomes="Leading a team through a full UX process from scratch — research, synthesis, IA, design, testing — taught me that the most important job of a team lead is keeping the work honest. It's easy to jump to solutions; the discipline is staying in the research long enough to find the real problem. The insight that stuck most: the experience gap at Franklin's wasn't a design problem on its own, it was an information problem. Their warmth was real — it just wasn't reaching people before they arrived. If I were to continue the project, I'd explore in-context digital touchpoints at the storefront itself that help first-timers orient without needing to ask."
+
+      problemHeadline="The warmth was real — it just wasn't reaching people before they arrived."
+      problem="Franklin's has a strong in-store experience. The brief: close the gap between what first-time visitors expected digitally and what they actually found when they walked in."
+
+      roleHeadline="Team lead on a five-person UXDG 101 project — from fieldwork to final prototype."
+      role="Led and contributed across every stage: structuring the research approach, directing fieldwork, synthesising findings, defining the IA, and driving the high-fidelity Figma prototype."
+
+      researchHeadline="Most friction started before anyone walked through the door."
+      research="Contextual inquiry at the café — barista and customer interviews, plus a SCAD student survey. The website was outdated, the service model unclear, and the in-store warmth had no digital equivalent."
+
+      pullQuote="Their warmth was real. It just wasn't reaching people before they arrived."
+
+      challengeHeadline="Users don't think in business categories — they think in tasks."
+      challenge="Card sorting on FigJam revealed four natural buckets: Menu, Order, About, Contact. That structure became the backbone of the redesigned IA."
+
+      processHeadline="Every design decision traces directly back to a research finding."
+      process="The homepage was restructured to surface practical expectations earlier — seating, service style, hours. Navigation reduced to four items; the order flow redesigned as a clear sequence with explicit progress cues."
+      usabilityTesting="We tested a full order — small cappuccino, skim milk, vanilla syrup — from discovery to checkout. Users completed it with no major breakdowns. The flow held; we made the call not to iterate."
+
+      solutionHeadline="The redesign didn't change Franklin's identity — it made it clearer upfront."
+      solution="Task-based navigation, a restructured homepage, a cleaner menu, and a step-by-step order flow from discovery to checkout."
+
+      outcomesHeadline="The most important job of a team lead is keeping the work honest."
+      outcomes="The experience gap wasn't a design problem — it was an information problem. If I were to continue, I'd explore in-context digital touchpoints at the storefront itself."
     />
   )
 }
