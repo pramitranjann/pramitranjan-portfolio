@@ -41,6 +41,8 @@ const labelStyle: React.CSSProperties = {
   fontSize: 'var(--text-h3)',
   fontWeight: 400,
   color: '#FF3120',
+  textTransform: 'uppercase',
+  letterSpacing: '0.14em',
   lineHeight: 1,
   paddingTop: '4px',
 }
