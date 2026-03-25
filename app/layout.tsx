@@ -51,6 +51,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     '--motion-eyebrow-line-duration': `${motion.eyebrowLineDuration}s`,
     '--motion-eyebrow-label-duration': `${motion.eyebrowLabelDuration}s`,
     '--motion-eyebrow-label-delay': `${motion.eyebrowLabelDelay}s`,
+    '--audio-interaction-volume': `${content.design.audio.interactionVolume}`,
   } as CSSProperties
 
   return (

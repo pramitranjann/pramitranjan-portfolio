@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import type {
+  AudioSettings,
   CardStyleSettings,
   CaseStudyContent,
   CaseStudySection,
@@ -1467,6 +1468,10 @@ function DesignSystemEditor({
           styleSettings={content.design.listeningCard}
           onChange={(styleSettings) => updateSection('design', { ...content.design, listeningCard: styleSettings })}
         />
+        <AudioSettingsEditor
+          settings={content.design.audio}
+          onChange={(audio) => updateSection('design', { ...content.design, audio })}
+        />
       </SectionFrame>
     </>
   )
@@ -2449,6 +2454,30 @@ function MotionSettingsEditor({
         <SliderField label="Pause Before Lift" value={settings.introPauseBeforeLift} min={0} max={1000} step={50} suffix="ms" onChange={(value) => onChange({ ...settings, introPauseBeforeLift: value })} />
         <SliderField label="Lift Duration" value={settings.introLiftDuration} min={200} max={1600} step={50} suffix="ms" onChange={(value) => onChange({ ...settings, introLiftDuration: value })} />
       </div>
+    </div>
+  )
+}
+
+function AudioSettingsEditor({
+  settings,
+  onChange,
+}: {
+  settings: AudioSettings
+  onChange: (value: AudioSettings) => void
+}) {
+  return (
+    <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
+      <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.1em' }}>
+        INTERACTION AUDIO
+      </div>
+      <SliderField
+        label="Volume"
+        value={settings.interactionVolume}
+        min={0}
+        max={1}
+        step={0.05}
+        onChange={(value) => onChange({ ...settings, interactionVolume: value })}
+      />
     </div>
   )
 }

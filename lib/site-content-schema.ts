@@ -109,6 +109,10 @@ export interface MotionSettings {
   introLiftDuration: number
 }
 
+export interface AudioSettings {
+  interactionVolume: number
+}
+
 export interface HeroStageCopy {
   number: string
   titleHtml: string
@@ -266,6 +270,7 @@ export interface SiteContent {
     nowCards: NowCardStyleSettings
     listeningCard: ListeningCardStyleSettings
     motion: MotionSettings
+    audio: AudioSettings
   }
   copy: {
     home: HomePageCopy
@@ -507,6 +512,12 @@ function isMotionSettings(value: unknown): value is MotionSettings {
   )
 }
 
+function isAudioSettings(value: unknown): value is AudioSettings {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return typeof item.interactionVolume === 'number'
+}
+
 function isProjectLink(value: unknown): value is ProjectLink {
   if (!value || typeof value !== 'object') return false
   const item = value as Record<string, unknown>
@@ -623,6 +634,7 @@ export function isSiteContent(value: unknown): value is SiteContent {
     isNowCardStyleSettings(design.nowCards) &&
     isListeningCardStyleSettings(design.listeningCard) &&
     isMotionSettings(design.motion) &&
+    isAudioSettings(design.audio) &&
     isHomePageCopy(copy.home) &&
     isAboutPageCopy(copy.aboutPage) &&
     isWorkPageCopy(copy.workPage) &&

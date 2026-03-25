@@ -12,6 +12,14 @@ const IMMEDIATE_SOUND_WINDOW_MS = 220
 const SOUND_SAMPLE_RATE = 22050
 const interactionSoundUrls = new Map<'nav' | 'lightbox' | 'card', string>()
 
+function getInteractionVolume() {
+  if (typeof window === 'undefined') return 1
+  const value = window.getComputedStyle(document.body).getPropertyValue('--audio-interaction-volume').trim()
+  const parsed = Number.parseFloat(value)
+  if (!Number.isFinite(parsed)) return 1
+  return Math.max(0, Math.min(parsed, 1.5))
+}
+
 function getCtx(): AudioContext | null {
   if (typeof window === 'undefined') return null
   try {
@@ -163,15 +171,15 @@ function getInteractionSoundUrl(kind: 'nav' | 'lightbox' | 'card') {
 
   const url = renderInteractionSound(
     kind === 'nav'
-      ? [{ freq: 1100, gain: 0.2, start: 0, attack: 0.005, decay: 0.09 }]
+      ? [{ freq: 1100, gain: 0.38, start: 0, attack: 0.005, decay: 0.09 }]
       : kind === 'lightbox'
         ? [
-            { freq: 1050, gain: 0.14, start: 0, attack: 0.005, decay: 0.12 },
-            { freq: 880, gain: 0.1, start: 0.06, attack: 0.005, decay: 0.1 },
+            { freq: 1050, gain: 0.28, start: 0, attack: 0.005, decay: 0.12 },
+            { freq: 880, gain: 0.22, start: 0.06, attack: 0.005, decay: 0.1 },
           ]
         : [
-            { freq: 880, gain: 0.16, start: 0, attack: 0.005, decay: 0.09 },
-            { freq: 1320, gain: 0.12, start: 0.055, attack: 0.005, decay: 0.1 },
+            { freq: 880, gain: 0.32, start: 0, attack: 0.005, decay: 0.09 },
+            { freq: 1320, gain: 0.26, start: 0.055, attack: 0.005, decay: 0.1 },
           ]
   )
 
@@ -184,23 +192,24 @@ function playInteractionSound(kind: 'nav' | 'lightbox' | 'card') {
 
   try {
     const audio = new Audio(getInteractionSoundUrl(kind))
-    audio.volume = 0.45
+    const volume = getInteractionVolume()
+    audio.volume = Math.max(0, Math.min(volume, 1))
     audio.play().catch(() => {
       if (kind === 'nav') {
         void withImmediateCtx((ctx) => {
-          tone(ctx, 1100, 0.09, ctx.currentTime + OFFSET, 0.008, 0.09)
+          tone(ctx, 1100, 0.16 * volume, ctx.currentTime + OFFSET, 0.008, 0.09)
         })
       } else if (kind === 'lightbox') {
         void withImmediateCtx((ctx) => {
           const t = ctx.currentTime + OFFSET
-          tone(ctx, 1050, 0.07, t, 0.008, 0.12)
-          tone(ctx, 880, 0.05, t + 0.06, 0.008, 0.1)
+          tone(ctx, 1050, 0.12 * volume, t, 0.008, 0.12)
+          tone(ctx, 880, 0.09 * volume, t + 0.06, 0.008, 0.1)
         })
       } else {
         void withImmediateCtx((ctx) => {
           const t = ctx.currentTime + OFFSET
-          tone(ctx, 880, 0.08, t, 0.008, 0.09)
-          tone(ctx, 1320, 0.07, t + 0.055, 0.008, 0.1)
+          tone(ctx, 880, 0.14 * volume, t, 0.008, 0.09)
+          tone(ctx, 1320, 0.11 * volume, t + 0.055, 0.008, 0.1)
         })
       }
     })
