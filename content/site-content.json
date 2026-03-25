@@ -803,7 +803,12 @@
       "solutionHeadline": "Search, book, done — with transparent pricing and no friction.",
       "solution": "A desktop platform with streamlined search-and-book, transparent pricing, time selection, and service categorisation. Clarity over density.",
       "outcomesHeadline": "The worker side deserved more screen time than I gave it.",
-      "outcomes": "HelpOH pushed me to design for two very different users simultaneously. In a next iteration, I'd build out a dedicated worker dashboard with job management and training access."
+      "outcomes": "HelpOH pushed me to design for two very different users simultaneously. In a next iteration, I'd build out a dedicated worker dashboard with job management and training access.",
+      "mediaSettings": {
+        "hero": {
+          "background": "#FFFFFF"
+        }
+      }
     },
     {
       "slug": "atom",
@@ -850,7 +855,12 @@
       "solutionHeadline": "Four widgets. One focus. No noise.",
       "solution": "A four-widget home screen with screen time visualisation, app usage breakdowns, and a toggleable Focus mode that blocks selected apps for user-defined periods.",
       "outcomesHeadline": "The hardest part wasn't adding features — it was deciding what to withhold.",
-      "outcomes": "Atom OS taught me that subtraction is a design decision. I'd revisit the onboarding flow to help users understand the philosophy before they start using it."
+      "outcomes": "Atom OS taught me that subtraction is a design decision. I'd revisit the onboarding flow to help users understand the philosophy before they start using it.",
+      "mediaSettings": {
+        "hero": {
+          "background": "#FFFFFF"
+        }
+      }
     },
     {
       "slug": "albers",
