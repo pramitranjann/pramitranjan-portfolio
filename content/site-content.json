@@ -673,7 +673,7 @@
       "outcomes": "The experience gap wasn't a design problem — it was an information problem. If I were to continue, I'd explore in-context digital touchpoints at the storefront itself.",
       "mediaSettings": {
         "hero": {
-          "fit": "cover",
+          "fit": "contain",
           "background": "#FFFFFF"
         }
       },
