@@ -754,11 +754,10 @@
           "section": "solution",
           "layout": "single",
           "align": "center",
-          "width": "100%",
+          "width": "78%",
           "images": [
             {
-              "src": "/work/loomlearn/solution-hero-processed.png",
-              "aspectRatio": "4 / 3"
+              "src": "/work/loomlearn/solution-hero-processed.png"
             }
           ]
         }
