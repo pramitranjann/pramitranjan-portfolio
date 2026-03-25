@@ -10,7 +10,7 @@ let _ctx: AudioContext | null = null
 let _unlocking: Promise<void> | null = null
 const IMMEDIATE_SOUND_WINDOW_MS = 220
 const SOUND_SAMPLE_RATE = 22050
-const interactionSoundUrls = new Map<'nav' | 'lightbox' | 'card', string>()
+const soundUrls = new Map<'nav' | 'lightbox' | 'card' | 'intro-p' | 'intro-r' | 'intro-lift', string>()
 
 function getInteractionVolume() {
   if (typeof window === 'undefined') return 1
@@ -165,8 +165,8 @@ function renderInteractionSound(segments: SoundSegment[]) {
   return URL.createObjectURL(new Blob([buffer], { type: 'audio/wav' }))
 }
 
-function getInteractionSoundUrl(kind: 'nav' | 'lightbox' | 'card') {
-  const existing = interactionSoundUrls.get(kind)
+function getSoundUrl(kind: 'nav' | 'lightbox' | 'card' | 'intro-p' | 'intro-r' | 'intro-lift') {
+  const existing = soundUrls.get(kind)
   if (existing) return existing
 
   const url = renderInteractionSound(
@@ -177,24 +177,33 @@ function getInteractionSoundUrl(kind: 'nav' | 'lightbox' | 'card') {
             { freq: 1050, gain: 0.28, start: 0, attack: 0.005, decay: 0.12 },
             { freq: 880, gain: 0.22, start: 0.06, attack: 0.005, decay: 0.1 },
           ]
-        : [
+        : kind === 'card'
+          ? [
             { freq: 880, gain: 0.32, start: 0, attack: 0.005, decay: 0.09 },
             { freq: 1320, gain: 0.26, start: 0.055, attack: 0.005, decay: 0.1 },
           ]
+          : kind === 'intro-p'
+            ? [{ freq: 820, gain: 0.24, start: 0, attack: 0.004, decay: 0.08 }]
+            : kind === 'intro-r'
+              ? [{ freq: 960, gain: 0.24, start: 0, attack: 0.004, decay: 0.08 }]
+              : [
+                  { freq: 440, gain: 0.14, start: 0, attack: 0.03, decay: 0.26 },
+                  { freq: 660, gain: 0.12, start: 0.08, attack: 0.03, decay: 0.22 },
+                ]
   )
 
-  interactionSoundUrls.set(kind, url)
+  soundUrls.set(kind, url)
   return url
 }
 
-function playInteractionSound(kind: 'nav' | 'lightbox' | 'card') {
+function playGeneratedSound(kind: 'nav' | 'lightbox' | 'card' | 'intro-p' | 'intro-r' | 'intro-lift') {
   if (typeof window === 'undefined') return
 
   try {
-    const audio = new Audio(getInteractionSoundUrl(kind))
+    const audio = new Audio(getSoundUrl(kind))
     const volume = getInteractionVolume()
     audio.volume = Math.max(0, Math.min(volume, 1))
-    audio.play().catch(() => {
+    return audio.play().catch(() => {
       if (kind === 'nav') {
         void withImmediateCtx((ctx) => {
           tone(ctx, 1100, 0.16 * volume, ctx.currentTime + OFFSET, 0.008, 0.09)
@@ -268,17 +277,17 @@ const OFFSET = 0.02
 
 // Single clean tone — nav / back links
 export function playNav() {
-  playInteractionSound('nav')
+  void playGeneratedSound('nav')
 }
 
 // Two-tone slide — lightbox frame change
 export function playLightboxNav() {
-  playInteractionSound('lightbox')
+  void playGeneratedSound('lightbox')
 }
 
 // Ascending pair — entering a project card
 export function playCardEnter() {
-  playInteractionSound('card')
+  void playGeneratedSound('card')
 }
 
 // Soft layered arrival — new page settled
@@ -293,17 +302,10 @@ export function playPageArrive() {
 // Soft typewriter tick — intro animation keystroke (P or R)
 // Fires from setTimeout so only plays if context already running (iOS: silent on first load)
 export function playIntroKey(pitch: 'P' | 'R') {
-  withHotCtx((ctx) => {
-    const freq = pitch === 'P' ? 820 : 960
-    tone(ctx, freq, 0.06, ctx.currentTime + 0.01, 0.006, 0.07)
-  })
+  void playGeneratedSound(pitch === 'P' ? 'intro-p' : 'intro-r')
 }
 
 // Subtle lift tone — curtain begins to rise
 export function playIntroLift() {
-  withHotCtx((ctx) => {
-    const t = ctx.currentTime + 0.01
-    tone(ctx, 440, 0.04, t,        0.06, 0.30)
-    tone(ctx, 660, 0.03, t + 0.08, 0.04, 0.25)
-  })
+  void playGeneratedSound('intro-lift')
 }
