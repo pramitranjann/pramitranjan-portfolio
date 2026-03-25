@@ -237,6 +237,7 @@ export interface CaseStudyMediaImage {
 export interface CaseStudyMediaBlock {
   id: string
   section: CaseStudyMediaBlockSection
+  hidden?: boolean
   layout: CaseStudyMediaBlockLayout
   placement?: CaseStudyMediaPlacement
   align?: CaseStudyMediaAlign
@@ -608,6 +609,7 @@ function isCaseStudyMediaBlock(value: unknown): value is CaseStudyMediaBlock {
   return (
     isString(item.id) &&
     isCaseStudyMediaBlockSection(item.section) &&
+    (item.hidden === undefined || typeof item.hidden === 'boolean') &&
     (item.layout === 'single' || item.layout === 'pair') &&
     (item.placement === undefined || isCaseStudyMediaPlacement(item.placement)) &&
     (item.align === undefined || isCaseStudyMediaAlign(item.align)) &&

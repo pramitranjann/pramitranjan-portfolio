@@ -2428,11 +2428,19 @@ function MediaBlockEditor({
   return (
     <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
       <div className="flex items-center justify-between" style={{ gap: '12px', flexWrap: 'wrap' }}>
-      <div className="font-mono" style={{ fontSize: '13px', color: '#f5f2ed', letterSpacing: '0.14em', lineHeight: 1.4 }}>
-        {block.section.toUpperCase()} BLOCK
-      </div>
+        <div className="font-mono" style={{ fontSize: '13px', color: '#f5f2ed', letterSpacing: '0.14em', lineHeight: 1.4 }}>
+          {block.section.toUpperCase()} BLOCK{block.hidden ? ' [HIDDEN]' : ''}
+        </div>
         <ReorderButtons index={index} length={length} onMove={onMove} />
       </div>
+      <label className="font-mono" style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', color: '#d2cec8', letterSpacing: '0.12em' }}>
+        <input
+          type="checkbox"
+          checked={Boolean(block.hidden)}
+          onChange={(event) => onChange((current) => ({ ...current, hidden: event.target.checked || undefined }))}
+        />
+        Hide Block From Public Site
+      </label>
       <Field label="Section">
         <select value={block.section} onChange={(event) => onChange((current) => ({ ...current, section: event.target.value as CaseStudyMediaBlockSection }))} style={inputStyle()}>
           <option value="research">Research</option>

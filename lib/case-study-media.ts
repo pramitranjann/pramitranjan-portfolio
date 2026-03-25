@@ -22,8 +22,11 @@ function createBlockId(slug: string, section: CaseStudyMediaBlockSection, index:
 
 export function deriveCaseStudyMediaBlocks(caseStudy: CaseStudyContent): CaseStudyMediaBlock[] {
   const explicitBlocks = caseStudy.mediaBlocks ?? []
+  const visibleExplicitBlocks = process.env.NODE_ENV === 'production'
+    ? explicitBlocks.filter((block) => !block.hidden)
+    : explicitBlocks
   const sectionsWithExplicitBlocks = new Set(explicitBlocks.map((block) => block.section))
-  const blocks: CaseStudyMediaBlock[] = [...explicitBlocks]
+  const blocks: CaseStudyMediaBlock[] = [...visibleExplicitBlocks]
   const media = caseStudy.mediaSettings
 
   if (caseStudy.researchImage && !sectionsWithExplicitBlocks.has('research')) {
