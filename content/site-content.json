@@ -1064,11 +1064,11 @@
         "Installation",
         "Research"
       ],
-      "prev": null,
-      "next": {
+      "prev": {
         "slug": "faces-of-power",
         "title": "Faces of Power"
       },
+      "next": null,
       "backHref": "/creative/mixed-media",
       "backLabel": "MIXED MEDIA",
       "heroImage": "/creative/mixed-media/south-china-sea/hero-processed.png",
@@ -1136,11 +1136,11 @@
           "align": "center",
           "images": [
             {
-              "src": "/creative/mixed-media/south-china-sea/solution-hero-processed.png",
-              "aspectRatio": "4 / 5"
+              "src": "/creative/mixed-media/south-china-sea/solution-hero-processed.png"
             }
           ],
-          "placement": "side-right"
+          "placement": "side-right",
+          "width": "min(100%, 820px)"
         },
         {
           "id": "process-1774473786169-k7n9r0",
