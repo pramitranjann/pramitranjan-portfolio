@@ -529,7 +529,7 @@
       "introLiftDuration": 850
     },
     "audio": {
-      "interactionVolume": 0.9
+      "interactionVolume": 1
     }
   },
   "copy": {
