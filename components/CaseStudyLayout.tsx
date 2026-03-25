@@ -260,6 +260,7 @@ export function CaseStudyLayout({
   const [navVisible, setNavVisible] = useState(false)
   const [activeId, setActiveId]     = useState('')
   const scrollLocked = useRef(false)
+  const lockTargetId = useRef<string | null>(null)
   const lockTimer    = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
@@ -297,7 +298,21 @@ export function CaseStudyLayout({
       setNavVisible(window.scrollY > 100)
       // Don't update active section while a programmatic scroll is animating —
       // that's what causes the flickering between items on click.
-      if (scrollLocked.current) return
+      if (scrollLocked.current) {
+        const targetId = lockTargetId.current
+        const target = targetId ? document.getElementById(targetId) : null
+
+        if (target) {
+          const rect = target.getBoundingClientRect()
+          if (rect.top <= 118) {
+            scrollLocked.current = false
+            lockTargetId.current = null
+            setActiveId(target.id)
+          }
+        }
+
+        if (scrollLocked.current) return
+      }
       const active = getActiveSection()
       if (active) setActiveId(active.id)
     }
@@ -628,10 +643,13 @@ export function CaseStudyLayout({
                 if (el) {
                   setActiveId(item.id)
                   scrollLocked.current = true
+                  lockTargetId.current = item.id
                   if (lockTimer.current) clearTimeout(lockTimer.current)
                   el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                  // Release lock after smooth scroll finishes (~600ms)
-                  lockTimer.current = setTimeout(() => { scrollLocked.current = false }, 600)
+                  lockTimer.current = setTimeout(() => {
+                    scrollLocked.current = false
+                    lockTargetId.current = null
+                  }, 1800)
                 }
               }}
               className="font-mono"
