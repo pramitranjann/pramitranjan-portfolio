@@ -448,8 +448,8 @@ export function CaseStudyLayout({
         {research && (
           <section id="sec-research" data-section={copy.researchLabel} className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
             <GsapReveal>
-              <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
-                <span className="font-mono" style={labelStyle}>{copy.researchLabel}</span>
+              <div data-reveal className="case-study-meta-grid grid" style={researchInlineBlocks.length ? { ...gridStyle, alignItems: 'center' } : gridStyle}>
+                <span className="font-mono" style={researchInlineBlocks.length ? { ...labelStyle, alignSelf: 'center' } : labelStyle}>{copy.researchLabel}</span>
                 <div
                   className={researchInlineBlocks.length ? 'case-study-inline-layout' : undefined}
                   style={researchInlineBlocks.length ? { display: 'grid', gridTemplateColumns: 'minmax(0, 640px) minmax(320px, 1fr)', gap: '32px', alignItems: 'center' } : undefined}
@@ -506,8 +506,8 @@ export function CaseStudyLayout({
         {challenge && (
           <section id="sec-challenge" data-section={copy.challengeLabel} className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
             <GsapReveal>
-              <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
-                <span className="font-mono" style={labelStyle}>{copy.challengeLabel}</span>
+              <div data-reveal className="case-study-meta-grid grid" style={challengeInlineBlocks.length ? { ...gridStyle, alignItems: 'center' } : gridStyle}>
+                <span className="font-mono" style={challengeInlineBlocks.length ? { ...labelStyle, alignSelf: 'center' } : labelStyle}>{copy.challengeLabel}</span>
                 <div
                   className={challengeInlineBlocks.length ? 'case-study-inline-layout' : undefined}
                   style={challengeInlineBlocks.length ? { display: 'grid', gridTemplateColumns: 'minmax(0, 640px) minmax(320px, 1fr)', gap: '32px', alignItems: 'center' } : undefined}
@@ -578,8 +578,8 @@ export function CaseStudyLayout({
         {/* Solution */}
         <section id="sec-solution" data-section={copy.solutionLabel} className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
           <GsapReveal>
-            <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
-              <span className="font-mono" style={labelStyle}>{copy.solutionLabel}</span>
+            <div data-reveal className="case-study-meta-grid grid" style={solutionInlineBlocks.length ? { ...gridStyle, alignItems: 'center' } : gridStyle}>
+              <span className="font-mono" style={solutionInlineBlocks.length ? { ...labelStyle, alignSelf: 'center' } : labelStyle}>{copy.solutionLabel}</span>
               <div
                 className={solutionInlineBlocks.length ? 'case-study-inline-layout' : undefined}
                 style={solutionInlineBlocks.length ? { display: 'grid', gridTemplateColumns: 'minmax(0, 640px) minmax(320px, 1fr)', gap: '32px', alignItems: 'center' } : undefined}
