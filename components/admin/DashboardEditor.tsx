@@ -108,6 +108,24 @@ const mediaBackgroundOptions: PresetOption[] = [
   { value: '#f5f2ed', label: 'Paper Light · #f5f2ed' },
 ]
 
+const mediaInlineTextWidthOptions: PresetOption[] = [
+  { value: '', label: 'Default Text Width · 640px' },
+  { value: '420px', label: 'Compact Text · 420px' },
+  { value: '480px', label: 'Narrow Text · 480px' },
+  { value: '560px', label: 'Medium Text · 560px' },
+  { value: '640px', label: 'Default Text · 640px' },
+  { value: '720px', label: 'Wide Text · 720px' },
+]
+
+const mediaInlineMinWidthOptions: PresetOption[] = [
+  { value: '', label: 'Default Media Min · 320px' },
+  { value: '320px', label: '320px' },
+  { value: '360px', label: '360px' },
+  { value: '420px', label: '420px' },
+  { value: '480px', label: '480px' },
+  { value: '560px', label: '560px' },
+]
+
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label style={{ display: 'grid', gap: '8px' }}>
@@ -2457,6 +2475,24 @@ function MediaBlockEditor({
         placeholder="100%, 78%, 920px, min(100%, 920px)"
         onChange={(value) => onChange((current) => ({ ...current, width: value }))}
       />
+      {block.placement === 'side-right' ? (
+        <>
+          <PresetSelectField
+            label="Text Column Width"
+            value={block.inlineTextWidth}
+            options={mediaInlineTextWidthOptions}
+            placeholder="420px, 560px, 640px"
+            onChange={(value) => onChange((current) => ({ ...current, inlineTextWidth: value }))}
+          />
+          <PresetSelectField
+            label="Media Column Minimum"
+            value={block.inlineMediaMinWidth}
+            options={mediaInlineMinWidthOptions}
+            placeholder="320px, 420px, 480px"
+            onChange={(value) => onChange((current) => ({ ...current, inlineMediaMinWidth: value }))}
+          />
+        </>
+      ) : null}
       <PresetSelectField
         label="Gap"
         value={block.gap}

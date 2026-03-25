@@ -241,6 +241,8 @@ export interface CaseStudyMediaBlock {
   placement?: CaseStudyMediaPlacement
   align?: CaseStudyMediaAlign
   width?: string
+  inlineTextWidth?: string
+  inlineMediaMinWidth?: string
   gap?: string
   images: CaseStudyMediaImage[]
 }
@@ -610,6 +612,8 @@ function isCaseStudyMediaBlock(value: unknown): value is CaseStudyMediaBlock {
     (item.placement === undefined || isCaseStudyMediaPlacement(item.placement)) &&
     (item.align === undefined || isCaseStudyMediaAlign(item.align)) &&
     isOptionalString(item.width) &&
+    isOptionalString(item.inlineTextWidth) &&
+    isOptionalString(item.inlineMediaMinWidth) &&
     isOptionalString(item.gap) &&
     Array.isArray(item.images) &&
     item.images.every(isCaseStudyMediaImage)
