@@ -760,6 +760,25 @@
               "aspectRatio": "3 / 2"
             }
           ]
+        },
+        {
+          "id": "research-1774467128401-vjt30f",
+          "section": "research",
+          "layout": "single",
+          "placement": "side-right",
+          "align": "center",
+          "width": "100%",
+          "gap": "2px",
+          "images": [
+            {
+              "src": "",
+              "fit": "contain",
+              "position": "center center",
+              "aspectRatio": "4 / 3",
+              "background": "#161616",
+              "alt": ""
+            }
+          ]
         }
       ]
     },
