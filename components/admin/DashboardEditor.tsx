@@ -101,7 +101,7 @@ const mediaAspectRatioOptions: PresetOption[] = [
 ]
 
 const mediaBackgroundOptions: PresetOption[] = [
-  { value: '', label: 'Default Background' },
+  { value: '', label: 'Default Background · Page Black' },
   { value: '#161616', label: 'Surface Dark · #161616' },
   { value: '#111111', label: 'Panel Dark · #111111' },
   { value: '#0d0d0d', label: 'Page Black · #0d0d0d' },
@@ -111,7 +111,7 @@ const mediaBackgroundOptions: PresetOption[] = [
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label style={{ display: 'grid', gap: '8px' }}>
-      <span className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#999999', letterSpacing: '0.1em' }}>
+      <span className="font-mono" style={{ fontSize: '13px', color: '#d2cec8', letterSpacing: '0.12em', lineHeight: 1.4 }}>
         {label}
       </span>
       {children}
@@ -279,7 +279,7 @@ function createMediaImageDraft() {
     fit: 'contain',
     position: 'center center',
     aspectRatio: '4 / 3',
-    background: '#161616',
+    background: '#0d0d0d',
     alt: '',
   } satisfies CaseStudyMediaBlock['images'][number]
 }
@@ -2281,9 +2281,9 @@ function MediaBlockEditor({
   return (
     <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
       <div className="flex items-center justify-between" style={{ gap: '12px', flexWrap: 'wrap' }}>
-        <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#999999', letterSpacing: '0.1em' }}>
-          {block.section.toUpperCase()} BLOCK
-        </div>
+      <div className="font-mono" style={{ fontSize: '13px', color: '#f5f2ed', letterSpacing: '0.14em', lineHeight: 1.4 }}>
+        {block.section.toUpperCase()} BLOCK
+      </div>
         <ReorderButtons index={index} length={length} onMove={onMove} />
       </div>
       <Field label="Section">
@@ -2336,7 +2336,7 @@ function MediaBlockEditor({
       />
       {images.map((image, imageIndex) => (
         <div key={`${block.id}-${imageIndex}`} style={{ display: 'grid', gap: '12px', border: '1px solid #171717', padding: '14px' }}>
-          <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.1em' }}>
+          <div className="font-mono" style={{ fontSize: '12px', color: '#c4beb6', letterSpacing: '0.12em', lineHeight: 1.4 }}>
             IMAGE {imageIndex + 1}
           </div>
           <SourcePathField
@@ -2839,7 +2839,7 @@ function CardStyleEditor({
 }) {
   return (
     <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
-      <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.1em' }}>
+      <div className="font-mono" style={{ fontSize: '13px', color: '#f5f2ed', letterSpacing: '0.14em', lineHeight: 1.4 }}>
         {title.toUpperCase()}
       </div>
       <Field label="Title Size">

@@ -186,13 +186,13 @@ export function CaseStudyLayout({
     height: '280px',
     fit: 'contain',
     position: 'center center',
-    background: '#161616',
+    background: '#0d0d0d',
   })
   const researchMedia = resolveMediaSlot(mediaSettings?.research, {
     height: '320px',
     fit: 'contain',
     position: 'center center',
-    background: '#161616',
+    background: '#0d0d0d',
   })
   const challengeMedia = resolveMediaPair(mediaSettings?.challengePair, {
     height: '267px',
@@ -200,13 +200,13 @@ export function CaseStudyLayout({
     fit: 'contain',
     firstPosition: 'center center',
     secondPosition: 'center center',
-    background: '#161616',
+    background: '#0d0d0d',
   })
   const solutionHeroMedia = resolveMediaSlot(mediaSettings?.solutionHero, {
     height: '480px',
     fit: 'contain',
     position: 'center center',
-    background: '#161616',
+    background: '#0d0d0d',
   })
   const solutionPairMedia = resolveMediaPair(mediaSettings?.solutionPair, {
     height: '320px',
@@ -214,7 +214,7 @@ export function CaseStudyLayout({
     fit: 'contain',
     firstPosition: 'center center',
     secondPosition: 'center center',
-    background: '#161616',
+    background: '#0d0d0d',
   })
   const caseStudyMediaBlocks = deriveCaseStudyMediaBlocks({
     slug,
@@ -452,9 +452,9 @@ export function CaseStudyLayout({
                 <span className="font-mono" style={labelStyle}>{copy.researchLabel}</span>
                 <div
                   className={researchInlineBlocks.length ? 'case-study-inline-layout' : undefined}
-                  style={researchInlineBlocks.length ? { display: 'grid', gridTemplateColumns: 'minmax(0, 640px) minmax(320px, 1fr)', gap: '32px', alignItems: 'start' } : undefined}
+                  style={researchInlineBlocks.length ? { display: 'grid', gridTemplateColumns: 'minmax(0, 640px) minmax(320px, 1fr)', gap: '32px', alignItems: 'center' } : undefined}
                 >
-                  <div style={{ maxWidth: researchInlineBlocks.length ? 'none' : '640px' }}>
+                  <div style={researchInlineBlocks.length ? { maxWidth: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'center' } : { maxWidth: '640px' }}>
                     {researchHeadline && (
                       <p className="font-mono" style={headlineStyle}>{researchHeadline}</p>
                     )}
@@ -510,9 +510,9 @@ export function CaseStudyLayout({
                 <span className="font-mono" style={labelStyle}>{copy.challengeLabel}</span>
                 <div
                   className={challengeInlineBlocks.length ? 'case-study-inline-layout' : undefined}
-                  style={challengeInlineBlocks.length ? { display: 'grid', gridTemplateColumns: 'minmax(0, 640px) minmax(320px, 1fr)', gap: '32px', alignItems: 'start' } : undefined}
+                  style={challengeInlineBlocks.length ? { display: 'grid', gridTemplateColumns: 'minmax(0, 640px) minmax(320px, 1fr)', gap: '32px', alignItems: 'center' } : undefined}
                 >
-                  <div style={{ maxWidth: challengeInlineBlocks.length ? 'none' : '640px' }}>
+                  <div style={challengeInlineBlocks.length ? { maxWidth: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'center' } : { maxWidth: '640px' }}>
                     {challengeHeadline && (
                       <p className="font-mono" style={headlineStyle}>{challengeHeadline}</p>
                     )}
@@ -582,9 +582,9 @@ export function CaseStudyLayout({
               <span className="font-mono" style={labelStyle}>{copy.solutionLabel}</span>
               <div
                 className={solutionInlineBlocks.length ? 'case-study-inline-layout' : undefined}
-                style={solutionInlineBlocks.length ? { display: 'grid', gridTemplateColumns: 'minmax(0, 640px) minmax(320px, 1fr)', gap: '32px', alignItems: 'start' } : undefined}
+                style={solutionInlineBlocks.length ? { display: 'grid', gridTemplateColumns: 'minmax(0, 640px) minmax(320px, 1fr)', gap: '32px', alignItems: 'center' } : undefined}
               >
-                <div style={{ maxWidth: solutionInlineBlocks.length ? 'none' : '640px' }}>
+                <div style={solutionInlineBlocks.length ? { maxWidth: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'center' } : { maxWidth: '640px' }}>
                   {solutionHeadline && (
                     <p className="font-mono" style={headlineStyle}>{solutionHeadline}</p>
                   )}
