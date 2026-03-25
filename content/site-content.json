@@ -670,7 +670,12 @@
       "solutionHeadline": "The redesign didn't change Franklin's identity — it made it clearer upfront.",
       "solution": "Task-based navigation, a restructured homepage, a cleaner menu, and a step-by-step order flow from discovery to checkout.",
       "outcomesHeadline": "The most important job of a team lead is keeping the work honest.",
-      "outcomes": "The experience gap wasn't a design problem — it was an information problem. If I were to continue, I'd explore in-context digital touchpoints at the storefront itself."
+      "outcomes": "The experience gap wasn't a design problem — it was an information problem. If I were to continue, I'd explore in-context digital touchpoints at the storefront itself.",
+      "mediaSettings": {
+        "hero": {
+          "fit": "cover"
+        }
+      }
     },
     {
       "slug": "loomlearn",
