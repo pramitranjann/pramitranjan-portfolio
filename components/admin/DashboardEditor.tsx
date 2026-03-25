@@ -45,6 +45,69 @@ type PageKey =
   | 'motion'
   | `case-study:${string}`
 
+type PresetOption = {
+  value: string
+  label: string
+}
+
+const mediaBlockWidthOptions: PresetOption[] = [
+  { value: '', label: 'Auto / Full Width' },
+  { value: '56%', label: 'Portrait Narrow · 56%' },
+  { value: '60%', label: 'Portrait Narrow · 60%' },
+  { value: '64%', label: 'Portrait Medium · 64%' },
+  { value: '68%', label: 'Portrait Medium · 68%' },
+  { value: '72%', label: 'Portrait Wide · 72%' },
+  { value: '78%', label: 'Centered Showcase · 78%' },
+  { value: '84%', label: 'Wide Showcase · 84%' },
+  { value: '100%', label: 'Full Width · 100%' },
+  { value: '720px', label: 'Fixed Width · 720px' },
+  { value: '820px', label: 'Fixed Width · 820px' },
+  { value: '920px', label: 'Fixed Width · 920px' },
+  { value: 'min(100%, 720px)', label: 'Responsive Clamp · 720px' },
+  { value: 'min(100%, 820px)', label: 'Responsive Clamp · 820px' },
+  { value: 'min(100%, 920px)', label: 'Responsive Clamp · 920px' },
+]
+
+const mediaGapOptions: PresetOption[] = [
+  { value: '', label: 'Default Gap' },
+  { value: '2px', label: 'Tight · 2px' },
+  { value: '8px', label: 'Small · 8px' },
+  { value: '12px', label: 'Medium · 12px' },
+  { value: '16px', label: 'Comfortable · 16px' },
+  { value: '24px', label: 'Loose · 24px' },
+]
+
+const mediaPositionOptions: PresetOption[] = [
+  { value: '', label: 'Default Position' },
+  { value: 'center center', label: 'Center' },
+  { value: 'center top', label: 'Top Center' },
+  { value: 'center bottom', label: 'Bottom Center' },
+  { value: 'left center', label: 'Left Center' },
+  { value: 'right center', label: 'Right Center' },
+  { value: '50% 20%', label: 'Upper Focus · 50% 20%' },
+  { value: '50% 30%', label: 'Upper Focus · 50% 30%' },
+  { value: '50% 70%', label: 'Lower Focus · 50% 70%' },
+]
+
+const mediaAspectRatioOptions: PresetOption[] = [
+  { value: '', label: 'Auto Ratio' },
+  { value: '3 / 4', label: 'Portrait UI · 3 / 4' },
+  { value: '4 / 5', label: 'Portrait Tall · 4 / 5' },
+  { value: '1 / 1', label: 'Square · 1 / 1' },
+  { value: '4 / 3', label: 'Square-ish Landscape · 4 / 3' },
+  { value: '3 / 2', label: 'Landscape Medium · 3 / 2' },
+  { value: '16 / 10', label: 'Wide UI · 16 / 10' },
+  { value: '16 / 9', label: 'Wide Flow · 16 / 9' },
+]
+
+const mediaBackgroundOptions: PresetOption[] = [
+  { value: '', label: 'Default Background' },
+  { value: '#161616', label: 'Surface Dark · #161616' },
+  { value: '#111111', label: 'Panel Dark · #111111' },
+  { value: '#0d0d0d', label: 'Page Black · #0d0d0d' },
+  { value: '#f5f2ed', label: 'Paper Light · #f5f2ed' },
+]
+
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label style={{ display: 'grid', gap: '8px' }}>
@@ -80,6 +143,57 @@ function inputStyle(multiline = false) {
     outline: 'none',
     resize: multiline ? 'vertical' as const : undefined,
   }
+}
+
+function PresetSelectField({
+  label,
+  value,
+  options,
+  placeholder,
+  onChange,
+}: {
+  label: string
+  value: string | undefined
+  options: PresetOption[]
+  placeholder: string
+  onChange: (value: string | undefined) => void
+}) {
+  const isCustom = !!value && !options.some((option) => option.value === value)
+  const selectValue = isCustom ? '__custom__' : (value ?? '')
+
+  return (
+    <Field label={label}>
+      <div style={{ display: 'grid', gap: '8px' }}>
+        <select
+          value={selectValue}
+          onChange={(event) => {
+            const nextValue = event.target.value
+            if (nextValue === '__custom__') {
+              onChange(value)
+              return
+            }
+            onChange(nextValue || undefined)
+          }}
+          style={inputStyle()}
+        >
+          {options.map((option) => (
+            <option key={`${label}-${option.value || 'default'}`} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+          <option value="__custom__">Custom</option>
+        </select>
+        {isCustom ? (
+          <input
+            value={value}
+            onChange={(event) => onChange(event.target.value || undefined)}
+            placeholder={placeholder}
+            style={inputStyle()}
+          />
+        ) : null}
+      </div>
+    </Field>
+  )
 }
 
 function textToTags(value: string) {
@@ -2059,12 +2173,20 @@ function MediaBlockEditor({
           <option value="right">Right</option>
         </select>
       </Field>
-      <Field label="Block Width">
-        <input value={block.width ?? ''} onChange={(event) => onChange((current) => ({ ...current, width: event.target.value || undefined }))} placeholder="100%, 78%, 920px, min(100%, 920px)" style={inputStyle()} />
-      </Field>
-      <Field label="Gap">
-        <input value={block.gap ?? ''} onChange={(event) => onChange((current) => ({ ...current, gap: event.target.value || undefined }))} placeholder="2px, 12px" style={inputStyle()} />
-      </Field>
+      <PresetSelectField
+        label="Block Width"
+        value={block.width}
+        options={mediaBlockWidthOptions}
+        placeholder="100%, 78%, 920px, min(100%, 920px)"
+        onChange={(value) => onChange((current) => ({ ...current, width: value }))}
+      />
+      <PresetSelectField
+        label="Gap"
+        value={block.gap}
+        options={mediaGapOptions}
+        placeholder="2px, 12px"
+        onChange={(value) => onChange((current) => ({ ...current, gap: value }))}
+      />
       {images.map((image, imageIndex) => (
         <div key={`${block.id}-${imageIndex}`} style={{ display: 'grid', gap: '12px', border: '1px solid #171717', padding: '14px' }}>
           <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.1em' }}>
@@ -2109,45 +2231,42 @@ function MediaBlockEditor({
               <option value="cover">cover</option>
             </select>
           </Field>
-          <Field label="Position">
-            <input
-              value={image.position ?? ''}
-              onChange={(event) =>
-                onChange((current) => ({
-                  ...current,
-                  images: updateAt(images, imageIndex, { ...image, position: event.target.value || undefined }),
-                }))
-              }
-              placeholder="center center / 50% 20%"
-              style={inputStyle()}
-            />
-          </Field>
-          <Field label="Aspect Ratio">
-            <input
-              value={image.aspectRatio ?? ''}
-              onChange={(event) =>
-                onChange((current) => ({
-                  ...current,
-                  images: updateAt(images, imageIndex, { ...image, aspectRatio: event.target.value || undefined }),
-                }))
-              }
-              placeholder="3 / 4, 4 / 3, 1 / 1, 16 / 10"
-              style={inputStyle()}
-            />
-          </Field>
-          <Field label="Background">
-            <input
-              value={image.background ?? ''}
-              onChange={(event) =>
-                onChange((current) => ({
-                  ...current,
-                  images: updateAt(images, imageIndex, { ...image, background: event.target.value || undefined }),
-                }))
-              }
-              placeholder="#161616"
-              style={inputStyle()}
-            />
-          </Field>
+          <PresetSelectField
+            label="Position"
+            value={image.position}
+            options={mediaPositionOptions}
+            placeholder="center center / 50% 20%"
+            onChange={(value) =>
+              onChange((current) => ({
+                ...current,
+                images: updateAt(images, imageIndex, { ...image, position: value }),
+              }))
+            }
+          />
+          <PresetSelectField
+            label="Aspect Ratio"
+            value={image.aspectRatio}
+            options={mediaAspectRatioOptions}
+            placeholder="3 / 4, 4 / 3, 1 / 1, 16 / 10"
+            onChange={(value) =>
+              onChange((current) => ({
+                ...current,
+                images: updateAt(images, imageIndex, { ...image, aspectRatio: value }),
+              }))
+            }
+          />
+          <PresetSelectField
+            label="Background"
+            value={image.background}
+            options={mediaBackgroundOptions}
+            placeholder="#161616"
+            onChange={(value) =>
+              onChange((current) => ({
+                ...current,
+                images: updateAt(images, imageIndex, { ...image, background: value }),
+              }))
+            }
+          />
         </div>
       ))}
       <button
