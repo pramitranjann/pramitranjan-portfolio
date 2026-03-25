@@ -310,6 +310,46 @@ function serializeContent(content: SiteContent) {
   return JSON.stringify(content)
 }
 
+function syncCaseStudySectionNavigation(caseStudies: CaseStudyContent[], section: CaseStudySection) {
+  const sectionItems = caseStudies.filter((item) => item.section === section)
+  const syncedSectionItems = sectionItems.map((item, index) => ({
+    ...item,
+    prev: index > 0 ? { slug: sectionItems[index - 1].slug, title: sectionItems[index - 1].title } : null,
+    next: index < sectionItems.length - 1 ? { slug: sectionItems[index + 1].slug, title: sectionItems[index + 1].title } : null,
+  }))
+
+  let sectionIndex = 0
+  return caseStudies.map((item) => {
+    if (item.section !== section) return item
+    const nextItem = syncedSectionItems[sectionIndex]
+    sectionIndex += 1
+    return nextItem
+  })
+}
+
+function moveCaseStudyWithinSection(caseStudies: CaseStudyContent[], slug: string, direction: -1 | 1) {
+  const target = caseStudies.find((item) => item.slug === slug)
+  if (!target) return caseStudies
+
+  const sectionItems = caseStudies.filter((item) => item.section === target.section)
+  const sectionIndex = sectionItems.findIndex((item) => item.slug === slug)
+  const nextIndex = sectionIndex + direction
+  if (sectionIndex === -1 || nextIndex < 0 || nextIndex >= sectionItems.length) {
+    return caseStudies
+  }
+
+  const reorderedSectionItems = moveItem(sectionItems, sectionIndex, direction)
+  let replacementIndex = 0
+  const reorderedCaseStudies = caseStudies.map((item) => {
+    if (item.section !== target.section) return item
+    const nextItem = reorderedSectionItems[replacementIndex]
+    replacementIndex += 1
+    return nextItem
+  })
+
+  return syncCaseStudySectionNavigation(reorderedCaseStudies, target.section)
+}
+
 function SidebarGroup({
   title,
   children,
@@ -355,6 +395,60 @@ function SidebarButton({
     >
       {label}
     </button>
+  )
+}
+
+function SidebarCaseStudyItem({
+  active,
+  label,
+  onClick,
+  index,
+  length,
+  onMove,
+}: {
+  active: boolean
+  label: string
+  onClick: () => void
+  index: number
+  length: number
+  onMove: (direction: -1 | 1) => void
+}) {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) auto auto', gap: '6px', alignItems: 'stretch' }}>
+      <SidebarButton active={active} label={label} onClick={onClick} />
+      <button
+        type="button"
+        onClick={() => onMove(-1)}
+        disabled={index === 0}
+        className="font-mono"
+        style={{
+          background: 'transparent',
+          border: '1px solid #1f1f1f',
+          color: index === 0 ? '#444444' : '#999999',
+          padding: '0 10px',
+          cursor: index === 0 ? 'default' : 'pointer',
+          letterSpacing: '0.08em',
+        }}
+      >
+        ↑
+      </button>
+      <button
+        type="button"
+        onClick={() => onMove(1)}
+        disabled={index === length - 1}
+        className="font-mono"
+        style={{
+          background: 'transparent',
+          border: '1px solid #1f1f1f',
+          color: index === length - 1 ? '#444444' : '#999999',
+          padding: '0 10px',
+          cursor: index === length - 1 ? 'default' : 'pointer',
+          letterSpacing: '0.08em',
+        }}
+      >
+        ↓
+      </button>
+    </div>
   )
 }
 
@@ -500,9 +594,10 @@ git push`
     applyContentChange((current) => {
       const draft = createCaseStudyDraft(section, current.caseStudies)
       setActivePage(`case-study:${draft.slug}`)
+      const nextCaseStudies = [...current.caseStudies, draft]
       return {
         ...current,
-        caseStudies: [...current.caseStudies, draft],
+        caseStudies: syncCaseStudySectionNavigation(nextCaseStudies, section),
       }
     })
   }
@@ -515,11 +610,22 @@ git push`
       return
     }
 
+    applyContentChange((current) => {
+      const target = current.caseStudies.find((item) => item.slug === slug)
+      const nextCaseStudies = current.caseStudies.filter((item) => item.slug !== slug)
+      return {
+        ...current,
+        caseStudies: target ? syncCaseStudySectionNavigation(nextCaseStudies, target.section) : nextCaseStudies,
+      }
+    })
+    setActivePage('homepage')
+  }
+
+  function moveCaseStudy(slug: string, direction: -1 | 1) {
     applyContentChange((current) => ({
       ...current,
-      caseStudies: current.caseStudies.filter((item) => item.slug !== slug),
+      caseStudies: moveCaseStudyWithinSection(current.caseStudies, slug, direction),
     }))
-    setActivePage('homepage')
   }
 
   function handleUndo() {
@@ -746,36 +852,45 @@ git push`
             </SidebarGroup>
 
             <SidebarGroup title="WORK CASE STUDIES">
-              {groupedCaseStudies.work.map((item) => (
-                <SidebarButton
+              {groupedCaseStudies.work.map((item, index) => (
+                <SidebarCaseStudyItem
                   key={item.slug}
                   active={activePage === `case-study:${item.slug}`}
                   label={item.title}
                   onClick={() => setActivePage(`case-study:${item.slug}` as PageKey)}
+                  index={index}
+                  length={groupedCaseStudies.work.length}
+                  onMove={(direction) => moveCaseStudy(item.slug, direction)}
                 />
               ))}
               <SidebarButton active={false} label="+ Add Work Case Study" onClick={() => addCaseStudy('work')} />
             </SidebarGroup>
 
             <SidebarGroup title="MIXED MEDIA">
-              {groupedCaseStudies.mixedMedia.map((item) => (
-                <SidebarButton
+              {groupedCaseStudies.mixedMedia.map((item, index) => (
+                <SidebarCaseStudyItem
                   key={item.slug}
                   active={activePage === `case-study:${item.slug}`}
                   label={item.title}
                   onClick={() => setActivePage(`case-study:${item.slug}` as PageKey)}
+                  index={index}
+                  length={groupedCaseStudies.mixedMedia.length}
+                  onMove={(direction) => moveCaseStudy(item.slug, direction)}
                 />
               ))}
               <SidebarButton active={false} label="+ Add Mixed Media" onClick={() => addCaseStudy('mixed-media')} />
             </SidebarGroup>
 
             <SidebarGroup title="BRANDING">
-              {groupedCaseStudies.branding.map((item) => (
-                <SidebarButton
+              {groupedCaseStudies.branding.map((item, index) => (
+                <SidebarCaseStudyItem
                   key={item.slug}
                   active={activePage === `case-study:${item.slug}`}
                   label={item.title}
                   onClick={() => setActivePage(`case-study:${item.slug}` as PageKey)}
+                  index={index}
+                  length={groupedCaseStudies.branding.length}
+                  onMove={(direction) => moveCaseStudy(item.slug, direction)}
                 />
               ))}
               <SidebarButton active={false} label="+ Add Branding" onClick={() => addCaseStudy('branding')} />
