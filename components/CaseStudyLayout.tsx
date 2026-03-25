@@ -108,11 +108,53 @@ function blockJustify(align?: CaseStudyMediaBlock['align']) {
   return 'center'
 }
 
-function renderMediaBlock(block: CaseStudyMediaBlock) {
+function renderMediaBlockContent(block: CaseStudyMediaBlock) {
   const images = block.images.filter((item) => item.src)
   if (!images.length) return null
 
   const columns = block.layout === 'pair' && images.length > 1 ? `repeat(${images.length}, minmax(0, 1fr))` : 'minmax(0, 1fr)'
+
+  return (
+    <div
+      className="case-study-media-block"
+      style={{
+        width: block.width || '100%',
+        display: 'grid',
+        gridTemplateColumns: columns,
+        gap: block.gap || '2px',
+      }}
+    >
+      {images.map((image, index) => (
+        <div
+          key={`${block.id}-${index}`}
+          style={{
+            position: 'relative',
+            width: '100%',
+            aspectRatio: image.aspectRatio || (block.layout === 'pair' ? '4 / 3' : '16 / 10'),
+            backgroundColor: image.background || '#161616',
+            border: '1px solid #1a1a1a',
+            overflow: 'hidden',
+          }}
+        >
+          <Image
+            src={image.src}
+            alt={image.alt || ''}
+            fill
+            style={{
+              objectFit: image.fit || 'contain',
+              objectPosition: image.position || 'center center',
+            }}
+            sizes={block.layout === 'pair' ? '50vw' : '100vw'}
+          />
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function renderMediaBlock(block: CaseStudyMediaBlock) {
+  const content = renderMediaBlockContent(block)
+  if (!content) return null
 
   return (
     <div
@@ -123,40 +165,7 @@ function renderMediaBlock(block: CaseStudyMediaBlock) {
         justifyContent: blockJustify(block.align),
       }}
     >
-      <div
-        className="case-study-media-block"
-        style={{
-          width: block.width || '100%',
-          display: 'grid',
-          gridTemplateColumns: columns,
-          gap: block.gap || '2px',
-        }}
-      >
-        {images.map((image, index) => (
-          <div
-            key={`${block.id}-${index}`}
-            style={{
-              position: 'relative',
-              width: '100%',
-              aspectRatio: image.aspectRatio || (block.layout === 'pair' ? '4 / 3' : '16 / 10'),
-              backgroundColor: image.background || '#161616',
-              border: '1px solid #1a1a1a',
-              overflow: 'hidden',
-            }}
-          >
-            <Image
-              src={image.src}
-              alt={image.alt || ''}
-              fill
-              style={{
-                objectFit: image.fit || 'contain',
-                objectPosition: image.position || 'center center',
-              }}
-              sizes={block.layout === 'pair' ? '50vw' : '100vw'}
-            />
-          </div>
-        ))}
-      </div>
+      {content}
     </div>
   )
 }
@@ -246,6 +255,12 @@ export function CaseStudyLayout({
   const researchBlocks = caseStudyMediaBlocks.filter((block) => block.section === 'research')
   const challengeBlocks = caseStudyMediaBlocks.filter((block) => block.section === 'challenge')
   const solutionBlocks = caseStudyMediaBlocks.filter((block) => block.section === 'solution')
+  const researchInlineBlocks = researchBlocks.filter((block) => block.placement === 'side-right')
+  const researchBelowBlocks = researchBlocks.filter((block) => block.placement !== 'side-right')
+  const challengeInlineBlocks = challengeBlocks.filter((block) => block.placement === 'side-right')
+  const challengeBelowBlocks = challengeBlocks.filter((block) => block.placement !== 'side-right')
+  const solutionInlineBlocks = solutionBlocks.filter((block) => block.placement === 'side-right')
+  const solutionBelowBlocks = solutionBlocks.filter((block) => block.placement !== 'side-right')
 
   const navItems = [
     { id: 'sec-problem', label: copy.navProblemLabel, show: true },
@@ -296,6 +311,8 @@ export function CaseStudyLayout({
 
     const onScroll = () => {
       setNavVisible(window.scrollY > 100)
+      const documentBottom = window.innerHeight + window.scrollY
+      const remainingScroll = document.documentElement.scrollHeight - documentBottom
       // Don't update active section while a programmatic scroll is animating —
       // that's what causes the flickering between items on click.
       if (scrollLocked.current) {
@@ -303,8 +320,11 @@ export function CaseStudyLayout({
         const target = targetId ? document.getElementById(targetId) : null
 
         if (target) {
+          const sections = Array.from(document.querySelectorAll('section[id^="sec-"]'))
+            .filter((el) => el.id !== 'sec-hero')
           const rect = target.getBoundingClientRect()
-          if (rect.top <= 118) {
+          const isLastSection = sections[sections.length - 1]?.id === target.id
+          if (rect.top <= 118 || (isLastSection && remainingScroll <= 24)) {
             scrollLocked.current = false
             lockTargetId.current = null
             setActiveId(target.id)
@@ -430,18 +450,32 @@ export function CaseStudyLayout({
             <GsapReveal>
               <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
                 <span className="font-mono" style={labelStyle}>{copy.researchLabel}</span>
-                <div style={{ maxWidth: '640px' }}>
-                  {researchHeadline && (
-                    <p className="font-mono" style={headlineStyle}>{researchHeadline}</p>
-                  )}
-                  <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8 }}>
-                    {research}
-                  </p>
+                <div
+                  className={researchInlineBlocks.length ? 'case-study-inline-layout' : undefined}
+                  style={researchInlineBlocks.length ? { display: 'grid', gridTemplateColumns: 'minmax(0, 640px) minmax(320px, 1fr)', gap: '32px', alignItems: 'start' } : undefined}
+                >
+                  <div style={{ maxWidth: researchInlineBlocks.length ? 'none' : '640px' }}>
+                    {researchHeadline && (
+                      <p className="font-mono" style={headlineStyle}>{researchHeadline}</p>
+                    )}
+                    <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8 }}>
+                      {research}
+                    </p>
+                  </div>
+                  {researchInlineBlocks.length ? (
+                    <div className="case-study-inline-media" style={{ display: 'grid', gap: '14px' }}>
+                      {researchInlineBlocks.map((block) => (
+                        <div key={block.id} data-reveal style={{ display: 'flex', justifyContent: blockJustify(block.align) }}>
+                          {renderMediaBlockContent(block)}
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
                 </div>
               </div>
-              {researchBlocks.length ? (
+              {researchBelowBlocks.length ? (
                 <div className="mt-6" style={{ display: 'grid', gap: '14px' }}>
-                  {researchBlocks.map(renderMediaBlock)}
+                  {researchBelowBlocks.map(renderMediaBlock)}
                 </div>
               ) : researchImage ? (
                 <div data-reveal className="case-study-research-image w-full mt-6" style={{ position: 'relative', height: researchMedia.height, backgroundColor: researchMedia.background, border: '1px solid #1a1a1a', overflow: 'hidden' }}>
@@ -474,18 +508,32 @@ export function CaseStudyLayout({
             <GsapReveal>
               <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
                 <span className="font-mono" style={labelStyle}>{copy.challengeLabel}</span>
-                <div style={{ maxWidth: '640px' }}>
-                  {challengeHeadline && (
-                    <p className="font-mono" style={headlineStyle}>{challengeHeadline}</p>
-                  )}
-                  <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8 }}>
-                    {challenge}
-                  </p>
+                <div
+                  className={challengeInlineBlocks.length ? 'case-study-inline-layout' : undefined}
+                  style={challengeInlineBlocks.length ? { display: 'grid', gridTemplateColumns: 'minmax(0, 640px) minmax(320px, 1fr)', gap: '32px', alignItems: 'start' } : undefined}
+                >
+                  <div style={{ maxWidth: challengeInlineBlocks.length ? 'none' : '640px' }}>
+                    {challengeHeadline && (
+                      <p className="font-mono" style={headlineStyle}>{challengeHeadline}</p>
+                    )}
+                    <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8 }}>
+                      {challenge}
+                    </p>
+                  </div>
+                  {challengeInlineBlocks.length ? (
+                    <div className="case-study-inline-media" style={{ display: 'grid', gap: '14px' }}>
+                      {challengeInlineBlocks.map((block) => (
+                        <div key={block.id} data-reveal style={{ display: 'flex', justifyContent: blockJustify(block.align) }}>
+                          {renderMediaBlockContent(block)}
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
                 </div>
               </div>
-              {challengeBlocks.length ? (
+              {challengeBelowBlocks.length ? (
                 <div className="mt-6" style={{ display: 'grid', gap: '14px' }}>
-                  {challengeBlocks.map(renderMediaBlock)}
+                  {challengeBelowBlocks.map(renderMediaBlock)}
                 </div>
               ) : challengeImages ? (
                 <div data-reveal className="case-study-image-grid mt-6 grid grid-cols-2" style={{ gap: challengeMedia.gap }}>
@@ -532,18 +580,32 @@ export function CaseStudyLayout({
           <GsapReveal>
             <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
               <span className="font-mono" style={labelStyle}>{copy.solutionLabel}</span>
-              <div style={{ maxWidth: '640px' }}>
-                {solutionHeadline && (
-                  <p className="font-mono" style={headlineStyle}>{solutionHeadline}</p>
-                )}
-                <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8 }}>
-                  {solution ?? ''}
-                </p>
+              <div
+                className={solutionInlineBlocks.length ? 'case-study-inline-layout' : undefined}
+                style={solutionInlineBlocks.length ? { display: 'grid', gridTemplateColumns: 'minmax(0, 640px) minmax(320px, 1fr)', gap: '32px', alignItems: 'start' } : undefined}
+              >
+                <div style={{ maxWidth: solutionInlineBlocks.length ? 'none' : '640px' }}>
+                  {solutionHeadline && (
+                    <p className="font-mono" style={headlineStyle}>{solutionHeadline}</p>
+                  )}
+                  <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8 }}>
+                    {solution ?? ''}
+                  </p>
+                </div>
+                {solutionInlineBlocks.length ? (
+                  <div className="case-study-inline-media" style={{ display: 'grid', gap: '14px' }}>
+                    {solutionInlineBlocks.map((block) => (
+                      <div key={block.id} data-reveal style={{ display: 'flex', justifyContent: blockJustify(block.align) }}>
+                        {renderMediaBlockContent(block)}
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
               </div>
             </div>
-            {solutionBlocks.length ? (
+            {solutionBelowBlocks.length ? (
               <div className="mt-6" style={{ display: 'grid', gap: '14px' }}>
-                {solutionBlocks.map(renderMediaBlock)}
+                {solutionBelowBlocks.map(renderMediaBlock)}
               </div>
             ) : (
               <>
@@ -619,7 +681,7 @@ export function CaseStudyLayout({
         </div>
 
         {/* Section Nav */}
-        <nav aria-label="Page sections" style={{
+        <nav aria-label="Page sections" className="case-study-section-nav" style={{
           position: 'fixed',
           bottom: '28px',
           left: '50%',
@@ -645,14 +707,17 @@ export function CaseStudyLayout({
                   scrollLocked.current = true
                   lockTargetId.current = item.id
                   if (lockTimer.current) clearTimeout(lockTimer.current)
-                  el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                  const targetTop = window.scrollY + el.getBoundingClientRect().top - 65
+                  const maxScrollTop = document.documentElement.scrollHeight - window.innerHeight
+                  const clampedTargetTop = Math.max(0, Math.min(targetTop, maxScrollTop))
+                  window.scrollTo({ top: clampedTargetTop, behavior: 'smooth' })
                   lockTimer.current = setTimeout(() => {
                     scrollLocked.current = false
                     lockTargetId.current = null
                   }, 1800)
                 }
               }}
-              className="font-mono"
+              className="font-mono case-study-section-nav-button"
               style={{
                 fontSize: '11px',
                 letterSpacing: '0.14em',

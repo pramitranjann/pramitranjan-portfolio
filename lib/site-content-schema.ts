@@ -199,6 +199,7 @@ export type CaseStudySection = 'work' | 'mixed-media' | 'branding'
 export type CaseStudyMediaBlockSection = 'research' | 'challenge' | 'solution'
 export type CaseStudyMediaBlockLayout = 'single' | 'pair'
 export type CaseStudyMediaAlign = 'left' | 'center' | 'right'
+export type CaseStudyMediaPlacement = 'below' | 'side-right'
 
 export interface CaseStudyMediaSlotSettings {
   height?: string
@@ -237,6 +238,7 @@ export interface CaseStudyMediaBlock {
   id: string
   section: CaseStudyMediaBlockSection
   layout: CaseStudyMediaBlockLayout
+  placement?: CaseStudyMediaPlacement
   align?: CaseStudyMediaAlign
   width?: string
   gap?: string
@@ -580,6 +582,10 @@ function isCaseStudyMediaAlign(value: unknown): value is CaseStudyMediaAlign {
   return value === 'left' || value === 'center' || value === 'right'
 }
 
+function isCaseStudyMediaPlacement(value: unknown): value is CaseStudyMediaPlacement {
+  return value === 'below' || value === 'side-right'
+}
+
 function isCaseStudyMediaImage(value: unknown): value is CaseStudyMediaImage {
   if (!value || typeof value !== 'object') return false
   const item = value as Record<string, unknown>
@@ -600,6 +606,7 @@ function isCaseStudyMediaBlock(value: unknown): value is CaseStudyMediaBlock {
     isString(item.id) &&
     isCaseStudyMediaBlockSection(item.section) &&
     (item.layout === 'single' || item.layout === 'pair') &&
+    (item.placement === undefined || isCaseStudyMediaPlacement(item.placement)) &&
     (item.align === undefined || isCaseStudyMediaAlign(item.align)) &&
     isOptionalString(item.width) &&
     isOptionalString(item.gap) &&

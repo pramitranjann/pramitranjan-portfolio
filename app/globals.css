@@ -439,6 +439,34 @@ button:hover .arrow-nudge-back {
     padding: 20px 24px !important;
   }
 
+  /* Case study — section nav becomes a horizontal mobile tray */
+  .case-study-section-nav {
+    left: 16px !important;
+    right: 16px !important;
+    bottom: 16px !important;
+    transform: none !important;
+    width: auto !important;
+    max-width: calc(100vw - 32px) !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .case-study-section-nav::-webkit-scrollbar {
+    display: none;
+  }
+  .case-study-section-nav-button {
+    font-size: 10px !important;
+    padding: 10px 12px !important;
+  }
+  .case-study-inline-layout {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  .case-study-inline-media {
+    width: 100% !important;
+  }
+
   /* About page — WHO I AM sidebar collapses to single column on mobile */
   .about-who-sidebar {
     grid-template-columns: 1fr !important;

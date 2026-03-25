@@ -289,6 +289,7 @@ function createMediaBlockDraft(section: CaseStudyMediaBlockSection): CaseStudyMe
     id: `${section}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     section,
     layout: 'single',
+    placement: 'below',
     align: 'center',
     width: '100%',
     gap: '2px',
@@ -2300,6 +2301,16 @@ function MediaBlockEditor({
         >
           <option value="single">Single</option>
           <option value="pair">Two-up Pair</option>
+        </select>
+      </Field>
+      <Field label="Placement">
+        <select
+          value={block.placement ?? 'below'}
+          onChange={(event) => onChange((current) => ({ ...current, placement: event.target.value as CaseStudyMediaBlock['placement'] }))}
+          style={inputStyle()}
+        >
+          <option value="below">Below Text</option>
+          <option value="side-right">Side by Side (Right)</option>
         </select>
       </Field>
       <Field label="Align">
