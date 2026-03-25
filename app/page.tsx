@@ -7,10 +7,10 @@ import { About }            from '@/components/About'
 import { Contact }          from '@/components/Contact'
 import { Footer }          from '@/components/Footer'
 import { IntroAnimation }  from '@/components/IntroAnimation'
-import { getSiteContent } from '@/lib/site-content'
+import { getPublicSiteContent } from '@/lib/site-content'
 
 export default async function HomePage() {
-  const content = await getSiteContent()
+  const content = await getPublicSiteContent()
 
   return (
     <>

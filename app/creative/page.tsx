@@ -1,8 +1,8 @@
 import { CreativePageClient } from '@/components/CreativePageClient'
-import { getSiteContent } from '@/lib/site-content'
+import { getPublicSiteContent } from '@/lib/site-content'
 
 export default async function CreativePage() {
-  const content = await getSiteContent()
+  const content = await getPublicSiteContent()
   return (
     <CreativePageClient
       cities={content.photography.cities}

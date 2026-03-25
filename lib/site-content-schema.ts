@@ -248,6 +248,7 @@ export interface CaseStudyMediaBlock {
 export interface CaseStudyContent {
   slug: string
   section: CaseStudySection
+  hidden?: boolean
   title: string
   oneliner: string
   type: string
@@ -670,6 +671,7 @@ function isCaseStudyContent(value: unknown): value is CaseStudyContent {
   return (
     isString(item.slug) &&
     isCaseStudySection(item.section) &&
+    (item.hidden === undefined || typeof item.hidden === 'boolean') &&
     isString(item.title) &&
     isString(item.oneliner) &&
     isString(item.type) &&

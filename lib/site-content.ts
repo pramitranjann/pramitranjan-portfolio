@@ -2,6 +2,7 @@ import 'server-only'
 
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
+import { notFound } from 'next/navigation'
 import { type CaseStudyContent, isSiteContent, type SiteContent } from '@/lib/site-content-schema'
 
 const contentPath = path.join(process.cwd(), 'content', 'site-content.json')
@@ -17,23 +18,75 @@ async function readSiteContentFile(): Promise<SiteContent> {
   return parsed
 }
 
+function canSeeHiddenCaseStudies() {
+  return process.env.NODE_ENV !== 'production'
+}
+
+function filterVisibleCaseStudies(caseStudies: CaseStudyContent[]) {
+  if (canSeeHiddenCaseStudies()) return caseStudies
+  return caseStudies.filter((item) => !item.hidden)
+}
+
+function getCaseStudySlugFromHref(href: string) {
+  const match = href.match(/^\/(?:work|creative\/(?:mixed-media|branding))\/([^/]+)$/)
+  return match?.[1] ?? null
+}
+
+function filterWorkProjectsByVisibleCaseStudies(content: SiteContent) {
+  if (canSeeHiddenCaseStudies()) return content
+
+  const hiddenSlugs = new Set(content.caseStudies.filter((item) => item.hidden).map((item) => item.slug))
+  const filterItems = (items: SiteContent['home']['selectedWork']['items']) =>
+    items.filter((item) => {
+      const slug = getCaseStudySlugFromHref(item.href)
+      return !slug || !hiddenSlugs.has(slug)
+    })
+
+  return {
+    ...content,
+    home: {
+      ...content.home,
+      selectedWork: {
+        ...content.home.selectedWork,
+        items: filterItems(content.home.selectedWork.items),
+      },
+      moreWork: {
+        ...content.home.moreWork,
+        items: filterItems(content.home.moreWork.items),
+      },
+    },
+    workPage: {
+      ...content.workPage,
+      projects: filterItems(content.workPage.projects),
+    },
+  }
+}
+
 export async function getSiteContent() {
   return readSiteContentFile()
 }
 
-export async function getCaseStudyContent(slug: string) {
+export async function getPublicSiteContent() {
   const content = await getSiteContent()
+  return {
+    ...filterWorkProjectsByVisibleCaseStudies(content),
+    caseStudies: filterVisibleCaseStudies(content.caseStudies),
+  }
+}
+
+export async function getCaseStudyContent(slug: string) {
+  const content = await getPublicSiteContent()
   const caseStudy = content.caseStudies.find((item) => item.slug === slug)
 
   if (!caseStudy) {
-    throw new Error(`Case study not found: ${slug}`)
+    notFound()
   }
 
   return caseStudy
 }
 
 export async function getCaseStudiesBySection(section: CaseStudyContent['section']) {
-  const content = await getSiteContent()
+  const content = await getPublicSiteContent()
   return content.caseStudies.filter((item) => item.section === section)
 }
 

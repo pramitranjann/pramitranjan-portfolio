@@ -1,8 +1,8 @@
 import { WorkPageClient } from '@/components/WorkPageClient'
-import { getSiteContent } from '@/lib/site-content'
+import { getPublicSiteContent } from '@/lib/site-content'
 
 export default async function WorkPage() {
-  const content = await getSiteContent()
+  const content = await getPublicSiteContent()
 
   return (
     <WorkPageClient
