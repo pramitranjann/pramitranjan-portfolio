@@ -1696,7 +1696,50 @@ function CaseStudyEditor({
   }
 
   function removeMediaBlock(blockId: string) {
-    updateMediaBlocks(mediaBlocks.filter((block) => block.id !== blockId))
+    const block = mediaBlocks.find((item) => item.id === blockId)
+    if (!block) return
+
+    onChange((current) => {
+      const nextMediaBlocks = mediaBlocks.filter((item) => item.id !== blockId)
+
+      if (current.mediaBlocks?.some((item) => item.id === blockId)) {
+        return {
+          ...current,
+          mediaBlocks: nextMediaBlocks,
+        }
+      }
+
+      if (block.section === 'research') {
+        return {
+          ...current,
+          researchImage: undefined,
+          mediaBlocks: nextMediaBlocks,
+        }
+      }
+
+      if (block.section === 'challenge') {
+        return {
+          ...current,
+          challengeImages: undefined,
+          mediaBlocks: nextMediaBlocks,
+        }
+      }
+
+      if (block.section === 'solution') {
+        const isSingle = block.layout === 'single'
+        return {
+          ...current,
+          solutionHeroImage: isSingle ? undefined : current.solutionHeroImage,
+          solutionImages: isSingle ? current.solutionImages : undefined,
+          mediaBlocks: nextMediaBlocks,
+        }
+      }
+
+      return {
+        ...current,
+        mediaBlocks: nextMediaBlocks,
+      }
+    })
   }
 
   function moveMediaBlock(blockId: string, direction: -1 | 1) {
