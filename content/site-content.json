@@ -744,7 +744,7 @@
             },
             {
               "src": "/work/loomlearn/ideation-2-processed.png",
-              "aspectRatio": "4 / 3"
+              "aspectRatio": "3 / 2"
             }
           ]
         },
@@ -756,7 +756,8 @@
           "width": "78%",
           "images": [
             {
-              "src": "/work/loomlearn/solution-hero-processed.png"
+              "src": "/work/loomlearn/solution-hero-processed.png",
+              "aspectRatio": "3 / 2"
             }
           ]
         }
