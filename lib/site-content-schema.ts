@@ -225,6 +225,7 @@ export interface CaseStudyContent {
   challengeImages?: string[]
   solutionHeroImage?: string
   solutionImages?: string[]
+  uiCopy?: CaseStudyUiCopy
 }
 
 export interface SiteContent {
@@ -558,7 +559,8 @@ function isCaseStudyContent(value: unknown): value is CaseStudyContent {
     isOptionalString(item.researchImage) &&
     isOptionalStringArray(item.challengeImages) &&
     isOptionalString(item.solutionHeroImage) &&
-    isOptionalStringArray(item.solutionImages)
+    isOptionalStringArray(item.solutionImages) &&
+    (item.uiCopy === undefined || isCaseStudyUiCopy(item.uiCopy))
   )
 }
 

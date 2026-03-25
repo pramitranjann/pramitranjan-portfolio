@@ -1,6 +1,7 @@
 import { revalidatePath } from 'next/cache'
 import { NextResponse } from 'next/server'
 import { isValidAdminSessionToken, getAdminCookieName } from '@/lib/admin-auth'
+import { isLocalDashboardWriteEnabled } from '@/lib/dashboard-storage'
 import { getSiteContent, saveSiteContent } from '@/lib/site-content'
 import { isSiteContent } from '@/lib/site-content-schema'
 
@@ -29,6 +30,15 @@ export async function GET(request: Request) {
 export async function PUT(request: Request) {
   if (!isAuthorized(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  if (!isLocalDashboardWriteEnabled()) {
+    return NextResponse.json(
+      {
+        error: 'Dashboard saves are disabled on Vercel. Run the site locally, save to site-content.json, then commit and push the file changes.',
+      },
+      { status: 409 }
+    )
   }
 
   const body: unknown = await request.json()

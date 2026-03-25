@@ -9,6 +9,7 @@ import { ReadingProgress } from './ReadingProgress'
 import { useSiteCopy } from '@/components/SiteCopyProvider'
 import { playNav } from '@/lib/sounds'
 import { GsapReveal } from './GsapReveal'
+import type { CaseStudyUiCopy } from '@/lib/site-content-schema'
 
 interface ProjectLink {
   slug: string
@@ -47,6 +48,7 @@ interface CaseStudyLayoutProps {
   challengeImages?: string[]
   solutionHeroImage?: string
   solutionImages?: string[]
+  uiCopy?: CaseStudyUiCopy
 }
 
 const labelStyle: React.CSSProperties = {
@@ -75,10 +77,10 @@ export function CaseStudyLayout({
   problem, role, research, challenge, process, usabilityTesting, solution, outcomes,
   problemHeadline, roleHeadline, researchHeadline, challengeHeadline,
   processHeadline, solutionHeadline, outcomesHeadline, pullQuote,
-  heroImage, researchImage, challengeImages, solutionHeroImage, solutionImages,
+  heroImage, researchImage, challengeImages, solutionHeroImage, solutionImages, uiCopy,
 }: CaseStudyLayoutProps) {
   const basePath = backHref
-  const copy = useSiteCopy().caseStudy
+  const copy = { ...useSiteCopy().caseStudy, ...uiCopy }
 
   const navItems = [
     { id: 'sec-problem', label: copy.navProblemLabel, show: true },

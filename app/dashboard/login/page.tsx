@@ -17,7 +17,7 @@ export default async function DashboardLoginPage() {
           If you’re not me, this is just expensive wallpaper.
         </h1>
         <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.7, marginBottom: '24px' }}>
-          Private entrance for tweaking the homepage, About, Work, and photography without breaking a sweat.
+          Private entrance for local-first edits to the homepage, About, Work, and photography before committing and pushing them properly.
         </p>
         <DashboardLoginForm />
       </section>

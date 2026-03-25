@@ -23,6 +23,7 @@ import type {
 
 type EditorProps = {
   initialContent: SiteContent
+  localWriteEnabled: boolean
 }
 
 type PageKey =
@@ -221,7 +222,7 @@ function ReorderButtons({
   )
 }
 
-export function DashboardEditor({ initialContent }: EditorProps) {
+export function DashboardEditor({ initialContent, localWriteEnabled }: EditorProps) {
   const [history, setHistory] = useState({
     past: [] as SiteContent[],
     present: initialContent,
@@ -258,6 +259,26 @@ export function DashboardEditor({ initialContent }: EditorProps) {
     setEditingEnabled(true)
     setStatus('Editing enabled')
     return true
+  }
+
+  function handleEditingToggle() {
+    if (!localWriteEnabled) return
+
+    if (!editingEnabled) {
+      requestEditingAccess()
+      return
+    }
+
+    if (isDirty) {
+      const confirmed = window.confirm('Turn editing off? Your unsaved changes will stay here, but the dashboard will lock until you enable editing again.')
+      if (!confirmed) {
+        setStatus('Editing stays on')
+        return
+      }
+    }
+
+    setEditingEnabled(false)
+    setStatus(isDirty ? 'Editing locked with unsaved changes' : 'Editing disabled')
   }
 
   function applyContentChange(updater: (current: SiteContent) => SiteContent) {
@@ -354,6 +375,11 @@ export function DashboardEditor({ initialContent }: EditorProps) {
   }
 
   async function handleSave() {
+    if (!localWriteEnabled) {
+      setStatus('Vercel mode is view-only. Save locally, then commit and push.')
+      return
+    }
+
     if (!editingEnabled) {
       setStatus('Enable editing before saving')
       return
@@ -391,6 +417,14 @@ export function DashboardEditor({ initialContent }: EditorProps) {
 
   return (
     <div style={{ display: 'grid', gap: '24px' }}>
+      <div style={{ border: `1px solid ${localWriteEnabled ? '#1f1f1f' : '#5f2a23'}`, background: '#111111', padding: '16px 18px' }}>
+        <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: localWriteEnabled ? '#999999' : '#f5f2ed', lineHeight: 1.8 }}>
+          {localWriteEnabled
+            ? 'Local save mode: SAVE CHANGES writes to content/site-content.json on this machine. After that, review the git diff, commit it, and push it.'
+            : 'Vercel mode: this dashboard is read-only for persistence. Use it locally if you want SAVE CHANGES to write to content/site-content.json.'}
+        </p>
+      </div>
+
       <div className="flex items-center justify-between" style={{ gap: '16px', flexWrap: 'wrap' }}>
         <p className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.08em' }}>
           {isDirty ? `${status} · UNSAVED` : status}
@@ -398,11 +432,12 @@ export function DashboardEditor({ initialContent }: EditorProps) {
         <div className="flex" style={{ gap: '12px', flexWrap: 'wrap' }}>
           <button
             type="button"
-            onClick={requestEditingAccess}
+            onClick={handleEditingToggle}
             className="font-mono"
-            style={{ background: editingEnabled ? '#181818' : 'transparent', border: '1px solid #2a2a2a', color: editingEnabled ? '#f5f2ed' : '#999999', padding: '12px 16px', letterSpacing: '0.1em', cursor: 'pointer' }}
+            disabled={!localWriteEnabled}
+            style={{ background: editingEnabled ? '#181818' : 'transparent', border: '1px solid #2a2a2a', color: !localWriteEnabled ? '#444444' : editingEnabled ? '#f5f2ed' : '#999999', padding: '12px 16px', letterSpacing: '0.1em', cursor: localWriteEnabled ? 'pointer' : 'default' }}
           >
-            {editingEnabled ? 'EDITING ON' : 'ENABLE EDITING'}
+            {editingEnabled ? 'TURN EDITING OFF' : 'ENABLE EDITING'}
           </button>
           <button
             type="button"
@@ -433,19 +468,19 @@ export function DashboardEditor({ initialContent }: EditorProps) {
           <button
             type="button"
             onClick={handleSave}
-            disabled={saving || !editingEnabled || !isDirty}
+            disabled={saving || !editingEnabled || !isDirty || !localWriteEnabled}
             className="font-mono"
             onMouseEnter={() => setSaveHovered(true)}
             onMouseLeave={() => setSaveHovered(false)}
             style={{
-              background: saving || !editingEnabled || !isDirty ? '#3a1d18' : saveHovered ? '#ff5a4d' : '#FF3120',
+              background: saving || !editingEnabled || !isDirty || !localWriteEnabled ? '#3a1d18' : saveHovered ? '#ff5a4d' : '#FF3120',
               border: 'none',
-              color: saving || !editingEnabled || !isDirty ? '#7a5a55' : '#0d0d0d',
+              color: saving || !editingEnabled || !isDirty || !localWriteEnabled ? '#7a5a55' : '#0d0d0d',
               padding: '12px 16px',
               letterSpacing: '0.1em',
-              cursor: saving || !editingEnabled || !isDirty ? 'default' : 'pointer',
-              boxShadow: saveHovered && editingEnabled && isDirty ? '0 0 0 1px rgba(255, 49, 32, 0.45), 0 8px 28px rgba(255, 49, 32, 0.22)' : 'none',
-              transform: saveHovered && editingEnabled && isDirty ? 'translateY(-1px)' : 'none',
+              cursor: saving || !editingEnabled || !isDirty || !localWriteEnabled ? 'default' : 'pointer',
+              boxShadow: saveHovered && editingEnabled && isDirty && localWriteEnabled ? '0 0 0 1px rgba(255, 49, 32, 0.45), 0 8px 28px rgba(255, 49, 32, 0.22)' : 'none',
+              transform: saveHovered && editingEnabled && isDirty && localWriteEnabled ? 'translateY(-1px)' : 'none',
               transition: 'background 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease',
             }}
           >
@@ -454,7 +489,7 @@ export function DashboardEditor({ initialContent }: EditorProps) {
         </div>
       </div>
 
-      {!editingEnabled ? (
+      {!editingEnabled && localWriteEnabled ? (
         <div style={{ border: '1px solid #1f1f1f', background: '#111111', padding: '16px 18px' }}>
           <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.7 }}>
             Dashboard is currently read-only. Use <span style={{ color: '#f5f2ed' }}>ENABLE EDITING</span> to confirm you want to make changes before any field becomes editable.
@@ -471,7 +506,7 @@ export function DashboardEditor({ initialContent }: EditorProps) {
               <SidebarButton active={activePage === 'work-page'} label="Work Page" onClick={() => setActivePage('work-page')} />
               <SidebarButton active={activePage === 'creative-page'} label="Creative Page" onClick={() => setActivePage('creative-page')} />
               <SidebarButton active={activePage === 'photography-page'} label="Photography Page" onClick={() => setActivePage('photography-page')} />
-              <SidebarButton active={activePage === 'case-study-ui'} label="Case Study UI" onClick={() => setActivePage('case-study-ui')} />
+              <SidebarButton active={activePage === 'case-study-ui'} label="Case Study Defaults" onClick={() => setActivePage('case-study-ui')} />
               <SidebarButton active={activePage === 'design-system'} label="Design System" onClick={() => setActivePage('design-system')} />
               <SidebarButton active={activePage === 'motion'} label="Motion" onClick={() => setActivePage('motion')} />
             </SidebarGroup>
@@ -514,7 +549,7 @@ export function DashboardEditor({ initialContent }: EditorProps) {
           </div>
         </aside>
 
-        <fieldset disabled={!editingEnabled || saving} style={{ display: 'grid', gap: '24px', opacity: !editingEnabled ? 0.58 : 1, transition: 'opacity 0.18s ease', minWidth: 0 }}>
+        <fieldset disabled={!editingEnabled || saving || !localWriteEnabled} style={{ display: 'grid', gap: '24px', opacity: !editingEnabled || !localWriteEnabled ? 0.58 : 1, transition: 'opacity 0.18s ease', minWidth: 0 }}>
           {activePage === 'homepage' ? (
             <HomepageEditor content={content} updateSection={updateSection} />
           ) : null}
@@ -542,6 +577,7 @@ export function DashboardEditor({ initialContent }: EditorProps) {
           {activeCaseStudy ? (
             <CaseStudyEditor
               caseStudy={activeCaseStudy}
+              defaultUiCopy={content.copy.caseStudy}
               onChange={(updater) => updateCaseStudy(activeCaseStudy.slug, updater)}
               onDelete={() => removeCaseStudy(activeCaseStudy.slug)}
             />
@@ -1233,7 +1269,7 @@ function CaseStudyUiEditor({
 
   return (
     <>
-      <SectionFrame title="Case Study Section Labels">
+      <SectionFrame title="Case Study Default Labels">
         <Field label="Problem Label">
           <input value={ui.problemLabel} onChange={(event) => updateCaseStudyCopy({ ...ui, problemLabel: event.target.value })} style={inputStyle()} />
         </Field>
@@ -1260,7 +1296,7 @@ function CaseStudyUiEditor({
         </Field>
       </SectionFrame>
 
-      <SectionFrame title="Case Study Nav Labels">
+      <SectionFrame title="Case Study Default Nav Labels">
         <Field label="Nav Problem Label">
           <input value={ui.navProblemLabel} onChange={(event) => updateCaseStudyCopy({ ...ui, navProblemLabel: event.target.value })} style={inputStyle()} />
         </Field>
@@ -1284,7 +1320,7 @@ function CaseStudyUiEditor({
         </Field>
       </SectionFrame>
 
-      <SectionFrame title="Case Study Defaults">
+      <SectionFrame title="Case Study Default Fallback Copy">
         <Field label="Previous Label">
           <input value={ui.prevLabel} onChange={(event) => updateCaseStudyCopy({ ...ui, prevLabel: event.target.value })} style={inputStyle()} />
         </Field>
@@ -1395,13 +1431,17 @@ function MotionEditor({
 
 function CaseStudyEditor({
   caseStudy,
+  defaultUiCopy,
   onChange,
   onDelete,
 }: {
   caseStudy: CaseStudyContent
+  defaultUiCopy: SiteContent['copy']['caseStudy']
   onChange: (updater: (item: CaseStudyContent) => CaseStudyContent) => void
   onDelete: () => void
 }) {
+  const caseStudyUi = caseStudy.uiCopy ?? defaultUiCopy
+
   return (
     <>
       <SectionFrame title={`${caseStudy.title} · Basics`}>
@@ -1538,6 +1578,69 @@ function CaseStudyEditor({
           onHeadlineChange={(value) => onChange((current) => ({ ...current, outcomesHeadline: value || undefined }))}
           onBodyChange={(value) => onChange((current) => ({ ...current, outcomes: value || undefined }))}
         />
+      </SectionFrame>
+
+      <SectionFrame title={`${caseStudy.title} · UI Copy`}>
+        <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.7 }}>
+          These labels are specific to this case study. They start from the shared defaults, then save into this project once you edit them.
+        </p>
+        <Field label="Problem Label">
+          <input value={caseStudyUi.problemLabel} onChange={(event) => onChange((current) => ({ ...current, uiCopy: { ...caseStudyUi, problemLabel: event.target.value } }))} style={inputStyle()} />
+        </Field>
+        <Field label="Role Label">
+          <input value={caseStudyUi.roleLabel} onChange={(event) => onChange((current) => ({ ...current, uiCopy: { ...caseStudyUi, roleLabel: event.target.value } }))} style={inputStyle()} />
+        </Field>
+        <Field label="Research Label">
+          <input value={caseStudyUi.researchLabel} onChange={(event) => onChange((current) => ({ ...current, uiCopy: { ...caseStudyUi, researchLabel: event.target.value } }))} style={inputStyle()} />
+        </Field>
+        <Field label="Challenge Label">
+          <input value={caseStudyUi.challengeLabel} onChange={(event) => onChange((current) => ({ ...current, uiCopy: { ...caseStudyUi, challengeLabel: event.target.value } }))} style={inputStyle()} />
+        </Field>
+        <Field label="Process Label">
+          <input value={caseStudyUi.processLabel} onChange={(event) => onChange((current) => ({ ...current, uiCopy: { ...caseStudyUi, processLabel: event.target.value } }))} style={inputStyle()} />
+        </Field>
+        <Field label="Solution Label">
+          <input value={caseStudyUi.solutionLabel} onChange={(event) => onChange((current) => ({ ...current, uiCopy: { ...caseStudyUi, solutionLabel: event.target.value } }))} style={inputStyle()} />
+        </Field>
+        <Field label="Outcomes Label">
+          <input value={caseStudyUi.outcomesLabel} onChange={(event) => onChange((current) => ({ ...current, uiCopy: { ...caseStudyUi, outcomesLabel: event.target.value } }))} style={inputStyle()} />
+        </Field>
+        <Field label="Key Insight Label">
+          <input value={caseStudyUi.keyInsightLabel} onChange={(event) => onChange((current) => ({ ...current, uiCopy: { ...caseStudyUi, keyInsightLabel: event.target.value } }))} style={inputStyle()} />
+        </Field>
+        <Field label="Previous Label">
+          <input value={caseStudyUi.prevLabel} onChange={(event) => onChange((current) => ({ ...current, uiCopy: { ...caseStudyUi, prevLabel: event.target.value } }))} style={inputStyle()} />
+        </Field>
+        <Field label="Next Label">
+          <input value={caseStudyUi.nextLabel} onChange={(event) => onChange((current) => ({ ...current, uiCopy: { ...caseStudyUi, nextLabel: event.target.value } }))} style={inputStyle()} />
+        </Field>
+        <Field label="Nav Problem Label">
+          <input value={caseStudyUi.navProblemLabel} onChange={(event) => onChange((current) => ({ ...current, uiCopy: { ...caseStudyUi, navProblemLabel: event.target.value } }))} style={inputStyle()} />
+        </Field>
+        <Field label="Nav Role Label">
+          <input value={caseStudyUi.navRoleLabel} onChange={(event) => onChange((current) => ({ ...current, uiCopy: { ...caseStudyUi, navRoleLabel: event.target.value } }))} style={inputStyle()} />
+        </Field>
+        <Field label="Nav Research Label">
+          <input value={caseStudyUi.navResearchLabel} onChange={(event) => onChange((current) => ({ ...current, uiCopy: { ...caseStudyUi, navResearchLabel: event.target.value } }))} style={inputStyle()} />
+        </Field>
+        <Field label="Nav Challenge Label">
+          <input value={caseStudyUi.navChallengeLabel} onChange={(event) => onChange((current) => ({ ...current, uiCopy: { ...caseStudyUi, navChallengeLabel: event.target.value } }))} style={inputStyle()} />
+        </Field>
+        <Field label="Nav Process Label">
+          <input value={caseStudyUi.navProcessLabel} onChange={(event) => onChange((current) => ({ ...current, uiCopy: { ...caseStudyUi, navProcessLabel: event.target.value } }))} style={inputStyle()} />
+        </Field>
+        <Field label="Nav Solution Label">
+          <input value={caseStudyUi.navSolutionLabel} onChange={(event) => onChange((current) => ({ ...current, uiCopy: { ...caseStudyUi, navSolutionLabel: event.target.value } }))} style={inputStyle()} />
+        </Field>
+        <Field label="Nav Outcomes Label">
+          <input value={caseStudyUi.navOutcomesLabel} onChange={(event) => onChange((current) => ({ ...current, uiCopy: { ...caseStudyUi, navOutcomesLabel: event.target.value } }))} style={inputStyle()} />
+        </Field>
+        <Field label="Default Problem Copy">
+          <textarea value={caseStudyUi.defaultProblem} onChange={(event) => onChange((current) => ({ ...current, uiCopy: { ...caseStudyUi, defaultProblem: event.target.value } }))} style={inputStyle(true)} />
+        </Field>
+        <Field label="Default Role Copy">
+          <textarea value={caseStudyUi.defaultRole} onChange={(event) => onChange((current) => ({ ...current, uiCopy: { ...caseStudyUi, defaultRole: event.target.value } }))} style={inputStyle(true)} />
+        </Field>
       </SectionFrame>
     </>
   )
