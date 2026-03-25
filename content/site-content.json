@@ -7,7 +7,10 @@
         {
           "title": "Franklin's",
           "oneliner": "The experience starts before you walk in.",
-          "tags": ["UX", "RESEARCH"],
+          "tags": [
+            "UX",
+            "RESEARCH"
+          ],
           "href": "/work/franklins",
           "cover": "/work/franklins/cover-processed.png",
           "coverPosition": "center"
@@ -15,7 +18,10 @@
         {
           "title": "Albers",
           "oneliner": "Colour theory you can actually play with.",
-          "tags": ["UI", "CODE"],
+          "tags": [
+            "UI",
+            "CODE"
+          ],
           "href": "/work/albers",
           "cover": "/work/albers/cover-processed.png",
           "coverPosition": "center"
@@ -23,7 +29,10 @@
         {
           "title": "LoomLearn",
           "oneliner": "One learning space for students who think differently.",
-          "tags": ["UX", "ED-TECH"],
+          "tags": [
+            "UX",
+            "ED-TECH"
+          ],
           "href": "/work/loomlearn",
           "cover": "/work/loomlearn/cover-processed.png",
           "coverPosition": "center"
@@ -31,7 +40,10 @@
         {
           "title": "Atom OS",
           "oneliner": "A phone stripped down to what actually matters.",
-          "tags": ["UI", "SYSTEMS"],
+          "tags": [
+            "UI",
+            "SYSTEMS"
+          ],
           "href": "/work/atom",
           "cover": "/work/atom/cover-processed.png",
           "coverPosition": "center"
@@ -45,13 +57,19 @@
         {
           "title": "Accord",
           "oneliner": "A contract tool built for freelancers.",
-          "tags": ["UX", "PRODUCT"],
+          "tags": [
+            "UX",
+            "PRODUCT"
+          ],
           "href": "/work/accord"
         },
         {
           "title": "HelpOH",
           "oneliner": "Connecting homes to trusted help, and workers to fair work.",
-          "tags": ["UX", "SERVICE DESIGN"],
+          "tags": [
+            "UX",
+            "SERVICE DESIGN"
+          ],
           "href": "/work/helpoh",
           "cover": "/work/helpoh/cover-hor-processed.png",
           "coverPosition": "center"
@@ -59,7 +77,10 @@
         {
           "title": "Purcast",
           "oneliner": "A podcast app designed for the Fluxathon.",
-          "tags": ["UI", "COMPETITION"],
+          "tags": [
+            "UI",
+            "COMPETITION"
+          ],
           "href": "/work/purcast"
         }
       ]
@@ -132,9 +153,14 @@
         "desc": "Photography · Design and Technology · Business Studies"
       }
     ],
-    "tools": ["FIGMA", "ADOBE CREATIVE SUITE", "CLAUDE CODE", "VIBE CODING"],
+    "tools": [
+      "FIGMA",
+      "ADOBE CREATIVE SUITE",
+      "CLAUDE CODE",
+      "VIBE CODING"
+    ],
     "nowHeading": "RIGHT NOW_",
-    "nowDescription": "A snapshot of what I'm into this month. Updated manually.",
+    "nowDescription": "A snapshot of what I'm into this month.",
     "nowCards": [
       {
         "label": "MOVING_",
@@ -172,53 +198,74 @@
       {
         "title": "Franklin's",
         "oneliner": "The experience starts before you walk in.",
-          "tags": ["UX", "RESEARCH"],
-          "href": "/work/franklins",
-          "cover": "/work/franklins/cover-hor-processed.png",
-          "coverPosition": "center"
-        },
+        "tags": [
+          "UX",
+          "RESEARCH"
+        ],
+        "href": "/work/franklins",
+        "cover": "/work/franklins/cover-hor-processed.png",
+        "coverPosition": "center"
+      },
       {
         "title": "LoomLearn",
         "oneliner": "One learning space for students who think differently.",
-          "tags": ["UX", "RESEARCH"],
-          "href": "/work/loomlearn",
-          "cover": "/work/loomlearn/cover-hor-processed.png",
-          "coverPosition": "center"
-        },
+        "tags": [
+          "UX",
+          "RESEARCH"
+        ],
+        "href": "/work/loomlearn",
+        "cover": "/work/loomlearn/cover-hor-processed.png",
+        "coverPosition": "center"
+      },
       {
         "title": "HelpOH",
         "oneliner": "Connecting homes to trusted help, and workers to fair work.",
-          "tags": ["UX", "SERVICE DESIGN"],
-          "href": "/work/helpoh",
-          "cover": "/work/helpoh/cover-hor-processed.png",
-          "coverPosition": "center"
-        },
+        "tags": [
+          "UX",
+          "SERVICE DESIGN"
+        ],
+        "href": "/work/helpoh",
+        "cover": "/work/helpoh/cover-hor-processed.png",
+        "coverPosition": "center"
+      },
       {
         "title": "Atom OS",
         "oneliner": "A phone stripped down to what actually matters.",
-          "tags": ["UI", "SYSTEMS"],
-          "href": "/work/atom",
-          "cover": "/work/atom/cover-hor-processed.png",
-          "coverPosition": "center"
-        },
+        "tags": [
+          "UI",
+          "SYSTEMS"
+        ],
+        "href": "/work/atom",
+        "cover": "/work/atom/cover-hor-processed.png",
+        "coverPosition": "center"
+      },
       {
         "title": "Albers",
         "oneliner": "Colour theory you can actually play with.",
-          "tags": ["UI", "INTERACTION"],
-          "href": "/work/albers",
-          "cover": "/work/albers/cover-hor-processed.png",
-          "coverPosition": "center"
-        },
+        "tags": [
+          "UI",
+          "INTERACTION"
+        ],
+        "href": "/work/albers",
+        "cover": "/work/albers/cover-hor-processed.png",
+        "coverPosition": "center"
+      },
       {
         "title": "Accord",
         "oneliner": "A contract tool built for freelancers.",
-        "tags": ["UX", "PRODUCT"],
+        "tags": [
+          "UX",
+          "PRODUCT"
+        ],
         "href": "/work/accord"
       },
       {
         "title": "Purcast",
         "oneliner": "A podcast app designed for the Fluxathon.",
-        "tags": ["UI", "COMPETITION"],
+        "tags": [
+          "UI",
+          "COMPETITION"
+        ],
         "href": "/work/purcast"
       }
     ]
@@ -264,14 +311,85 @@
         "city": "KL",
         "descriptor": "Street life and quiet corners of a city in motion.",
         "images": [
-          "/creative/photography/kl/01.jpg", "/creative/photography/kl/02.jpg", "/creative/photography/kl/03.jpg", "/creative/photography/kl/04.jpg", "/creative/photography/kl/05.jpg", "/creative/photography/kl/06.jpg", "/creative/photography/kl/07.jpg", "/creative/photography/kl/08.jpg", "/creative/photography/kl/09.jpg", "/creative/photography/kl/10.jpg",
-          "/creative/photography/kl/11.jpg", "/creative/photography/kl/12.jpg", "/creative/photography/kl/13.jpg", "/creative/photography/kl/14.jpg", "/creative/photography/kl/15.jpg", "/creative/photography/kl/16.jpg", "/creative/photography/kl/17.jpg", "/creative/photography/kl/18.jpg", "/creative/photography/kl/19.jpg", "/creative/photography/kl/20.jpg",
-          "/creative/photography/kl/21.jpg", "/creative/photography/kl/22.jpg", "/creative/photography/kl/23.jpg", "/creative/photography/kl/24.jpg", "/creative/photography/kl/25.jpg", "/creative/photography/kl/26.jpg", "/creative/photography/kl/27.jpg", "/creative/photography/kl/28.jpg", "/creative/photography/kl/29.jpg", "/creative/photography/kl/30.jpg",
-          "/creative/photography/kl/31.jpg", "/creative/photography/kl/32.jpg", "/creative/photography/kl/33.jpg", "/creative/photography/kl/34.jpg", "/creative/photography/kl/35.jpg", "/creative/photography/kl/36.jpg", "/creative/photography/kl/37.jpg", "/creative/photography/kl/38.jpg", "/creative/photography/kl/39.jpg", "/creative/photography/kl/40.jpg",
-          "/creative/photography/kl/41.jpg", "/creative/photography/kl/42.jpg", "/creative/photography/kl/43.jpg", "/creative/photography/kl/44.jpg", "/creative/photography/kl/45.jpg", "/creative/photography/kl/46.jpg", "/creative/photography/kl/47.jpg", "/creative/photography/kl/48.jpg", "/creative/photography/kl/49.jpg", "/creative/photography/kl/50.jpg",
-          "/creative/photography/kl/51.jpg", "/creative/photography/kl/52.jpg", "/creative/photography/kl/53.jpg", "/creative/photography/kl/54.jpg", "/creative/photography/kl/55.jpg", "/creative/photography/kl/56.jpg", "/creative/photography/kl/57.jpg", "/creative/photography/kl/58.jpg", "/creative/photography/kl/59.jpg", "/creative/photography/kl/60.jpg",
-          "/creative/photography/kl/61.jpg", "/creative/photography/kl/62.jpg", "/creative/photography/kl/63.jpg", "/creative/photography/kl/64.jpg", "/creative/photography/kl/65.jpg", "/creative/photography/kl/66.jpg", "/creative/photography/kl/67.jpg", "/creative/photography/kl/68.jpg", "/creative/photography/kl/69.jpg", "/creative/photography/kl/70.jpg",
-          "/creative/photography/kl/71.jpg", "/creative/photography/kl/72.jpg", "/creative/photography/kl/73.jpg", "/creative/photography/kl/74.jpg", "/creative/photography/kl/75.jpg", "/creative/photography/kl/76.jpg", "/creative/photography/kl/77.jpg", "/creative/photography/kl/78.jpg", "/creative/photography/kl/79.jpg"
+          "/creative/photography/kl/01.jpg",
+          "/creative/photography/kl/02.jpg",
+          "/creative/photography/kl/03.jpg",
+          "/creative/photography/kl/04.jpg",
+          "/creative/photography/kl/05.jpg",
+          "/creative/photography/kl/06.jpg",
+          "/creative/photography/kl/07.jpg",
+          "/creative/photography/kl/08.jpg",
+          "/creative/photography/kl/09.jpg",
+          "/creative/photography/kl/10.jpg",
+          "/creative/photography/kl/11.jpg",
+          "/creative/photography/kl/12.jpg",
+          "/creative/photography/kl/13.jpg",
+          "/creative/photography/kl/14.jpg",
+          "/creative/photography/kl/15.jpg",
+          "/creative/photography/kl/16.jpg",
+          "/creative/photography/kl/17.jpg",
+          "/creative/photography/kl/18.jpg",
+          "/creative/photography/kl/19.jpg",
+          "/creative/photography/kl/20.jpg",
+          "/creative/photography/kl/21.jpg",
+          "/creative/photography/kl/22.jpg",
+          "/creative/photography/kl/23.jpg",
+          "/creative/photography/kl/24.jpg",
+          "/creative/photography/kl/25.jpg",
+          "/creative/photography/kl/26.jpg",
+          "/creative/photography/kl/27.jpg",
+          "/creative/photography/kl/28.jpg",
+          "/creative/photography/kl/29.jpg",
+          "/creative/photography/kl/30.jpg",
+          "/creative/photography/kl/31.jpg",
+          "/creative/photography/kl/32.jpg",
+          "/creative/photography/kl/33.jpg",
+          "/creative/photography/kl/34.jpg",
+          "/creative/photography/kl/35.jpg",
+          "/creative/photography/kl/36.jpg",
+          "/creative/photography/kl/37.jpg",
+          "/creative/photography/kl/38.jpg",
+          "/creative/photography/kl/39.jpg",
+          "/creative/photography/kl/40.jpg",
+          "/creative/photography/kl/41.jpg",
+          "/creative/photography/kl/42.jpg",
+          "/creative/photography/kl/43.jpg",
+          "/creative/photography/kl/44.jpg",
+          "/creative/photography/kl/45.jpg",
+          "/creative/photography/kl/46.jpg",
+          "/creative/photography/kl/47.jpg",
+          "/creative/photography/kl/48.jpg",
+          "/creative/photography/kl/49.jpg",
+          "/creative/photography/kl/50.jpg",
+          "/creative/photography/kl/51.jpg",
+          "/creative/photography/kl/52.jpg",
+          "/creative/photography/kl/53.jpg",
+          "/creative/photography/kl/54.jpg",
+          "/creative/photography/kl/55.jpg",
+          "/creative/photography/kl/56.jpg",
+          "/creative/photography/kl/57.jpg",
+          "/creative/photography/kl/58.jpg",
+          "/creative/photography/kl/59.jpg",
+          "/creative/photography/kl/60.jpg",
+          "/creative/photography/kl/61.jpg",
+          "/creative/photography/kl/62.jpg",
+          "/creative/photography/kl/63.jpg",
+          "/creative/photography/kl/64.jpg",
+          "/creative/photography/kl/65.jpg",
+          "/creative/photography/kl/66.jpg",
+          "/creative/photography/kl/67.jpg",
+          "/creative/photography/kl/68.jpg",
+          "/creative/photography/kl/69.jpg",
+          "/creative/photography/kl/70.jpg",
+          "/creative/photography/kl/71.jpg",
+          "/creative/photography/kl/72.jpg",
+          "/creative/photography/kl/73.jpg",
+          "/creative/photography/kl/74.jpg",
+          "/creative/photography/kl/75.jpg",
+          "/creative/photography/kl/76.jpg",
+          "/creative/photography/kl/77.jpg",
+          "/creative/photography/kl/78.jpg",
+          "/creative/photography/kl/79.jpg"
         ]
       },
       {
@@ -279,10 +397,42 @@
         "city": "Penang",
         "descriptor": "Heritage streets and the texture of an older world.",
         "images": [
-          "/creative/photography/penang/01.jpg", "/creative/photography/penang/02.jpg", "/creative/photography/penang/03.jpg", "/creative/photography/penang/04.jpg", "/creative/photography/penang/05.jpg", "/creative/photography/penang/06.jpg", "/creative/photography/penang/07.jpg", "/creative/photography/penang/08.jpg", "/creative/photography/penang/09.jpg", "/creative/photography/penang/10.jpg",
-          "/creative/photography/penang/11.jpg", "/creative/photography/penang/12.jpg", "/creative/photography/penang/13.jpg", "/creative/photography/penang/14.jpg", "/creative/photography/penang/15.jpg", "/creative/photography/penang/16.jpg", "/creative/photography/penang/17.jpg", "/creative/photography/penang/18.jpg", "/creative/photography/penang/19.jpg", "/creative/photography/penang/20.jpg",
-          "/creative/photography/penang/21.jpg", "/creative/photography/penang/22.jpg", "/creative/photography/penang/23.jpg", "/creative/photography/penang/24.jpg", "/creative/photography/penang/25.jpg", "/creative/photography/penang/26.jpg", "/creative/photography/penang/27.jpg", "/creative/photography/penang/28.jpg", "/creative/photography/penang/29.jpg", "/creative/photography/penang/30.jpg",
-          "/creative/photography/penang/31.jpg", "/creative/photography/penang/32.jpg", "/creative/photography/penang/33.jpg", "/creative/photography/penang/34.jpg", "/creative/photography/penang/35.jpg", "/creative/photography/penang/36.jpg"
+          "/creative/photography/penang/01.jpg",
+          "/creative/photography/penang/02.jpg",
+          "/creative/photography/penang/03.jpg",
+          "/creative/photography/penang/04.jpg",
+          "/creative/photography/penang/05.jpg",
+          "/creative/photography/penang/06.jpg",
+          "/creative/photography/penang/07.jpg",
+          "/creative/photography/penang/08.jpg",
+          "/creative/photography/penang/09.jpg",
+          "/creative/photography/penang/10.jpg",
+          "/creative/photography/penang/11.jpg",
+          "/creative/photography/penang/12.jpg",
+          "/creative/photography/penang/13.jpg",
+          "/creative/photography/penang/14.jpg",
+          "/creative/photography/penang/15.jpg",
+          "/creative/photography/penang/16.jpg",
+          "/creative/photography/penang/17.jpg",
+          "/creative/photography/penang/18.jpg",
+          "/creative/photography/penang/19.jpg",
+          "/creative/photography/penang/20.jpg",
+          "/creative/photography/penang/21.jpg",
+          "/creative/photography/penang/22.jpg",
+          "/creative/photography/penang/23.jpg",
+          "/creative/photography/penang/24.jpg",
+          "/creative/photography/penang/25.jpg",
+          "/creative/photography/penang/26.jpg",
+          "/creative/photography/penang/27.jpg",
+          "/creative/photography/penang/28.jpg",
+          "/creative/photography/penang/29.jpg",
+          "/creative/photography/penang/30.jpg",
+          "/creative/photography/penang/31.jpg",
+          "/creative/photography/penang/32.jpg",
+          "/creative/photography/penang/33.jpg",
+          "/creative/photography/penang/34.jpg",
+          "/creative/photography/penang/35.jpg",
+          "/creative/photography/penang/36.jpg"
         ]
       },
       {
@@ -290,7 +440,15 @@
         "city": "Singapore",
         "descriptor": "The duality of a city-state — dense and lush at once.",
         "images": [
-          "/creative/photography/singapore/01.jpg", "/creative/photography/singapore/02.jpg", "/creative/photography/singapore/03.jpg", "/creative/photography/singapore/04.jpg", "/creative/photography/singapore/05.jpg", "/creative/photography/singapore/06.jpg", "/creative/photography/singapore/07.jpg", "/creative/photography/singapore/08.jpg", "/creative/photography/singapore/09.jpg"
+          "/creative/photography/singapore/01.jpg",
+          "/creative/photography/singapore/02.jpg",
+          "/creative/photography/singapore/03.jpg",
+          "/creative/photography/singapore/04.jpg",
+          "/creative/photography/singapore/05.jpg",
+          "/creative/photography/singapore/06.jpg",
+          "/creative/photography/singapore/07.jpg",
+          "/creative/photography/singapore/08.jpg",
+          "/creative/photography/singapore/09.jpg"
         ]
       },
       {
@@ -298,8 +456,23 @@
         "city": "Ho Chi Minh",
         "descriptor": "Noise, heat, and the city that never slows down.",
         "images": [
-          "/creative/photography/hcmc/01.jpg", "/creative/photography/hcmc/02.jpg", "/creative/photography/hcmc/03.jpg", "/creative/photography/hcmc/04.jpg", "/creative/photography/hcmc/05.jpg", "/creative/photography/hcmc/06.jpg", "/creative/photography/hcmc/07.jpg", "/creative/photography/hcmc/08.jpg", "/creative/photography/hcmc/09.jpg", "/creative/photography/hcmc/10.jpg",
-          "/creative/photography/hcmc/11.jpg", "/creative/photography/hcmc/12.jpg", "/creative/photography/hcmc/13.jpg", "/creative/photography/hcmc/14.jpg", "/creative/photography/hcmc/15.jpg", "/creative/photography/hcmc/16.jpg", "/creative/photography/hcmc/17.jpg"
+          "/creative/photography/hcmc/01.jpg",
+          "/creative/photography/hcmc/02.jpg",
+          "/creative/photography/hcmc/03.jpg",
+          "/creative/photography/hcmc/04.jpg",
+          "/creative/photography/hcmc/05.jpg",
+          "/creative/photography/hcmc/06.jpg",
+          "/creative/photography/hcmc/07.jpg",
+          "/creative/photography/hcmc/08.jpg",
+          "/creative/photography/hcmc/09.jpg",
+          "/creative/photography/hcmc/10.jpg",
+          "/creative/photography/hcmc/11.jpg",
+          "/creative/photography/hcmc/12.jpg",
+          "/creative/photography/hcmc/13.jpg",
+          "/creative/photography/hcmc/14.jpg",
+          "/creative/photography/hcmc/15.jpg",
+          "/creative/photography/hcmc/16.jpg",
+          "/creative/photography/hcmc/17.jpg"
         ]
       }
     ]
@@ -461,9 +634,23 @@
       "title": "Franklin's",
       "oneliner": "The experience starts before you walk in.",
       "type": "UX DESIGN · 2025",
-      "tags": ["UX Research", "Contextual Inquiry", "Information Architecture", "Figma", "Usability Testing", "FigJam", "Team Leadership"],
-      "prev": { "slug": "loomlearn", "title": "LoomLearn" },
-      "next": { "slug": "helpoh", "title": "HelpOH" },
+      "tags": [
+        "UX Research",
+        "Contextual Inquiry",
+        "Information Architecture",
+        "Figma",
+        "Usability Testing",
+        "FigJam",
+        "Team Leadership"
+      ],
+      "prev": {
+        "slug": "loomlearn",
+        "title": "LoomLearn"
+      },
+      "next": {
+        "slug": "helpoh",
+        "title": "HelpOH"
+      },
       "heroImage": "/work/franklins/cover-processed.png",
       "problemHeadline": "The warmth was real — it just wasn't reaching people before they arrived.",
       "problem": "Franklin's has a strong in-store experience. The brief: close the gap between what first-time visitors expected digitally and what they actually found when they walked in.",
@@ -488,14 +675,32 @@
       "title": "LoomLearn",
       "oneliner": "One learning space for students who think differently.",
       "type": "UX DESIGN · 2024",
-      "tags": ["UI/UX", "Figma", "Accessibility", "Interaction Design", "Prototyping"],
-      "prev": { "slug": "franklins", "title": "Franklin's" },
-      "next": { "slug": "helpoh", "title": "HelpOH" },
+      "tags": [
+        "UI/UX",
+        "Figma",
+        "Accessibility",
+        "Interaction Design",
+        "Prototyping"
+      ],
+      "prev": {
+        "slug": "franklins",
+        "title": "Franklin's"
+      },
+      "next": {
+        "slug": "helpoh",
+        "title": "HelpOH"
+      },
       "heroImage": "/work/loomlearn/cover-processed.png",
       "researchImage": "/work/loomlearn/research-processed.png",
-      "challengeImages": ["/work/loomlearn/ideation-1-processed.png", "/work/loomlearn/ideation-2-processed.png"],
+      "challengeImages": [
+        "/work/loomlearn/ideation-1-processed.png",
+        "/work/loomlearn/ideation-2-processed.png"
+      ],
       "solutionHeroImage": "/work/loomlearn/solution-hero-processed.png",
-      "solutionImages": ["/work/loomlearn/solution-1-processed.png", "/work/loomlearn/solution-2-processed.png"],
+      "solutionImages": [
+        "/work/loomlearn/solution-1-processed.png",
+        "/work/loomlearn/solution-2-processed.png"
+      ],
       "problemHeadline": "The problem wasn't the tools — it was the switching between them.",
       "problem": "LoomLearn integrates Cornell notes, Pomodoro timers, mind maps, spider charts, and flashcards into a single drag-and-drop platform. Designed specifically with dyslexic learners in mind, built for anyone who switches between too many tools to study effectively.",
       "roleHeadline": "Sole designer across research, UX, UI design, and prototyping.",
@@ -518,12 +723,26 @@
       "title": "HelpOH",
       "oneliner": "Connecting homes to trusted help, and workers to fair work.",
       "type": "UX DESIGN · 2024",
-      "tags": ["UI/UX", "Figma", "Service Design", "Prototyping"],
-      "prev": { "slug": "loomlearn", "title": "LoomLearn" },
-      "next": { "slug": "atom", "title": "Atom OS" },
+      "tags": [
+        "UI/UX",
+        "Figma",
+        "Service Design",
+        "Prototyping"
+      ],
+      "prev": {
+        "slug": "loomlearn",
+        "title": "LoomLearn"
+      },
+      "next": {
+        "slug": "atom",
+        "title": "Atom OS"
+      },
       "heroImage": "/work/helpoh/cover-processed.png",
       "solutionHeroImage": "/work/helpoh/solution-hero-processed.png",
-      "solutionImages": ["/work/helpoh/solution-1-processed.png", "/work/helpoh/solution-1-processed.png"],
+      "solutionImages": [
+        "/work/helpoh/solution-1-processed.png",
+        "/work/helpoh/solution-1-processed.png"
+      ],
       "problemHeadline": "A two-sided problem: unreliable help for users, unfair work for workers.",
       "problem": "HelpOH connects users with vetted professionals for household services, while giving workers legal protections, training, and consistent income. Designed for Malaysia's rapidly growing economy.",
       "roleHeadline": "Sole designer across research, UX strategy, UI design, and prototyping.",
@@ -546,14 +765,31 @@
       "title": "Atom OS",
       "oneliner": "A phone OS that strips your screen down to what actually matters.",
       "type": "UI/UX · 2024",
-      "tags": ["UI/UX", "Figma", "Interaction Design", "Systems Thinking"],
-      "prev": { "slug": "helpoh", "title": "HelpOH" },
-      "next": { "slug": "albers", "title": "Albers" },
+      "tags": [
+        "UI/UX",
+        "Figma",
+        "Interaction Design",
+        "Systems Thinking"
+      ],
+      "prev": {
+        "slug": "helpoh",
+        "title": "HelpOH"
+      },
+      "next": {
+        "slug": "albers",
+        "title": "Albers"
+      },
       "heroImage": "/work/atom/cover-processed.png",
       "researchImage": "/work/atom/research-processed.png",
-      "challengeImages": ["/work/atom/ideation-1-processed.png", "/work/atom/ideation-2-processed.png"],
+      "challengeImages": [
+        "/work/atom/ideation-1-processed.png",
+        "/work/atom/ideation-2-processed.png"
+      ],
       "solutionHeroImage": "/work/atom/solution-hero-processed.png",
-      "solutionImages": ["/work/atom/hero-2-processed.png", "/work/atom/solution-2-processed.png"],
+      "solutionImages": [
+        "/work/atom/hero-2-processed.png",
+        "/work/atom/solution-2-processed.png"
+      ],
       "problemHeadline": "Subtraction is a design decision.",
       "problem": "Atom OS redesigns the smartphone experience by removing distractions and replacing them with four intentional widgets. The goal: make the phone feel deliberately limited — not broken, just focused.",
       "roleHeadline": "Sole designer across concept, UI design, and prototyping.",
@@ -576,14 +812,33 @@
       "title": "Albers",
       "oneliner": "What if 'interaction of color' was taken literally?",
       "type": "UI DESIGN · 2025",
-      "tags": ["SwiftUI", "AppKit", "Figma", "Claude Code", "Vibe Coding", "macOS"],
-      "prev": { "slug": "atom", "title": "Atom OS" },
-      "next": { "slug": "accord", "title": "Accord" },
+      "tags": [
+        "SwiftUI",
+        "AppKit",
+        "Figma",
+        "Claude Code",
+        "Vibe Coding",
+        "macOS"
+      ],
+      "prev": {
+        "slug": "atom",
+        "title": "Atom OS"
+      },
+      "next": {
+        "slug": "accord",
+        "title": "Accord"
+      },
       "heroImage": "/work/albers/cover-processed.png",
       "researchImage": "/work/albers/img-7-processed.png",
-      "challengeImages": ["/work/albers/img-1-processed.png", "/work/albers/img-2-processed.png"],
+      "challengeImages": [
+        "/work/albers/img-1-processed.png",
+        "/work/albers/img-2-processed.png"
+      ],
       "solutionHeroImage": "/work/albers/img-6-processed.png",
-      "solutionImages": ["/work/albers/img-4-processed.png", "/work/albers/img-5-processed.png"],
+      "solutionImages": [
+        "/work/albers/img-4-processed.png",
+        "/work/albers/img-5-processed.png"
+      ],
       "problemHeadline": "I took 'interaction of color' literally — and built an app around it.",
       "problem": "ALBERS is a macOS color theory tool named after Josef Albers. It isolates perceptual phenomena like simultaneous contrast and optical mixing, giving users real-time controls to manipulate each one directly.",
       "roleHeadline": "Sole designer and developer — concept to shipped macOS app.",
@@ -606,9 +861,19 @@
       "title": "Accord",
       "oneliner": "A contract tool built for freelancers.",
       "type": "UX DESIGN · 2025",
-      "tags": ["UX Design", "Product", "Figma"],
-      "prev": { "slug": "albers", "title": "Albers" },
-      "next": { "slug": "designathon-01", "title": "Design-athon 01" }
+      "tags": [
+        "UX Design",
+        "Product",
+        "Figma"
+      ],
+      "prev": {
+        "slug": "albers",
+        "title": "Albers"
+      },
+      "next": {
+        "slug": "designathon-01",
+        "title": "Design-athon 01"
+      }
     },
     {
       "slug": "designathon-01",
@@ -616,9 +881,19 @@
       "title": "Design-athon 01",
       "oneliner": "A 48-hour weather app designed with Claude AI.",
       "type": "UI DESIGN · 2025",
-      "tags": ["UI Design", "Sprint", "Claude AI"],
-      "prev": { "slug": "accord", "title": "Accord" },
-      "next": { "slug": "designathon-02", "title": "Design-athon 02" }
+      "tags": [
+        "UI Design",
+        "Sprint",
+        "Claude AI"
+      ],
+      "prev": {
+        "slug": "accord",
+        "title": "Accord"
+      },
+      "next": {
+        "slug": "designathon-02",
+        "title": "Design-athon 02"
+      }
     },
     {
       "slug": "designathon-02",
@@ -626,8 +901,15 @@
       "title": "Design-athon 02",
       "oneliner": "Redesigning Passio Go with Figma Make.",
       "type": "UI DESIGN · 2025",
-      "tags": ["UI Design", "Sprint", "Figma Make"],
-      "prev": { "slug": "designathon-01", "title": "Design-athon 01" },
+      "tags": [
+        "UI Design",
+        "Sprint",
+        "Figma Make"
+      ],
+      "prev": {
+        "slug": "designathon-01",
+        "title": "Design-athon 01"
+      },
       "next": null
     },
     {
@@ -636,8 +918,16 @@
       "title": "Purcast",
       "oneliner": "A podcast app designed for the Fluxathon.",
       "type": "UI DESIGN · 2025",
-      "tags": ["UI Design", "Figma", "Competition", "Sprint"],
-      "prev": { "slug": "helpoh", "title": "HelpOH" },
+      "tags": [
+        "UI Design",
+        "Figma",
+        "Competition",
+        "Sprint"
+      ],
+      "prev": {
+        "slug": "helpoh",
+        "title": "HelpOH"
+      },
       "next": null
     },
     {
@@ -646,16 +936,30 @@
       "title": "Faces of Power",
       "oneliner": "What does power look like up close?",
       "type": "MIXED MEDIA · 2024",
-      "tags": ["Mixed Media", "Photography", "Conceptual Art", "Installation"],
+      "tags": [
+        "Mixed Media",
+        "Photography",
+        "Conceptual Art",
+        "Installation"
+      ],
       "prev": null,
-      "next": { "slug": "south-china-sea", "title": "South China Sea" },
+      "next": {
+        "slug": "south-china-sea",
+        "title": "South China Sea"
+      },
       "backHref": "/creative/mixed-media",
       "backLabel": "MIXED MEDIA",
       "heroImage": "/creative/mixed-media/faces-of-power/hero-processed.png",
       "researchImage": "/creative/mixed-media/faces-of-power/research-processed.png",
-      "challengeImages": ["/creative/mixed-media/faces-of-power/ideation-1-processed.png", "/creative/mixed-media/faces-of-power/ideation-2-processed.png"],
+      "challengeImages": [
+        "/creative/mixed-media/faces-of-power/ideation-1-processed.png",
+        "/creative/mixed-media/faces-of-power/ideation-2-processed.png"
+      ],
       "solutionHeroImage": "/creative/mixed-media/faces-of-power/solution-hero-processed.png",
-      "solutionImages": ["/creative/mixed-media/faces-of-power/solution-1-processed.png", "/creative/mixed-media/faces-of-power/solution-2-processed.png"],
+      "solutionImages": [
+        "/creative/mixed-media/faces-of-power/solution-1-processed.png",
+        "/creative/mixed-media/faces-of-power/solution-2-processed.png"
+      ],
       "problemHeadline": "What does power look like up close?",
       "problem": "A mixed media art project exploring how leaders make decisions that impact millions. Using close-up portraiture, interviews, and layered physical materials, the work interrogates themes of privacy, intimacy, and authority.",
       "roleHeadline": "Sole artist — concept, photography, material fabrication, and installation.",
@@ -678,16 +982,31 @@
       "title": "South China Sea",
       "oneliner": "What ordinary people don't know is already shaping their lives.",
       "type": "MIXED MEDIA · 2024",
-      "tags": ["Mixed Media", "Photography", "Cyanotype", "Installation", "Research"],
-      "prev": { "slug": "faces-of-power", "title": "Faces of Power" },
+      "tags": [
+        "Mixed Media",
+        "Photography",
+        "Cyanotype",
+        "Installation",
+        "Research"
+      ],
+      "prev": {
+        "slug": "faces-of-power",
+        "title": "Faces of Power"
+      },
       "next": null,
       "backHref": "/creative/mixed-media",
       "backLabel": "MIXED MEDIA",
       "heroImage": "/creative/mixed-media/south-china-sea/hero-processed.png",
       "researchImage": "/creative/mixed-media/south-china-sea/research-processed.png",
-      "challengeImages": ["/creative/mixed-media/south-china-sea/ideation-1-processed.png", "/creative/mixed-media/south-china-sea/ideation-2-processed.png"],
+      "challengeImages": [
+        "/creative/mixed-media/south-china-sea/ideation-1-processed.png",
+        "/creative/mixed-media/south-china-sea/ideation-2-processed.png"
+      ],
       "solutionHeroImage": "/creative/mixed-media/south-china-sea/solution-hero-processed.png",
-      "solutionImages": ["/creative/mixed-media/south-china-sea/solution-1-processed.png", "/creative/mixed-media/south-china-sea/solution-2-processed.png"],
+      "solutionImages": [
+        "/creative/mixed-media/south-china-sea/solution-1-processed.png",
+        "/creative/mixed-media/south-china-sea/solution-2-processed.png"
+      ],
       "problemHeadline": "What ordinary people don't know is already shaping their lives.",
       "problem": "A large-scale mixed media installation exploring the South China Sea conflict through the lens of public naivety. Presented as a detective board, it connects geopolitics to lived experience through cyanotypes, photograms, coffee-aged maps, and original photography.",
       "roleHeadline": "Sole artist — concept, research, photography, darkroom work, and installation.",
@@ -710,9 +1029,17 @@
       "title": "Oracle",
       "oneliner": "For trendsetters, by trend haters.",
       "type": "BRANDING · 2023",
-      "tags": ["Brand Identity", "Graphic Design", "Marketing", "Art Direction"],
+      "tags": [
+        "Brand Identity",
+        "Graphic Design",
+        "Marketing",
+        "Art Direction"
+      ],
       "prev": null,
-      "next": { "slug": "soho", "title": "SOHO" },
+      "next": {
+        "slug": "soho",
+        "title": "SOHO"
+      },
       "backHref": "/creative/branding",
       "backLabel": "BRANDING",
       "problemHeadline": "No brief, no client, no constraints — just a mythology and an aesthetic.",
@@ -737,15 +1064,26 @@
       "title": "SOHO",
       "oneliner": "A sixth form art exhibition as diverse as the districts it's named after.",
       "type": "BRANDING · 2024",
-      "tags": ["Event Design", "Brand Identity", "Graphic Design", "Leadership"],
-      "prev": { "slug": "oracle", "title": "Oracle" },
+      "tags": [
+        "Event Design",
+        "Brand Identity",
+        "Graphic Design",
+        "Leadership"
+      ],
+      "prev": {
+        "slug": "oracle",
+        "title": "Oracle"
+      },
       "next": null,
       "backHref": "/creative/branding",
       "backLabel": "BRANDING",
       "heroImage": "/creative/branding/soho/cover-processed.png",
       "researchImage": "/creative/branding/soho/research-processed.png",
       "solutionHeroImage": "/creative/branding/soho/solution-hero-processed.png",
-      "solutionImages": ["/creative/branding/soho/solution-1-processed.png", "/creative/branding/soho/solution-1-processed.png"],
+      "solutionImages": [
+        "/creative/branding/soho/solution-1-processed.png",
+        "/creative/branding/soho/solution-1-processed.png"
+      ],
       "problemHeadline": "One identity for an exhibition as diverse as the districts it's named after.",
       "problem": "SOHO was the 2024 Sixth Form Art Exhibition, planned and organised by students. Named after the culturally dense SOHO districts of London and New York, it brought together art, fashion, music, and more under a single identity.",
       "roleHeadline": "Chair of the exhibition — organising, delegating, and leading all branding.",

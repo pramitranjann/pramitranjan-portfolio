@@ -223,6 +223,11 @@ function ReorderButtons({
 }
 
 export function DashboardEditor({ initialContent, localWriteEnabled }: EditorProps) {
+  const gitCommands = `git status
+git diff
+git add -A
+git commit -m "your message here"
+git push`
   const [history, setHistory] = useState({
     past: [] as SiteContent[],
     present: initialContent,
@@ -234,6 +239,8 @@ export function DashboardEditor({ initialContent, localWriteEnabled }: EditorPro
   const [activePage, setActivePage] = useState<PageKey>('homepage')
   const [editingEnabled, setEditingEnabled] = useState(false)
   const [saveHovered, setSaveHovered] = useState(false)
+  const [showGitPrompt, setShowGitPrompt] = useState(false)
+  const [copiedGitCommands, setCopiedGitCommands] = useState(false)
 
   const content = history.present
   const isDirty = useMemo(() => serializeContent(content) !== serializeContent(savedContent), [content, savedContent])
@@ -404,6 +411,18 @@ export function DashboardEditor({ initialContent, localWriteEnabled }: EditorPro
     setSavedContent(content)
     setStatus('Saved')
     setSaving(false)
+    setShowGitPrompt(true)
+    setCopiedGitCommands(false)
+  }
+
+  async function handleCopyGitCommands() {
+    try {
+      await navigator.clipboard.writeText(gitCommands)
+      setCopiedGitCommands(true)
+      setStatus('Git commands copied')
+    } catch {
+      setStatus('Could not copy commands')
+    }
   }
 
   async function handleLogout() {
@@ -424,6 +443,52 @@ export function DashboardEditor({ initialContent, localWriteEnabled }: EditorPro
             : 'Vercel mode: this dashboard is read-only for persistence. Use it locally if you want SAVE CHANGES to write to content/site-content.json.'}
         </p>
       </div>
+
+      {showGitPrompt && localWriteEnabled ? (
+        <div style={{ border: '1px solid #FF3120', background: '#111111', padding: '16px 18px', display: 'grid', gap: '14px' }}>
+          <div className="flex items-center justify-between" style={{ gap: '12px', flexWrap: 'wrap' }}>
+            <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#f5f2ed', lineHeight: 1.7 }}>
+              Saved to <span style={{ color: '#FF3120' }}>content/site-content.json</span>. Next step: review the diff, commit it, and push it.
+            </p>
+            <button
+              type="button"
+              onClick={() => setShowGitPrompt(false)}
+              className="font-mono"
+              style={{ background: 'transparent', border: '1px solid #2a2a2a', color: '#999999', padding: '8px 12px', cursor: 'pointer', letterSpacing: '0.1em' }}
+            >
+              DISMISS
+            </button>
+          </div>
+          <pre
+            className="font-mono"
+            style={{
+              margin: 0,
+              padding: '14px 16px',
+              background: '#0d0d0d',
+              border: '1px solid #1f1f1f',
+              color: '#f5f2ed',
+              fontSize: '13px',
+              lineHeight: 1.7,
+              overflowX: 'auto',
+            }}
+          >
+            {gitCommands}
+          </pre>
+          <div className="flex items-center" style={{ gap: '12px', flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              onClick={handleCopyGitCommands}
+              className="font-mono"
+              style={{ background: '#FF3120', border: 'none', color: '#0d0d0d', padding: '10px 14px', cursor: 'pointer', letterSpacing: '0.1em' }}
+            >
+              {copiedGitCommands ? 'COPIED' : 'COPY COMMANDS'}
+            </button>
+            <span className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.08em' }}>
+              Run these from `/Users/pramitranjan/portfolio`
+            </span>
+          </div>
+        </div>
+      ) : null}
 
       <div className="flex items-center justify-between" style={{ gap: '16px', flexWrap: 'wrap' }}>
         <p className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.08em' }}>
