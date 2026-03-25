@@ -700,7 +700,7 @@
         "slug": "helpoh",
         "title": "HelpOH"
       },
-      "heroImage": "/work/loomlearn/cover-processed.png",
+      "heroImage": "/work/loomlearn/cover-hor-processed.png",
       "researchImage": "/work/loomlearn/research-processed.png",
       "challengeImages": [
         "/work/loomlearn/ideation-1-processed.png",
@@ -725,7 +725,44 @@
       "solutionHeadline": "One canvas. Six tools. No switching.",
       "solution": "A desktop learning platform where Cornell notes, mind maps, to-do lists, spider charts, flashcards, and Pomodoro timers coexist on one canvas — rearrangeable and resizable per session.",
       "outcomesHeadline": "Building for accessibility first made the product stronger for everyone.",
-      "outcomes": "Building for accessibility first made the product stronger for everyone — that was the clearest takeaway. I'd revisit the onboarding to better communicate how the widgets work together, rather than letting users figure it out alone."
+      "outcomes": "Building for accessibility first made the product stronger for everyone — that was the clearest takeaway. I'd revisit the onboarding to better communicate how the widgets work together, rather than letting users figure it out alone.",
+      "mediaSettings": {
+        "hero": {
+          "background": "#FFFFFF"
+        }
+      },
+      "mediaBlocks": [
+        {
+          "id": "loomlearn-challenge-1",
+          "section": "challenge",
+          "layout": "pair",
+          "align": "center",
+          "width": "100%",
+          "images": [
+            {
+              "src": "/work/loomlearn/ideation-1-processed.png",
+              "aspectRatio": "4 / 3"
+            },
+            {
+              "src": "/work/loomlearn/ideation-2-processed.png",
+              "aspectRatio": "4 / 3"
+            }
+          ]
+        },
+        {
+          "id": "loomlearn-solution-1",
+          "section": "solution",
+          "layout": "single",
+          "align": "center",
+          "width": "100%",
+          "images": [
+            {
+              "src": "/work/loomlearn/solution-hero-processed.png",
+              "aspectRatio": "4 / 3"
+            }
+          ]
+        }
+      ]
     },
     {
       "slug": "helpoh",
