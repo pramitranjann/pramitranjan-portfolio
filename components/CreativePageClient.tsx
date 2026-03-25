@@ -130,6 +130,7 @@ export function CreativePageClient({
                 tag={project.type}
                 href={`/creative/mixed-media/${project.slug}`}
                 cover={project.heroImage}
+                imagePosition={project.cardImagePosition ?? 'center'}
                 cardStyle={cardStyle}
               />
             ))}
@@ -147,6 +148,7 @@ export function CreativePageClient({
                 tag={project.type}
                 href={`/creative/branding/${project.slug}`}
                 cover={project.heroImage}
+                imagePosition={project.cardImagePosition ?? 'center'}
                 cardStyle={cardStyle}
               />
             ))}

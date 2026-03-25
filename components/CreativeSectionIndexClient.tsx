@@ -44,6 +44,7 @@ export function CreativeSectionIndexClient({
                 tag={project.type}
                 href={`/creative/${project.section}/${project.slug}`}
                 cover={project.heroImage}
+                imagePosition={project.cardImagePosition ?? 'center'}
                 cardStyle={cardStyle}
               />
             ))}

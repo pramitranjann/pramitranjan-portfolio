@@ -221,6 +221,7 @@ export interface CaseStudyContent {
   outcomesHeadline?: string
   pullQuote?: string
   heroImage?: string
+  cardImagePosition?: string
   researchImage?: string
   challengeImages?: string[]
   solutionHeroImage?: string
@@ -556,6 +557,7 @@ function isCaseStudyContent(value: unknown): value is CaseStudyContent {
     isOptionalString(item.outcomesHeadline) &&
     isOptionalString(item.pullQuote) &&
     isOptionalString(item.heroImage) &&
+    isOptionalString(item.cardImagePosition) &&
     isOptionalString(item.researchImage) &&
     isOptionalStringArray(item.challengeImages) &&
     isOptionalString(item.solutionHeroImage) &&

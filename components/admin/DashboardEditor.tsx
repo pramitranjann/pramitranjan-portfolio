@@ -1569,6 +1569,13 @@ function CaseStudyEditor({
         <Field label="Hero Image">
           <input value={caseStudy.heroImage ?? ''} onChange={(event) => onChange((current) => ({ ...current, heroImage: event.target.value || undefined }))} style={inputStyle()} />
         </Field>
+        <Field label="Card Image Position (for listing cards)">
+          <input
+            value={caseStudy.cardImagePosition ?? ''}
+            onChange={(event) => onChange((current) => ({ ...current, cardImagePosition: event.target.value || undefined }))}
+            style={inputStyle()}
+          />
+        </Field>
         <Field label="Research Image">
           <input value={caseStudy.researchImage ?? ''} onChange={(event) => onChange((current) => ({ ...current, researchImage: event.target.value || undefined }))} style={inputStyle()} />
         </Field>
@@ -1935,7 +1942,7 @@ function WorkProjectListEditor({
           <Field label="Cover Image Path">
             <input value={item.cover ?? ''} onChange={(event) => onChange(updateAt(items, index, { ...item, cover: event.target.value || undefined }))} style={inputStyle()} />
           </Field>
-          <Field label="Cover Object Position">
+          <Field label="Cover Object Position (e.g. center, center top, 50% 20%)">
             <input value={item.coverPosition ?? ''} onChange={(event) => onChange(updateAt(items, index, { ...item, coverPosition: event.target.value || undefined }))} style={inputStyle()} />
           </Field>
           <button
@@ -2084,7 +2091,7 @@ function PhotographyCityListEditor({
           <Field label="Cover Image Path">
             <input value={item.cover} onChange={(event) => onChange(updateAt(items, index, { ...item, cover: event.target.value }))} style={inputStyle()} />
           </Field>
-          <Field label="Object Position">
+          <Field label="Object Position (e.g. center, center top, 50% 20%)">
             <input value={item.imagePosition ?? ''} onChange={(event) => onChange(updateAt(items, index, { ...item, imagePosition: event.target.value || undefined }))} style={inputStyle()} />
           </Field>
           <label className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#999999', letterSpacing: '0.1em', display: 'flex', alignItems: 'center', gap: '10px' }}>
