@@ -21,12 +21,12 @@ function createBlockId(slug: string, section: CaseStudyMediaBlockSection, index:
 }
 
 export function deriveCaseStudyMediaBlocks(caseStudy: CaseStudyContent): CaseStudyMediaBlock[] {
-  if (caseStudy.mediaBlocks?.length) return caseStudy.mediaBlocks
-
-  const blocks: CaseStudyMediaBlock[] = []
+  const explicitBlocks = caseStudy.mediaBlocks ?? []
+  const sectionsWithExplicitBlocks = new Set(explicitBlocks.map((block) => block.section))
+  const blocks: CaseStudyMediaBlock[] = [...explicitBlocks]
   const media = caseStudy.mediaSettings
 
-  if (caseStudy.researchImage) {
+  if (caseStudy.researchImage && !sectionsWithExplicitBlocks.has('research')) {
     blocks.push({
       id: createBlockId(caseStudy.slug, 'research', blocks.filter((item) => item.section === 'research').length),
       section: 'research',
@@ -44,7 +44,7 @@ export function deriveCaseStudyMediaBlocks(caseStudy: CaseStudyContent): CaseStu
     })
   }
 
-  if (caseStudy.challengeImages?.length) {
+  if (caseStudy.challengeImages?.length && !sectionsWithExplicitBlocks.has('challenge')) {
     blocks.push({
       id: createBlockId(caseStudy.slug, 'challenge', blocks.filter((item) => item.section === 'challenge').length),
       section: 'challenge',
@@ -69,7 +69,7 @@ export function deriveCaseStudyMediaBlocks(caseStudy: CaseStudyContent): CaseStu
     })
   }
 
-  if (caseStudy.solutionHeroImage) {
+  if (caseStudy.solutionHeroImage && !sectionsWithExplicitBlocks.has('solution')) {
     blocks.push({
       id: createBlockId(caseStudy.slug, 'solution', blocks.filter((item) => item.section === 'solution').length),
       section: 'solution',
@@ -87,7 +87,7 @@ export function deriveCaseStudyMediaBlocks(caseStudy: CaseStudyContent): CaseStu
     })
   }
 
-  if (caseStudy.solutionImages?.length) {
+  if (caseStudy.solutionImages?.length && !sectionsWithExplicitBlocks.has('solution')) {
     blocks.push({
       id: createBlockId(caseStudy.slug, 'solution', blocks.filter((item) => item.section === 'solution').length),
       section: 'solution',
