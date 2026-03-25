@@ -196,6 +196,9 @@ export interface ProjectLink {
 }
 
 export type CaseStudySection = 'work' | 'mixed-media' | 'branding'
+export type CaseStudyMediaBlockSection = 'research' | 'challenge' | 'solution'
+export type CaseStudyMediaBlockLayout = 'single' | 'pair'
+export type CaseStudyMediaAlign = 'left' | 'center' | 'right'
 
 export interface CaseStudyMediaSlotSettings {
   height?: string
@@ -219,6 +222,25 @@ export interface CaseStudyMediaSettings {
   challengePair?: CaseStudyImagePairSettings
   solutionHero?: CaseStudyMediaSlotSettings
   solutionPair?: CaseStudyImagePairSettings
+}
+
+export interface CaseStudyMediaImage {
+  src: string
+  alt?: string
+  fit?: 'contain' | 'cover'
+  position?: string
+  aspectRatio?: string
+  background?: string
+}
+
+export interface CaseStudyMediaBlock {
+  id: string
+  section: CaseStudyMediaBlockSection
+  layout: CaseStudyMediaBlockLayout
+  align?: CaseStudyMediaAlign
+  width?: string
+  gap?: string
+  images: CaseStudyMediaImage[]
 }
 
 export interface CaseStudyContent {
@@ -255,6 +277,7 @@ export interface CaseStudyContent {
   solutionHeroImage?: string
   solutionImages?: string[]
   mediaSettings?: CaseStudyMediaSettings
+  mediaBlocks?: CaseStudyMediaBlock[]
   uiCopy?: CaseStudyUiCopy
 }
 
@@ -549,6 +572,42 @@ function isCaseStudyMediaSettings(value: unknown): value is CaseStudyMediaSettin
   )
 }
 
+function isCaseStudyMediaBlockSection(value: unknown): value is CaseStudyMediaBlockSection {
+  return value === 'research' || value === 'challenge' || value === 'solution'
+}
+
+function isCaseStudyMediaAlign(value: unknown): value is CaseStudyMediaAlign {
+  return value === 'left' || value === 'center' || value === 'right'
+}
+
+function isCaseStudyMediaImage(value: unknown): value is CaseStudyMediaImage {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return (
+    isString(item.src) &&
+    isOptionalString(item.alt) &&
+    (item.fit === undefined || item.fit === 'contain' || item.fit === 'cover') &&
+    isOptionalString(item.position) &&
+    isOptionalString(item.aspectRatio) &&
+    isOptionalString(item.background)
+  )
+}
+
+function isCaseStudyMediaBlock(value: unknown): value is CaseStudyMediaBlock {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return (
+    isString(item.id) &&
+    isCaseStudyMediaBlockSection(item.section) &&
+    (item.layout === 'single' || item.layout === 'pair') &&
+    (item.align === undefined || isCaseStudyMediaAlign(item.align)) &&
+    isOptionalString(item.width) &&
+    isOptionalString(item.gap) &&
+    Array.isArray(item.images) &&
+    item.images.every(isCaseStudyMediaImage)
+  )
+}
+
 function isMotionSettings(value: unknown): value is MotionSettings {
   if (!value || typeof value !== 'object') return false
   const item = value as Record<string, unknown>
@@ -635,6 +694,7 @@ function isCaseStudyContent(value: unknown): value is CaseStudyContent {
     isOptionalString(item.solutionHeroImage) &&
     isOptionalStringArray(item.solutionImages) &&
     (item.mediaSettings === undefined || isCaseStudyMediaSettings(item.mediaSettings)) &&
+    (item.mediaBlocks === undefined || (Array.isArray(item.mediaBlocks) && item.mediaBlocks.every(isCaseStudyMediaBlock))) &&
     (item.uiCopy === undefined || isCaseStudyUiCopy(item.uiCopy))
   )
 }

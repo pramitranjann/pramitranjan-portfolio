@@ -9,7 +9,8 @@ import { ReadingProgress } from './ReadingProgress'
 import { useSiteCopy } from '@/components/SiteCopyProvider'
 import { playNav } from '@/lib/sounds'
 import { GsapReveal } from './GsapReveal'
-import type { CaseStudyMediaSettings, CaseStudyUiCopy } from '@/lib/site-content-schema'
+import { deriveCaseStudyMediaBlocks } from '@/lib/case-study-media'
+import type { CaseStudyMediaBlock, CaseStudyMediaSettings, CaseStudyUiCopy } from '@/lib/site-content-schema'
 
 interface ProjectLink {
   slug: string
@@ -17,6 +18,8 @@ interface ProjectLink {
 }
 
 interface CaseStudyLayoutProps {
+  slug?: string
+  section?: 'work' | 'mixed-media' | 'branding'
   title: string
   oneliner: string
   type: string
@@ -49,6 +52,7 @@ interface CaseStudyLayoutProps {
   solutionHeroImage?: string
   solutionImages?: string[]
   mediaSettings?: CaseStudyMediaSettings
+  mediaBlocks?: CaseStudyMediaBlock[]
   uiCopy?: CaseStudyUiCopy
 }
 
@@ -98,13 +102,74 @@ function resolveMediaPair(
   }
 }
 
+function blockJustify(align?: CaseStudyMediaBlock['align']) {
+  if (align === 'left') return 'flex-start'
+  if (align === 'right') return 'flex-end'
+  return 'center'
+}
+
+function renderMediaBlock(block: CaseStudyMediaBlock) {
+  const images = block.images.filter((item) => item.src)
+  if (!images.length) return null
+
+  const columns = block.layout === 'pair' && images.length > 1 ? `repeat(${images.length}, minmax(0, 1fr))` : 'minmax(0, 1fr)'
+
+  return (
+    <div
+      key={block.id}
+      data-reveal
+      style={{
+        display: 'flex',
+        justifyContent: blockJustify(block.align),
+      }}
+    >
+      <div
+        className="case-study-media-block"
+        style={{
+          width: block.width || '100%',
+          display: 'grid',
+          gridTemplateColumns: columns,
+          gap: block.gap || '2px',
+        }}
+      >
+        {images.map((image, index) => (
+          <div
+            key={`${block.id}-${index}`}
+            style={{
+              position: 'relative',
+              width: '100%',
+              aspectRatio: image.aspectRatio || (block.layout === 'pair' ? '4 / 3' : '16 / 10'),
+              backgroundColor: image.background || '#161616',
+              border: '1px solid #1a1a1a',
+              overflow: 'hidden',
+            }}
+          >
+            <Image
+              src={image.src}
+              alt={image.alt || ''}
+              fill
+              style={{
+                objectFit: image.fit || 'contain',
+                objectPosition: image.position || 'center center',
+              }}
+              sizes={block.layout === 'pair' ? '50vw' : '100vw'}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export function CaseStudyLayout({
+  slug = 'case-study',
+  section = 'work',
   title, oneliner, type, tags, prev, next,
   backHref = '/work', backLabel = 'WORK',
   problem, role, research, challenge, process, usabilityTesting, solution, outcomes,
   problemHeadline, roleHeadline, researchHeadline, challengeHeadline,
   processHeadline, solutionHeadline, outcomesHeadline, pullQuote,
-  heroImage, researchImage, challengeImages, solutionHeroImage, solutionImages, mediaSettings, uiCopy,
+  heroImage, researchImage, challengeImages, solutionHeroImage, solutionImages, mediaSettings, mediaBlocks, uiCopy,
 }: CaseStudyLayoutProps) {
   const basePath = backHref
   const copy = { ...useSiteCopy().caseStudy, ...uiCopy }
@@ -142,6 +207,45 @@ export function CaseStudyLayout({
     secondPosition: 'center center',
     background: '#161616',
   })
+  const caseStudyMediaBlocks = deriveCaseStudyMediaBlocks({
+    slug,
+    section,
+    title,
+    oneliner,
+    type,
+    tags,
+    prev,
+    next,
+    backHref,
+    backLabel,
+    problem,
+    role,
+    research,
+    challenge,
+    process,
+    usabilityTesting,
+    solution,
+    outcomes,
+    problemHeadline,
+    roleHeadline,
+    researchHeadline,
+    challengeHeadline,
+    processHeadline,
+    solutionHeadline,
+    outcomesHeadline,
+    pullQuote,
+    heroImage,
+    researchImage,
+    challengeImages,
+    solutionHeroImage,
+    solutionImages,
+    mediaSettings,
+    mediaBlocks,
+    uiCopy,
+  })
+  const researchBlocks = caseStudyMediaBlocks.filter((block) => block.section === 'research')
+  const challengeBlocks = caseStudyMediaBlocks.filter((block) => block.section === 'challenge')
+  const solutionBlocks = caseStudyMediaBlocks.filter((block) => block.section === 'solution')
 
   const navItems = [
     { id: 'sec-problem', label: copy.navProblemLabel, show: true },
@@ -312,11 +416,15 @@ export function CaseStudyLayout({
                   </p>
                 </div>
               </div>
-              {researchImage && (
+              {researchBlocks.length ? (
+                <div className="mt-6" style={{ display: 'grid', gap: '14px' }}>
+                  {researchBlocks.map(renderMediaBlock)}
+                </div>
+              ) : researchImage ? (
                 <div data-reveal className="case-study-research-image w-full mt-6" style={{ position: 'relative', height: researchMedia.height, backgroundColor: researchMedia.background, border: '1px solid #1a1a1a', overflow: 'hidden' }}>
                   <Image src={researchImage} alt="Research" fill style={{ objectFit: researchMedia.fit, objectPosition: researchMedia.position }} sizes="100vw" />
                 </div>
-              )}
+              ) : null}
             </GsapReveal>
           </section>
         )}
@@ -352,7 +460,11 @@ export function CaseStudyLayout({
                   </p>
                 </div>
               </div>
-              {challengeImages && (
+              {challengeBlocks.length ? (
+                <div className="mt-6" style={{ display: 'grid', gap: '14px' }}>
+                  {challengeBlocks.map(renderMediaBlock)}
+                </div>
+              ) : challengeImages ? (
                 <div data-reveal className="case-study-image-grid mt-6 grid grid-cols-2" style={{ gap: challengeMedia.gap }}>
                   <div className="case-study-ideation-image" style={{ position: 'relative', height: challengeMedia.height, backgroundColor: challengeMedia.background, border: '1px solid #1a1a1a', overflow: 'hidden' }}>
                     <Image src={challengeImages[0]} alt="Challenge 1" fill style={{ objectFit: challengeMedia.fit, objectPosition: challengeMedia.firstPosition }} sizes="50vw" />
@@ -361,7 +473,7 @@ export function CaseStudyLayout({
                     <Image src={challengeImages[1]} alt="Challenge 2" fill style={{ objectFit: challengeMedia.fit, objectPosition: challengeMedia.secondPosition }} sizes="50vw" />
                   </div>
                 </div>
-              )}
+              ) : null}
             </GsapReveal>
           </section>
         )}
@@ -406,20 +518,28 @@ export function CaseStudyLayout({
                 </p>
               </div>
             </div>
-            {solutionHeroImage && (
-              <div data-reveal className="case-study-solution-hero w-full mt-6 mb-1" style={{ position: 'relative', height: solutionHeroMedia.height, backgroundColor: solutionHeroMedia.background, border: '1px solid #1a1a1a', overflow: 'hidden' }}>
-                <Image src={solutionHeroImage} alt="Solution" fill style={{ objectFit: solutionHeroMedia.fit, objectPosition: solutionHeroMedia.position }} sizes="100vw" />
+            {solutionBlocks.length ? (
+              <div className="mt-6" style={{ display: 'grid', gap: '14px' }}>
+                {solutionBlocks.map(renderMediaBlock)}
               </div>
-            )}
-            {solutionImages && (solutionImages[0] || solutionImages[1]) && (
-              <div data-reveal className="case-study-image-grid grid grid-cols-2" style={{ gap: solutionPairMedia.gap }}>
-                <div className="case-study-solution-image" style={{ position: 'relative', height: solutionPairMedia.height, backgroundColor: solutionPairMedia.background, border: '1px solid #1a1a1a', overflow: 'hidden' }}>
-                  {solutionImages[0] && <Image src={solutionImages[0]} alt="Solution 1" fill style={{ objectFit: solutionPairMedia.fit, objectPosition: solutionPairMedia.firstPosition }} sizes="50vw" />}
-                </div>
-                <div className="case-study-solution-image" style={{ position: 'relative', height: solutionPairMedia.height, backgroundColor: solutionPairMedia.background, border: '1px solid #1a1a1a', overflow: 'hidden' }}>
-                  {solutionImages[1] && <Image src={solutionImages[1]} alt="Solution 2" fill style={{ objectFit: solutionPairMedia.fit, objectPosition: solutionPairMedia.secondPosition }} sizes="50vw" />}
-                </div>
-              </div>
+            ) : (
+              <>
+                {solutionHeroImage && (
+                  <div data-reveal className="case-study-solution-hero w-full mt-6 mb-1" style={{ position: 'relative', height: solutionHeroMedia.height, backgroundColor: solutionHeroMedia.background, border: '1px solid #1a1a1a', overflow: 'hidden' }}>
+                    <Image src={solutionHeroImage} alt="Solution" fill style={{ objectFit: solutionHeroMedia.fit, objectPosition: solutionHeroMedia.position }} sizes="100vw" />
+                  </div>
+                )}
+                {solutionImages && (solutionImages[0] || solutionImages[1]) && (
+                  <div data-reveal className="case-study-image-grid grid grid-cols-2" style={{ gap: solutionPairMedia.gap }}>
+                    <div className="case-study-solution-image" style={{ position: 'relative', height: solutionPairMedia.height, backgroundColor: solutionPairMedia.background, border: '1px solid #1a1a1a', overflow: 'hidden' }}>
+                      {solutionImages[0] && <Image src={solutionImages[0]} alt="Solution 1" fill style={{ objectFit: solutionPairMedia.fit, objectPosition: solutionPairMedia.firstPosition }} sizes="50vw" />}
+                    </div>
+                    <div className="case-study-solution-image" style={{ position: 'relative', height: solutionPairMedia.height, backgroundColor: solutionPairMedia.background, border: '1px solid #1a1a1a', overflow: 'hidden' }}>
+                      {solutionImages[1] && <Image src={solutionImages[1]} alt="Solution 2" fill style={{ objectFit: solutionPairMedia.fit, objectPosition: solutionPairMedia.secondPosition }} sizes="50vw" />}
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </GsapReveal>
         </section>

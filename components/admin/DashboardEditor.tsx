@@ -1,10 +1,14 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { deriveCaseStudyMediaBlocks } from '@/lib/case-study-media'
 import type {
   AudioSettings,
   CardStyleSettings,
   CaseStudyContent,
+  CaseStudyMediaAlign,
+  CaseStudyMediaBlock,
+  CaseStudyMediaBlockSection,
   CaseStudyImagePairSettings,
   CaseStudyMediaSettings,
   CaseStudyMediaSlotSettings,
@@ -139,6 +143,38 @@ function createCaseStudyDraft(section: CaseStudySection, existing: CaseStudyCont
     prev: null,
     next: null,
   } satisfies CaseStudyContent
+}
+
+function createMediaImageDraft() {
+  return {
+    src: '',
+    fit: 'contain',
+    position: 'center center',
+    aspectRatio: '4 / 3',
+    background: '#161616',
+    alt: '',
+  } satisfies CaseStudyMediaBlock['images'][number]
+}
+
+function createMediaBlockDraft(section: CaseStudyMediaBlockSection): CaseStudyMediaBlock {
+  return {
+    id: `${section}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    section,
+    layout: 'single',
+    align: 'center',
+    width: '100%',
+    gap: '2px',
+    images: [createMediaImageDraft()],
+  }
+}
+
+function normalizeMediaBlock(block: CaseStudyMediaBlock): CaseStudyMediaBlock {
+  const imageCount = block.layout === 'pair' ? 2 : 1
+  const images = Array.from({ length: imageCount }, (_, index) => block.images[index] ?? createMediaImageDraft())
+  return {
+    ...block,
+    images,
+  }
 }
 
 function serializeContent(content: SiteContent) {
@@ -1514,6 +1550,29 @@ function CaseStudyEditor({
   onDelete: () => void
 }) {
   const caseStudyUi = caseStudy.uiCopy ?? defaultUiCopy
+  const mediaBlocks = deriveCaseStudyMediaBlocks(caseStudy)
+
+  function updateMediaBlocks(nextBlocks: CaseStudyMediaBlock[]) {
+    onChange((current) => ({ ...current, mediaBlocks: nextBlocks }))
+  }
+
+  function updateMediaBlock(blockId: string, updater: (block: CaseStudyMediaBlock) => CaseStudyMediaBlock) {
+    updateMediaBlocks(mediaBlocks.map((block) => (block.id === blockId ? normalizeMediaBlock(updater(block)) : block)))
+  }
+
+  function addMediaBlock(section: CaseStudyMediaBlockSection) {
+    updateMediaBlocks([...mediaBlocks, createMediaBlockDraft(section)])
+  }
+
+  function removeMediaBlock(blockId: string) {
+    updateMediaBlocks(mediaBlocks.filter((block) => block.id !== blockId))
+  }
+
+  function moveMediaBlock(blockId: string, direction: -1 | 1) {
+    const index = mediaBlocks.findIndex((block) => block.id === blockId)
+    if (index === -1) return
+    updateMediaBlocks(moveItem(mediaBlocks, index, direction))
+  }
 
   return (
     <>
@@ -1593,57 +1652,15 @@ function CaseStudyEditor({
             style={inputStyle()}
           />
         </Field>
-        <Field label="Research Image">
-          <input value={caseStudy.researchImage ?? ''} onChange={(event) => onChange((current) => ({ ...current, researchImage: event.target.value || undefined }))} style={inputStyle()} />
-        </Field>
-        <MediaSlotEditor
-          title="Research Layout"
-          value={caseStudy.mediaSettings?.research}
-          defaultHeight="320px"
-          onChange={(value) => onChange((current) => ({
-            ...current,
-            mediaSettings: { ...current.mediaSettings, research: value } satisfies CaseStudyMediaSettings,
-          }))}
-        />
-        <ImagePairEditor
-          label="Challenge Images"
-          images={caseStudy.challengeImages ?? []}
-          onChange={(images) => onChange((current) => ({ ...current, challengeImages: images.length ? images : undefined }))}
-        />
-        <MediaPairEditor
-          title="Challenge Pair Layout"
-          value={caseStudy.mediaSettings?.challengePair}
-          defaultHeight="267px"
-          onChange={(value) => onChange((current) => ({
-            ...current,
-            mediaSettings: { ...current.mediaSettings, challengePair: value } satisfies CaseStudyMediaSettings,
-          }))}
-        />
-        <Field label="Solution Hero Image">
-          <input value={caseStudy.solutionHeroImage ?? ''} onChange={(event) => onChange((current) => ({ ...current, solutionHeroImage: event.target.value || undefined }))} style={inputStyle()} />
-        </Field>
-        <MediaSlotEditor
-          title="Solution Hero Layout"
-          value={caseStudy.mediaSettings?.solutionHero}
-          defaultHeight="480px"
-          onChange={(value) => onChange((current) => ({
-            ...current,
-            mediaSettings: { ...current.mediaSettings, solutionHero: value } satisfies CaseStudyMediaSettings,
-          }))}
-        />
-        <ImagePairEditor
-          label="Solution Images"
-          images={caseStudy.solutionImages ?? []}
-          onChange={(images) => onChange((current) => ({ ...current, solutionImages: images.length ? images : undefined }))}
-        />
-        <MediaPairEditor
-          title="Solution Pair Layout"
-          value={caseStudy.mediaSettings?.solutionPair}
-          defaultHeight="320px"
-          onChange={(value) => onChange((current) => ({
-            ...current,
-            mediaSettings: { ...current.mediaSettings, solutionPair: value } satisfies CaseStudyMediaSettings,
-          }))}
+        <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.7 }}>
+          Use media blocks for UX screenshots. Set a narrower width plus portrait-style aspect ratios for app screens, or use full-width blocks for wider flows and comparison layouts.
+        </p>
+        <MediaBlockListEditor
+          blocks={mediaBlocks}
+          onAdd={addMediaBlock}
+          onMove={moveMediaBlock}
+          onChange={updateMediaBlock}
+          onRemove={removeMediaBlock}
         />
       </SectionFrame>
 
@@ -1943,6 +1960,204 @@ function MediaPairEditor({
       <Field label={`Background (${title})`}>
         <input value={next.background ?? ''} onChange={(event) => update({ background: event.target.value || undefined })} placeholder="#161616" style={inputStyle()} />
       </Field>
+    </div>
+  )
+}
+
+function MediaBlockListEditor({
+  blocks,
+  onAdd,
+  onMove,
+  onChange,
+  onRemove,
+}: {
+  blocks: CaseStudyMediaBlock[]
+  onAdd: (section: CaseStudyMediaBlockSection) => void
+  onMove: (blockId: string, direction: -1 | 1) => void
+  onChange: (blockId: string, updater: (block: CaseStudyMediaBlock) => CaseStudyMediaBlock) => void
+  onRemove: (blockId: string) => void
+}) {
+  return (
+    <div style={{ display: 'grid', gap: '12px' }}>
+      <div className="flex" style={{ gap: '8px', flexWrap: 'wrap' }}>
+        <button type="button" onClick={() => onAdd('research')} className="font-mono" style={{ background: 'transparent', border: '1px solid #2a2a2a', color: '#FF3120', padding: '8px 12px', cursor: 'pointer', letterSpacing: '0.1em' }}>
+          + ADD RESEARCH BLOCK
+        </button>
+        <button type="button" onClick={() => onAdd('challenge')} className="font-mono" style={{ background: 'transparent', border: '1px solid #2a2a2a', color: '#FF3120', padding: '8px 12px', cursor: 'pointer', letterSpacing: '0.1em' }}>
+          + ADD CHALLENGE BLOCK
+        </button>
+        <button type="button" onClick={() => onAdd('solution')} className="font-mono" style={{ background: 'transparent', border: '1px solid #2a2a2a', color: '#FF3120', padding: '8px 12px', cursor: 'pointer', letterSpacing: '0.1em' }}>
+          + ADD SOLUTION BLOCK
+        </button>
+      </div>
+      {blocks.length === 0 ? (
+        <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#666666', lineHeight: 1.7 }}>
+          No media blocks yet. Add a block to place screenshots exactly where you want them.
+        </p>
+      ) : null}
+      {blocks.map((block, index) => (
+        <MediaBlockEditor
+          key={block.id}
+          block={block}
+          index={index}
+          length={blocks.length}
+          onMove={(direction) => onMove(block.id, direction)}
+          onChange={(updater) => onChange(block.id, updater)}
+          onRemove={() => onRemove(block.id)}
+        />
+      ))}
+    </div>
+  )
+}
+
+function MediaBlockEditor({
+  block,
+  index,
+  length,
+  onMove,
+  onChange,
+  onRemove,
+}: {
+  block: CaseStudyMediaBlock
+  index: number
+  length: number
+  onMove: (direction: -1 | 1) => void
+  onChange: (updater: (block: CaseStudyMediaBlock) => CaseStudyMediaBlock) => void
+  onRemove: () => void
+}) {
+  const images = normalizeMediaBlock(block).images
+
+  return (
+    <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
+      <div className="flex items-center justify-between" style={{ gap: '12px', flexWrap: 'wrap' }}>
+        <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#999999', letterSpacing: '0.1em' }}>
+          {block.section.toUpperCase()} BLOCK
+        </div>
+        <ReorderButtons index={index} length={length} onMove={onMove} />
+      </div>
+      <Field label="Section">
+        <select value={block.section} onChange={(event) => onChange((current) => ({ ...current, section: event.target.value as CaseStudyMediaBlockSection }))} style={inputStyle()}>
+          <option value="research">Research</option>
+          <option value="challenge">Challenge</option>
+          <option value="solution">Solution</option>
+        </select>
+      </Field>
+      <Field label="Layout">
+        <select
+          value={block.layout}
+          onChange={(event) => onChange((current) => normalizeMediaBlock({ ...current, layout: event.target.value as CaseStudyMediaBlock['layout'] }))}
+          style={inputStyle()}
+        >
+          <option value="single">Single</option>
+          <option value="pair">Two-up Pair</option>
+        </select>
+      </Field>
+      <Field label="Align">
+        <select value={block.align ?? 'center'} onChange={(event) => onChange((current) => ({ ...current, align: event.target.value as CaseStudyMediaAlign }))} style={inputStyle()}>
+          <option value="left">Left</option>
+          <option value="center">Center</option>
+          <option value="right">Right</option>
+        </select>
+      </Field>
+      <Field label="Block Width">
+        <input value={block.width ?? ''} onChange={(event) => onChange((current) => ({ ...current, width: event.target.value || undefined }))} placeholder="100%, 78%, 920px, min(100%, 920px)" style={inputStyle()} />
+      </Field>
+      <Field label="Gap">
+        <input value={block.gap ?? ''} onChange={(event) => onChange((current) => ({ ...current, gap: event.target.value || undefined }))} placeholder="2px, 12px" style={inputStyle()} />
+      </Field>
+      {images.map((image, imageIndex) => (
+        <div key={`${block.id}-${imageIndex}`} style={{ display: 'grid', gap: '12px', border: '1px solid #171717', padding: '14px' }}>
+          <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.1em' }}>
+            IMAGE {imageIndex + 1}
+          </div>
+          <Field label="Source">
+            <input
+              value={image.src}
+              onChange={(event) =>
+                onChange((current) => ({
+                  ...current,
+                  images: updateAt(images, imageIndex, { ...image, src: event.target.value }),
+                }))
+              }
+              style={inputStyle()}
+            />
+          </Field>
+          <Field label="Alt">
+            <input
+              value={image.alt ?? ''}
+              onChange={(event) =>
+                onChange((current) => ({
+                  ...current,
+                  images: updateAt(images, imageIndex, { ...image, alt: event.target.value || undefined }),
+                }))
+              }
+              style={inputStyle()}
+            />
+          </Field>
+          <Field label="Fit">
+            <select
+              value={image.fit ?? 'contain'}
+              onChange={(event) =>
+                onChange((current) => ({
+                  ...current,
+                  images: updateAt(images, imageIndex, { ...image, fit: event.target.value as CaseStudyMediaBlock['images'][number]['fit'] }),
+                }))
+              }
+              style={inputStyle()}
+            >
+              <option value="contain">contain</option>
+              <option value="cover">cover</option>
+            </select>
+          </Field>
+          <Field label="Position">
+            <input
+              value={image.position ?? ''}
+              onChange={(event) =>
+                onChange((current) => ({
+                  ...current,
+                  images: updateAt(images, imageIndex, { ...image, position: event.target.value || undefined }),
+                }))
+              }
+              placeholder="center center / 50% 20%"
+              style={inputStyle()}
+            />
+          </Field>
+          <Field label="Aspect Ratio">
+            <input
+              value={image.aspectRatio ?? ''}
+              onChange={(event) =>
+                onChange((current) => ({
+                  ...current,
+                  images: updateAt(images, imageIndex, { ...image, aspectRatio: event.target.value || undefined }),
+                }))
+              }
+              placeholder="3 / 4, 4 / 3, 1 / 1, 16 / 10"
+              style={inputStyle()}
+            />
+          </Field>
+          <Field label="Background">
+            <input
+              value={image.background ?? ''}
+              onChange={(event) =>
+                onChange((current) => ({
+                  ...current,
+                  images: updateAt(images, imageIndex, { ...image, background: event.target.value || undefined }),
+                }))
+              }
+              placeholder="#161616"
+              style={inputStyle()}
+            />
+          </Field>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={onRemove}
+        className="font-mono"
+        style={{ justifySelf: 'start', background: 'transparent', border: '1px solid #2a2a2a', color: '#999999', padding: '8px 12px', cursor: 'pointer', letterSpacing: '0.1em' }}
+      >
+        REMOVE BLOCK
+      </button>
     </div>
   )
 }
