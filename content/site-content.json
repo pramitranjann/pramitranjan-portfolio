@@ -701,7 +701,6 @@
         "title": "HelpOH"
       },
       "heroImage": "/work/loomlearn/cover-hor-processed.png",
-      "researchImage": "/work/loomlearn/research-processed.png",
       "challengeImages": [
         "/work/loomlearn/ideation-1-processed.png",
         "/work/loomlearn/ideation-2-processed.png"
@@ -741,7 +740,7 @@
           "images": [
             {
               "src": "/work/loomlearn/ideation-1-processed.png",
-              "aspectRatio": "4 / 3"
+              "aspectRatio": "3 / 2"
             },
             {
               "src": "/work/loomlearn/ideation-2-processed.png",
