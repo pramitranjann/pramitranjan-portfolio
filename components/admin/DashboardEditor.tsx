@@ -1702,8 +1702,9 @@ function CaseStudyEditor({
 
     onChange((current) => {
       const nextMediaBlocks = mediaBlocks.filter((item) => item.id !== blockId)
+      const hasRemainingSectionBlocks = nextMediaBlocks.some((item) => item.section === block.section)
 
-      if (current.mediaBlocks?.some((item) => item.id === blockId)) {
+      if (hasRemainingSectionBlocks) {
         return {
           ...current,
           mediaBlocks: nextMediaBlocks,
@@ -1727,11 +1728,10 @@ function CaseStudyEditor({
       }
 
       if (block.section === 'solution') {
-        const isSingle = block.layout === 'single'
         return {
           ...current,
-          solutionHeroImage: isSingle ? undefined : current.solutionHeroImage,
-          solutionImages: isSingle ? current.solutionImages : undefined,
+          solutionHeroImage: undefined,
+          solutionImages: undefined,
           mediaBlocks: nextMediaBlocks,
         }
       }

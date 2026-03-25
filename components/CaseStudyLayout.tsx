@@ -480,7 +480,7 @@ export function CaseStudyLayout({
                 <div className="mt-6" style={{ display: 'grid', gap: '14px' }}>
                   {researchBelowBlocks.map(renderMediaBlock)}
                 </div>
-              ) : researchImage ? (
+              ) : !researchBlocks.length && researchImage ? (
                 <div data-reveal className="case-study-research-image w-full mt-6" style={{ position: 'relative', height: researchMedia.height, backgroundColor: researchMedia.background, border: '1px solid #1a1a1a', overflow: 'hidden' }}>
                   <Image src={researchImage} alt="Research" fill style={{ objectFit: researchMedia.fit, objectPosition: researchMedia.position }} sizes="100vw" />
                 </div>
@@ -538,7 +538,7 @@ export function CaseStudyLayout({
                 <div className="mt-6" style={{ display: 'grid', gap: '14px' }}>
                   {challengeBelowBlocks.map(renderMediaBlock)}
                 </div>
-              ) : challengeImages ? (
+              ) : !challengeBlocks.length && challengeImages ? (
                 <div data-reveal className="case-study-image-grid mt-6 grid grid-cols-2" style={{ gap: challengeMedia.gap }}>
                   <div className="case-study-ideation-image" style={{ position: 'relative', height: challengeMedia.height, backgroundColor: challengeMedia.background, border: '1px solid #1a1a1a', overflow: 'hidden' }}>
                     <Image src={challengeImages[0]} alt="Challenge 1" fill style={{ objectFit: challengeMedia.fit, objectPosition: challengeMedia.firstPosition }} sizes="50vw" />
@@ -629,7 +629,7 @@ export function CaseStudyLayout({
               <div className="mt-6" style={{ display: 'grid', gap: '14px' }}>
                 {solutionBelowBlocks.map(renderMediaBlock)}
               </div>
-            ) : (
+            ) : !solutionBlocks.length ? (
               <>
                 {solutionHeroImage && (
                   <div data-reveal className="case-study-solution-hero w-full mt-6 mb-1" style={{ position: 'relative', height: solutionHeroMedia.height, backgroundColor: solutionHeroMedia.background, border: '1px solid #1a1a1a', overflow: 'hidden' }}>
@@ -647,7 +647,7 @@ export function CaseStudyLayout({
                   </div>
                 )}
               </>
-            )}
+            ) : null}
           </GsapReveal>
         </section>
 
