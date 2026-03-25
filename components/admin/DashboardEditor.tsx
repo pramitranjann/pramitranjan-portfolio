@@ -1764,9 +1764,12 @@ function CaseStudyEditor({
       </SectionFrame>
 
       <SectionFrame title={`${caseStudy.title} · Media`}>
-        <Field label="Hero Image">
-          <input value={caseStudy.heroImage ?? ''} onChange={(event) => onChange((current) => ({ ...current, heroImage: event.target.value || undefined }))} style={inputStyle()} />
-        </Field>
+        <SourcePathField
+          label="Hero Image"
+          value={caseStudy.heroImage ?? ''}
+          localWriteEnabled={localWriteEnabled}
+          onChange={(value) => onChange((current) => ({ ...current, heroImage: value || undefined }))}
+        />
         <MediaSlotEditor
           title="Hero Layout"
           value={caseStudy.mediaSettings?.hero}
@@ -2096,6 +2099,73 @@ function MediaPairEditor({
   )
 }
 
+function SourcePathField({
+  label,
+  value,
+  localWriteEnabled,
+  onChange,
+}: {
+  label: string
+  value: string
+  localWriteEnabled: boolean
+  onChange: (value: string) => void
+}) {
+  const [pickerError, setPickerError] = useState<string | null>(null)
+
+  async function handleBrowse() {
+    setPickerError(null)
+
+    const response = await fetch('/api/admin/file-picker', { method: 'POST' })
+    const data = await response.json().catch(() => null)
+
+    if (!response.ok) {
+      setPickerError(data?.error ?? 'Could not open Finder.')
+      return
+    }
+
+    if (data?.cancelled || !data?.src) {
+      return
+    }
+
+    onChange(data.src)
+  }
+
+  return (
+    <Field label={label}>
+      <div style={{ display: 'grid', gap: '8px' }}>
+        <div className="flex" style={{ gap: '8px', alignItems: 'stretch' }}>
+          <input value={value} onChange={(event) => onChange(event.target.value)} style={inputStyle()} />
+          <button
+            type="button"
+            onClick={handleBrowse}
+            disabled={!localWriteEnabled}
+            className="font-mono"
+            style={{
+              background: 'transparent',
+              border: '1px solid #2a2a2a',
+              color: localWriteEnabled ? '#f5f2ed' : '#444444',
+              padding: '12px 14px',
+              cursor: localWriteEnabled ? 'pointer' : 'default',
+              letterSpacing: '0.1em',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            BROWSE
+          </button>
+        </div>
+        <span className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', lineHeight: 1.6 }}>
+          Opens Finder locally and fills a `/...` path from this project’s `public` folder.
+        </span>
+        {pickerError ? (
+          <p className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#FF3120', lineHeight: 1.6, margin: 0 }}>
+            {pickerError}
+          </p>
+        ) : null}
+      </div>
+    </Field>
+  )
+}
+
 function MediaBlockListEditor({
   blocks,
   localWriteEnabled,
@@ -2163,28 +2233,6 @@ function MediaBlockEditor({
   onRemove: () => void
 }) {
   const images = normalizeMediaBlock(block).images
-  const [pickerError, setPickerError] = useState<string | null>(null)
-
-  async function handleBrowse(imageIndex: number) {
-    setPickerError(null)
-
-    const response = await fetch('/api/admin/file-picker', { method: 'POST' })
-    const data = await response.json().catch(() => null)
-
-    if (!response.ok) {
-      setPickerError(data?.error ?? 'Could not open Finder.')
-      return
-    }
-
-    if (data?.cancelled || !data?.src) {
-      return
-    }
-
-    onChange((current) => ({
-      ...current,
-      images: updateAt(images, imageIndex, { ...images[imageIndex], src: data.src }),
-    }))
-  }
 
   return (
     <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
@@ -2237,42 +2285,17 @@ function MediaBlockEditor({
           <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.1em' }}>
             IMAGE {imageIndex + 1}
           </div>
-          <Field label="Source">
-            <div style={{ display: 'grid', gap: '8px' }}>
-              <div className="flex" style={{ gap: '8px', alignItems: 'stretch' }}>
-                <input
-                  value={image.src}
-                  onChange={(event) =>
-                    onChange((current) => ({
-                      ...current,
-                      images: updateAt(images, imageIndex, { ...image, src: event.target.value }),
-                    }))
-                  }
-                  style={inputStyle()}
-                />
-                <button
-                  type="button"
-                  onClick={() => handleBrowse(imageIndex)}
-                  disabled={!localWriteEnabled}
-                  className="font-mono"
-                  style={{
-                    background: 'transparent',
-                    border: '1px solid #2a2a2a',
-                    color: localWriteEnabled ? '#f5f2ed' : '#444444',
-                    padding: '12px 14px',
-                    cursor: localWriteEnabled ? 'pointer' : 'default',
-                    letterSpacing: '0.1em',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  BROWSE
-                </button>
-              </div>
-              <span className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', lineHeight: 1.6 }}>
-                Opens Finder locally and fills a `/...` path from this project’s `public` folder.
-              </span>
-            </div>
-          </Field>
+          <SourcePathField
+            label="Source"
+            value={image.src}
+            localWriteEnabled={localWriteEnabled}
+            onChange={(value) =>
+              onChange((current) => ({
+                ...current,
+                images: updateAt(images, imageIndex, { ...image, src: value }),
+              }))
+            }
+          />
           <Field label="Alt">
             <input
               value={image.alt ?? ''}
@@ -2338,11 +2361,6 @@ function MediaBlockEditor({
           />
         </div>
       ))}
-      {pickerError ? (
-        <p className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#FF3120', lineHeight: 1.6 }}>
-          {pickerError}
-        </p>
-      ) : null}
       <button
         type="button"
         onClick={onRemove}
