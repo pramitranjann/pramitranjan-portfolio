@@ -267,8 +267,16 @@ export function CaseStudyLayout({
       const sections = Array.from(document.querySelectorAll('section[id^="sec-"]'))
         .filter(el => el.id !== 'sec-hero')
       if (sections.length === 0) return null
-      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 120) {
-        return sections[sections.length - 1] ?? null
+      const lastSection = sections[sections.length - 1] ?? null
+      const documentBottom = window.innerHeight + window.scrollY
+      const remainingScroll = document.documentElement.scrollHeight - documentBottom
+
+      if (
+        lastSection &&
+        remainingScroll <= 24 &&
+        lastSection.getBoundingClientRect().top <= window.innerHeight * 0.6
+      ) {
+        return lastSection
       }
       const threshold = 110
       let active = sections[0] ?? null
