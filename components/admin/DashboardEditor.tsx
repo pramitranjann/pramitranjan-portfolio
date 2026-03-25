@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { deriveCaseStudyMediaBlocks } from '@/lib/case-study-media'
 import type {
   AudioSettings,
@@ -158,8 +158,21 @@ function PresetSelectField({
   placeholder: string
   onChange: (value: string | undefined) => void
 }) {
-  const isCustom = !!value && !options.some((option) => option.value === value)
-  const selectValue = isCustom ? '__custom__' : (value ?? '')
+  const hasPresetMatch = !!value && options.some((option) => option.value === value)
+  const [customMode, setCustomMode] = useState(Boolean(value) && !hasPresetMatch)
+
+  useEffect(() => {
+    if (!value) {
+      setCustomMode(false)
+      return
+    }
+
+    if (!options.some((option) => option.value === value)) {
+      setCustomMode(true)
+    }
+  }, [options, value])
+
+  const selectValue = customMode ? '__custom__' : (value ?? '')
 
   return (
     <Field label={label}>
@@ -169,9 +182,10 @@ function PresetSelectField({
           onChange={(event) => {
             const nextValue = event.target.value
             if (nextValue === '__custom__') {
-              onChange(value)
+              setCustomMode(true)
               return
             }
+            setCustomMode(false)
             onChange(nextValue || undefined)
           }}
           style={inputStyle()}
@@ -183,9 +197,9 @@ function PresetSelectField({
           ))}
           <option value="__custom__">Custom</option>
         </select>
-        {isCustom ? (
+        {customMode ? (
           <input
-            value={value}
+            value={value ?? ''}
             onChange={(event) => onChange(event.target.value || undefined)}
             placeholder={placeholder}
             style={inputStyle()}
