@@ -1107,7 +1107,7 @@
           "images": [
             {
               "src": "/creative/mixed-media/south-china-sea/research-processed.png",
-              "aspectRatio": "16 / 10",
+              "aspectRatio": "3 / 2",
               "background": "#161616"
             }
           ]
@@ -1134,33 +1134,47 @@
           "section": "solution",
           "layout": "single",
           "align": "center",
-          "width": "100%",
           "images": [
             {
               "src": "/creative/mixed-media/south-china-sea/solution-hero-processed.png",
-              "aspectRatio": "16 / 10"
+              "aspectRatio": "4 / 5"
             }
           ],
           "placement": "side-right"
         },
         {
-          "id": "south-china-sea-solution-2",
-          "section": "solution",
+          "id": "process-1774473786169-k7n9r0",
+          "section": "process",
           "layout": "pair",
+          "placement": "below",
           "align": "center",
           "width": "100%",
+          "gap": "2px",
           "images": [
             {
-              "src": "/creative/mixed-media/south-china-sea/solution-1-processed.png",
-              "aspectRatio": "4 / 3"
+              "src": "/creative/mixed-media/south-china-sea/solution-2-processed.png",
+              "fit": "contain",
+              "position": "center center",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
             },
             {
-              "src": "/creative/mixed-media/south-china-sea/solution-2-processed.png",
-              "aspectRatio": "4 / 3"
+              "src": "/creative/mixed-media/south-china-sea/solution-1-processed.png",
+              "fit": "contain",
+              "position": "center center",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
             }
           ]
         }
-      ]
+      ],
+      "mediaSettings": {
+        "hero": {
+          "fit": "cover"
+        }
+      }
     },
     {
       "slug": "oracle",

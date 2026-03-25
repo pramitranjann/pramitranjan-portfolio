@@ -2234,6 +2234,9 @@ function MediaBlockListEditor({
         <button type="button" onClick={() => onAdd('challenge')} className="font-mono" style={{ background: 'transparent', border: '1px solid #2a2a2a', color: '#FF3120', padding: '8px 12px', cursor: 'pointer', letterSpacing: '0.1em' }}>
           + ADD CHALLENGE BLOCK
         </button>
+        <button type="button" onClick={() => onAdd('process')} className="font-mono" style={{ background: 'transparent', border: '1px solid #2a2a2a', color: '#FF3120', padding: '8px 12px', cursor: 'pointer', letterSpacing: '0.1em' }}>
+          + ADD PROCESS BLOCK
+        </button>
         <button type="button" onClick={() => onAdd('solution')} className="font-mono" style={{ background: 'transparent', border: '1px solid #2a2a2a', color: '#FF3120', padding: '8px 12px', cursor: 'pointer', letterSpacing: '0.1em' }}>
           + ADD SOLUTION BLOCK
         </button>
@@ -2290,6 +2293,7 @@ function MediaBlockEditor({
         <select value={block.section} onChange={(event) => onChange((current) => ({ ...current, section: event.target.value as CaseStudyMediaBlockSection }))} style={inputStyle()}>
           <option value="research">Research</option>
           <option value="challenge">Challenge</option>
+          <option value="process">Process</option>
           <option value="solution">Solution</option>
         </select>
       </Field>

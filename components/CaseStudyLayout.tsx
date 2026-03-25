@@ -259,6 +259,9 @@ export function CaseStudyLayout({
   const researchBelowBlocks = researchBlocks.filter((block) => block.placement !== 'side-right')
   const challengeInlineBlocks = challengeBlocks.filter((block) => block.placement === 'side-right')
   const challengeBelowBlocks = challengeBlocks.filter((block) => block.placement !== 'side-right')
+  const processBlocks = caseStudyMediaBlocks.filter((block) => block.section === 'process')
+  const processInlineBlocks = processBlocks.filter((block) => block.placement === 'side-right')
+  const processBelowBlocks = processBlocks.filter((block) => block.placement !== 'side-right')
   const solutionInlineBlocks = solutionBlocks.filter((block) => block.placement === 'side-right')
   const solutionBelowBlocks = solutionBlocks.filter((block) => block.placement !== 'side-right')
 
@@ -555,7 +558,11 @@ export function CaseStudyLayout({
             <GsapReveal>
               <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
                 <span className="font-mono" style={labelStyle}>{copy.processLabel}</span>
-                <div>
+                <div
+                  className={processInlineBlocks.length ? 'case-study-inline-layout' : undefined}
+                  style={processInlineBlocks.length ? { display: 'grid', gridTemplateColumns: 'minmax(0, 640px) minmax(320px, 1fr)', gap: '32px', alignItems: 'center' } : undefined}
+                >
+                  <div style={processInlineBlocks.length ? { maxWidth: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'center' } : undefined}>
                   {processHeadline && (
                     <p className="font-mono" style={{ ...headlineStyle, maxWidth: '640px' }}>{processHeadline}</p>
                   )}
@@ -569,8 +576,23 @@ export function CaseStudyLayout({
                       {usabilityTesting}
                     </p>
                   )}
+                  </div>
+                  {processInlineBlocks.length ? (
+                    <div className="case-study-inline-media" style={{ display: 'grid', gap: '14px' }}>
+                      {processInlineBlocks.map((block) => (
+                        <div key={block.id} data-reveal style={{ display: 'flex', justifyContent: blockJustify(block.align) }}>
+                          {renderMediaBlockContent(block)}
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
                 </div>
               </div>
+              {processBelowBlocks.length ? (
+                <div className="mt-6" style={{ display: 'grid', gap: '14px' }}>
+                  {processBelowBlocks.map(renderMediaBlock)}
+                </div>
+              ) : null}
             </GsapReveal>
           </section>
         )}

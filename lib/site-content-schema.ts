@@ -196,7 +196,7 @@ export interface ProjectLink {
 }
 
 export type CaseStudySection = 'work' | 'mixed-media' | 'branding'
-export type CaseStudyMediaBlockSection = 'research' | 'challenge' | 'solution'
+export type CaseStudyMediaBlockSection = 'research' | 'challenge' | 'process' | 'solution'
 export type CaseStudyMediaBlockLayout = 'single' | 'pair'
 export type CaseStudyMediaAlign = 'left' | 'center' | 'right'
 export type CaseStudyMediaPlacement = 'below' | 'side-right'
@@ -575,7 +575,7 @@ function isCaseStudyMediaSettings(value: unknown): value is CaseStudyMediaSettin
 }
 
 function isCaseStudyMediaBlockSection(value: unknown): value is CaseStudyMediaBlockSection {
-  return value === 'research' || value === 'challenge' || value === 'solution'
+  return value === 'research' || value === 'challenge' || value === 'process' || value === 'solution'
 }
 
 function isCaseStudyMediaAlign(value: unknown): value is CaseStudyMediaAlign {
