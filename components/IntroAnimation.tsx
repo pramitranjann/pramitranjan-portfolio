@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useMotionSettings } from '@/components/MotionSettingsProvider'
 import { playIntroKey, playIntroLift } from '@/lib/sounds'
 
@@ -8,19 +8,23 @@ import { playIntroKey, playIntroLift } from '@/lib/sounds'
 let _played = false
 
 export function IntroAnimation() {
-  const [done, setDone] = useState(() => _played)
-
+  const [done, setDone] = useState(false)
   const [text, setText] = useState('')
   const [cursorHidden, setCursorHidden] = useState(false)
   const [lifting, setLifting] = useState(false)
+  const [reducedMotion, setReducedMotion] = useState(false)
   const motion = useMotionSettings()
 
-  const reducedMotion = useMemo(
-    () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-    []
-  )
+  useEffect(() => {
+    setReducedMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+  }, [])
 
   useEffect(() => {
+    if (_played) {
+      setDone(true)
+      return
+    }
+
     if (done) return
 
     const ids: ReturnType<typeof setTimeout>[] = []

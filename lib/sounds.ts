@@ -8,7 +8,7 @@
 
 let _ctx: AudioContext | null = null
 let _unlocking: Promise<void> | null = null
-const IMMEDIATE_SOUND_WINDOW_MS = 120
+const IMMEDIATE_SOUND_WINDOW_MS = 220
 
 function getCtx(): AudioContext | null {
   if (typeof window === 'undefined') return null
@@ -52,23 +52,23 @@ async function unlockCtx() {
 // Pre-unlock on first input so route/audio clicks keep working on Safari/iOS.
 if (typeof window !== 'undefined') {
   const handler = () => {
+    const ctx = getCtx()
+    if (ctx?.state === 'running') return
+
     if (!_unlocking) {
       _unlocking = unlockCtx().finally(() => {
-        const ctx = getCtx()
-        if (!ctx || ctx.state === 'running') {
-          document.removeEventListener('touchstart', handler)
-          document.removeEventListener('pointerdown', handler)
-          document.removeEventListener('click', handler)
-          document.removeEventListener('keydown', handler)
-        }
         _unlocking = null
       })
     }
   }
-  document.addEventListener('touchstart', handler, { passive: true })
-  document.addEventListener('pointerdown', handler, { passive: true })
-  document.addEventListener('click', handler, { passive: true })
-  document.addEventListener('keydown', handler, { passive: true })
+  document.addEventListener('touchstart', handler, { passive: true, capture: true })
+  document.addEventListener('pointerdown', handler, { passive: true, capture: true })
+  document.addEventListener('click', handler, { passive: true, capture: true })
+  document.addEventListener('keydown', handler, { passive: true, capture: true })
+  window.addEventListener('pageshow', handler)
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') handler()
+  })
 }
 
 function tone(
