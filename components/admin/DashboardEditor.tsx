@@ -5,6 +5,9 @@ import type {
   AudioSettings,
   CardStyleSettings,
   CaseStudyContent,
+  CaseStudyImagePairSettings,
+  CaseStudyMediaSettings,
+  CaseStudyMediaSlotSettings,
   CaseStudySection,
   EntryItem,
   GalleryStyleSettings,
@@ -1574,6 +1577,15 @@ function CaseStudyEditor({
         <Field label="Hero Image">
           <input value={caseStudy.heroImage ?? ''} onChange={(event) => onChange((current) => ({ ...current, heroImage: event.target.value || undefined }))} style={inputStyle()} />
         </Field>
+        <MediaSlotEditor
+          title="Hero Layout"
+          value={caseStudy.mediaSettings?.hero}
+          defaultHeight="280px"
+          onChange={(value) => onChange((current) => ({
+            ...current,
+            mediaSettings: { ...current.mediaSettings, hero: value } satisfies CaseStudyMediaSettings,
+          }))}
+        />
         <Field label="Card Image Position (for listing cards)">
           <input
             value={caseStudy.cardImagePosition ?? ''}
@@ -1584,18 +1596,54 @@ function CaseStudyEditor({
         <Field label="Research Image">
           <input value={caseStudy.researchImage ?? ''} onChange={(event) => onChange((current) => ({ ...current, researchImage: event.target.value || undefined }))} style={inputStyle()} />
         </Field>
+        <MediaSlotEditor
+          title="Research Layout"
+          value={caseStudy.mediaSettings?.research}
+          defaultHeight="320px"
+          onChange={(value) => onChange((current) => ({
+            ...current,
+            mediaSettings: { ...current.mediaSettings, research: value } satisfies CaseStudyMediaSettings,
+          }))}
+        />
         <ImagePairEditor
           label="Challenge Images"
           images={caseStudy.challengeImages ?? []}
           onChange={(images) => onChange((current) => ({ ...current, challengeImages: images.length ? images : undefined }))}
         />
+        <MediaPairEditor
+          title="Challenge Pair Layout"
+          value={caseStudy.mediaSettings?.challengePair}
+          defaultHeight="267px"
+          onChange={(value) => onChange((current) => ({
+            ...current,
+            mediaSettings: { ...current.mediaSettings, challengePair: value } satisfies CaseStudyMediaSettings,
+          }))}
+        />
         <Field label="Solution Hero Image">
           <input value={caseStudy.solutionHeroImage ?? ''} onChange={(event) => onChange((current) => ({ ...current, solutionHeroImage: event.target.value || undefined }))} style={inputStyle()} />
         </Field>
+        <MediaSlotEditor
+          title="Solution Hero Layout"
+          value={caseStudy.mediaSettings?.solutionHero}
+          defaultHeight="480px"
+          onChange={(value) => onChange((current) => ({
+            ...current,
+            mediaSettings: { ...current.mediaSettings, solutionHero: value } satisfies CaseStudyMediaSettings,
+          }))}
+        />
         <ImagePairEditor
           label="Solution Images"
           images={caseStudy.solutionImages ?? []}
           onChange={(images) => onChange((current) => ({ ...current, solutionImages: images.length ? images : undefined }))}
+        />
+        <MediaPairEditor
+          title="Solution Pair Layout"
+          value={caseStudy.mediaSettings?.solutionPair}
+          defaultHeight="320px"
+          onChange={(value) => onChange((current) => ({
+            ...current,
+            mediaSettings: { ...current.mediaSettings, solutionPair: value } satisfies CaseStudyMediaSettings,
+          }))}
         />
       </SectionFrame>
 
@@ -1802,6 +1850,98 @@ function ImagePairEditor({
       </Field>
       <Field label={`${label} 2`}>
         <input value={second} onChange={(event) => onChange(toPair(first, event.target.value))} style={inputStyle()} />
+      </Field>
+    </div>
+  )
+}
+
+function MediaSlotEditor({
+  title,
+  value,
+  defaultHeight,
+  onChange,
+}: {
+  title: string
+  value: CaseStudyMediaSlotSettings | undefined
+  defaultHeight: string
+  onChange: (value: CaseStudyMediaSlotSettings | undefined) => void
+}) {
+  const next = value ?? {}
+
+  function update(patch: Partial<CaseStudyMediaSlotSettings>) {
+    const merged = { ...next, ...patch }
+    const hasValues = Object.values(merged).some(Boolean)
+    onChange(hasValues ? merged : undefined)
+  }
+
+  return (
+    <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
+      <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.1em' }}>
+        {title.toUpperCase()}
+      </div>
+      <Field label={`Fit (${title})`}>
+        <select value={next.fit ?? 'contain'} onChange={(event) => update({ fit: event.target.value as CaseStudyMediaSlotSettings['fit'] })} style={inputStyle()}>
+          <option value="contain">contain</option>
+          <option value="cover">cover</option>
+        </select>
+      </Field>
+      <Field label={`Position (${title})`}>
+        <input value={next.position ?? ''} onChange={(event) => update({ position: event.target.value || undefined })} placeholder="center center / 50% 20%" style={inputStyle()} />
+      </Field>
+      <Field label={`Height (${title})`}>
+        <input value={next.height ?? ''} onChange={(event) => update({ height: event.target.value || undefined })} placeholder={defaultHeight} style={inputStyle()} />
+      </Field>
+      <Field label={`Background (${title})`}>
+        <input value={next.background ?? ''} onChange={(event) => update({ background: event.target.value || undefined })} placeholder="#161616" style={inputStyle()} />
+      </Field>
+    </div>
+  )
+}
+
+function MediaPairEditor({
+  title,
+  value,
+  defaultHeight,
+  onChange,
+}: {
+  title: string
+  value: CaseStudyImagePairSettings | undefined
+  defaultHeight: string
+  onChange: (value: CaseStudyImagePairSettings | undefined) => void
+}) {
+  const next = value ?? {}
+
+  function update(patch: Partial<CaseStudyImagePairSettings>) {
+    const merged = { ...next, ...patch }
+    const hasValues = Object.values(merged).some(Boolean)
+    onChange(hasValues ? merged : undefined)
+  }
+
+  return (
+    <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
+      <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.1em' }}>
+        {title.toUpperCase()}
+      </div>
+      <Field label={`Fit (${title})`}>
+        <select value={next.fit ?? 'contain'} onChange={(event) => update({ fit: event.target.value as CaseStudyImagePairSettings['fit'] })} style={inputStyle()}>
+          <option value="contain">contain</option>
+          <option value="cover">cover</option>
+        </select>
+      </Field>
+      <Field label={`${title} Image 1 Position`}>
+        <input value={next.firstPosition ?? ''} onChange={(event) => update({ firstPosition: event.target.value || undefined })} placeholder="center center / 50% 20%" style={inputStyle()} />
+      </Field>
+      <Field label={`${title} Image 2 Position`}>
+        <input value={next.secondPosition ?? ''} onChange={(event) => update({ secondPosition: event.target.value || undefined })} placeholder="center center / 50% 20%" style={inputStyle()} />
+      </Field>
+      <Field label={`Height (${title})`}>
+        <input value={next.height ?? ''} onChange={(event) => update({ height: event.target.value || undefined })} placeholder={defaultHeight} style={inputStyle()} />
+      </Field>
+      <Field label={`Gap (${title})`}>
+        <input value={next.gap ?? ''} onChange={(event) => update({ gap: event.target.value || undefined })} placeholder="2px" style={inputStyle()} />
+      </Field>
+      <Field label={`Background (${title})`}>
+        <input value={next.background ?? ''} onChange={(event) => update({ background: event.target.value || undefined })} placeholder="#161616" style={inputStyle()} />
       </Field>
     </div>
   )

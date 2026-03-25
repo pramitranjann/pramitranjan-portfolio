@@ -197,6 +197,30 @@ export interface ProjectLink {
 
 export type CaseStudySection = 'work' | 'mixed-media' | 'branding'
 
+export interface CaseStudyMediaSlotSettings {
+  height?: string
+  fit?: 'contain' | 'cover'
+  position?: string
+  background?: string
+}
+
+export interface CaseStudyImagePairSettings {
+  height?: string
+  gap?: string
+  fit?: 'contain' | 'cover'
+  firstPosition?: string
+  secondPosition?: string
+  background?: string
+}
+
+export interface CaseStudyMediaSettings {
+  hero?: CaseStudyMediaSlotSettings
+  research?: CaseStudyMediaSlotSettings
+  challengePair?: CaseStudyImagePairSettings
+  solutionHero?: CaseStudyMediaSlotSettings
+  solutionPair?: CaseStudyImagePairSettings
+}
+
 export interface CaseStudyContent {
   slug: string
   section: CaseStudySection
@@ -230,6 +254,7 @@ export interface CaseStudyContent {
   challengeImages?: string[]
   solutionHeroImage?: string
   solutionImages?: string[]
+  mediaSettings?: CaseStudyMediaSettings
   uiCopy?: CaseStudyUiCopy
 }
 
@@ -488,6 +513,42 @@ function isCaseStudyUiCopy(value: unknown): value is CaseStudyUiCopy {
   )
 }
 
+function isCaseStudyMediaSlotSettings(value: unknown): value is CaseStudyMediaSlotSettings {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return (
+    isOptionalString(item.height) &&
+    (item.fit === undefined || item.fit === 'contain' || item.fit === 'cover') &&
+    isOptionalString(item.position) &&
+    isOptionalString(item.background)
+  )
+}
+
+function isCaseStudyImagePairSettings(value: unknown): value is CaseStudyImagePairSettings {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return (
+    isOptionalString(item.height) &&
+    isOptionalString(item.gap) &&
+    (item.fit === undefined || item.fit === 'contain' || item.fit === 'cover') &&
+    isOptionalString(item.firstPosition) &&
+    isOptionalString(item.secondPosition) &&
+    isOptionalString(item.background)
+  )
+}
+
+function isCaseStudyMediaSettings(value: unknown): value is CaseStudyMediaSettings {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return (
+    (item.hero === undefined || isCaseStudyMediaSlotSettings(item.hero)) &&
+    (item.research === undefined || isCaseStudyMediaSlotSettings(item.research)) &&
+    (item.challengePair === undefined || isCaseStudyImagePairSettings(item.challengePair)) &&
+    (item.solutionHero === undefined || isCaseStudyMediaSlotSettings(item.solutionHero)) &&
+    (item.solutionPair === undefined || isCaseStudyImagePairSettings(item.solutionPair))
+  )
+}
+
 function isMotionSettings(value: unknown): value is MotionSettings {
   if (!value || typeof value !== 'object') return false
   const item = value as Record<string, unknown>
@@ -573,6 +634,7 @@ function isCaseStudyContent(value: unknown): value is CaseStudyContent {
     isOptionalStringArray(item.challengeImages) &&
     isOptionalString(item.solutionHeroImage) &&
     isOptionalStringArray(item.solutionImages) &&
+    (item.mediaSettings === undefined || isCaseStudyMediaSettings(item.mediaSettings)) &&
     (item.uiCopy === undefined || isCaseStudyUiCopy(item.uiCopy))
   )
 }
