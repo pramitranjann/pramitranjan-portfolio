@@ -856,7 +856,7 @@ git push`
                 <SidebarCaseStudyItem
                   key={item.slug}
                   active={activePage === `case-study:${item.slug}`}
-                  label={item.title}
+                  label={item.hidden ? `${item.title} [HIDDEN]` : item.title}
                   onClick={() => setActivePage(`case-study:${item.slug}` as PageKey)}
                   index={index}
                   length={groupedCaseStudies.work.length}
@@ -871,7 +871,7 @@ git push`
                 <SidebarCaseStudyItem
                   key={item.slug}
                   active={activePage === `case-study:${item.slug}`}
-                  label={item.title}
+                  label={item.hidden ? `${item.title} [HIDDEN]` : item.title}
                   onClick={() => setActivePage(`case-study:${item.slug}` as PageKey)}
                   index={index}
                   length={groupedCaseStudies.mixedMedia.length}
@@ -886,7 +886,7 @@ git push`
                 <SidebarCaseStudyItem
                   key={item.slug}
                   active={activePage === `case-study:${item.slug}`}
-                  label={item.title}
+                  label={item.hidden ? `${item.title} [HIDDEN]` : item.title}
                   onClick={() => setActivePage(`case-study:${item.slug}` as PageKey)}
                   index={index}
                   length={groupedCaseStudies.branding.length}
@@ -1875,6 +1875,17 @@ function CaseStudyEditor({
         >
           REMOVE CASE STUDY
         </button>
+        <label className="font-mono" style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', color: '#d2cec8', letterSpacing: '0.12em' }}>
+          <input
+            type="checkbox"
+            checked={Boolean(caseStudy.hidden)}
+            onChange={(event) => onChange((current) => ({ ...current, hidden: event.target.checked || undefined }))}
+          />
+          Hide From Public Site
+        </label>
+        <p className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#777777', lineHeight: 1.6, margin: 0 }}>
+          Hidden case studies stay visible locally in the dashboard and on localhost, but won’t show on the public site.
+        </p>
         <Field label="Section">
           <select
             value={caseStudy.section}

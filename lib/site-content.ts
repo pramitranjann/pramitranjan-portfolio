@@ -82,7 +82,12 @@ export async function getCaseStudyContent(slug: string) {
     notFound()
   }
 
-  return caseStudy
+  const visibleSlugs = new Set(content.caseStudies.map((item) => item.slug))
+  return {
+    ...caseStudy,
+    prev: caseStudy.prev && visibleSlugs.has(caseStudy.prev.slug) ? caseStudy.prev : null,
+    next: caseStudy.next && visibleSlugs.has(caseStudy.next.slug) ? caseStudy.next : null,
+  }
 }
 
 export async function getCaseStudiesBySection(section: CaseStudyContent['section']) {
