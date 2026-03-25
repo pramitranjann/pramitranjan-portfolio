@@ -1064,11 +1064,11 @@
         "Installation",
         "Research"
       ],
-      "prev": {
+      "prev": null,
+      "next": {
         "slug": "faces-of-power",
         "title": "Faces of Power"
       },
-      "next": null,
       "backHref": "/creative/mixed-media",
       "backLabel": "MIXED MEDIA",
       "heroImage": "/creative/mixed-media/south-china-sea/hero-processed.png",
@@ -1096,7 +1096,71 @@
       "solutionHeadline": "A 7ft × 3ft board that makes viewers discover connections rather than be told them.",
       "solution": "A 7ft × 3ft detective board combining original photography, cyanotypes, photograms, coffee-aged map prints, and handwritten notes — all connected by red string.",
       "outcomesHeadline": "The detective board was the right call. The piece lived very much in the visual.",
-      "outcomes": "The detective board format let viewers discover connections rather than be told them. I'd invest more in the sound or ambient dimension if revisiting — the piece lived very much in the visual; there's a version that also hits the body."
+      "outcomes": "The detective board format let viewers discover connections rather than be told them. I'd invest more in the sound or ambient dimension if revisiting — the piece lived very much in the visual; there's a version that also hits the body.",
+      "mediaBlocks": [
+        {
+          "id": "south-china-sea-research-1",
+          "section": "research",
+          "layout": "single",
+          "align": "center",
+          "width": "100%",
+          "images": [
+            {
+              "src": "/creative/mixed-media/south-china-sea/research-processed.png",
+              "aspectRatio": "16 / 10",
+              "background": "#161616"
+            }
+          ]
+        },
+        {
+          "id": "south-china-sea-challenge-1",
+          "section": "challenge",
+          "layout": "pair",
+          "align": "center",
+          "width": "100%",
+          "images": [
+            {
+              "src": "/creative/mixed-media/south-china-sea/ideation-1-processed.png",
+              "aspectRatio": "4 / 3"
+            },
+            {
+              "src": "/creative/mixed-media/south-china-sea/ideation-2-processed.png",
+              "aspectRatio": "4 / 3"
+            }
+          ]
+        },
+        {
+          "id": "south-china-sea-solution-1",
+          "section": "solution",
+          "layout": "single",
+          "align": "center",
+          "width": "100%",
+          "images": [
+            {
+              "src": "/creative/mixed-media/south-china-sea/solution-hero-processed.png",
+              "aspectRatio": "16 / 10"
+            }
+          ],
+          "placement": "side-right"
+        },
+        {
+          "id": "south-china-sea-solution-2",
+          "section": "solution",
+          "layout": "pair",
+          "align": "center",
+          "width": "100%",
+          "images": [
+            {
+              "src": "/creative/mixed-media/south-china-sea/solution-1-processed.png",
+              "aspectRatio": "4 / 3"
+            },
+            {
+              "src": "/creative/mixed-media/south-china-sea/solution-2-processed.png",
+              "aspectRatio": "4 / 3"
+            }
+          ]
+        }
+      ]
     },
     {
       "slug": "oracle",
