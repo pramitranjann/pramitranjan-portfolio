@@ -797,6 +797,7 @@ git push`
             <CaseStudyEditor
               caseStudy={activeCaseStudy}
               defaultUiCopy={content.copy.caseStudy}
+              localWriteEnabled={localWriteEnabled}
               onChange={(updater) => updateCaseStudy(activeCaseStudy.slug, updater)}
               onDelete={() => removeCaseStudy(activeCaseStudy.slug)}
             />
@@ -1655,11 +1656,13 @@ function MotionEditor({
 function CaseStudyEditor({
   caseStudy,
   defaultUiCopy,
+  localWriteEnabled,
   onChange,
   onDelete,
 }: {
   caseStudy: CaseStudyContent
   defaultUiCopy: SiteContent['copy']['caseStudy']
+  localWriteEnabled: boolean
   onChange: (updater: (item: CaseStudyContent) => CaseStudyContent) => void
   onDelete: () => void
 }) {
@@ -1771,6 +1774,7 @@ function CaseStudyEditor({
         </p>
         <MediaBlockListEditor
           blocks={mediaBlocks}
+          localWriteEnabled={localWriteEnabled}
           onAdd={addMediaBlock}
           onMove={moveMediaBlock}
           onChange={updateMediaBlock}
@@ -2080,12 +2084,14 @@ function MediaPairEditor({
 
 function MediaBlockListEditor({
   blocks,
+  localWriteEnabled,
   onAdd,
   onMove,
   onChange,
   onRemove,
 }: {
   blocks: CaseStudyMediaBlock[]
+  localWriteEnabled: boolean
   onAdd: (section: CaseStudyMediaBlockSection) => void
   onMove: (blockId: string, direction: -1 | 1) => void
   onChange: (blockId: string, updater: (block: CaseStudyMediaBlock) => CaseStudyMediaBlock) => void
@@ -2113,6 +2119,7 @@ function MediaBlockListEditor({
         <MediaBlockEditor
           key={block.id}
           block={block}
+          localWriteEnabled={localWriteEnabled}
           index={index}
           length={blocks.length}
           onMove={(direction) => onMove(block.id, direction)}
@@ -2126,6 +2133,7 @@ function MediaBlockListEditor({
 
 function MediaBlockEditor({
   block,
+  localWriteEnabled,
   index,
   length,
   onMove,
@@ -2133,6 +2141,7 @@ function MediaBlockEditor({
   onRemove,
 }: {
   block: CaseStudyMediaBlock
+  localWriteEnabled: boolean
   index: number
   length: number
   onMove: (direction: -1 | 1) => void
@@ -2140,6 +2149,28 @@ function MediaBlockEditor({
   onRemove: () => void
 }) {
   const images = normalizeMediaBlock(block).images
+  const [pickerError, setPickerError] = useState<string | null>(null)
+
+  async function handleBrowse(imageIndex: number) {
+    setPickerError(null)
+
+    const response = await fetch('/api/admin/file-picker', { method: 'POST' })
+    const data = await response.json().catch(() => null)
+
+    if (!response.ok) {
+      setPickerError(data?.error ?? 'Could not open Finder.')
+      return
+    }
+
+    if (data?.cancelled || !data?.src) {
+      return
+    }
+
+    onChange((current) => ({
+      ...current,
+      images: updateAt(images, imageIndex, { ...images[imageIndex], src: data.src }),
+    }))
+  }
 
   return (
     <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
@@ -2193,16 +2224,40 @@ function MediaBlockEditor({
             IMAGE {imageIndex + 1}
           </div>
           <Field label="Source">
-            <input
-              value={image.src}
-              onChange={(event) =>
-                onChange((current) => ({
-                  ...current,
-                  images: updateAt(images, imageIndex, { ...image, src: event.target.value }),
-                }))
-              }
-              style={inputStyle()}
-            />
+            <div style={{ display: 'grid', gap: '8px' }}>
+              <div className="flex" style={{ gap: '8px', alignItems: 'stretch' }}>
+                <input
+                  value={image.src}
+                  onChange={(event) =>
+                    onChange((current) => ({
+                      ...current,
+                      images: updateAt(images, imageIndex, { ...image, src: event.target.value }),
+                    }))
+                  }
+                  style={inputStyle()}
+                />
+                <button
+                  type="button"
+                  onClick={() => handleBrowse(imageIndex)}
+                  disabled={!localWriteEnabled}
+                  className="font-mono"
+                  style={{
+                    background: 'transparent',
+                    border: '1px solid #2a2a2a',
+                    color: localWriteEnabled ? '#f5f2ed' : '#444444',
+                    padding: '12px 14px',
+                    cursor: localWriteEnabled ? 'pointer' : 'default',
+                    letterSpacing: '0.1em',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  BROWSE
+                </button>
+              </div>
+              <span className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', lineHeight: 1.6 }}>
+                Opens Finder locally and fills a `/...` path from this project’s `public` folder.
+              </span>
+            </div>
           </Field>
           <Field label="Alt">
             <input
@@ -2269,6 +2324,11 @@ function MediaBlockEditor({
           />
         </div>
       ))}
+      {pickerError ? (
+        <p className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#FF3120', lineHeight: 1.6 }}>
+          {pickerError}
+        </p>
+      ) : null}
       <button
         type="button"
         onClick={onRemove}
