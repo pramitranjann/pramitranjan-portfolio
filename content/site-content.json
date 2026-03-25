@@ -1095,7 +1095,9 @@
             }
           ],
           "placement": "side-right",
-          "width": "72%"
+          "width": "72%",
+          "inlineTextWidth": "480px",
+          "inlineMediaMinWidth": "560px"
         },
         {
           "id": "process-1774473786169-k7n9r0",
