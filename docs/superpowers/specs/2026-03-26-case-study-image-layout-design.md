@@ -1,7 +1,7 @@
 # Case Study Image Layout — Design Spec
 
 **Date:** 2026-03-26
-**Status:** Approved (v3 — all spec review issues resolved)
+**Status:** Approved (v4 — extended to cover mixed-media and branding case studies)
 
 ---
 
@@ -500,9 +500,235 @@ Up/down arrow buttons stay — they remain as the accessible fallback and are no
 
 | File | Change |
 |---|---|
-| `content/site-content.json` | Update/add `mediaBlocks` for Franklin's, LoomLearn, HelpOH, Atom OS, Albers |
+| `content/site-content.json` | Update/add `mediaBlocks` for Franklin's, LoomLearn, HelpOH, Atom OS, Albers, South China Sea, Faces of Power, Soho, Oracle |
 | `lib/case-study-templates.ts` | New file — 5 templates + `applyTemplate` |
 | `components/admin/DashboardEditor.tsx` | `moveItemTo` utility; `moveMediaBlock` signature; `replaceAllMediaBlocks`; `pendingNewSection`/`pendingTemplateId` state; `addCaseStudyWithTemplate`; `MediaBlockListEditor`/`MediaBlockEditor` prop type changes; drag-and-drop; "Apply template…" inline panel |
+
+---
+
+## Part 1 (continued) — Mixed-media and branding case studies
+
+**Pattern for both sections:** Research side-right (as per user decision), all other sections full-width below. This matches the Process-Heavy template structure.
+
+**Note on unprocessed ideation images:** Both South China Sea and Faces of Power have `ideation-1.png` / `ideation-2.png` without processed counterparts. These are set `hidden: true` until processed versions are created. All other images use `-processed.png` variants.
+
+---
+
+### South China Sea (mixed-media)
+
+Existing blocks: `south-china-sea-research-1` (single, below, 3/2, hidden), `south-china-sea-challenge-1` (pair, below, 4/3, hidden), `south-china-sea-solution-1` (single, side-right, 4/5, hidden), `process-1774473786169-k7n9r0` (pair, below, 4/3, hidden).
+
+**1. Update `south-china-sea-research-1` in place:**
+- Add `placement: "side-right"`, `inlineTextWidth: "480px"`, `inlineMediaMinWidth: "240px"`
+- Change `aspectRatio` → `"4 / 3"` (was `"3 / 2"`)
+- Set `fit: "contain"`, `src: "/creative/mixed-media/south-china-sea/research-processed.png"`
+- Remove `hidden: true`
+
+**2. Update `south-china-sea-challenge-1` in place:**
+- Set `fit: "contain"` on both images
+- `images[0].src`: `/creative/mixed-media/south-china-sea/ideation-1.png` (unprocessed — no `-processed` version exists)
+- `images[1].src`: `/creative/mixed-media/south-china-sea/ideation-2.png` (unprocessed)
+- Keep `hidden: true` until processed versions exist
+
+**3. Replace `south-china-sea-solution-1`** (was side-right / 4/5 — wrong placement and ratio):
+```json
+{
+  "id": "south-china-sea-solution-1",
+  "section": "solution",
+  "layout": "single",
+  "width": "100%",
+  "align": "center",
+  "images": [{ "src": "/creative/mixed-media/south-china-sea/solution-hero-processed.png", "fit": "contain", "aspectRatio": "16 / 10", "background": "#0d0d0d", "alt": "" }]
+}
+```
+
+**4. Update `process-1774473786169-k7n9r0` in place:**
+- Set `fit: "contain"` on both images
+- `images[0].src`: `/creative/mixed-media/south-china-sea/solution-2-processed.png`
+- `images[1].src`: `/creative/mixed-media/south-china-sea/solution-1-processed.png`
+- Remove `hidden: true`
+
+**5. Add `south-china-sea-solution-2`** after `south-china-sea-solution-1`:
+```json
+{
+  "id": "south-china-sea-solution-2",
+  "section": "solution",
+  "layout": "pair",
+  "width": "100%",
+  "gap": "2px",
+  "align": "center",
+  "images": [
+    { "src": "/creative/mixed-media/south-china-sea/solution-1-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
+    { "src": "/creative/mixed-media/south-china-sea/solution-2-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+  ]
+}
+```
+
+Final block order: `south-china-sea-research-1`, `south-china-sea-challenge-1`, process block, `south-china-sea-solution-1`, `south-china-sea-solution-2`.
+
+---
+
+### Faces of Power (mixed-media)
+
+No existing blocks. Add from scratch.
+
+Note: `ideation-1.png` and `ideation-2.png` have no processed counterparts — challenge block is `hidden: true` until they are processed.
+
+```json
+"mediaBlocks": [
+  {
+    "id": "faces-of-power-research-1",
+    "section": "research",
+    "layout": "single",
+    "placement": "side-right",
+    "inlineTextWidth": "480px",
+    "inlineMediaMinWidth": "240px",
+    "align": "center",
+    "images": [{ "src": "/creative/mixed-media/faces-of-power/research-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }]
+  },
+  {
+    "id": "faces-of-power-challenge-1",
+    "section": "challenge",
+    "layout": "pair",
+    "width": "100%",
+    "gap": "2px",
+    "align": "center",
+    "hidden": true,
+    "images": [
+      { "src": "/creative/mixed-media/faces-of-power/ideation-1.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
+      { "src": "/creative/mixed-media/faces-of-power/ideation-2.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+    ]
+  },
+  {
+    "id": "faces-of-power-solution-1",
+    "section": "solution",
+    "layout": "single",
+    "width": "100%",
+    "align": "center",
+    "images": [{ "src": "/creative/mixed-media/faces-of-power/solution-hero-processed.png", "fit": "contain", "aspectRatio": "16 / 10", "background": "#0d0d0d", "alt": "" }]
+  },
+  {
+    "id": "faces-of-power-solution-2",
+    "section": "solution",
+    "layout": "pair",
+    "width": "100%",
+    "gap": "2px",
+    "align": "center",
+    "images": [
+      { "src": "/creative/mixed-media/faces-of-power/solution-1-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
+      { "src": "/creative/mixed-media/faces-of-power/solution-2-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+    ]
+  }
+]
+```
+
+---
+
+### Soho (branding)
+
+No existing blocks. Has: `research-processed.png`, `hero-processed.png`, `solution-hero-processed.png`, `solution-1-processed.png`. No challenge-specific images exist — skip challenge block.
+
+```json
+"mediaBlocks": [
+  {
+    "id": "soho-research-1",
+    "section": "research",
+    "layout": "single",
+    "placement": "side-right",
+    "inlineTextWidth": "480px",
+    "inlineMediaMinWidth": "240px",
+    "align": "center",
+    "images": [{ "src": "/creative/branding/soho/research-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }]
+  },
+  {
+    "id": "soho-solution-1",
+    "section": "solution",
+    "layout": "single",
+    "width": "100%",
+    "align": "center",
+    "images": [{ "src": "/creative/branding/soho/solution-hero-processed.png", "fit": "contain", "aspectRatio": "16 / 10", "background": "#0d0d0d", "alt": "" }]
+  },
+  {
+    "id": "soho-solution-2",
+    "section": "solution",
+    "layout": "pair",
+    "width": "100%",
+    "gap": "2px",
+    "align": "center",
+    "images": [
+      { "src": "/creative/branding/soho/solution-1-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
+      { "src": "/creative/branding/soho/hero-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+    ]
+  }
+]
+```
+
+---
+
+### Oracle (branding)
+
+No existing blocks, no images in `/public/creative/branding/oracle/`. Pre-fill with hidden Visual/Brand template blocks (empty `src`) so the structure is ready when images are added.
+
+```json
+"mediaBlocks": [
+  {
+    "id": "oracle-challenge-1",
+    "section": "challenge",
+    "layout": "pair",
+    "width": "100%",
+    "gap": "2px",
+    "align": "center",
+    "hidden": true,
+    "images": [
+      { "src": "", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
+      { "src": "", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+    ]
+  },
+  {
+    "id": "oracle-process-1",
+    "section": "process",
+    "layout": "single",
+    "width": "100%",
+    "align": "center",
+    "hidden": true,
+    "images": [{ "src": "", "fit": "contain", "aspectRatio": "16 / 10", "background": "#0d0d0d", "alt": "" }]
+  },
+  {
+    "id": "oracle-solution-1",
+    "section": "solution",
+    "layout": "single",
+    "width": "100%",
+    "align": "center",
+    "hidden": true,
+    "images": [{ "src": "", "fit": "contain", "aspectRatio": "16 / 10", "background": "#0d0d0d", "alt": "" }]
+  },
+  {
+    "id": "oracle-solution-2",
+    "section": "solution",
+    "layout": "pair",
+    "width": "100%",
+    "gap": "2px",
+    "align": "center",
+    "hidden": true,
+    "images": [
+      { "src": "", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
+      { "src": "", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+    ]
+  }
+]
+```
+
+---
+
+### Updated files affected
+
+| File | Change |
+|---|---|
+| `content/site-content.json` | Update/add `mediaBlocks` for **9 case studies**: Franklin's, LoomLearn, HelpOH, Atom OS, Albers, South China Sea, Faces of Power, Soho, Oracle |
+| `lib/case-study-templates.ts` | New file (unchanged from above) |
+| `components/admin/DashboardEditor.tsx` | All changes unchanged from above |
+
+---
 
 ## Out of scope
 
