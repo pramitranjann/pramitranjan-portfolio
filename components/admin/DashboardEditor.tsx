@@ -202,6 +202,7 @@ function getImageExportGuide({
   if (!ratio || perImageWidth <= 0) {
     return {
       widthLabel: widthGuide.label,
+      blockLabel: widthGuide.label,
       imageLabel: block.layout === 'pair' && imageCount > 1
         ? `${widthGuide.mode === 'exact' ? '' : '~'}${Math.round(perImageWidth)}px per image`
         : `${widthGuide.mode === 'exact' ? '' : '~'}${Math.round(perImageWidth)}px image width`,
@@ -212,6 +213,9 @@ function getImageExportGuide({
   const prefix = widthGuide.mode === 'exact' ? '' : '~'
   return {
     widthLabel: widthGuide.label,
+    blockLabel: block.layout === 'pair' && imageCount > 1
+      ? `${prefix}${Math.round(widthGuide.widthPx)}px block width · ${prefix}${Math.round(imageHeight)}px row height`
+      : `${prefix}${Math.round(widthGuide.widthPx)} × ${Math.round(imageHeight)}px block`,
     imageLabel: `${prefix}${Math.round(perImageWidth)} × ${Math.round(imageHeight)}px per image`,
   }
 }
@@ -383,12 +387,12 @@ function createCaseStudyDraft(section: CaseStudySection, existing: CaseStudyCont
 
 function createMediaImageDraft() {
   return {
-    src: '',
+    src: '/placeholders/case-study-media-block.svg',
     fit: 'contain',
     position: 'center center',
     aspectRatio: '4 / 3',
     background: '#0d0d0d',
-    alt: '',
+    alt: 'Layout placeholder',
   } satisfies CaseStudyMediaBlock['images'][number]
 }
 
@@ -396,6 +400,7 @@ function createMediaBlockDraft(section: CaseStudyMediaBlockSection): CaseStudyMe
   return {
     id: `${section}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     section,
+    hidden: true,
     layout: 'single',
     placement: 'below',
     align: 'center',
@@ -2576,7 +2581,7 @@ function MediaBlockEditor({
       />
       {blockGuide ? (
         <p className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#777777', lineHeight: 1.6, margin: '-4px 0 0' }}>
-          {blockGuide.label}
+          {getImageExportGuide({ block, imageCount: images.length, aspectRatio: images[0]?.aspectRatio || (block.layout === 'pair' ? '4 / 3' : '16 / 10') })?.blockLabel ?? blockGuide.label}
           {block.layout === 'pair' ? ` · ${getImageExportGuide({ block, imageCount: images.length, aspectRatio: images[0]?.aspectRatio || '4 / 3' })?.imageLabel ?? ''}` : ''}
         </p>
       ) : (
