@@ -50,6 +50,8 @@ type PresetOption = {
   label: string
 }
 
+const mediaReferenceWidthPx = 920
+
 const mediaBlockWidthOptions: PresetOption[] = [
   { value: '', label: 'Auto / Full Width' },
   { value: '56%', label: 'Portrait Narrow · 56% · ~515px @ 920' },
@@ -125,6 +127,94 @@ const mediaInlineMinWidthOptions: PresetOption[] = [
   { value: '480px', label: '480px' },
   { value: '560px', label: '560px' },
 ]
+
+function parsePxValue(value: string | undefined) {
+  if (!value) return null
+  const match = value.trim().match(/^(\d+(?:\.\d+)?)px$/)
+  return match ? Number(match[1]) : null
+}
+
+function parsePercentValue(value: string | undefined) {
+  if (!value) return null
+  const match = value.trim().match(/^(\d+(?:\.\d+)?)%$/)
+  return match ? Number(match[1]) : null
+}
+
+function parseClampMaxPx(value: string | undefined) {
+  if (!value) return null
+  const match = value.trim().match(/^min\(100%,\s*(\d+(?:\.\d+)?)px\)$/)
+  return match ? Number(match[1]) : null
+}
+
+function parseAspectRatioValue(value: string | undefined) {
+  if (!value) return null
+  const match = value.trim().match(/^(\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)$/)
+  if (!match) return null
+  const width = Number(match[1])
+  const height = Number(match[2])
+  if (!width || !height) return null
+  return { width, height }
+}
+
+function getBlockWidthGuide(value: string | undefined) {
+  const px = parsePxValue(value)
+  if (px !== null) {
+    return { mode: 'exact' as const, widthPx: px, label: `${Math.round(px)}px block width` }
+  }
+
+  const clampMax = parseClampMaxPx(value)
+  if (clampMax !== null) {
+    return { mode: 'max' as const, widthPx: clampMax, label: `Up to ${Math.round(clampMax)}px block width` }
+  }
+
+  const percent = parsePercentValue(value)
+  if (percent !== null) {
+    const approxWidth = mediaReferenceWidthPx * (percent / 100)
+    return {
+      mode: 'approx' as const,
+      widthPx: approxWidth,
+      label: `~${Math.round(approxWidth)}px block width @ ${mediaReferenceWidthPx}px section width`,
+    }
+  }
+
+  return null
+}
+
+function getImageExportGuide({
+  block,
+  imageCount,
+  aspectRatio,
+}: {
+  block: CaseStudyMediaBlock
+  imageCount: number
+  aspectRatio: string
+}) {
+  const widthGuide = getBlockWidthGuide(block.width)
+  if (!widthGuide) return null
+
+  const gapPx = parsePxValue(block.gap) ?? 2
+  const totalGap = block.layout === 'pair' && imageCount > 1 ? gapPx * (imageCount - 1) : 0
+  const perImageWidth = block.layout === 'pair' && imageCount > 1
+    ? (widthGuide.widthPx - totalGap) / imageCount
+    : widthGuide.widthPx
+
+  const ratio = parseAspectRatioValue(aspectRatio)
+  if (!ratio || perImageWidth <= 0) {
+    return {
+      widthLabel: widthGuide.label,
+      imageLabel: block.layout === 'pair' && imageCount > 1
+        ? `${widthGuide.mode === 'exact' ? '' : '~'}${Math.round(perImageWidth)}px per image`
+        : `${widthGuide.mode === 'exact' ? '' : '~'}${Math.round(perImageWidth)}px image width`,
+    }
+  }
+
+  const imageHeight = perImageWidth * (ratio.height / ratio.width)
+  const prefix = widthGuide.mode === 'exact' ? '' : '~'
+  return {
+    widthLabel: widthGuide.label,
+    imageLabel: `${prefix}${Math.round(perImageWidth)} × ${Math.round(imageHeight)}px per image`,
+  }
+}
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -2424,6 +2514,7 @@ function MediaBlockEditor({
   onRemove: () => void
 }) {
   const images = normalizeMediaBlock(block).images
+  const blockGuide = getBlockWidthGuide(block.width)
 
   return (
     <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
@@ -2483,6 +2574,16 @@ function MediaBlockEditor({
         placeholder="100%, 78%, 920px, min(100%, 920px)"
         onChange={(value) => onChange((current) => ({ ...current, width: value }))}
       />
+      {blockGuide ? (
+        <p className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#777777', lineHeight: 1.6, margin: '-4px 0 0' }}>
+          {blockGuide.label}
+          {block.layout === 'pair' ? ` · ${getImageExportGuide({ block, imageCount: images.length, aspectRatio: images[0]?.aspectRatio || '4 / 3' })?.imageLabel ?? ''}` : ''}
+        </p>
+      ) : (
+        <p className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#777777', lineHeight: 1.6, margin: '-4px 0 0' }}>
+          Block width depends on the available section width. Use a fixed `px` width for exact export dimensions.
+        </p>
+      )}
       {block.placement === 'side-right' ? (
         <>
           <PresetSelectField
@@ -2575,6 +2676,22 @@ function MediaBlockEditor({
               }))
             }
           />
+          {(() => {
+            const exportGuide = getImageExportGuide({
+              block,
+              imageCount: images.length,
+              aspectRatio: image.aspectRatio || (block.layout === 'pair' ? '4 / 3' : '16 / 10'),
+            })
+            return exportGuide ? (
+              <p className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#777777', lineHeight: 1.6, margin: '-4px 0 0' }}>
+                Export guide: {exportGuide.imageLabel}
+              </p>
+            ) : (
+              <p className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#777777', lineHeight: 1.6, margin: '-4px 0 0' }}>
+                Export guide appears once the block width is set to a fixed px value, a responsive clamp, or a percentage preset.
+              </p>
+            )
+          })()}
           <PresetSelectField
             label="Background"
             value={image.background}
