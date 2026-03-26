@@ -744,8 +744,8 @@
       },
       "heroImage": "/work/loomlearn/cover-hor-processed.png",
       "challengeImages": [
-        "/work/loomlearn/ideation-1-processed.png",
-        "/work/loomlearn/ideation-2-processed.png"
+        "/work/loomlearn/ideation-1.png",
+        "/work/loomlearn/ideation-2.png"
       ],
       "solutionHeroImage": "/work/loomlearn/solution-hero-processed.png",
       "solutionImages": [
@@ -781,7 +781,7 @@
           "inlineTextWidth": "480px",
           "inlineMediaMinWidth": "240px",
           "align": "center",
-          "images": [{ "src": "/work/loomlearn/ideation-1-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }]
+          "images": [{ "src": "/work/loomlearn/ideation-1.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }]
         },
         {
           "id": "loomlearn-challenge-1",
@@ -791,7 +791,7 @@
           "inlineTextWidth": "480px",
           "inlineMediaMinWidth": "240px",
           "align": "center",
-          "images": [{ "src": "/work/loomlearn/ideation-2-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }]
+          "images": [{ "src": "/work/loomlearn/ideation-2.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }]
         },
         {
           "id": "loomlearn-solution-1",
