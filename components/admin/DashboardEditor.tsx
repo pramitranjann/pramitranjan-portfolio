@@ -2553,6 +2553,8 @@ function MediaBlockListEditor({
 }) {
   const [showTemplatePicker, setShowTemplatePicker] = useState(false)
   const [pickerTemplateId, setPickerTemplateId] = useState('standard-ux')
+  const [dragFromIndex, setDragFromIndex] = useState<number | null>(null)
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
   return (
     <div style={{ display: 'grid', gap: '12px' }}>
       <div className="flex" style={{ gap: '8px', flexWrap: 'wrap' }}>
@@ -2640,17 +2642,81 @@ function MediaBlockListEditor({
         </p>
       ) : null}
       {blocks.map((block, index) => (
-        <MediaBlockEditor
-          key={block.id}
-          block={block}
-          localWriteEnabled={localWriteEnabled}
-          index={index}
-          length={blocks.length}
-          onMove={(direction) => onMove(block.id, index + direction)}
-          onChange={(updater) => onChange(block.id, updater)}
-          onRemove={() => onRemove(block.id)}
-        />
+        <div key={block.id}>
+          {/* Drop zone above this block */}
+          <div
+            onDragOver={(e) => { e.preventDefault(); setDragOverIndex(index) }}
+            onDragLeave={() => setDragOverIndex(null)}
+            onDrop={(e) => {
+              e.preventDefault()
+              if (dragFromIndex !== null && dragFromIndex !== index) {
+                onMove(blocks[dragFromIndex].id, index)
+              }
+              setDragFromIndex(null)
+              setDragOverIndex(null)
+            }}
+            style={{ height: '6px', position: 'relative', flexShrink: 0 }}
+          >
+            {dragOverIndex === index && dragFromIndex !== null && (
+              <div style={{ position: 'absolute', left: 0, right: 0, top: '2px', height: '2px', background: '#FF3120', pointerEvents: 'none' }} />
+            )}
+          </div>
+
+          {/* Block row */}
+          <div
+            draggable
+            onDragStart={() => setDragFromIndex(index)}
+            onDragEnd={() => { setDragFromIndex(null); setDragOverIndex(null) }}
+            style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '8px',
+              opacity: dragFromIndex === index ? 0.4 : 1,
+              borderStyle: dragFromIndex === index ? 'dashed' : 'solid',
+            }}
+          >
+            {/* Drag handle */}
+            <div
+              style={{ cursor: 'grab', padding: '18px 4px 0', color: '#333', fontSize: '16px', flexShrink: 0, userSelect: 'none' }}
+              title="Drag to reorder"
+            >
+              ⠿
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <MediaBlockEditor
+                block={block}
+                localWriteEnabled={localWriteEnabled}
+                index={index}
+                length={blocks.length}
+                onMove={(direction) => onMove(block.id, index + direction)}
+                onChange={(updater) => onChange(block.id, updater)}
+                onRemove={() => onRemove(block.id)}
+              />
+            </div>
+          </div>
+        </div>
       ))}
+
+      {/* Final drop zone after last block */}
+      {blocks.length > 0 && (
+        <div
+          onDragOver={(e) => { e.preventDefault(); setDragOverIndex(blocks.length) }}
+          onDragLeave={() => setDragOverIndex(null)}
+          onDrop={(e) => {
+            e.preventDefault()
+            if (dragFromIndex !== null && dragFromIndex !== blocks.length - 1) {
+              onMove(blocks[dragFromIndex].id, blocks.length)
+            }
+            setDragFromIndex(null)
+            setDragOverIndex(null)
+          }}
+          style={{ height: '6px', position: 'relative' }}
+        >
+          {dragOverIndex === blocks.length && dragFromIndex !== null && (
+            <div style={{ position: 'absolute', left: 0, right: 0, top: '2px', height: '2px', background: '#FF3120', pointerEvents: 'none' }} />
+          )}
+        </div>
+      )}
     </div>
   )
 }
