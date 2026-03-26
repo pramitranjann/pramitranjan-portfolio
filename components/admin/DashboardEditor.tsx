@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { deriveCaseStudyMediaBlocks } from '@/lib/case-study-media'
+import { applyTemplate, CASE_STUDY_TEMPLATES } from '@/lib/case-study-templates'
 import type {
   AudioSettings,
   CardStyleSettings,
@@ -626,6 +627,8 @@ git push`
   const [saveHovered, setSaveHovered] = useState(false)
   const [showGitPrompt, setShowGitPrompt] = useState(false)
   const [copiedGitCommands, setCopiedGitCommands] = useState(false)
+  const [pendingNewSection, setPendingNewSection] = useState<CaseStudySection | null>(null)
+  const [pendingTemplateId, setPendingTemplateId] = useState('standard-ux')
 
   const content = history.present
   const isDirty = useMemo(() => serializeContent(content) !== serializeContent(savedContent), [content, savedContent])
@@ -721,6 +724,20 @@ git push`
         ...current,
         caseStudies: syncCaseStudySectionNavigation(nextCaseStudies, section),
       }
+    })
+  }
+
+  function addCaseStudyWithTemplate(section: CaseStudySection, templateId: string) {
+    applyContentChange((current) => {
+      const draft = createCaseStudyDraft(section, current.caseStudies)
+      const nextCaseStudies = [...current.caseStudies, {
+        ...draft,
+        mediaBlocks: applyTemplate(templateId),
+      }]
+      setActivePage(`case-study:${draft.slug}`)
+      setPendingNewSection(null)
+      setPendingTemplateId('standard-ux')
+      return { ...current, caseStudies: syncCaseStudySectionNavigation(nextCaseStudies, section) }
     })
   }
 
@@ -985,7 +1002,7 @@ git push`
                   onMove={(direction) => moveCaseStudy(item.slug, direction)}
                 />
               ))}
-              <SidebarButton active={false} label="+ Add Work Case Study" onClick={() => addCaseStudy('work')} />
+              <SidebarButton active={false} label="+ Add Work Case Study" onClick={() => { setPendingNewSection('work'); setPendingTemplateId('standard-ux') }} />
             </SidebarGroup>
 
             <SidebarGroup title="MIXED MEDIA">
@@ -1000,7 +1017,7 @@ git push`
                   onMove={(direction) => moveCaseStudy(item.slug, direction)}
                 />
               ))}
-              <SidebarButton active={false} label="+ Add Mixed Media" onClick={() => addCaseStudy('mixed-media')} />
+              <SidebarButton active={false} label="+ Add Mixed Media" onClick={() => { setPendingNewSection('mixed-media'); setPendingTemplateId('visual-brand') }} />
             </SidebarGroup>
 
             <SidebarGroup title="BRANDING">
@@ -1015,8 +1032,62 @@ git push`
                   onMove={(direction) => moveCaseStudy(item.slug, direction)}
                 />
               ))}
-              <SidebarButton active={false} label="+ Add Branding" onClick={() => addCaseStudy('branding')} />
+              <SidebarButton active={false} label="+ Add Branding" onClick={() => { setPendingNewSection('branding'); setPendingTemplateId('visual-brand') }} />
             </SidebarGroup>
+            {pendingNewSection && (
+              <div style={{ border: '1px solid #333', padding: '14px', marginTop: '8px', background: '#111' }}>
+                <p className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.14em', color: '#f5f2ed', textTransform: 'uppercase', marginBottom: '10px' }}>
+                  Choose a template
+                </p>
+                <div style={{ display: 'grid', gap: '6px', marginBottom: '12px' }}>
+                  {CASE_STUDY_TEMPLATES.map((template) => (
+                    <label
+                      key={template.id}
+                      className="font-mono"
+                      style={{
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: '8px',
+                        cursor: 'pointer',
+                        border: `1px solid ${pendingTemplateId === template.id ? '#FF3120' : '#222'}`,
+                        padding: '8px 10px',
+                      }}
+                    >
+                      <input
+                        type="radio"
+                        name="template"
+                        value={template.id}
+                        checked={pendingTemplateId === template.id}
+                        onChange={() => setPendingTemplateId(template.id)}
+                        style={{ marginTop: '2px', flexShrink: 0 }}
+                      />
+                      <span>
+                        <span style={{ fontSize: '11px', letterSpacing: '0.08em', color: '#f5f2ed', display: 'block' }}>{template.label}</span>
+                        <span style={{ fontSize: '10px', color: '#555', letterSpacing: '0.04em' }}>{template.description}</span>
+                      </span>
+                    </label>
+                  ))}
+                </div>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button
+                    type="button"
+                    className="font-mono"
+                    onClick={() => addCaseStudyWithTemplate(pendingNewSection, pendingTemplateId)}
+                    style={{ background: '#FF3120', border: 'none', color: '#fff', padding: '8px 14px', cursor: 'pointer', fontSize: '11px', letterSpacing: '0.12em' }}
+                  >
+                    CREATE →
+                  </button>
+                  <button
+                    type="button"
+                    className="font-mono"
+                    onClick={() => { setPendingNewSection(null); setPendingTemplateId('standard-ux') }}
+                    style={{ background: 'transparent', border: '1px solid #333', color: '#666', padding: '8px 14px', cursor: 'pointer', fontSize: '11px', letterSpacing: '0.12em' }}
+                  >
+                    CANCEL
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </aside>
 
