@@ -1197,79 +1197,56 @@
           "id": "south-china-sea-research-1",
           "section": "research",
           "layout": "single",
+          "placement": "side-right",
+          "inlineTextWidth": "480px",
+          "inlineMediaMinWidth": "240px",
           "align": "center",
-          "width": "100%",
-          "images": [
-            {
-              "src": "/creative/mixed-media/south-china-sea/research-processed.png",
-              "aspectRatio": "3 / 2",
-              "background": "#161616"
-            }
-          ],
-          "hidden": true
+          "images": [{ "src": "/creative/mixed-media/south-china-sea/research-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }]
         },
         {
           "id": "south-china-sea-challenge-1",
           "section": "challenge",
           "layout": "pair",
-          "align": "center",
           "width": "100%",
-          "images": [
-            {
-              "src": "/creative/mixed-media/south-china-sea/ideation-1-processed.png",
-              "aspectRatio": "4 / 3"
-            },
-            {
-              "src": "/creative/mixed-media/south-china-sea/ideation-2-processed.png",
-              "aspectRatio": "4 / 3"
-            }
-          ],
-          "hidden": true
-        },
-        {
-          "id": "south-china-sea-solution-1",
-          "section": "solution",
-          "layout": "single",
+          "gap": "2px",
           "align": "center",
+          "hidden": true,
           "images": [
-            {
-              "src": "/creative/mixed-media/south-china-sea/solution-hero-processed.png",
-              "aspectRatio": "4 / 5"
-            }
-          ],
-          "placement": "side-right",
-          "width": "72%",
-          "inlineTextWidth": "480px",
-          "inlineMediaMinWidth": "560px",
-          "hidden": true
+            { "src": "/creative/mixed-media/south-china-sea/ideation-1.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
+            { "src": "/creative/mixed-media/south-china-sea/ideation-2.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+          ]
         },
         {
           "id": "process-1774473786169-k7n9r0",
           "section": "process",
           "layout": "pair",
-          "placement": "below",
-          "align": "center",
           "width": "100%",
           "gap": "2px",
+          "align": "center",
           "images": [
-            {
-              "src": "/creative/mixed-media/south-china-sea/solution-2-processed.png",
-              "fit": "contain",
-              "position": "center center",
-              "aspectRatio": "4 / 3",
-              "background": "#0d0d0d",
-              "alt": ""
-            },
-            {
-              "src": "/creative/mixed-media/south-china-sea/solution-1-processed.png",
-              "fit": "contain",
-              "position": "center center",
-              "aspectRatio": "4 / 3",
-              "background": "#0d0d0d",
-              "alt": ""
-            }
-          ],
-          "hidden": true
+            { "src": "/creative/mixed-media/south-china-sea/solution-2-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
+            { "src": "/creative/mixed-media/south-china-sea/solution-1-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+          ]
+        },
+        {
+          "id": "south-china-sea-solution-1",
+          "section": "solution",
+          "layout": "single",
+          "width": "100%",
+          "align": "center",
+          "images": [{ "src": "/creative/mixed-media/south-china-sea/solution-hero-processed.png", "fit": "contain", "aspectRatio": "16 / 10", "background": "#0d0d0d", "alt": "" }]
+        },
+        {
+          "id": "south-china-sea-solution-2",
+          "section": "solution",
+          "layout": "pair",
+          "width": "100%",
+          "gap": "2px",
+          "align": "center",
+          "images": [
+            { "src": "/creative/mixed-media/south-china-sea/solution-1-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
+            { "src": "/creative/mixed-media/south-china-sea/solution-2-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+          ]
         }
       ],
       "mediaSettings": {
@@ -1322,7 +1299,52 @@
       "solutionHeadline": "A multi-part installation where power is constructed, projected, and concealed.",
       "solution": "A multi-part installation combining Mod Roc masks, acetate lightbox prints, gelli prints, and photograms — each exploring a different facet of how power is constructed, projected, and concealed.",
       "outcomesHeadline": "Removing colour and context made the images feel universal — anyone could be in power.",
-      "outcomes": "The most powerful moment was realising that removing colour and context — the photograms — made the images feel universal: anyone could be in power. I'd push the interview component further, potentially making it part of the installation itself."
+      "outcomes": "The most powerful moment was realising that removing colour and context — the photograms — made the images feel universal: anyone could be in power. I'd push the interview component further, potentially making it part of the installation itself.",
+      "mediaBlocks": [
+        {
+          "id": "faces-of-power-research-1",
+          "section": "research",
+          "layout": "single",
+          "placement": "side-right",
+          "inlineTextWidth": "480px",
+          "inlineMediaMinWidth": "240px",
+          "align": "center",
+          "images": [{ "src": "/creative/mixed-media/faces-of-power/research-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }]
+        },
+        {
+          "id": "faces-of-power-challenge-1",
+          "section": "challenge",
+          "layout": "pair",
+          "width": "100%",
+          "gap": "2px",
+          "align": "center",
+          "hidden": true,
+          "images": [
+            { "src": "/creative/mixed-media/faces-of-power/ideation-1.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
+            { "src": "/creative/mixed-media/faces-of-power/ideation-2.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+          ]
+        },
+        {
+          "id": "faces-of-power-solution-1",
+          "section": "solution",
+          "layout": "single",
+          "width": "100%",
+          "align": "center",
+          "images": [{ "src": "/creative/mixed-media/faces-of-power/solution-hero-processed.png", "fit": "contain", "aspectRatio": "16 / 10", "background": "#0d0d0d", "alt": "" }]
+        },
+        {
+          "id": "faces-of-power-solution-2",
+          "section": "solution",
+          "layout": "pair",
+          "width": "100%",
+          "gap": "2px",
+          "align": "center",
+          "images": [
+            { "src": "/creative/mixed-media/faces-of-power/solution-1-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
+            { "src": "/creative/mixed-media/faces-of-power/solution-2-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+          ]
+        }
+      ]
     },
     {
       "slug": "oracle",
@@ -1357,7 +1379,53 @@
       "solutionHeadline": "A complete brand world: six designs, a full identity, and a multi-format campaign.",
       "solution": "A complete brand system: six t-shirt designs, logo and identity, and a multi-format campaign covering social graphics, vintage screen mockups, and a 'Coming Soon' teaser. All produced as Figma assets and mockups.",
       "outcomesHeadline": "Meaningful branding requires purpose, not just aesthetics.",
-      "outcomes": "Oracle taught me the difference between art and branding. Meaningful branding requires purpose, not just aesthetics — if extended, it would need lore, a narrative world that rewards attention and gives people something to be part of, not just wear."
+      "outcomes": "Oracle taught me the difference between art and branding. Meaningful branding requires purpose, not just aesthetics — if extended, it would need lore, a narrative world that rewards attention and gives people something to be part of, not just wear.",
+      "mediaBlocks": [
+        {
+          "id": "oracle-challenge-1",
+          "section": "challenge",
+          "layout": "pair",
+          "width": "100%",
+          "gap": "2px",
+          "align": "center",
+          "hidden": true,
+          "images": [
+            { "src": "", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
+            { "src": "", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+          ]
+        },
+        {
+          "id": "oracle-process-1",
+          "section": "process",
+          "layout": "single",
+          "width": "100%",
+          "align": "center",
+          "hidden": true,
+          "images": [{ "src": "", "fit": "contain", "aspectRatio": "16 / 10", "background": "#0d0d0d", "alt": "" }]
+        },
+        {
+          "id": "oracle-solution-1",
+          "section": "solution",
+          "layout": "single",
+          "width": "100%",
+          "align": "center",
+          "hidden": true,
+          "images": [{ "src": "", "fit": "contain", "aspectRatio": "16 / 10", "background": "#0d0d0d", "alt": "" }]
+        },
+        {
+          "id": "oracle-solution-2",
+          "section": "solution",
+          "layout": "pair",
+          "width": "100%",
+          "gap": "2px",
+          "align": "center",
+          "hidden": true,
+          "images": [
+            { "src": "", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
+            { "src": "", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+          ]
+        }
+      ]
     },
     {
       "slug": "soho",
@@ -1399,7 +1467,39 @@
       "solutionHeadline": "A full exhibition identity that holds every artist together without flattening any of them.",
       "solution": "Full exhibition identity including A3 poster, email banner, and a postcard series featuring each participating artist's work — all cohesive under the SOHO visual system.",
       "outcomesHeadline": "Design leadership is as much about coordination as craft.",
-      "outcomes": "Chairing the exhibition taught me that design leadership is as much about coordination as craft. Getting peers to hit deadlines and contribute materials was harder than the visual work. I'd build a clearer production timeline from day one in any future project like this."
+      "outcomes": "Chairing the exhibition taught me that design leadership is as much about coordination as craft. Getting peers to hit deadlines and contribute materials was harder than the visual work. I'd build a clearer production timeline from day one in any future project like this.",
+      "mediaBlocks": [
+        {
+          "id": "soho-research-1",
+          "section": "research",
+          "layout": "single",
+          "placement": "side-right",
+          "inlineTextWidth": "480px",
+          "inlineMediaMinWidth": "240px",
+          "align": "center",
+          "images": [{ "src": "/creative/branding/soho/research-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }]
+        },
+        {
+          "id": "soho-solution-1",
+          "section": "solution",
+          "layout": "single",
+          "width": "100%",
+          "align": "center",
+          "images": [{ "src": "/creative/branding/soho/solution-hero-processed.png", "fit": "contain", "aspectRatio": "16 / 10", "background": "#0d0d0d", "alt": "" }]
+        },
+        {
+          "id": "soho-solution-2",
+          "section": "solution",
+          "layout": "pair",
+          "width": "100%",
+          "gap": "2px",
+          "align": "center",
+          "images": [
+            { "src": "/creative/branding/soho/solution-1-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
+            { "src": "/creative/branding/soho/hero-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+          ]
+        }
+      ]
     }
   ]
 }
