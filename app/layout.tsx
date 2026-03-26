@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import type { CSSProperties } from 'react'
 import { DM_Serif_Display, DM_Mono } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { MotionSettingsProvider } from '@/components/MotionSettingsProvider'
 import { SiteCopyProvider } from '@/components/SiteCopyProvider'
@@ -67,6 +68,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             {children}
           </SiteCopyProvider>
         </MotionSettingsProvider>
+        <Analytics />
       </body>
     </html>
   )

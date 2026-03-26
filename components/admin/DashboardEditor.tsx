@@ -52,20 +52,20 @@ type PresetOption = {
 
 const mediaBlockWidthOptions: PresetOption[] = [
   { value: '', label: 'Auto / Full Width' },
-  { value: '56%', label: 'Portrait Narrow · 56%' },
-  { value: '60%', label: 'Portrait Narrow · 60%' },
-  { value: '64%', label: 'Portrait Medium · 64%' },
-  { value: '68%', label: 'Portrait Medium · 68%' },
-  { value: '72%', label: 'Portrait Wide · 72%' },
-  { value: '78%', label: 'Centered Showcase · 78%' },
-  { value: '84%', label: 'Wide Showcase · 84%' },
-  { value: '100%', label: 'Full Width · 100%' },
+  { value: '56%', label: 'Portrait Narrow · 56% · ~515px @ 920' },
+  { value: '60%', label: 'Portrait Narrow · 60% · ~552px @ 920' },
+  { value: '64%', label: 'Portrait Medium · 64% · ~589px @ 920' },
+  { value: '68%', label: 'Portrait Medium · 68% · ~626px @ 920' },
+  { value: '72%', label: 'Portrait Wide · 72% · ~662px @ 920' },
+  { value: '78%', label: 'Centered Showcase · 78% · ~718px @ 920' },
+  { value: '84%', label: 'Wide Showcase · 84% · ~773px @ 920' },
+  { value: '100%', label: 'Full Width · 100% · 920px @ 920' },
   { value: '720px', label: 'Fixed Width · 720px' },
   { value: '820px', label: 'Fixed Width · 820px' },
   { value: '920px', label: 'Fixed Width · 920px' },
-  { value: 'min(100%, 720px)', label: 'Responsive Clamp · 720px' },
-  { value: 'min(100%, 820px)', label: 'Responsive Clamp · 820px' },
-  { value: 'min(100%, 920px)', label: 'Responsive Clamp · 920px' },
+  { value: 'min(100%, 720px)', label: 'Responsive Clamp · max 720px' },
+  { value: 'min(100%, 820px)', label: 'Responsive Clamp · max 820px' },
+  { value: 'min(100%, 920px)', label: 'Responsive Clamp · max 920px' },
 ]
 
 const mediaGapOptions: PresetOption[] = [
@@ -91,13 +91,13 @@ const mediaPositionOptions: PresetOption[] = [
 
 const mediaAspectRatioOptions: PresetOption[] = [
   { value: '', label: 'Auto Ratio' },
-  { value: '3 / 4', label: 'Portrait UI · 3 / 4' },
-  { value: '4 / 5', label: 'Portrait Tall · 4 / 5' },
-  { value: '1 / 1', label: 'Square · 1 / 1' },
-  { value: '4 / 3', label: 'Square-ish Landscape · 4 / 3' },
-  { value: '3 / 2', label: 'Landscape Medium · 3 / 2' },
-  { value: '16 / 10', label: 'Wide UI · 16 / 10' },
-  { value: '16 / 9', label: 'Wide Flow · 16 / 9' },
+  { value: '3 / 4', label: 'Portrait UI · 3 / 4 · 480×640 @ 480w' },
+  { value: '4 / 5', label: 'Portrait Tall · 4 / 5 · 480×600 @ 480w' },
+  { value: '1 / 1', label: 'Square · 1 / 1 · 480×480 @ 480w' },
+  { value: '4 / 3', label: 'Square-ish Landscape · 4 / 3 · 480×360 @ 480w' },
+  { value: '3 / 2', label: 'Landscape Medium · 3 / 2 · 480×320 @ 480w' },
+  { value: '16 / 10', label: 'Wide UI · 16 / 10 · 480×300 @ 480w' },
+  { value: '16 / 9', label: 'Wide Flow · 16 / 9 · 480×270 @ 480w' },
 ]
 
 const mediaBackgroundOptions: PresetOption[] = [
