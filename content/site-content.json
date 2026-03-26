@@ -646,13 +646,10 @@
         "FigJam",
         "Team Leadership"
       ],
-      "prev": {
+      "prev": null,
+      "next": {
         "slug": "loomlearn",
         "title": "LoomLearn"
-      },
-      "next": {
-        "slug": "helpoh",
-        "title": "HelpOH"
       },
       "heroImage": "/work/franklins/cover-hor-processed.png",
       "problemHeadline": "The warmth was real — it just wasn't reaching people before they arrived.",
@@ -746,7 +743,8 @@
               "src": "/work/loomlearn/ideation-2-processed.png",
               "aspectRatio": "3 / 2"
             }
-          ]
+          ],
+          "hidden": true
         },
         {
           "id": "loomlearn-solution-1",
@@ -759,7 +757,8 @@
               "src": "/work/loomlearn/solution-hero-processed.png",
               "aspectRatio": "3 / 2"
             }
-          ]
+          ],
+          "hidden": true
         },
         {
           "id": "research-1774467128401-vjt30f",
@@ -778,7 +777,8 @@
               "background": "#161616",
               "alt": ""
             }
-          ]
+          ],
+          "hidden": true
         }
       ]
     },
@@ -827,7 +827,41 @@
         "hero": {
           "background": "#FFFFFF"
         }
-      }
+      },
+      "mediaBlocks": [
+        {
+          "id": "helpoh-solution-1",
+          "section": "solution",
+          "layout": "single",
+          "align": "center",
+          "width": "100%",
+          "images": [
+            {
+              "src": "/work/helpoh/solution-hero-processed.png",
+              "aspectRatio": "16 / 10"
+            }
+          ],
+          "hidden": true
+        },
+        {
+          "id": "helpoh-solution-2",
+          "section": "solution",
+          "layout": "pair",
+          "align": "center",
+          "width": "100%",
+          "images": [
+            {
+              "src": "/work/helpoh/solution-1-processed.png",
+              "aspectRatio": "4 / 3"
+            },
+            {
+              "src": "/work/helpoh/solution-1-processed.png",
+              "aspectRatio": "4 / 3"
+            }
+          ],
+          "hidden": true
+        }
+      ]
     },
     {
       "slug": "atom",
@@ -879,7 +913,73 @@
         "hero": {
           "background": "#FFFFFF"
         }
-      }
+      },
+      "mediaBlocks": [
+        {
+          "id": "atom-research-1",
+          "section": "research",
+          "layout": "single",
+          "align": "center",
+          "width": "100%",
+          "images": [
+            {
+              "src": "/work/atom/research-processed.png",
+              "aspectRatio": "16 / 10"
+            }
+          ],
+          "hidden": true
+        },
+        {
+          "id": "atom-challenge-1",
+          "section": "challenge",
+          "layout": "pair",
+          "align": "center",
+          "width": "100%",
+          "images": [
+            {
+              "src": "/work/atom/ideation-1-processed.png",
+              "aspectRatio": "4 / 3"
+            },
+            {
+              "src": "/work/atom/ideation-2-processed.png",
+              "aspectRatio": "4 / 3"
+            }
+          ],
+          "hidden": true
+        },
+        {
+          "id": "atom-solution-1",
+          "section": "solution",
+          "layout": "single",
+          "align": "center",
+          "width": "100%",
+          "images": [
+            {
+              "src": "/work/atom/solution-hero-processed.png",
+              "aspectRatio": "16 / 10"
+            }
+          ],
+          "hidden": true
+        },
+        {
+          "id": "atom-solution-2",
+          "section": "solution",
+          "layout": "pair",
+          "align": "center",
+          "width": "100%",
+          "images": [
+            {
+              "src": "/work/atom/hero-2-processed.png",
+              "aspectRatio": "4 / 3"
+            },
+            {
+              "src": "/work/atom/solution-2-processed.png",
+              "aspectRatio": "4 / 3"
+            }
+          ],
+          "hidden": true
+        }
+      ]
     },
     {
       "slug": "albers",
@@ -946,46 +1046,9 @@
         "title": "Albers"
       },
       "next": {
-        "slug": "designathon-01",
-        "title": "Design-athon 01"
+        "slug": "purcast",
+        "title": "Purcast"
       }
-    },
-    {
-      "slug": "designathon-01",
-      "section": "work",
-      "title": "Design-athon 01",
-      "oneliner": "A 48-hour weather app designed with Claude AI.",
-      "type": "UI DESIGN · 2025",
-      "tags": [
-        "UI Design",
-        "Sprint",
-        "Claude AI"
-      ],
-      "prev": {
-        "slug": "accord",
-        "title": "Accord"
-      },
-      "next": {
-        "slug": "designathon-02",
-        "title": "Design-athon 02"
-      }
-    },
-    {
-      "slug": "designathon-02",
-      "section": "work",
-      "title": "Design-athon 02",
-      "oneliner": "Redesigning Passio Go with Figma Make.",
-      "type": "UI DESIGN · 2025",
-      "tags": [
-        "UI Design",
-        "Sprint",
-        "Figma Make"
-      ],
-      "prev": {
-        "slug": "designathon-01",
-        "title": "Design-athon 01"
-      },
-      "next": null
     },
     {
       "slug": "purcast",
@@ -1000,10 +1063,32 @@
         "Sprint"
       ],
       "prev": {
-        "slug": "helpoh",
-        "title": "HelpOH"
+        "slug": "accord",
+        "title": "Accord"
       },
-      "next": null
+      "next": {
+        "slug": "designathon-02",
+        "title": "Design-athon 02"
+      },
+      "hidden": true
+    },
+    {
+      "slug": "designathon-02",
+      "section": "work",
+      "title": "Design-athon 02",
+      "oneliner": "Redesigning Passio Go with Figma Make.",
+      "type": "UI DESIGN · 2025",
+      "tags": [
+        "UI Design",
+        "Sprint",
+        "Figma Make"
+      ],
+      "prev": {
+        "slug": "purcast",
+        "title": "Purcast"
+      },
+      "next": null,
+      "hidden": true
     },
     {
       "slug": "south-china-sea",
@@ -1064,7 +1149,8 @@
               "aspectRatio": "3 / 2",
               "background": "#161616"
             }
-          ]
+          ],
+          "hidden": true
         },
         {
           "id": "south-china-sea-challenge-1",
@@ -1081,7 +1167,8 @@
               "src": "/creative/mixed-media/south-china-sea/ideation-2-processed.png",
               "aspectRatio": "4 / 3"
             }
-          ]
+          ],
+          "hidden": true
         },
         {
           "id": "south-china-sea-solution-1",
@@ -1097,7 +1184,8 @@
           "placement": "side-right",
           "width": "72%",
           "inlineTextWidth": "480px",
-          "inlineMediaMinWidth": "560px"
+          "inlineMediaMinWidth": "560px",
+          "hidden": true
         },
         {
           "id": "process-1774473786169-k7n9r0",
@@ -1124,7 +1212,8 @@
               "background": "#0d0d0d",
               "alt": ""
             }
-          ]
+          ],
+          "hidden": true
         }
       ],
       "mediaSettings": {
