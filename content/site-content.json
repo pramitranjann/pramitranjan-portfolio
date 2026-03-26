@@ -674,7 +674,52 @@
           "background": "#FFFFFF"
         }
       },
-      "mediaBlocks": []
+      "mediaBlocks": [
+        {
+          "id": "franklins-research-1",
+          "section": "research",
+          "layout": "single",
+          "placement": "side-right",
+          "inlineTextWidth": "480px",
+          "inlineMediaMinWidth": "240px",
+          "align": "center",
+          "hidden": true,
+          "images": [{ "src": "", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }]
+        },
+        {
+          "id": "franklins-challenge-1",
+          "section": "challenge",
+          "layout": "single",
+          "placement": "side-right",
+          "inlineTextWidth": "480px",
+          "inlineMediaMinWidth": "240px",
+          "align": "center",
+          "hidden": true,
+          "images": [{ "src": "", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }]
+        },
+        {
+          "id": "franklins-solution-1",
+          "section": "solution",
+          "layout": "single",
+          "width": "100%",
+          "align": "center",
+          "hidden": true,
+          "images": [{ "src": "", "fit": "contain", "aspectRatio": "16 / 10", "background": "#0d0d0d", "alt": "" }]
+        },
+        {
+          "id": "franklins-solution-2",
+          "section": "solution",
+          "layout": "pair",
+          "width": "100%",
+          "gap": "2px",
+          "align": "center",
+          "hidden": true,
+          "images": [
+            { "src": "", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
+            { "src": "", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+          ]
+        }
+      ]
     },
     {
       "slug": "loomlearn",
@@ -729,56 +774,44 @@
       },
       "mediaBlocks": [
         {
+          "id": "research-1774467128401-vjt30f",
+          "section": "research",
+          "layout": "single",
+          "placement": "side-right",
+          "inlineTextWidth": "480px",
+          "inlineMediaMinWidth": "240px",
+          "align": "center",
+          "images": [{ "src": "/work/loomlearn/ideation-1-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }]
+        },
+        {
           "id": "loomlearn-challenge-1",
           "section": "challenge",
-          "layout": "pair",
+          "layout": "single",
+          "placement": "side-right",
+          "inlineTextWidth": "480px",
+          "inlineMediaMinWidth": "240px",
           "align": "center",
-          "width": "100%",
-          "images": [
-            {
-              "src": "/work/loomlearn/ideation-1-processed.png",
-              "aspectRatio": "3 / 2"
-            },
-            {
-              "src": "/work/loomlearn/ideation-2-processed.png",
-              "aspectRatio": "3 / 2"
-            }
-          ],
-          "hidden": true
+          "images": [{ "src": "/work/loomlearn/ideation-2-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }]
         },
         {
           "id": "loomlearn-solution-1",
           "section": "solution",
           "layout": "single",
+          "width": "100%",
           "align": "center",
-          "width": "78%",
-          "images": [
-            {
-              "src": "/work/loomlearn/solution-hero-processed.png",
-              "aspectRatio": "3 / 2"
-            }
-          ],
-          "hidden": true
+          "images": [{ "src": "/work/loomlearn/solution-hero-processed.png", "fit": "contain", "aspectRatio": "16 / 10", "background": "#0d0d0d", "alt": "" }]
         },
         {
-          "id": "research-1774467128401-vjt30f",
-          "section": "research",
-          "layout": "single",
-          "placement": "side-right",
+          "id": "loomlearn-solution-2",
+          "section": "solution",
+          "layout": "pair",
+          "width": "100%",
+          "gap": "2px",
           "align": "center",
-          "width": "78%",
-          "gap": "8px",
           "images": [
-            {
-              "src": "/work/loomlearn/ideation-1.png",
-              "fit": "contain",
-              "position": "center center",
-              "aspectRatio": "4 / 3",
-              "background": "#161616",
-              "alt": ""
-            }
-          ],
-          "hidden": true
+            { "src": "/work/loomlearn/solution-1-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
+            { "src": "/work/loomlearn/solution-2-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+          ]
         }
       ]
     },
@@ -840,8 +873,7 @@
               "src": "/work/helpoh/solution-hero-processed.png",
               "aspectRatio": "16 / 10"
             }
-          ],
-          "hidden": true
+          ]
         },
         {
           "id": "helpoh-solution-2",
@@ -858,8 +890,7 @@
               "src": "/work/helpoh/solution-1-processed.png",
               "aspectRatio": "4 / 3"
             }
-          ],
-          "hidden": true
+          ]
         }
       ]
     },
@@ -919,65 +950,43 @@
           "id": "atom-research-1",
           "section": "research",
           "layout": "single",
+          "placement": "side-right",
+          "inlineTextWidth": "480px",
+          "inlineMediaMinWidth": "240px",
           "align": "center",
-          "width": "100%",
-          "images": [
-            {
-              "src": "/placeholders/case-study-media-block.svg",
-              "aspectRatio": "16 / 10"
-            }
-          ],
-          "hidden": true
+          "images": [{ "src": "/work/atom/research-processed.png", "fit": "contain", "aspectRatio": "3 / 4", "background": "#0d0d0d", "alt": "" }]
         },
         {
           "id": "atom-challenge-1",
           "section": "challenge",
           "layout": "pair",
-          "align": "center",
           "width": "100%",
+          "gap": "2px",
+          "align": "center",
           "images": [
-            {
-              "src": "/work/atom/ideation-1-processed.png",
-              "aspectRatio": "4 / 3"
-            },
-            {
-              "src": "/work/atom/ideation-2-processed.png",
-              "aspectRatio": "4 / 3"
-            }
-          ],
-          "hidden": true
+            { "src": "/work/atom/ideation-1-processed.png", "fit": "contain", "aspectRatio": "3 / 4", "background": "#0d0d0d", "alt": "" },
+            { "src": "/work/atom/ideation-2-processed.png", "fit": "contain", "aspectRatio": "3 / 4", "background": "#0d0d0d", "alt": "" }
+          ]
         },
         {
           "id": "atom-solution-1",
           "section": "solution",
           "layout": "single",
-          "align": "center",
           "width": "100%",
-          "images": [
-            {
-              "src": "/work/atom/solution-hero-processed.png",
-              "aspectRatio": "16 / 10"
-            }
-          ],
-          "hidden": true
+          "align": "center",
+          "images": [{ "src": "/work/atom/solution-hero-processed.png", "fit": "contain", "aspectRatio": "16 / 10", "background": "#0d0d0d", "alt": "" }]
         },
         {
           "id": "atom-solution-2",
           "section": "solution",
           "layout": "pair",
-          "align": "center",
           "width": "100%",
+          "gap": "2px",
+          "align": "center",
           "images": [
-            {
-              "src": "/work/atom/hero-2-processed.png",
-              "aspectRatio": "4 / 3"
-            },
-            {
-              "src": "/work/atom/solution-2-processed.png",
-              "aspectRatio": "4 / 3"
-            }
-          ],
-          "hidden": true
+            { "src": "/work/atom/hero-2-processed.png", "fit": "contain", "aspectRatio": "3 / 4", "background": "#0d0d0d", "alt": "" },
+            { "src": "/work/atom/solution-2-processed.png", "fit": "contain", "aspectRatio": "3 / 4", "background": "#0d0d0d", "alt": "" }
+          ]
         }
       ]
     },
@@ -1028,7 +1037,53 @@
       "solutionHeadline": "Nine modes. One premise: color has no fixed identity.",
       "solution": "A nine-mode macOS application where each mode isolates one perceptual color phenomenon with real-time controls. The amber HUD frames the app as an instrument of observation, not a creative canvas. Built in SwiftUI with AppKit, targeting macOS 13+.",
       "outcomesHeadline": "Constraint as identity — when an interface commits fully, every decision becomes easier.",
-      "outcomes": "Vibe coding pushed me to be more precise about design intent upfront — the AI needs clarity to move in the right direction. The HUD aesthetic taught me that constraint as identity makes every decision easier. I'd like to eventually publish ALBERS as a genuine teaching tool on the Mac App Store."
+      "outcomes": "Vibe coding pushed me to be more precise about design intent upfront — the AI needs clarity to move in the right direction. The HUD aesthetic taught me that constraint as identity makes every decision easier. I'd like to eventually publish ALBERS as a genuine teaching tool on the Mac App Store.",
+      "mediaBlocks": [
+        {
+          "id": "albers-solution-1",
+          "section": "solution",
+          "layout": "single",
+          "width": "100%",
+          "align": "center",
+          "images": [{ "src": "/work/albers/img-1-processed.png", "fit": "contain", "aspectRatio": "16 / 10", "background": "#0d0d0d", "alt": "" }]
+        },
+        {
+          "id": "albers-solution-2",
+          "section": "solution",
+          "layout": "pair",
+          "width": "100%",
+          "gap": "2px",
+          "align": "center",
+          "images": [
+            { "src": "/work/albers/img-2-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
+            { "src": "/work/albers/img-3-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+          ]
+        },
+        {
+          "id": "albers-solution-3",
+          "section": "solution",
+          "layout": "pair",
+          "width": "100%",
+          "gap": "2px",
+          "align": "center",
+          "images": [
+            { "src": "/work/albers/img-4-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
+            { "src": "/work/albers/img-5-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+          ]
+        },
+        {
+          "id": "albers-solution-4",
+          "section": "solution",
+          "layout": "pair",
+          "width": "100%",
+          "gap": "2px",
+          "align": "center",
+          "images": [
+            { "src": "/work/albers/img-6-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
+            { "src": "/work/albers/img-7-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+          ]
+        }
+      ]
     },
     {
       "slug": "accord",
