@@ -2672,7 +2672,7 @@ function MediaBlockListEditor({
               alignItems: 'flex-start',
               gap: '8px',
               opacity: dragFromIndex === index ? 0.4 : 1,
-              borderStyle: dragFromIndex === index ? 'dashed' : 'solid',
+              border: dragFromIndex === index ? '1px dashed #444' : 'none',
             }}
           >
             {/* Drag handle */}
