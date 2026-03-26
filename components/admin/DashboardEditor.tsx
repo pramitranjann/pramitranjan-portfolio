@@ -355,6 +355,15 @@ function moveItem<T>(items: T[], index: number, direction: -1 | 1) {
   return nextItems
 }
 
+function moveItemTo<T>(items: T[], fromIndex: number, toIndex: number): T[] {
+  const clampedTo = Math.min(toIndex, items.length - 1)
+  if (fromIndex === clampedTo) return items
+  const nextItems = [...items]
+  const [item] = nextItems.splice(fromIndex, 1)
+  nextItems.splice(clampedTo, 0, item)
+  return nextItems
+}
+
 function toPair(first: string, second: string) {
   return [first, second].filter(Boolean)
 }
@@ -1971,10 +1980,10 @@ function CaseStudyEditor({
     })
   }
 
-  function moveMediaBlock(blockId: string, direction: -1 | 1) {
-    const index = mediaBlocks.findIndex((block) => block.id === blockId)
-    if (index === -1) return
-    updateMediaBlocks(moveItem(mediaBlocks, index, direction))
+  function moveMediaBlock(blockId: string, toIndex: number) {
+    const fromIndex = mediaBlocks.findIndex((block) => block.id === blockId)
+    if (fromIndex === -1 || toIndex < 0 || toIndex > mediaBlocks.length) return
+    updateMediaBlocks(moveItemTo(mediaBlocks, fromIndex, toIndex))
   }
 
   return (
@@ -2460,7 +2469,7 @@ function MediaBlockListEditor({
   blocks: CaseStudyMediaBlock[]
   localWriteEnabled: boolean
   onAdd: (section: CaseStudyMediaBlockSection) => void
-  onMove: (blockId: string, direction: -1 | 1) => void
+  onMove: (blockId: string, toIndex: number) => void
   onChange: (blockId: string, updater: (block: CaseStudyMediaBlock) => CaseStudyMediaBlock) => void
   onRemove: (blockId: string) => void
 }) {
@@ -2492,7 +2501,7 @@ function MediaBlockListEditor({
           localWriteEnabled={localWriteEnabled}
           index={index}
           length={blocks.length}
-          onMove={(direction) => onMove(block.id, direction)}
+          onMove={(direction) => onMove(block.id, index + direction)}
           onChange={(updater) => onChange(block.id, updater)}
           onRemove={() => onRemove(block.id)}
         />
