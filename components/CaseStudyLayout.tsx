@@ -263,6 +263,7 @@ export function CaseStudyLayout({
     mediaBlocks,
     uiCopy,
   })
+  const explicitMediaBlockSections = new Set((mediaBlocks ?? []).map((block) => block.section))
   const researchBlocks = caseStudyMediaBlocks.filter((block) => block.section === 'research')
   const challengeBlocks = caseStudyMediaBlocks.filter((block) => block.section === 'challenge')
   const solutionBlocks = caseStudyMediaBlocks.filter((block) => block.section === 'solution')
@@ -491,7 +492,7 @@ export function CaseStudyLayout({
                 <div className="mt-6" style={{ display: 'grid', gap: '14px' }}>
                   {researchBelowBlocks.map(renderMediaBlock)}
                 </div>
-              ) : !researchBlocks.length && researchImage ? (
+              ) : !researchBlocks.length && !explicitMediaBlockSections.has('research') && researchImage ? (
                 <div data-reveal className="case-study-research-image w-full mt-6" style={{ position: 'relative', height: researchMedia.height, backgroundColor: researchMedia.background, border: '1px solid #1a1a1a', overflow: 'hidden' }}>
                   <Image src={researchImage} alt="Research" fill style={{ objectFit: researchMedia.fit, objectPosition: researchMedia.position }} sizes="100vw" />
                 </div>
@@ -549,7 +550,7 @@ export function CaseStudyLayout({
                 <div className="mt-6" style={{ display: 'grid', gap: '14px' }}>
                   {challengeBelowBlocks.map(renderMediaBlock)}
                 </div>
-              ) : !challengeBlocks.length && challengeImages ? (
+              ) : !challengeBlocks.length && !explicitMediaBlockSections.has('challenge') && challengeImages ? (
                 <div data-reveal className="case-study-image-grid mt-6 grid grid-cols-2" style={{ gap: challengeMedia.gap }}>
                   <div className="case-study-ideation-image" style={{ position: 'relative', height: challengeMedia.height, backgroundColor: challengeMedia.background, border: '1px solid #1a1a1a', overflow: 'hidden' }}>
                     <Image src={challengeImages[0]} alt="Challenge 1" fill style={{ objectFit: challengeMedia.fit, objectPosition: challengeMedia.firstPosition }} sizes="50vw" />
@@ -640,7 +641,7 @@ export function CaseStudyLayout({
               <div className="mt-6" style={{ display: 'grid', gap: '14px' }}>
                 {solutionBelowBlocks.map(renderMediaBlock)}
               </div>
-            ) : !solutionBlocks.length ? (
+            ) : !solutionBlocks.length && !explicitMediaBlockSections.has('solution') ? (
               <>
                 {solutionHeroImage && (
                   <div data-reveal className="case-study-solution-hero w-full mt-6 mb-1" style={{ position: 'relative', height: solutionHeroMedia.height, backgroundColor: solutionHeroMedia.background, border: '1px solid #1a1a1a', overflow: 'hidden' }}>
