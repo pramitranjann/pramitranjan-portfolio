@@ -2057,6 +2057,10 @@ function CaseStudyEditor({
     updateMediaBlocks(moveItemTo(mediaBlocks, fromIndex, toIndex))
   }
 
+  function replaceAllMediaBlocks(blocks: CaseStudyMediaBlock[]) {
+    updateMediaBlocks(blocks)
+  }
+
   return (
     <>
       <SectionFrame title={`${caseStudy.title} · Basics`}>
@@ -2159,6 +2163,7 @@ function CaseStudyEditor({
           onMove={moveMediaBlock}
           onChange={updateMediaBlock}
           onRemove={removeMediaBlock}
+          onReplaceAll={replaceAllMediaBlocks}
         />
       </SectionFrame>
 
@@ -2536,6 +2541,7 @@ function MediaBlockListEditor({
   onMove,
   onChange,
   onRemove,
+  onReplaceAll,
 }: {
   blocks: CaseStudyMediaBlock[]
   localWriteEnabled: boolean
@@ -2543,7 +2549,10 @@ function MediaBlockListEditor({
   onMove: (blockId: string, toIndex: number) => void
   onChange: (blockId: string, updater: (block: CaseStudyMediaBlock) => CaseStudyMediaBlock) => void
   onRemove: (blockId: string) => void
+  onReplaceAll: (blocks: CaseStudyMediaBlock[]) => void
 }) {
+  const [showTemplatePicker, setShowTemplatePicker] = useState(false)
+  const [pickerTemplateId, setPickerTemplateId] = useState('standard-ux')
   return (
     <div style={{ display: 'grid', gap: '12px' }}>
       <div className="flex" style={{ gap: '8px', flexWrap: 'wrap' }}>
@@ -2559,7 +2568,72 @@ function MediaBlockListEditor({
         <button type="button" onClick={() => onAdd('solution')} className="font-mono" style={{ background: 'transparent', border: '1px solid #2a2a2a', color: '#FF3120', padding: '8px 12px', cursor: 'pointer', letterSpacing: '0.1em' }}>
           + ADD SOLUTION BLOCK
         </button>
+        <button
+          type="button"
+          onClick={() => setShowTemplatePicker((v) => !v)}
+          className="font-mono"
+          style={{ background: 'transparent', border: '1px solid #2a2a2a', color: '#666666', padding: '8px 12px', cursor: 'pointer', letterSpacing: '0.1em', marginLeft: 'auto' }}
+        >
+          APPLY TEMPLATE…
+        </button>
       </div>
+      {showTemplatePicker && (
+        <div style={{ border: '1px solid #333', padding: '14px', background: '#111' }}>
+          <p className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.14em', color: '#f5f2ed', textTransform: 'uppercase', marginBottom: '10px' }}>
+            Apply a template
+          </p>
+          <div style={{ display: 'grid', gap: '6px', marginBottom: '10px' }}>
+            {CASE_STUDY_TEMPLATES.map((template) => (
+              <label
+                key={template.id}
+                className="font-mono"
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '8px',
+                  cursor: 'pointer',
+                  border: `1px solid ${pickerTemplateId === template.id ? '#FF3120' : '#222'}`,
+                  padding: '8px 10px',
+                }}
+              >
+                <input
+                  type="radio"
+                  name="apply-template"
+                  value={template.id}
+                  checked={pickerTemplateId === template.id}
+                  onChange={() => setPickerTemplateId(template.id)}
+                  style={{ marginTop: '2px', flexShrink: 0 }}
+                />
+                <span>
+                  <span style={{ fontSize: '11px', letterSpacing: '0.08em', color: '#f5f2ed', display: 'block' }}>{template.label}</span>
+                  <span style={{ fontSize: '10px', color: '#555', letterSpacing: '0.04em' }}>{template.description}</span>
+                </span>
+              </label>
+            ))}
+          </div>
+          <p className="font-mono" style={{ fontSize: '10px', color: '#666', borderLeft: '2px solid #333', paddingLeft: '10px', marginBottom: '10px', lineHeight: 1.6 }}>
+            This will replace all current media blocks. Image paths will be cleared.
+          </p>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button
+              type="button"
+              className="font-mono"
+              onClick={() => { onReplaceAll(applyTemplate(pickerTemplateId)); setShowTemplatePicker(false) }}
+              style={{ background: '#FF3120', border: 'none', color: '#fff', padding: '8px 14px', cursor: 'pointer', fontSize: '11px', letterSpacing: '0.12em' }}
+            >
+              APPLY {CASE_STUDY_TEMPLATES.find((t) => t.id === pickerTemplateId)?.label.toUpperCase() ?? ''} →
+            </button>
+            <button
+              type="button"
+              className="font-mono"
+              onClick={() => setShowTemplatePicker(false)}
+              style={{ background: 'transparent', border: '1px solid #333', color: '#666', padding: '8px 14px', cursor: 'pointer', fontSize: '11px', letterSpacing: '0.12em' }}
+            >
+              CANCEL
+            </button>
+          </div>
+        </div>
+      )}
       {blocks.length === 0 ? (
         <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#666666', lineHeight: 1.7 }}>
           No media blocks yet. Add a block to place screenshots exactly where you want them.
