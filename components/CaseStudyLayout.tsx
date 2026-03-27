@@ -110,12 +110,33 @@ function blockJustify(align?: CaseStudyMediaBlock['align']) {
 
 function inlineLayoutStyle(blocks: CaseStudyMediaBlock[]): React.CSSProperties | undefined {
   if (!blocks.length) return undefined
+  return {
+    display: 'grid',
+    gridTemplateColumns: 'minmax(0, 1fr) auto',
+    gap: '32px',
+    alignItems: 'center',
+  }
+}
+
+function inlineTextStyle(blocks: CaseStudyMediaBlock[]): React.CSSProperties {
+  const primaryBlock = blocks[0]
+  if (!primaryBlock) return { maxWidth: '640px' }
+  return {
+    width: '100%',
+    maxWidth: primaryBlock.inlineTextWidth || '640px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  }
+}
+
+function inlineMediaColumnStyle(blocks: CaseStudyMediaBlock[]): React.CSSProperties {
   const primaryBlock = blocks[0]
   return {
     display: 'grid',
-    gridTemplateColumns: `minmax(0, ${primaryBlock.inlineTextWidth || '640px'}) minmax(${primaryBlock.inlineMediaMinWidth || '320px'}, 1fr)`,
-    gap: '32px',
-    alignItems: 'center',
+    gap: '14px',
+    justifyItems: 'end',
+    minWidth: primaryBlock?.inlineMediaMinWidth || undefined,
   }
 }
 
@@ -469,7 +490,7 @@ export function CaseStudyLayout({
                   className={researchInlineBlocks.length ? 'case-study-inline-layout' : undefined}
                   style={inlineLayoutStyle(researchInlineBlocks)}
                 >
-                  <div style={researchInlineBlocks.length ? { maxWidth: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'center' } : { maxWidth: '640px' }}>
+                  <div style={researchInlineBlocks.length ? inlineTextStyle(researchInlineBlocks) : { maxWidth: '640px' }}>
                     {researchHeadline && (
                       <p className="font-mono" style={headlineStyle}>{researchHeadline}</p>
                     )}
@@ -478,7 +499,7 @@ export function CaseStudyLayout({
                     </p>
                   </div>
                   {researchInlineBlocks.length ? (
-                    <div className="case-study-inline-media" style={{ display: 'grid', gap: '14px' }}>
+                    <div className="case-study-inline-media" style={inlineMediaColumnStyle(researchInlineBlocks)}>
                       {researchInlineBlocks.map((block) => (
                         <div key={block.id} data-reveal style={{ display: 'flex', justifyContent: blockJustify(block.align) }}>
                           {renderMediaBlockContent(block)}
@@ -527,7 +548,7 @@ export function CaseStudyLayout({
                   className={challengeInlineBlocks.length ? 'case-study-inline-layout' : undefined}
                   style={inlineLayoutStyle(challengeInlineBlocks)}
                 >
-                  <div style={challengeInlineBlocks.length ? { maxWidth: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'center' } : { maxWidth: '640px' }}>
+                  <div style={challengeInlineBlocks.length ? inlineTextStyle(challengeInlineBlocks) : { maxWidth: '640px' }}>
                     {challengeHeadline && (
                       <p className="font-mono" style={headlineStyle}>{challengeHeadline}</p>
                     )}
@@ -536,7 +557,7 @@ export function CaseStudyLayout({
                     </p>
                   </div>
                   {challengeInlineBlocks.length ? (
-                    <div className="case-study-inline-media" style={{ display: 'grid', gap: '14px' }}>
+                    <div className="case-study-inline-media" style={inlineMediaColumnStyle(challengeInlineBlocks)}>
                       {challengeInlineBlocks.map((block) => (
                         <div key={block.id} data-reveal style={{ display: 'flex', justifyContent: blockJustify(block.align) }}>
                           {renderMediaBlockContent(block)}
@@ -574,7 +595,7 @@ export function CaseStudyLayout({
                   className={processInlineBlocks.length ? 'case-study-inline-layout' : undefined}
                   style={inlineLayoutStyle(processInlineBlocks)}
                 >
-                  <div style={processInlineBlocks.length ? { maxWidth: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'center' } : undefined}>
+                  <div style={processInlineBlocks.length ? inlineTextStyle(processInlineBlocks) : undefined}>
                   {processHeadline && (
                     <p className="font-mono" style={{ ...headlineStyle, maxWidth: '640px' }}>{processHeadline}</p>
                   )}
@@ -590,7 +611,7 @@ export function CaseStudyLayout({
                   )}
                   </div>
                   {processInlineBlocks.length ? (
-                    <div className="case-study-inline-media" style={{ display: 'grid', gap: '14px' }}>
+                    <div className="case-study-inline-media" style={inlineMediaColumnStyle(processInlineBlocks)}>
                       {processInlineBlocks.map((block) => (
                         <div key={block.id} data-reveal style={{ display: 'flex', justifyContent: blockJustify(block.align) }}>
                           {renderMediaBlockContent(block)}
@@ -618,7 +639,7 @@ export function CaseStudyLayout({
                 className={solutionInlineBlocks.length ? 'case-study-inline-layout' : undefined}
                 style={inlineLayoutStyle(solutionInlineBlocks)}
               >
-                <div style={solutionInlineBlocks.length ? { maxWidth: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'center' } : { maxWidth: '640px' }}>
+                <div style={solutionInlineBlocks.length ? inlineTextStyle(solutionInlineBlocks) : { maxWidth: '640px' }}>
                   {solutionHeadline && (
                     <p className="font-mono" style={headlineStyle}>{solutionHeadline}</p>
                   )}
@@ -627,7 +648,7 @@ export function CaseStudyLayout({
                   </p>
                 </div>
                 {solutionInlineBlocks.length ? (
-                  <div className="case-study-inline-media" style={{ display: 'grid', gap: '14px' }}>
+                  <div className="case-study-inline-media" style={inlineMediaColumnStyle(solutionInlineBlocks)}>
                     {solutionInlineBlocks.map((block) => (
                       <div key={block.id} data-reveal style={{ display: 'flex', justifyContent: blockJustify(block.align) }}>
                         {renderMediaBlockContent(block)}
