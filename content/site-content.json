@@ -1232,9 +1232,12 @@
           "id": "south-china-sea-solution-1",
           "section": "solution",
           "layout": "single",
-          "width": "100%",
+          "placement": "side-right",
+          "width": "420px",
+          "inlineTextWidth": "560px",
+          "inlineMediaMinWidth": "420px",
           "align": "center",
-          "images": [{ "src": "/creative/mixed-media/south-china-sea/solution-hero-processed.png", "fit": "contain", "aspectRatio": "16 / 10", "background": "#0d0d0d", "alt": "" }]
+          "images": [{ "src": "/creative/mixed-media/south-china-sea/solution-hero-processed.png", "fit": "contain", "aspectRatio": "3 / 4", "background": "#0d0d0d", "alt": "" }]
         },
         {
           "id": "south-china-sea-solution-2",
