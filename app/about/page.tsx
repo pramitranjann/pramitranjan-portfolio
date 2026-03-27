@@ -238,7 +238,7 @@ export default async function AboutPage() {
                 {content.aboutPage.contactBody}
               </p>
               <div data-reveal className="flex items-center" style={{ gap: '16px', flexWrap: 'wrap' }}>
-                {content.aboutPage.contactLinks.map((link, index) => (
+                {content.aboutPage.contactLinks.map((link) => (
                   <a
                     key={`${link.label}-${link.href}`}
                     href={link.href}
@@ -246,13 +246,13 @@ export default async function AboutPage() {
                     style={{
                       fontSize: 'var(--text-meta)',
                       letterSpacing: '0.14em',
-                      color: index === 0 ? '#FF3120' : '#999999',
-                      border: index === 0 ? '1px solid #FF3120' : '1px solid #1f1f1f',
+                      color: '#FF3120',
+                      border: '1px solid #FF3120',
                       padding: '10px 20px',
                       textDecoration: 'none',
                     }}
                   >
-                    {link.label}{index === 0 ? ' →' : ''}
+                    {link.label} →
                   </a>
                 ))}
               </div>

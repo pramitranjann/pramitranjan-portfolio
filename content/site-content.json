@@ -180,13 +180,13 @@
     ],
     "contactTitleHtml": "Let's make something <span style=\"color: #FF3120\">worth making.</span>",
     "contactBody": "Or just say hello. Either works.",
-    "contactLinks": [
-      {
-        "label": "INSTAGRAM",
-        "href": "https://www.instagram.com/pramitranjann/"
-      },
-      {
-        "label": "EMAIL",
+      "contactLinks": [
+        {
+          "label": "LINKEDIN",
+          "href": "https://www.linkedin.com/in/pramitranjann/"
+        },
+        {
+          "label": "EMAIL",
         "href": "mailto:pramit@pramitranjann.com"
       }
     ]
