@@ -74,7 +74,7 @@ export function About({
           className="font-mono"
           style={{ fontSize: 'var(--text-meta)', color: '#FF3120', letterSpacing: '0.12em', textDecoration: 'none', whiteSpace: 'nowrap', justifySelf: 'end', alignSelf: 'end', marginTop: '14px' }}
         >
-          {copy.aboutReadMoreLabel} <span className="arrow-nudge">→</span>
+              {copy.aboutReadMoreLabel}
         </Link>
       </div>
     </section>
