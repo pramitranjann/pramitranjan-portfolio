@@ -471,7 +471,7 @@ body.carousel-reengaging main {
     right: 16px !important;
     bottom: 16px !important;
     transform: none !important;
-    width: auto !important;
+    width: calc(100vw - 32px) !important;
     max-width: calc(100vw - 32px) !important;
     overflow-x: auto !important;
     overflow-y: hidden !important;
