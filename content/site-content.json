@@ -180,13 +180,13 @@
     ],
     "contactTitleHtml": "Let's make something <span style=\"color: #FF3120\">worth making.</span>",
     "contactBody": "Or just say hello. Either works.",
-      "contactLinks": [
-        {
-          "label": "LINKEDIN",
-          "href": "https://www.linkedin.com/in/pramitranjann/"
-        },
-        {
-          "label": "EMAIL",
+    "contactLinks": [
+      {
+        "label": "LINKEDIN",
+        "href": "https://www.linkedin.com/in/pramitranjann/"
+      },
+      {
+        "label": "EMAIL",
         "href": "mailto:pramit@pramitranjann.com"
       }
     ]
@@ -684,7 +684,15 @@
           "inlineMediaMinWidth": "240px",
           "align": "center",
           "hidden": true,
-          "images": [{ "src": "", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }]
+          "images": [
+            {
+              "src": "",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
+          ]
         },
         {
           "id": "franklins-challenge-1",
@@ -695,7 +703,15 @@
           "inlineMediaMinWidth": "240px",
           "align": "center",
           "hidden": true,
-          "images": [{ "src": "", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }]
+          "images": [
+            {
+              "src": "",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
+          ]
         },
         {
           "id": "franklins-solution-1",
@@ -704,7 +720,15 @@
           "width": "100%",
           "align": "center",
           "hidden": true,
-          "images": [{ "src": "", "fit": "contain", "aspectRatio": "16 / 10", "background": "#0d0d0d", "alt": "" }]
+          "images": [
+            {
+              "src": "",
+              "fit": "contain",
+              "aspectRatio": "16 / 10",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
+          ]
         },
         {
           "id": "franklins-solution-2",
@@ -715,8 +739,20 @@
           "align": "center",
           "hidden": true,
           "images": [
-            { "src": "", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
-            { "src": "", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+            {
+              "src": "",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            },
+            {
+              "src": "",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
           ]
         }
       ]
@@ -781,7 +817,15 @@
           "inlineTextWidth": "480px",
           "inlineMediaMinWidth": "240px",
           "align": "center",
-          "images": [{ "src": "/work/loomlearn/ideation-1.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }]
+          "images": [
+            {
+              "src": "/work/loomlearn/ideation-1.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
+          ]
         },
         {
           "id": "loomlearn-challenge-1",
@@ -791,7 +835,15 @@
           "inlineTextWidth": "480px",
           "inlineMediaMinWidth": "240px",
           "align": "center",
-          "images": [{ "src": "/work/loomlearn/ideation-2.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }]
+          "images": [
+            {
+              "src": "/work/loomlearn/ideation-2.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
+          ]
         },
         {
           "id": "loomlearn-solution-1",
@@ -799,7 +851,15 @@
           "layout": "single",
           "width": "100%",
           "align": "center",
-          "images": [{ "src": "/work/loomlearn/solution-hero-processed.png", "fit": "contain", "aspectRatio": "16 / 10", "background": "#0d0d0d", "alt": "" }]
+          "images": [
+            {
+              "src": "/work/loomlearn/solution-hero-processed.png",
+              "fit": "contain",
+              "aspectRatio": "16 / 10",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
+          ]
         },
         {
           "id": "loomlearn-solution-2",
@@ -809,8 +869,20 @@
           "gap": "2px",
           "align": "center",
           "images": [
-            { "src": "/work/loomlearn/solution-1-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
-            { "src": "/work/loomlearn/solution-2-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+            {
+              "src": "/work/loomlearn/solution-1-processed.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            },
+            {
+              "src": "/work/loomlearn/solution-2-processed.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
           ]
         }
       ]
@@ -954,7 +1026,15 @@
           "inlineTextWidth": "480px",
           "inlineMediaMinWidth": "240px",
           "align": "center",
-          "images": [{ "src": "/work/atom/research-processed.png", "fit": "contain", "aspectRatio": "3 / 4", "background": "#0d0d0d", "alt": "" }]
+          "images": [
+            {
+              "src": "/work/atom/research-processed.png",
+              "fit": "contain",
+              "aspectRatio": "3 / 4",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
+          ]
         },
         {
           "id": "atom-challenge-1",
@@ -964,8 +1044,20 @@
           "gap": "2px",
           "align": "center",
           "images": [
-            { "src": "/work/atom/ideation-1-processed.png", "fit": "contain", "aspectRatio": "3 / 4", "background": "#0d0d0d", "alt": "" },
-            { "src": "/work/atom/ideation-2-processed.png", "fit": "contain", "aspectRatio": "3 / 4", "background": "#0d0d0d", "alt": "" }
+            {
+              "src": "/work/atom/ideation-1-processed.png",
+              "fit": "contain",
+              "aspectRatio": "3 / 4",
+              "background": "#0d0d0d",
+              "alt": ""
+            },
+            {
+              "src": "/work/atom/ideation-2-processed.png",
+              "fit": "contain",
+              "aspectRatio": "3 / 4",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
           ]
         },
         {
@@ -974,7 +1066,15 @@
           "layout": "single",
           "width": "100%",
           "align": "center",
-          "images": [{ "src": "/work/atom/solution-hero-processed.png", "fit": "contain", "aspectRatio": "16 / 10", "background": "#0d0d0d", "alt": "" }]
+          "images": [
+            {
+              "src": "/work/atom/solution-hero-processed.png",
+              "fit": "contain",
+              "aspectRatio": "16 / 10",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
+          ]
         },
         {
           "id": "atom-solution-2",
@@ -984,8 +1084,20 @@
           "gap": "2px",
           "align": "center",
           "images": [
-            { "src": "/work/atom/hero-2-processed.png", "fit": "contain", "aspectRatio": "3 / 4", "background": "#0d0d0d", "alt": "" },
-            { "src": "/work/atom/solution-2-processed.png", "fit": "contain", "aspectRatio": "3 / 4", "background": "#0d0d0d", "alt": "" }
+            {
+              "src": "/work/atom/hero-2-processed.png",
+              "fit": "contain",
+              "aspectRatio": "3 / 4",
+              "background": "#0d0d0d",
+              "alt": ""
+            },
+            {
+              "src": "/work/atom/solution-2-processed.png",
+              "fit": "contain",
+              "aspectRatio": "3 / 4",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
           ]
         }
       ]
@@ -1045,7 +1157,16 @@
           "layout": "single",
           "width": "100%",
           "align": "center",
-          "images": [{ "src": "/work/albers/img-1-processed.png", "fit": "contain", "aspectRatio": "16 / 10", "background": "#0d0d0d", "alt": "" }]
+          "images": [
+            {
+              "src": "/work/albers/img-1-processed.png",
+              "fit": "contain",
+              "aspectRatio": "16 / 10",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
+          ],
+          "hidden": true
         },
         {
           "id": "albers-solution-2",
@@ -1055,9 +1176,22 @@
           "gap": "2px",
           "align": "center",
           "images": [
-            { "src": "/work/albers/img-2-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
-            { "src": "/work/albers/img-3-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
-          ]
+            {
+              "src": "/work/albers/img-2-processed.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            },
+            {
+              "src": "/work/albers/img-3-processed.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
+          ],
+          "hidden": true
         },
         {
           "id": "albers-solution-3",
@@ -1067,9 +1201,22 @@
           "gap": "2px",
           "align": "center",
           "images": [
-            { "src": "/work/albers/img-4-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
-            { "src": "/work/albers/img-5-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
-          ]
+            {
+              "src": "/work/albers/img-4-processed.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            },
+            {
+              "src": "/work/albers/img-5-processed.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
+          ],
+          "hidden": true
         },
         {
           "id": "albers-solution-4",
@@ -1079,9 +1226,54 @@
           "gap": "2px",
           "align": "center",
           "images": [
-            { "src": "/work/albers/img-6-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
-            { "src": "/work/albers/img-7-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
-          ]
+            {
+              "src": "/work/albers/img-6-processed.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            },
+            {
+              "src": "/work/albers/img-7-processed.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
+          ],
+          "hidden": true
+        },
+        {
+          "id": "albers-research-1",
+          "section": "research",
+          "layout": "single",
+          "align": "center",
+          "width": "100%",
+          "images": [
+            {
+              "src": "/work/albers/img-7-processed.png",
+              "aspectRatio": "16 / 10"
+            }
+          ],
+          "hidden": true
+        },
+        {
+          "id": "albers-challenge-1",
+          "section": "challenge",
+          "layout": "pair",
+          "align": "center",
+          "width": "100%",
+          "images": [
+            {
+              "src": "/work/albers/img-1-processed.png",
+              "aspectRatio": "4 / 3"
+            },
+            {
+              "src": "/work/albers/img-2-processed.png",
+              "aspectRatio": "4 / 3"
+            }
+          ],
+          "hidden": true
         }
       ]
     },
@@ -1201,7 +1393,15 @@
           "inlineTextWidth": "480px",
           "inlineMediaMinWidth": "240px",
           "align": "center",
-          "images": [{ "src": "/creative/mixed-media/south-china-sea/research-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }]
+          "images": [
+            {
+              "src": "/creative/mixed-media/south-china-sea/research-processed.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
+          ]
         },
         {
           "id": "south-china-sea-challenge-1",
@@ -1212,8 +1412,20 @@
           "align": "center",
           "hidden": true,
           "images": [
-            { "src": "/creative/mixed-media/south-china-sea/ideation-1.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
-            { "src": "/creative/mixed-media/south-china-sea/ideation-2.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+            {
+              "src": "/creative/mixed-media/south-china-sea/ideation-1.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            },
+            {
+              "src": "/creative/mixed-media/south-china-sea/ideation-2.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
           ]
         },
         {
@@ -1224,20 +1436,37 @@
           "gap": "2px",
           "align": "center",
           "images": [
-            { "src": "/creative/mixed-media/south-china-sea/solution-2-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
-            { "src": "/creative/mixed-media/south-china-sea/solution-1-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+            {
+              "src": "/creative/mixed-media/south-china-sea/solution-2-processed.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            },
+            {
+              "src": "/creative/mixed-media/south-china-sea/solution-1-processed.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
           ]
         },
         {
           "id": "south-china-sea-solution-1",
           "section": "solution",
           "layout": "single",
-          "placement": "side-right",
-          "width": "420px",
-          "inlineTextWidth": "560px",
-          "inlineMediaMinWidth": "420px",
+          "width": "100%",
           "align": "center",
-          "images": [{ "src": "/creative/mixed-media/south-china-sea/solution-hero-processed.png", "fit": "contain", "aspectRatio": "3 / 4", "background": "#0d0d0d", "alt": "" }]
+          "images": [
+            {
+              "src": "/creative/mixed-media/south-china-sea/solution-hero-processed.png",
+              "fit": "contain",
+              "aspectRatio": "16 / 10",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
+          ]
         },
         {
           "id": "south-china-sea-solution-2",
@@ -1247,8 +1476,20 @@
           "gap": "2px",
           "align": "center",
           "images": [
-            { "src": "/creative/mixed-media/south-china-sea/solution-1-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
-            { "src": "/creative/mixed-media/south-china-sea/solution-2-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+            {
+              "src": "/creative/mixed-media/south-china-sea/solution-1-processed.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            },
+            {
+              "src": "/creative/mixed-media/south-china-sea/solution-2-processed.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
           ]
         }
       ],
@@ -1312,7 +1553,15 @@
           "inlineTextWidth": "480px",
           "inlineMediaMinWidth": "240px",
           "align": "center",
-          "images": [{ "src": "/creative/mixed-media/faces-of-power/research-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }]
+          "images": [
+            {
+              "src": "/creative/mixed-media/faces-of-power/research-processed.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
+          ]
         },
         {
           "id": "faces-of-power-challenge-1",
@@ -1323,8 +1572,20 @@
           "align": "center",
           "hidden": true,
           "images": [
-            { "src": "/creative/mixed-media/faces-of-power/ideation-1.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
-            { "src": "/creative/mixed-media/faces-of-power/ideation-2.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+            {
+              "src": "/creative/mixed-media/faces-of-power/ideation-1.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            },
+            {
+              "src": "/creative/mixed-media/faces-of-power/ideation-2.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
           ]
         },
         {
@@ -1333,7 +1594,15 @@
           "layout": "single",
           "width": "100%",
           "align": "center",
-          "images": [{ "src": "/creative/mixed-media/faces-of-power/solution-hero-processed.png", "fit": "contain", "aspectRatio": "16 / 10", "background": "#0d0d0d", "alt": "" }]
+          "images": [
+            {
+              "src": "/creative/mixed-media/faces-of-power/solution-hero-processed.png",
+              "fit": "contain",
+              "aspectRatio": "16 / 10",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
+          ]
         },
         {
           "id": "faces-of-power-solution-2",
@@ -1343,8 +1612,20 @@
           "gap": "2px",
           "align": "center",
           "images": [
-            { "src": "/creative/mixed-media/faces-of-power/solution-1-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
-            { "src": "/creative/mixed-media/faces-of-power/solution-2-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+            {
+              "src": "/creative/mixed-media/faces-of-power/solution-1-processed.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            },
+            {
+              "src": "/creative/mixed-media/faces-of-power/solution-2-processed.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
           ]
         }
       ]
@@ -1393,8 +1674,20 @@
           "align": "center",
           "hidden": true,
           "images": [
-            { "src": "", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
-            { "src": "", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+            {
+              "src": "",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            },
+            {
+              "src": "",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
           ]
         },
         {
@@ -1404,7 +1697,15 @@
           "width": "100%",
           "align": "center",
           "hidden": true,
-          "images": [{ "src": "", "fit": "contain", "aspectRatio": "16 / 10", "background": "#0d0d0d", "alt": "" }]
+          "images": [
+            {
+              "src": "",
+              "fit": "contain",
+              "aspectRatio": "16 / 10",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
+          ]
         },
         {
           "id": "oracle-solution-1",
@@ -1413,7 +1714,15 @@
           "width": "100%",
           "align": "center",
           "hidden": true,
-          "images": [{ "src": "", "fit": "contain", "aspectRatio": "16 / 10", "background": "#0d0d0d", "alt": "" }]
+          "images": [
+            {
+              "src": "",
+              "fit": "contain",
+              "aspectRatio": "16 / 10",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
+          ]
         },
         {
           "id": "oracle-solution-2",
@@ -1424,8 +1733,20 @@
           "align": "center",
           "hidden": true,
           "images": [
-            { "src": "", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
-            { "src": "", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+            {
+              "src": "",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            },
+            {
+              "src": "",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
           ]
         }
       ]
@@ -1480,7 +1801,15 @@
           "inlineTextWidth": "480px",
           "inlineMediaMinWidth": "240px",
           "align": "center",
-          "images": [{ "src": "/creative/branding/soho/research-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }]
+          "images": [
+            {
+              "src": "/creative/branding/soho/research-processed.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
+          ]
         },
         {
           "id": "soho-solution-1",
@@ -1488,7 +1817,15 @@
           "layout": "single",
           "width": "100%",
           "align": "center",
-          "images": [{ "src": "/creative/branding/soho/solution-hero-processed.png", "fit": "contain", "aspectRatio": "16 / 10", "background": "#0d0d0d", "alt": "" }]
+          "images": [
+            {
+              "src": "/creative/branding/soho/solution-hero-processed.png",
+              "fit": "contain",
+              "aspectRatio": "16 / 10",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
+          ]
         },
         {
           "id": "soho-solution-2",
@@ -1498,8 +1835,20 @@
           "gap": "2px",
           "align": "center",
           "images": [
-            { "src": "/creative/branding/soho/solution-1-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" },
-            { "src": "/creative/branding/soho/hero-processed.png", "fit": "contain", "aspectRatio": "4 / 3", "background": "#0d0d0d", "alt": "" }
+            {
+              "src": "/creative/branding/soho/solution-1-processed.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            },
+            {
+              "src": "/creative/branding/soho/hero-processed.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
           ]
         }
       ]

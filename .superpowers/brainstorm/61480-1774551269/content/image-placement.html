@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Study Image Layout</title>
+<script src="../../../scripts/helper.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0d0d0d;
+    color: #f5f2ed;
+    font-family: "DM Mono", "Courier New", monospace;
+    padding: 40px 32px 80px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .page-title {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: #FF3120;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: #f5f2ed;
+    margin-bottom: 6px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    color: #666666;
+    letter-spacing: 0.04em;
+    margin-bottom: 40px;
+    line-height: 1.6;
+  }
+
+  /* ─── Approach cards ─── */
+  .approaches {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .approach {
+    border: 1px solid #1f1f1f;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .approach:hover { border-color: #444; }
+  .approach.selected { border-color: #FF3120 !important; }
+
+  .approach-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    border-bottom: 1px solid #1a1a1a;
+    background: #111;
+  }
+
+  .approach-letter {
+    width: 28px;
+    height: 28px;
+    border: 1px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: #999;
+    flex-shrink: 0;
+  }
+
+  .approach.selected .approach-letter {
+    border-color: #FF3120;
+    color: #FF3120;
+  }
+
+  .approach-meta h3 {
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: #f5f2ed;
+    font-weight: 400;
+    margin-bottom: 3px;
+  }
+
+  .approach-meta p {
+    font-size: 11px;
+    color: #666;
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+  }
+
+  .badge {
+    margin-left: auto;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: #FF3120;
+    border: 1px solid #FF312044;
+    padding: 3px 8px;
+    flex-shrink: 0;
+  }
+
+  .mockup-area {
+    padding: 20px 20px 24px;
+    background: #0d0d0d;
+  }
+
+  /* ─── Section wireframe ─── */
+  .cs-section {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    border: 1px solid #1a1a1a;
+    margin-bottom: 2px;
+  }
+
+  .cs-label-col {
+    padding: 14px 16px;
+    border-right: 1px solid #1a1a1a;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .cs-label {
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    color: #FF3120;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .cs-content-col {
+    padding: 14px 16px;
+  }
+
+  .text-block {
+    height: 8px;
+    background: #222;
+    border-radius: 1px;
+    margin-bottom: 5px;
+  }
+
+  .text-block.short { width: 55%; }
+  .text-block.medium { width: 80%; }
+  .text-block.full { width: 100%; }
+
+  .text-headline {
+    height: 10px;
+    background: #333;
+    border-radius: 1px;
+    margin-bottom: 8px;
+    width: 70%;
+  }
+
+  /* Image placeholders */
+  .img-full {
+    width: 100%;
+    background: #161616;
+    border: 1px solid #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: #444;
+    text-transform: uppercase;
+    margin-top: 12px;
+  }
+
+  .img-full.ratio-16-10 { aspect-ratio: 16/10; }
+  .img-full.ratio-4-3 { aspect-ratio: 4/3; }
+  .img-full.ratio-3-2 { aspect-ratio: 3/2; }
+  .img-full.ratio-tall { aspect-ratio: 4/5; }
+
+  .img-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-top: 12px;
+  }
+
+  .img-pair-item {
+    background: #161616;
+    border: 1px solid #1a1a1a;
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: #444;
+    text-transform: uppercase;
+  }
+
+  /* Inline layout: text + image side by side */
+  .inline-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+    margin-top: 0;
+  }
+
+  .inline-text .text-block,
+  .inline-text .text-headline {
+    /* nothing extra */
+  }
+
+  .inline-image {
+    background: #161616;
+    border: 1px solid #1a1a1a;
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: #444;
+    text-transform: uppercase;
+  }
+
+  .inline-image.tall { aspect-ratio: 4/5; }
+
+  /* Offset / centered single */
+  .img-centered {
+    width: 78%;
+    margin: 12px auto 0;
+    background: #161616;
+    border: 1px solid #1a1a1a;
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: #444;
+    text-transform: uppercase;
+  }
+
+  .section-label-mini {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: #555;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  /* ─── Full-width spanning image (below the label/content grid) ─── */
+  .img-span-full {
+    width: 100%;
+    background: #161616;
+    border: 1px solid #1a1a1a;
+    border-top: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: #444;
+    text-transform: uppercase;
+    aspect-ratio: 16/7;
+    margin-bottom: 2px;
+  }
+
+  .tradeoffs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 14px;
+  }
+
+  .tradeoff-item {
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    line-height: 1.6;
+    padding: 10px 12px;
+    border: 1px solid #1a1a1a;
+  }
+
+  .tradeoff-item.pro { border-color: #1a331a; background: #0d160d; color: #5a9e5a; }
+  .tradeoff-item.con { border-color: #331a1a; background: #160d0d; color: #9e5a5a; }
+
+  .tradeoff-label {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    opacity: 0.7;
+  }
+
+  .divider {
+    height: 1px;
+    background: #1a1a1a;
+    margin: 32px 0;
+  }
+
+  /* selected indicator */
+  #selection-indicator {
+    position: fixed;
+    bottom: 20px;
+    right: 24px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: #FF3120;
+    background: #0d0d0d;
+    border: 1px solid #FF312044;
+    padding: 8px 14px;
+    display: none;
+  }
+
+  #selection-indicator.visible { display: block; }
+</style>
+</head>
+<body>
+
+<div class="page-title">Case Study Images</div>
+<h1>How should images sit inside each section?</h1>
+<p class="subtitle">Three approaches to placement and sizing — all using your existing layout system.<br>Click an approach to select it.</p>
+
+<div class="approaches">
+
+  <!-- ─── APPROACH A ─── -->
+  <div class="approach" data-choice="a" onclick="toggleSelect(this)">
+    <div class="approach-header">
+      <div class="approach-letter">A</div>
+      <div class="approach-meta">
+        <h3>Text first, image below — always</h3>
+        <p>Every section: read the text, then see the image. One rule, no exceptions.</p>
+      </div>
+    </div>
+    <div class="mockup-area">
+
+      <div class="section-label-mini">Research section</div>
+      <div class="cs-section">
+        <div class="cs-label-col"><span class="cs-label">Research</span></div>
+        <div class="cs-content-col">
+          <div class="text-headline"></div>
+          <div class="text-block full"></div>
+          <div class="text-block full"></div>
+          <div class="text-block medium"></div>
+          <div class="text-block short"></div>
+          <!-- image below text, inside content column -->
+          <div class="img-full ratio-16-10">UI screen or process photo</div>
+        </div>
+      </div>
+
+      <div class="section-label-mini" style="margin-top:14px">Solution section</div>
+      <div class="cs-section">
+        <div class="cs-label-col"><span class="cs-label">Solution</span></div>
+        <div class="cs-content-col">
+          <div class="text-headline"></div>
+          <div class="text-block full"></div>
+          <div class="text-block medium"></div>
+          <!-- hero image below -->
+          <div class="img-full ratio-16-10">Hero screen</div>
+          <!-- pair below that -->
+          <div class="img-pair">
+            <div class="img-pair-item">Detail 1</div>
+            <div class="img-pair-item">Detail 2</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tradeoffs">
+        <div class="tradeoff-item pro"><div class="tradeoff-label">Works well</div>Predictable rhythm. Text and images never compete. Easy to manage across case studies.</div>
+        <div class="tradeoff-item con"><div class="tradeoff-label">Watch out</div>Can feel like a written report. Process photos need to be strong enough to earn the space.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── APPROACH B ─── -->
+  <div class="approach" data-choice="b" onclick="toggleSelect(this)">
+    <div class="approach-header">
+      <div class="approach-letter">B</div>
+      <div class="approach-meta">
+        <h3>Inline for process, full-width for solution</h3>
+        <p>Research & challenge: text left, image right (side by side). Solution: full width below — it earns the space.</p>
+      </div>
+      <div class="badge">RECOMMENDED</div>
+    </div>
+    <div class="mockup-area">
+
+      <div class="section-label-mini">Research / Challenge section (side-right placement)</div>
+      <div class="cs-section">
+        <div class="cs-label-col"><span class="cs-label">Research</span></div>
+        <div class="cs-content-col">
+          <div class="inline-layout">
+            <div class="inline-text">
+              <div class="text-headline"></div>
+              <div class="text-block full"></div>
+              <div class="text-block full"></div>
+              <div class="text-block medium"></div>
+              <div class="text-block short"></div>
+            </div>
+            <div class="inline-image">Process photo<br>or wireframe</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label-mini" style="margin-top:14px">Solution section (full-width below)</div>
+      <div class="cs-section">
+        <div class="cs-label-col"><span class="cs-label">Solution</span></div>
+        <div class="cs-content-col">
+          <div class="text-headline"></div>
+          <div class="text-block full"></div>
+          <div class="text-block medium"></div>
+          <div class="img-full ratio-16-10" style="margin-top:14px">Hero UI screen — full content width</div>
+          <div class="img-pair">
+            <div class="img-pair-item">Screen 2</div>
+            <div class="img-pair-item">Screen 3</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tradeoffs">
+        <div class="tradeoff-item pro"><div class="tradeoff-label">Works well</div>Process images accompany the text that describes them. Solution gets maximum visual weight. Matches how recruiters read: scan → image → read detail.</div>
+        <div class="tradeoff-item con"><div class="tradeoff-label">Watch out</div>Side-right images need to be landscape or square — portrait screens can feel cramped inline. Two rules to remember instead of one.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── APPROACH C ─── -->
+  <div class="approach" data-choice="c" onclick="toggleSelect(this)">
+    <div class="approach-header">
+      <div class="approach-letter">C</div>
+      <div class="approach-meta">
+        <h3>Full-width, edge-to-edge — across the whole section</h3>
+        <p>Images break out of the content column and span the full page width, below the label/text grid.</p>
+      </div>
+    </div>
+    <div class="mockup-area">
+
+      <div class="section-label-mini">Challenge section (full-span image)</div>
+      <div class="cs-section">
+        <div class="cs-label-col"><span class="cs-label">Challenge</span></div>
+        <div class="cs-content-col">
+          <div class="text-headline"></div>
+          <div class="text-block full"></div>
+          <div class="text-block full"></div>
+          <div class="text-block medium"></div>
+        </div>
+      </div>
+      <!-- image spans full width below the grid -->
+      <div class="img-span-full">Image spans full section width — wider than the content column</div>
+
+      <div class="section-label-mini" style="margin-top:14px">Solution section (full-span pair)</div>
+      <div class="cs-section">
+        <div class="cs-label-col"><span class="cs-label">Solution</span></div>
+        <div class="cs-content-col">
+          <div class="text-headline"></div>
+          <div class="text-block full"></div>
+          <div class="text-block medium"></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:2px">
+        <div style="background:#161616;border:1px solid #1a1a1a;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-size:9px;letter-spacing:0.12em;color:#444;text-transform:uppercase">Screen 1</div>
+        <div style="background:#161616;border:1px solid #1a1a1a;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-size:9px;letter-spacing:0.12em;color:#444;text-transform:uppercase">Screen 2</div>
+      </div>
+
+      <div class="tradeoffs">
+        <div class="tradeoff-item pro"><div class="tradeoff-label">Works well</div>Maximum visual impact. UI screens get real breathing room. Cinematic feel — images feel like part of the layout, not attachments.</div>
+        <div class="tradeoff-item con"><div class="tradeoff-label">Watch out</div>Requires layout changes to CaseStudyLayout.tsx (images currently can't span outside the content column). Most effort to implement.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="selection-indicator"></div>
+
+<script>
+  function toggleSelect(el) {
+    const all = document.querySelectorAll('.approach');
+    all.forEach(a => a.classList.remove('selected'));
+    el.classList.add('selected');
+    const letter = el.querySelector('.approach-letter').textContent;
+    const title = el.querySelector('.approach-meta h3').textContent;
+    const ind = document.getElementById('selection-indicator');
+    ind.textContent = '→ ' + letter + ': ' + title;
+    ind.classList.add('visible');
+    if (window.recordChoice) window.recordChoice(el.dataset.choice, letter + ' — ' + title);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Template System Design</title>
+<script src="../../../scripts/helper.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0d0d0d;
+    color: #f5f2ed;
+    font-family: "DM Mono", "Courier New", monospace;
+    padding: 40px 32px 100px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .eyebrow { font-size: 11px; letter-spacing: 0.16em; color: #FF3120; text-transform: uppercase; margin-bottom: 8px; }
+  h1 { font-family: "DM Serif Display", Georgia, serif; font-size: 26px; font-weight: 400; margin-bottom: 6px; }
+  .subtitle { font-size: 13px; color: #666; letter-spacing: 0.04em; margin-bottom: 40px; line-height: 1.6; }
+  h2 { font-size: 10px; letter-spacing: 0.16em; color: #FF3120; text-transform: uppercase; margin: 40px 0 14px; display: flex; align-items: center; gap: 12px; }
+  h2::after { content: ''; flex: 1; height: 1px; background: #1a1a1a; }
+  h2:first-of-type { margin-top: 0; }
+
+  /* ── Template cards ── */
+  .template-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .tcard {
+    border: 1px solid #1f1f1f;
+    overflow: hidden;
+  }
+
+  .tcard-header {
+    padding: 12px 14px;
+    background: #111;
+    border-bottom: 1px solid #1a1a1a;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .tcard-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #FF3120;
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+
+  .tcard-dot.grey { background: #333; }
+  .tcard-dot.amber { background: #c47f2a; }
+  .tcard-dot.teal { background: #2a7a7a; }
+
+  .tcard-name { font-size: 12px; letter-spacing: 0.06em; color: #f5f2ed; margin-bottom: 2px; }
+  .tcard-sub { font-size: 10px; color: #555; letter-spacing: 0.04em; line-height: 1.5; }
+  .tcard-eg { font-size: 9px; color: #FF3120; letter-spacing: 0.1em; margin-top: 4px; }
+
+  .tcard-body { padding: 12px 14px; }
+
+  /* Block list inside template */
+  .block-list { display: flex; flex-direction: column; gap: 3px; }
+
+  .block-row {
+    display: grid;
+    grid-template-columns: 72px 70px 1fr;
+    gap: 0;
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    border: 1px solid #1a1a1a;
+  }
+
+  .block-row-cell {
+    padding: 5px 8px;
+    border-right: 1px solid #1a1a1a;
+    line-height: 1.4;
+  }
+  .block-row-cell:last-child { border-right: none; color: #555; }
+  .block-row-cell.section { color: #FF3120; }
+  .block-row-cell.placement { color: #888; }
+
+  .block-vis {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    padding: 5px 8px;
+  }
+
+  .bv-text { background: #222; height: 100%; flex: 1.5; min-height: 24px; border-radius: 1px; }
+  .bv-img { background: #161616; border: 1px solid #222; flex: 1; min-height: 24px; border-radius: 1px; }
+  .bv-img.wide { flex: 3; }
+  .bv-img.full { flex: 1; width: 100%; }
+
+  /* ── Dashboard mockups ── */
+  .dash-mockup {
+    border: 1px solid #1f1f1f;
+    overflow: hidden;
+  }
+
+  .dash-toolbar {
+    background: #111;
+    border-bottom: 1px solid #1a1a1a;
+    padding: 8px 14px;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .dash-toolbar .crumb { color: #FF3120; }
+
+  .dash-body { padding: 18px 16px; }
+
+  /* New case study flow */
+  .new-flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 0; align-items: start; }
+
+  .flow-step {
+    background: #111;
+    border: 1px solid #1a1a1a;
+    padding: 12px 12px;
+  }
+
+  .flow-step-label {
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    color: #555;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .flow-step-title {
+    font-size: 10px;
+    color: #f5f2ed;
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+  }
+
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6px;
+    color: #333;
+    font-size: 14px;
+    margin-top: 28px;
+  }
+
+  .mini-input {
+    height: 22px;
+    background: #0d0d0d;
+    border: 1px solid #2a2a2a;
+    margin-bottom: 4px;
+    font-size: 8px;
+    letter-spacing: 0.08em;
+    color: #555;
+    padding: 0 6px;
+    display: flex;
+    align-items: center;
+  }
+
+  .mini-radio {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .mini-radio-item {
+    border: 1px solid #222;
+    padding: 3px 7px;
+    font-size: 8px;
+    letter-spacing: 0.08em;
+    color: #666;
+  }
+
+  .mini-radio-item.active { border-color: #FF3120; color: #FF3120; }
+
+  .mini-btn {
+    display: inline-flex;
+    align-items: center;
+    background: #FF3120;
+    color: #fff;
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    padding: 4px 10px;
+    margin-top: 6px;
+  }
+
+  /* Existing case study — template apply section */
+  .block-editor-section {
+    border: 1px solid #1a1a1a;
+    margin-bottom: 8px;
+  }
+
+  .bes-header {
+    background: #0f0f0f;
+    border-bottom: 1px solid #1a1a1a;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .bes-title {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: #666;
+    text-transform: uppercase;
+  }
+
+  .bes-actions {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .bes-btn {
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    color: #999;
+    border: 1px solid #222;
+    padding: 3px 8px;
+    text-transform: uppercase;
+  }
+
+  .bes-btn.primary { border-color: #FF3120; color: #FF3120; }
+
+  .bes-body { padding: 10px 12px; }
+
+  /* Drag handle block */
+  .drag-block {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #1a1a1a;
+    padding: 7px 10px;
+    margin-bottom: 3px;
+    background: #0d0d0d;
+  }
+
+  .drag-handle {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 2px;
+    cursor: grab;
+    flex-shrink: 0;
+  }
+
+  .drag-dot-row { display: flex; gap: 2px; }
+  .drag-dot { width: 3px; height: 3px; background: #333; border-radius: 50%; }
+
+  .drag-block-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .drag-block-section {
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    color: #FF3120;
+    text-transform: uppercase;
+  }
+
+  .drag-block-desc {
+    font-size: 8px;
+    letter-spacing: 0.06em;
+    color: #555;
+    margin-top: 1px;
+  }
+
+  .drag-block-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .drag-action-btn {
+    font-size: 7px;
+    letter-spacing: 0.1em;
+    color: #444;
+    border: 1px solid #1a1a1a;
+    padding: 2px 6px;
+  }
+
+  .drag-block.dragging { opacity: 0.4; border-style: dashed; }
+  .drag-block.active { border-color: #FF3120; background: #110800; }
+
+  /* Template picker modal */
+  .template-picker {
+    border: 1px solid #333;
+    background: #111;
+    padding: 16px;
+  }
+
+  .tp-title {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: #f5f2ed;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .tp-sub { font-size: 10px; color: #555; margin-bottom: 14px; line-height: 1.5; }
+
+  .tp-options { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 12px; }
+
+  .tp-opt {
+    border: 1px solid #222;
+    padding: 8px 10px;
+    cursor: pointer;
+  }
+
+  .tp-opt.selected { border-color: #FF3120; }
+
+  .tp-opt-name { font-size: 9px; letter-spacing: 0.1em; color: #f5f2ed; margin-bottom: 3px; }
+  .tp-opt-desc { font-size: 8px; color: #555; line-height: 1.4; }
+
+  .tp-warning {
+    font-size: 9px;
+    color: #666;
+    border-left: 2px solid #333;
+    padding: 6px 10px;
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+
+  .tp-warning span { color: #c47f2a; }
+
+  .tp-footer { display: flex; gap: 8px; }
+  .tp-cancel { font-size: 9px; letter-spacing: 0.1em; color: #555; border: 1px solid #222; padding: 5px 12px; }
+  .tp-apply { font-size: 9px; letter-spacing: 0.1em; color: #fff; background: #FF3120; padding: 5px 12px; }
+
+  /* ── Drag + drop section ── */
+  .dnd-note {
+    font-size: 10px;
+    color: #555;
+    letter-spacing: 0.04em;
+    line-height: 1.7;
+    border: 1px solid #1a1a1a;
+    padding: 12px 14px;
+    margin-top: 10px;
+  }
+  .dnd-note strong { color: #f5f2ed; }
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Full System Design</div>
+<h1>Templates + drag-and-drop + dashboard edits</h1>
+<p class="subtitle">Three templates cover the range of case study types. Applied at creation or swapped later. Drag handles replace up/down arrows.</p>
+
+<!-- ── PART 1: TEMPLATES ── -->
+<h2>The three templates</h2>
+
+<div class="template-grid">
+
+  <!-- Standard UX -->
+  <div class="tcard">
+    <div class="tcard-header">
+      <div class="tcard-dot"></div>
+      <div>
+        <div class="tcard-name">Standard UX</div>
+        <div class="tcard-sub">For most case studies: research-led work, desktop or responsive UI</div>
+        <div class="tcard-eg">→ Franklin's · LoomLearn · HelpOH · Accord</div>
+      </div>
+    </div>
+    <div class="tcard-body">
+      <div class="block-list">
+        <div class="block-row">
+          <div class="block-row-cell section">Research</div>
+          <div class="block-row-cell placement">side-right</div>
+          <div class="block-row-cell">single · 60/40 · 4/3</div>
+        </div>
+        <div class="block-row">
+          <div class="block-row-cell section">Challenge</div>
+          <div class="block-row-cell placement">side-right</div>
+          <div class="block-row-cell">single · 60/40 · 4/3</div>
+        </div>
+        <div class="block-row">
+          <div class="block-row-cell section">Solution</div>
+          <div class="block-row-cell placement">below</div>
+          <div class="block-row-cell">single hero · 100% · 16/10</div>
+        </div>
+        <div class="block-row">
+          <div class="block-row-cell section">Solution</div>
+          <div class="block-row-cell placement">below</div>
+          <div class="block-row-cell">pair · 100% · 4/3 each</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile / App -->
+  <div class="tcard">
+    <div class="tcard-header">
+      <div class="tcard-dot amber"></div>
+      <div>
+        <div class="tcard-name">Mobile / App</div>
+        <div class="tcard-sub">Phone-first UI — portrait screens need a taller aspect ratio inline</div>
+        <div class="tcard-eg">→ Atom OS · any mobile-first project</div>
+      </div>
+    </div>
+    <div class="tcard-body">
+      <div class="block-list">
+        <div class="block-row">
+          <div class="block-row-cell section">Research</div>
+          <div class="block-row-cell placement">side-right</div>
+          <div class="block-row-cell">single · 60/40 · 3/4 portrait</div>
+        </div>
+        <div class="block-row">
+          <div class="block-row-cell section">Challenge</div>
+          <div class="block-row-cell placement">below</div>
+          <div class="block-row-cell">pair · 100% · 3/4 each</div>
+        </div>
+        <div class="block-row">
+          <div class="block-row-cell section">Solution</div>
+          <div class="block-row-cell placement">below</div>
+          <div class="block-row-cell">single hero · 100% · 16/10</div>
+        </div>
+        <div class="block-row">
+          <div class="block-row-cell section">Solution</div>
+          <div class="block-row-cell placement">below</div>
+          <div class="block-row-cell">pair · 100% · 3/4 each</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Process-Heavy -->
+  <div class="tcard">
+    <div class="tcard-header">
+      <div class="tcard-dot teal"></div>
+      <div>
+        <div class="tcard-name">Process-Heavy</div>
+        <div class="tcard-sub">Projects with extensive iteration — adds a dedicated process block</div>
+        <div class="tcard-eg">→ projects with usability testing, multiple rounds</div>
+      </div>
+    </div>
+    <div class="tcard-body">
+      <div class="block-list">
+        <div class="block-row">
+          <div class="block-row-cell section">Research</div>
+          <div class="block-row-cell placement">side-right</div>
+          <div class="block-row-cell">single · 60/40 · 4/3</div>
+        </div>
+        <div class="block-row">
+          <div class="block-row-cell section">Challenge</div>
+          <div class="block-row-cell placement">side-right</div>
+          <div class="block-row-cell">single · 60/40 · 4/3</div>
+        </div>
+        <div class="block-row">
+          <div class="block-row-cell section">Process</div>
+          <div class="block-row-cell placement">below</div>
+          <div class="block-row-cell">pair · 100% · 4/3 each</div>
+        </div>
+        <div class="block-row">
+          <div class="block-row-cell section">Solution</div>
+          <div class="block-row-cell placement">below</div>
+          <div class="block-row-cell">single hero · 100% · 16/10</div>
+        </div>
+        <div class="block-row">
+          <div class="block-row-cell section">Solution</div>
+          <div class="block-row-cell placement">below</div>
+          <div class="block-row-cell">pair · 100% · 4/3 each</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Visual / Brand -->
+  <div class="tcard">
+    <div class="tcard-header">
+      <div class="tcard-dot grey"></div>
+      <div>
+        <div class="tcard-name">Visual / Brand</div>
+        <div class="tcard-sub">Branding and creative projects — full-width imagery throughout</div>
+        <div class="tcard-eg">→ Oracle branding · Soho · mixed-media case studies</div>
+      </div>
+    </div>
+    <div class="tcard-body">
+      <div class="block-list">
+        <div class="block-row">
+          <div class="block-row-cell section">Challenge</div>
+          <div class="block-row-cell placement">below</div>
+          <div class="block-row-cell">pair · 100% · 4/3 each</div>
+        </div>
+        <div class="block-row">
+          <div class="block-row-cell section">Process</div>
+          <div class="block-row-cell placement">below</div>
+          <div class="block-row-cell">single · 100% · 16/10</div>
+        </div>
+        <div class="block-row">
+          <div class="block-row-cell section">Solution</div>
+          <div class="block-row-cell placement">below</div>
+          <div class="block-row-cell">single hero · 100% · 16/10</div>
+        </div>
+        <div class="block-row">
+          <div class="block-row-cell section">Solution</div>
+          <div class="block-row-cell placement">below</div>
+          <div class="block-row-cell">pair · 100% · 4/3 each</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── PART 2: NEW CASE STUDY FLOW ── -->
+<h2>Creating a new case study — template picker step</h2>
+
+<div class="dash-mockup">
+  <div class="dash-toolbar">
+    <span class="crumb">Dashboard</span> / <span>New Case Study</span>
+  </div>
+  <div class="dash-body">
+    <div class="new-flow">
+
+      <div class="flow-step">
+        <div class="flow-step-label">Step 1</div>
+        <div class="flow-step-title">Basics</div>
+        <div class="mini-input">Slug (e.g. my-project)</div>
+        <div class="mini-input">Title</div>
+        <div class="mini-input">One-liner</div>
+        <div class="mini-input">Type (e.g. UX DESIGN · 2025)</div>
+      </div>
+
+      <div class="flow-arrow">→</div>
+
+      <div class="flow-step">
+        <div class="flow-step-label">Step 2 — new</div>
+        <div class="flow-step-title">Choose a template</div>
+        <div class="mini-radio">
+          <div class="mini-radio-item active">Standard UX</div>
+          <div class="mini-radio-item">Mobile / App</div>
+          <div class="mini-radio-item">Process-Heavy</div>
+          <div class="mini-radio-item">Visual / Brand</div>
+          <div class="mini-radio-item">Blank</div>
+        </div>
+        <div style="font-size:8px;color:#555;margin-top:8px;line-height:1.5">Selected: <span style="color:#f5f2ed">Standard UX</span><br>4 blocks pre-configured. Add images after creation.</div>
+      </div>
+
+      <div class="flow-arrow">→</div>
+
+      <div class="flow-step">
+        <div class="flow-step-label">Step 3</div>
+        <div class="flow-step-title">Created — add images</div>
+        <div style="font-size:8px;color:#555;margin-top:4px;line-height:1.6">Case study created with template blocks. Media blocks are hidden until you add image paths. Edit in the case study editor.</div>
+        <div class="mini-btn">Open Editor →</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ── PART 3: APPLY TEMPLATE TO EXISTING ── -->
+<h2>Applying a template to an existing case study</h2>
+
+<div class="dash-mockup">
+  <div class="dash-toolbar">
+    <span class="crumb">Dashboard</span> / <span class="crumb">Case Studies</span> / <span>Atom OS</span>
+  </div>
+  <div class="dash-body">
+
+    <div class="block-editor-section">
+      <div class="bes-header">
+        <div class="bes-title">Media Blocks</div>
+        <div class="bes-actions">
+          <div class="bes-btn primary">Apply template…</div>
+          <div class="bes-btn">+ Add block</div>
+        </div>
+      </div>
+      <div class="bes-body">
+
+        <!-- Template picker inline panel (shown after clicking "Apply template…") -->
+        <div class="template-picker" style="margin-bottom:12px">
+          <div class="tp-title">Apply a template</div>
+          <div class="tp-sub">Replaces all current blocks with the template's pre-configured set. You can undo this or add blocks individually afterwards.</div>
+          <div class="tp-options">
+            <div class="tp-opt"><div class="tp-opt-name">Standard UX</div><div class="tp-opt-desc">Research + challenge inline · solution full-width</div></div>
+            <div class="tp-opt selected"><div class="tp-opt-name">Mobile / App</div><div class="tp-opt-desc">Portrait inline · challenge pair · solution hero + pair</div></div>
+            <div class="tp-opt"><div class="tp-opt-name">Process-Heavy</div><div class="tp-opt-desc">Adds dedicated process block with pair</div></div>
+            <div class="tp-opt"><div class="tp-opt-name">Visual / Brand</div><div class="tp-opt-desc">Full-width images throughout, no inline</div></div>
+          </div>
+          <div class="tp-warning"><span>⚠ This will replace existing blocks.</span> Image paths will be cleared — you'll re-add them after applying.</div>
+          <div class="tp-footer">
+            <div class="tp-cancel">Cancel</div>
+            <div class="tp-apply">Apply Mobile / App →</div>
+          </div>
+        </div>
+
+        <!-- Drag-and-drop block list -->
+        <div class="drag-block active">
+          <div class="drag-handle"><div class="drag-dot-row"><div class="drag-dot"></div><div class="drag-dot"></div></div><div class="drag-dot-row"><div class="drag-dot"></div><div class="drag-dot"></div></div><div class="drag-dot-row"><div class="drag-dot"></div><div class="drag-dot"></div></div></div>
+          <div class="drag-block-info">
+            <div class="drag-block-section">Research</div>
+            <div class="drag-block-desc">side-right · 60/40 · 3/4 portrait · 1 image</div>
+          </div>
+          <div class="drag-block-actions">
+            <div class="drag-action-btn">Edit</div>
+            <div class="drag-action-btn">✕</div>
+          </div>
+        </div>
+        <div class="drag-block">
+          <div class="drag-handle"><div class="drag-dot-row"><div class="drag-dot"></div><div class="drag-dot"></div></div><div class="drag-dot-row"><div class="drag-dot"></div><div class="drag-dot"></div></div><div class="drag-dot-row"><div class="drag-dot"></div><div class="drag-dot"></div></div></div>
+          <div class="drag-block-info">
+            <div class="drag-block-section">Challenge</div>
+            <div class="drag-block-desc">below · pair · 100% · 3/4 each · 2 images</div>
+          </div>
+          <div class="drag-block-actions">
+            <div class="drag-action-btn">Edit</div>
+            <div class="drag-action-btn">✕</div>
+          </div>
+        </div>
+        <div class="drag-block">
+          <div class="drag-handle"><div class="drag-dot-row"><div class="drag-dot"></div><div class="drag-dot"></div></div><div class="drag-dot-row"><div class="drag-dot"></div><div class="drag-dot"></div></div><div class="drag-dot-row"><div class="drag-dot"></div><div class="drag-dot"></div></div></div>
+          <div class="drag-block-info">
+            <div class="drag-block-section">Solution</div>
+            <div class="drag-block-desc">below · single · 100% · 16/10 · hero screen</div>
+          </div>
+          <div class="drag-block-actions">
+            <div class="drag-action-btn">Edit</div>
+            <div class="drag-action-btn">✕</div>
+          </div>
+        </div>
+        <div class="drag-block dragging">
+          <div class="drag-handle"><div class="drag-dot-row"><div class="drag-dot"></div><div class="drag-dot"></div></div><div class="drag-dot-row"><div class="drag-dot"></div><div class="drag-dot"></div></div><div class="drag-dot-row"><div class="drag-dot"></div><div class="drag-dot"></div></div></div>
+          <div class="drag-block-info">
+            <div class="drag-block-section">Solution</div>
+            <div class="drag-block-desc">below · pair · 100% · 3/4 each · 2 images — dragging…</div>
+          </div>
+          <div class="drag-block-actions">
+            <div class="drag-action-btn">Edit</div>
+            <div class="drag-action-btn">✕</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="dnd-note" style="margin-top:12px">
+  <strong>Drag-and-drop:</strong> Uses HTML5 draggable API — no new dependencies. The existing up/down arrow buttons stay as a fallback. Drag handles (⠿) appear on hover at the left of each block row.
+</div>
+
+</body>
+</html>

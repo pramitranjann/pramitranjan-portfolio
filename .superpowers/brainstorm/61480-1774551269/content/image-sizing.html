@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Sizing — Approach B</title>
+<script src="../../../scripts/helper.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0d0d0d;
+    color: #f5f2ed;
+    font-family: "DM Mono", "Courier New", monospace;
+    padding: 40px 32px 80px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .page-title { font-size: 11px; letter-spacing: 0.16em; color: #FF3120; text-transform: uppercase; margin-bottom: 8px; }
+  h1 { font-family: "DM Serif Display", Georgia, serif; font-size: 26px; font-weight: 400; margin-bottom: 6px; }
+  .subtitle { font-size: 13px; color: #666; letter-spacing: 0.04em; margin-bottom: 36px; line-height: 1.6; }
+
+  h2 { font-size: 11px; letter-spacing: 0.16em; color: #FF3120; text-transform: uppercase; margin: 40px 0 16px; }
+  h2:first-of-type { margin-top: 0; }
+
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .cards.three { grid-template-columns: 1fr 1fr 1fr; }
+
+  .card {
+    border: 1px solid #1f1f1f;
+    cursor: pointer;
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+  .card:hover { border-color: #444; }
+  .card.selected { border-color: #FF3120 !important; }
+
+  .card-label {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: #666;
+    text-transform: uppercase;
+    padding: 12px 14px 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #111;
+    border-bottom: 1px solid #1a1a1a;
+  }
+
+  .card-letter {
+    width: 20px; height: 20px;
+    border: 1px solid #333;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: #999;
+    flex-shrink: 0;
+  }
+
+  .card.selected .card-letter { border-color: #FF3120; color: #FF3120; }
+
+  .card-desc {
+    font-size: 10px;
+    color: #555;
+    letter-spacing: 0.04em;
+    padding: 8px 14px 12px;
+    line-height: 1.5;
+  }
+
+  .card-mockup {
+    padding: 16px 14px;
+    background: #0d0d0d;
+  }
+
+  /* Wireframe building blocks */
+  .cs-section {
+    display: grid;
+    border: 1px solid #1a1a1a;
+  }
+
+  .cs-section.two-col { grid-template-columns: 72px 1fr; }
+
+  .cs-label-col {
+    padding: 10px 10px;
+    border-right: 1px solid #1a1a1a;
+  }
+
+  .cs-label {
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    color: #FF3120;
+    text-transform: uppercase;
+  }
+
+  .cs-content-col { padding: 10px 12px; }
+
+  .text-block {
+    height: 6px;
+    background: #222;
+    border-radius: 1px;
+    margin-bottom: 4px;
+  }
+  .text-block.short { width: 50%; }
+  .text-block.medium { width: 75%; }
+  .text-block.full { width: 100%; }
+  .text-block.headline { height: 8px; background: #2e2e2e; width: 65%; margin-bottom: 7px; }
+
+  .img-placeholder {
+    background: #161616;
+    border: 1px solid #222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    color: #444;
+    text-transform: uppercase;
+  }
+
+  /* Inline layouts */
+  .inline-50-50 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; }
+  .inline-60-40 { display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px; align-items: start; }
+  .inline-40-60 { display: grid; grid-template-columns: 1fr 1.4fr; gap: 14px; align-items: start; }
+
+  /* Aspect ratios */
+  .ar-4-3 { aspect-ratio: 4/3; }
+  .ar-16-10 { aspect-ratio: 16/10; }
+  .ar-3-2 { aspect-ratio: 3/2; }
+  .ar-1-1 { aspect-ratio: 1/1; }
+
+  /* Solution widths */
+  .sol-100 { width: 100%; }
+  .sol-78 { width: 78%; margin: 0 auto; }
+
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 6px; }
+
+  .recommended-badge {
+    margin-left: auto;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: #FF3120;
+    border: 1px solid #FF312044;
+    padding: 2px 6px;
+  }
+
+  .divider { height: 1px; background: #1a1a1a; margin: 32px 0; }
+
+  .note {
+    font-size: 11px;
+    color: #555;
+    letter-spacing: 0.04em;
+    line-height: 1.7;
+    border-left: 2px solid #FF3120;
+    padding: 10px 14px;
+    margin-top: 16px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-title">Approach B — Details</div>
+<h1>Now let's get the sizes right</h1>
+<p class="subtitle">Two decisions to make: how to split text vs. image inline, and how wide solution images should be.</p>
+
+<!-- ─── PART 1: Inline image ratio ─── -->
+<h2>Part 1 — Inline image: how much space does the image get?</h2>
+
+<div class="cards three">
+
+  <!-- Option 1: 50/50 -->
+  <div class="card" data-choice="inline-50-50" onclick="selectCard(this, 'inline')">
+    <div class="card-label">
+      <div class="card-letter">1</div>
+      50 / 50 split
+    </div>
+    <div class="card-mockup">
+      <div class="cs-section two-col">
+        <div class="cs-label-col"><span class="cs-label">Research</span></div>
+        <div class="cs-content-col">
+          <div class="inline-50-50">
+            <div>
+              <div class="text-block headline"></div>
+              <div class="text-block full"></div>
+              <div class="text-block full"></div>
+              <div class="text-block medium"></div>
+              <div class="text-block short"></div>
+            </div>
+            <div class="img-placeholder ar-4-3">Image</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-desc">Equal weight. Image feels prominent alongside the text. Good if the image carries meaning on its own.</div>
+  </div>
+
+  <!-- Option 2: 60/40 — text-heavy -->
+  <div class="card" data-choice="inline-60-40" onclick="selectCard(this, 'inline')">
+    <div class="card-label">
+      <div class="card-letter">2</div>
+      60 / 40 — text leads
+      <span class="recommended-badge">RECOMMENDED</span>
+    </div>
+    <div class="card-mockup">
+      <div class="cs-section two-col">
+        <div class="cs-label-col"><span class="cs-label">Research</span></div>
+        <div class="cs-content-col">
+          <div class="inline-60-40">
+            <div>
+              <div class="text-block headline"></div>
+              <div class="text-block full"></div>
+              <div class="text-block full"></div>
+              <div class="text-block medium"></div>
+              <div class="text-block short"></div>
+            </div>
+            <div class="img-placeholder ar-4-3">Image</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-desc">Text dominates, image supports. Matches your existing text-heavy layout system. Less fighting for space.</div>
+  </div>
+
+  <!-- Option 3: 40/60 — image-heavy -->
+  <div class="card" data-choice="inline-40-60" onclick="selectCard(this, 'inline')">
+    <div class="card-label">
+      <div class="card-letter">3</div>
+      40 / 60 — image leads
+    </div>
+    <div class="card-mockup">
+      <div class="cs-section two-col">
+        <div class="cs-label-col"><span class="cs-label">Research</span></div>
+        <div class="cs-content-col">
+          <div class="inline-40-60">
+            <div>
+              <div class="text-block headline"></div>
+              <div class="text-block full"></div>
+              <div class="text-block full"></div>
+              <div class="text-block medium"></div>
+              <div class="text-block short"></div>
+            </div>
+            <div class="img-placeholder ar-4-3">Image</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-desc">Image gets more room. Better if your process photos or screens need space to be legible.</div>
+  </div>
+
+</div>
+
+<div class="divider"></div>
+
+<!-- ─── PART 2: Solution image width ─── -->
+<h2>Part 2 — Solution section: how wide should the hero image be?</h2>
+
+<div class="cards">
+
+  <!-- Option A: Full content width -->
+  <div class="card" data-choice="sol-100" onclick="selectCard(this, 'solution')">
+    <div class="card-label">
+      <div class="card-letter">A</div>
+      100% content width
+      <span class="recommended-badge">RECOMMENDED</span>
+    </div>
+    <div class="card-mockup">
+      <div class="cs-section two-col">
+        <div class="cs-label-col"><span class="cs-label">Solution</span></div>
+        <div class="cs-content-col">
+          <div class="text-block headline"></div>
+          <div class="text-block full"></div>
+          <div class="text-block medium"></div>
+          <div class="img-placeholder ar-16-10 sol-100" style="margin-top:10px">Hero screen — full width</div>
+          <div class="pair">
+            <div class="img-placeholder ar-4-3">Detail 1</div>
+            <div class="img-placeholder ar-4-3">Detail 2</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-desc">Image fills the content column edge-to-edge. Strong visual statement. Works best with landscape screens (16:9 or 16:10).</div>
+  </div>
+
+  <!-- Option B: 78% centred -->
+  <div class="card" data-choice="sol-78" onclick="selectCard(this, 'solution')">
+    <div class="card-label">
+      <div class="card-letter">B</div>
+      78% — centred, inset
+    </div>
+    <div class="card-mockup">
+      <div class="cs-section two-col">
+        <div class="cs-label-col"><span class="cs-label">Solution</span></div>
+        <div class="cs-content-col">
+          <div class="text-block headline"></div>
+          <div class="text-block full"></div>
+          <div class="text-block medium"></div>
+          <div class="img-placeholder ar-16-10 sol-78" style="margin-top:10px">Hero screen — 78%</div>
+          <div class="pair">
+            <div class="img-placeholder ar-4-3">Detail 1</div>
+            <div class="img-placeholder ar-4-3">Detail 2</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-desc">Slightly inset — gives the image breathing room on the sides. Less imposing, more editorial. Good for device mockups with drop shadows.</div>
+  </div>
+
+</div>
+
+<div class="note">
+  These two decisions are independent — pick the inline split and the solution width separately. Your choices get written into site-content.json as <code>inlineTextWidth</code> and <code>width</code> on each media block.
+</div>
+
+<div id="selection-indicator" style="position:fixed;bottom:20px;right:24px;font-size:11px;letter-spacing:0.12em;color:#FF3120;background:#0d0d0d;border:1px solid #FF312044;padding:8px 14px;display:none"></div>
+
+<script>
+  const selections = {};
+  function selectCard(el, group) {
+    document.querySelectorAll('[data-choice^="' + (group === 'inline' ? 'inline' : 'sol') + '"]').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    const choice = el.dataset.choice;
+    const label = el.querySelector('.card-label').textContent.trim();
+    selections[group] = { choice, label };
+    const ind = document.getElementById('selection-indicator');
+    const parts = Object.entries(selections).map(([g, v]) => v.label.replace(/\s+/g, ' ').trim().substring(0, 40));
+    ind.style.display = 'block';
+    ind.textContent = '→ ' + parts.join('  ·  ');
+    if (window.recordChoice) window.recordChoice(choice, label);
+  }
+</script>
+</body>
+</html>

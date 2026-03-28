@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Final Design — Case Study Image Layout</title>
+<script src="../../../scripts/helper.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0d0d0d;
+    color: #f5f2ed;
+    font-family: "DM Mono", "Courier New", monospace;
+    padding: 40px 32px 80px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .eyebrow { font-size: 11px; letter-spacing: 0.16em; color: #FF3120; text-transform: uppercase; margin-bottom: 8px; }
+  h1 { font-family: "DM Serif Display", Georgia, serif; font-size: 26px; font-weight: 400; margin-bottom: 6px; }
+  .subtitle { font-size: 13px; color: #666; letter-spacing: 0.04em; margin-bottom: 40px; line-height: 1.6; }
+
+  .section-title {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: #555;
+    text-transform: uppercase;
+    margin: 32px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #1a1a1a;
+  }
+
+  /* Wireframe */
+  .cs-section {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    border: 1px solid #1a1a1a;
+    margin-bottom: 2px;
+  }
+
+  .cs-label-col {
+    padding: 14px 12px;
+    border-right: 1px solid #1a1a1a;
+  }
+
+  .cs-label {
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    color: #FF3120;
+    text-transform: uppercase;
+    line-height: 1;
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  .cs-content-col { padding: 14px 16px; }
+
+  .text-block {
+    height: 7px;
+    background: #1e1e1e;
+    border-radius: 1px;
+    margin-bottom: 5px;
+  }
+  .text-block.s { width: 48%; }
+  .text-block.m { width: 73%; }
+  .text-block.f { width: 100%; }
+  .text-block.h { height: 9px; background: #2a2a2a; width: 62%; margin-bottom: 9px; }
+
+  .img {
+    background: #141414;
+    border: 1px solid #1f1f1f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    color: #3a3a3a;
+    text-transform: uppercase;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .img .img-type {
+    font-size: 7px;
+    color: #2e2e2e;
+    letter-spacing: 0.12em;
+  }
+
+  /* Inline: text 60% / image 40% */
+  .inline {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+
+  .pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-top: 8px;
+  }
+
+  /* rule annotations */
+  .annotation {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: #444;
+    margin: 6px 0 0;
+    padding-left: 2px;
+  }
+
+  .annotation span { color: #FF3120; }
+
+  /* Rule summary table */
+  .rules {
+    border: 1px solid #1f1f1f;
+    margin-top: 36px;
+  }
+
+  .rules-header {
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    color: #FF3120;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    background: #111;
+    border-bottom: 1px solid #1f1f1f;
+  }
+
+  .rule-row {
+    display: grid;
+    grid-template-columns: 100px 90px 90px 1fr;
+    border-bottom: 1px solid #141414;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    color: #666;
+  }
+
+  .rule-row:last-child { border-bottom: none; }
+  .rule-row.header-row { color: #444; font-size: 9px; letter-spacing: 0.1em; background: #0f0f0f; }
+
+  .rule-cell {
+    padding: 9px 14px;
+    border-right: 1px solid #141414;
+    line-height: 1.5;
+  }
+
+  .rule-cell:last-child { border-right: none; }
+  .rule-cell.accent { color: #f5f2ed; }
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Final Design — Approach B</div>
+<h1>The complete case study image system</h1>
+<p class="subtitle">60/40 inline for process sections · 100% full-width for solution · consistent aspect ratios throughout</p>
+
+<!-- ─── RESEARCH ─── -->
+<div class="section-title">Research / Challenge sections</div>
+
+<div class="cs-section">
+  <div class="cs-label-col">
+    <span class="cs-label">Research</span>
+  </div>
+  <div class="cs-content-col">
+    <div class="inline">
+      <div>
+        <div class="text-block h"></div>
+        <div class="text-block f"></div>
+        <div class="text-block f"></div>
+        <div class="text-block m"></div>
+        <div class="text-block s"></div>
+      </div>
+      <div class="img" style="aspect-ratio:4/3">
+        Process photo<br>or wireframe
+        <span class="img-type">4 : 3 · contain</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="annotation"><span>placement:</span> side-right · <span>split:</span> 60 text / 40 image · <span>aspectRatio:</span> 4/3 · <span>fit:</span> contain</div>
+
+<!-- ─── SOLUTION ─── -->
+<div class="section-title" style="margin-top:28px">Solution section</div>
+
+<div class="cs-section">
+  <div class="cs-label-col">
+    <span class="cs-label">Solution</span>
+  </div>
+  <div class="cs-content-col">
+    <div class="text-block h"></div>
+    <div class="text-block f"></div>
+    <div class="text-block m"></div>
+
+    <!-- Hero: full width -->
+    <div class="img" style="aspect-ratio:16/10;margin-top:14px;width:100%">
+      Hero UI screen
+      <span class="img-type">16 : 10 · contain</span>
+    </div>
+
+    <!-- Pair: two supporting screens -->
+    <div class="pair">
+      <div class="img" style="aspect-ratio:4/3">
+        Detail 1
+        <span class="img-type">4 : 3</span>
+      </div>
+      <div class="img" style="aspect-ratio:4/3">
+        Detail 2
+        <span class="img-type">4 : 3</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="annotation"><span>hero:</span> single · 100% width · 16/10 · contain &nbsp;|&nbsp; <span>pair:</span> 2 images · 4/3 · 2px gap</div>
+
+<!-- ─── HERO (for reference) ─── -->
+<div class="section-title" style="margin-top:28px">Hero section (unchanged — shown for reference)</div>
+
+<div class="cs-section" style="grid-template-columns:1fr 1fr">
+  <div style="padding:14px 16px;border-right:1px solid #1a1a1a">
+    <div style="height:9px;background:#2a2a2a;width:40%;border-radius:1px;margin-bottom:14px"></div>
+    <div style="height:18px;background:#222;width:80%;border-radius:1px;margin-bottom:8px"></div>
+    <div class="text-block m"></div>
+    <div class="text-block s"></div>
+  </div>
+  <div class="img" style="min-height:100px">
+    Hero image (already working)
+    <span class="img-type">50% of page width · contains or covers</span>
+  </div>
+</div>
+<div class="annotation">No changes needed here.</div>
+
+<!-- ─── RULES TABLE ─── -->
+<div class="rules">
+  <div class="rules-header">The rules at a glance</div>
+  <div class="rule-row header-row">
+    <div class="rule-cell">Section</div>
+    <div class="rule-cell">Placement</div>
+    <div class="rule-cell">Width</div>
+    <div class="rule-cell">Aspect ratio &amp; fit</div>
+  </div>
+  <div class="rule-row">
+    <div class="rule-cell accent">Research</div>
+    <div class="rule-cell">side-right</div>
+    <div class="rule-cell">60/40 split</div>
+    <div class="rule-cell">4/3 · contain (single image)</div>
+  </div>
+  <div class="rule-row">
+    <div class="rule-cell accent">Challenge</div>
+    <div class="rule-cell">side-right</div>
+    <div class="rule-cell">60/40 split</div>
+    <div class="rule-cell">4/3 · contain (single image)</div>
+  </div>
+  <div class="rule-row">
+    <div class="rule-cell accent">Process</div>
+    <div class="rule-cell">side-right</div>
+    <div class="rule-cell">60/40 split</div>
+    <div class="rule-cell">4/3 · contain (single image)</div>
+  </div>
+  <div class="rule-row">
+    <div class="rule-cell accent">Solution hero</div>
+    <div class="rule-cell">below</div>
+    <div class="rule-cell">100%</div>
+    <div class="rule-cell">16/10 · contain (single image)</div>
+  </div>
+  <div class="rule-row">
+    <div class="rule-cell accent">Solution pair</div>
+    <div class="rule-cell">below</div>
+    <div class="rule-cell">100%</div>
+    <div class="rule-cell">4/3 each · 2px gap</div>
+  </div>
+  <div class="rule-row">
+    <div class="rule-cell" style="color:#333;font-style:italic">Exception</div>
+    <div class="rule-cell" style="color:#333">—</div>
+    <div class="rule-cell" style="color:#333">—</div>
+    <div class="rule-cell" style="color:#333;font-style:italic">Mobile-first case studies (e.g. Atom): inline image can use 3/4 portrait aspect ratio instead</div>
+  </div>
+</div>
+
+</body>
+</html>
