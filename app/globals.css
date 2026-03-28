@@ -62,6 +62,7 @@ html, body {
   --motion-eyebrow-line-duration: 0.4s;
   --motion-eyebrow-label-duration: 0.4s;
   --motion-eyebrow-label-delay: 0.2s;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 /* Hide scrollbar — prevents layout shift on the fixed nav */
@@ -103,10 +104,14 @@ body.carousel-reengaging main {
 }
 .portfolio-card:hover {
   border-color: #FF3120;
-  transform: translateY(-4px);
   box-shadow: 0 0 0 1px #FF3120,
               0 0 32px rgba(255, 49, 32, 0.1),
               0 8px 24px rgba(0, 0, 0, 0.4);
+}
+@media (hover: hover) and (pointer: fine) {
+  .portfolio-card:hover {
+    transform: translateY(-4px);
+  }
 }
 
 /* Card title underline — draws in from left on hover (same pattern as .social-link::after) */
@@ -144,10 +149,12 @@ body.carousel-reengaging main {
   display: inline-block;
   transition: transform 0.2s ease;
 }
-.portfolio-card:hover .arrow-nudge,
-a:hover .arrow-nudge,
-button:hover .arrow-nudge {
-  transform: translateX(4px);
+@media (hover: hover) and (pointer: fine) {
+  .portfolio-card:hover .arrow-nudge,
+  a:hover .arrow-nudge,
+  button:hover .arrow-nudge {
+    transform: translateX(4px);
+  }
 }
 
 /* Arrow nudge — back links */
@@ -155,9 +162,11 @@ button:hover .arrow-nudge {
   display: inline-block;
   transition: transform 0.2s ease;
 }
-a:hover .arrow-nudge-back,
-button:hover .arrow-nudge-back {
-  transform: translateX(-4px);
+@media (hover: hover) and (pointer: fine) {
+  a:hover .arrow-nudge-back,
+  button:hover .arrow-nudge-back {
+    transform: translateX(-4px);
+  }
 }
 
 /* Nav link — red dot expands on hover */
@@ -231,7 +240,7 @@ button:hover .arrow-nudge-back {
 .eyebrow-line {
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform var(--motion-eyebrow-line-duration) ease;
+  transition: transform var(--motion-eyebrow-line-duration) var(--ease-out);
 }
 .eyebrow-label {
   opacity: 0;
@@ -247,7 +256,7 @@ button:hover .arrow-nudge-back {
 .js-ready .reveal {
   opacity: 0;
   transform: translateY(var(--motion-simple-reveal-distance));
-  transition: opacity var(--motion-simple-reveal-duration) ease, transform var(--motion-simple-reveal-duration) ease;
+  transition: opacity var(--motion-simple-reveal-duration) var(--ease-out), transform var(--motion-simple-reveal-duration) var(--ease-out);
 }
 .js-ready .reveal.revealed {
   opacity: 1;
@@ -256,7 +265,7 @@ button:hover .arrow-nudge-back {
 .js-ready .reveal-text {
   opacity: 0;
   transform: translateY(var(--motion-simple-reveal-distance));
-  transition: opacity var(--motion-simple-reveal-duration) ease, transform var(--motion-simple-reveal-duration) ease;
+  transition: opacity var(--motion-simple-reveal-duration) var(--ease-out), transform var(--motion-simple-reveal-duration) var(--ease-out);
 }
 .js-ready .reveal-text.revealed {
   opacity: 1;
@@ -265,11 +274,28 @@ button:hover .arrow-nudge-back {
 .js-ready .reveal-slide {
   opacity: 0;
   transform: translateX(40px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
 }
 .js-ready .reveal-slide.revealed {
   opacity: 1;
   transform: translateX(0);
+}
+
+/* ─── Reduced motion — keep opacity fades, remove movement ───────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .js-ready .reveal,
+  .js-ready .reveal-text {
+    transform: none;
+    transition: opacity var(--motion-simple-reveal-duration) ease;
+  }
+  .js-ready .reveal-slide {
+    transform: none;
+    transition: opacity 0.6s ease;
+  }
+  body.carousel-releasing main,
+  body.carousel-reengaging main {
+    transition: none;
+  }
 }
 
 /* ─── Mobile responsive overrides (< 768px) ──────────────────────────────── */

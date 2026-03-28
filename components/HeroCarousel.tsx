@@ -6,6 +6,7 @@ import { useSiteCopy } from '@/components/SiteCopyProvider'
 export function HeroCarousel() {
   const heroStages = useSiteCopy().home.heroStages
   const total = heroStages.length
+  const [reducedMotion, setReducedMotion] = useState(false)
   const [current, setCurrent] = useState(0)
   const currentRef = useRef(0)
   const isAnimating = useRef(false)
@@ -19,6 +20,10 @@ export function HeroCarousel() {
   const touchStartY = useRef<number | null>(null)
   // Track whether carousel has ever released so re-engagement doesn't re-hide main
   const hasReleasedRef = useRef(false)
+
+  useEffect(() => {
+    setReducedMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+  }, [])
 
   // Add carousel-active class on mount so main starts off-screen
   useEffect(() => {
@@ -46,18 +51,24 @@ export function HeroCarousel() {
       document.body.style.overflow = 'hidden'
       window.scrollTo(0, 0)
     } else {
-      holdingRef.current = true
       hasReleasedRef.current = true
       document.body.classList.remove('carousel-active')
-      document.body.classList.add('carousel-releasing')
       window.scrollTo(0, 0)
-      // Unlock after slide completes — same 900ms as stage transitions
-      const t = setTimeout(() => {
+      if (reducedMotion) {
+        // Skip slide animation — unlock scroll immediately
         holdingRef.current = false
-        document.body.classList.remove('carousel-releasing')
         document.body.style.overflow = ''
-      }, 900)
-      return () => clearTimeout(t)
+      } else {
+        holdingRef.current = true
+        document.body.classList.add('carousel-releasing')
+        // Unlock after slide completes — same 900ms as stage transitions
+        const t = setTimeout(() => {
+          holdingRef.current = false
+          document.body.classList.remove('carousel-releasing')
+          document.body.style.overflow = ''
+        }, 900)
+        return () => clearTimeout(t)
+      }
     }
     return () => { document.body.style.overflow = '' }
   }, [released])
@@ -164,6 +175,7 @@ export function HeroCarousel() {
 
   return (
     <div
+      className="hero-carousel-container"
       style={{
         position: 'fixed',
         top: '57px',
@@ -173,7 +185,7 @@ export function HeroCarousel() {
         overflow: 'hidden',
         zIndex: 10,
         transform: released ? 'translateY(-100%)' : 'translateY(0)',
-        transition: 'transform 0.85s cubic-bezier(0.77, 0, 0.175, 1)',
+        transition: reducedMotion ? 'none' : 'transform 0.85s cubic-bezier(0.77, 0, 0.175, 1)',
         backgroundColor: '#0d0d0d',
       }}
     >
@@ -190,7 +202,7 @@ export function HeroCarousel() {
             padding: '80px 40px',
             transform: i < current ? 'translateY(-100%)' : i === current ? 'translateY(0)' : 'translateY(100%)',
             opacity: i === current ? 1 : 0,
-            transition: 'transform 0.85s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.4s ease',
+            transition: reducedMotion ? 'none' : 'transform 0.85s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.4s ease',
           }}
         >
           <RuleLabel number={stage.number} />
