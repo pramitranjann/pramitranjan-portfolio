@@ -313,6 +313,26 @@ export function CaseStudyLayout({
   const scrollLocked = useRef(false)
   const lockTargetId = useRef<string | null>(null)
   const lockTimer    = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const navRef       = useRef<HTMLElement | null>(null)
+
+  // On mobile, scroll the nav horizontally so the active button is visible
+  useEffect(() => {
+    if (!activeId || !navRef.current) return
+    const nav = navRef.current
+    const activeBtn = nav.querySelector<HTMLElement>(`[data-nav-id="${activeId}"]`)
+    if (!activeBtn) return
+    const navRect = nav.getBoundingClientRect()
+    const btnRect = activeBtn.getBoundingClientRect()
+    const btnLeft = activeBtn.offsetLeft
+    const btnRight = btnLeft + activeBtn.offsetWidth
+    const visibleLeft = nav.scrollLeft
+    const visibleRight = visibleLeft + navRect.width
+    if (btnLeft < visibleLeft) {
+      nav.scrollTo({ left: btnLeft - 12, behavior: 'smooth' })
+    } else if (btnRight > visibleRight) {
+      nav.scrollTo({ left: btnRight - navRect.width + 12, behavior: 'smooth' })
+    }
+  }, [activeId])
 
   useEffect(() => {
     const getActiveSection = () => {
@@ -736,7 +756,7 @@ export function CaseStudyLayout({
         </div>
 
         {/* Section Nav */}
-        <nav aria-label="Page sections" className="case-study-section-nav" style={{
+        <nav ref={navRef} aria-label="Page sections" className="case-study-section-nav" style={{
           position: 'fixed',
           bottom: '28px',
           left: '50%',
@@ -772,6 +792,7 @@ export function CaseStudyLayout({
                   }, 1800)
                 }
               }}
+              data-nav-id={item.id}
               className="font-mono case-study-section-nav-button"
               style={{
                 fontSize: '11px',
