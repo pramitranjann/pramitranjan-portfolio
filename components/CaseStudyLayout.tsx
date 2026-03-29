@@ -315,23 +315,11 @@ export function CaseStudyLayout({
   const lockTimer    = useRef<ReturnType<typeof setTimeout> | null>(null)
   const navRef       = useRef<HTMLElement | null>(null)
 
-  // On mobile, scroll the nav horizontally so the active button is visible
+  // On mobile, scroll the nav horizontally to center the active button
   useEffect(() => {
     if (!activeId || !navRef.current) return
-    const nav = navRef.current
-    const activeBtn = nav.querySelector<HTMLElement>(`[data-nav-id="${activeId}"]`)
-    if (!activeBtn) return
-    const navRect = nav.getBoundingClientRect()
-    const btnRect = activeBtn.getBoundingClientRect()
-    const btnLeft = activeBtn.offsetLeft
-    const btnRight = btnLeft + activeBtn.offsetWidth
-    const visibleLeft = nav.scrollLeft
-    const visibleRight = visibleLeft + navRect.width
-    if (btnLeft < visibleLeft) {
-      nav.scrollTo({ left: btnLeft - 12, behavior: 'smooth' })
-    } else if (btnRight > visibleRight) {
-      nav.scrollTo({ left: btnRight - navRect.width + 12, behavior: 'smooth' })
-    }
+    const activeBtn = navRef.current.querySelector<HTMLElement>(`[data-nav-id="${activeId}"]`)
+    activeBtn?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
   }, [activeId])
 
   useEffect(() => {
