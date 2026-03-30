@@ -153,6 +153,10 @@ function inlineMediaColumnStyle(blocks: CaseStudyMediaBlock[]): React.CSSPropert
   }
 }
 
+function sectionActivationLine() {
+  return Math.max(110, window.innerHeight * 0.68)
+}
+
 function renderMediaBlockContent(block: CaseStudyMediaBlock) {
   const images = block.images.filter((item) => item.src)
   if (!images.length) return null
@@ -343,22 +347,22 @@ export function CaseStudyLayout({
       const lastSection = sections[sections.length - 1] ?? null
       const documentBottom = window.innerHeight + window.scrollY
       const remainingScroll = document.documentElement.scrollHeight - documentBottom
+      const activationLine = sectionActivationLine()
 
       if (
         lastSection &&
         (
-          (remainingScroll <= 24 && lastSection.getBoundingClientRect().top <= window.innerHeight * 0.6) ||
-          lastSection.getBoundingClientRect().top <= window.innerHeight * 0.45
+          lastSection.getBoundingClientRect().top <= activationLine ||
+          (remainingScroll <= 24 && lastSection.getBoundingClientRect().top <= window.innerHeight - 120)
         )
       ) {
         return lastSection
       }
-      const threshold = 110
       let active = sections[0] ?? null
 
       for (const el of sections) {
         const rect = el.getBoundingClientRect()
-        if (rect.top <= threshold) {
+        if (rect.top <= activationLine) {
           active = el
         } else {
           break
@@ -379,11 +383,12 @@ export function CaseStudyLayout({
         const target = targetId ? document.getElementById(targetId) : null
 
         if (target) {
+          const activationLine = sectionActivationLine()
           const sections = Array.from(document.querySelectorAll('section[id^="sec-"]'))
             .filter((el) => el.id !== 'sec-hero')
           const rect = target.getBoundingClientRect()
           const isLastSection = sections[sections.length - 1]?.id === target.id
-          if (rect.top <= 118 || (isLastSection && remainingScroll <= 24)) {
+          if (rect.top <= activationLine || (isLastSection && remainingScroll <= 24)) {
             scrollLocked.current = false
             lockTargetId.current = null
             setActiveId(target.id)
