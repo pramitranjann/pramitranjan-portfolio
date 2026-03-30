@@ -908,22 +908,6 @@
       },
       "mediaBlocks": [
         {
-          "id": "atom-solution-1",
-          "section": "solution",
-          "layout": "single",
-          "width": "100%",
-          "align": "center",
-          "images": [
-            {
-              "src": "/work/atom/solution-hero-processed.png",
-              "fit": "contain",
-              "aspectRatio": "16 / 10",
-              "background": "#0d0d0d",
-              "alt": ""
-            }
-          ]
-        },
-        {
           "id": "atom-solution-2",
           "section": "solution",
           "layout": "single",
@@ -1003,8 +987,7 @@
               "background": "#0d0d0d",
               "alt": ""
             }
-          ],
-          "hidden": true
+          ]
         }
       ]
     },
