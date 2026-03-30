@@ -967,11 +967,6 @@
         "title": "Accord"
       },
       "heroImage": "/work/albers/cover-processed.png",
-      "researchImage": "/work/albers/img-7-processed.png",
-      "challengeImages": [
-        "/work/albers/img-1-processed.png",
-        "/work/albers/img-2-processed.png"
-      ],
       "solutionHeroImage": "/work/albers/img-6-processed.png",
       "solutionImages": [
         "/work/albers/img-4-processed.png",
@@ -994,125 +989,19 @@
       "outcomes": "Vibe coding pushed me to be more precise about design intent upfront — the AI needs clarity to move in the right direction. The HUD aesthetic taught me that constraint as identity makes every decision easier. I'd like to eventually publish ALBERS as a genuine teaching tool on the Mac App Store.",
       "mediaBlocks": [
         {
-          "id": "albers-solution-1",
-          "section": "solution",
-          "layout": "single",
-          "width": "100%",
-          "align": "center",
-          "images": [
-            {
-              "src": "/work/albers/img-1-processed.png",
-              "fit": "contain",
-              "aspectRatio": "16 / 10",
-              "background": "#0d0d0d",
-              "alt": ""
-            }
-          ],
-          "hidden": true
-        },
-        {
-          "id": "albers-solution-2",
-          "section": "solution",
-          "layout": "pair",
-          "width": "100%",
-          "gap": "2px",
-          "align": "center",
-          "images": [
-            {
-              "src": "/work/albers/img-2-processed.png",
-              "fit": "contain",
-              "aspectRatio": "4 / 3",
-              "background": "#0d0d0d",
-              "alt": ""
-            },
-            {
-              "src": "/work/albers/img-3-processed.png",
-              "fit": "contain",
-              "aspectRatio": "4 / 3",
-              "background": "#0d0d0d",
-              "alt": ""
-            }
-          ],
-          "hidden": true
-        },
-        {
           "id": "albers-solution-3",
           "section": "solution",
-          "layout": "pair",
-          "width": "100%",
-          "gap": "2px",
-          "align": "center",
-          "images": [
-            {
-              "src": "/work/albers/img-4-processed.png",
-              "fit": "contain",
-              "aspectRatio": "4 / 3",
-              "background": "#0d0d0d",
-              "alt": ""
-            },
-            {
-              "src": "/work/albers/img-5-processed.png",
-              "fit": "contain",
-              "aspectRatio": "4 / 3",
-              "background": "#0d0d0d",
-              "alt": ""
-            }
-          ],
-          "hidden": true
-        },
-        {
-          "id": "albers-solution-4",
-          "section": "solution",
-          "layout": "pair",
-          "width": "100%",
-          "gap": "2px",
-          "align": "center",
-          "images": [
-            {
-              "src": "/work/albers/img-6-processed.png",
-              "fit": "contain",
-              "aspectRatio": "4 / 3",
-              "background": "#0d0d0d",
-              "alt": ""
-            },
-            {
-              "src": "/work/albers/img-7-processed.png",
-              "fit": "contain",
-              "aspectRatio": "4 / 3",
-              "background": "#0d0d0d",
-              "alt": ""
-            }
-          ],
-          "hidden": true
-        },
-        {
-          "id": "albers-research-1",
-          "section": "research",
           "layout": "single",
-          "align": "center",
           "width": "100%",
+          "gap": "2px",
+          "align": "center",
           "images": [
             {
-              "src": "/work/albers/img-7-processed.png",
-              "aspectRatio": "16 / 10"
-            }
-          ],
-          "hidden": true
-        },
-        {
-          "id": "albers-challenge-1",
-          "section": "challenge",
-          "layout": "pair",
-          "align": "center",
-          "width": "100%",
-          "images": [
-            {
-              "src": "/work/albers/img-1-processed.png",
-              "aspectRatio": "4 / 3"
-            },
-            {
-              "src": "/work/albers/img-2-processed.png",
-              "aspectRatio": "4 / 3"
+              "src": "/work/albers/img-1.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
             }
           ],
           "hidden": true
