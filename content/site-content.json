@@ -851,27 +851,12 @@
           "width": "100%",
           "images": [
             {
-              "src": "/work/helpoh/solution-hero-processed.png",
+              "src": "/work/helpoh/solution-1.png",
               "aspectRatio": "16 / 10"
             }
-          ]
-        },
-        {
-          "id": "helpoh-solution-2",
-          "section": "solution",
-          "layout": "pair",
-          "align": "center",
-          "width": "100%",
-          "images": [
-            {
-              "src": "/work/helpoh/solution-1-processed.png",
-              "aspectRatio": "4 / 3"
-            },
-            {
-              "src": "/work/helpoh/solution-1-processed.png",
-              "aspectRatio": "4 / 3"
-            }
-          ]
+          ],
+          "placement": "side-right",
+          "inlineTextWidth": "420px"
         }
       ]
     },
