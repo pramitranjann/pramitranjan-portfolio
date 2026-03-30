@@ -694,7 +694,7 @@
               "src": "/franklins process 2.jpg",
               "fit": "contain",
               "position": "right center",
-              "aspectRatio": "4 / 3",
+              "aspectRatio": "16 / 10",
               "background": "#0d0d0d",
               "alt": "Layout placeholder"
             }
@@ -712,14 +712,14 @@
             {
               "src": "/Home Page.png",
               "fit": "contain",
-              "aspectRatio": "4 / 3",
+              "aspectRatio": "16 / 10",
               "background": "#0d0d0d",
               "alt": ""
             },
             {
               "src": "/Order HomePage.png",
               "fit": "contain",
-              "aspectRatio": "4 / 3",
+              "aspectRatio": "16 / 10",
               "background": "#0d0d0d",
               "alt": ""
             }
