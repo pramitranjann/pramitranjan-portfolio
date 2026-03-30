@@ -678,7 +678,7 @@
         {
           "id": "franklins-research-1",
           "section": "research",
-          "layout": "single",
+          "layout": "pair",
           "placement": "side-right",
           "inlineTextWidth": "480px",
           "inlineMediaMinWidth": "240px",
@@ -691,21 +691,35 @@
               "aspectRatio": "4 / 3",
               "background": "#0d0d0d",
               "alt": ""
+            },
+            {
+              "src": "/franklins research 2.jpg",
+              "fit": "contain",
+              "position": "center center",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": "Layout placeholder"
             }
           ]
         },
         {
-          "id": "franklins-challenge-1",
-          "section": "challenge",
-          "layout": "single",
-          "placement": "side-right",
-          "inlineTextWidth": "480px",
-          "inlineMediaMinWidth": "240px",
+          "id": "franklins-solution-2",
+          "section": "solution",
+          "layout": "pair",
+          "width": "100%",
+          "gap": "2px",
           "align": "center",
           "hidden": true,
           "images": [
             {
-              "src": "",
+              "src": "/Home Page.png",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            },
+            {
+              "src": "/Order HomePage.png",
               "fit": "contain",
               "aspectRatio": "4 / 3",
               "background": "#0d0d0d",
@@ -737,52 +751,7 @@
               "alt": "Layout placeholder"
             }
           ],
-          "placement": "side-right"
-        },
-        {
-          "id": "franklins-solution-2",
-          "section": "solution",
-          "layout": "pair",
-          "width": "100%",
-          "gap": "2px",
-          "align": "center",
-          "hidden": true,
-          "images": [
-            {
-              "src": "/Home Page.png",
-              "fit": "contain",
-              "aspectRatio": "4 / 3",
-              "background": "#0d0d0d",
-              "alt": ""
-            },
-            {
-              "src": "/Order HomePage.png",
-              "fit": "contain",
-              "aspectRatio": "4 / 3",
-              "background": "#0d0d0d",
-              "alt": ""
-            }
-          ]
-        },
-        {
-          "id": "research-1774907514633-nie3fu",
-          "section": "research",
-          "hidden": true,
-          "layout": "single",
-          "placement": "below",
-          "align": "center",
-          "width": "100%",
-          "gap": "2px",
-          "images": [
-            {
-              "src": "/franklins research 2.jpg",
-              "fit": "contain",
-              "position": "center center",
-              "aspectRatio": "4 / 3",
-              "background": "#0d0d0d",
-              "alt": "Layout placeholder"
-            }
-          ]
+          "placement": "below"
         }
       ]
     },
