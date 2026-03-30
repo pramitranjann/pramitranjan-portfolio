@@ -856,7 +856,8 @@
             }
           ],
           "placement": "side-right",
-          "inlineTextWidth": "420px"
+          "inlineTextWidth": "420px",
+          "inlineMediaMinWidth": "560px"
         }
       ]
     },
