@@ -686,7 +686,7 @@
           "hidden": true,
           "images": [
             {
-              "src": "",
+              "src": "/202620_UXDG101-01_22643_Franklins_Assignment3.jpg",
               "fit": "contain",
               "aspectRatio": "4 / 3",
               "background": "#0d0d0d",
@@ -716,19 +716,28 @@
         {
           "id": "franklins-solution-1",
           "section": "solution",
-          "layout": "single",
+          "layout": "pair",
           "width": "100%",
           "align": "center",
           "hidden": true,
           "images": [
             {
-              "src": "",
+              "src": "/Menu.png",
               "fit": "contain",
               "aspectRatio": "16 / 10",
               "background": "#0d0d0d",
               "alt": ""
+            },
+            {
+              "src": "/About Us.png",
+              "fit": "contain",
+              "position": "center center",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": "Layout placeholder"
             }
-          ]
+          ],
+          "placement": "side-right"
         },
         {
           "id": "franklins-solution-2",
@@ -740,18 +749,38 @@
           "hidden": true,
           "images": [
             {
-              "src": "",
+              "src": "/Home Page.png",
               "fit": "contain",
               "aspectRatio": "4 / 3",
               "background": "#0d0d0d",
               "alt": ""
             },
             {
-              "src": "",
+              "src": "/Order HomePage.png",
               "fit": "contain",
               "aspectRatio": "4 / 3",
               "background": "#0d0d0d",
               "alt": ""
+            }
+          ]
+        },
+        {
+          "id": "research-1774907514633-nie3fu",
+          "section": "research",
+          "hidden": true,
+          "layout": "single",
+          "placement": "below",
+          "align": "center",
+          "width": "100%",
+          "gap": "2px",
+          "images": [
+            {
+              "src": "/franklins research 2.jpg",
+              "fit": "contain",
+              "position": "center center",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": "Layout placeholder"
             }
           ]
         }
