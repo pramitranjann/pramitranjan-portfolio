@@ -687,12 +687,13 @@
               "fit": "contain",
               "aspectRatio": "16 / 10",
               "background": "#0d0d0d",
-              "alt": ""
+              "alt": "",
+              "position": "left center"
             },
             {
               "src": "/franklins process 2.jpg",
               "fit": "contain",
-              "position": "center center",
+              "position": "right center",
               "aspectRatio": "4 / 3",
               "background": "#0d0d0d",
               "alt": "Layout placeholder"
