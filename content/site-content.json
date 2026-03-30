@@ -924,8 +924,9 @@
               "alt": ""
             }
           ],
-          "placement": "side-right",
-          "inlineTextWidth": "420px"
+          "placement": "between-solution-outcomes",
+          "inlineTextWidth": "420px",
+          "portraitSplitCount": 2
         }
       ]
     },

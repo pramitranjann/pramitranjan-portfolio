@@ -76,6 +76,12 @@ const headlineStyle: React.CSSProperties = {
   marginBottom: '10px',
 }
 
+// Local-only toggle for portrait side-by-side text drift.
+// Set to `false` to return to the pre-motion layout immediately.
+const ENABLE_PORTRAIT_SIDE_RIGHT_TEXT_DRIFT = true
+
+type InlineSectionKey = 'research' | 'challenge' | 'process' | 'solution'
+
 function resolveMediaSlot(
   settings: CaseStudyMediaSettings['hero'] | CaseStudyMediaSettings['research'] | CaseStudyMediaSettings['solutionHero'],
   defaults: { height: string; fit: 'contain' | 'cover'; position: string; background: string }
@@ -157,6 +163,26 @@ function sectionActivationLine() {
   return Math.max(110, window.innerHeight * 0.68)
 }
 
+function parseAspectRatio(value?: string) {
+  if (!value) return null
+  const match = value.match(/^(\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)$/)
+  if (!match) return null
+  const width = Number(match[1])
+  const height = Number(match[2])
+  if (!width || !height) return null
+  return { width, height }
+}
+
+function hasPortraitSideRightMotion(blocks: CaseStudyMediaBlock[]) {
+  if (!ENABLE_PORTRAIT_SIDE_RIGHT_TEXT_DRIFT) return false
+  return blocks.some((block) =>
+    block.images.some((image) => {
+      const ratio = parseAspectRatio(image.aspectRatio)
+      return ratio ? ratio.height > ratio.width : false
+    })
+  )
+}
+
 function renderMediaBlockContent(block: CaseStudyMediaBlock) {
   const images = block.images.filter((item) => item.src)
   if (!images.length) return null
@@ -197,6 +223,65 @@ function renderMediaBlockContent(block: CaseStudyMediaBlock) {
           />
         </div>
       ))}
+    </div>
+  )
+}
+
+function portraitSplitYPositions(count: 2 | 3) {
+  return count === 2 ? [22, 78] : [12, 50, 88]
+}
+
+function renderPortraitSplitBlock(block: CaseStudyMediaBlock) {
+  const image = block.images.find((item) => item.src)
+  if (!image) return null
+
+  const splitCount = block.portraitSplitCount ?? 2
+  const ratio = parseAspectRatio(image.aspectRatio) ?? { width: 3, height: 4 }
+  const sliceAspectRatio = `${ratio.width * splitCount} / ${ratio.height}`
+  const yPositions = portraitSplitYPositions(splitCount)
+
+  return (
+    <div
+      key={block.id}
+      data-reveal
+      style={{
+        display: 'flex',
+        justifyContent: blockJustify(block.align),
+      }}
+    >
+      <div
+        className="case-study-media-block"
+        style={{
+          width: block.width || '100%',
+          display: 'grid',
+          gap: block.gap || '12px',
+        }}
+      >
+        {yPositions.map((yPosition, index) => (
+          <div
+            key={`${block.id}-slice-${index}`}
+            style={{
+              position: 'relative',
+              width: '100%',
+              aspectRatio: sliceAspectRatio,
+              backgroundColor: image.background || '#161616',
+              border: '1px solid #1a1a1a',
+              overflow: 'hidden',
+            }}
+          >
+            <Image
+              src={image.src}
+              alt={image.alt || ''}
+              fill
+              style={{
+                objectFit: 'cover',
+                objectPosition: `50% ${yPosition}%`,
+              }}
+              sizes="100vw"
+            />
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
@@ -313,7 +398,8 @@ export function CaseStudyLayout({
   const processInlineBlocks = processBlocks.filter((block) => block.placement === 'side-right')
   const processBelowBlocks = processBlocks.filter((block) => block.placement !== 'side-right')
   const solutionInlineBlocks = solutionBlocks.filter((block) => block.placement === 'side-right')
-  const solutionBelowBlocks = solutionBlocks.filter((block) => block.placement !== 'side-right')
+  const solutionSplitBlocks = solutionBlocks.filter((block) => block.placement === 'between-solution-outcomes')
+  const solutionBelowBlocks = solutionBlocks.filter((block) => block.placement !== 'side-right' && block.placement !== 'between-solution-outcomes')
 
   const navItems = [
     { id: 'sec-problem', label: copy.navProblemLabel, show: true },
@@ -331,6 +417,15 @@ export function CaseStudyLayout({
   const lockTargetId = useRef<string | null>(null)
   const lockTimer    = useRef<ReturnType<typeof setTimeout> | null>(null)
   const navRef       = useRef<HTMLElement | null>(null)
+  const motionSectionRefs = useRef<Partial<Record<InlineSectionKey, HTMLElement | null>>>({})
+  const motionLabelRefs = useRef<Partial<Record<InlineSectionKey, HTMLSpanElement | null>>>({})
+  const motionTextRefs = useRef<Partial<Record<InlineSectionKey, HTMLDivElement | null>>>({})
+  const motionMediaRefs = useRef<Partial<Record<InlineSectionKey, HTMLDivElement | null>>>({})
+
+  const researchHasPortraitMotion = hasPortraitSideRightMotion(researchInlineBlocks)
+  const challengeHasPortraitMotion = hasPortraitSideRightMotion(challengeInlineBlocks)
+  const processHasPortraitMotion = hasPortraitSideRightMotion(processInlineBlocks)
+  const solutionHasPortraitMotion = hasPortraitSideRightMotion(solutionInlineBlocks)
 
   // On mobile, scroll the nav horizontally to center the active button
   useEffect(() => {
@@ -338,6 +433,85 @@ export function CaseStudyLayout({
     const activeBtn = navRef.current.querySelector<HTMLElement>(`[data-nav-id="${activeId}"]`)
     activeBtn?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
   }, [activeId])
+
+  useEffect(() => {
+    if (!ENABLE_PORTRAIT_SIDE_RIGHT_TEXT_DRIFT) return
+
+    const activeKeys = ([
+      ['research', researchHasPortraitMotion],
+      ['challenge', challengeHasPortraitMotion],
+      ['process', processHasPortraitMotion],
+      ['solution', solutionHasPortraitMotion],
+    ] as const).filter(([, enabled]) => enabled).map(([key]) => key)
+
+    const resetTransforms = () => {
+      activeKeys.forEach((key) => {
+        const label = motionLabelRefs.current[key]
+        const text = motionTextRefs.current[key]
+        if (label) label.style.transform = 'translate3d(0, 0, 0)'
+        if (text) text.style.transform = 'translate3d(0, 0, 0)'
+      })
+    }
+
+    if (!activeKeys.length) {
+      resetTransforms()
+      return
+    }
+
+    let frame = 0
+
+    const update = () => {
+      frame = 0
+
+      if (window.innerWidth < 1024) {
+        resetTransforms()
+        return
+      }
+
+      activeKeys.forEach((key) => {
+        const section = motionSectionRefs.current[key]
+        const label = motionLabelRefs.current[key]
+        const text = motionTextRefs.current[key]
+        const media = motionMediaRefs.current[key]
+
+        if (!section || !text || !media) return
+
+        const maxOffset = Math.max(0, media.scrollHeight - text.scrollHeight - 32)
+        if (maxOffset <= 0) {
+          if (label) label.style.transform = 'translate3d(0, 0, 0)'
+          text.style.transform = 'translate3d(0, 0, 0)'
+          return
+        }
+
+        const rect = section.getBoundingClientRect()
+        const startLine = window.innerHeight * 0.18
+        const travelDistance = Math.max(rect.height - window.innerHeight * 0.52, 1)
+        const rawProgress = (startLine - rect.top) / travelDistance
+        const progress = Math.max(0, Math.min(rawProgress, 1))
+        const eased = 1 - Math.pow(1 - progress, 1.35)
+        const offset = Math.round(maxOffset * eased)
+
+        if (label) label.style.transform = `translate3d(0, ${offset}px, 0)`
+        text.style.transform = `translate3d(0, ${offset}px, 0)`
+      })
+    }
+
+    const requestUpdate = () => {
+      if (frame) return
+      frame = window.requestAnimationFrame(update)
+    }
+
+    window.addEventListener('scroll', requestUpdate, { passive: true })
+    window.addEventListener('resize', requestUpdate)
+    requestUpdate()
+
+    return () => {
+      window.removeEventListener('scroll', requestUpdate)
+      window.removeEventListener('resize', requestUpdate)
+      if (frame) window.cancelAnimationFrame(frame)
+      resetTransforms()
+    }
+  }, [researchHasPortraitMotion, challengeHasPortraitMotion, processHasPortraitMotion, solutionHasPortraitMotion])
 
   useEffect(() => {
     const getActiveSection = () => {
@@ -510,15 +684,38 @@ export function CaseStudyLayout({
 
         {/* Research */}
         {research && (
-          <section id="sec-research" data-section={copy.researchLabel} className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
+          <section
+            id="sec-research"
+            ref={(node) => { motionSectionRefs.current.research = node }}
+            data-section={copy.researchLabel}
+            className="case-study-section border-b border-divider"
+            style={{ padding: '32px 40px' }}
+          >
             <GsapReveal>
               <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
-                <span className="font-mono" style={labelStyle}>{copy.researchLabel}</span>
+                <span
+                  ref={(node) => { motionLabelRefs.current.research = node }}
+                  className="font-mono"
+                  style={{
+                    ...labelStyle,
+                    willChange: researchHasPortraitMotion ? 'transform' : undefined,
+                    transition: researchHasPortraitMotion ? 'transform 120ms linear' : undefined,
+                  }}
+                >
+                  {copy.researchLabel}
+                </span>
                 <div
                   className={researchInlineBlocks.length ? 'case-study-inline-layout' : undefined}
                   style={inlineLayoutStyle(researchInlineBlocks)}
                 >
-                  <div style={researchInlineBlocks.length ? inlineTextStyle(researchInlineBlocks) : { maxWidth: '640px' }}>
+                  <div
+                    ref={(node) => { motionTextRefs.current.research = node }}
+                    style={{
+                      ...(researchInlineBlocks.length ? inlineTextStyle(researchInlineBlocks) : { maxWidth: '640px' }),
+                      willChange: researchHasPortraitMotion ? 'transform' : undefined,
+                      transition: researchHasPortraitMotion ? 'transform 120ms linear' : undefined,
+                    }}
+                  >
                     {researchHeadline && (
                       <p className="font-mono" style={headlineStyle}>{researchHeadline}</p>
                     )}
@@ -527,7 +724,11 @@ export function CaseStudyLayout({
                     </p>
                   </div>
                   {researchInlineBlocks.length ? (
-                    <div className="case-study-inline-media" style={inlineMediaColumnStyle(researchInlineBlocks)}>
+                    <div
+                      ref={(node) => { motionMediaRefs.current.research = node }}
+                      className="case-study-inline-media"
+                      style={inlineMediaColumnStyle(researchInlineBlocks)}
+                    >
                       {researchInlineBlocks.map((block) => (
                         <div key={block.id} data-reveal style={{ display: 'flex', justifyContent: blockJustify(block.align) }}>
                           {renderMediaBlockContent(block)}
@@ -568,15 +769,38 @@ export function CaseStudyLayout({
 
         {/* Challenge */}
         {challenge && (
-          <section id="sec-challenge" data-section={copy.challengeLabel} className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
+          <section
+            id="sec-challenge"
+            ref={(node) => { motionSectionRefs.current.challenge = node }}
+            data-section={copy.challengeLabel}
+            className="case-study-section border-b border-divider"
+            style={{ padding: '32px 40px' }}
+          >
             <GsapReveal>
               <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
-                <span className="font-mono" style={labelStyle}>{copy.challengeLabel}</span>
+                <span
+                  ref={(node) => { motionLabelRefs.current.challenge = node }}
+                  className="font-mono"
+                  style={{
+                    ...labelStyle,
+                    willChange: challengeHasPortraitMotion ? 'transform' : undefined,
+                    transition: challengeHasPortraitMotion ? 'transform 120ms linear' : undefined,
+                  }}
+                >
+                  {copy.challengeLabel}
+                </span>
                 <div
                   className={challengeInlineBlocks.length ? 'case-study-inline-layout' : undefined}
                   style={inlineLayoutStyle(challengeInlineBlocks)}
                 >
-                  <div style={challengeInlineBlocks.length ? inlineTextStyle(challengeInlineBlocks) : { maxWidth: '640px' }}>
+                  <div
+                    ref={(node) => { motionTextRefs.current.challenge = node }}
+                    style={{
+                      ...(challengeInlineBlocks.length ? inlineTextStyle(challengeInlineBlocks) : { maxWidth: '640px' }),
+                      willChange: challengeHasPortraitMotion ? 'transform' : undefined,
+                      transition: challengeHasPortraitMotion ? 'transform 120ms linear' : undefined,
+                    }}
+                  >
                     {challengeHeadline && (
                       <p className="font-mono" style={headlineStyle}>{challengeHeadline}</p>
                     )}
@@ -585,7 +809,11 @@ export function CaseStudyLayout({
                     </p>
                   </div>
                   {challengeInlineBlocks.length ? (
-                    <div className="case-study-inline-media" style={inlineMediaColumnStyle(challengeInlineBlocks)}>
+                    <div
+                      ref={(node) => { motionMediaRefs.current.challenge = node }}
+                      className="case-study-inline-media"
+                      style={inlineMediaColumnStyle(challengeInlineBlocks)}
+                    >
                       {challengeInlineBlocks.map((block) => (
                         <div key={block.id} data-reveal style={{ display: 'flex', justifyContent: blockJustify(block.align) }}>
                           {renderMediaBlockContent(block)}
@@ -615,15 +843,38 @@ export function CaseStudyLayout({
 
         {/* Process */}
         {(process || usabilityTesting) && (
-          <section id="sec-process" data-section={copy.processLabel} className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
+          <section
+            id="sec-process"
+            ref={(node) => { motionSectionRefs.current.process = node }}
+            data-section={copy.processLabel}
+            className="case-study-section border-b border-divider"
+            style={{ padding: '32px 40px' }}
+          >
             <GsapReveal>
               <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
-                <span className="font-mono" style={labelStyle}>{copy.processLabel}</span>
+                <span
+                  ref={(node) => { motionLabelRefs.current.process = node }}
+                  className="font-mono"
+                  style={{
+                    ...labelStyle,
+                    willChange: processHasPortraitMotion ? 'transform' : undefined,
+                    transition: processHasPortraitMotion ? 'transform 120ms linear' : undefined,
+                  }}
+                >
+                  {copy.processLabel}
+                </span>
                 <div
                   className={processInlineBlocks.length ? 'case-study-inline-layout' : undefined}
                   style={inlineLayoutStyle(processInlineBlocks)}
                 >
-                  <div style={processInlineBlocks.length ? inlineTextStyle(processInlineBlocks) : undefined}>
+                  <div
+                    ref={(node) => { motionTextRefs.current.process = node }}
+                    style={{
+                      ...(processInlineBlocks.length ? inlineTextStyle(processInlineBlocks) : {}),
+                      willChange: processHasPortraitMotion ? 'transform' : undefined,
+                      transition: processHasPortraitMotion ? 'transform 120ms linear' : undefined,
+                    }}
+                  >
                   {processHeadline && (
                     <p className="font-mono" style={{ ...headlineStyle, maxWidth: '640px' }}>{processHeadline}</p>
                   )}
@@ -639,7 +890,11 @@ export function CaseStudyLayout({
                   )}
                   </div>
                   {processInlineBlocks.length ? (
-                    <div className="case-study-inline-media" style={inlineMediaColumnStyle(processInlineBlocks)}>
+                    <div
+                      ref={(node) => { motionMediaRefs.current.process = node }}
+                      className="case-study-inline-media"
+                      style={inlineMediaColumnStyle(processInlineBlocks)}
+                    >
                       {processInlineBlocks.map((block) => (
                         <div key={block.id} data-reveal style={{ display: 'flex', justifyContent: blockJustify(block.align) }}>
                           {renderMediaBlockContent(block)}
@@ -659,15 +914,38 @@ export function CaseStudyLayout({
         )}
 
         {/* Solution */}
-        <section id="sec-solution" data-section={copy.solutionLabel} className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
+        <section
+          id="sec-solution"
+          ref={(node) => { motionSectionRefs.current.solution = node }}
+          data-section={copy.solutionLabel}
+          className="case-study-section border-b border-divider"
+          style={{ padding: '32px 40px' }}
+        >
           <GsapReveal>
             <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
-              <span className="font-mono" style={labelStyle}>{copy.solutionLabel}</span>
+              <span
+                ref={(node) => { motionLabelRefs.current.solution = node }}
+                className="font-mono"
+                style={{
+                  ...labelStyle,
+                  willChange: solutionHasPortraitMotion ? 'transform' : undefined,
+                  transition: solutionHasPortraitMotion ? 'transform 120ms linear' : undefined,
+                }}
+              >
+                {copy.solutionLabel}
+              </span>
               <div
                 className={solutionInlineBlocks.length ? 'case-study-inline-layout' : undefined}
                 style={inlineLayoutStyle(solutionInlineBlocks)}
               >
-                <div style={solutionInlineBlocks.length ? inlineTextStyle(solutionInlineBlocks) : { maxWidth: '640px' }}>
+                <div
+                  ref={(node) => { motionTextRefs.current.solution = node }}
+                  style={{
+                    ...(solutionInlineBlocks.length ? inlineTextStyle(solutionInlineBlocks) : { maxWidth: '640px' }),
+                    willChange: solutionHasPortraitMotion ? 'transform' : undefined,
+                    transition: solutionHasPortraitMotion ? 'transform 120ms linear' : undefined,
+                  }}
+                >
                   {solutionHeadline && (
                     <p className="font-mono" style={headlineStyle}>{solutionHeadline}</p>
                   )}
@@ -676,7 +954,11 @@ export function CaseStudyLayout({
                   </p>
                 </div>
                 {solutionInlineBlocks.length ? (
-                  <div className="case-study-inline-media" style={inlineMediaColumnStyle(solutionInlineBlocks)}>
+                  <div
+                    ref={(node) => { motionMediaRefs.current.solution = node }}
+                    className="case-study-inline-media"
+                    style={inlineMediaColumnStyle(solutionInlineBlocks)}
+                  >
                     {solutionInlineBlocks.map((block) => (
                       <div key={block.id} data-reveal style={{ display: 'flex', justifyContent: blockJustify(block.align) }}>
                         {renderMediaBlockContent(block)}
@@ -711,6 +993,16 @@ export function CaseStudyLayout({
             ) : null}
           </GsapReveal>
         </section>
+
+        {solutionSplitBlocks.length ? (
+          <div className="case-study-section border-b border-divider" style={{ padding: '0 40px 32px' }}>
+            <GsapReveal>
+              <div data-reveal style={{ display: 'grid', gap: '14px' }}>
+                {solutionSplitBlocks.map(renderPortraitSplitBlock)}
+              </div>
+            </GsapReveal>
+          </div>
+        ) : null}
 
         {/* Outcomes */}
         {outcomes && (

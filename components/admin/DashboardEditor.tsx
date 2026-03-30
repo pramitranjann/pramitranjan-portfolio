@@ -2761,7 +2761,12 @@ function MediaBlockEditor({
         Hide Block From Public Site
       </label>
       <Field label="Section">
-        <select value={block.section} onChange={(event) => onChange((current) => ({ ...current, section: event.target.value as CaseStudyMediaBlockSection }))} style={inputStyle()}>
+        <select
+          value={block.placement === 'between-solution-outcomes' ? 'solution' : block.section}
+          disabled={block.placement === 'between-solution-outcomes'}
+          onChange={(event) => onChange((current) => ({ ...current, section: event.target.value as CaseStudyMediaBlockSection }))}
+          style={inputStyle()}
+        >
           <option value="research">Research</option>
           <option value="challenge">Challenge</option>
           <option value="process">Process</option>
@@ -2770,7 +2775,8 @@ function MediaBlockEditor({
       </Field>
       <Field label="Layout">
         <select
-          value={block.layout}
+          value={block.placement === 'between-solution-outcomes' ? 'single' : block.layout}
+          disabled={block.placement === 'between-solution-outcomes'}
           onChange={(event) => onChange((current) => normalizeMediaBlock({ ...current, layout: event.target.value as CaseStudyMediaBlock['layout'] }))}
           style={inputStyle()}
         >
@@ -2781,13 +2787,51 @@ function MediaBlockEditor({
       <Field label="Placement">
         <select
           value={block.placement ?? 'below'}
-          onChange={(event) => onChange((current) => ({ ...current, placement: event.target.value as CaseStudyMediaBlock['placement'] }))}
+          onChange={(event) => onChange((current) => {
+            const placement = event.target.value as CaseStudyMediaBlock['placement']
+            if (placement === 'between-solution-outcomes') {
+              return normalizeMediaBlock({
+                ...current,
+                section: 'solution',
+                placement,
+                layout: 'single',
+                portraitSplitCount: current.portraitSplitCount ?? 2,
+              })
+            }
+
+            return {
+              ...current,
+              placement,
+              portraitSplitCount: placement === 'side-right' || placement === 'below' ? undefined : current.portraitSplitCount,
+            }
+          })}
           style={inputStyle()}
         >
           <option value="below">Below Text</option>
           <option value="side-right">Side by Side (Right)</option>
+          <option value="between-solution-outcomes">Between Solution + Outcomes</option>
         </select>
       </Field>
+      {block.placement === 'between-solution-outcomes' ? (
+        <>
+          <p className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#777777', lineHeight: 1.6, margin: '-4px 0 0' }}>
+            Uses one portrait image and slices it into stacked crops rendered between the Solution and Outcomes sections.
+          </p>
+          <Field label="Portrait Split">
+            <select
+              value={block.portraitSplitCount ?? 2}
+              onChange={(event) => onChange((current) => ({
+                ...current,
+                portraitSplitCount: Number(event.target.value) as 2 | 3,
+              }))}
+              style={inputStyle()}
+            >
+              <option value={2}>2 slices</option>
+              <option value={3}>3 slices</option>
+            </select>
+          </Field>
+        </>
+      ) : null}
       <Field label="Align">
         <select value={block.align ?? 'center'} onChange={(event) => onChange((current) => ({ ...current, align: event.target.value as CaseStudyMediaAlign }))} style={inputStyle()}>
           <option value="left">Left</option>

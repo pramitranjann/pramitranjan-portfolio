@@ -199,7 +199,7 @@ export type CaseStudySection = 'work' | 'mixed-media' | 'branding'
 export type CaseStudyMediaBlockSection = 'research' | 'challenge' | 'process' | 'solution'
 export type CaseStudyMediaBlockLayout = 'single' | 'pair'
 export type CaseStudyMediaAlign = 'left' | 'center' | 'right'
-export type CaseStudyMediaPlacement = 'below' | 'side-right'
+export type CaseStudyMediaPlacement = 'below' | 'side-right' | 'between-solution-outcomes'
 
 export interface CaseStudyMediaSlotSettings {
   height?: string
@@ -240,6 +240,7 @@ export interface CaseStudyMediaBlock {
   hidden?: boolean
   layout: CaseStudyMediaBlockLayout
   placement?: CaseStudyMediaPlacement
+  portraitSplitCount?: 2 | 3
   align?: CaseStudyMediaAlign
   width?: string
   inlineTextWidth?: string
@@ -587,7 +588,7 @@ function isCaseStudyMediaAlign(value: unknown): value is CaseStudyMediaAlign {
 }
 
 function isCaseStudyMediaPlacement(value: unknown): value is CaseStudyMediaPlacement {
-  return value === 'below' || value === 'side-right'
+  return value === 'below' || value === 'side-right' || value === 'between-solution-outcomes'
 }
 
 function isCaseStudyMediaImage(value: unknown): value is CaseStudyMediaImage {
@@ -612,6 +613,7 @@ function isCaseStudyMediaBlock(value: unknown): value is CaseStudyMediaBlock {
     (item.hidden === undefined || typeof item.hidden === 'boolean') &&
     (item.layout === 'single' || item.layout === 'pair') &&
     (item.placement === undefined || isCaseStudyMediaPlacement(item.placement)) &&
+    (item.portraitSplitCount === undefined || item.portraitSplitCount === 2 || item.portraitSplitCount === 3) &&
     (item.align === undefined || isCaseStudyMediaAlign(item.align)) &&
     isOptionalString(item.width) &&
     isOptionalString(item.inlineTextWidth) &&
