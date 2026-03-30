@@ -676,9 +676,8 @@
       },
       "mediaBlocks": [
         {
-          "id": "franklins-research-1",
           "section": "research",
-          "layout": "pair",
+          "layout": "single",
           "placement": "side-right",
           "inlineTextWidth": "480px",
           "inlineMediaMinWidth": "240px",
@@ -686,24 +685,41 @@
           "hidden": true,
           "images": [
             {
-              "src": "/202620_UXDG101-01_22643_Franklins_Assignment3.jpg",
+              "src": "",
               "fit": "contain",
               "aspectRatio": "4 / 3",
               "background": "#0d0d0d",
               "alt": ""
+            }
+          ],
+          "id": "research-1774907845343-lycc9d"
+        },
+        {
+          "section": "solution",
+          "layout": "pair",
+          "width": "100%",
+          "align": "center",
+          "hidden": true,
+          "images": [
+            {
+              "src": "/franklins process 1.jpg",
+              "fit": "contain",
+              "aspectRatio": "16 / 10",
+              "background": "#0d0d0d",
+              "alt": ""
             },
             {
-              "src": "/franklins research 2.jpg",
+              "src": "/franklins process 2.jpg",
               "fit": "contain",
               "position": "center center",
               "aspectRatio": "4 / 3",
               "background": "#0d0d0d",
               "alt": "Layout placeholder"
             }
-          ]
+          ],
+          "id": "solution-1774907845344-nmxx1c"
         },
         {
-          "id": "franklins-solution-2",
           "section": "solution",
           "layout": "pair",
           "width": "100%",
@@ -725,33 +741,8 @@
               "background": "#0d0d0d",
               "alt": ""
             }
-          ]
-        },
-        {
-          "id": "franklins-solution-1",
-          "section": "solution",
-          "layout": "pair",
-          "width": "100%",
-          "align": "center",
-          "hidden": true,
-          "images": [
-            {
-              "src": "/Menu.png",
-              "fit": "contain",
-              "aspectRatio": "16 / 10",
-              "background": "#0d0d0d",
-              "alt": ""
-            },
-            {
-              "src": "/About Us.png",
-              "fit": "contain",
-              "position": "center center",
-              "aspectRatio": "4 / 3",
-              "background": "#0d0d0d",
-              "alt": "Layout placeholder"
-            }
           ],
-          "placement": "below"
+          "id": "solution-1774907845344-ot79cn"
         }
       ]
     },
