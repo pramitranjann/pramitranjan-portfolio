@@ -791,7 +791,7 @@
               "position": "center center"
             }
           ],
-          "placement": "side-right",
+          "placement": "below",
           "inlineTextWidth": "480px"
         }
       ]
