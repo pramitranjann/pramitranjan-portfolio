@@ -881,11 +881,6 @@
         "title": "Albers"
       },
       "heroImage": "/work/atom/cover-processed.png",
-      "researchImage": "/work/atom/research-processed.png",
-      "challengeImages": [
-        "/work/atom/ideation-1-processed.png",
-        "/work/atom/ideation-2-processed.png"
-      ],
       "solutionHeroImage": "/work/atom/solution-hero-processed.png",
       "solutionImages": [
         "/work/atom/hero-2-processed.png",
@@ -913,48 +908,6 @@
       },
       "mediaBlocks": [
         {
-          "id": "atom-research-1",
-          "section": "research",
-          "layout": "single",
-          "placement": "side-right",
-          "inlineTextWidth": "480px",
-          "inlineMediaMinWidth": "240px",
-          "align": "center",
-          "images": [
-            {
-              "src": "/work/atom/research-processed.png",
-              "fit": "contain",
-              "aspectRatio": "3 / 4",
-              "background": "#0d0d0d",
-              "alt": ""
-            }
-          ]
-        },
-        {
-          "id": "atom-challenge-1",
-          "section": "challenge",
-          "layout": "pair",
-          "width": "100%",
-          "gap": "2px",
-          "align": "center",
-          "images": [
-            {
-              "src": "/work/atom/ideation-1-processed.png",
-              "fit": "contain",
-              "aspectRatio": "3 / 4",
-              "background": "#0d0d0d",
-              "alt": ""
-            },
-            {
-              "src": "/work/atom/ideation-2-processed.png",
-              "fit": "contain",
-              "aspectRatio": "3 / 4",
-              "background": "#0d0d0d",
-              "alt": ""
-            }
-          ]
-        },
-        {
           "id": "atom-solution-1",
           "section": "solution",
           "layout": "single",
@@ -973,26 +926,21 @@
         {
           "id": "atom-solution-2",
           "section": "solution",
-          "layout": "pair",
+          "layout": "single",
           "width": "100%",
           "gap": "2px",
           "align": "center",
           "images": [
             {
-              "src": "/work/atom/hero-2-processed.png",
-              "fit": "contain",
-              "aspectRatio": "3 / 4",
-              "background": "#0d0d0d",
-              "alt": ""
-            },
-            {
-              "src": "/work/atom/solution-2-processed.png",
+              "src": "/work/atom/solution-hero.png",
               "fit": "contain",
               "aspectRatio": "3 / 4",
               "background": "#0d0d0d",
               "alt": ""
             }
-          ]
+          ],
+          "placement": "side-right",
+          "inlineTextWidth": "420px"
         }
       ]
     },
