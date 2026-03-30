@@ -990,7 +990,12 @@
             }
           ]
         }
-      ]
+      ],
+      "mediaSettings": {
+        "hero": {
+          "background": "#FFFFFF"
+        }
+      }
     },
     {
       "slug": "accord",
