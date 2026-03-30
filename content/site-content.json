@@ -778,12 +778,12 @@
           "id": "loomlearn-solution-2",
           "section": "solution",
           "layout": "single",
-          "width": "100%",
+          "width": "84%",
           "gap": "2px",
           "align": "center",
           "images": [
             {
-              "src": "/work/loomlearn/hero-1.png",
+              "src": "/work/loomlearn/solution-hero.png",
               "fit": "contain",
               "aspectRatio": "16 / 10",
               "background": "#0d0d0d",
