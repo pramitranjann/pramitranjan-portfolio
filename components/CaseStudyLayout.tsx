@@ -353,7 +353,7 @@ export function CaseStudyLayout({
         lastSection &&
         (
           lastSection.getBoundingClientRect().top <= activationLine ||
-          (remainingScroll <= 24 && lastSection.getBoundingClientRect().top <= window.innerHeight - 120)
+          lastSection.getBoundingClientRect().top <= window.innerHeight - 120
         )
       ) {
         return lastSection
@@ -388,7 +388,7 @@ export function CaseStudyLayout({
             .filter((el) => el.id !== 'sec-hero')
           const rect = target.getBoundingClientRect()
           const isLastSection = sections[sections.length - 1]?.id === target.id
-          if (rect.top <= activationLine || (isLastSection && remainingScroll <= 24)) {
+          if (rect.top <= activationLine || (isLastSection && rect.top <= window.innerHeight - 120)) {
             scrollLocked.current = false
             lockTargetId.current = null
             setActiveId(target.id)
