@@ -111,18 +111,22 @@ function blockJustify(align?: CaseStudyMediaBlock['align']) {
 function resolvedInlineMediaWidth(block?: CaseStudyMediaBlock) {
   const width = block?.width?.trim()
   if (block?.placement === 'side-right' && (!width || width === '100%')) {
-    return block.inlineMediaMinWidth || 'clamp(220px, 32vw, 520px)'
+    return '100%'
   }
   return width || '100%'
 }
 
 function inlineLayoutStyle(blocks: CaseStudyMediaBlock[]): React.CSSProperties | undefined {
   if (!blocks.length) return undefined
+  const primaryBlock = blocks[0]
+  const textWidth = primaryBlock?.inlineTextWidth || '640px'
+  const mediaMinWidth = primaryBlock?.inlineMediaMinWidth || 'clamp(320px, 32vw, 720px)'
   return {
     display: 'grid',
-    gridTemplateColumns: 'minmax(0, 1fr) auto',
+    width: '100%',
+    gridTemplateColumns: `fit-content(${textWidth}) minmax(${mediaMinWidth}, 1fr)`,
     gap: '32px',
-    alignItems: 'center',
+    alignItems: 'start',
   }
 }
 
@@ -142,9 +146,10 @@ function inlineMediaColumnStyle(blocks: CaseStudyMediaBlock[]): React.CSSPropert
   const primaryBlock = blocks[0]
   return {
     display: 'grid',
+    width: '100%',
     gap: '14px',
-    justifyItems: 'end',
-    minWidth: primaryBlock?.inlineMediaMinWidth || 'clamp(220px, 32vw, 520px)',
+    justifyItems: 'stretch',
+    minWidth: primaryBlock?.inlineMediaMinWidth || 'clamp(320px, 32vw, 720px)',
   }
 }
 
@@ -341,8 +346,10 @@ export function CaseStudyLayout({
 
       if (
         lastSection &&
-        remainingScroll <= 24 &&
-        lastSection.getBoundingClientRect().top <= window.innerHeight * 0.6
+        (
+          (remainingScroll <= 24 && lastSection.getBoundingClientRect().top <= window.innerHeight * 0.6) ||
+          lastSection.getBoundingClientRect().top <= window.innerHeight * 0.45
+        )
       ) {
         return lastSection
       }

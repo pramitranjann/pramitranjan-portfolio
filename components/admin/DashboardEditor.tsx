@@ -127,6 +127,9 @@ const mediaInlineMinWidthOptions: PresetOption[] = [
   { value: '420px', label: '420px' },
   { value: '480px', label: '480px' },
   { value: '560px', label: '560px' },
+  { value: '640px', label: '640px' },
+  { value: '720px', label: '720px' },
+  { value: '820px', label: '820px' },
 ]
 
 function parsePxValue(value: string | undefined) {
