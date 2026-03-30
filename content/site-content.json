@@ -857,7 +857,7 @@
           ],
           "placement": "side-right",
           "inlineTextWidth": "420px",
-          "inlineMediaMinWidth": "820px"
+          "inlineMediaMinWidth": "640px"
         }
       ]
     },
