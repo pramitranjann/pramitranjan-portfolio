@@ -108,6 +108,14 @@ function blockJustify(align?: CaseStudyMediaBlock['align']) {
   return 'center'
 }
 
+function resolvedInlineMediaWidth(block?: CaseStudyMediaBlock) {
+  const width = block?.width?.trim()
+  if (block?.placement === 'side-right' && (!width || width === '100%')) {
+    return block.inlineMediaMinWidth || 'clamp(220px, 32vw, 520px)'
+  }
+  return width || '100%'
+}
+
 function inlineLayoutStyle(blocks: CaseStudyMediaBlock[]): React.CSSProperties | undefined {
   if (!blocks.length) return undefined
   return {
@@ -136,7 +144,7 @@ function inlineMediaColumnStyle(blocks: CaseStudyMediaBlock[]): React.CSSPropert
     display: 'grid',
     gap: '14px',
     justifyItems: 'end',
-    minWidth: primaryBlock?.inlineMediaMinWidth || undefined,
+    minWidth: primaryBlock?.inlineMediaMinWidth || 'clamp(220px, 32vw, 520px)',
   }
 }
 
@@ -150,7 +158,7 @@ function renderMediaBlockContent(block: CaseStudyMediaBlock) {
     <div
       className="case-study-media-block"
       style={{
-        width: block.width || '100%',
+        width: resolvedInlineMediaWidth(block),
         display: 'grid',
         gridTemplateColumns: columns,
         gap: block.gap || '2px',
