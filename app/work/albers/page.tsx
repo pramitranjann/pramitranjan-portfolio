@@ -7,6 +7,8 @@ export default async function AlbersPage() {
     <CaseStudyLayout
       {...caseStudy}
       mediaBlocks={caseStudy.mediaBlocks?.filter((block) => block.section !== 'solution')}
+      solutionHeroImage={undefined}
+      solutionImages={undefined}
       solutionEmbedUrl="https://albers-web.vercel.app"
       solutionEmbedTitle="ALBERS live app"
       solutionEmbedAspectRatio="4 / 3"
