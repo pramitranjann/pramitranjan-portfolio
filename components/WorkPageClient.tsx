@@ -28,6 +28,12 @@ export function WorkPageClient({
   const copy = useSiteCopy().workPage
 
   useEffect(() => {
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+    })
+  }, [])
+
+  useEffect(() => {
     const el = eyebrowRef.current
     if (!el) return
     const observer = new IntersectionObserver(
