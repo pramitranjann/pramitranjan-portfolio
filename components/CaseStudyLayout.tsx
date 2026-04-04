@@ -58,6 +58,10 @@ interface CaseStudyLayoutProps {
   solutionEmbedTitle?: string
   solutionEmbedAspectRatio?: string
   solutionEmbedCtaLabel?: string
+  solutionEmbedWidth?: string
+  solutionEmbedCalloutLabel?: string
+  solutionEmbedCalloutTitle?: string
+  solutionEmbedCalloutBody?: string
 }
 
 const labelStyle: React.CSSProperties = {
@@ -318,6 +322,7 @@ export function CaseStudyLayout({
   processHeadline, solutionHeadline, outcomesHeadline, pullQuote,
   heroImage, researchImage, challengeImages, solutionHeroImage, solutionImages, mediaSettings, mediaBlocks, uiCopy,
   solutionEmbedUrl, solutionEmbedTitle = 'Live experience', solutionEmbedAspectRatio = '4 / 3', solutionEmbedCtaLabel = 'OPEN LIVE APP',
+  solutionEmbedWidth = 'min(100%, 1120px)', solutionEmbedCalloutLabel, solutionEmbedCalloutTitle, solutionEmbedCalloutBody,
 }: CaseStudyLayoutProps) {
   const basePath = backHref
   const copy = { ...useSiteCopy().caseStudy, ...uiCopy }
@@ -978,50 +983,92 @@ export function CaseStudyLayout({
                 {solutionBelowBlocks.map(renderMediaBlock)}
               </div>
             ) : solutionEmbedUrl ? (
-              <div className="mt-6" style={{ display: 'grid', gap: '14px' }}>
-                <div
-                  data-reveal
-                  style={{
-                    position: 'relative',
-                    width: '100%',
-                    aspectRatio: solutionEmbedAspectRatio,
-                    backgroundColor: '#0d0d0d',
-                    border: '1px solid #1a1a1a',
-                    overflow: 'hidden',
-                  }}
-                >
-                  <iframe
-                    src={solutionEmbedUrl}
-                    title={solutionEmbedTitle}
-                    loading="lazy"
-                    referrerPolicy="strict-origin-when-cross-origin"
-                    allow="fullscreen"
+              <div className="mt-6" style={{ display: 'flex', justifyContent: 'center' }}>
+                <div style={{ width: solutionEmbedWidth, display: 'grid', gap: '14px' }}>
+                  {(solutionEmbedCalloutLabel || solutionEmbedCalloutTitle || solutionEmbedCalloutBody) ? (
+                    <div
+                      data-reveal
+                      style={{
+                        background: '#111111',
+                        border: '1px solid #1f1f1f',
+                        padding: '18px 20px',
+                        display: 'grid',
+                        gap: '8px',
+                      }}
+                    >
+                      {solutionEmbedCalloutLabel ? (
+                        <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.16em', color: '#FF3120' }}>
+                          {solutionEmbedCalloutLabel}
+                        </span>
+                      ) : null}
+                      {solutionEmbedCalloutTitle ? (
+                        <p className="font-mono" style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.01em', color: '#f5f2ed', lineHeight: 1.5, margin: 0 }}>
+                          {solutionEmbedCalloutTitle}
+                        </p>
+                      ) : null}
+                      {solutionEmbedCalloutBody ? (
+                        <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.7, margin: 0 }}>
+                          {solutionEmbedCalloutBody}
+                        </p>
+                      ) : null}
+                    </div>
+                  ) : null}
+                  <div
+                    data-reveal
                     style={{
+                      position: 'relative',
                       width: '100%',
-                      height: '100%',
-                      border: 0,
-                      background: '#0d0d0d',
-                    }}
-                  />
-                </div>
-                <div data-reveal style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <a
-                    href={solutionEmbedUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="font-mono"
-                    onPointerDown={playNav}
-                    style={{
-                      fontSize: 'var(--text-meta)',
-                      letterSpacing: '0.14em',
-                      color: '#FF3120',
-                      border: '1px solid #FF3120',
-                      padding: '10px 20px',
-                      textDecoration: 'none',
+                      aspectRatio: solutionEmbedAspectRatio,
+                      backgroundColor: '#111111',
+                      border: '1px solid #1f1f1f',
+                      padding: '12px',
+                      overflow: 'hidden',
                     }}
                   >
-                    {solutionEmbedCtaLabel} <span className="arrow-nudge">↗</span>
-                  </a>
+                    <div
+                      style={{
+                        position: 'relative',
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: '#0d0d0d',
+                        border: '1px solid #1a1a1a',
+                        overflow: 'hidden',
+                      }}
+                    >
+                      <iframe
+                        src={solutionEmbedUrl}
+                        title={solutionEmbedTitle}
+                        loading="lazy"
+                        referrerPolicy="strict-origin-when-cross-origin"
+                        allow="fullscreen"
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          border: 0,
+                          background: '#0d0d0d',
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div data-reveal style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <a
+                      href={solutionEmbedUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="font-mono"
+                      onPointerDown={playNav}
+                      style={{
+                        fontSize: 'var(--text-meta)',
+                        letterSpacing: '0.14em',
+                        color: '#FF3120',
+                        border: '1px solid #FF3120',
+                        padding: '10px 20px',
+                        textDecoration: 'none',
+                      }}
+                    >
+                      {solutionEmbedCtaLabel} <span className="arrow-nudge">↗</span>
+                    </a>
+                  </div>
                 </div>
               </div>
             ) : !solutionBlocks.length && !explicitMediaBlockSections.has('solution') ? (
