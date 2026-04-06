@@ -24,12 +24,13 @@ const dmMono = DM_Mono({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://www.pramitranjan.com'),
   title: 'Pramit Ranjan',
   description: 'UX designer and photographer. Portfolio of case studies, creative work, and photography.',
   openGraph: {
     title: 'Pramit Ranjan',
     description: 'UX designer and photographer.',
-    url: 'https://pramitranjan.com',
+    url: 'https://www.pramitranjan.com',
     siteName: 'Pramit Ranjan',
     type: 'website',
   },
