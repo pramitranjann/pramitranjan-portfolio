@@ -1165,7 +1165,7 @@ export function CaseStudyLayout({
           alignItems: 'stretch',
           background: 'rgba(13,13,13,0.98)',
           backdropFilter: 'blur(16px)',
-          border: '1px solid rgba(245, 242, 237, 0.34)',
+          border: '1px solid var(--color-white)',
           boxShadow: '0 10px 36px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(245, 242, 237, 0.06)',
           opacity: navVisible ? 1 : 0,
           pointerEvents: navVisible ? 'auto' : 'none',
@@ -1204,7 +1204,7 @@ export function CaseStudyLayout({
                 position: 'relative',
                 flexShrink: 0,
                 whiteSpace: 'nowrap',
-                borderRight: i < navItems.length - 1 ? '1px solid rgba(245, 242, 237, 0.16)' : 'none',
+                borderRight: i < navItems.length - 1 ? '1px solid var(--color-white)' : 'none',
                 textShadow: activeId === item.id ? '0 0 10px rgba(245, 242, 237, 0.18)' : 'none',
                 transition: 'color 0.15s ease, background 0.15s ease',
               }}
