@@ -89,6 +89,12 @@ export function CreativeListingCard({
       }}
     >
       {({ hovered }) => {
+        const hiddenTextStyle = {
+          opacity: hovered ? 0 : 1,
+          transform: hovered ? 'translateY(8px)' : 'translateY(0px)',
+          transition: 'opacity 110ms ease-out, transform 160ms cubic-bezier(0.23, 1, 0.32, 1)',
+        } as const
+
         const hoverCard = (
           <div className="portfolio-card flex flex-col h-full" style={{ backgroundColor: '#1c1c1c', padding: cardStyle?.cardPadding ?? '16px' }}>
             <div
@@ -114,13 +120,13 @@ export function CreativeListingCard({
                 />
               ) : null}
             </div>
-            <h3 className="font-serif" style={{ fontSize: cardStyle?.titleSize ?? 'var(--text-body)', fontWeight: 'var(--font-weight-serif)', color: 'var(--color-heading)', marginBottom: '4px' }}>
+            <h3 className="font-serif" style={{ fontSize: cardStyle?.titleSize ?? 'var(--text-body)', fontWeight: 'var(--font-weight-serif)', color: 'var(--color-heading)', marginBottom: '4px', ...hiddenTextStyle }}>
               <span className="card-title-inner">{title}</span>
             </h3>
-            <p className="font-mono flex-1" style={{ fontSize: cardStyle?.bodySize ?? 'var(--text-meta)', letterSpacing: '0.04em', color: 'var(--color-body)', lineHeight: 1.6, marginBottom: '12px' }}>
+            <p className="font-mono flex-1" style={{ fontSize: cardStyle?.bodySize ?? 'var(--text-meta)', letterSpacing: '0.04em', color: 'var(--color-body)', lineHeight: 1.6, marginBottom: '12px', ...hiddenTextStyle }}>
               {desc}
             </p>
-            <div className="flex flex-col" style={{ gap: '6px' }}>
+            <div className="flex flex-col" style={{ gap: '6px', ...hiddenTextStyle }}>
               {tag ? <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: 'var(--color-label)' }}>{tag}</span> : null}
               {comingSoon
                 ? <span className="font-mono" style={{ fontSize: cardStyle?.bodySize ?? 'var(--text-meta)', letterSpacing: '0.1em', color: 'var(--color-label)' }}>COMING SOON</span>

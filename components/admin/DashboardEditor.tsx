@@ -3680,6 +3680,24 @@ function ListeningCardStyleEditor({
       <Field label="Artwork Size">
         <input value={styleSettings.artworkSize} onChange={(event) => onChange({ ...styleSettings, artworkSize: event.target.value })} style={inputStyle()} />
       </Field>
+      <Field label="Hover Artwork Size">
+        <input value={styleSettings.hoverArtworkSize} onChange={(event) => onChange({ ...styleSettings, hoverArtworkSize: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Hover Min Height">
+        <input value={styleSettings.hoverMinHeight} onChange={(event) => onChange({ ...styleSettings, hoverMinHeight: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Hover Scale">
+        <input value={styleSettings.hoverScale} onChange={(event) => onChange({ ...styleSettings, hoverScale: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Hover Progress Height">
+        <input value={styleSettings.hoverProgressHeight} onChange={(event) => onChange({ ...styleSettings, hoverProgressHeight: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Hover Copy · Playing">
+        <textarea value={styleSettings.hoverCopyPlaying} onChange={(event) => onChange({ ...styleSettings, hoverCopyPlaying: event.target.value })} style={inputStyle(true)} />
+      </Field>
+      <Field label="Hover Copy · Idle">
+        <textarea value={styleSettings.hoverCopyIdle} onChange={(event) => onChange({ ...styleSettings, hoverCopyIdle: event.target.value })} style={inputStyle(true)} />
+      </Field>
       <Field label="Progress Meta Size">
         <input value={styleSettings.progressMetaSize} onChange={(event) => onChange({ ...styleSettings, progressMetaSize: event.target.value })} style={inputStyle()} />
       </Field>

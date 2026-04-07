@@ -110,6 +110,12 @@ export interface ListeningCardStyleSettings {
   artistSize: string
   cardPadding: string
   artworkSize: string
+  hoverArtworkSize: string
+  hoverMinHeight: string
+  hoverScale: string
+  hoverProgressHeight: string
+  hoverCopyPlaying: string
+  hoverCopyIdle: string
   progressMetaSize: string
   cardBackground: string
   cardBorderColor: string
@@ -575,6 +581,12 @@ function isListeningCardStyleSettings(value: unknown): value is ListeningCardSty
     isString(item.artistSize) &&
     isString(item.cardPadding) &&
     isString(item.artworkSize) &&
+    isString(item.hoverArtworkSize) &&
+    isString(item.hoverMinHeight) &&
+    isString(item.hoverScale) &&
+    isString(item.hoverProgressHeight) &&
+    isString(item.hoverCopyPlaying) &&
+    isString(item.hoverCopyIdle) &&
     isString(item.progressMetaSize) &&
     isString(item.cardBackground) &&
     isString(item.cardBorderColor) &&

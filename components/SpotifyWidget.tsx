@@ -147,8 +147,8 @@ function SidebarVariant({
         background: styleSettings?.cardBackground ?? '#111111',
         border: `1px solid ${styleSettings?.cardBorderColor ?? '#1f1f1f'}`,
         padding: expanded ? '17px' : (styleSettings?.cardPadding ?? '14px'),
-        minHeight: expanded ? '190px' : '110px',
-        transform: expanded ? 'scale(1.018)' : 'scale(1)',
+        minHeight: expanded ? (styleSettings?.hoverMinHeight ?? '190px') : '110px',
+        transform: expanded ? `scale(${styleSettings?.hoverScale ?? '1.018'})` : 'scale(1)',
         transformOrigin: 'center right',
         boxShadow: expanded ? '0 20px 44px rgba(0,0,0,0.45), 0 0 0 1px rgba(245,242,237,0.04)' : 'none',
         transition: 'padding 220ms cubic-bezier(0.23, 1, 0.32, 1), min-height 240ms cubic-bezier(0.23, 1, 0.32, 1), transform 220ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 220ms cubic-bezier(0.23, 1, 0.32, 1)',
@@ -171,8 +171,8 @@ function SidebarVariant({
             src={track.albumArt}
             alt={track.title}
             style={{
-              width: expanded ? '92px' : (styleSettings?.artworkSize ?? '36px'),
-              height: expanded ? '92px' : (styleSettings?.artworkSize ?? '36px'),
+              width: expanded ? (styleSettings?.hoverArtworkSize ?? '92px') : (styleSettings?.artworkSize ?? '36px'),
+              height: expanded ? (styleSettings?.hoverArtworkSize ?? '92px') : (styleSettings?.artworkSize ?? '36px'),
               objectFit: 'cover',
               border: `1px solid ${styleSettings?.artworkBorderColor ?? '#2a2a2a'}`,
               flexShrink: 0,
@@ -183,8 +183,8 @@ function SidebarVariant({
         ) : (
           <div
             style={{
-              width: expanded ? '92px' : (styleSettings?.artworkSize ?? '36px'),
-              height: expanded ? '92px' : (styleSettings?.artworkSize ?? '36px'),
+              width: expanded ? (styleSettings?.hoverArtworkSize ?? '92px') : (styleSettings?.artworkSize ?? '36px'),
+              height: expanded ? (styleSettings?.hoverArtworkSize ?? '92px') : (styleSettings?.artworkSize ?? '36px'),
               background: styleSettings?.progressTrackColor ?? '#1f1f1f',
               border: `1px solid ${styleSettings?.artworkBorderColor ?? '#2a2a2a'}`,
               flexShrink: 0,
@@ -223,7 +223,7 @@ function SidebarVariant({
           <div
             style={{
               marginTop: expanded ? '14px' : '10px',
-              height: expanded ? '6px' : '1px',
+              height: expanded ? (styleSettings?.hoverProgressHeight ?? '6px') : '1px',
               background: styleSettings?.progressTrackColor ?? '#1f1f1f',
               position: 'relative',
               overflow: 'hidden',
@@ -259,8 +259,8 @@ function SidebarVariant({
       >
         <div className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.05em', color: styleSettings?.artistColor ?? '#999999', lineHeight: 1.7 }}>
           {track.isPlaying
-            ? 'Proof the sidebar has better taste than most rooms.'
-            : 'Between tracks, but the taste level is still intact.'}
+            ? (styleSettings?.hoverCopyPlaying ?? 'Proof the sidebar has better taste than most rooms.')
+            : (styleSettings?.hoverCopyIdle ?? 'Between tracks, but the taste level is still intact.')}
         </div>
         {track.externalUrl ? (
           <a

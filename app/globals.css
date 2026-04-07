@@ -135,20 +135,14 @@ body.carousel-reengaging main {
 /* Card images — fill container correctly regardless of source dimensions */
 .portfolio-card img { object-fit: cover; object-position: top; }
 
-/* Card hover — lift + red border + glow */
+/* Card hover — subtle lift only; richer state is handled by the preview layer */
 .portfolio-card {
   border: 1px solid #2a2a2a;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-}
-.portfolio-card:hover {
-  border-color: #FF3120;
-  box-shadow: 0 0 0 1px #FF3120,
-              0 0 32px rgba(255, 49, 32, 0.1),
-              0 8px 24px rgba(0, 0, 0, 0.4);
+  transition: transform 0.16s cubic-bezier(0.23, 1, 0.32, 1);
 }
 @media (hover: hover) and (pointer: fine) {
   .portfolio-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-2px);
   }
 }
 

@@ -78,8 +78,8 @@ export function HoverPreviewSurface({
       <div
         style={{
           height: '100%',
-          transform: visible ? 'scale(0.995)' : 'scale(1)',
-          transition: 'transform 140ms cubic-bezier(0.23, 1, 0.32, 1)',
+          transform: 'scale(1)',
+          transition: 'none',
         }}
       >
         {childContent}
@@ -153,7 +153,6 @@ export function HoverPreviewSurface({
               letterSpacing: '0.14em',
               color: settings.accentColor,
               width: 'fit-content',
-              textShadow: '0 0 14px rgba(255,49,32,0.2)',
             }}
           >
             {preview.ctaLabel} <span className="arrow-nudge">→</span>

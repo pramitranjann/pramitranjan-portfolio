@@ -168,6 +168,12 @@ export function ProjectCard({
       }}
     >
       {({ hovered }) => {
+        const hiddenTextStyle = {
+          opacity: hovered ? 0 : 1,
+          transform: hovered ? 'translateY(8px)' : 'translateY(0px)',
+          transition: 'opacity 110ms ease-out, transform 160ms cubic-bezier(0.23, 1, 0.32, 1)',
+        } as const
+
         const withCarousel = variant === 'supporting' ? (
           <div className="portfolio-card" style={cardBase}>
             <div
@@ -199,11 +205,11 @@ export function ProjectCard({
                 </div>
               )}
             </div>
-            <div className="font-serif" style={{ fontSize: titleSize ?? 'var(--text-body)', color: 'var(--color-heading)' }}>
+            <div className="font-serif" style={{ fontSize: titleSize ?? 'var(--text-body)', color: 'var(--color-heading)', ...hiddenTextStyle }}>
               <span className="card-title-inner">{title}</span>
             </div>
-            <div className="font-mono" style={{ fontSize: metaSize ?? 'var(--text-meta)', color: 'var(--color-body)', marginTop: '4px', letterSpacing: '0.1em' }}>{category}</div>
-            <div className="font-mono" style={{ fontSize: metaSize ?? 'var(--text-meta)', color: 'var(--color-red)', letterSpacing: '0.1em', marginTop: '8px' }}>
+            <div className="font-mono" style={{ fontSize: metaSize ?? 'var(--text-meta)', color: 'var(--color-body)', marginTop: '4px', letterSpacing: '0.1em', ...hiddenTextStyle }}>{category}</div>
+            <div className="font-mono" style={{ fontSize: metaSize ?? 'var(--text-meta)', color: 'var(--color-red)', letterSpacing: '0.1em', marginTop: '8px', ...hiddenTextStyle }}>
               <span className="card-cta-inner">VIEW</span> <span className="arrow-nudge">→</span>
             </div>
           </div>
@@ -226,18 +232,18 @@ export function ProjectCard({
                 </div>
               )}
             </div>
-            <div className="font-mono" style={{ fontSize: metaSize ?? 'var(--text-meta)', letterSpacing: '0.14em', color: 'var(--color-body)', marginBottom: '8px' }}>{category}</div>
-            <div className="font-serif" style={{ fontSize: titleSize ?? 'var(--text-h3)', color: 'var(--color-heading)', marginBottom: '8px' }}>
+            <div className="font-mono" style={{ fontSize: metaSize ?? 'var(--text-meta)', letterSpacing: '0.14em', color: 'var(--color-body)', marginBottom: '8px', ...hiddenTextStyle }}>{category}</div>
+            <div className="font-serif" style={{ fontSize: titleSize ?? 'var(--text-h3)', color: 'var(--color-heading)', marginBottom: '8px', ...hiddenTextStyle }}>
               <span className="card-title-inner">{title}</span>
             </div>
-            <div className="font-mono" style={{ fontSize: bodySize ?? 'var(--text-body)', color: 'var(--color-body)', lineHeight: 1.6 }}>{oneliner}</div>
+            <div className="font-mono" style={{ fontSize: bodySize ?? 'var(--text-body)', color: 'var(--color-body)', lineHeight: 1.6, ...hiddenTextStyle }}>{oneliner}</div>
             {!comingSoon && (
-              <div className="font-mono" style={{ marginTop: '14px', fontSize: metaSize ?? 'var(--text-meta)', color: 'var(--color-red)', letterSpacing: '0.1em' }}>
+              <div className="font-mono" style={{ marginTop: '14px', fontSize: metaSize ?? 'var(--text-meta)', color: 'var(--color-red)', letterSpacing: '0.1em', ...hiddenTextStyle }}>
                 <span className="card-cta-inner">VIEW</span> →
               </div>
             )}
             {comingSoon && (
-              <div className="font-mono" style={{ marginTop: '14px', fontSize: metaSize ?? 'var(--text-meta)', color: 'var(--color-body)', letterSpacing: '0.1em' }}>COMING SOON</div>
+              <div className="font-mono" style={{ marginTop: '14px', fontSize: metaSize ?? 'var(--text-meta)', color: 'var(--color-body)', letterSpacing: '0.1em', ...hiddenTextStyle }}>COMING SOON</div>
             )}
           </div>
         )
