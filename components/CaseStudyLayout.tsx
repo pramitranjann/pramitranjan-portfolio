@@ -168,12 +168,12 @@ function inlineMediaColumnStyle(blocks: CaseStudyMediaBlock[]): React.CSSPropert
   }
 }
 
-function caseStudyNavActivationOffset() {
+function caseStudyNavScrollOffset() {
   return window.innerWidth <= 768 ? 65 : 150
 }
 
 function sectionActivationLine() {
-  return caseStudyNavActivationOffset()
+  return window.innerWidth <= 768 ? 65 : 220
 }
 
 function parseAspectRatio(value?: string) {
@@ -435,7 +435,6 @@ export function CaseStudyLayout({
     { id: 'sec-outcomes', label: copy.navOutcomesLabel, show: !!outcomes },
   ].filter(item => item.show)
 
-  const [navVisible, setNavVisible] = useState(false)
   const [activeId, setActiveId]     = useState('')
   const scrollLocked = useRef(false)
   const lockTargetId = useRef<string | null>(null)
@@ -571,7 +570,6 @@ export function CaseStudyLayout({
     }
 
     const onScroll = () => {
-      setNavVisible(window.scrollY > 100)
       const documentBottom = window.innerHeight + window.scrollY
       const remainingScroll = document.documentElement.scrollHeight - documentBottom
       // Don't update active section while a programmatic scroll is animating —
@@ -1233,23 +1231,27 @@ export function CaseStudyLayout({
             )}
           </div>
         </div>
-
         {/* Section Nav */}
         <nav ref={navRef} aria-label="Page sections" className="case-study-section-nav" style={{
           position: 'fixed',
-          top: '84px',
+          top: '72px',
           bottom: 'auto',
           left: '50%',
           transform: 'translateX(-50%)',
           zIndex: 998,
           display: 'flex',
           alignItems: 'stretch',
-          background: resolvedNavStyle.background,
+          background: resolvedNavStyle.background === 'rgba(13,13,13,0.98)' ? '#0d0d0d' : resolvedNavStyle.background,
           backdropFilter: 'blur(16px)',
           border: `1px solid ${resolvedNavStyle.borderColor}`,
-          boxShadow: '0 10px 36px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(245, 242, 237, 0.06)',
-          opacity: navVisible ? 1 : 0,
-          pointerEvents: navVisible ? 'auto' : 'none',
+          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.32)',
+          width: 'fit-content',
+          maxWidth: 'calc(100vw - (var(--layout-page-gutter) * 2))',
+          overflowX: 'auto',
+          overflowY: 'hidden',
+          scrollbarWidth: 'none',
+          opacity: 1,
+          pointerEvents: 'auto',
           transition: 'opacity 0.3s ease',
         }}>
           {navItems.map((item, i) => (
@@ -1262,7 +1264,7 @@ export function CaseStudyLayout({
                   scrollLocked.current = true
                   lockTargetId.current = item.id
                   if (lockTimer.current) clearTimeout(lockTimer.current)
-                  const targetTop = window.scrollY + el.getBoundingClientRect().top - caseStudyNavActivationOffset()
+                  const targetTop = window.scrollY + el.getBoundingClientRect().top - caseStudyNavScrollOffset()
                   const maxScrollTop = document.documentElement.scrollHeight - window.innerHeight
                   const clampedTargetTop = Math.max(0, Math.min(targetTop, maxScrollTop))
                   window.scrollTo({ top: clampedTargetTop, behavior: 'smooth' })
