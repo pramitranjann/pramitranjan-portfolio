@@ -1502,7 +1502,8 @@
             }
           ]
         }
-      ]
+      ],
+      "hidden": true
     },
     {
       "slug": "soho",
@@ -1523,7 +1524,7 @@
       "next": null,
       "backHref": "/creative/branding",
       "backLabel": "BRANDING",
-      "heroImage": "/creative/branding/soho/cover-processed.png",
+      "heroImage": "/creative/branding/soho/cover.png",
       "researchImage": "/creative/branding/soho/research-processed.png",
       "solutionHeroImage": "/creative/branding/soho/solution-hero-processed.png",
       "solutionImages": [
@@ -1556,7 +1557,7 @@
           "align": "center",
           "images": [
             {
-              "src": "/creative/branding/soho/research-processed.png",
+              "src": "/creative/branding/soho/research.png",
               "fit": "contain",
               "aspectRatio": "4 / 3",
               "background": "#0d0d0d",
@@ -1572,7 +1573,7 @@
           "align": "center",
           "images": [
             {
-              "src": "/creative/branding/soho/solution-hero-processed.png",
+              "src": "/creative/branding/soho/hero.png",
               "fit": "contain",
               "aspectRatio": "16 / 10",
               "background": "#0d0d0d",
@@ -1589,14 +1590,14 @@
           "align": "center",
           "images": [
             {
-              "src": "/creative/branding/soho/solution-1-processed.png",
+              "src": "/creative/branding/soho/solution-1.png",
               "fit": "contain",
               "aspectRatio": "4 / 3",
               "background": "#0d0d0d",
               "alt": ""
             },
             {
-              "src": "/creative/branding/soho/hero-processed.png",
+              "src": "/creative/branding/soho/research.png",
               "fit": "contain",
               "aspectRatio": "4 / 3",
               "background": "#0d0d0d",
