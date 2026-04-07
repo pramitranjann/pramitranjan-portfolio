@@ -1065,7 +1065,7 @@ export function CaseStudyLayout({
                       />
                     </div>
                   </div>
-                  <div data-reveal className="md:hidden" style={{ display: 'flex', justifyContent: 'center' }}>
+                  <div data-reveal className="flex md:hidden" style={{ justifyContent: 'center' }}>
                     <div
                       style={{
                         width: 'min(100%, 380px)',
