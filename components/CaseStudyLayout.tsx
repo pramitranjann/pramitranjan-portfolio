@@ -168,8 +168,12 @@ function inlineMediaColumnStyle(blocks: CaseStudyMediaBlock[]): React.CSSPropert
   }
 }
 
+function caseStudyNavActivationOffset() {
+  return window.innerWidth <= 768 ? 65 : 150
+}
+
 function sectionActivationLine() {
-  return Math.max(110, window.innerHeight * 0.68)
+  return caseStudyNavActivationOffset()
 }
 
 function parseAspectRatio(value?: string) {
@@ -1258,7 +1262,7 @@ export function CaseStudyLayout({
                   scrollLocked.current = true
                   lockTargetId.current = item.id
                   if (lockTimer.current) clearTimeout(lockTimer.current)
-                  const targetTop = window.scrollY + el.getBoundingClientRect().top - 65
+                  const targetTop = window.scrollY + el.getBoundingClientRect().top - caseStudyNavActivationOffset()
                   const maxScrollTop = document.documentElement.scrollHeight - window.innerHeight
                   const clampedTargetTop = Math.max(0, Math.min(targetTop, maxScrollTop))
                   window.scrollTo({ top: clampedTargetTop, behavior: 'smooth' })
