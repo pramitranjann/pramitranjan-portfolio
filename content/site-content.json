@@ -764,13 +764,13 @@
       },
       "mediaBlocks": [
         {
-          "section": "research",
+          "section": "process",
           "layout": "pair",
           "width": "100%",
           "align": "center",
           "images": [
             {
-              "src": "/franklins process 1.jpg",
+              "src": "/work/franklins/franklins process 1.jpg",
               "fit": "contain",
               "aspectRatio": "16 / 10",
               "background": "#0d0d0d",
@@ -778,7 +778,7 @@
               "position": "left center"
             },
             {
-              "src": "/franklins process 2.jpg",
+              "src": "/work/franklins/franklins process 2.jpg",
               "fit": "contain",
               "position": "right center",
               "aspectRatio": "16 / 10",
@@ -796,14 +796,14 @@
           "align": "center",
           "images": [
             {
-              "src": "/Home Page.png",
+              "src": "/work/franklins/Home Page.png",
               "fit": "contain",
               "aspectRatio": "16 / 10",
               "background": "#0d0d0d",
               "alt": ""
             },
             {
-              "src": "/Order HomePage.png",
+              "src": "/work/franklins/Menu.png",
               "fit": "contain",
               "aspectRatio": "16 / 10",
               "background": "#0d0d0d",
@@ -811,6 +811,34 @@
             }
           ],
           "id": "solution-1774907845344-ot79cn"
+        },
+        {
+          "id": "research-1775594149489-wl75uf",
+          "section": "research",
+          "hidden": true,
+          "layout": "pair",
+          "placement": "below",
+          "align": "center",
+          "width": "100%",
+          "gap": "2px",
+          "images": [
+            {
+              "src": "/work/franklins/202620_UXDG101-01_22643_Franklins_Assignment3.jpg",
+              "fit": "contain",
+              "position": "center center",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": "Layout placeholder"
+            },
+            {
+              "src": "/work/franklins/franklins research 2.jpg",
+              "fit": "contain",
+              "position": "center center",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": "Layout placeholder"
+            }
+          ]
         }
       ]
     },
