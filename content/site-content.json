@@ -12,7 +12,7 @@
             "RESEARCH"
           ],
           "href": "/work/franklins",
-          "cover": "/work/franklins/cover-processed.png",
+          "cover": "/work/franklins/cover-hor.png",
           "coverPosition": "center"
         },
         {
@@ -23,7 +23,7 @@
             "CODE"
           ],
           "href": "/work/albers",
-          "cover": "/work/albers/cover-processed.png",
+          "cover": "/work/albers/cover-hor.png",
           "coverPosition": "center"
         },
         {
@@ -34,7 +34,7 @@
             "ED-TECH"
           ],
           "href": "/work/loomlearn",
-          "cover": "/work/loomlearn/cover-processed.png",
+          "cover": "/work/loomlearn/cover-hor.png",
           "coverPosition": "center"
         },
         {
@@ -45,7 +45,7 @@
             "SYSTEMS"
           ],
           "href": "/work/atom",
-          "cover": "/work/atom/cover-processed.png",
+          "cover": "/work/atom/cover-hor.png",
           "coverPosition": "center"
         }
       ]
@@ -1295,7 +1295,7 @@
       "next": null,
       "backHref": "/creative/mixed-media",
       "backLabel": "MIXED MEDIA",
-      "heroImage": "/creative/mixed-media/faces-of-power/hero-processed.png",
+      "heroImage": "/creative/mixed-media/faces-of-power/hero.png",
       "researchImage": "/creative/mixed-media/faces-of-power/research-processed.png",
       "challengeImages": [
         "/creative/mixed-media/faces-of-power/ideation-1-processed.png",
