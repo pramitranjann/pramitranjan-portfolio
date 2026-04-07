@@ -15,8 +15,44 @@ interface PhotoLightboxProps {
   onNext: () => void
 }
 
-function PhotoSlide({ src, alt, index, total }: { src: string; alt: string; index: number; total: number }) {
+const SWIPE_OFFSET_THRESHOLD = 90
+const SWIPE_VELOCITY_THRESHOLD = 450
+
+function PhotoSlide({
+  src,
+  alt,
+  index,
+  total,
+  onPrev,
+  onNext,
+}: {
+  src: string
+  alt: string
+  index: number
+  total: number
+  onPrev: () => void
+  onNext: () => void
+}) {
   const direction = (usePresenceData() as number) ?? 1
+
+  function handleDragEnd(
+    _: MouseEvent | TouchEvent | PointerEvent,
+    info: { offset: { x: number; y: number }; velocity: { x: number; y: number } }
+  ) {
+    const shouldGoPrev = info.offset.x > SWIPE_OFFSET_THRESHOLD || info.velocity.x > SWIPE_VELOCITY_THRESHOLD
+    const shouldGoNext = info.offset.x < -SWIPE_OFFSET_THRESHOLD || info.velocity.x < -SWIPE_VELOCITY_THRESHOLD
+
+    if (shouldGoPrev && index > 0) {
+      playLightboxNav()
+      onPrev()
+      return
+    }
+
+    if (shouldGoNext && index < total - 1) {
+      playLightboxNav()
+      onNext()
+    }
+  }
 
   return (
     <motion.div
@@ -24,6 +60,12 @@ function PhotoSlide({ src, alt, index, total }: { src: string; alt: string; inde
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: direction > 0 ? '-100%' : '100%', opacity: 0 }}
       transition={{ type: 'spring', stiffness: 280, damping: 32, mass: 0.8 }}
+      drag="x"
+      dragConstraints={{ left: 0, right: 0 }}
+      dragElastic={0.16}
+      dragMomentum={false}
+      dragDirectionLock
+      onDragEnd={handleDragEnd}
       style={{
         position: 'absolute',
         inset: 0,
@@ -32,7 +74,11 @@ function PhotoSlide({ src, alt, index, total }: { src: string; alt: string; inde
         alignItems: 'center',
         justifyContent: 'center',
         gap: '16px',
+        cursor: 'grab',
+        touchAction: 'pan-y',
+        userSelect: 'none',
       }}
+      whileDrag={{ cursor: 'grabbing' }}
     >
       <div style={{ position: 'relative', width: 'min(60vw, 480px)', height: 'min(80vh, 720px)' }}>
         <Image
@@ -87,7 +133,7 @@ export function PhotoLightbox({ src, alt, index, total, direction, onClose, onPr
         style={{ position: 'relative', width: '100%', height: '100%' }}
       >
         <AnimatePresence custom={direction} mode="popLayout">
-          <PhotoSlide key={index} src={src} alt={alt} index={index} total={total} />
+          <PhotoSlide key={index} src={src} alt={alt} index={index} total={total} onPrev={onPrev} onNext={onNext} />
         </AnimatePresence>
 
         {/* Prev */}
