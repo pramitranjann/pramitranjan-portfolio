@@ -16,6 +16,21 @@ export function getCaseStudyPreviewImages(caseStudy: Pick<CaseStudyContent, 'her
   ]).slice(0, 4)
 }
 
+export function getCaseStudyWorkHoverImage(
+  caseStudy: Pick<CaseStudyContent, 'solutionHeroImage' | 'solutionImages' | 'mediaBlocks' | 'heroImage'>
+) {
+  const solutionBlockImage = caseStudy.mediaBlocks
+    ?.find((block) => block.section === 'solution' && block.images.length > 0)
+    ?.images[0]?.src
+
+  return uniqueImages([
+    solutionBlockImage,
+    caseStudy.solutionHeroImage,
+    caseStudy.solutionImages?.[0],
+    caseStudy.heroImage,
+  ])[0]
+}
+
 export function mergePreviewImages(primary?: string, previewImages?: string[]) {
   return uniqueImages([primary, ...(previewImages ?? [])]).slice(0, 4)
 }

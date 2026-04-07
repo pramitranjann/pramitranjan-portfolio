@@ -57,6 +57,7 @@ export function ProjectCard({
 }: ProjectCardProps) {
   const category = tags.join(' · ')
   const cardImages = mergePreviewImages(cover, previewImages)
+  const hoverRevealImage = previewImages?.[0] ?? cover
 
   const cardBase = {
     backgroundColor: '#1c1c1c',
@@ -191,15 +192,24 @@ export function ProjectCard({
                 overflow: 'hidden',
               }}
             >
-              {cardImages.length ? (
-                <HoverImageCarousel
-                  images={cardImages}
-                  alt={title}
-                  hovered={hovered}
-                  sizes="(max-width: 768px) 100vw, 24vw"
-                  imageFit={imageFit ?? 'cover'}
-                  imagePosition={coverPosition ?? 'center'}
-                />
+              {hoverRevealImage ? (
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    opacity: hovered ? 1 : 0,
+                    transition: 'opacity 220ms ease-out',
+                  }}
+                >
+                  <HoverImageCarousel
+                    images={[hoverRevealImage]}
+                    alt={title}
+                    hovered={false}
+                    sizes="(max-width: 768px) 100vw, 24vw"
+                    imageFit={imageFit ?? 'cover'}
+                    imagePosition={coverPosition ?? 'center'}
+                  />
+                </div>
               ) : (
                 <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', padding: '16px', backgroundColor: '#111111' }}>
                   <span className="font-serif" style={{ fontSize: '13px', fontStyle: 'italic', color: '#444444', textAlign: 'center', lineHeight: 1.4 }}>don&apos;t judge a book by its cover</span>

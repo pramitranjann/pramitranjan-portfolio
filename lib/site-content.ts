@@ -4,7 +4,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { notFound } from 'next/navigation'
 import { type CaseStudyContent, isSiteContent, type SiteContent } from '@/lib/site-content-schema'
-import { getCaseStudyPreviewImages, mergePreviewImages } from '@/lib/preview-images'
+import { getCaseStudyPreviewImages, getCaseStudyWorkHoverImage, mergePreviewImages } from '@/lib/preview-images'
 
 const contentPath = path.join(process.cwd(), 'content', 'site-content.json')
 
@@ -34,22 +34,25 @@ function getCaseStudySlugFromHref(href: string) {
 }
 
 function filterWorkProjectsByVisibleCaseStudies(content: SiteContent) {
-  if (canSeeHiddenCaseStudies()) return content
-
   const hiddenSlugs = new Set(content.caseStudies.filter((item) => item.hidden).map((item) => item.slug))
   const caseStudyBySlug = new Map(content.caseStudies.map((item) => [item.slug, item]))
   const filterItems = (items: SiteContent['home']['selectedWork']['items']) =>
     items.filter((item) => {
       const slug = getCaseStudySlugFromHref(item.href)
-      return !slug || !hiddenSlugs.has(slug)
+      return canSeeHiddenCaseStudies() || !slug || !hiddenSlugs.has(slug)
     })
   const enrichItems = (items: SiteContent['home']['selectedWork']['items']) =>
     items.map((item) => {
       const slug = getCaseStudySlugFromHref(item.href)
       const caseStudy = slug ? caseStudyBySlug.get(slug) : null
-      const previewImages = caseStudy ? mergePreviewImages(item.cover, getCaseStudyPreviewImages(caseStudy)) : mergePreviewImages(item.cover)
+      const workHoverImage = caseStudy ? getCaseStudyWorkHoverImage(caseStudy) : undefined
+      const previewImages = workHoverImage
+        ? [workHoverImage]
+        : caseStudy
+          ? mergePreviewImages(item.cover, getCaseStudyPreviewImages(caseStudy))
+          : mergePreviewImages(item.cover)
 
-      return previewImages.length > 1 ? { ...item, previewImages } : item
+      return previewImages.length ? { ...item, previewImages } : item
     })
 
   return {
