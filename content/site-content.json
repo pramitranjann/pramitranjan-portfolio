@@ -1153,7 +1153,7 @@
       },
       "backHref": "/creative/mixed-media",
       "backLabel": "MIXED MEDIA",
-      "heroImage": "/creative/mixed-media/south-china-sea/hero-processed.png",
+      "heroImage": "/creative/mixed-media/south-china-sea/hero.png",
       "researchImage": "/creative/mixed-media/south-china-sea/research-processed.png",
       "challengeImages": [
         "/creative/mixed-media/south-china-sea/ideation-1-processed.png",
@@ -1184,13 +1184,13 @@
           "id": "south-china-sea-research-1",
           "section": "research",
           "layout": "single",
-          "placement": "side-right",
+          "placement": "below",
           "inlineTextWidth": "480px",
           "inlineMediaMinWidth": "240px",
           "align": "center",
           "images": [
             {
-              "src": "/creative/mixed-media/south-china-sea/research-processed.png",
+              "src": "/creative/mixed-media/south-china-sea/research.png",
               "fit": "contain",
               "aspectRatio": "4 / 3",
               "background": "#0d0d0d",
@@ -1201,21 +1201,13 @@
         {
           "id": "south-china-sea-challenge-1",
           "section": "challenge",
-          "layout": "pair",
+          "layout": "single",
           "width": "100%",
           "gap": "2px",
           "align": "center",
-          "hidden": true,
           "images": [
             {
               "src": "/creative/mixed-media/south-china-sea/ideation-1.png",
-              "fit": "contain",
-              "aspectRatio": "4 / 3",
-              "background": "#0d0d0d",
-              "alt": ""
-            },
-            {
-              "src": "/creative/mixed-media/south-china-sea/ideation-2.png",
               "fit": "contain",
               "aspectRatio": "4 / 3",
               "background": "#0d0d0d",
@@ -1226,20 +1218,13 @@
         {
           "id": "process-1774473786169-k7n9r0",
           "section": "process",
-          "layout": "pair",
+          "layout": "single",
           "width": "100%",
           "gap": "2px",
           "align": "center",
           "images": [
             {
-              "src": "/creative/mixed-media/south-china-sea/solution-2-processed.png",
-              "fit": "contain",
-              "aspectRatio": "4 / 3",
-              "background": "#0d0d0d",
-              "alt": ""
-            },
-            {
-              "src": "/creative/mixed-media/south-china-sea/solution-1-processed.png",
+              "src": "/creative/mixed-media/south-china-sea/solution-2.png",
               "fit": "contain",
               "aspectRatio": "4 / 3",
               "background": "#0d0d0d",
@@ -1255,35 +1240,33 @@
           "align": "center",
           "images": [
             {
-              "src": "/creative/mixed-media/south-china-sea/solution-hero-processed.png",
+              "src": "/creative/mixed-media/south-china-sea/solution-hero.png",
               "fit": "contain",
-              "aspectRatio": "16 / 10",
+              "aspectRatio": "4 / 5",
               "background": "#0d0d0d",
               "alt": ""
             }
-          ]
+          ],
+          "placement": "side-right",
+          "inlineTextWidth": "420px",
+          "inlineMediaMinWidth": "820px"
         },
         {
-          "id": "south-china-sea-solution-2",
-          "section": "solution",
-          "layout": "pair",
+          "id": "process-1775590025770-6tevv2",
+          "section": "process",
+          "layout": "single",
+          "placement": "below",
+          "align": "center",
           "width": "100%",
           "gap": "2px",
-          "align": "center",
           "images": [
             {
-              "src": "/creative/mixed-media/south-china-sea/solution-1-processed.png",
+              "src": "/creative/mixed-media/south-china-sea/solution-1.png",
               "fit": "contain",
+              "position": "center center",
               "aspectRatio": "4 / 3",
               "background": "#0d0d0d",
-              "alt": ""
-            },
-            {
-              "src": "/creative/mixed-media/south-china-sea/solution-2-processed.png",
-              "fit": "contain",
-              "aspectRatio": "4 / 3",
-              "background": "#0d0d0d",
-              "alt": ""
+              "alt": "Layout placeholder"
             }
           ]
         }
