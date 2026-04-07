@@ -7,6 +7,8 @@ interface SpotifyTrack {
   artist: string
   album: string
   albumArt: string | null
+  externalUrl: string | null
+  spotifyUri?: string | null
   progress?: number
   duration?: number
 }
@@ -52,6 +54,8 @@ async function getLastPlayed(token: string): Promise<NextResponse> {
     artist: item.artists.map((a: { name: string }) => a.name).join(', '),
     album: item.album.name,
     albumArt: item.album.images?.[1]?.url ?? item.album.images?.[0]?.url ?? null,
+    externalUrl: item.external_urls?.spotify ?? null,
+    spotifyUri: item.uri ?? null,
   }
   return NextResponse.json(track, { headers: { 'Cache-Control': 'no-store' } })
 }
@@ -82,6 +86,8 @@ export async function GET() {
       artist: now.item.artists.map((a: { name: string }) => a.name).join(', '),
       album: now.item.album.name,
       albumArt: now.item.album.images?.[1]?.url ?? now.item.album.images?.[0]?.url ?? null,
+      externalUrl: now.item.external_urls?.spotify ?? null,
+      spotifyUri: now.item.uri ?? null,
       progress: now.progress_ms,
       duration: now.item.duration_ms,
     }
