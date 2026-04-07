@@ -138,42 +138,21 @@ body.carousel-reengaging main {
 /* Card hover — subtle lift only; richer state is handled by the preview layer */
 .portfolio-card {
   border: 1px solid #2a2a2a;
-  transition: transform 0.16s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: border-color 0.16s cubic-bezier(0.23, 1, 0.32, 1),
+              transform 0.16s cubic-bezier(0.23, 1, 0.32, 1);
 }
 @media (hover: hover) and (pointer: fine) {
   .portfolio-card:hover {
+    border-color: #FF3120;
     transform: translateY(-2px);
   }
 }
 
-/* Card title underline — draws in from left on hover (same pattern as .social-link::after) */
 .card-title-inner {
-  position: relative;
   display: inline;
 }
-.card-title-inner::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: #FF3120;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.3s ease;
-}
-.portfolio-card:hover .card-title-inner::after {
-  transform: scaleX(1);
-}
-
-/* Card CTA letter-spacing expand */
 .card-cta-inner {
   display: inline;
-  transition: letter-spacing 0.25s ease;
-}
-.portfolio-card:hover .card-cta-inner {
-  letter-spacing: 0.2em;
 }
 
 /* Arrow nudge — forward links */
@@ -182,7 +161,6 @@ body.carousel-reengaging main {
   transition: transform 0.2s ease;
 }
 @media (hover: hover) and (pointer: fine) {
-  .portfolio-card:hover .arrow-nudge,
   a:hover .arrow-nudge,
   button:hover .arrow-nudge {
     transform: translateX(4px);
