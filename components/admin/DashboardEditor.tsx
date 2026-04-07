@@ -3179,6 +3179,12 @@ function WorkProjectListEditor({
             localWriteEnabled={localWriteEnabled}
             onChange={(value) => onChange(updateAt(items, index, { ...item, cover: value || undefined }))}
           />
+          <SourcePathField
+            label="Hover Image Path"
+            value={item.hoverImage ?? ''}
+            localWriteEnabled={localWriteEnabled}
+            onChange={(value) => onChange(updateAt(items, index, { ...item, hoverImage: value || undefined }))}
+          />
           <Field label="Cover Object Position (e.g. center, center top, 50% 20%)">
             <input value={item.coverPosition ?? ''} onChange={(event) => onChange(updateAt(items, index, { ...item, coverPosition: event.target.value || undefined }))} style={inputStyle()} />
           </Field>

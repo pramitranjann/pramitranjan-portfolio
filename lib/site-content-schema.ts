@@ -4,6 +4,7 @@ export interface WorkProject {
   tags: string[]
   href: string
   cover?: string
+  hoverImage?: string
   coverPosition?: string
   previewImages?: string[]
 }
@@ -464,6 +465,7 @@ function isWorkProject(value: unknown): value is WorkProject {
     isStringArray(item.tags) &&
     isString(item.href) &&
     (item.cover === undefined || isString(item.cover)) &&
+    (item.hoverImage === undefined || isString(item.hoverImage)) &&
     (item.coverPosition === undefined || isString(item.coverPosition)) &&
     isOptionalStringArray(item.previewImages)
   )

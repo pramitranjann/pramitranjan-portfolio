@@ -16,6 +16,7 @@ interface ProjectCardProps {
   imageRatio?: string
   comingSoon?: boolean
   cover?: string
+  hoverImage?: string
   coverPosition?: string
   previewImages?: string[]
   titleSize?: string
@@ -43,6 +44,7 @@ export function ProjectCard({
   imageRatio,
   comingSoon,
   cover,
+  hoverImage,
   coverPosition,
   previewImages,
   titleSize,
@@ -57,7 +59,7 @@ export function ProjectCard({
 }: ProjectCardProps) {
   const category = tags.join(' · ')
   const cardImages = mergePreviewImages(cover, previewImages)
-  const hoverRevealImage = previewImages?.[0] ?? cover
+  const hoverRevealImage = hoverImage ?? previewImages?.[0] ?? cover
 
   const cardBase = {
     backgroundColor: '#1c1c1c',

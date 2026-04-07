@@ -46,13 +46,19 @@ function filterWorkProjectsByVisibleCaseStudies(content: SiteContent) {
       const slug = getCaseStudySlugFromHref(item.href)
       const caseStudy = slug ? caseStudyBySlug.get(slug) : null
       const workHoverImage = caseStudy ? getCaseStudyWorkHoverImage(caseStudy) : undefined
-      const previewImages = workHoverImage
-        ? [workHoverImage]
+      const previewImages = item.hoverImage
+        ? [item.hoverImage]
+        : workHoverImage
+          ? [workHoverImage]
         : caseStudy
           ? mergePreviewImages(item.cover, getCaseStudyPreviewImages(caseStudy))
           : mergePreviewImages(item.cover)
 
-      return previewImages.length ? { ...item, previewImages } : item
+      return {
+        ...item,
+        hoverImage: item.hoverImage ?? workHoverImage,
+        ...(previewImages.length ? { previewImages } : {}),
+      }
     })
 
   return {
