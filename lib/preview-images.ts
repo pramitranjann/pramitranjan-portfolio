@@ -14,9 +14,13 @@ export function getCaseStudyPreviewImages(caseStudy: Pick<CaseStudyContent, 'her
     caseStudy.solutionHeroImage,
     ...(caseStudy.solutionImages ?? []),
     ...blockImages,
-  ]).slice(0, 3)
+  ]).slice(0, 4)
 }
 
 export function mergePreviewImages(primary?: string, previewImages?: string[]) {
-  return uniqueImages([primary, ...(previewImages ?? [])]).slice(0, 3)
+  return uniqueImages([primary, ...(previewImages ?? [])]).slice(0, 4)
+}
+
+export function getPhotographyPreviewImages(cover?: string, galleryImages?: string[]) {
+  return uniqueImages([cover, ...(galleryImages ?? [])]).slice(0, 4)
 }

@@ -42,6 +42,7 @@ export interface PhotographyCity {
   title: string
   desc: string
   cover: string
+  previewImages?: string[]
   imagePosition?: string
   comingSoon: boolean
 }

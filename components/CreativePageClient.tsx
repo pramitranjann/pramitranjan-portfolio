@@ -114,6 +114,7 @@ export function CreativePageClient({
                 desc={city.desc}
                 href={city.comingSoon ? undefined : `/creative/photography/${city.slug}`}
                 cover={city.cover}
+                previewImages={city.previewImages}
                 comingSoon={city.comingSoon}
                 imagePosition={city.imagePosition ?? 'center'}
                 cardStyle={cardStyle}
