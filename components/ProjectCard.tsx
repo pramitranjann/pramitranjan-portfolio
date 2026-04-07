@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { playCardEnter } from '@/lib/sounds'
 import { HoverPreviewSurface } from '@/components/HoverPreviewSurface'
 import { HoverImageCarousel } from '@/components/HoverImageCarousel'
+import { mergePreviewImages } from '@/lib/preview-images'
 import type { HoverPreviewSettings } from '@/lib/site-content-schema'
 
 interface ProjectCardProps {
@@ -55,6 +56,7 @@ export function ProjectCard({
   hoverPreviewSettings,
 }: ProjectCardProps) {
   const category = tags.join(' · ')
+  const cardImages = mergePreviewImages(cover, previewImages)
 
   const cardBase = {
     backgroundColor: '#1c1c1c',
@@ -78,9 +80,9 @@ export function ProjectCard({
             overflow: 'hidden',
           }}
         >
-          {cover ? (
+          {cardImages.length ? (
             <HoverImageCarousel
-              images={previewImages ?? [cover]}
+              images={cardImages}
               alt={title}
               hovered={false}
               sizes="(max-width: 768px) 100vw, 24vw"
@@ -105,9 +107,9 @@ export function ProjectCard({
     ) : (
       <div className="portfolio-card" style={cardBase}>
         <div style={{ position: 'relative', width: '100%', height: 0, paddingBottom: '100%', backgroundColor: imageBackground ?? '#252525', border: `${imageBorderWidth ?? '1px'} solid ${imageBorderColor ?? '#333333'}`, marginBottom: '14px', overflow: 'hidden' }}>
-          {cover ? (
+          {cardImages.length ? (
             <HoverImageCarousel
-              images={previewImages ?? [cover]}
+              images={cardImages}
               alt={title}
               hovered={false}
               sizes="(max-width: 768px) 100vw, 32vw"
@@ -189,9 +191,9 @@ export function ProjectCard({
                 overflow: 'hidden',
               }}
             >
-              {cover ? (
+              {cardImages.length ? (
                 <HoverImageCarousel
-                  images={previewImages ?? [cover]}
+                  images={cardImages}
                   alt={title}
                   hovered={hovered}
                   sizes="(max-width: 768px) 100vw, 24vw"
@@ -216,9 +218,9 @@ export function ProjectCard({
         ) : (
           <div className="portfolio-card" style={cardBase}>
             <div style={{ position: 'relative', width: '100%', height: 0, paddingBottom: '100%', backgroundColor: imageBackground ?? '#252525', border: `${imageBorderWidth ?? '1px'} solid ${imageBorderColor ?? '#333333'}`, marginBottom: '14px', overflow: 'hidden' }}>
-              {cover ? (
+              {cardImages.length ? (
                 <HoverImageCarousel
-                  images={previewImages ?? [cover]}
+                  images={cardImages}
                   alt={title}
                   hovered={hovered}
                   sizes="(max-width: 768px) 100vw, 32vw"

@@ -19,12 +19,18 @@ export function HoverImageCarousel({
   hovered: boolean
 }) {
   const frames = useMemo(() => Array.from(new Set((images ?? []).filter(Boolean))), [images])
+  const [brokenImages, setBrokenImages] = useState<string[]>([])
   const [activeIndex, setActiveIndex] = useState(0)
   const startTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const rotateTimer = useRef<ReturnType<typeof setInterval> | null>(null)
+  const visibleFrames = useMemo(() => frames.filter((image) => !brokenImages.includes(image)), [frames, brokenImages])
 
   useEffect(() => {
-    if (typeof window === 'undefined' || frames.length <= 1) return
+    setBrokenImages([])
+  }, [frames])
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || visibleFrames.length <= 1) return
     if (!hovered) {
       if (startTimer.current) clearTimeout(startTimer.current)
       if (rotateTimer.current) clearInterval(rotateTimer.current)
@@ -32,7 +38,7 @@ export function HoverImageCarousel({
       return
     }
 
-    frames.slice(1).forEach((image) => {
+    visibleFrames.slice(1).forEach((image) => {
       const preload = new window.Image()
       preload.src = image
     })
@@ -40,7 +46,7 @@ export function HoverImageCarousel({
     startTimer.current = setTimeout(() => {
       setActiveIndex(1)
       rotateTimer.current = setInterval(() => {
-        setActiveIndex((current) => (current + 1) % frames.length)
+        setActiveIndex((current) => (current + 1) % visibleFrames.length)
       }, 1350)
     }, 380)
 
@@ -48,26 +54,40 @@ export function HoverImageCarousel({
       if (startTimer.current) clearTimeout(startTimer.current)
       if (rotateTimer.current) clearInterval(rotateTimer.current)
     }
-  }, [frames, hovered])
+  }, [visibleFrames, hovered])
 
-  if (!frames.length) {
+  useEffect(() => {
+    if (!visibleFrames.length) {
+      setActiveIndex(0)
+      return
+    }
+
+    if (activeIndex > visibleFrames.length - 1) {
+      setActiveIndex(0)
+    }
+  }, [activeIndex, visibleFrames.length])
+
+  if (!visibleFrames.length) {
     return null
   }
 
   return (
     <>
-      {frames.map((image, index) => (
+      {visibleFrames.map((image, index) => (
         <Image
           key={image}
           src={image}
           alt={alt}
           fill
           sizes={sizes}
+          onError={() => {
+            setBrokenImages((current) => (current.includes(image) ? current : [...current, image]))
+          }}
           style={{
             objectFit: imageFit,
             objectPosition: imagePosition,
             opacity: index === activeIndex ? 1 : 0,
-            transition: 'opacity 220ms ease-out',
+            transition: 'opacity 240ms ease-out',
           }}
         />
       ))}

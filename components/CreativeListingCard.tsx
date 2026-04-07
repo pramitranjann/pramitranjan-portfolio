@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { playCardEnter } from '@/lib/sounds'
 import { HoverPreviewSurface } from '@/components/HoverPreviewSurface'
 import { HoverImageCarousel } from '@/components/HoverImageCarousel'
+import { mergePreviewImages } from '@/lib/preview-images'
 import type { HoverPreviewSettings, PhotographyCardStyleSettings } from '@/lib/site-content-schema'
 
 type CreativeListingCardProps = {
@@ -32,6 +33,8 @@ export function CreativeListingCard({
   cardStyle,
   hoverPreviewSettings,
 }: CreativeListingCardProps) {
+  const cardImages = mergePreviewImages(cover, previewImages)
+
   const inner = (
     <div className="portfolio-card flex flex-col h-full" style={{ backgroundColor: '#1c1c1c', padding: cardStyle?.cardPadding ?? '16px' }}>
       <div
@@ -46,7 +49,7 @@ export function CreativeListingCard({
           overflow: 'hidden',
         }}
       >
-        {cover ? <Image src={cover} alt={title} fill style={{ objectFit: cardStyle?.imageFit ?? 'cover', objectPosition: imagePosition }} sizes="(max-width: 768px) 50vw, 25vw" /> : null}
+        {cardImages.length ? <Image src={cardImages[0]} alt={title} fill style={{ objectFit: cardStyle?.imageFit ?? 'cover', objectPosition: imagePosition }} sizes="(max-width: 768px) 50vw, 25vw" /> : null}
       </div>
       <h3 className="font-serif" style={{ fontSize: cardStyle?.titleSize ?? 'var(--text-body)', fontWeight: 'var(--font-weight-serif)', color: 'var(--color-heading)', marginBottom: '4px' }}>
         <span className="card-title-inner">{title}</span>
@@ -109,9 +112,9 @@ export function CreativeListingCard({
                 overflow: 'hidden',
               }}
             >
-              {cover ? (
+              {cardImages.length ? (
                 <HoverImageCarousel
-                  images={previewImages ?? [cover]}
+                  images={cardImages}
                   alt={title}
                   hovered={hovered}
                   sizes="(max-width: 768px) 50vw, 25vw"
