@@ -122,8 +122,8 @@ function SidebarVariant({
         background: styleSettings?.cardBackground ?? '#111111',
         border: `1px solid ${styleSettings?.cardBorderColor ?? '#1f1f1f'}`,
         padding: expanded ? '18px' : (styleSettings?.cardPadding ?? '14px'),
-        minHeight: expanded ? '258px' : undefined,
-        transform: expanded ? 'scale(1.035)' : 'scale(1)',
+        minHeight: expanded ? '204px' : undefined,
+        transform: expanded ? 'scale(1.02)' : 'scale(1)',
         transformOrigin: 'center right',
         boxShadow: expanded ? '0 20px 44px rgba(0,0,0,0.45), 0 0 0 1px rgba(245,242,237,0.04)' : 'none',
         transition: 'padding 180ms cubic-bezier(0.23, 1, 0.32, 1), min-height 180ms cubic-bezier(0.23, 1, 0.32, 1), transform 180ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 180ms cubic-bezier(0.23, 1, 0.32, 1)',
@@ -146,8 +146,8 @@ function SidebarVariant({
             src={track.albumArt}
             alt={track.title}
             style={{
-              width: expanded ? '88px' : (styleSettings?.artworkSize ?? '36px'),
-              height: expanded ? '88px' : (styleSettings?.artworkSize ?? '36px'),
+              width: expanded ? '72px' : (styleSettings?.artworkSize ?? '36px'),
+              height: expanded ? '72px' : (styleSettings?.artworkSize ?? '36px'),
               objectFit: 'cover',
               border: `1px solid ${styleSettings?.artworkBorderColor ?? '#2a2a2a'}`,
               flexShrink: 0,
@@ -157,8 +157,8 @@ function SidebarVariant({
         ) : (
           <div
             style={{
-              width: expanded ? '88px' : (styleSettings?.artworkSize ?? '36px'),
-              height: expanded ? '88px' : (styleSettings?.artworkSize ?? '36px'),
+              width: expanded ? '72px' : (styleSettings?.artworkSize ?? '36px'),
+              height: expanded ? '72px' : (styleSettings?.artworkSize ?? '36px'),
               background: styleSettings?.progressTrackColor ?? '#1f1f1f',
               border: `1px solid ${styleSettings?.artworkBorderColor ?? '#2a2a2a'}`,
               flexShrink: 0,
@@ -194,57 +194,35 @@ function SidebarVariant({
       </div>
       {track.isPlaying && (
         <>
-          <div style={{ marginTop: expanded ? '14px' : '10px', height: expanded ? '2px' : '1px', background: styleSettings?.progressTrackColor ?? '#1f1f1f', position: 'relative' }}>
-            <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${pct}%`, background: styleSettings?.progressFillColor ?? '#FF3120' }} />
-          </div>
-          <div className="flex justify-between" style={{ marginTop: '4px' }}>
-            <span className="font-mono" style={{ fontSize: styleSettings?.progressMetaSize ?? '7px', letterSpacing: '0.1em', color: styleSettings?.progressMetaColor ?? '#444444' }}>
-              {progress ? formatMs(progress) : '0:00'}
-            </span>
-            <span className="font-mono" style={{ fontSize: styleSettings?.progressMetaSize ?? '7px', letterSpacing: '0.1em', color: styleSettings?.progressMetaColor ?? '#444444' }}>
-              {track.duration ? formatMs(track.duration) : '0:00'}
-            </span>
+          <div
+            style={{
+              marginTop: expanded ? '14px' : '10px',
+              height: expanded ? '4px' : '1px',
+              background: styleSettings?.progressTrackColor ?? '#1f1f1f',
+              position: 'relative',
+              overflow: 'hidden',
+            }}
+          >
+            <div
+              style={{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                height: '100%',
+                width: `${pct}%`,
+                background: styleSettings?.progressFillColor ?? '#FF3120',
+                boxShadow: expanded ? `0 0 14px ${styleSettings?.progressFillColor ?? '#FF3120'}` : 'none',
+              }}
+            />
           </div>
         </>
       )}
       {expanded ? (
-        <div style={{ marginTop: '16px', display: 'grid', gap: '12px' }}>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
-              gap: '10px',
-            }}
-          >
-            <MetaStat
-              label="ALBUM"
-              value={track.album}
-              styleSettings={styleSettings}
-            />
-            <MetaStat
-              label="STATUS"
-              value={track.isPlaying ? 'Now Playing' : 'Last Played'}
-              styleSettings={styleSettings}
-            />
-            <MetaStat
-              label={track.isPlaying ? 'AT' : 'LENGTH'}
-              value={track.isPlaying && progress !== undefined ? formatMs(progress) : (track.duration ? formatMs(track.duration) : 'Unknown')}
-              styleSettings={styleSettings}
-            />
-            <MetaStat
-              label={track.isPlaying ? 'ENDS IN' : 'DURATION'}
-              value={track.duration !== undefined
-                ? (track.isPlaying && progress !== undefined
-                  ? formatMs(Math.max(track.duration - progress, 0))
-                  : formatMs(track.duration))
-                : 'Unknown'}
-              styleSettings={styleSettings}
-            />
-          </div>
+        <div style={{ marginTop: '14px', display: 'grid', gap: '10px' }}>
           <div className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.05em', color: styleSettings?.artistColor ?? '#999999', lineHeight: 1.7 }}>
             {track.isPlaying
-              ? 'Live from Spotify right now. Hover keeps the card open while the progress bar continues to move.'
-              : 'Most recent track from Spotify. Open it directly if you want to keep the listening session going.'}
+              ? 'Currently soundtracking the page and refusing to be background noise.'
+              : 'Not live right now, but still worthy of a direct handoff back to Spotify.'}
           </div>
           {track.externalUrl ? (
             <a
@@ -267,33 +245,6 @@ function SidebarVariant({
           ) : null}
         </div>
       ) : null}
-    </div>
-  )
-}
-
-function MetaStat({
-  label,
-  value,
-  styleSettings,
-}: {
-  label: string
-  value: string
-  styleSettings?: ListeningCardStyleSettings
-}) {
-  return (
-    <div
-      style={{
-        padding: '10px 12px',
-        border: `1px solid ${styleSettings?.cardBorderColor ?? '#1f1f1f'}`,
-        background: 'rgba(255,255,255,0.02)',
-      }}
-    >
-      <div className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.16em', color: styleSettings?.labelColor ?? '#666666', marginBottom: '6px' }}>
-        {label}
-      </div>
-      <div className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.04em', color: styleSettings?.titleColor ?? '#f5f2ed', lineHeight: 1.5 }}>
-        {value}
-      </div>
     </div>
   )
 }
@@ -348,9 +299,4 @@ function CellVariant({
       ) : null}
     </div>
   )
-}
-
-function formatMs(ms: number): string {
-  const s = Math.floor(ms / 1000)
-  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`
 }
