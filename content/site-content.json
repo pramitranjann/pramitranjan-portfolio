@@ -1344,7 +1344,7 @@
           "id": "faces-of-power-research-1",
           "section": "research",
           "layout": "single",
-          "placement": "side-right",
+          "placement": "below",
           "inlineTextWidth": "480px",
           "inlineMediaMinWidth": "240px",
           "align": "center",
@@ -1365,7 +1365,6 @@
           "width": "100%",
           "gap": "2px",
           "align": "center",
-          "hidden": true,
           "images": [
             {
               "src": "/creative/mixed-media/faces-of-power/ideation-1.png",
@@ -1391,33 +1390,9 @@
           "align": "center",
           "images": [
             {
-              "src": "/creative/mixed-media/faces-of-power/solution-hero-processed.png",
+              "src": "/creative/mixed-media/faces-of-power/solution-2.png",
               "fit": "contain",
               "aspectRatio": "16 / 10",
-              "background": "#0d0d0d",
-              "alt": ""
-            }
-          ]
-        },
-        {
-          "id": "faces-of-power-solution-2",
-          "section": "solution",
-          "layout": "pair",
-          "width": "100%",
-          "gap": "2px",
-          "align": "center",
-          "images": [
-            {
-              "src": "/creative/mixed-media/faces-of-power/solution-1-processed.png",
-              "fit": "contain",
-              "aspectRatio": "4 / 3",
-              "background": "#0d0d0d",
-              "alt": ""
-            },
-            {
-              "src": "/creative/mixed-media/faces-of-power/solution-2-processed.png",
-              "fit": "contain",
-              "aspectRatio": "4 / 3",
               "background": "#0d0d0d",
               "alt": ""
             }

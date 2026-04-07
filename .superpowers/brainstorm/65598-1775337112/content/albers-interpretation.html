@@ -1,0 +1,66 @@
+<h2>What does "styled like Albers" mean?</h2>
+<p class="subtitle">The Albers case study could draw from two distinct sources — pick the one that feels right before we go further.</p>
+
+<div class="cards" style="margin-top: 32px; grid-template-columns: 1fr 1fr; gap: 24px;">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 0; background: #1a1a2e; min-height: 340px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+      <!-- Josef Albers "Homage to the Square" interpretation -->
+      <div style="position: relative; width: 200px; height: 200px; display: flex; align-items: center; justify-content: center;">
+        <!-- Outer square -->
+        <div style="position: absolute; width: 200px; height: 200px; background: #E8450A;"></div>
+        <!-- Middle square -->
+        <div style="position: absolute; width: 140px; height: 140px; background: #F2A72B;"></div>
+        <!-- Inner square -->
+        <div style="position: absolute; width: 90px; height: 90px; background: #F7D36B;"></div>
+        <!-- Core -->
+        <div style="position: absolute; width: 48px; height: 48px; background: #FAEDB5;"></div>
+      </div>
+      <!-- Page content overlay suggestion -->
+      <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 16px 20px; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);">
+        <div style="font-size: 10px; letter-spacing: 0.2em; color: #F2A72B; margin-bottom: 4px; font-family: monospace;">UI DESIGN · 2025</div>
+        <div style="font-size: 18px; font-weight: 700; color: #fff; letter-spacing: -0.01em; font-family: sans-serif;">ALBERS</div>
+        <div style="font-size: 11px; color: #ddd; margin-top: 4px; font-family: sans-serif;">What if 'interaction of color' was taken literally?</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Josef Albers the Artist</h3>
+      <p>Page styled after his <em>Homage to the Square</em> paintings — nested geometric squares, bold flat color blocks, no ornamentation. The page itself becomes a color study. Case study sections use color fields as dividers and containers.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 0; background: #0a0a08; min-height: 340px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+      <!-- Albers App HUD aesthetic -->
+      <div style="width: 85%; font-family: 'Courier New', monospace; color: #C8860A;">
+        <!-- HUD grid lines -->
+        <div style="border: 1px solid #C8860A33; padding: 16px; position: relative;">
+          <div style="position: absolute; top: -1px; left: 16px; background: #0a0a08; padding: 0 6px; font-size: 9px; letter-spacing: 0.25em; color: #C8860A;">MODE 01 · SIMULTANEOUS CONTRAST</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #C8860A33; margin-bottom: 12px;">
+            <div style="background: #0a0a08; padding: 8px; font-size: 9px; color: #C8860A88;">HUE ⟶ 214°</div>
+            <div style="background: #0a0a08; padding: 8px; font-size: 9px; color: #C8860A88;">SAT ⟶ 78%</div>
+          </div>
+          <!-- Color swatch -->
+          <div style="display: flex; gap: 2px; margin-bottom: 12px;">
+            <div style="flex: 1; height: 32px; background: #1e3a5f;"></div>
+            <div style="flex: 1; height: 32px; background: #2a5298;"></div>
+            <div style="flex: 1; height: 32px; background: #4169e1;"></div>
+            <div style="flex: 1; height: 32px; background: #6495ed;"></div>
+            <div style="flex: 1; height: 32px; background: #b0c4de;"></div>
+          </div>
+          <div style="font-size: 8px; letter-spacing: 0.15em; color: #C8860A66; border-top: 1px solid #C8860A22; padding-top: 8px;">ALBERS · COLOR THEORY INSTRUMENT · macOS 13+</div>
+        </div>
+      </div>
+      <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 16px 20px; background: rgba(0,0,0,0.7);">
+        <div style="font-size: 10px; letter-spacing: 0.2em; color: #C8860A; margin-bottom: 4px; font-family: monospace;">UI DESIGN · 2025</div>
+        <div style="font-size: 18px; font-weight: 700; color: #C8860A; letter-spacing: 0.05em; font-family: monospace;">ALBERS</div>
+        <div style="font-size: 11px; color: #C8860A88; margin-top: 4px; font-family: monospace; letter-spacing: 0.08em;">WHAT IF INTERACTION OF COLOR WAS TAKEN LITERALLY?</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — The Albers App Itself</h3>
+      <p>Page styled after the app's amber terminal HUD aesthetic — dark background, monospace type, instrument panels, grid overlays. The case study design echoes the product it's presenting. Each section looks like a HUD mode panel.</p>
+    </div>
+  </div>
+</div>
+
+<p style="margin-top: 20px; font-size: 13px; color: #888; text-align: center;">Click to select — or describe a different direction in the terminal.</p>
