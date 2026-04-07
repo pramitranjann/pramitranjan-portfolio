@@ -67,7 +67,7 @@ export function About({
 
       <div style={{ display: 'grid', alignSelf: 'stretch', minWidth: '250px' }}>
         <div className="reveal-text" style={{ alignSelf: 'center', minWidth: '250px' }}>
-          <SpotifyWidget variant="sidebar" restingLabel={spotifyLabel.replace(/_+$/, '')} styleSettings={listeningStyle} />
+          <SpotifyWidget variant="sidebar" restingLabel={spotifyLabel.replace(/_+$/, '')} styleSettings={listeningStyle} interactionMode="hover-expand" />
         </div>
         <Link
           href="/about"

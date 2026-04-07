@@ -1,5 +1,6 @@
 // components/ProjectCard.tsx
 'use client'
+import Image from 'next/image'
 import Link from 'next/link'
 import { playCardEnter } from '@/lib/sounds'
 import { HoverPreviewSurface } from '@/components/HoverPreviewSurface'
@@ -76,13 +77,12 @@ export function ProjectCard({
           }}
         >
           {cover ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={cover}
               alt={title}
-              loading="lazy"
-              decoding="async"
-              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: imageFit ?? 'cover', objectPosition: coverPosition ?? 'center' }}
+              fill
+              sizes="(max-width: 768px) 100vw, 24vw"
+              style={{ objectFit: imageFit ?? 'cover', objectPosition: coverPosition ?? 'center' }}
             />
           ) : (
             <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', padding: '16px', backgroundColor: '#111111' }}>
@@ -103,13 +103,12 @@ export function ProjectCard({
       <div className="portfolio-card" style={cardBase}>
         <div style={{ position: 'relative', width: '100%', height: 0, paddingBottom: '100%', backgroundColor: imageBackground ?? '#252525', border: `${imageBorderWidth ?? '1px'} solid ${imageBorderColor ?? '#333333'}`, marginBottom: '14px', overflow: 'hidden' }}>
           {cover ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={cover}
               alt={title}
-              loading="lazy"
-              decoding="async"
-              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: imageFit ?? 'cover', objectPosition: coverPosition ?? 'center' }}
+              fill
+              sizes="(max-width: 768px) 100vw, 32vw"
+              style={{ objectFit: imageFit ?? 'cover', objectPosition: coverPosition ?? 'center' }}
             />
           ) : (
             <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', padding: '16px', backgroundColor: '#111111' }}>

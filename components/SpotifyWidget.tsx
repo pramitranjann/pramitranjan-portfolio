@@ -1,8 +1,7 @@
 'use client'
-import { useEffect, useId, useRef, useState } from 'react'
-import type { CSSProperties } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { ListeningCardStyleSettings } from '@/lib/site-content-schema'
-import { playCardEnter, playNav } from '@/lib/sounds'
+import { playNav } from '@/lib/sounds'
 
 interface Track {
   isPlaying: boolean
@@ -20,16 +19,17 @@ interface SpotifyWidgetProps {
   variant: 'sidebar' | 'cell'
   restingLabel?: string
   styleSettings?: ListeningCardStyleSettings
+  interactionMode?: 'static' | 'hover-expand'
 }
 
-export function SpotifyWidget({ variant, restingLabel, styleSettings }: SpotifyWidgetProps) {
+const HOVER_QUERY = '(hover: hover) and (pointer: fine)'
+
+export function SpotifyWidget({ variant, restingLabel, styleSettings, interactionMode = 'static' }: SpotifyWidgetProps) {
   const [track, setTrack] = useState<Track | null>(null)
   const [liveProgress, setLiveProgress] = useState<number | undefined>(undefined)
-  const [isOpen, setIsOpen] = useState(false)
+  const [canHover, setCanHover] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
   const tickRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  const rootRef = useRef<HTMLDivElement | null>(null)
-  const overlayRef = useRef<HTMLDivElement | null>(null)
-  const overlayId = useId()
 
   useEffect(() => {
     const fetch_ = () =>
@@ -63,29 +63,13 @@ export function SpotifyWidget({ variant, restingLabel, styleSettings }: SpotifyW
   }, [track?.isPlaying, track?.duration, track?.title])
 
   useEffect(() => {
-    if (!isOpen) return
-
-    const onPointerDown = (event: PointerEvent) => {
-      const target = event.target as Node | null
-      if (!target) return
-      if (rootRef.current?.contains(target) || overlayRef.current?.contains(target)) return
-      setIsOpen(false)
-      playNav()
-    }
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape') return
-      setIsOpen(false)
-      playNav()
-    }
-
-    document.addEventListener('pointerdown', onPointerDown)
-    document.addEventListener('keydown', onKeyDown)
-    return () => {
-      document.removeEventListener('pointerdown', onPointerDown)
-      document.removeEventListener('keydown', onKeyDown)
-    }
-  }, [isOpen])
+    if (typeof window === 'undefined') return
+    const media = window.matchMedia(HOVER_QUERY)
+    const sync = () => setCanHover(media.matches)
+    sync()
+    media.addEventListener('change', sync)
+    return () => media.removeEventListener('change', sync)
+  }, [])
 
   if (!track) return null  // parent renders static content as fallback
 
@@ -93,57 +77,26 @@ export function SpotifyWidget({ variant, restingLabel, styleSettings }: SpotifyW
   const pct = progress !== undefined && track.duration !== undefined
     ? Math.min(Math.round((progress / track.duration) * 100), 100)
     : 0
-
-  const closeOverlay = () => {
-    setIsOpen(false)
-    playNav()
-  }
-
-  const toggleOverlay = () => {
-    setIsOpen((current) => {
-      const next = !current
-      if (next) playCardEnter()
-      else playNav()
-      return next
-    })
-  }
+  const isInteractive = variant === 'sidebar' && interactionMode === 'hover-expand' && canHover
 
   return (
-    <div ref={rootRef} style={{ position: 'relative', width: '100%', zIndex: isOpen ? 50 : 'auto' }}>
-      <button
-        type="button"
-        onClick={toggleOverlay}
-        aria-expanded={isOpen}
-        aria-haspopup="dialog"
-        aria-controls={overlayId}
-        style={{
-          width: '100%',
-          display: 'block',
-          background: 'none',
-          border: 'none',
-          padding: 0,
-          textAlign: 'left',
-          cursor: 'pointer',
-        }}
-      >
-        {variant === 'cell' ? (
-          <CellVariant track={track} pct={pct} restingLabel={restingLabel} styleSettings={styleSettings} />
-        ) : (
-          <SidebarVariant track={track} progress={progress} pct={pct} restingLabel={restingLabel} styleSettings={styleSettings} />
-        )}
-      </button>
-
-      <SpotifyOverlay
-        id={overlayId}
-        overlayRef={overlayRef}
-        track={track}
-        progress={progress}
-        pct={pct}
-        restingLabel={restingLabel}
-        styleSettings={styleSettings}
-        open={isOpen}
-        onClose={closeOverlay}
-      />
+    <div
+      style={{ width: '100%' }}
+      onPointerEnter={isInteractive ? () => setIsHovered(true) : undefined}
+      onPointerLeave={isInteractive ? () => setIsHovered(false) : undefined}
+    >
+      {variant === 'cell' ? (
+        <CellVariant track={track} pct={pct} restingLabel={restingLabel} styleSettings={styleSettings} />
+      ) : (
+        <SidebarVariant
+          track={track}
+          progress={progress}
+          pct={pct}
+          restingLabel={restingLabel}
+          styleSettings={styleSettings}
+          expanded={isInteractive && isHovered}
+        />
+      )}
     </div>
   )
 }
@@ -154,15 +107,28 @@ function SidebarVariant({
   pct,
   restingLabel,
   styleSettings,
+  expanded = false,
 }: {
   track: Track
   progress: number | undefined
   pct: number
   restingLabel?: string
   styleSettings?: ListeningCardStyleSettings
+  expanded?: boolean
 }) {
   return (
-    <div style={{ background: styleSettings?.cardBackground ?? '#111111', border: `1px solid ${styleSettings?.cardBorderColor ?? '#1f1f1f'}`, padding: styleSettings?.cardPadding ?? '14px' }}>
+    <div
+      style={{
+        background: styleSettings?.cardBackground ?? '#111111',
+        border: `1px solid ${styleSettings?.cardBorderColor ?? '#1f1f1f'}`,
+        padding: expanded ? '18px' : (styleSettings?.cardPadding ?? '14px'),
+        minHeight: expanded ? '258px' : undefined,
+        transform: expanded ? 'scale(1.035)' : 'scale(1)',
+        transformOrigin: 'center right',
+        boxShadow: expanded ? '0 20px 44px rgba(0,0,0,0.45), 0 0 0 1px rgba(245,242,237,0.04)' : 'none',
+        transition: 'padding 180ms cubic-bezier(0.23, 1, 0.32, 1), min-height 180ms cubic-bezier(0.23, 1, 0.32, 1), transform 180ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 180ms cubic-bezier(0.23, 1, 0.32, 1)',
+      }}
+    >
       <div className="flex items-center" style={{ gap: '8px', marginBottom: '12px' }}>
         <div style={{
           width: '6px', height: '6px', borderRadius: '50%',
@@ -173,25 +139,62 @@ function SidebarVariant({
           {track.isPlaying ? 'NOW PLAYING' : restingLabel ?? 'LAST PLAYED'}
         </span>
       </div>
-      <div className="flex" style={{ gap: '10px', alignItems: 'center' }}>
+      <div className="flex" style={{ gap: expanded ? '14px' : '10px', alignItems: 'center' }}>
         {track.albumArt ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={track.albumArt} alt={track.title} style={{ width: styleSettings?.artworkSize ?? '36px', height: styleSettings?.artworkSize ?? '36px', objectFit: 'cover', border: `1px solid ${styleSettings?.artworkBorderColor ?? '#2a2a2a'}`, flexShrink: 0 }} />
+          <img
+            src={track.albumArt}
+            alt={track.title}
+            style={{
+              width: expanded ? '88px' : (styleSettings?.artworkSize ?? '36px'),
+              height: expanded ? '88px' : (styleSettings?.artworkSize ?? '36px'),
+              objectFit: 'cover',
+              border: `1px solid ${styleSettings?.artworkBorderColor ?? '#2a2a2a'}`,
+              flexShrink: 0,
+              transition: 'width 180ms cubic-bezier(0.23, 1, 0.32, 1), height 180ms cubic-bezier(0.23, 1, 0.32, 1)',
+            }}
+          />
         ) : (
-          <div style={{ width: styleSettings?.artworkSize ?? '36px', height: styleSettings?.artworkSize ?? '36px', background: styleSettings?.progressTrackColor ?? '#1f1f1f', border: `1px solid ${styleSettings?.artworkBorderColor ?? '#2a2a2a'}`, flexShrink: 0 }} />
+          <div
+            style={{
+              width: expanded ? '88px' : (styleSettings?.artworkSize ?? '36px'),
+              height: expanded ? '88px' : (styleSettings?.artworkSize ?? '36px'),
+              background: styleSettings?.progressTrackColor ?? '#1f1f1f',
+              border: `1px solid ${styleSettings?.artworkBorderColor ?? '#2a2a2a'}`,
+              flexShrink: 0,
+              transition: 'width 180ms cubic-bezier(0.23, 1, 0.32, 1), height 180ms cubic-bezier(0.23, 1, 0.32, 1)',
+            }}
+          />
         )}
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div className="font-serif" style={{ fontSize: styleSettings?.titleSize ?? '15px', fontStyle: 'italic', color: styleSettings?.titleColor ?? '#f5f2ed', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+          <div
+            className="font-serif"
+            style={{
+              fontSize: expanded ? '22px' : (styleSettings?.titleSize ?? '15px'),
+              fontStyle: 'italic',
+              color: styleSettings?.titleColor ?? '#f5f2ed',
+              whiteSpace: expanded ? 'normal' : 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              lineHeight: expanded ? 1.15 : 1.3,
+              transition: 'font-size 180ms cubic-bezier(0.23, 1, 0.32, 1)',
+            }}
+          >
             {track.title}
           </div>
           <div className="font-mono" style={{ fontSize: styleSettings?.artistSize ?? '10px', letterSpacing: '0.1em', color: styleSettings?.artistColor ?? '#999999', marginTop: '3px' }}>
             {track.artist.toUpperCase()}
           </div>
+          {expanded ? (
+            <div className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.12em', color: styleSettings?.labelColor ?? '#666666', marginTop: '8px', lineHeight: 1.6 }}>
+              {track.album.toUpperCase()}
+            </div>
+          ) : null}
         </div>
       </div>
       {track.isPlaying && (
         <>
-          <div style={{ marginTop: '10px', height: '1px', background: styleSettings?.progressTrackColor ?? '#1f1f1f', position: 'relative' }}>
+          <div style={{ marginTop: expanded ? '14px' : '10px', height: expanded ? '2px' : '1px', background: styleSettings?.progressTrackColor ?? '#1f1f1f', position: 'relative' }}>
             <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${pct}%`, background: styleSettings?.progressFillColor ?? '#FF3120' }} />
           </div>
           <div className="flex justify-between" style={{ marginTop: '4px' }}>
@@ -204,6 +207,93 @@ function SidebarVariant({
           </div>
         </>
       )}
+      {expanded ? (
+        <div style={{ marginTop: '16px', display: 'grid', gap: '12px' }}>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+              gap: '10px',
+            }}
+          >
+            <MetaStat
+              label="ALBUM"
+              value={track.album}
+              styleSettings={styleSettings}
+            />
+            <MetaStat
+              label="STATUS"
+              value={track.isPlaying ? 'Now Playing' : 'Last Played'}
+              styleSettings={styleSettings}
+            />
+            <MetaStat
+              label={track.isPlaying ? 'AT' : 'LENGTH'}
+              value={track.isPlaying && progress !== undefined ? formatMs(progress) : (track.duration ? formatMs(track.duration) : 'Unknown')}
+              styleSettings={styleSettings}
+            />
+            <MetaStat
+              label={track.isPlaying ? 'ENDS IN' : 'DURATION'}
+              value={track.duration !== undefined
+                ? (track.isPlaying && progress !== undefined
+                  ? formatMs(Math.max(track.duration - progress, 0))
+                  : formatMs(track.duration))
+                : 'Unknown'}
+              styleSettings={styleSettings}
+            />
+          </div>
+          <div className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.05em', color: styleSettings?.artistColor ?? '#999999', lineHeight: 1.7 }}>
+            {track.isPlaying
+              ? 'Live from Spotify right now. Hover keeps the card open while the progress bar continues to move.'
+              : 'Most recent track from Spotify. Open it directly if you want to keep the listening session going.'}
+          </div>
+          {track.externalUrl ? (
+            <a
+              href={track.externalUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="font-mono"
+              onClick={playNav}
+              style={{
+                color: styleSettings?.progressFillColor ?? '#FF3120',
+                fontSize: '11px',
+                letterSpacing: '0.14em',
+                textDecoration: 'none',
+                whiteSpace: 'nowrap',
+                width: 'fit-content',
+              }}
+            >
+              OPEN IN SPOTIFY →
+            </a>
+          ) : null}
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
+function MetaStat({
+  label,
+  value,
+  styleSettings,
+}: {
+  label: string
+  value: string
+  styleSettings?: ListeningCardStyleSettings
+}) {
+  return (
+    <div
+      style={{
+        padding: '10px 12px',
+        border: `1px solid ${styleSettings?.cardBorderColor ?? '#1f1f1f'}`,
+        background: 'rgba(255,255,255,0.02)',
+      }}
+    >
+      <div className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.16em', color: styleSettings?.labelColor ?? '#666666', marginBottom: '6px' }}>
+        {label}
+      </div>
+      <div className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.04em', color: styleSettings?.titleColor ?? '#f5f2ed', lineHeight: 1.5 }}>
+        {value}
+      </div>
     </div>
   )
 }
@@ -256,171 +346,6 @@ function CellVariant({
           </div>
         </div>
       ) : null}
-    </div>
-  )
-}
-
-const overlaySurfaceStyle = (styleSettings?: ListeningCardStyleSettings, open?: boolean): CSSProperties => ({
-  position: 'absolute' as const,
-  top: 'calc(100% + 12px)',
-  right: 0,
-  width: 'min(360px, calc(100vw - 32px))',
-  maxWidth: 'calc(100vw - 32px)',
-  background: styleSettings?.cardBackground ?? '#111111',
-  border: `1px solid ${styleSettings?.cardBorderColor ?? '#1f1f1f'}`,
-  boxShadow: '0 16px 48px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(245, 242, 237, 0.04)',
-  padding: '16px',
-  opacity: open ? 1 : 0,
-  transform: open ? 'translateY(0) scale(1)' : 'translateY(-6px) scale(0.985)',
-  transformOrigin: 'top right',
-  transition: 'opacity 0.2s ease, transform 0.24s ease',
-  pointerEvents: open ? 'auto' : 'none',
-  zIndex: 60,
-})
-
-const SpotifyOverlay = ({
-  id,
-  track,
-  progress,
-  pct,
-  restingLabel,
-  styleSettings,
-  open,
-  onClose,
-  overlayRef,
-}: {
-  id: string
-  track: Track
-  progress: number | undefined
-  pct: number
-  restingLabel?: string
-  styleSettings?: ListeningCardStyleSettings
-  open: boolean
-  onClose: () => void
-  overlayRef: React.RefObject<HTMLDivElement | null>
-}) => {
-  return (
-    <div
-      id={id}
-      ref={overlayRef}
-      role="dialog"
-      aria-label="Spotify track details"
-      style={overlaySurfaceStyle(styleSettings, open)}
-    >
-      <div className="flex items-center justify-between" style={{ gap: '12px', marginBottom: '14px' }}>
-        <div className="flex items-center" style={{ gap: '8px' }}>
-          <div
-            style={{
-              width: '7px',
-              height: '7px',
-              borderRadius: '50%',
-              background: track.isPlaying ? (styleSettings?.activeDotColor ?? '#FF3120') : (styleSettings?.idleDotColor ?? '#444444'),
-              animation: track.isPlaying ? 'spotify-pulse 1.6s ease infinite' : 'none',
-            }}
-          />
-          <span className="font-mono" style={{ fontSize: styleSettings?.labelSize ?? '11px', letterSpacing: '0.14em', color: styleSettings?.labelColor ?? '#666666' }}>
-            {track.isPlaying ? 'NOW PLAYING' : restingLabel ?? 'LAST PLAYED'}
-          </span>
-        </div>
-        <button
-          type="button"
-          onClick={onClose}
-          className="font-mono"
-          style={{
-            background: 'none',
-            border: 'none',
-            padding: 0,
-            cursor: 'pointer',
-            color: styleSettings?.labelColor ?? '#666666',
-            fontSize: '11px',
-            letterSpacing: '0.14em',
-          }}
-        >
-          CLOSE
-        </button>
-      </div>
-
-      <div style={{ display: 'grid', gap: '14px' }}>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '88px minmax(0, 1fr)',
-            gap: '14px',
-            alignItems: 'center',
-          }}
-        >
-          {track.albumArt ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={track.albumArt}
-              alt={track.title}
-              style={{
-                width: '88px',
-                height: '88px',
-                objectFit: 'cover',
-                border: `1px solid ${styleSettings?.artworkBorderColor ?? '#2a2a2a'}`,
-              }}
-            />
-          ) : (
-            <div style={{ width: '88px', height: '88px', background: styleSettings?.progressTrackColor ?? '#1f1f1f', border: `1px solid ${styleSettings?.artworkBorderColor ?? '#2a2a2a'}` }} />
-          )}
-
-          <div style={{ minWidth: 0 }}>
-            <div className="font-serif" style={{ fontSize: '24px', fontStyle: 'italic', fontWeight: 'var(--font-weight-serif)', color: styleSettings?.titleColor ?? '#f5f2ed', lineHeight: 1.15, marginBottom: '6px' }}>
-              {track.title}
-            </div>
-            <div className="font-mono" style={{ fontSize: styleSettings?.artistSize ?? '10px', letterSpacing: '0.1em', color: styleSettings?.artistColor ?? '#999999', lineHeight: 1.6, marginBottom: '6px' }}>
-              {track.artist.toUpperCase()}
-            </div>
-            <div className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.1em', color: styleSettings?.labelColor ?? '#666666', lineHeight: 1.6 }}>
-              {track.album.toUpperCase()}
-            </div>
-          </div>
-        </div>
-
-        {track.isPlaying && track.duration ? (
-          <div style={{ borderTop: `1px solid ${styleSettings?.cardBorderColor ?? '#1f1f1f'}`, paddingTop: '12px' }}>
-            <div className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.12em', color: styleSettings?.labelColor ?? '#666666', marginBottom: '8px' }}>
-              TRACK PROGRESS
-            </div>
-            <div style={{ height: '2px', background: styleSettings?.progressTrackColor ?? '#1f1f1f', position: 'relative', overflow: 'hidden' }}>
-              <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${pct}%`, background: styleSettings?.progressFillColor ?? '#FF3120', transition: 'width 0.45s linear' }} />
-            </div>
-            <div className="flex justify-between" style={{ marginTop: '8px' }}>
-              <span className="font-mono" style={{ fontSize: styleSettings?.progressMetaSize ?? '9px', letterSpacing: '0.1em', color: styleSettings?.progressMetaColor ?? '#444444' }}>
-                {progress ? formatMs(progress) : '0:00'}
-              </span>
-              <span className="font-mono" style={{ fontSize: styleSettings?.progressMetaSize ?? '9px', letterSpacing: '0.1em', color: styleSettings?.progressMetaColor ?? '#444444' }}>
-                {formatMs(track.duration)}
-              </span>
-            </div>
-          </div>
-        ) : null}
-
-        <div className="flex items-center justify-between" style={{ gap: '12px', marginTop: '2px' }}>
-          <div className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.12em', color: styleSettings?.labelColor ?? '#666666' }}>
-            {track.isPlaying ? 'LIVE LISTENING SURFACE' : 'RECENT LISTENING SURFACE'}
-          </div>
-          {track.externalUrl ? (
-            <a
-              href={track.externalUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="font-mono"
-              onClick={playNav}
-              style={{
-                color: styleSettings?.progressFillColor ?? '#FF3120',
-                fontSize: '11px',
-                letterSpacing: '0.14em',
-                textDecoration: 'none',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              OPEN IN SPOTIFY →
-            </a>
-          ) : null}
-        </div>
-      </div>
     </div>
   )
 }

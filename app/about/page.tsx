@@ -141,7 +141,7 @@ export default async function AboutPage() {
           </div>
           <div style={{ padding: '28px 24px' }}>
             <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#666666', display: 'block', marginBottom: '10px' }}>{copy.onRotationLabel}</span>
-            <SpotifyWidget variant="sidebar" styleSettings={content.design.listeningCard} />
+            <SpotifyWidget variant="sidebar" styleSettings={content.design.listeningCard} interactionMode="static" />
           </div>
         </section>
 
@@ -212,7 +212,7 @@ export default async function AboutPage() {
               {content.aboutPage.nowDescription}
             </p>
             <div data-reveal className="now-grid-mobile" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1px', background: '#1f1f1f', border: '1px solid #1f1f1f' }}>
-              <SpotifyWidget variant="cell" styleSettings={content.design.listeningCard} />
+              <SpotifyWidget variant="cell" styleSettings={content.design.listeningCard} interactionMode="static" />
               {content.aboutPage.nowCards.map((card) => (
                 <NowCell key={card.label} label={card.label} value={card.value} sub={card.sub} styleSettings={content.design.nowCards} />
               ))}
