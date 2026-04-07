@@ -206,6 +206,23 @@ export function ProjectCard({
                 overflow: 'hidden',
               }}
             >
+              {cardImages.length ? (
+                <HoverImageCarousel
+                  images={cardImages}
+                  alt={title}
+                  hovered={false}
+                  sizes="(max-width: 768px) 100vw, 24vw"
+                  imageFit={imageFit ?? 'cover'}
+                  imagePosition={coverPosition ?? 'center'}
+                  imageScale={coverScale ?? '1'}
+                  priorityFirstFrame={priorityImage}
+                />
+              ) : (
+                <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', padding: '16px', backgroundColor: '#111111' }}>
+                  <span className="font-serif" style={{ fontSize: '13px', fontStyle: 'italic', color: '#444444', textAlign: 'center', lineHeight: 1.4 }}>don&apos;t judge a book by its cover</span>
+                  <div style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
+                </div>
+              )}
               {hoverRevealImage ? (
                 <div
                   style={{
@@ -226,12 +243,7 @@ export function ProjectCard({
                     priorityFirstFrame={priorityImage}
                   />
                 </div>
-              ) : (
-                <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', padding: '16px', backgroundColor: '#111111' }}>
-                  <span className="font-serif" style={{ fontSize: '13px', fontStyle: 'italic', color: '#444444', textAlign: 'center', lineHeight: 1.4 }}>don&apos;t judge a book by its cover</span>
-                  <div style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
-                </div>
-              )}
+              ) : null}
             </div>
             <div className="font-serif" style={{ fontSize: titleSize ?? 'var(--text-body)', color: 'var(--color-heading)', ...hiddenTextStyle }}>
               <span className="card-title-inner">{title}</span>
