@@ -52,7 +52,7 @@ export function HoverPreviewSurface({
     if (openTimer.current) clearTimeout(openTimer.current)
     openTimer.current = setTimeout(() => {
       setVisible(true)
-    }, 45)
+    }, 18)
   }
 
   function closePreview() {
@@ -60,7 +60,7 @@ export function HoverPreviewSurface({
     if (closeTimer.current) clearTimeout(closeTimer.current)
     closeTimer.current = setTimeout(() => {
       setVisible(false)
-    }, 65)
+    }, 36)
   }
 
   const childContent = typeof children === 'function' ? children({ hovered: visible }) : children
@@ -78,8 +78,8 @@ export function HoverPreviewSurface({
       <div
         style={{
           height: '100%',
-          transform: visible ? 'scale(0.988)' : 'scale(1)',
-          transition: 'transform 160ms cubic-bezier(0.23, 1, 0.32, 1)',
+          transform: visible ? 'scale(0.995)' : 'scale(1)',
+          transition: 'transform 140ms cubic-bezier(0.23, 1, 0.32, 1)',
         }}
       >
         {childContent}
@@ -91,16 +91,16 @@ export function HoverPreviewSurface({
           position: 'absolute',
           inset: 0,
           padding: settings.padding,
-          background: settings.background,
-          border: `1px solid ${settings.borderColor}`,
-          boxShadow: visible ? settings.shadow : 'none',
+          background: 'transparent',
+          border: 'none',
+          boxShadow: 'none',
           display: 'grid',
           alignContent: 'end',
           gap: '12px',
           pointerEvents: 'none',
           opacity: visible ? 1 : 0,
-          transform: visible ? 'translateY(0px) scale(1)' : 'translateY(8px) scale(0.985)',
-          transition: 'opacity 160ms ease-out, transform 220ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 220ms cubic-bezier(0.23, 1, 0.32, 1)',
+          transform: visible ? 'translateY(0px)' : 'translateY(4px)',
+          transition: 'opacity 120ms ease-out, transform 160ms cubic-bezier(0.23, 1, 0.32, 1)',
           overflow: 'hidden',
           zIndex: 2,
         }}
@@ -109,13 +109,12 @@ export function HoverPreviewSurface({
           style={{
             position: 'absolute',
             inset: 0,
-            background: `linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 34%, ${settings.background} 68%, ${settings.background} 100%)`,
+            background: `linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 42%, rgba(13,13,13,0.42) 62%, ${settings.background} 82%, ${settings.background} 100%)`,
           }}
         />
-        <div style={{ position: 'absolute', left: 0, right: 0, top: 0, height: '2px', background: settings.accentColor }} />
 
         {preview.metadata && preview.metadata.length > 0 ? (
-          <div style={{ position: 'relative', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+          <div style={{ position: 'relative', display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: 'auto' }}>
             {preview.metadata.map((item) => (
               <span
                 key={item}
@@ -125,7 +124,8 @@ export function HoverPreviewSurface({
                   letterSpacing: '0.12em',
                   color: settings.metaColor,
                   border: `1px solid ${settings.borderColor}`,
-                  background: 'rgba(255,255,255,0.03)',
+                  background: 'rgba(17,17,17,0.78)',
+                  backdropFilter: 'blur(6px)',
                   padding: '5px 8px',
                 }}
               >
@@ -153,6 +153,7 @@ export function HoverPreviewSurface({
               letterSpacing: '0.14em',
               color: settings.accentColor,
               width: 'fit-content',
+              textShadow: '0 0 14px rgba(255,49,32,0.2)',
             }}
           >
             {preview.ctaLabel} <span className="arrow-nudge">→</span>

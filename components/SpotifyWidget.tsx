@@ -30,6 +30,8 @@ export function SpotifyWidget({ variant, restingLabel, styleSettings, interactio
   const [canHover, setCanHover] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
   const tickRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const hoverOpenRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const hoverCloseRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     const fetch_ = () =>
@@ -71,6 +73,13 @@ export function SpotifyWidget({ variant, restingLabel, styleSettings, interactio
     return () => media.removeEventListener('change', sync)
   }, [])
 
+  useEffect(() => {
+    return () => {
+      if (hoverOpenRef.current) clearTimeout(hoverOpenRef.current)
+      if (hoverCloseRef.current) clearTimeout(hoverCloseRef.current)
+    }
+  }, [])
+
   if (!track) return null  // parent renders static content as fallback
 
   const progress = liveProgress ?? track.progress
@@ -79,11 +88,27 @@ export function SpotifyWidget({ variant, restingLabel, styleSettings, interactio
     : 0
   const isInteractive = variant === 'sidebar' && interactionMode === 'hover-expand' && canHover
 
+  const handlePointerEnter = isInteractive
+    ? () => {
+        if (hoverCloseRef.current) clearTimeout(hoverCloseRef.current)
+        if (hoverOpenRef.current) clearTimeout(hoverOpenRef.current)
+        hoverOpenRef.current = setTimeout(() => setIsHovered(true), 40)
+      }
+    : undefined
+
+  const handlePointerLeave = isInteractive
+    ? () => {
+        if (hoverOpenRef.current) clearTimeout(hoverOpenRef.current)
+        if (hoverCloseRef.current) clearTimeout(hoverCloseRef.current)
+        hoverCloseRef.current = setTimeout(() => setIsHovered(false), 110)
+      }
+    : undefined
+
   return (
     <div
       style={{ width: '100%' }}
-      onPointerEnter={isInteractive ? () => setIsHovered(true) : undefined}
-      onPointerLeave={isInteractive ? () => setIsHovered(false) : undefined}
+      onPointerEnter={handlePointerEnter}
+      onPointerLeave={handlePointerLeave}
     >
       {variant === 'cell' ? (
         <CellVariant track={track} pct={pct} restingLabel={restingLabel} styleSettings={styleSettings} />
@@ -121,12 +146,12 @@ function SidebarVariant({
       style={{
         background: styleSettings?.cardBackground ?? '#111111',
         border: `1px solid ${styleSettings?.cardBorderColor ?? '#1f1f1f'}`,
-        padding: expanded ? '18px' : (styleSettings?.cardPadding ?? '14px'),
-        minHeight: expanded ? '204px' : undefined,
-        transform: expanded ? 'scale(1.02)' : 'scale(1)',
+        padding: expanded ? '17px' : (styleSettings?.cardPadding ?? '14px'),
+        minHeight: expanded ? '190px' : '110px',
+        transform: expanded ? 'scale(1.018)' : 'scale(1)',
         transformOrigin: 'center right',
         boxShadow: expanded ? '0 20px 44px rgba(0,0,0,0.45), 0 0 0 1px rgba(245,242,237,0.04)' : 'none',
-        transition: 'padding 180ms cubic-bezier(0.23, 1, 0.32, 1), min-height 180ms cubic-bezier(0.23, 1, 0.32, 1), transform 180ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 180ms cubic-bezier(0.23, 1, 0.32, 1)',
+        transition: 'padding 220ms cubic-bezier(0.23, 1, 0.32, 1), min-height 240ms cubic-bezier(0.23, 1, 0.32, 1), transform 220ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 220ms cubic-bezier(0.23, 1, 0.32, 1)',
       }}
     >
       <div className="flex items-center" style={{ gap: '8px', marginBottom: '12px' }}>
@@ -139,30 +164,31 @@ function SidebarVariant({
           {track.isPlaying ? 'NOW PLAYING' : restingLabel ?? 'LAST PLAYED'}
         </span>
       </div>
-      <div className="flex" style={{ gap: expanded ? '14px' : '10px', alignItems: 'center' }}>
+      <div className="flex" style={{ gap: expanded ? '16px' : '10px', alignItems: 'center', transition: 'gap 220ms cubic-bezier(0.23, 1, 0.32, 1)' }}>
         {track.albumArt ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={track.albumArt}
             alt={track.title}
             style={{
-              width: expanded ? '72px' : (styleSettings?.artworkSize ?? '36px'),
-              height: expanded ? '72px' : (styleSettings?.artworkSize ?? '36px'),
+              width: expanded ? '92px' : (styleSettings?.artworkSize ?? '36px'),
+              height: expanded ? '92px' : (styleSettings?.artworkSize ?? '36px'),
               objectFit: 'cover',
               border: `1px solid ${styleSettings?.artworkBorderColor ?? '#2a2a2a'}`,
               flexShrink: 0,
-              transition: 'width 180ms cubic-bezier(0.23, 1, 0.32, 1), height 180ms cubic-bezier(0.23, 1, 0.32, 1)',
+              transition: 'width 220ms cubic-bezier(0.23, 1, 0.32, 1), height 220ms cubic-bezier(0.23, 1, 0.32, 1), transform 220ms cubic-bezier(0.23, 1, 0.32, 1)',
+              transform: expanded ? 'translateY(1px)' : 'translateY(0px)',
             }}
           />
         ) : (
           <div
             style={{
-              width: expanded ? '72px' : (styleSettings?.artworkSize ?? '36px'),
-              height: expanded ? '72px' : (styleSettings?.artworkSize ?? '36px'),
+              width: expanded ? '92px' : (styleSettings?.artworkSize ?? '36px'),
+              height: expanded ? '92px' : (styleSettings?.artworkSize ?? '36px'),
               background: styleSettings?.progressTrackColor ?? '#1f1f1f',
               border: `1px solid ${styleSettings?.artworkBorderColor ?? '#2a2a2a'}`,
               flexShrink: 0,
-              transition: 'width 180ms cubic-bezier(0.23, 1, 0.32, 1), height 180ms cubic-bezier(0.23, 1, 0.32, 1)',
+              transition: 'width 220ms cubic-bezier(0.23, 1, 0.32, 1), height 220ms cubic-bezier(0.23, 1, 0.32, 1)',
             }}
           />
         )}
@@ -177,7 +203,7 @@ function SidebarVariant({
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               lineHeight: expanded ? 1.15 : 1.3,
-              transition: 'font-size 180ms cubic-bezier(0.23, 1, 0.32, 1)',
+              transition: 'font-size 220ms cubic-bezier(0.23, 1, 0.32, 1)',
             }}
           >
             {track.title}
@@ -197,10 +223,12 @@ function SidebarVariant({
           <div
             style={{
               marginTop: expanded ? '14px' : '10px',
-              height: expanded ? '4px' : '1px',
+              height: expanded ? '6px' : '1px',
               background: styleSettings?.progressTrackColor ?? '#1f1f1f',
               position: 'relative',
               overflow: 'hidden',
+              borderRadius: expanded ? '999px' : '0px',
+              transition: 'height 220ms cubic-bezier(0.23, 1, 0.32, 1), border-radius 220ms cubic-bezier(0.23, 1, 0.32, 1)',
             }}
           >
             <div
@@ -212,39 +240,48 @@ function SidebarVariant({
                 width: `${pct}%`,
                 background: styleSettings?.progressFillColor ?? '#FF3120',
                 boxShadow: expanded ? `0 0 14px ${styleSettings?.progressFillColor ?? '#FF3120'}` : 'none',
+                transition: 'box-shadow 220ms cubic-bezier(0.23, 1, 0.32, 1)',
               }}
             />
           </div>
         </>
       )}
-      {expanded ? (
-        <div style={{ marginTop: '14px', display: 'grid', gap: '10px' }}>
-          <div className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.05em', color: styleSettings?.artistColor ?? '#999999', lineHeight: 1.7 }}>
-            {track.isPlaying
-              ? 'Currently soundtracking the page and refusing to be background noise.'
-              : 'Not live right now, but still worthy of a direct handoff back to Spotify.'}
-          </div>
-          {track.externalUrl ? (
-            <a
-              href={track.externalUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="font-mono"
-              onClick={playNav}
-              style={{
-                color: styleSettings?.progressFillColor ?? '#FF3120',
-                fontSize: '11px',
-                letterSpacing: '0.14em',
-                textDecoration: 'none',
-                whiteSpace: 'nowrap',
-                width: 'fit-content',
-              }}
-            >
-              OPEN IN SPOTIFY →
-            </a>
-          ) : null}
+      <div
+        style={{
+          marginTop: expanded ? '12px' : '0px',
+          display: 'grid',
+          gap: '10px',
+          maxHeight: expanded ? '80px' : '0px',
+          opacity: expanded ? 1 : 0,
+          overflow: 'hidden',
+          transition: 'max-height 240ms cubic-bezier(0.23, 1, 0.32, 1), opacity 180ms ease-out, margin-top 220ms cubic-bezier(0.23, 1, 0.32, 1)',
+        }}
+      >
+        <div className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.05em', color: styleSettings?.artistColor ?? '#999999', lineHeight: 1.7 }}>
+          {track.isPlaying
+            ? 'Proof the sidebar has better taste than most rooms.'
+            : 'Between tracks, but the taste level is still intact.'}
         </div>
-      ) : null}
+        {track.externalUrl ? (
+          <a
+            href={track.externalUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="font-mono"
+            onClick={playNav}
+            style={{
+              color: styleSettings?.progressFillColor ?? '#FF3120',
+              fontSize: '11px',
+              letterSpacing: '0.14em',
+              textDecoration: 'none',
+              whiteSpace: 'nowrap',
+              width: 'fit-content',
+            }}
+          >
+            OPEN IN SPOTIFY →
+          </a>
+        ) : null}
+      </div>
     </div>
   )
 }
