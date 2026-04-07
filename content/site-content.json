@@ -1561,7 +1561,6 @@
       "backHref": "/creative/branding",
       "backLabel": "BRANDING",
       "heroImage": "/creative/branding/soho/cover.png",
-      "researchImage": "/creative/branding/soho/research-processed.png",
       "solutionHeroImage": "/creative/branding/soho/solution-hero-processed.png",
       "solutionImages": [
         "/creative/branding/soho/solution-1-processed.png",
@@ -1583,40 +1582,6 @@
       "outcomesHeadline": "Design leadership is as much about coordination as craft.",
       "outcomes": "Chairing the exhibition taught me that design leadership is as much about coordination as craft. Getting peers to hit deadlines and contribute materials was harder than the visual work. I'd build a clearer production timeline from day one in any future project like this.",
       "mediaBlocks": [
-        {
-          "id": "soho-research-1",
-          "section": "research",
-          "layout": "single",
-          "placement": "side-right",
-          "inlineTextWidth": "480px",
-          "inlineMediaMinWidth": "240px",
-          "align": "center",
-          "images": [
-            {
-              "src": "/creative/branding/soho/research.png",
-              "fit": "contain",
-              "aspectRatio": "4 / 3",
-              "background": "#0d0d0d",
-              "alt": ""
-            }
-          ]
-        },
-        {
-          "id": "soho-solution-1",
-          "section": "solution",
-          "layout": "single",
-          "width": "100%",
-          "align": "center",
-          "images": [
-            {
-              "src": "/creative/branding/soho/hero.png",
-              "fit": "contain",
-              "aspectRatio": "16 / 10",
-              "background": "#0d0d0d",
-              "alt": ""
-            }
-          ]
-        },
         {
           "id": "soho-solution-2",
           "section": "solution",
@@ -1641,7 +1606,12 @@
             }
           ]
         }
-      ]
+      ],
+      "mediaSettings": {
+        "hero": {
+          "background": "#FFFFFF"
+        }
+      }
     }
   ]
 }
