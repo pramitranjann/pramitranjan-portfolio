@@ -1089,35 +1089,17 @@ export function CaseStudyLayout({
                         <div
                           style={{
                             width: '100%',
-                            padding: '14px',
-                            borderRadius: '28px',
-                            background: 'linear-gradient(180deg, #171717 0%, #0f0f0f 100%)',
-                            border: '1px solid #2a2a2a',
+                            padding: '12px',
+                            background: '#111111',
+                            border: '1px solid #1f1f1f',
                             boxShadow: '0 20px 50px rgba(0,0,0,0.45)',
                           }}
                         >
                           <div
                             style={{
-                              display: 'flex',
-                              justifyContent: 'center',
-                              marginBottom: '10px',
-                            }}
-                          >
-                            <div
-                              style={{
-                                width: '34%',
-                                height: '4px',
-                                borderRadius: '999px',
-                                background: '#2c2c2c',
-                              }}
-                            />
-                          </div>
-                          <div
-                            style={{
                               position: 'relative',
                               width: '100%',
                               aspectRatio: '9 / 19.5',
-                              borderRadius: '22px',
                               overflow: 'hidden',
                               background: '#0d0d0d',
                               border: '1px solid #1f1f1f',
