@@ -8,12 +8,11 @@ export function getCaseStudyPreviewImages(caseStudy: Pick<CaseStudyContent, 'her
   const blockImages = caseStudy.mediaBlocks?.flatMap((block) => block.images.map((image) => image.src)) ?? []
 
   return uniqueImages([
-    caseStudy.heroImage,
+    ...blockImages,
     caseStudy.researchImage,
     ...(caseStudy.challengeImages ?? []),
     caseStudy.solutionHeroImage,
     ...(caseStudy.solutionImages ?? []),
-    ...blockImages,
   ]).slice(0, 4)
 }
 

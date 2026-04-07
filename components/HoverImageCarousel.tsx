@@ -67,8 +67,7 @@ export function HoverImageCarousel({
             objectFit: imageFit,
             objectPosition: imagePosition,
             opacity: index === activeIndex ? 1 : 0,
-            transform: index === activeIndex ? 'scale(1.02)' : 'scale(1)',
-            transition: 'opacity 260ms ease-out, transform 900ms cubic-bezier(0.23, 1, 0.32, 1)',
+            transition: 'opacity 220ms ease-out',
           }}
         />
       ))}

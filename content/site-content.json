@@ -821,7 +821,7 @@
         {
           "id": "research-1775594149489-wl75uf",
           "section": "research",
-          "layout": "pair",
+          "layout": "single",
           "placement": "below",
           "align": "center",
           "width": "100%",
@@ -829,14 +829,6 @@
           "images": [
             {
               "src": "/work/franklins/202620_UXDG101-01_22643_Franklins_Assignment3.jpg",
-              "fit": "contain",
-              "position": "center center",
-              "aspectRatio": "4 / 3",
-              "background": "#0d0d0d",
-              "alt": "Layout placeholder"
-            },
-            {
-              "src": "/work/franklins/franklins research 2.jpg",
               "fit": "contain",
               "position": "center center",
               "aspectRatio": "4 / 3",
