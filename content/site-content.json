@@ -203,7 +203,7 @@
           "RESEARCH"
         ],
         "href": "/work/franklins",
-        "cover": "/work/franklins/cover-hor-processed.png",
+        "cover": "/work/franklins/cover-hor.png",
         "coverPosition": "center"
       },
       {
@@ -214,7 +214,7 @@
           "RESEARCH"
         ],
         "href": "/work/loomlearn",
-        "cover": "/work/loomlearn/cover-hor-processed.png",
+        "cover": "/work/loomlearn/cover-hor.png",
         "coverPosition": "center"
       },
       {
@@ -225,7 +225,7 @@
           "SERVICE DESIGN"
         ],
         "href": "/work/helpoh",
-        "cover": "/work/helpoh/cover-hor-processed.png",
+        "cover": "/work/helpoh/cover-hor.png",
         "coverPosition": "center"
       },
       {
@@ -236,7 +236,7 @@
           "SYSTEMS"
         ],
         "href": "/work/atom",
-        "cover": "/work/atom/cover-hor-processed.png",
+        "cover": "/work/atom/cover-hor.png",
         "coverPosition": "center"
       },
       {
@@ -247,7 +247,7 @@
           "INTERACTION"
         ],
         "href": "/work/albers",
-        "cover": "/work/albers/cover-hor-processed.png",
+        "cover": "/work/albers/cover-hor.png",
         "coverPosition": "center"
       },
       {
