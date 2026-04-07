@@ -464,7 +464,8 @@ function isWorkProject(value: unknown): value is WorkProject {
     isStringArray(item.tags) &&
     isString(item.href) &&
     (item.cover === undefined || isString(item.cover)) &&
-    (item.coverPosition === undefined || isString(item.coverPosition))
+    (item.coverPosition === undefined || isString(item.coverPosition)) &&
+    isOptionalStringArray(item.previewImages)
   )
 }
 
@@ -495,7 +496,8 @@ function isPhotographyCity(value: unknown): value is PhotographyCity {
     isString(item.desc) &&
     isString(item.cover) &&
     typeof item.comingSoon === 'boolean' &&
-    (item.imagePosition === undefined || isString(item.imagePosition))
+    (item.imagePosition === undefined || isString(item.imagePosition)) &&
+    isOptionalStringArray(item.previewImages)
   )
 }
 
