@@ -64,6 +64,21 @@ export interface CardStyleSettings {
   imageBorderWidth: string
 }
 
+export interface HoverPreviewSettings {
+  enabled: boolean
+  width: string
+  padding: string
+  offsetX: string
+  offsetY: string
+  background: string
+  borderColor: string
+  titleColor: string
+  bodyColor: string
+  metaColor: string
+  accentColor: string
+  shadow: string
+}
+
 export interface PhotographyCardStyleSettings {
   titleSize: string
   bodySize: string
@@ -399,6 +414,7 @@ export interface SiteContent {
   design: {
     supportingCards: CardStyleSettings
     photographyCards: PhotographyCardStyleSettings
+    hoverPreviews: HoverPreviewSettings
     gallery: GalleryStyleSettings
     nowCards: NowCardStyleSettings
     listeningCard: ListeningCardStyleSettings
@@ -500,6 +516,25 @@ function isCardStyleSettings(value: unknown): value is CardStyleSettings {
     isString(item.imageBorderColor) &&
     isString(item.imageBorderWidth) &&
     (item.bodySize === undefined || isString(item.bodySize))
+  )
+}
+
+function isHoverPreviewSettings(value: unknown): value is HoverPreviewSettings {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return (
+    typeof item.enabled === 'boolean' &&
+    isString(item.width) &&
+    isString(item.padding) &&
+    isString(item.offsetX) &&
+    isString(item.offsetY) &&
+    isString(item.background) &&
+    isString(item.borderColor) &&
+    isString(item.titleColor) &&
+    isString(item.bodyColor) &&
+    isString(item.metaColor) &&
+    isString(item.accentColor) &&
+    isString(item.shadow)
   )
 }
 
@@ -950,6 +985,7 @@ export function isSiteContent(value: unknown): value is SiteContent {
     photography.galleries.every(isPhotographyGallery) &&
     isCardStyleSettings(design.supportingCards) &&
     isPhotographyCardStyleSettings(design.photographyCards) &&
+    isHoverPreviewSettings(design.hoverPreviews) &&
     isGalleryStyleSettings(design.gallery) &&
     isNowCardStyleSettings(design.nowCards) &&
     isListeningCardStyleSettings(design.listeningCard) &&

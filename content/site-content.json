@@ -498,6 +498,20 @@
       "imageBorderColor": "#333333",
       "imageBorderWidth": "1px"
     },
+    "hoverPreviews": {
+      "enabled": true,
+      "width": "320px",
+      "padding": "16px",
+      "offsetX": "18px",
+      "offsetY": "-8px",
+      "background": "#111111",
+      "borderColor": "#2a2a2a",
+      "titleColor": "#f5f2ed",
+      "bodyColor": "#999999",
+      "metaColor": "#666666",
+      "accentColor": "#FF3120",
+      "shadow": "0 18px 48px rgba(0, 0, 0, 0.5)"
+    },
     "gallery": {
       "imageAspectRatio": "2 / 3",
       "gridGap": "12px",
