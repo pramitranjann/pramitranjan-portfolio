@@ -232,7 +232,16 @@ function getImageExportGuide({
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label style={{ display: 'grid', gap: '8px' }}>
-      <span className="font-mono" style={{ fontSize: '13px', color: '#d2cec8', letterSpacing: '0.12em', lineHeight: 1.4 }}>
+      <span
+        className="font-mono"
+        style={{
+          fontSize: '11px',
+          color: '#8b857d',
+          letterSpacing: '0.16em',
+          lineHeight: 1.4,
+          textTransform: 'uppercase',
+        }}
+      >
         {label}
       </span>
       {children}
@@ -241,15 +250,103 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 }
 
 function SectionFrame({ title, children }: { title: string; children: React.ReactNode }) {
+  const [isOpen, setIsOpen] = useState(true)
+
   return (
-    <section style={{ border: '1px solid #1f1f1f', background: '#111111', padding: '20px' }}>
-      <h2 className="font-serif" style={{ fontSize: 'var(--text-h3)', color: '#f5f2ed', fontWeight: 400, marginBottom: '18px' }}>
-        {title}
-      </h2>
-      <div style={{ display: 'grid', gap: '16px' }}>
-        {children}
-      </div>
+    <section style={{ border: '1px solid #1f1f1f', background: '#111111' }}>
+      <button
+        type="button"
+        onClick={() => setIsOpen((current) => !current)}
+        className="flex items-center justify-between"
+        style={{
+          width: '100%',
+          background: 'transparent',
+          border: 'none',
+          padding: '18px 20px',
+          cursor: 'pointer',
+          textAlign: 'left',
+          borderBottom: isOpen ? '1px solid #1b1b1b' : 'none',
+        }}
+      >
+        <div style={{ display: 'grid', gap: '6px' }}>
+          <span className="font-mono" style={{ fontSize: '10px', color: '#666666', letterSpacing: '0.18em', textTransform: 'uppercase' }}>
+            Dashboard Section
+          </span>
+          <h2 className="font-serif" style={{ fontSize: '28px', color: '#f5f2ed', fontWeight: 500, margin: 0, lineHeight: 1.05 }}>
+            {title}
+          </h2>
+        </div>
+        <span className="font-mono" style={{ fontSize: '11px', color: '#999999', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
+          {isOpen ? 'Hide' : 'Show'}
+        </span>
+      </button>
+      {isOpen ? (
+        <div style={{ display: 'grid', gap: '16px', padding: '20px' }}>
+          {children}
+        </div>
+      ) : null}
     </section>
+  )
+}
+
+function EditorItemCard({
+  title,
+  subtitle,
+  defaultOpen = false,
+  children,
+}: {
+  title: string
+  subtitle?: string
+  defaultOpen?: boolean
+  children: React.ReactNode
+}) {
+  const [isOpen, setIsOpen] = useState(defaultOpen)
+
+  return (
+    <div style={{ border: '1px solid #1f1f1f', background: '#0f0f0f' }}>
+      <button
+        type="button"
+        onClick={() => setIsOpen((current) => !current)}
+        className="flex items-center justify-between"
+        style={{
+          width: '100%',
+          background: 'transparent',
+          border: 'none',
+          padding: '14px 16px',
+          cursor: 'pointer',
+          textAlign: 'left',
+          borderBottom: isOpen ? '1px solid #1b1b1b' : 'none',
+        }}
+      >
+        <div style={{ display: 'grid', gap: '4px', minWidth: 0 }}>
+          <span className="font-serif" style={{ fontSize: '24px', color: '#f5f2ed', lineHeight: 1 }}>
+            {title}
+          </span>
+          {subtitle ? (
+            <span
+              className="font-mono"
+              style={{
+                fontSize: '11px',
+                color: '#777777',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                lineHeight: 1.5,
+              }}
+            >
+              {subtitle}
+            </span>
+          ) : null}
+        </div>
+        <span className="font-mono" style={{ fontSize: '11px', color: '#999999', letterSpacing: '0.14em', textTransform: 'uppercase', flexShrink: 0 }}>
+          {isOpen ? 'Hide' : 'Edit'}
+        </span>
+      </button>
+      {isOpen ? (
+        <div style={{ display: 'grid', gap: '12px', padding: '16px' }}>
+          {children}
+        </div>
+      ) : null}
+    </div>
   )
 }
 
@@ -484,18 +581,39 @@ function moveCaseStudyWithinSection(caseStudies: CaseStudyContent[], slug: strin
 function SidebarGroup({
   title,
   children,
+  defaultOpen = true,
 }: {
   title: string
   children: React.ReactNode
+  defaultOpen?: boolean
 }) {
+  const [isOpen, setIsOpen] = useState(defaultOpen)
+
   return (
     <div style={{ display: 'grid', gap: '10px' }}>
-      <div className="font-mono" style={{ fontSize: '11px', color: '#666666', letterSpacing: '0.14em' }}>
-        {title}
-      </div>
-      <div style={{ display: 'grid', gap: '8px' }}>
-        {children}
-      </div>
+      <button
+        type="button"
+        onClick={() => setIsOpen((current) => !current)}
+        className="flex items-center justify-between font-mono"
+        style={{
+          background: 'transparent',
+          border: 'none',
+          padding: 0,
+          cursor: 'pointer',
+          fontSize: '11px',
+          color: '#666666',
+          letterSpacing: '0.14em',
+          textAlign: 'left',
+        }}
+      >
+        <span>{title}</span>
+        <span style={{ color: '#8d8d8d' }}>{isOpen ? '−' : '+'}</span>
+      </button>
+      {isOpen ? (
+        <div style={{ display: 'grid', gap: '8px' }}>
+          {children}
+        </div>
+      ) : null}
     </div>
   )
 }
@@ -2375,17 +2493,14 @@ function HeadlineBodyEditor({
   onBodyChange: (value: string) => void
 }) {
   return (
-    <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
-      <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.1em' }}>
-        {title.toUpperCase()}
-      </div>
+    <EditorItemCard title={title} subtitle={headline || 'Narrative copy'} defaultOpen={false}>
       <Field label={`${title} Headline`}>
         <textarea value={headline} onChange={(event) => onHeadlineChange(event.target.value)} style={inputStyle(true)} />
       </Field>
       <Field label={`${title} Body`}>
         <textarea value={body} onChange={(event) => onBodyChange(event.target.value)} style={inputStyle(true)} />
       </Field>
-    </div>
+    </EditorItemCard>
   )
 }
 
@@ -3080,7 +3195,12 @@ function HeroStageListEditor({
         </button>
       </div>
       {items.map((item, index) => (
-        <div key={`${item.number}-${index}`} style={{ border: '1px solid #1f1f1f', padding: '16px', display: 'grid', gap: '12px' }}>
+        <EditorItemCard
+          key={`${item.number}-${index}`}
+          title={`Stage ${item.number || String(index + 1).padStart(2, '0')}`}
+          subtitle={item.footerLabel || 'Homepage intro stage'}
+          defaultOpen={index === 0}
+        >
           <ReorderButtons index={index} length={items.length} onMove={(direction) => onChange(moveItem(items, index, direction))} />
           <Field label="Stage Number">
             <input value={item.number} onChange={(event) => onChange(updateAt(items, index, { ...item, number: event.target.value }))} style={inputStyle()} />
@@ -3102,7 +3222,7 @@ function HeroStageListEditor({
           >
             REMOVE STAGE
           </button>
-        </div>
+        </EditorItemCard>
       ))}
     </div>
   )
@@ -3133,7 +3253,12 @@ function LinkItemListEditor({
         </button>
       </div>
       {items.map((item, index) => (
-        <div key={`${item.label}-${index}`} style={{ border: '1px solid #1f1f1f', padding: '16px', display: 'grid', gap: '12px' }}>
+        <EditorItemCard
+          key={`${item.label}-${index}`}
+          title={item.label || `Link ${index + 1}`}
+          subtitle={item.href || 'Navigation link'}
+          defaultOpen={index === 0}
+        >
           <ReorderButtons index={index} length={items.length} onMove={(direction) => onChange(moveItem(items, index, direction))} />
           <Field label="Label">
             <input value={item.label} onChange={(event) => onChange(updateAt(items, index, { ...item, label: event.target.value }))} style={inputStyle()} />
@@ -3149,7 +3274,7 @@ function LinkItemListEditor({
           >
             REMOVE LINK
           </button>
-        </div>
+        </EditorItemCard>
       ))}
     </div>
   )
@@ -3182,7 +3307,12 @@ function WorkProjectListEditor({
         </button>
       </div>
       {items.map((item, index) => (
-        <div key={`${item.title}-${index}`} style={{ border: '1px solid #1f1f1f', padding: '16px', display: 'grid', gap: '12px' }}>
+        <EditorItemCard
+          key={`${item.title}-${index}`}
+          title={item.title || `Work item ${index + 1}`}
+          subtitle={item.href || item.oneliner || 'Work card'}
+          defaultOpen={index === 0}
+        >
           <ReorderButtons index={index} length={items.length} onMove={(direction) => onChange(moveItem(items, index, direction))} />
           <Field label="Title">
             <input value={item.title} onChange={(event) => onChange(updateAt(items, index, { ...item, title: event.target.value }))} style={inputStyle()} />
@@ -3228,7 +3358,7 @@ function WorkProjectListEditor({
           >
             REMOVE ITEM
           </button>
-        </div>
+        </EditorItemCard>
       ))}
     </div>
   )
@@ -3259,7 +3389,12 @@ function EntryListEditor({
         </button>
       </div>
       {items.map((item, index) => (
-        <div key={`${item.org}-${index}`} style={{ border: '1px solid #1f1f1f', padding: '16px', display: 'grid', gap: '12px' }}>
+        <EditorItemCard
+          key={`${item.org}-${index}`}
+          title={item.org || `Entry ${index + 1}`}
+          subtitle={[item.role, item.date].filter(Boolean).join(' · ') || 'Timeline item'}
+          defaultOpen={index === 0}
+        >
           <ReorderButtons index={index} length={items.length} onMove={(direction) => onChange(moveItem(items, index, direction))} />
           <Field label="Organisation">
             <input value={item.org} onChange={(event) => onChange(updateAt(items, index, { ...item, org: event.target.value }))} style={inputStyle()} />
@@ -3281,7 +3416,7 @@ function EntryListEditor({
           >
             REMOVE ITEM
           </button>
-        </div>
+        </EditorItemCard>
       ))}
     </div>
   )
@@ -3304,7 +3439,12 @@ function NowCardListEditor({ items, onChange }: { items: NowCard[]; onChange: (i
         </button>
       </div>
       {items.map((item, index) => (
-        <div key={`${item.label}-${index}`} style={{ border: '1px solid #1f1f1f', padding: '16px', display: 'grid', gap: '12px' }}>
+        <EditorItemCard
+          key={`${item.label}-${index}`}
+          title={item.label || `Card ${index + 1}`}
+          subtitle={item.value || 'Now card'}
+          defaultOpen={index === 0}
+        >
           <ReorderButtons index={index} length={items.length} onMove={(direction) => onChange(moveItem(items, index, direction))} />
           <Field label="Label">
             <input value={item.label} onChange={(event) => onChange(updateAt(items, index, { ...item, label: event.target.value }))} style={inputStyle()} />
@@ -3323,7 +3463,7 @@ function NowCardListEditor({ items, onChange }: { items: NowCard[]; onChange: (i
           >
             REMOVE CARD
           </button>
-        </div>
+        </EditorItemCard>
       ))}
     </div>
   )
@@ -3354,7 +3494,12 @@ function PhotographyCityListEditor({
         </button>
       </div>
       {items.map((item, index) => (
-        <div key={`${item.slug}-${index}`} style={{ border: '1px solid #1f1f1f', padding: '16px', display: 'grid', gap: '12px' }}>
+        <EditorItemCard
+          key={`${item.slug}-${index}`}
+          title={item.title || item.slug || `City ${index + 1}`}
+          subtitle={item.comingSoon ? 'Coming soon card' : item.desc || 'Photography card'}
+          defaultOpen={index === 0}
+        >
           <ReorderButtons index={index} length={items.length} onMove={(direction) => onChange(moveItem(items, index, direction))} />
           <Field label="Slug">
             <input value={item.slug} onChange={(event) => onChange(updateAt(items, index, { ...item, slug: event.target.value }))} style={inputStyle()} />
@@ -3395,7 +3540,7 @@ function PhotographyCityListEditor({
           >
             REMOVE CITY
           </button>
-        </div>
+        </EditorItemCard>
       ))}
     </div>
   )
@@ -3424,7 +3569,12 @@ function PhotographyGalleryListEditor({
         </button>
       </div>
       {items.map((item, index) => (
-        <div key={`${item.slug}-${index}`} style={{ border: '1px solid #1f1f1f', padding: '16px', display: 'grid', gap: '12px' }}>
+        <EditorItemCard
+          key={`${item.slug}-${index}`}
+          title={item.city || item.slug || `Gallery ${index + 1}`}
+          subtitle={item.descriptor || 'Photography gallery'}
+          defaultOpen={index === 0}
+        >
           <ReorderButtons index={index} length={items.length} onMove={(direction) => onChange(moveItem(items, index, direction))} />
           <Field label="Slug">
             <input value={item.slug} onChange={(event) => onChange(updateAt(items, index, { ...item, slug: event.target.value }))} style={inputStyle()} />
@@ -3444,7 +3594,7 @@ function PhotographyGalleryListEditor({
           >
             REMOVE GALLERY
           </button>
-        </div>
+        </EditorItemCard>
       ))}
     </div>
   )
@@ -3473,7 +3623,12 @@ function ImageListEditor({
         </button>
       </div>
       {images.map((image, index) => (
-        <div key={`${image}-${index}`} style={{ border: '1px solid #1f1f1f', padding: '16px', display: 'grid', gap: '12px' }}>
+        <EditorItemCard
+          key={`${image}-${index}`}
+          title={`Image ${index + 1}`}
+          subtitle={image || 'Gallery frame'}
+          defaultOpen={index === 0}
+        >
           <ReorderButtons index={index} length={images.length} onMove={(direction) => onChange(moveItem(images, index, direction))} />
           <Field label={`Image ${index + 1}`}>
             <input value={image} onChange={(event) => onChange(updateAt(images, index, event.target.value))} style={inputStyle()} />
@@ -3486,7 +3641,7 @@ function ImageListEditor({
           >
             REMOVE IMAGE
           </button>
-        </div>
+        </EditorItemCard>
       ))}
     </div>
   )
