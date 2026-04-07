@@ -573,7 +573,8 @@ export function CaseStudyLayout({
 
     const onScroll = () => {
       const heroTextBottom = heroTextRef.current?.getBoundingClientRect().bottom ?? Number.POSITIVE_INFINITY
-      setNavVisible(heroTextBottom <= 72)
+      const revealThreshold = window.innerWidth <= 768 ? 12 : 72
+      setNavVisible(heroTextBottom <= revealThreshold)
       const documentBottom = window.innerHeight + window.scrollY
       const remainingScroll = document.documentElement.scrollHeight - documentBottom
       // Don't update active section while a programmatic scroll is animating —
