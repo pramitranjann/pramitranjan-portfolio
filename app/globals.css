@@ -24,8 +24,10 @@
   --color-frameborder: #222222;
 
   /* Fonts */
-  --font-serif: "DM Serif Display", serif;
+  --font-serif: var(--font-dm-serif), serif;
   --font-mono: "DM Mono", monospace;
+  --font-weight-serif: 400;
+  --font-weight-mono: 400;
 
   /* ── Type scale ────────────────────────────────────────────────────────────
      Display  Serif regular   clamp(72px,13vw,130px)  Hero name
@@ -91,6 +93,14 @@ html, body {
   --motion-eyebrow-label-duration: 0.4s;
   --motion-eyebrow-label-delay: 0.2s;
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.font-serif {
+  font-weight: var(--font-weight-serif);
+}
+
+.font-mono {
+  font-weight: var(--font-weight-mono);
 }
 
 /* Hide scrollbar — prevents layout shift on the fixed nav */

@@ -46,7 +46,7 @@ function EntryList({ items }: { items: Array<{ org: string; role: string; date: 
           {/* H3 — org/institution name */}
           <h3
             className="font-serif"
-            style={{ fontSize: 'var(--text-h3)', fontStyle: 'italic', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.2, marginBottom: '8px' }}
+            style={{ fontSize: 'var(--text-h3)', fontStyle: 'italic', fontWeight: 'var(--font-weight-serif)', color: '#f5f2ed', lineHeight: 1.2, marginBottom: '8px' }}
           >
             {item.org}
           </h3>
@@ -83,7 +83,7 @@ function NowCell({
   return (
     <div style={{ background: '#0d0d0d', padding: styleSettings.cardPadding }}>
       <span className="font-mono" style={{ fontSize: styleSettings.labelSize, letterSpacing: '0.18em', color: '#FF3120', display: 'block', marginBottom: '10px' }}>{label}</span>
-      <div className="font-serif" style={{ fontSize: styleSettings.titleSize, fontStyle: 'italic', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.3, marginBottom: '7px' }}>{value}</div>
+      <div className="font-serif" style={{ fontSize: styleSettings.titleSize, fontStyle: 'italic', fontWeight: 'var(--font-weight-serif)', color: '#f5f2ed', lineHeight: 1.3, marginBottom: '7px' }}>{value}</div>
       <div className="font-mono" style={{ fontSize: styleSettings.bodySize, letterSpacing: '0.08em', color: '#999999', lineHeight: 1.6 }}>{sub}</div>
     </div>
   )
@@ -109,7 +109,7 @@ export default async function AboutPage() {
             <h1
               data-reveal
               className="font-serif"
-              style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '28px' }}
+              style={{ fontSize: 'var(--text-h1)', fontWeight: 'var(--font-weight-serif)', color: '#f5f2ed', lineHeight: 1.05, marginBottom: '28px' }}
               dangerouslySetInnerHTML={{ __html: copy.heroTitleHtml }}
             />
             {/* Body LG */}
@@ -227,7 +227,7 @@ export default async function AboutPage() {
               <h2
                 data-reveal
                 className="font-serif"
-                style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '20px' }}
+                style={{ fontSize: 'var(--text-h1)', fontWeight: 'var(--font-weight-serif)', color: '#f5f2ed', lineHeight: 1.05, marginBottom: '20px' }}
                 dangerouslySetInnerHTML={{ __html: content.aboutPage.contactTitleHtml }}
               />
               <p

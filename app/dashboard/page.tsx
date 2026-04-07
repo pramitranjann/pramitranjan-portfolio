@@ -19,7 +19,7 @@ export default async function DashboardPage() {
           <p className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120', marginBottom: '12px' }}>
             DASHBOARD_ · {getDashboardWriteModeLabel()}
           </p>
-          <h1 className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '12px' }}>
+          <h1 className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 'var(--font-weight-serif)', color: '#f5f2ed', lineHeight: 1.05, marginBottom: '12px' }}>
             Edit the site locally, then push the file changes yourself.
           </h1>
           <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.8, maxWidth: '720px' }}>

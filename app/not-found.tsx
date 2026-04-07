@@ -23,7 +23,7 @@ export default function NotFound() {
             className="font-serif"
             style={{
               fontSize: 'clamp(100px, 18vw, 180px)',
-              fontWeight: 400,
+              fontWeight: 'var(--font-weight-serif)',
               fontStyle: 'italic',
               color: '#141414',
               lineHeight: 1,
@@ -41,7 +41,7 @@ export default function NotFound() {
             className="font-serif"
             style={{
               fontSize: 'var(--text-h1)',
-              fontWeight: 400,
+              fontWeight: 'var(--font-weight-serif)',
               color: '#f5f2ed',
               lineHeight: 1.1,
               marginBottom: '16px',

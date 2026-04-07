@@ -32,13 +32,13 @@ export function Contact() {
     >
       <div
         className="reveal-text font-serif italic"
-        style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: 'var(--color-heading)', lineHeight: 1.1 }}
+        style={{ fontSize: 'var(--text-h1)', fontWeight: 'var(--font-weight-serif)', color: 'var(--color-heading)', lineHeight: 1.1 }}
       >
         {copy.contactTitle}
       </div>
       <div
         className="reveal-text font-serif italic"
-        style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: 'var(--color-red)', lineHeight: 1.1, marginBottom: '40px' }}
+        style={{ fontSize: 'var(--text-h1)', fontWeight: 'var(--font-weight-serif)', color: 'var(--color-red)', lineHeight: 1.1, marginBottom: '40px' }}
       >
         {copy.contactAccent}
       </div>

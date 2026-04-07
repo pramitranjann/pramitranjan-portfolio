@@ -29,7 +29,7 @@ export function PhotographyIndexClient({
               <span className="arrow-nudge-back">←</span> {copy.backLabel}
             </Link>
           </div>
-          <h1 className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '40px' }}>
+          <h1 className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 'var(--font-weight-serif)', color: '#f5f2ed', lineHeight: 1.05, marginBottom: '40px' }}>
             {heroTitle}
           </h1>
           <div className="grid grid-cols-2 md:grid-cols-4" style={{ gap: '16px' }}>
@@ -39,7 +39,7 @@ export function PhotographyIndexClient({
                   <div style={{ position: 'relative', width: '100%', aspectRatio: cardStyle.imageAspectRatio, backgroundColor: '#252525', border: '1px solid #333333', marginBottom: '12px', overflow: 'hidden' }}>
                     <Image src={city.cover} alt={city.title} fill style={{ objectFit: 'cover', objectPosition: city.imagePosition ?? 'center' }} sizes="(max-width: 768px) 50vw, 25vw" />
                   </div>
-                  <h2 className="font-serif" style={{ fontSize: cardStyle.titleSize, fontWeight: 400, color: '#f5f2ed', marginBottom: '4px' }}>{city.title}</h2>
+                  <h2 className="font-serif" style={{ fontSize: cardStyle.titleSize, fontWeight: 'var(--font-weight-serif)', color: '#f5f2ed', marginBottom: '4px' }}>{city.title}</h2>
                   <p className="font-mono flex-1" style={{ fontSize: cardStyle.bodySize, letterSpacing: '0.04em', color: '#999999', lineHeight: 1.6, marginBottom: '12px' }}>{city.desc}</p>
                   <span className="font-mono" style={{ fontSize: cardStyle.bodySize, letterSpacing: '0.1em', color: city.comingSoon ? '#666666' : '#FF3120' }}>
                     {city.comingSoon ? 'COMING SOON' : <>VIEW <span className="arrow-nudge">→</span></>}

@@ -25,7 +25,7 @@ export default function OGImage() {
         <div
           style={{
             fontSize: 80,
-            fontWeight: 400,
+            fontWeight: 'var(--font-weight-serif)',
             color: '#f5f2ed',
             lineHeight: 1,
             letterSpacing: '-1px',

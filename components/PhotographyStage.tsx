@@ -51,7 +51,7 @@ export function PhotographyStage() {
           </div>
           <h2
             className="font-serif"
-            style={{ fontSize: 'var(--text-h2)', fontWeight: 400, fontStyle: 'italic', color: 'var(--color-heading)', lineHeight: 1.1, marginBottom: '24px' }}
+            style={{ fontSize: 'var(--text-h2)', fontWeight: 'var(--font-weight-serif)', fontStyle: 'italic', color: 'var(--color-heading)', lineHeight: 1.1, marginBottom: '24px' }}
             dangerouslySetInnerHTML={{ __html: copy.photographyTitleHtml }}
           />
           <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.06em', color: 'var(--color-body)', lineHeight: 1.9, maxWidth: '340px' }}>

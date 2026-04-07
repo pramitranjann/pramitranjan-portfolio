@@ -635,7 +635,7 @@ export function CaseStudyLayout({
             <RuleLabel number={type} />
             <h1
               className="font-serif"
-              style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: 'var(--color-heading)', lineHeight: 1.1 }}
+              style={{ fontSize: 'var(--text-h1)', fontWeight: 'var(--font-weight-serif)', color: 'var(--color-heading)', lineHeight: 1.1 }}
             >
               {title}
             </h1>
@@ -1206,7 +1206,7 @@ export function CaseStudyLayout({
                 <p className="font-mono mb-2" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.12em', color: '#FF3120' }}>
                   <span className="arrow-nudge-back">←</span> {copy.prevLabel}
                 </p>
-                <p className="font-serif" style={{ fontSize: 'var(--text-body)', fontWeight: 400, color: '#666666' }}>
+                <p className="font-serif" style={{ fontSize: 'var(--text-body)', fontWeight: 'var(--font-weight-serif)', color: '#666666' }}>
                   {prev.title}
                 </p>
               </Link>
@@ -1220,7 +1220,7 @@ export function CaseStudyLayout({
                 <p className="font-mono mb-2" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.12em', color: '#FF3120' }}>
                   {copy.nextLabel} <span className="arrow-nudge">→</span>
                 </p>
-                <p className="font-serif" style={{ fontSize: 'var(--text-body)', fontWeight: 400, color: '#666666' }}>
+                <p className="font-serif" style={{ fontSize: 'var(--text-body)', fontWeight: 'var(--font-weight-serif)', color: '#666666' }}>
                   {next.title}
                 </p>
               </Link>

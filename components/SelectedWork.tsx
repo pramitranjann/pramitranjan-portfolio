@@ -30,7 +30,7 @@ export function SelectedWork({ content, cardStyle }: { content: HomeSection; car
       <div style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter) 24px' }}>
         <h2
           className="font-serif"
-          style={{ fontSize: 'var(--text-h2)', fontWeight: 400, color: 'var(--color-red)', lineHeight: 1.1, marginBottom: '12px' }}
+          style={{ fontSize: 'var(--text-h2)', fontWeight: 'var(--font-weight-serif)', color: 'var(--color-red)', lineHeight: 1.1, marginBottom: '12px' }}
         >
           {content.heading}
         </h2>

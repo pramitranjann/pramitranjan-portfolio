@@ -53,7 +53,7 @@ export function About({
 
         <h2
           className="reveal-text font-serif"
-          style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: 'var(--color-heading)', lineHeight: 1.05, marginBottom: '20px' }}
+          style={{ fontSize: 'var(--text-h1)', fontWeight: 'var(--font-weight-serif)', color: 'var(--color-heading)', lineHeight: 1.05, marginBottom: '20px' }}
           dangerouslySetInnerHTML={{ __html: copy.aboutTitleHtml }}
         />
 

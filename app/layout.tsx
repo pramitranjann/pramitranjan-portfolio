@@ -12,7 +12,7 @@ import { getSiteContent } from '@/lib/site-content'
 const dmSerif = DM_Serif_Display({
   weight: '400',
   subsets: ['latin'],
-  variable: '--font-serif',
+  variable: '--font-dm-serif',
   display: 'swap',
 })
 
@@ -47,6 +47,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const layout = content.design.layout
   const typography = content.design.typography
   const navigation = content.design.navigation
+  const selectedDisplayFont =
+    typography.displayFont === 'clash-display'
+      ? '"Clash Display", var(--font-dm-serif), serif'
+      : 'var(--font-dm-serif), serif'
   const motionCssVars = {
     '--motion-page-reveal-distance': `${motion.pageRevealDistance}px`,
     '--motion-page-reveal-duration': `${motion.pageRevealDuration}s`,
@@ -73,6 +77,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     '--text-body-lg': typography.bodyLgSize,
     '--text-body': typography.bodySize,
     '--text-meta': typography.metaSize,
+    '--font-serif': selectedDisplayFont,
+    '--font-weight-serif': typography.serifWeight,
+    '--font-weight-mono': typography.monoWeight,
     '--color-heading': typography.headingColor,
     '--color-body': typography.bodyColor,
     '--color-label': typography.labelColor,
@@ -99,6 +106,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" className={`${dmSerif.variable} ${dmMono.variable}`} suppressHydrationWarning>
       <head>
+        <link rel="preconnect" href="https://api.fontshare.com" />
+        <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" />
 <script dangerouslySetInnerHTML={{ __html: `document.documentElement.classList.add('js-ready')` }} />
       </head>
       <body style={{ backgroundColor: '#0d0d0d', color: '#f5f2ed', ...motionCssVars }}>

@@ -90,7 +90,7 @@ export function WorkPageClient({
             <span className="eyebrow-label font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: 'var(--color-red)' }}>{copy.eyebrow}</span>
           </div>
           <GsapReveal>
-            <h1 data-reveal className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: 'var(--color-heading)', lineHeight: 1.05, marginBottom: '20px' }}>
+            <h1 data-reveal className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 'var(--font-weight-serif)', color: 'var(--color-heading)', lineHeight: 1.05, marginBottom: '20px' }}>
               {heroTitle}
             </h1>
             <p data-reveal className="font-mono" style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: 'var(--color-body)', lineHeight: 1.9, maxWidth: '480px' }}>

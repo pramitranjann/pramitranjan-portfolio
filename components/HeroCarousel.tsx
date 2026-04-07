@@ -209,13 +209,13 @@ export function HeroCarousel() {
           {i === 0 ? (
             <h1
               className="font-serif"
-              style={{ fontSize: 'var(--text-display)', fontWeight: 400, color: '#f5f2ed', lineHeight: 0.95 }}
+              style={{ fontSize: 'var(--text-display)', fontWeight: 'var(--font-weight-serif)', color: '#f5f2ed', lineHeight: 0.95 }}
               dangerouslySetInnerHTML={{ __html: stage.titleHtml }}
             />
           ) : (
             <h2
               className="font-serif"
-              style={{ fontSize: 'var(--text-hero)', fontWeight: 400, fontStyle: 'italic', color: '#f5f2ed', lineHeight: 1.05 }}
+              style={{ fontSize: 'var(--text-hero)', fontWeight: 'var(--font-weight-serif)', fontStyle: 'italic', color: '#f5f2ed', lineHeight: 1.05 }}
               dangerouslySetInnerHTML={{ __html: stage.titleHtml }}
             />
           )}

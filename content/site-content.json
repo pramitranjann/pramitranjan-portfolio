@@ -547,6 +547,9 @@
       "footerPaddingY": "10px"
     },
     "typography": {
+      "displayFont": "dm-serif",
+      "serifWeight": "400",
+      "monoWeight": "400",
       "displaySize": "clamp(72px, 13vw, 130px)",
       "heroSize": "clamp(48px, 9vw, 96px)",
       "h1Size": "52px",

@@ -43,7 +43,7 @@ export function PhotoGalleryLayout({ city, descriptor, images, styleSettings }: 
               <span className="arrow-nudge-back">←</span> {copy.photoBackLabel}
             </Link>
           </div>
-          <h1 className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '8px' }}>
+          <h1 className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 'var(--font-weight-serif)', color: '#f5f2ed', lineHeight: 1.05, marginBottom: '8px' }}>
             {city}
           </h1>
           <p className="font-mono" style={{ fontSize: styleSettings.descriptorSize, letterSpacing: '0.1em', color: '#999999', marginBottom: '40px' }}>

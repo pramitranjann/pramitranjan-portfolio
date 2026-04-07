@@ -153,6 +153,9 @@ export interface LayoutSettings {
 }
 
 export interface TypographySettings {
+  displayFont: string
+  serifWeight: string
+  monoWeight: string
   displaySize: string
   heroSize: string
   h1Size: string
@@ -589,6 +592,9 @@ function isTypographySettings(value: unknown): value is TypographySettings {
   if (!value || typeof value !== 'object') return false
   const item = value as Record<string, unknown>
   return (
+    isString(item.displayFont) &&
+    isString(item.serifWeight) &&
+    isString(item.monoWeight) &&
     isString(item.displaySize) &&
     isString(item.heroSize) &&
     isString(item.h1Size) &&

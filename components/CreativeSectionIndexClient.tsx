@@ -32,7 +32,7 @@ export function CreativeSectionIndexClient({
               <span className="arrow-nudge-back">←</span> {backLabel}
             </Link>
           </div>
-          <h1 className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: 'var(--color-heading)', lineHeight: 1.05, marginBottom: '40px' }}>
+          <h1 className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 'var(--font-weight-serif)', color: 'var(--color-heading)', lineHeight: 1.05, marginBottom: '40px' }}>
             {title}
           </h1>
           <div className={columnsClass} style={{ gap: 'var(--layout-card-gap)' }}>

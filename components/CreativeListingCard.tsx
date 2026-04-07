@@ -42,7 +42,7 @@ export function CreativeListingCard({
       >
         {cover ? <Image src={cover} alt={title} fill style={{ objectFit: cardStyle?.imageFit ?? 'cover', objectPosition: imagePosition }} sizes="(max-width: 768px) 50vw, 25vw" /> : null}
       </div>
-      <h3 className="font-serif" style={{ fontSize: cardStyle?.titleSize ?? 'var(--text-body)', fontWeight: 400, color: 'var(--color-heading)', marginBottom: '4px' }}>
+      <h3 className="font-serif" style={{ fontSize: cardStyle?.titleSize ?? 'var(--text-body)', fontWeight: 'var(--font-weight-serif)', color: 'var(--color-heading)', marginBottom: '4px' }}>
         <span className="card-title-inner">{title}</span>
       </h3>
       <p className="font-mono flex-1" style={{ fontSize: cardStyle?.bodySize ?? 'var(--text-meta)', letterSpacing: '0.04em', color: 'var(--color-body)', lineHeight: 1.6, marginBottom: '12px' }}>

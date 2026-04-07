@@ -3735,6 +3735,42 @@ function TypographySettingsEditor({
 }) {
   return (
     <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
+      <Field label="Display Font">
+        <select
+          value={settings.displayFont ?? 'dm-serif'}
+          onChange={(event) => onChange({ ...settings, displayFont: event.target.value })}
+          style={inputStyle()}
+        >
+          <option value="dm-serif">DM Serif Display</option>
+          <option value="clash-display">Clash Display</option>
+        </select>
+      </Field>
+      <Field label="Serif Weight">
+        <select
+          value={settings.serifWeight ?? '400'}
+          onChange={(event) => onChange({ ...settings, serifWeight: event.target.value })}
+          style={inputStyle()}
+        >
+          <option value="300">300</option>
+          <option value="400">400</option>
+          <option value="500">500</option>
+          <option value="600">600</option>
+          <option value="700">700</option>
+        </select>
+      </Field>
+      <Field label="Mono Weight">
+        <select
+          value={settings.monoWeight ?? '400'}
+          onChange={(event) => onChange({ ...settings, monoWeight: event.target.value })}
+          style={inputStyle()}
+        >
+          <option value="300">300</option>
+          <option value="400">400</option>
+          <option value="500">500</option>
+          <option value="600">600</option>
+          <option value="700">700</option>
+        </select>
+      </Field>
       <Field label="Display Size">
         <input value={settings.displaySize} onChange={(event) => onChange({ ...settings, displaySize: event.target.value })} style={inputStyle()} />
       </Field>
