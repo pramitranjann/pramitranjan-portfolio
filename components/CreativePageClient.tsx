@@ -107,7 +107,7 @@ export function CreativePageClient({
         <section className="creative-section border-b border-divider" style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter)' }}>
           <SectionHeader label={copy.photographyLabel} count={copy.photographyCount} />
           <div ref={photoGridRef} className="grid grid-cols-2 md:grid-cols-4" style={{ gap: 'var(--layout-card-gap)' }}>
-            {cities.map((city) => (
+            {cities.map((city, index) => (
               <CreativeListingCard
                 key={city.slug}
                 title={city.title}
@@ -117,8 +117,12 @@ export function CreativePageClient({
                 previewImages={city.previewImages}
                 comingSoon={city.comingSoon}
                 imagePosition={city.imagePosition ?? 'center'}
+                imageScale={city.imageScale}
+                hoverImagePosition={city.hoverImagePosition}
+                hoverImageScale={city.hoverImageScale}
                 cardStyle={cardStyle}
                 hoverPreviewSettings={hoverPreviewSettings}
+                priorityImage={index < 4}
               />
             ))}
           </div>
@@ -127,7 +131,7 @@ export function CreativePageClient({
         <section className="creative-section border-b border-divider" style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter)' }}>
           <SectionHeader label={copy.mixedMediaLabel} count={copy.mixedMediaCount} />
           <div ref={mixedGridRef} className="grid grid-cols-2 md:grid-cols-3" style={{ gap: 'var(--layout-card-gap)' }}>
-            {mixedMediaProjects.map((project) => (
+            {mixedMediaProjects.map((project, index) => (
               <CreativeListingCard
                 key={project.slug}
                 title={project.title}
@@ -137,8 +141,12 @@ export function CreativePageClient({
                 cover={project.heroImage}
                 previewImages={getCaseStudyPreviewImages(project)}
                 imagePosition={project.cardImagePosition ?? 'center'}
+                imageScale={project.cardImageScale}
+                hoverImagePosition={project.cardHoverImagePosition}
+                hoverImageScale={project.cardHoverImageScale}
                 cardStyle={cardStyle}
                 hoverPreviewSettings={hoverPreviewSettings}
+                priorityImage={index < 3}
               />
             ))}
           </div>
@@ -147,7 +155,7 @@ export function CreativePageClient({
         <section className="creative-section" style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter)' }}>
           <SectionHeader label={copy.brandingLabel} count={copy.brandingCount} />
           <div ref={brandingGridRef} className="grid grid-cols-2" style={{ gap: 'var(--layout-card-gap)' }}>
-            {brandingProjects.map((project) => (
+            {brandingProjects.map((project, index) => (
               <CreativeListingCard
                 key={project.slug}
                 title={project.title}
@@ -157,8 +165,12 @@ export function CreativePageClient({
                 cover={project.heroImage}
                 previewImages={getCaseStudyPreviewImages(project)}
                 imagePosition={project.cardImagePosition ?? 'center'}
+                imageScale={project.cardImageScale}
+                hoverImagePosition={project.cardHoverImagePosition}
+                hoverImageScale={project.cardHoverImageScale}
                 cardStyle={cardStyle}
                 hoverPreviewSettings={hoverPreviewSettings}
+                priorityImage={index < 2}
               />
             ))}
           </div>

@@ -55,7 +55,7 @@ export function SelectedWork({
         className="card-grid grid grid-cols-2 md:grid-cols-4"
         style={{ gap: 'var(--layout-card-gap)', padding: `0 var(--layout-page-gutter) var(--layout-section-padding-y)` }}
       >
-        {content.items.map((p) => (
+        {content.items.map((p, index) => (
           <div key={p.title} className="reveal">
             <ProjectCard
               {...p}
@@ -69,6 +69,7 @@ export function SelectedWork({
               imageBorderColor={cardStyle.imageBorderColor}
               imageBorderWidth={cardStyle.imageBorderWidth}
               hoverPreviewSettings={hoverPreviewSettings}
+              priorityImage={index < 4}
             />
           </div>
         ))}

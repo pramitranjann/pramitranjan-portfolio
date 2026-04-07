@@ -18,6 +18,9 @@ interface ProjectCardProps {
   cover?: string
   hoverImage?: string
   coverPosition?: string
+  coverScale?: string
+  hoverImagePosition?: string
+  hoverImageScale?: string
   previewImages?: string[]
   titleSize?: string
   metaSize?: string
@@ -28,6 +31,7 @@ interface ProjectCardProps {
   imageBorderColor?: string
   imageBorderWidth?: string
   hoverPreviewSettings?: HoverPreviewSettings
+  priorityImage?: boolean
 }
 
 function ratioPadding(ratio: string): string {
@@ -46,6 +50,9 @@ export function ProjectCard({
   cover,
   hoverImage,
   coverPosition,
+  coverScale,
+  hoverImagePosition,
+  hoverImageScale,
   previewImages,
   titleSize,
   metaSize,
@@ -56,6 +63,7 @@ export function ProjectCard({
   imageBorderColor,
   imageBorderWidth,
   hoverPreviewSettings,
+  priorityImage = false,
 }: ProjectCardProps) {
   const category = tags.join(' · ')
   const cardImages = mergePreviewImages(cover, previewImages)
@@ -91,6 +99,8 @@ export function ProjectCard({
               sizes="(max-width: 768px) 100vw, 24vw"
               imageFit={imageFit ?? 'cover'}
               imagePosition={coverPosition ?? 'center'}
+              imageScale={coverScale ?? '1'}
+              priorityFirstFrame={priorityImage}
             />
           ) : (
             <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', padding: '16px', backgroundColor: '#111111' }}>
@@ -118,6 +128,8 @@ export function ProjectCard({
               sizes="(max-width: 768px) 100vw, 32vw"
               imageFit={imageFit ?? 'cover'}
               imagePosition={coverPosition ?? 'center'}
+              imageScale={coverScale ?? '1'}
+              priorityFirstFrame={priorityImage}
             />
           ) : (
             <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', padding: '16px', backgroundColor: '#111111' }}>
@@ -209,7 +221,9 @@ export function ProjectCard({
                     hovered={false}
                     sizes="(max-width: 768px) 100vw, 24vw"
                     imageFit={imageFit ?? 'cover'}
-                    imagePosition={coverPosition ?? 'center'}
+                    imagePosition={hoverImagePosition ?? coverPosition ?? 'center'}
+                    imageScale={hoverImageScale ?? coverScale ?? '1'}
+                    priorityFirstFrame={priorityImage}
                   />
                 </div>
               ) : (
@@ -237,7 +251,9 @@ export function ProjectCard({
                   hovered={hovered}
                   sizes="(max-width: 768px) 100vw, 32vw"
                   imageFit={imageFit ?? 'cover'}
-                  imagePosition={coverPosition ?? 'center'}
+                  imagePosition={hoverImagePosition ?? coverPosition ?? 'center'}
+                  imageScale={hovered ? (hoverImageScale ?? coverScale ?? '1') : (coverScale ?? '1')}
+                  priorityFirstFrame={priorityImage}
                 />
               ) : (
                 <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', padding: '16px', backgroundColor: '#111111' }}>

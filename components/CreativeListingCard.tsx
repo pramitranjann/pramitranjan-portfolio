@@ -17,8 +17,12 @@ type CreativeListingCardProps = {
   previewImages?: string[]
   comingSoon?: boolean
   imagePosition?: string
+  imageScale?: string
+  hoverImagePosition?: string
+  hoverImageScale?: string
   cardStyle?: PhotographyCardStyleSettings
   hoverPreviewSettings?: HoverPreviewSettings
+  priorityImage?: boolean
 }
 
 export function CreativeListingCard({
@@ -30,8 +34,12 @@ export function CreativeListingCard({
   previewImages,
   comingSoon,
   imagePosition = 'center',
+  imageScale,
+  hoverImagePosition,
+  hoverImageScale,
   cardStyle,
   hoverPreviewSettings,
+  priorityImage = false,
 }: CreativeListingCardProps) {
   const cardImages = mergePreviewImages(cover, previewImages)
 
@@ -49,7 +57,7 @@ export function CreativeListingCard({
           overflow: 'hidden',
         }}
       >
-        {cardImages.length ? <Image src={cardImages[0]} alt={title} fill style={{ objectFit: cardStyle?.imageFit ?? 'cover', objectPosition: imagePosition }} sizes="(max-width: 768px) 50vw, 25vw" /> : null}
+        {cardImages.length ? <Image src={cardImages[0]} alt={title} fill priority={priorityImage} style={{ objectFit: cardStyle?.imageFit ?? 'cover', objectPosition: imagePosition, transform: `scale(${imageScale ?? '1'})` }} sizes="(max-width: 768px) 50vw, 25vw" /> : null}
       </div>
       <h3 className="font-serif" style={{ fontSize: cardStyle?.titleSize ?? 'var(--text-body)', fontWeight: 'var(--font-weight-serif)', color: 'var(--color-heading)', marginBottom: '4px' }}>
         <span className="card-title-inner">{title}</span>
@@ -119,7 +127,9 @@ export function CreativeListingCard({
                   hovered={hovered}
                   sizes="(max-width: 768px) 50vw, 25vw"
                   imageFit={cardStyle?.imageFit ?? 'cover'}
-                  imagePosition={imagePosition}
+                  imagePosition={hovered ? (hoverImagePosition ?? imagePosition) : imagePosition}
+                  imageScale={hovered ? (hoverImageScale ?? imageScale ?? '1') : (imageScale ?? '1')}
+                  priorityFirstFrame={priorityImage}
                 />
               ) : null}
             </div>

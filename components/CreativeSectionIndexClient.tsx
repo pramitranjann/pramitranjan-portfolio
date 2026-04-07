@@ -37,7 +37,7 @@ export function CreativeSectionIndexClient({
             {title}
           </h1>
           <div className={columnsClass} style={{ gap: 'var(--layout-card-gap)' }}>
-            {projects.map((project) => (
+            {projects.map((project, index) => (
               <CreativeListingCard
                 key={project.slug}
                 title={project.title}
@@ -47,7 +47,11 @@ export function CreativeSectionIndexClient({
                 cover={project.heroImage}
                 previewImages={getCaseStudyPreviewImages(project)}
                 imagePosition={project.cardImagePosition ?? 'center'}
+                imageScale={project.cardImageScale}
+                hoverImagePosition={project.cardHoverImagePosition}
+                hoverImageScale={project.cardHoverImageScale}
                 cardStyle={cardStyle}
+                priorityImage={index < 3}
               />
             ))}
           </div>

@@ -2193,10 +2193,33 @@ function CaseStudyEditor({
             mediaSettings: { ...current.mediaSettings, hero: value } satisfies CaseStudyMediaSettings,
           }))}
         />
-        <Field label="Card Image Position (for listing cards)">
+        <Field label="Card Rest Image Position (for listing cards)">
           <input
             value={caseStudy.cardImagePosition ?? ''}
             onChange={(event) => onChange((current) => ({ ...current, cardImagePosition: event.target.value || undefined }))}
+            style={inputStyle()}
+          />
+        </Field>
+        <Field label="Card Rest Image Scale">
+          <input
+            value={caseStudy.cardImageScale ?? ''}
+            onChange={(event) => onChange((current) => ({ ...current, cardImageScale: event.target.value || undefined }))}
+            placeholder="1 / 1.08 / 1.16"
+            style={inputStyle()}
+          />
+        </Field>
+        <Field label="Card Hover Image Position">
+          <input
+            value={caseStudy.cardHoverImagePosition ?? ''}
+            onChange={(event) => onChange((current) => ({ ...current, cardHoverImagePosition: event.target.value || undefined }))}
+            style={inputStyle()}
+          />
+        </Field>
+        <Field label="Card Hover Image Scale">
+          <input
+            value={caseStudy.cardHoverImageScale ?? ''}
+            onChange={(event) => onChange((current) => ({ ...current, cardHoverImageScale: event.target.value || undefined }))}
+            placeholder="1 / 1.08 / 1.16"
             style={inputStyle()}
           />
         </Field>
@@ -3185,8 +3208,17 @@ function WorkProjectListEditor({
             localWriteEnabled={localWriteEnabled}
             onChange={(value) => onChange(updateAt(items, index, { ...item, hoverImage: value || undefined }))}
           />
-          <Field label="Cover Object Position (e.g. center, center top, 50% 20%)">
+          <Field label="Rest Image Position (e.g. center, center top, 50% 20%)">
             <input value={item.coverPosition ?? ''} onChange={(event) => onChange(updateAt(items, index, { ...item, coverPosition: event.target.value || undefined }))} style={inputStyle()} />
+          </Field>
+          <Field label="Rest Image Scale">
+            <input value={item.coverScale ?? ''} onChange={(event) => onChange(updateAt(items, index, { ...item, coverScale: event.target.value || undefined }))} placeholder="1 / 1.08 / 1.16" style={inputStyle()} />
+          </Field>
+          <Field label="Hover Image Position">
+            <input value={item.hoverImagePosition ?? ''} onChange={(event) => onChange(updateAt(items, index, { ...item, hoverImagePosition: event.target.value || undefined }))} style={inputStyle()} />
+          </Field>
+          <Field label="Hover Image Scale">
+            <input value={item.hoverImageScale ?? ''} onChange={(event) => onChange(updateAt(items, index, { ...item, hoverImageScale: event.target.value || undefined }))} placeholder="1 / 1.08 / 1.16" style={inputStyle()} />
           </Field>
           <button
             type="button"
@@ -3339,8 +3371,17 @@ function PhotographyCityListEditor({
             localWriteEnabled={localWriteEnabled}
             onChange={(value) => onChange(updateAt(items, index, { ...item, cover: value }))}
           />
-          <Field label="Object Position (e.g. center, center top, 50% 20%)">
+          <Field label="Rest Image Position (e.g. center, center top, 50% 20%)">
             <input value={item.imagePosition ?? ''} onChange={(event) => onChange(updateAt(items, index, { ...item, imagePosition: event.target.value || undefined }))} style={inputStyle()} />
+          </Field>
+          <Field label="Rest Image Scale">
+            <input value={item.imageScale ?? ''} onChange={(event) => onChange(updateAt(items, index, { ...item, imageScale: event.target.value || undefined }))} placeholder="1 / 1.08 / 1.16" style={inputStyle()} />
+          </Field>
+          <Field label="Hover Image Position">
+            <input value={item.hoverImagePosition ?? ''} onChange={(event) => onChange(updateAt(items, index, { ...item, hoverImagePosition: event.target.value || undefined }))} style={inputStyle()} />
+          </Field>
+          <Field label="Hover Image Scale">
+            <input value={item.hoverImageScale ?? ''} onChange={(event) => onChange(updateAt(items, index, { ...item, hoverImageScale: event.target.value || undefined }))} placeholder="1 / 1.08 / 1.16" style={inputStyle()} />
           </Field>
           <label className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#999999', letterSpacing: '0.1em', display: 'flex', alignItems: 'center', gap: '10px' }}>
             <input type="checkbox" checked={item.comingSoon} onChange={(event) => onChange(updateAt(items, index, { ...item, comingSoon: event.target.checked }))} />

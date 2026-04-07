@@ -6,6 +6,9 @@ export interface WorkProject {
   cover?: string
   hoverImage?: string
   coverPosition?: string
+  coverScale?: string
+  hoverImagePosition?: string
+  hoverImageScale?: string
   previewImages?: string[]
 }
 
@@ -45,6 +48,9 @@ export interface PhotographyCity {
   cover: string
   previewImages?: string[]
   imagePosition?: string
+  imageScale?: string
+  hoverImagePosition?: string
+  hoverImageScale?: string
   comingSoon: boolean
 }
 
@@ -381,6 +387,9 @@ export interface CaseStudyContent {
   pullQuote?: string
   heroImage?: string
   cardImagePosition?: string
+  cardImageScale?: string
+  cardHoverImagePosition?: string
+  cardHoverImageScale?: string
   researchImage?: string
   challengeImages?: string[]
   solutionHeroImage?: string
@@ -467,6 +476,9 @@ function isWorkProject(value: unknown): value is WorkProject {
     (item.cover === undefined || isString(item.cover)) &&
     (item.hoverImage === undefined || isString(item.hoverImage)) &&
     (item.coverPosition === undefined || isString(item.coverPosition)) &&
+    isOptionalString(item.coverScale) &&
+    isOptionalString(item.hoverImagePosition) &&
+    isOptionalString(item.hoverImageScale) &&
     isOptionalStringArray(item.previewImages)
   )
 }
@@ -499,6 +511,9 @@ function isPhotographyCity(value: unknown): value is PhotographyCity {
     isString(item.cover) &&
     typeof item.comingSoon === 'boolean' &&
     (item.imagePosition === undefined || isString(item.imagePosition)) &&
+    isOptionalString(item.imageScale) &&
+    isOptionalString(item.hoverImagePosition) &&
+    isOptionalString(item.hoverImageScale) &&
     isOptionalStringArray(item.previewImages)
   )
 }
@@ -940,6 +955,9 @@ function isCaseStudyContent(value: unknown): value is CaseStudyContent {
     isOptionalString(item.pullQuote) &&
     isOptionalString(item.heroImage) &&
     isOptionalString(item.cardImagePosition) &&
+    isOptionalString(item.cardImageScale) &&
+    isOptionalString(item.cardHoverImagePosition) &&
+    isOptionalString(item.cardHoverImageScale) &&
     isOptionalString(item.researchImage) &&
     isOptionalStringArray(item.challengeImages) &&
     isOptionalString(item.solutionHeroImage) &&

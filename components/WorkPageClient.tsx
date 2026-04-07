@@ -103,7 +103,7 @@ export function WorkPageClient({
 
         <section className="work-grid-section" style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter)' }}>
           <div ref={gridRef} className="grid grid-cols-2 md:grid-cols-4" style={{ gap: 'var(--layout-card-gap)' }}>
-            {projects.map((project) => (
+            {projects.map((project, index) => (
               <ProjectCard
                 key={`${project.href}-${project.title}`}
                 {...project}
@@ -117,6 +117,7 @@ export function WorkPageClient({
                 imageBorderColor={cardStyle.imageBorderColor}
                 imageBorderWidth={cardStyle.imageBorderWidth}
                 hoverPreviewSettings={hoverPreviewSettings}
+                priorityImage={index < 4}
               />
             ))}
             <div className="flex items-center justify-center" style={{ backgroundColor: '#1c1c1c', border: '1px solid #2a2a2a', padding: '16px', minHeight: '160px' }}>

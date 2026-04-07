@@ -435,11 +435,13 @@ export function CaseStudyLayout({
     { id: 'sec-outcomes', label: copy.navOutcomesLabel, show: !!outcomes },
   ].filter(item => item.show)
 
+  const [navVisible, setNavVisible] = useState(false)
   const [activeId, setActiveId]     = useState('')
   const scrollLocked = useRef(false)
   const lockTargetId = useRef<string | null>(null)
   const lockTimer    = useRef<ReturnType<typeof setTimeout> | null>(null)
   const navRef       = useRef<HTMLElement | null>(null)
+  const heroTextRef  = useRef<HTMLDivElement | null>(null)
   const motionSectionRefs = useRef<Partial<Record<InlineSectionKey, HTMLElement | null>>>({})
   const motionLabelRefs = useRef<Partial<Record<InlineSectionKey, HTMLSpanElement | null>>>({})
   const motionTextRefs = useRef<Partial<Record<InlineSectionKey, HTMLDivElement | null>>>({})
@@ -570,6 +572,8 @@ export function CaseStudyLayout({
     }
 
     const onScroll = () => {
+      const heroTextBottom = heroTextRef.current?.getBoundingClientRect().bottom ?? Number.POSITIVE_INFINITY
+      setNavVisible(heroTextBottom <= 72)
       const documentBottom = window.innerHeight + window.scrollY
       const remainingScroll = document.documentElement.scrollHeight - documentBottom
       // Don't update active section while a programmatic scroll is animating —
@@ -631,6 +635,7 @@ export function CaseStudyLayout({
           style={{ minHeight: '280px' }}
         >
           <div
+            ref={heroTextRef}
             className="case-study-hero-text flex flex-col justify-end border-r border-divider"
             style={{ padding: '48px var(--layout-page-gutter)' }}
           >
@@ -1250,8 +1255,8 @@ export function CaseStudyLayout({
           overflowX: 'auto',
           overflowY: 'hidden',
           scrollbarWidth: 'none',
-          opacity: 1,
-          pointerEvents: 'auto',
+          opacity: navVisible ? 1 : 0,
+          pointerEvents: navVisible ? 'auto' : 'none',
           transition: 'opacity 0.3s ease',
         }}>
           {navItems.map((item, i) => (

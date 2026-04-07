@@ -8,15 +8,19 @@ export function HoverImageCarousel({
   alt,
   imageFit = 'cover',
   imagePosition = 'center',
+  imageScale = '1',
   sizes,
   hovered,
+  priorityFirstFrame = false,
 }: {
   images?: string[]
   alt: string
   imageFit?: 'contain' | 'cover'
   imagePosition?: string
+  imageScale?: string
   sizes: string
   hovered: boolean
+  priorityFirstFrame?: boolean
 }) {
   const frames = useMemo(() => Array.from(new Set((images ?? []).filter(Boolean))), [images])
   const [brokenImages, setBrokenImages] = useState<string[]>([])
@@ -80,14 +84,16 @@ export function HoverImageCarousel({
           alt={alt}
           fill
           sizes={sizes}
+          priority={priorityFirstFrame && index === 0}
           onError={() => {
             setBrokenImages((current) => (current.includes(image) ? current : [...current, image]))
           }}
           style={{
             objectFit: imageFit,
             objectPosition: imagePosition,
+            transform: `scale(${imageScale})`,
             opacity: index === activeIndex ? 1 : 0,
-            transition: 'opacity 240ms ease-out',
+            transition: 'opacity 240ms ease-out, transform 240ms ease-out',
           }}
         />
       ))}
