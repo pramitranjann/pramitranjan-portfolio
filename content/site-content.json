@@ -745,7 +745,7 @@
         "slug": "loomlearn",
         "title": "LoomLearn"
       },
-      "heroImage": "/work/franklins/cover-hor-processed.png",
+      "heroImage": "/work/franklins/cover-hor.png",
       "problemHeadline": "The warmth was real — it just wasn't reaching people before they arrived.",
       "problem": "Franklin's has a strong in-store experience. The brief: close the gap between what first-time visitors expected digitally and what they actually found when they walked in.",
       "roleHeadline": "Team lead on a five-person UXDG 101 project — from fieldwork to final prototype.",
@@ -821,7 +821,6 @@
         {
           "id": "research-1775594149489-wl75uf",
           "section": "research",
-          "hidden": true,
           "layout": "pair",
           "placement": "below",
           "align": "center",
