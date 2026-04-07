@@ -1,9 +1,9 @@
 // components/ProjectCard.tsx
 'use client'
-import Image from 'next/image'
 import Link from 'next/link'
 import { playCardEnter } from '@/lib/sounds'
 import { HoverPreviewSurface } from '@/components/HoverPreviewSurface'
+import { HoverImageCarousel } from '@/components/HoverImageCarousel'
 import type { HoverPreviewSettings } from '@/lib/site-content-schema'
 
 interface ProjectCardProps {
@@ -16,6 +16,7 @@ interface ProjectCardProps {
   comingSoon?: boolean
   cover?: string
   coverPosition?: string
+  previewImages?: string[]
   titleSize?: string
   metaSize?: string
   bodySize?: string
@@ -42,6 +43,7 @@ export function ProjectCard({
   comingSoon,
   cover,
   coverPosition,
+  previewImages,
   titleSize,
   metaSize,
   bodySize,
@@ -77,12 +79,13 @@ export function ProjectCard({
           }}
         >
           {cover ? (
-            <Image
-              src={cover}
+            <HoverImageCarousel
+              images={previewImages ?? [cover]}
               alt={title}
-              fill
+              hovered={false}
               sizes="(max-width: 768px) 100vw, 24vw"
-              style={{ objectFit: imageFit ?? 'cover', objectPosition: coverPosition ?? 'center' }}
+              imageFit={imageFit ?? 'cover'}
+              imagePosition={coverPosition ?? 'center'}
             />
           ) : (
             <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', padding: '16px', backgroundColor: '#111111' }}>
@@ -103,12 +106,13 @@ export function ProjectCard({
       <div className="portfolio-card" style={cardBase}>
         <div style={{ position: 'relative', width: '100%', height: 0, paddingBottom: '100%', backgroundColor: imageBackground ?? '#252525', border: `${imageBorderWidth ?? '1px'} solid ${imageBorderColor ?? '#333333'}`, marginBottom: '14px', overflow: 'hidden' }}>
           {cover ? (
-            <Image
-              src={cover}
+            <HoverImageCarousel
+              images={previewImages ?? [cover]}
               alt={title}
-              fill
+              hovered={false}
               sizes="(max-width: 768px) 100vw, 32vw"
-              style={{ objectFit: imageFit ?? 'cover', objectPosition: coverPosition ?? 'center' }}
+              imageFit={imageFit ?? 'cover'}
+              imagePosition={coverPosition ?? 'center'}
             />
           ) : (
             <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', padding: '16px', backgroundColor: '#111111' }}>
@@ -163,7 +167,94 @@ export function ProjectCard({
         ctaLabel: 'OPEN CASE STUDY',
       }}
     >
-      {cardBody}
+      {({ hovered }) => {
+        const withCarousel = variant === 'supporting' ? (
+          <div className="portfolio-card" style={cardBase}>
+            <div
+              className="work-card-image"
+              style={{
+                position: 'relative',
+                width: '100%',
+                height: 0,
+                paddingBottom: ratioPadding(imageRatio ?? '1 / 1'),
+                backgroundColor: imageBackground ?? '#252525',
+                border: `${imageBorderWidth ?? '1px'} solid ${imageBorderColor ?? '#333333'}`,
+                marginBottom: '12px',
+                overflow: 'hidden',
+              }}
+            >
+              {cover ? (
+                <HoverImageCarousel
+                  images={previewImages ?? [cover]}
+                  alt={title}
+                  hovered={hovered}
+                  sizes="(max-width: 768px) 100vw, 24vw"
+                  imageFit={imageFit ?? 'cover'}
+                  imagePosition={coverPosition ?? 'center'}
+                />
+              ) : (
+                <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', padding: '16px', backgroundColor: '#111111' }}>
+                  <span className="font-serif" style={{ fontSize: '13px', fontStyle: 'italic', color: '#444444', textAlign: 'center', lineHeight: 1.4 }}>don&apos;t judge a book by its cover</span>
+                  <div style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
+                </div>
+              )}
+            </div>
+            <div className="font-serif" style={{ fontSize: titleSize ?? 'var(--text-body)', color: 'var(--color-heading)' }}>
+              <span className="card-title-inner">{title}</span>
+            </div>
+            <div className="font-mono" style={{ fontSize: metaSize ?? 'var(--text-meta)', color: 'var(--color-body)', marginTop: '4px', letterSpacing: '0.1em' }}>{category}</div>
+            <div className="font-mono" style={{ fontSize: metaSize ?? 'var(--text-meta)', color: 'var(--color-red)', letterSpacing: '0.1em', marginTop: '8px' }}>
+              <span className="card-cta-inner">VIEW</span> <span className="arrow-nudge">→</span>
+            </div>
+          </div>
+        ) : (
+          <div className="portfolio-card" style={cardBase}>
+            <div style={{ position: 'relative', width: '100%', height: 0, paddingBottom: '100%', backgroundColor: imageBackground ?? '#252525', border: `${imageBorderWidth ?? '1px'} solid ${imageBorderColor ?? '#333333'}`, marginBottom: '14px', overflow: 'hidden' }}>
+              {cover ? (
+                <HoverImageCarousel
+                  images={previewImages ?? [cover]}
+                  alt={title}
+                  hovered={hovered}
+                  sizes="(max-width: 768px) 100vw, 32vw"
+                  imageFit={imageFit ?? 'cover'}
+                  imagePosition={coverPosition ?? 'center'}
+                />
+              ) : (
+                <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', padding: '16px', backgroundColor: '#111111' }}>
+                  <span className="font-serif" style={{ fontSize: '13px', fontStyle: 'italic', color: '#444444', textAlign: 'center', lineHeight: 1.4 }}>don&apos;t judge a book by its cover</span>
+                  <div style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
+                </div>
+              )}
+            </div>
+            <div className="font-mono" style={{ fontSize: metaSize ?? 'var(--text-meta)', letterSpacing: '0.14em', color: 'var(--color-body)', marginBottom: '8px' }}>{category}</div>
+            <div className="font-serif" style={{ fontSize: titleSize ?? 'var(--text-h3)', color: 'var(--color-heading)', marginBottom: '8px' }}>
+              <span className="card-title-inner">{title}</span>
+            </div>
+            <div className="font-mono" style={{ fontSize: bodySize ?? 'var(--text-body)', color: 'var(--color-body)', lineHeight: 1.6 }}>{oneliner}</div>
+            {!comingSoon && (
+              <div className="font-mono" style={{ marginTop: '14px', fontSize: metaSize ?? 'var(--text-meta)', color: 'var(--color-red)', letterSpacing: '0.1em' }}>
+                <span className="card-cta-inner">VIEW</span> →
+              </div>
+            )}
+            {comingSoon && (
+              <div className="font-mono" style={{ marginTop: '14px', fontSize: metaSize ?? 'var(--text-meta)', color: 'var(--color-body)', letterSpacing: '0.1em' }}>COMING SOON</div>
+            )}
+          </div>
+        )
+
+        return comingSoon ? (
+          <div style={{ height: '100%' }}>{withCarousel}</div>
+        ) : (
+          <Link
+            href={href}
+            className="card-link"
+            style={{ display: 'block', textDecoration: 'none', height: '100%' }}
+            onPointerDown={playCardEnter}
+          >
+            {withCarousel}
+          </Link>
+        )
+      }}
     </HoverPreviewSurface>
   )
 }

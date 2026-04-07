@@ -6,6 +6,7 @@ import { Nav } from '@/components/Nav'
 import { CreativeListingCard } from '@/components/CreativeListingCard'
 import { playNav } from '@/lib/sounds'
 import type { CaseStudyContent, PhotographyCardStyleSettings } from '@/lib/site-content-schema'
+import { getCaseStudyPreviewImages } from '@/lib/preview-images'
 
 export function CreativeSectionIndexClient({
   title,
@@ -44,6 +45,7 @@ export function CreativeSectionIndexClient({
                 tag={project.type}
                 href={`/creative/${project.section}/${project.slug}`}
                 cover={project.heroImage}
+                previewImages={getCaseStudyPreviewImages(project)}
                 imagePosition={project.cardImagePosition ?? 'center'}
                 cardStyle={cardStyle}
               />

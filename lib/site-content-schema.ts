@@ -5,6 +5,7 @@ export interface WorkProject {
   href: string
   cover?: string
   coverPosition?: string
+  previewImages?: string[]
 }
 
 export interface HomeSection {

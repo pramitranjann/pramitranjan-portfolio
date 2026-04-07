@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { playCardEnter } from '@/lib/sounds'
 import { HoverPreviewSurface } from '@/components/HoverPreviewSurface'
+import { HoverImageCarousel } from '@/components/HoverImageCarousel'
 import type { HoverPreviewSettings, PhotographyCardStyleSettings } from '@/lib/site-content-schema'
 
 type CreativeListingCardProps = {
@@ -12,6 +13,7 @@ type CreativeListingCardProps = {
   tag?: string
   href?: string
   cover?: string
+  previewImages?: string[]
   comingSoon?: boolean
   imagePosition?: string
   cardStyle?: PhotographyCardStyleSettings
@@ -24,6 +26,7 @@ export function CreativeListingCard({
   tag,
   href,
   cover,
+  previewImages,
   comingSoon,
   imagePosition = 'center',
   cardStyle,
@@ -85,7 +88,51 @@ export function CreativeListingCard({
         ctaLabel,
       }}
     >
-      {cardBody}
+      {({ hovered }) => {
+        const hoverCard = (
+          <div className="portfolio-card flex flex-col h-full" style={{ backgroundColor: '#1c1c1c', padding: cardStyle?.cardPadding ?? '16px' }}>
+            <div
+              className="creative-card-image"
+              style={{
+                position: 'relative',
+                width: '100%',
+                aspectRatio: cardStyle?.imageAspectRatio ?? '3 / 2',
+                backgroundColor: cardStyle?.imageBackground ?? '#252525',
+                border: `${cardStyle?.imageBorderWidth ?? '1px'} solid ${cardStyle?.imageBorderColor ?? '#333333'}`,
+                marginBottom: '12px',
+                overflow: 'hidden',
+              }}
+            >
+              {cover ? (
+                <HoverImageCarousel
+                  images={previewImages ?? [cover]}
+                  alt={title}
+                  hovered={hovered}
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                  imageFit={cardStyle?.imageFit ?? 'cover'}
+                  imagePosition={imagePosition}
+                />
+              ) : null}
+            </div>
+            <h3 className="font-serif" style={{ fontSize: cardStyle?.titleSize ?? 'var(--text-body)', fontWeight: 'var(--font-weight-serif)', color: 'var(--color-heading)', marginBottom: '4px' }}>
+              <span className="card-title-inner">{title}</span>
+            </h3>
+            <p className="font-mono flex-1" style={{ fontSize: cardStyle?.bodySize ?? 'var(--text-meta)', letterSpacing: '0.04em', color: 'var(--color-body)', lineHeight: 1.6, marginBottom: '12px' }}>
+              {desc}
+            </p>
+            <div className="flex flex-col" style={{ gap: '6px' }}>
+              {tag ? <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: 'var(--color-label)' }}>{tag}</span> : null}
+              {comingSoon
+                ? <span className="font-mono" style={{ fontSize: cardStyle?.bodySize ?? 'var(--text-meta)', letterSpacing: '0.1em', color: 'var(--color-label)' }}>COMING SOON</span>
+                : <span className="font-mono" style={{ fontSize: cardStyle?.bodySize ?? 'var(--text-meta)', letterSpacing: '0.1em', color: 'var(--color-red)' }}>
+                    <span className="card-cta-inner">VIEW</span> <span className="arrow-nudge">→</span>
+                  </span>}
+            </div>
+          </div>
+        )
+
+        return comingSoon || !href ? <div className="h-full">{hoverCard}</div> : <Link href={href} className="h-full block" onPointerDown={playCardEnter}>{hoverCard}</Link>
+      }}
     </HoverPreviewSurface>
   )
 }

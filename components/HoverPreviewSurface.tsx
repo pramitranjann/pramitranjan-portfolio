@@ -23,7 +23,7 @@ export function HoverPreviewSurface({
   enabled: boolean
   settings: HoverPreviewSettings
   preview: HoverPreviewData
-  children: React.ReactNode
+  children: React.ReactNode | ((state: { hovered: boolean }) => React.ReactNode)
 }) {
   const openTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -63,8 +63,10 @@ export function HoverPreviewSurface({
     }, 65)
   }
 
+  const childContent = typeof children === 'function' ? children({ hovered: visible }) : children
+
   if (!enabled) {
-    return <>{children}</>
+    return <>{childContent}</>
   }
 
   return (
@@ -80,7 +82,7 @@ export function HoverPreviewSurface({
           transition: 'transform 160ms cubic-bezier(0.23, 1, 0.32, 1)',
         }}
       >
-        {children}
+        {childContent}
       </div>
 
       <div
@@ -107,7 +109,7 @@ export function HoverPreviewSurface({
           style={{
             position: 'absolute',
             inset: 0,
-            background: `linear-gradient(180deg, rgba(0,0,0,0.06) 0%, ${settings.background} 38%, ${settings.background} 100%)`,
+            background: `linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 34%, ${settings.background} 68%, ${settings.background} 100%)`,
           }}
         />
         <div style={{ position: 'absolute', left: 0, right: 0, top: 0, height: '2px', background: settings.accentColor }} />

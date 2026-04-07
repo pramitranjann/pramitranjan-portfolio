@@ -4,6 +4,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { notFound } from 'next/navigation'
 import { type CaseStudyContent, isSiteContent, type SiteContent } from '@/lib/site-content-schema'
+import { getCaseStudyPreviewImages, mergePreviewImages } from '@/lib/preview-images'
 
 const contentPath = path.join(process.cwd(), 'content', 'site-content.json')
 
@@ -36,10 +37,19 @@ function filterWorkProjectsByVisibleCaseStudies(content: SiteContent) {
   if (canSeeHiddenCaseStudies()) return content
 
   const hiddenSlugs = new Set(content.caseStudies.filter((item) => item.hidden).map((item) => item.slug))
+  const caseStudyBySlug = new Map(content.caseStudies.map((item) => [item.slug, item]))
   const filterItems = (items: SiteContent['home']['selectedWork']['items']) =>
     items.filter((item) => {
       const slug = getCaseStudySlugFromHref(item.href)
       return !slug || !hiddenSlugs.has(slug)
+    })
+  const enrichItems = (items: SiteContent['home']['selectedWork']['items']) =>
+    items.map((item) => {
+      const slug = getCaseStudySlugFromHref(item.href)
+      const caseStudy = slug ? caseStudyBySlug.get(slug) : null
+      const previewImages = caseStudy ? mergePreviewImages(item.cover, getCaseStudyPreviewImages(caseStudy)) : mergePreviewImages(item.cover)
+
+      return previewImages.length > 1 ? { ...item, previewImages } : item
     })
 
   return {
@@ -48,16 +58,16 @@ function filterWorkProjectsByVisibleCaseStudies(content: SiteContent) {
       ...content.home,
       selectedWork: {
         ...content.home.selectedWork,
-        items: filterItems(content.home.selectedWork.items),
+        items: enrichItems(filterItems(content.home.selectedWork.items)),
       },
       moreWork: {
         ...content.home.moreWork,
-        items: filterItems(content.home.moreWork.items),
+        items: enrichItems(filterItems(content.home.moreWork.items)),
       },
     },
     workPage: {
       ...content.workPage,
-      projects: filterItems(content.workPage.projects),
+      projects: enrichItems(filterItems(content.workPage.projects)),
     },
   }
 }

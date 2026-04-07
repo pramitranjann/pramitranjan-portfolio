@@ -8,6 +8,7 @@ import { useSiteCopy } from '@/components/SiteCopyProvider'
 import { Nav } from '@/components/Nav'
 import { CreativeListingCard } from '@/components/CreativeListingCard'
 import type { CaseStudyContent, HoverPreviewSettings, PhotographyCardStyleSettings, PhotographyCity } from '@/lib/site-content-schema'
+import { getCaseStudyPreviewImages } from '@/lib/preview-images'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -133,6 +134,7 @@ export function CreativePageClient({
                 tag={project.type}
                 href={`/creative/mixed-media/${project.slug}`}
                 cover={project.heroImage}
+                previewImages={getCaseStudyPreviewImages(project)}
                 imagePosition={project.cardImagePosition ?? 'center'}
                 cardStyle={cardStyle}
                 hoverPreviewSettings={hoverPreviewSettings}
@@ -152,6 +154,7 @@ export function CreativePageClient({
                 tag={project.type}
                 href={`/creative/branding/${project.slug}`}
                 cover={project.heroImage}
+                previewImages={getCaseStudyPreviewImages(project)}
                 imagePosition={project.cardImagePosition ?? 'center'}
                 cardStyle={cardStyle}
                 hoverPreviewSettings={hoverPreviewSettings}
