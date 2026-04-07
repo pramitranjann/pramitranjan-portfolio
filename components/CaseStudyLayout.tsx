@@ -1233,7 +1233,8 @@ export function CaseStudyLayout({
         {/* Section Nav */}
         <nav ref={navRef} aria-label="Page sections" className="case-study-section-nav" style={{
           position: 'fixed',
-          bottom: '28px',
+          top: '84px',
+          bottom: 'auto',
           left: '50%',
           transform: 'translateX(-50%)',
           zIndex: 998,

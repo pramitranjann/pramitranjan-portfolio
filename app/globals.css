@@ -507,6 +507,7 @@ body.carousel-reengaging main {
   .case-study-section-nav {
     left: 16px !important;
     right: 16px !important;
+    top: auto !important;
     bottom: 16px !important;
     transform: none !important;
     width: calc(100vw - 32px) !important;
