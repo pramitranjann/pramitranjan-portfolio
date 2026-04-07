@@ -18,6 +18,7 @@ import type {
   EntryItem,
   GalleryStyleSettings,
   HeroStageCopy,
+  HoverPreviewSettings,
   LayoutSettings,
   ListeningCardStyleSettings,
   LinkItem,
@@ -1960,6 +1961,10 @@ function DesignSystemEditor({
       </SectionFrame>
 
       <SectionFrame title="Card & Widget Controls">
+        <HoverPreviewSettingsEditor
+          settings={content.design.hoverPreviews}
+          onChange={(hoverPreviews) => updateSection('design', { ...content.design, hoverPreviews })}
+        />
         <CardStyleEditor
           title="Homepage + Work Cards"
           styleSettings={content.design.supportingCards}
@@ -3528,6 +3533,66 @@ function PhotographyCardStyleEditor({
       </Field>
       <Field label="Card Padding">
         <input value={styleSettings.cardPadding} onChange={(event) => onChange({ ...styleSettings, cardPadding: event.target.value })} style={inputStyle()} />
+      </Field>
+    </div>
+  )
+}
+
+function HoverPreviewSettingsEditor({
+  settings,
+  onChange,
+}: {
+  settings: HoverPreviewSettings
+  onChange: (value: HoverPreviewSettings) => void
+}) {
+  return (
+    <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
+      <div className="font-mono" style={{ fontSize: '13px', color: '#f5f2ed', letterSpacing: '0.14em', lineHeight: 1.4 }}>
+        HOVER PREVIEWS
+      </div>
+      <label className="font-mono" style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', color: '#d2cec8', letterSpacing: '0.12em' }}>
+        <input
+          type="checkbox"
+          checked={settings.enabled}
+          onChange={(event) => onChange({ ...settings, enabled: event.target.checked })}
+        />
+        Enable Desktop Card Hover Previews
+      </label>
+      <p className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#777777', lineHeight: 1.6, margin: 0 }}>
+        Applies to homepage work cards, work-page cards, and creative listing cards. Mobile tap behavior stays unchanged.
+      </p>
+      <Field label="Preview Width">
+        <input value={settings.width} onChange={(event) => onChange({ ...settings, width: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Preview Padding">
+        <input value={settings.padding} onChange={(event) => onChange({ ...settings, padding: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Offset X">
+        <input value={settings.offsetX} onChange={(event) => onChange({ ...settings, offsetX: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Offset Y">
+        <input value={settings.offsetY} onChange={(event) => onChange({ ...settings, offsetY: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Background">
+        <input value={settings.background} onChange={(event) => onChange({ ...settings, background: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Border Color">
+        <input value={settings.borderColor} onChange={(event) => onChange({ ...settings, borderColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Title Color">
+        <input value={settings.titleColor} onChange={(event) => onChange({ ...settings, titleColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Body Color">
+        <input value={settings.bodyColor} onChange={(event) => onChange({ ...settings, bodyColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Meta Color">
+        <input value={settings.metaColor} onChange={(event) => onChange({ ...settings, metaColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Accent Color">
+        <input value={settings.accentColor} onChange={(event) => onChange({ ...settings, accentColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Shadow">
+        <input value={settings.shadow} onChange={(event) => onChange({ ...settings, shadow: event.target.value })} style={inputStyle()} />
       </Field>
     </div>
   )

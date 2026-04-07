@@ -9,6 +9,7 @@ export default async function CreativePage() {
       mixedMediaProjects={content.caseStudies.filter((item) => item.section === 'mixed-media')}
       brandingProjects={content.caseStudies.filter((item) => item.section === 'branding')}
       cardStyle={content.design.photographyCards}
+      hoverPreviewSettings={content.design.hoverPreviews}
     />
   )
 }

@@ -17,7 +17,11 @@ export default async function HomePage() {
       <IntroAnimation />
       <HeroCarousel />
       <main style={{ paddingTop: '57px' }}>
-        <SelectedWork content={content.home.selectedWork} cardStyle={content.design.supportingCards} />
+        <SelectedWork
+          content={content.home.selectedWork}
+          cardStyle={content.design.supportingCards}
+          hoverPreviewSettings={content.design.hoverPreviews}
+        />
         <PhotographyStage />
         <About
           body={content.home.about.body}

@@ -7,7 +7,7 @@ import { useMotionSettings } from '@/components/MotionSettingsProvider'
 import { useSiteCopy } from '@/components/SiteCopyProvider'
 import { Nav } from '@/components/Nav'
 import { CreativeListingCard } from '@/components/CreativeListingCard'
-import type { CaseStudyContent, PhotographyCardStyleSettings, PhotographyCity } from '@/lib/site-content-schema'
+import type { CaseStudyContent, HoverPreviewSettings, PhotographyCardStyleSettings, PhotographyCity } from '@/lib/site-content-schema'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -25,11 +25,13 @@ export function CreativePageClient({
   mixedMediaProjects,
   brandingProjects,
   cardStyle,
+  hoverPreviewSettings,
 }: {
   cities: PhotographyCity[]
   mixedMediaProjects: CaseStudyContent[]
   brandingProjects: CaseStudyContent[]
   cardStyle: PhotographyCardStyleSettings
+  hoverPreviewSettings: HoverPreviewSettings
 }) {
   const eyebrowRef = useRef<HTMLDivElement>(null)
   const photoGridRef = useRef<HTMLDivElement>(null)
@@ -114,6 +116,7 @@ export function CreativePageClient({
                 comingSoon={city.comingSoon}
                 imagePosition={city.imagePosition ?? 'center'}
                 cardStyle={cardStyle}
+                hoverPreviewSettings={hoverPreviewSettings}
               />
             ))}
           </div>
@@ -132,6 +135,7 @@ export function CreativePageClient({
                 cover={project.heroImage}
                 imagePosition={project.cardImagePosition ?? 'center'}
                 cardStyle={cardStyle}
+                hoverPreviewSettings={hoverPreviewSettings}
               />
             ))}
           </div>
@@ -150,6 +154,7 @@ export function CreativePageClient({
                 cover={project.heroImage}
                 imagePosition={project.cardImagePosition ?? 'center'}
                 cardStyle={cardStyle}
+                hoverPreviewSettings={hoverPreviewSettings}
               />
             ))}
           </div>

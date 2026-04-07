@@ -3,7 +3,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { playCardEnter } from '@/lib/sounds'
-import type { PhotographyCardStyleSettings } from '@/lib/site-content-schema'
+import { HoverPreviewSurface } from '@/components/HoverPreviewSurface'
+import type { HoverPreviewSettings, PhotographyCardStyleSettings } from '@/lib/site-content-schema'
 
 type CreativeListingCardProps = {
   title: string
@@ -14,6 +15,7 @@ type CreativeListingCardProps = {
   comingSoon?: boolean
   imagePosition?: string
   cardStyle?: PhotographyCardStyleSettings
+  hoverPreviewSettings?: HoverPreviewSettings
 }
 
 export function CreativeListingCard({
@@ -25,6 +27,7 @@ export function CreativeListingCard({
   comingSoon,
   imagePosition = 'center',
   cardStyle,
+  hoverPreviewSettings,
 }: CreativeListingCardProps) {
   const inner = (
     <div className="portfolio-card flex flex-col h-full" style={{ backgroundColor: '#1c1c1c', padding: cardStyle?.cardPadding ?? '16px' }}>
@@ -59,5 +62,30 @@ export function CreativeListingCard({
     </div>
   )
 
-  return comingSoon || !href ? <div className="h-full">{inner}</div> : <Link href={href} className="h-full block" onPointerDown={playCardEnter}>{inner}</Link>
+  const cardBody =
+    comingSoon || !href ? <div className="h-full">{inner}</div> : <Link href={href} className="h-full block" onPointerDown={playCardEnter}>{inner}</Link>
+
+  if (comingSoon || !href || !hoverPreviewSettings?.enabled) {
+    return cardBody
+  }
+
+  const ctaLabel = href.startsWith('/creative/photography') ? 'OPEN GALLERY' : 'OPEN PROJECT'
+  const metadata = tag ? [tag] : []
+
+  return (
+    <HoverPreviewSurface
+      enabled={hoverPreviewSettings.enabled}
+      settings={hoverPreviewSettings}
+      preview={{
+        title,
+        body: desc,
+        image: cover,
+        imagePosition,
+        metadata,
+        ctaLabel,
+      }}
+    >
+      {cardBody}
+    </HoverPreviewSurface>
+  )
 }

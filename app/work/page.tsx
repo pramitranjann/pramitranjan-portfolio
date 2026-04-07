@@ -10,6 +10,7 @@ export default async function WorkPage() {
       heroBody={content.workPage.heroBody}
       projects={content.workPage.projects}
       cardStyle={content.design.supportingCards}
+      hoverPreviewSettings={content.design.hoverPreviews}
     />
   )
 }

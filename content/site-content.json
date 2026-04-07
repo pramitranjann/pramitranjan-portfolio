@@ -1012,9 +1012,9 @@
               "alt": ""
             }
           ],
-          "placement": "between-solution-outcomes",
+          "placement": "side-right",
           "inlineTextWidth": "420px",
-          "portraitSplitCount": 2
+          "inlineMediaMinWidth": "640px"
         }
       ]
     },
@@ -1346,7 +1346,7 @@
           "align": "center",
           "images": [
             {
-              "src": "/creative/mixed-media/faces-of-power/research-processed.png",
+              "src": "/creative/mixed-media/faces-of-power/research.png",
               "fit": "contain",
               "aspectRatio": "4 / 3",
               "background": "#0d0d0d",
@@ -1357,20 +1357,13 @@
         {
           "id": "faces-of-power-challenge-1",
           "section": "challenge",
-          "layout": "pair",
+          "layout": "single",
           "width": "100%",
           "gap": "2px",
           "align": "center",
           "images": [
             {
-              "src": "/creative/mixed-media/faces-of-power/ideation-1.png",
-              "fit": "contain",
-              "aspectRatio": "4 / 3",
-              "background": "#0d0d0d",
-              "alt": ""
-            },
-            {
-              "src": "/creative/mixed-media/faces-of-power/ideation-2.png",
+              "src": "/creative/mixed-media/faces-of-power/solution-hero.png",
               "fit": "contain",
               "aspectRatio": "4 / 3",
               "background": "#0d0d0d",
@@ -1394,7 +1387,12 @@
             }
           ]
         }
-      ]
+      ],
+      "mediaSettings": {
+        "hero": {
+          "fit": "cover"
+        }
+      }
     },
     {
       "slug": "oracle",

@@ -2,6 +2,8 @@
 'use client'
 import Link from 'next/link'
 import { playCardEnter } from '@/lib/sounds'
+import { HoverPreviewSurface } from '@/components/HoverPreviewSurface'
+import type { HoverPreviewSettings } from '@/lib/site-content-schema'
 
 interface ProjectCardProps {
   title: string
@@ -21,6 +23,7 @@ interface ProjectCardProps {
   imageBackground?: string
   imageBorderColor?: string
   imageBorderWidth?: string
+  hoverPreviewSettings?: HoverPreviewSettings
 }
 
 function ratioPadding(ratio: string): string {
@@ -46,6 +49,7 @@ export function ProjectCard({
   imageBackground,
   imageBorderColor,
   imageBorderWidth,
+  hoverPreviewSettings,
 }: ProjectCardProps) {
   const category = tags.join(' · ')
 
@@ -130,7 +134,7 @@ export function ProjectCard({
       </div>
     )
 
-  return comingSoon ? (
+  const cardBody = comingSoon ? (
     <div style={{ height: '100%' }}>{inner}</div>
   ) : (
     <Link
@@ -141,5 +145,26 @@ export function ProjectCard({
     >
       {inner}
     </Link>
+  )
+
+  if (comingSoon || !hoverPreviewSettings?.enabled) {
+    return cardBody
+  }
+
+  return (
+    <HoverPreviewSurface
+      enabled={hoverPreviewSettings.enabled}
+      settings={hoverPreviewSettings}
+      preview={{
+        title,
+        body: oneliner,
+        image: cover,
+        imagePosition: coverPosition,
+        metadata: tags.slice(0, 3),
+        ctaLabel: 'OPEN CASE STUDY',
+      }}
+    >
+      {cardBody}
+    </HoverPreviewSurface>
   )
 }

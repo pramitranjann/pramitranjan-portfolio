@@ -2,9 +2,17 @@
 import { useEffect, useRef } from 'react'
 import { useMotionSettings } from '@/components/MotionSettingsProvider'
 import { ProjectCard } from './ProjectCard'
-import type { CardStyleSettings, HomeSection } from '@/lib/site-content-schema'
+import type { CardStyleSettings, HomeSection, HoverPreviewSettings } from '@/lib/site-content-schema'
 
-export function SelectedWork({ content, cardStyle }: { content: HomeSection; cardStyle: CardStyleSettings }) {
+export function SelectedWork({
+  content,
+  cardStyle,
+  hoverPreviewSettings,
+}: {
+  content: HomeSection
+  cardStyle: CardStyleSettings
+  hoverPreviewSettings: HoverPreviewSettings
+}) {
   const gridRef = useRef<HTMLDivElement>(null)
   const motion = useMotionSettings()
 
@@ -60,6 +68,7 @@ export function SelectedWork({ content, cardStyle }: { content: HomeSection; car
               imageBackground={cardStyle.imageBackground}
               imageBorderColor={cardStyle.imageBorderColor}
               imageBorderWidth={cardStyle.imageBorderWidth}
+              hoverPreviewSettings={hoverPreviewSettings}
             />
           </div>
         ))}
