@@ -14,8 +14,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 function SectionHeader({ label, count }: { label: string; count: string }) {
   return (
     <div className="flex items-center justify-between" style={{ marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid #1f1f1f' }}>
-      <span className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.14em', color: '#f5f2ed' }}>{label}</span>
-      <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.16em', color: '#FF3120' }}>{count}</span>
+      <span className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.14em', color: 'var(--color-heading)' }}>{label}</span>
+      <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.16em', color: 'var(--color-red)' }}>{count}</span>
     </div>
   )
 }
@@ -86,24 +86,24 @@ export function CreativePageClient({
     <>
       <Nav />
       <main style={{ paddingTop: '57px' }}>
-        <section className="creative-hero-section border-b border-divider" style={{ padding: '64px 40px' }}>
+        <section className="creative-hero-section border-b border-divider" style={{ padding: 'var(--layout-hero-padding-y) var(--layout-page-gutter)' }}>
           <div ref={eyebrowRef} className="flex items-center" style={{ gap: '10px', marginBottom: '24px' }}>
-            <div className="eyebrow-line" style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
-            <span className="eyebrow-label font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>{copy.eyebrow}</span>
+            <div className="eyebrow-line" style={{ width: '32px', height: '1px', backgroundColor: 'var(--color-red)' }} />
+            <span className="eyebrow-label font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: 'var(--color-red)' }}>{copy.eyebrow}</span>
           </div>
           <GsapReveal>
-            <h1 data-reveal className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '20px' }}>
+            <h1 data-reveal className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: 'var(--color-heading)', lineHeight: 1.05, marginBottom: '20px' }}>
               {copy.heroTitle}
             </h1>
-            <p data-reveal className="font-mono" style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.9, maxWidth: '480px' }}>
+            <p data-reveal className="font-mono" style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: 'var(--color-body)', lineHeight: 1.9, maxWidth: '480px' }}>
               {copy.heroBody}
             </p>
           </GsapReveal>
         </section>
 
-        <section className="creative-section border-b border-divider" style={{ padding: '40px' }}>
+        <section className="creative-section border-b border-divider" style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter)' }}>
           <SectionHeader label={copy.photographyLabel} count={copy.photographyCount} />
-          <div ref={photoGridRef} className="grid grid-cols-2 md:grid-cols-4" style={{ gap: '16px' }}>
+          <div ref={photoGridRef} className="grid grid-cols-2 md:grid-cols-4" style={{ gap: 'var(--layout-card-gap)' }}>
             {cities.map((city) => (
               <CreativeListingCard
                 key={city.slug}
@@ -119,9 +119,9 @@ export function CreativePageClient({
           </div>
         </section>
 
-        <section className="creative-section border-b border-divider" style={{ padding: '40px' }}>
+        <section className="creative-section border-b border-divider" style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter)' }}>
           <SectionHeader label={copy.mixedMediaLabel} count={copy.mixedMediaCount} />
-          <div ref={mixedGridRef} className="grid grid-cols-2 md:grid-cols-3" style={{ gap: '16px' }}>
+          <div ref={mixedGridRef} className="grid grid-cols-2 md:grid-cols-3" style={{ gap: 'var(--layout-card-gap)' }}>
             {mixedMediaProjects.map((project) => (
               <CreativeListingCard
                 key={project.slug}
@@ -137,9 +137,9 @@ export function CreativePageClient({
           </div>
         </section>
 
-        <section className="creative-section" style={{ padding: '40px' }}>
+        <section className="creative-section" style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter)' }}>
           <SectionHeader label={copy.brandingLabel} count={copy.brandingCount} />
-          <div ref={brandingGridRef} className="grid grid-cols-2" style={{ gap: '16px' }}>
+          <div ref={brandingGridRef} className="grid grid-cols-2" style={{ gap: 'var(--layout-card-gap)' }}>
             {brandingProjects.map((project) => (
               <CreativeListingCard
                 key={project.slug}

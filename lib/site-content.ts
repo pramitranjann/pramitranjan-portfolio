@@ -85,6 +85,7 @@ export async function getCaseStudyContent(slug: string) {
   const visibleSlugs = new Set(content.caseStudies.map((item) => item.slug))
   return {
     ...caseStudy,
+    navStyle: content.design.caseStudyNav,
     prev: caseStudy.prev && visibleSlugs.has(caseStudy.prev.slug) ? caseStudy.prev : null,
     next: caseStudy.next && visibleSlugs.has(caseStudy.next.slug) ? caseStudy.next : null,
   }

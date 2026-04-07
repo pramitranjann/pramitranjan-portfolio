@@ -9,6 +9,7 @@
 
   /* Text — WCAG contrast on #0d0d0d bg */
   --color-white: #f5f2ed;     /* 17.3:1 — AAA ✓ */
+  --color-heading: #f5f2ed;
   --color-body: #999999;      /*  6.5:1 — AA  ✓ (all sizes) */
   --color-label: #666666;     /*  3.1:1 — AA  ✓ (large text / decorative only) */
   --color-meta: #444444;      /*  2.0:1 — decorative only, not content */
@@ -46,6 +47,33 @@
   --text-body-lg: 18px;
   --text-body:    16px;
   --text-meta:    14px;
+
+  /* Shared layout + shell */
+  --layout-page-gutter: 40px;
+  --layout-hero-padding-y: 64px;
+  --layout-section-padding-y: 40px;
+  --layout-compact-section-padding-y: 32px;
+  --layout-card-gap: 16px;
+  --layout-nav-padding-y: 24px;
+  --layout-footer-padding-y: 10px;
+
+  --nav-background: rgba(13,13,13,0.85);
+  --nav-border-color: #1f1f1f;
+  --nav-logo-color: #FF3120;
+  --nav-logo-size: 16px;
+  --nav-link-color: #999999;
+  --nav-link-hover-color: #f5f2ed;
+  --nav-link-active-color: #FF3120;
+  --nav-dot-color: #FF3120;
+  --nav-link-size: 13px;
+  --back-link-color: #666666;
+  --reading-track-color: #1f1f1f;
+  --reading-fill-color: #FF3120;
+  --footer-border-color: #1a1a1a;
+  --footer-text-color: #666666;
+  --footer-mark-color: #FF3120;
+  --social-link-color: #888888;
+  --social-link-underline-color: #FF3120;
 }
 
 html, body {
@@ -173,7 +201,7 @@ body.carousel-reengaging main {
 .nav-link {
   display: inline-flex;
   align-items: center;
-  color: #999999;
+  color: var(--nav-link-color);
   transition: color 0.2s ease;
   text-decoration: none;
 }
@@ -183,19 +211,19 @@ body.carousel-reengaging main {
   width: 0;
   height: 6px;
   border-radius: 3px;
-  background: #FF3120;
+  background: var(--nav-dot-color);
   transition: width 0.2s ease, margin-right 0.2s ease;
   margin-right: 0;
 }
 .nav-link:hover {
-  color: #f5f2ed;
+  color: var(--nav-link-hover-color);
 }
 .nav-link:hover::before {
   width: 6px;
   margin-right: 6px;
 }
 .nav-link.active {
-  color: #FF3120;
+  color: var(--nav-link-active-color);
 }
 .nav-link.active::before {
   width: 6px;
@@ -205,7 +233,7 @@ body.carousel-reengaging main {
 /* Social link — underline draws in from left */
 .social-link {
   position: relative;
-  color: #888888;
+  color: var(--social-link-color);
   text-decoration: none;
   transition: color 0.2s ease;
 }
@@ -216,13 +244,13 @@ body.carousel-reengaging main {
   left: 0;
   right: 0;
   height: 1px;
-  background: #FF3120;
+  background: var(--social-link-underline-color);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.25s ease;
 }
 .social-link:hover {
-  color: #FF3120;
+  color: var(--social-link-underline-color);
 }
 .social-link:hover::after {
   transform: scaleX(1);

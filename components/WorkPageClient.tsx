@@ -84,23 +84,23 @@ export function WorkPageClient({
     <>
       <Nav />
       <main style={{ paddingTop: '57px' }}>
-        <section className="work-hero-section border-b border-divider" style={{ padding: '64px 40px' }}>
+        <section className="work-hero-section border-b border-divider" style={{ padding: 'var(--layout-hero-padding-y) var(--layout-page-gutter)' }}>
           <div ref={eyebrowRef} className="flex items-center" style={{ gap: '10px', marginBottom: '24px' }}>
-            <div className="eyebrow-line" style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
-            <span className="eyebrow-label font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120' }}>{copy.eyebrow}</span>
+            <div className="eyebrow-line" style={{ width: '32px', height: '1px', backgroundColor: 'var(--color-red)' }} />
+            <span className="eyebrow-label font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: 'var(--color-red)' }}>{copy.eyebrow}</span>
           </div>
           <GsapReveal>
-            <h1 data-reveal className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '20px' }}>
+            <h1 data-reveal className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: 'var(--color-heading)', lineHeight: 1.05, marginBottom: '20px' }}>
               {heroTitle}
             </h1>
-            <p data-reveal className="font-mono" style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.9, maxWidth: '480px' }}>
+            <p data-reveal className="font-mono" style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: 'var(--color-body)', lineHeight: 1.9, maxWidth: '480px' }}>
               {heroBody}
             </p>
           </GsapReveal>
         </section>
 
-        <section className="work-grid-section" style={{ padding: '40px' }}>
-          <div ref={gridRef} className="grid grid-cols-2 md:grid-cols-4" style={{ gap: '16px' }}>
+        <section className="work-grid-section" style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter)' }}>
+          <div ref={gridRef} className="grid grid-cols-2 md:grid-cols-4" style={{ gap: 'var(--layout-card-gap)' }}>
             {projects.map((project) => (
               <ProjectCard
                 key={`${project.href}-${project.title}`}
@@ -110,6 +110,10 @@ export function WorkPageClient({
                 titleSize={cardStyle.titleSize}
                 metaSize={cardStyle.metaSize}
                 cardPadding={cardStyle.cardPadding}
+                imageFit={cardStyle.imageFit}
+                imageBackground={cardStyle.imageBackground}
+                imageBorderColor={cardStyle.imageBorderColor}
+                imageBorderWidth={cardStyle.imageBorderWidth}
               />
             ))}
             <div className="flex items-center justify-center" style={{ backgroundColor: '#1c1c1c', border: '1px solid #2a2a2a', padding: '16px', minHeight: '160px' }}>

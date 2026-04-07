@@ -78,43 +78,43 @@ function SidebarVariant({
   styleSettings?: ListeningCardStyleSettings
 }) {
   return (
-    <div style={{ background: '#111111', border: '1px solid #1f1f1f', padding: styleSettings?.cardPadding ?? '14px' }}>
+    <div style={{ background: styleSettings?.cardBackground ?? '#111111', border: `1px solid ${styleSettings?.cardBorderColor ?? '#1f1f1f'}`, padding: styleSettings?.cardPadding ?? '14px' }}>
       <div className="flex items-center" style={{ gap: '8px', marginBottom: '12px' }}>
         <div style={{
           width: '6px', height: '6px', borderRadius: '50%',
-          background: track.isPlaying ? '#FF3120' : '#444444',
+          background: track.isPlaying ? (styleSettings?.activeDotColor ?? '#FF3120') : (styleSettings?.idleDotColor ?? '#444444'),
           animation: track.isPlaying ? 'spotify-pulse 1.6s ease infinite' : 'none',
         }} />
-        <span className="font-mono" style={{ fontSize: styleSettings?.labelSize ?? '11px', letterSpacing: '0.14em', color: '#666666' }}>
+        <span className="font-mono" style={{ fontSize: styleSettings?.labelSize ?? '11px', letterSpacing: '0.14em', color: styleSettings?.labelColor ?? '#666666' }}>
           {track.isPlaying ? 'NOW PLAYING' : restingLabel ?? 'LAST PLAYED'}
         </span>
       </div>
       <div className="flex" style={{ gap: '10px', alignItems: 'center' }}>
         {track.albumArt ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={track.albumArt} alt={track.title} style={{ width: styleSettings?.artworkSize ?? '36px', height: styleSettings?.artworkSize ?? '36px', objectFit: 'cover', border: '1px solid #2a2a2a', flexShrink: 0 }} />
+          <img src={track.albumArt} alt={track.title} style={{ width: styleSettings?.artworkSize ?? '36px', height: styleSettings?.artworkSize ?? '36px', objectFit: 'cover', border: `1px solid ${styleSettings?.artworkBorderColor ?? '#2a2a2a'}`, flexShrink: 0 }} />
         ) : (
-          <div style={{ width: styleSettings?.artworkSize ?? '36px', height: styleSettings?.artworkSize ?? '36px', background: '#1f1f1f', border: '1px solid #2a2a2a', flexShrink: 0 }} />
+          <div style={{ width: styleSettings?.artworkSize ?? '36px', height: styleSettings?.artworkSize ?? '36px', background: styleSettings?.progressTrackColor ?? '#1f1f1f', border: `1px solid ${styleSettings?.artworkBorderColor ?? '#2a2a2a'}`, flexShrink: 0 }} />
         )}
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div className="font-serif" style={{ fontSize: styleSettings?.titleSize ?? '15px', fontStyle: 'italic', color: '#f5f2ed', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+          <div className="font-serif" style={{ fontSize: styleSettings?.titleSize ?? '15px', fontStyle: 'italic', color: styleSettings?.titleColor ?? '#f5f2ed', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
             {track.title}
           </div>
-          <div className="font-mono" style={{ fontSize: styleSettings?.artistSize ?? '10px', letterSpacing: '0.1em', color: '#999999', marginTop: '3px' }}>
+          <div className="font-mono" style={{ fontSize: styleSettings?.artistSize ?? '10px', letterSpacing: '0.1em', color: styleSettings?.artistColor ?? '#999999', marginTop: '3px' }}>
             {track.artist.toUpperCase()}
           </div>
         </div>
       </div>
       {track.isPlaying && (
         <>
-          <div style={{ marginTop: '10px', height: '1px', background: '#1f1f1f', position: 'relative' }}>
-            <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${pct}%`, background: '#FF3120' }} />
+          <div style={{ marginTop: '10px', height: '1px', background: styleSettings?.progressTrackColor ?? '#1f1f1f', position: 'relative' }}>
+            <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${pct}%`, background: styleSettings?.progressFillColor ?? '#FF3120' }} />
           </div>
           <div className="flex justify-between" style={{ marginTop: '4px' }}>
-            <span className="font-mono" style={{ fontSize: styleSettings?.progressMetaSize ?? '7px', letterSpacing: '0.1em', color: '#444444' }}>
+            <span className="font-mono" style={{ fontSize: styleSettings?.progressMetaSize ?? '7px', letterSpacing: '0.1em', color: styleSettings?.progressMetaColor ?? '#444444' }}>
               {progress ? formatMs(progress) : '0:00'}
             </span>
-            <span className="font-mono" style={{ fontSize: styleSettings?.progressMetaSize ?? '7px', letterSpacing: '0.1em', color: '#444444' }}>
+            <span className="font-mono" style={{ fontSize: styleSettings?.progressMetaSize ?? '7px', letterSpacing: '0.1em', color: styleSettings?.progressMetaColor ?? '#444444' }}>
               {track.duration ? formatMs(track.duration) : '0:00'}
             </span>
           </div>
@@ -136,30 +136,30 @@ function CellVariant({
   styleSettings?: ListeningCardStyleSettings
 }) {
   return (
-    <div style={{ background: '#0d0d0d', padding: styleSettings?.cardPadding ?? '14px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+    <div style={{ background: styleSettings?.cardBackground ?? '#0d0d0d', padding: styleSettings?.cardPadding ?? '14px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: `1px solid ${styleSettings?.cardBorderColor ?? 'transparent'}` }}>
       <div>
         <div className="flex items-center" style={{ gap: '8px', marginBottom: '12px' }}>
           <div style={{
             width: '6px', height: '6px', borderRadius: '50%',
-            background: track.isPlaying ? '#FF3120' : '#444444',
+            background: track.isPlaying ? (styleSettings?.activeDotColor ?? '#FF3120') : (styleSettings?.idleDotColor ?? '#444444'),
             animation: track.isPlaying ? 'spotify-pulse 1.6s ease infinite' : 'none',
           }} />
-          <span className="font-mono" style={{ fontSize: styleSettings?.labelSize ?? '11px', letterSpacing: '0.14em', color: '#666666' }}>
+          <span className="font-mono" style={{ fontSize: styleSettings?.labelSize ?? '11px', letterSpacing: '0.14em', color: styleSettings?.labelColor ?? '#666666' }}>
             {track.isPlaying ? 'NOW PLAYING' : restingLabel ?? 'LAST PLAYED'}
           </span>
         </div>
         <div className="flex" style={{ gap: '12px', alignItems: 'center' }}>
           {track.albumArt ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={track.albumArt} alt={track.title} style={{ width: styleSettings?.artworkSize ?? '36px', height: styleSettings?.artworkSize ?? '36px', objectFit: 'cover', border: '1px solid #2a2a2a', flexShrink: 0 }} />
+            <img src={track.albumArt} alt={track.title} style={{ width: styleSettings?.artworkSize ?? '36px', height: styleSettings?.artworkSize ?? '36px', objectFit: 'cover', border: `1px solid ${styleSettings?.artworkBorderColor ?? '#2a2a2a'}`, flexShrink: 0 }} />
           ) : (
-            <div style={{ width: styleSettings?.artworkSize ?? '36px', height: styleSettings?.artworkSize ?? '36px', background: '#1f1f1f', border: '1px solid #2a2a2a', flexShrink: 0 }} />
+            <div style={{ width: styleSettings?.artworkSize ?? '36px', height: styleSettings?.artworkSize ?? '36px', background: styleSettings?.progressTrackColor ?? '#1f1f1f', border: `1px solid ${styleSettings?.artworkBorderColor ?? '#2a2a2a'}`, flexShrink: 0 }} />
           )}
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div className="font-serif" style={{ fontSize: styleSettings?.titleSize ?? '15px', fontStyle: 'italic', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginBottom: '6px' }}>
+            <div className="font-serif" style={{ fontSize: styleSettings?.titleSize ?? '15px', fontStyle: 'italic', fontWeight: 400, color: styleSettings?.titleColor ?? '#f5f2ed', lineHeight: 1.3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginBottom: '6px' }}>
               {track.title}
             </div>
-            <div className="font-mono" style={{ fontSize: styleSettings?.artistSize ?? '10px', letterSpacing: '0.1em', color: '#999999', lineHeight: 1.5 }}>
+            <div className="font-mono" style={{ fontSize: styleSettings?.artistSize ?? '10px', letterSpacing: '0.1em', color: styleSettings?.artistColor ?? '#999999', lineHeight: 1.5 }}>
               {track.artist.toUpperCase()}
             </div>
           </div>
@@ -167,8 +167,8 @@ function CellVariant({
       </div>
       {track.isPlaying ? (
         <div style={{ marginTop: '12px' }}>
-          <div style={{ height: '1px', background: '#1f1f1f', position: 'relative' }}>
-            <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${pct}%`, background: '#FF3120' }} />
+          <div style={{ height: '1px', background: styleSettings?.progressTrackColor ?? '#1f1f1f', position: 'relative' }}>
+            <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${pct}%`, background: styleSettings?.progressFillColor ?? '#FF3120' }} />
           </div>
         </div>
       ) : null}

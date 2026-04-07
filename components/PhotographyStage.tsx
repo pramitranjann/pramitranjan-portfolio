@@ -39,26 +39,26 @@ export function PhotographyStage() {
       gridTemplateColumns: '1fr 1fr',
       minHeight: '480px',
       alignItems: 'stretch',
-      padding: '64px 40px',
+      padding: 'var(--layout-hero-padding-y) var(--layout-page-gutter)',
       gap: '56px',
     }}>
       {/* Text left */}
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
         <div>
           <div className="flex items-center" style={{ gap: '10px', marginBottom: '22px' }}>
-            <div style={{ width: '32px', height: '1px', backgroundColor: '#FF3120' }} />
-            <span className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.18em', color: '#FF3120' }}>{copy.photographyEyebrow}</span>
+            <div style={{ width: '32px', height: '1px', backgroundColor: 'var(--color-red)' }} />
+            <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: 'var(--color-red)' }}>{copy.photographyEyebrow}</span>
           </div>
           <h2
             className="font-serif"
-            style={{ fontSize: 'var(--text-h2)', fontWeight: 400, fontStyle: 'italic', color: '#f5f2ed', lineHeight: 1.1, marginBottom: '24px' }}
+            style={{ fontSize: 'var(--text-h2)', fontWeight: 400, fontStyle: 'italic', color: 'var(--color-heading)', lineHeight: 1.1, marginBottom: '24px' }}
             dangerouslySetInnerHTML={{ __html: copy.photographyTitleHtml }}
           />
-          <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.06em', color: '#999999', lineHeight: 1.9, maxWidth: '340px' }}>
+          <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.06em', color: 'var(--color-body)', lineHeight: 1.9, maxWidth: '340px' }}>
             {copy.photographyBody}
           </p>
         </div>
-        <Link href="/creative/photography" className="font-mono" style={{ display: 'inline-block', marginTop: '24px', fontSize: '10px', color: '#FF3120', letterSpacing: '0.12em', textDecoration: 'none' }}>
+        <Link href="/creative/photography" className="font-mono" style={{ display: 'inline-block', marginTop: '24px', fontSize: 'var(--text-meta)', color: 'var(--color-red)', letterSpacing: '0.12em', textDecoration: 'none' }}>
           {copy.photographyCtaLabel} →
         </Link>
       </div>
@@ -83,7 +83,7 @@ export function PhotographyStage() {
                   className="font-mono"
                   style={{
                     fontSize: '10px',
-                    color: '#FF3120',
+                    color: 'var(--color-red)',
                     textAlign: 'center',
                     marginTop: '4px',
                     height: '18px',

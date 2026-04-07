@@ -27,16 +27,16 @@ export function SelectedWork({ content, cardStyle }: { content: HomeSection; car
 
   return (
     <section>
-      <div style={{ padding: '40px 24px 24px' }}>
+      <div style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter) 24px' }}>
         <h2
           className="font-serif"
-          style={{ fontSize: 'var(--text-h2)', fontWeight: 400, color: '#FF3120', lineHeight: 1.1, marginBottom: '12px' }}
+          style={{ fontSize: 'var(--text-h2)', fontWeight: 400, color: 'var(--color-red)', lineHeight: 1.1, marginBottom: '12px' }}
         >
           {content.heading}
         </h2>
         <p
           className="font-mono"
-          style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.7, maxWidth: '480px' }}
+          style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: 'var(--color-body)', lineHeight: 1.7, maxWidth: '480px' }}
         >
           {content.body}
         </p>
@@ -45,7 +45,7 @@ export function SelectedWork({ content, cardStyle }: { content: HomeSection; car
       <div
         ref={gridRef}
         className="card-grid grid grid-cols-2 md:grid-cols-4"
-        style={{ gap: '16px', padding: '0 24px 40px' }}
+        style={{ gap: 'var(--layout-card-gap)', padding: `0 var(--layout-page-gutter) var(--layout-section-padding-y)` }}
       >
         {content.items.map((p) => (
           <div key={p.title} className="reveal">
@@ -56,6 +56,10 @@ export function SelectedWork({ content, cardStyle }: { content: HomeSection; car
               titleSize={cardStyle.titleSize}
               metaSize={cardStyle.metaSize}
               cardPadding={cardStyle.cardPadding}
+              imageFit={cardStyle.imageFit}
+              imageBackground={cardStyle.imageBackground}
+              imageBorderColor={cardStyle.imageBorderColor}
+              imageBorderWidth={cardStyle.imageBorderWidth}
             />
           </div>
         ))}

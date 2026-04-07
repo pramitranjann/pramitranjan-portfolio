@@ -14,12 +14,15 @@ import type {
   CaseStudyMediaSettings,
   CaseStudyMediaSlotSettings,
   CaseStudySection,
+  CaseStudyNavStyleSettings,
   EntryItem,
   GalleryStyleSettings,
   HeroStageCopy,
+  LayoutSettings,
   ListeningCardStyleSettings,
   LinkItem,
   MotionSettings,
+  NavigationStyleSettings,
   NowCard,
   NowCardStyleSettings,
   PhotographyCardStyleSettings,
@@ -27,6 +30,7 @@ import type {
   PhotographyGallery,
   ProjectLink,
   SiteContent,
+  TypographySettings,
   WorkProject,
 } from '@/lib/site-content-schema'
 
@@ -1096,19 +1100,19 @@ git push`
 
         <fieldset disabled={!editingEnabled || saving || !localWriteEnabled} style={{ display: 'grid', gap: '24px', opacity: !editingEnabled || !localWriteEnabled ? 0.58 : 1, transition: 'opacity 0.18s ease', minWidth: 0 }}>
           {activePage === 'homepage' ? (
-            <HomepageEditor content={content} updateSection={updateSection} />
+            <HomepageEditor content={content} updateSection={updateSection} localWriteEnabled={localWriteEnabled} />
           ) : null}
           {activePage === 'about-page' ? (
             <AboutPageEditor content={content} updateSection={updateSection} />
           ) : null}
           {activePage === 'work-page' ? (
-            <WorkPageEditor content={content} updateSection={updateSection} />
+            <WorkPageEditor content={content} updateSection={updateSection} localWriteEnabled={localWriteEnabled} />
           ) : null}
           {activePage === 'creative-page' ? (
             <CreativePageEditor content={content} updateSection={updateSection} />
           ) : null}
           {activePage === 'photography-page' ? (
-            <PhotographyPageEditor content={content} updateSection={updateSection} />
+            <PhotographyPageEditor content={content} updateSection={updateSection} localWriteEnabled={localWriteEnabled} />
           ) : null}
           {activePage === 'case-study-ui' ? (
             <CaseStudyUiEditor content={content} updateSection={updateSection} />
@@ -1137,9 +1141,11 @@ git push`
 function HomepageEditor({
   content,
   updateSection,
+  localWriteEnabled,
 }: {
   content: SiteContent
   updateSection: <K extends keyof SiteContent>(key: K, value: SiteContent[K]) => void
+  localWriteEnabled: boolean
 }) {
   return (
     <>
@@ -1177,6 +1183,7 @@ function HomepageEditor({
         <WorkProjectListEditor
           title="Selected Work Items"
           items={content.home.selectedWork.items}
+          localWriteEnabled={localWriteEnabled}
           onChange={(items) => updateSection('home', {
             ...content.home,
             selectedWork: { ...content.home.selectedWork, items },
@@ -1208,6 +1215,7 @@ function HomepageEditor({
         <WorkProjectListEditor
           title="More Work Items"
           items={content.home.moreWork.items}
+          localWriteEnabled={localWriteEnabled}
           onChange={(items) => updateSection('home', {
             ...content.home,
             moreWork: { ...content.home.moreWork, items },
@@ -1564,9 +1572,11 @@ function AboutPageEditor({
 function WorkPageEditor({
   content,
   updateSection,
+  localWriteEnabled,
 }: {
   content: SiteContent
   updateSection: <K extends keyof SiteContent>(key: K, value: SiteContent[K]) => void
+  localWriteEnabled: boolean
 }) {
   return (
     <>
@@ -1598,6 +1608,7 @@ function WorkPageEditor({
         <WorkProjectListEditor
           title="Work Projects"
           items={content.workPage.projects}
+          localWriteEnabled={localWriteEnabled}
           onChange={(items) => updateSection('workPage', { ...content.workPage, projects: items })}
         />
         <Field label="Empty State Label">
@@ -1766,9 +1777,11 @@ function CreativePageEditor({
 function PhotographyPageEditor({
   content,
   updateSection,
+  localWriteEnabled,
 }: {
   content: SiteContent
   updateSection: <K extends keyof SiteContent>(key: K, value: SiteContent[K]) => void
+  localWriteEnabled: boolean
 }) {
   return (
     <SectionFrame title="Photography Page">
@@ -1781,6 +1794,7 @@ function PhotographyPageEditor({
       </Field>
       <PhotographyCityListEditor
         items={content.photography.cities}
+        localWriteEnabled={localWriteEnabled}
         onChange={(items) => updateSection('photography', { ...content.photography, cities: items })}
       />
       <PhotographyGalleryListEditor
@@ -1924,14 +1938,35 @@ function DesignSystemEditor({
         </div>
       </SectionFrame>
 
-      <SectionFrame title="Global Card Controls">
+      <SectionFrame title="Global Layout Controls">
+        <LayoutSettingsEditor
+          settings={content.design.layout}
+          onChange={(layout) => updateSection('design', { ...content.design, layout })}
+        />
+      </SectionFrame>
+
+      <SectionFrame title="Typography Controls">
+        <TypographySettingsEditor
+          settings={content.design.typography}
+          onChange={(typography) => updateSection('design', { ...content.design, typography })}
+        />
+      </SectionFrame>
+
+      <SectionFrame title="Navigation + Link Controls">
+        <NavigationSettingsEditor
+          settings={content.design.navigation}
+          onChange={(navigation) => updateSection('design', { ...content.design, navigation })}
+        />
+      </SectionFrame>
+
+      <SectionFrame title="Card & Widget Controls">
         <CardStyleEditor
-          title="Supporting Cards"
+          title="Homepage + Work Cards"
           styleSettings={content.design.supportingCards}
           onChange={(styleSettings) => updateSection('design', { ...content.design, supportingCards: styleSettings })}
         />
         <PhotographyCardStyleEditor
-          title="Photography Cards"
+          title="Creative + Photography Cards"
           styleSettings={content.design.photographyCards}
           onChange={(styleSettings) => updateSection('design', { ...content.design, photographyCards: styleSettings })}
         />
@@ -1944,9 +1979,13 @@ function DesignSystemEditor({
           onChange={(styleSettings) => updateSection('design', { ...content.design, nowCards: styleSettings })}
         />
         <ListeningCardStyleEditor
-          title="Listening Cards"
+          title="Spotify Widget"
           styleSettings={content.design.listeningCard}
           onChange={(styleSettings) => updateSection('design', { ...content.design, listeningCard: styleSettings })}
+        />
+        <CaseStudyNavStyleEditor
+          settings={content.design.caseStudyNav}
+          onChange={(caseStudyNav) => updateSection('design', { ...content.design, caseStudyNav })}
         />
         <AudioSettingsEditor
           settings={content.design.audio}
@@ -3091,10 +3130,12 @@ function LinkItemListEditor({
 function WorkProjectListEditor({
   title,
   items,
+  localWriteEnabled,
   onChange,
 }: {
   title: string
   items: WorkProject[]
+  localWriteEnabled: boolean
   onChange: (items: WorkProject[]) => void
 }) {
   return (
@@ -3127,9 +3168,12 @@ function WorkProjectListEditor({
           <Field label="Href">
             <input value={item.href} onChange={(event) => onChange(updateAt(items, index, { ...item, href: event.target.value }))} style={inputStyle()} />
           </Field>
-          <Field label="Cover Image Path">
-            <input value={item.cover ?? ''} onChange={(event) => onChange(updateAt(items, index, { ...item, cover: event.target.value || undefined }))} style={inputStyle()} />
-          </Field>
+          <SourcePathField
+            label="Cover Image Path"
+            value={item.cover ?? ''}
+            localWriteEnabled={localWriteEnabled}
+            onChange={(value) => onChange(updateAt(items, index, { ...item, cover: value || undefined }))}
+          />
           <Field label="Cover Object Position (e.g. center, center top, 50% 20%)">
             <input value={item.coverPosition ?? ''} onChange={(event) => onChange(updateAt(items, index, { ...item, coverPosition: event.target.value || undefined }))} style={inputStyle()} />
           </Field>
@@ -3244,9 +3288,11 @@ function NowCardListEditor({ items, onChange }: { items: NowCard[]; onChange: (i
 
 function PhotographyCityListEditor({
   items,
+  localWriteEnabled,
   onChange,
 }: {
   items: PhotographyCity[]
+  localWriteEnabled: boolean
   onChange: (items: PhotographyCity[]) => void
 }) {
   return (
@@ -3276,9 +3322,12 @@ function PhotographyCityListEditor({
           <Field label="Description">
             <textarea value={item.desc} onChange={(event) => onChange(updateAt(items, index, { ...item, desc: event.target.value }))} style={inputStyle(true)} />
           </Field>
-          <Field label="Cover Image Path">
-            <input value={item.cover} onChange={(event) => onChange(updateAt(items, index, { ...item, cover: event.target.value }))} style={inputStyle()} />
-          </Field>
+          <SourcePathField
+            label="Cover Image Path"
+            value={item.cover}
+            localWriteEnabled={localWriteEnabled}
+            onChange={(value) => onChange(updateAt(items, index, { ...item, cover: value }))}
+          />
           <Field label="Object Position (e.g. center, center top, 50% 20%)">
             <input value={item.imagePosition ?? ''} onChange={(event) => onChange(updateAt(items, index, { ...item, imagePosition: event.target.value || undefined }))} style={inputStyle()} />
           </Field>
@@ -3417,6 +3466,21 @@ function CardStyleEditor({
       <Field label="Image Ratio">
         <input value={styleSettings.imageRatio} onChange={(event) => onChange({ ...styleSettings, imageRatio: event.target.value })} style={inputStyle()} />
       </Field>
+      <Field label="Image Fit">
+        <select value={styleSettings.imageFit} onChange={(event) => onChange({ ...styleSettings, imageFit: event.target.value as CardStyleSettings['imageFit'] })} style={inputStyle()}>
+          <option value="cover">cover</option>
+          <option value="contain">contain</option>
+        </select>
+      </Field>
+      <Field label="Image Background">
+        <input value={styleSettings.imageBackground} onChange={(event) => onChange({ ...styleSettings, imageBackground: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Image Border Color">
+        <input value={styleSettings.imageBorderColor} onChange={(event) => onChange({ ...styleSettings, imageBorderColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Image Border Width">
+        <input value={styleSettings.imageBorderWidth} onChange={(event) => onChange({ ...styleSettings, imageBorderWidth: event.target.value })} style={inputStyle()} />
+      </Field>
       <Field label="Card Padding">
         <input value={styleSettings.cardPadding} onChange={(event) => onChange({ ...styleSettings, cardPadding: event.target.value })} style={inputStyle()} />
       </Field>
@@ -3446,6 +3510,21 @@ function PhotographyCardStyleEditor({
       </Field>
       <Field label="Image Aspect Ratio">
         <input value={styleSettings.imageAspectRatio} onChange={(event) => onChange({ ...styleSettings, imageAspectRatio: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Image Fit">
+        <select value={styleSettings.imageFit} onChange={(event) => onChange({ ...styleSettings, imageFit: event.target.value as PhotographyCardStyleSettings['imageFit'] })} style={inputStyle()}>
+          <option value="cover">cover</option>
+          <option value="contain">contain</option>
+        </select>
+      </Field>
+      <Field label="Image Background">
+        <input value={styleSettings.imageBackground} onChange={(event) => onChange({ ...styleSettings, imageBackground: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Image Border Color">
+        <input value={styleSettings.imageBorderColor} onChange={(event) => onChange({ ...styleSettings, imageBorderColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Image Border Width">
+        <input value={styleSettings.imageBorderWidth} onChange={(event) => onChange({ ...styleSettings, imageBorderWidth: event.target.value })} style={inputStyle()} />
       </Field>
       <Field label="Card Padding">
         <input value={styleSettings.cardPadding} onChange={(event) => onChange({ ...styleSettings, cardPadding: event.target.value })} style={inputStyle()} />
@@ -3538,6 +3617,226 @@ function ListeningCardStyleEditor({
       </Field>
       <Field label="Progress Meta Size">
         <input value={styleSettings.progressMetaSize} onChange={(event) => onChange({ ...styleSettings, progressMetaSize: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Card Background">
+        <input value={styleSettings.cardBackground} onChange={(event) => onChange({ ...styleSettings, cardBackground: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Card Border Color">
+        <input value={styleSettings.cardBorderColor} onChange={(event) => onChange({ ...styleSettings, cardBorderColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Label Color">
+        <input value={styleSettings.labelColor} onChange={(event) => onChange({ ...styleSettings, labelColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Track Title Color">
+        <input value={styleSettings.titleColor} onChange={(event) => onChange({ ...styleSettings, titleColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Artist Color">
+        <input value={styleSettings.artistColor} onChange={(event) => onChange({ ...styleSettings, artistColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Idle Dot Color">
+        <input value={styleSettings.idleDotColor} onChange={(event) => onChange({ ...styleSettings, idleDotColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Active Dot Color">
+        <input value={styleSettings.activeDotColor} onChange={(event) => onChange({ ...styleSettings, activeDotColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Artwork Border Color">
+        <input value={styleSettings.artworkBorderColor} onChange={(event) => onChange({ ...styleSettings, artworkBorderColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Progress Track Color">
+        <input value={styleSettings.progressTrackColor} onChange={(event) => onChange({ ...styleSettings, progressTrackColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Progress Fill Color">
+        <input value={styleSettings.progressFillColor} onChange={(event) => onChange({ ...styleSettings, progressFillColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Progress Meta Color">
+        <input value={styleSettings.progressMetaColor} onChange={(event) => onChange({ ...styleSettings, progressMetaColor: event.target.value })} style={inputStyle()} />
+      </Field>
+    </div>
+  )
+}
+
+function CaseStudyNavStyleEditor({
+  settings,
+  onChange,
+}: {
+  settings: CaseStudyNavStyleSettings
+  onChange: (value: CaseStudyNavStyleSettings) => void
+}) {
+  return (
+    <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
+      <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.1em' }}>
+        CASE STUDY NAV
+      </div>
+      <Field label="Nav Background">
+        <input value={settings.background} onChange={(event) => onChange({ ...settings, background: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Border Color">
+        <input value={settings.borderColor} onChange={(event) => onChange({ ...settings, borderColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Divider Color">
+        <input value={settings.dividerColor} onChange={(event) => onChange({ ...settings, dividerColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Active Text Color">
+        <input value={settings.activeTextColor} onChange={(event) => onChange({ ...settings, activeTextColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Inactive Text Color">
+        <input value={settings.inactiveTextColor} onChange={(event) => onChange({ ...settings, inactiveTextColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Active Background">
+        <input value={settings.activeBackground} onChange={(event) => onChange({ ...settings, activeBackground: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Active Indicator Color">
+        <input value={settings.activeIndicatorColor} onChange={(event) => onChange({ ...settings, activeIndicatorColor: event.target.value })} style={inputStyle()} />
+      </Field>
+    </div>
+  )
+}
+
+function LayoutSettingsEditor({
+  settings,
+  onChange,
+}: {
+  settings: LayoutSettings
+  onChange: (value: LayoutSettings) => void
+}) {
+  return (
+    <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
+      <Field label="Page Gutter">
+        <input value={settings.pageGutter} onChange={(event) => onChange({ ...settings, pageGutter: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Hero Padding Y">
+        <input value={settings.heroPaddingY} onChange={(event) => onChange({ ...settings, heroPaddingY: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Section Padding Y">
+        <input value={settings.sectionPaddingY} onChange={(event) => onChange({ ...settings, sectionPaddingY: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Compact Section Padding Y">
+        <input value={settings.compactSectionPaddingY} onChange={(event) => onChange({ ...settings, compactSectionPaddingY: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Card Gap">
+        <input value={settings.cardGap} onChange={(event) => onChange({ ...settings, cardGap: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Nav Padding Y">
+        <input value={settings.navPaddingY} onChange={(event) => onChange({ ...settings, navPaddingY: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Footer Padding Y">
+        <input value={settings.footerPaddingY} onChange={(event) => onChange({ ...settings, footerPaddingY: event.target.value })} style={inputStyle()} />
+      </Field>
+    </div>
+  )
+}
+
+function TypographySettingsEditor({
+  settings,
+  onChange,
+}: {
+  settings: TypographySettings
+  onChange: (value: TypographySettings) => void
+}) {
+  return (
+    <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
+      <Field label="Display Size">
+        <input value={settings.displaySize} onChange={(event) => onChange({ ...settings, displaySize: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Hero Size">
+        <input value={settings.heroSize} onChange={(event) => onChange({ ...settings, heroSize: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="H1 Size">
+        <input value={settings.h1Size} onChange={(event) => onChange({ ...settings, h1Size: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="H2 Size">
+        <input value={settings.h2Size} onChange={(event) => onChange({ ...settings, h2Size: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="H3 Size">
+        <input value={settings.h3Size} onChange={(event) => onChange({ ...settings, h3Size: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Eyebrow Size">
+        <input value={settings.eyebrowSize} onChange={(event) => onChange({ ...settings, eyebrowSize: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Body Large Size">
+        <input value={settings.bodyLgSize} onChange={(event) => onChange({ ...settings, bodyLgSize: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Body Size">
+        <input value={settings.bodySize} onChange={(event) => onChange({ ...settings, bodySize: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Meta Size">
+        <input value={settings.metaSize} onChange={(event) => onChange({ ...settings, metaSize: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Heading Color">
+        <input value={settings.headingColor} onChange={(event) => onChange({ ...settings, headingColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Body Color">
+        <input value={settings.bodyColor} onChange={(event) => onChange({ ...settings, bodyColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Label Color">
+        <input value={settings.labelColor} onChange={(event) => onChange({ ...settings, labelColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Accent Color">
+        <input value={settings.accentColor} onChange={(event) => onChange({ ...settings, accentColor: event.target.value })} style={inputStyle()} />
+      </Field>
+    </div>
+  )
+}
+
+function NavigationSettingsEditor({
+  settings,
+  onChange,
+}: {
+  settings: NavigationStyleSettings
+  onChange: (value: NavigationStyleSettings) => void
+}) {
+  return (
+    <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
+      <Field label="Nav Background">
+        <input value={settings.navBackground} onChange={(event) => onChange({ ...settings, navBackground: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Nav Border Color">
+        <input value={settings.navBorderColor} onChange={(event) => onChange({ ...settings, navBorderColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Nav Logo Color">
+        <input value={settings.navLogoColor} onChange={(event) => onChange({ ...settings, navLogoColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Nav Logo Size">
+        <input value={settings.navLogoSize} onChange={(event) => onChange({ ...settings, navLogoSize: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Nav Link Color">
+        <input value={settings.navLinkColor} onChange={(event) => onChange({ ...settings, navLinkColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Nav Link Hover Color">
+        <input value={settings.navLinkHoverColor} onChange={(event) => onChange({ ...settings, navLinkHoverColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Nav Link Active Color">
+        <input value={settings.navLinkActiveColor} onChange={(event) => onChange({ ...settings, navLinkActiveColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Nav Dot Color">
+        <input value={settings.navDotColor} onChange={(event) => onChange({ ...settings, navDotColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Nav Link Size">
+        <input value={settings.navLinkSize} onChange={(event) => onChange({ ...settings, navLinkSize: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Back Link Color">
+        <input value={settings.backLinkColor} onChange={(event) => onChange({ ...settings, backLinkColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Reading Track Color">
+        <input value={settings.readingTrackColor} onChange={(event) => onChange({ ...settings, readingTrackColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Reading Fill Color">
+        <input value={settings.readingFillColor} onChange={(event) => onChange({ ...settings, readingFillColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Footer Border Color">
+        <input value={settings.footerBorderColor} onChange={(event) => onChange({ ...settings, footerBorderColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Footer Text Color">
+        <input value={settings.footerTextColor} onChange={(event) => onChange({ ...settings, footerTextColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Footer Mark Color">
+        <input value={settings.footerMarkColor} onChange={(event) => onChange({ ...settings, footerMarkColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Social Link Color">
+        <input value={settings.socialLinkColor} onChange={(event) => onChange({ ...settings, socialLinkColor: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Social Underline Color">
+        <input value={settings.socialLinkUnderlineColor} onChange={(event) => onChange({ ...settings, socialLinkUnderlineColor: event.target.value })} style={inputStyle()} />
       </Field>
     </div>
   )

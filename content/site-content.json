@@ -482,13 +482,21 @@
       "titleSize": "var(--text-body)",
       "metaSize": "var(--text-meta)",
       "imageRatio": "4 / 3",
-      "cardPadding": "16px"
+      "cardPadding": "16px",
+      "imageFit": "cover",
+      "imageBackground": "#252525",
+      "imageBorderColor": "#333333",
+      "imageBorderWidth": "1px"
     },
     "photographyCards": {
       "titleSize": "var(--text-body)",
       "bodySize": "var(--text-meta)",
       "imageAspectRatio": "3 / 2",
-      "cardPadding": "16px"
+      "cardPadding": "16px",
+      "imageFit": "cover",
+      "imageBackground": "#252525",
+      "imageBorderColor": "#333333",
+      "imageBorderWidth": "1px"
     },
     "gallery": {
       "imageAspectRatio": "2 / 3",
@@ -507,7 +515,70 @@
       "artistSize": "10px",
       "cardPadding": "14px",
       "artworkSize": "36px",
-      "progressMetaSize": "7px"
+      "progressMetaSize": "7px",
+      "cardBackground": "#111111",
+      "cardBorderColor": "#1f1f1f",
+      "labelColor": "#666666",
+      "titleColor": "#f5f2ed",
+      "artistColor": "#999999",
+      "idleDotColor": "#444444",
+      "activeDotColor": "#FF3120",
+      "artworkBorderColor": "#2a2a2a",
+      "progressTrackColor": "#1f1f1f",
+      "progressFillColor": "#FF3120",
+      "progressMetaColor": "#444444"
+    },
+    "caseStudyNav": {
+      "background": "rgba(13,13,13,0.98)",
+      "borderColor": "var(--color-white)",
+      "dividerColor": "var(--color-white)",
+      "activeTextColor": "#f5f2ed",
+      "inactiveTextColor": "#9a9a9a",
+      "activeBackground": "rgba(245, 242, 237, 0.08)",
+      "activeIndicatorColor": "#FF3120"
+    },
+    "layout": {
+      "pageGutter": "40px",
+      "heroPaddingY": "64px",
+      "sectionPaddingY": "40px",
+      "compactSectionPaddingY": "32px",
+      "cardGap": "16px",
+      "navPaddingY": "24px",
+      "footerPaddingY": "10px"
+    },
+    "typography": {
+      "displaySize": "clamp(72px, 13vw, 130px)",
+      "heroSize": "clamp(48px, 9vw, 96px)",
+      "h1Size": "52px",
+      "h2Size": "38px",
+      "h3Size": "24px",
+      "eyebrowSize": "14px",
+      "bodyLgSize": "18px",
+      "bodySize": "16px",
+      "metaSize": "14px",
+      "headingColor": "#f5f2ed",
+      "bodyColor": "#999999",
+      "labelColor": "#666666",
+      "accentColor": "#FF3120"
+    },
+    "navigation": {
+      "navBackground": "rgba(13,13,13,0.85)",
+      "navBorderColor": "#1f1f1f",
+      "navLogoColor": "#FF3120",
+      "navLogoSize": "16px",
+      "navLinkColor": "#999999",
+      "navLinkHoverColor": "#f5f2ed",
+      "navLinkActiveColor": "#FF3120",
+      "navDotColor": "#FF3120",
+      "navLinkSize": "13px",
+      "backLinkColor": "#666666",
+      "readingTrackColor": "#1f1f1f",
+      "readingFillColor": "#FF3120",
+      "footerBorderColor": "#1a1a1a",
+      "footerTextColor": "#666666",
+      "footerMarkColor": "#FF3120",
+      "socialLinkColor": "#888888",
+      "socialLinkUnderlineColor": "#FF3120"
     },
     "motion": {
       "pageRevealDistance": 16,

@@ -58,6 +58,10 @@ export interface CardStyleSettings {
   bodySize?: string
   imageRatio: string
   cardPadding: string
+  imageFit: 'contain' | 'cover'
+  imageBackground: string
+  imageBorderColor: string
+  imageBorderWidth: string
 }
 
 export interface PhotographyCardStyleSettings {
@@ -65,6 +69,10 @@ export interface PhotographyCardStyleSettings {
   bodySize: string
   imageAspectRatio: string
   cardPadding: string
+  imageFit: 'contain' | 'cover'
+  imageBackground: string
+  imageBorderColor: string
+  imageBorderWidth: string
 }
 
 export interface GalleryStyleSettings {
@@ -87,6 +95,27 @@ export interface ListeningCardStyleSettings {
   cardPadding: string
   artworkSize: string
   progressMetaSize: string
+  cardBackground: string
+  cardBorderColor: string
+  labelColor: string
+  titleColor: string
+  artistColor: string
+  idleDotColor: string
+  activeDotColor: string
+  artworkBorderColor: string
+  progressTrackColor: string
+  progressFillColor: string
+  progressMetaColor: string
+}
+
+export interface CaseStudyNavStyleSettings {
+  background: string
+  borderColor: string
+  dividerColor: string
+  activeTextColor: string
+  inactiveTextColor: string
+  activeBackground: string
+  activeIndicatorColor: string
 }
 
 export interface MotionSettings {
@@ -111,6 +140,52 @@ export interface MotionSettings {
 
 export interface AudioSettings {
   interactionVolume: number
+}
+
+export interface LayoutSettings {
+  pageGutter: string
+  heroPaddingY: string
+  sectionPaddingY: string
+  compactSectionPaddingY: string
+  cardGap: string
+  navPaddingY: string
+  footerPaddingY: string
+}
+
+export interface TypographySettings {
+  displaySize: string
+  heroSize: string
+  h1Size: string
+  h2Size: string
+  h3Size: string
+  eyebrowSize: string
+  bodyLgSize: string
+  bodySize: string
+  metaSize: string
+  headingColor: string
+  bodyColor: string
+  labelColor: string
+  accentColor: string
+}
+
+export interface NavigationStyleSettings {
+  navBackground: string
+  navBorderColor: string
+  navLogoColor: string
+  navLogoSize: string
+  navLinkColor: string
+  navLinkHoverColor: string
+  navLinkActiveColor: string
+  navDotColor: string
+  navLinkSize: string
+  backLinkColor: string
+  readingTrackColor: string
+  readingFillColor: string
+  footerBorderColor: string
+  footerTextColor: string
+  footerMarkColor: string
+  socialLinkColor: string
+  socialLinkUnderlineColor: string
 }
 
 export interface HeroStageCopy {
@@ -324,6 +399,10 @@ export interface SiteContent {
     gallery: GalleryStyleSettings
     nowCards: NowCardStyleSettings
     listeningCard: ListeningCardStyleSettings
+    caseStudyNav: CaseStudyNavStyleSettings
+    layout: LayoutSettings
+    typography: TypographySettings
+    navigation: NavigationStyleSettings
     motion: MotionSettings
     audio: AudioSettings
   }
@@ -413,6 +492,10 @@ function isCardStyleSettings(value: unknown): value is CardStyleSettings {
     isString(item.metaSize) &&
     isString(item.imageRatio) &&
     isString(item.cardPadding) &&
+    (item.imageFit === 'contain' || item.imageFit === 'cover') &&
+    isString(item.imageBackground) &&
+    isString(item.imageBorderColor) &&
+    isString(item.imageBorderWidth) &&
     (item.bodySize === undefined || isString(item.bodySize))
   )
 }
@@ -420,7 +503,16 @@ function isCardStyleSettings(value: unknown): value is CardStyleSettings {
 function isPhotographyCardStyleSettings(value: unknown): value is PhotographyCardStyleSettings {
   if (!value || typeof value !== 'object') return false
   const item = value as Record<string, unknown>
-  return isString(item.titleSize) && isString(item.bodySize) && isString(item.imageAspectRatio) && isString(item.cardPadding)
+  return (
+    isString(item.titleSize) &&
+    isString(item.bodySize) &&
+    isString(item.imageAspectRatio) &&
+    isString(item.cardPadding) &&
+    (item.imageFit === 'contain' || item.imageFit === 'cover') &&
+    isString(item.imageBackground) &&
+    isString(item.imageBorderColor) &&
+    isString(item.imageBorderWidth)
+  )
 }
 
 function isGalleryStyleSettings(value: unknown): value is GalleryStyleSettings {
@@ -444,7 +536,32 @@ function isListeningCardStyleSettings(value: unknown): value is ListeningCardSty
     isString(item.artistSize) &&
     isString(item.cardPadding) &&
     isString(item.artworkSize) &&
-    isString(item.progressMetaSize)
+    isString(item.progressMetaSize) &&
+    isString(item.cardBackground) &&
+    isString(item.cardBorderColor) &&
+    isString(item.labelColor) &&
+    isString(item.titleColor) &&
+    isString(item.artistColor) &&
+    isString(item.idleDotColor) &&
+    isString(item.activeDotColor) &&
+    isString(item.artworkBorderColor) &&
+    isString(item.progressTrackColor) &&
+    isString(item.progressFillColor) &&
+    isString(item.progressMetaColor)
+  )
+}
+
+function isCaseStudyNavStyleSettings(value: unknown): value is CaseStudyNavStyleSettings {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return (
+    isString(item.background) &&
+    isString(item.borderColor) &&
+    isString(item.dividerColor) &&
+    isString(item.activeTextColor) &&
+    isString(item.inactiveTextColor) &&
+    isString(item.activeBackground) &&
+    isString(item.activeIndicatorColor)
   )
 }
 
@@ -452,6 +569,64 @@ function isHeroStageCopy(value: unknown): value is HeroStageCopy {
   if (!value || typeof value !== 'object') return false
   const item = value as Record<string, unknown>
   return isString(item.number) && isString(item.titleHtml) && isString(item.body) && isOptionalString(item.footerLabel)
+}
+
+function isLayoutSettings(value: unknown): value is LayoutSettings {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return (
+    isString(item.pageGutter) &&
+    isString(item.heroPaddingY) &&
+    isString(item.sectionPaddingY) &&
+    isString(item.compactSectionPaddingY) &&
+    isString(item.cardGap) &&
+    isString(item.navPaddingY) &&
+    isString(item.footerPaddingY)
+  )
+}
+
+function isTypographySettings(value: unknown): value is TypographySettings {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return (
+    isString(item.displaySize) &&
+    isString(item.heroSize) &&
+    isString(item.h1Size) &&
+    isString(item.h2Size) &&
+    isString(item.h3Size) &&
+    isString(item.eyebrowSize) &&
+    isString(item.bodyLgSize) &&
+    isString(item.bodySize) &&
+    isString(item.metaSize) &&
+    isString(item.headingColor) &&
+    isString(item.bodyColor) &&
+    isString(item.labelColor) &&
+    isString(item.accentColor)
+  )
+}
+
+function isNavigationStyleSettings(value: unknown): value is NavigationStyleSettings {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return (
+    isString(item.navBackground) &&
+    isString(item.navBorderColor) &&
+    isString(item.navLogoColor) &&
+    isString(item.navLogoSize) &&
+    isString(item.navLinkColor) &&
+    isString(item.navLinkHoverColor) &&
+    isString(item.navLinkActiveColor) &&
+    isString(item.navDotColor) &&
+    isString(item.navLinkSize) &&
+    isString(item.backLinkColor) &&
+    isString(item.readingTrackColor) &&
+    isString(item.readingFillColor) &&
+    isString(item.footerBorderColor) &&
+    isString(item.footerTextColor) &&
+    isString(item.footerMarkColor) &&
+    isString(item.socialLinkColor) &&
+    isString(item.socialLinkUnderlineColor)
+  )
 }
 
 function isHomePageCopy(value: unknown): value is HomePageCopy {
@@ -772,6 +947,10 @@ export function isSiteContent(value: unknown): value is SiteContent {
     isGalleryStyleSettings(design.gallery) &&
     isNowCardStyleSettings(design.nowCards) &&
     isListeningCardStyleSettings(design.listeningCard) &&
+    isCaseStudyNavStyleSettings(design.caseStudyNav) &&
+    isLayoutSettings(design.layout) &&
+    isTypographySettings(design.typography) &&
+    isNavigationStyleSettings(design.navigation) &&
     isMotionSettings(design.motion) &&
     isAudioSettings(design.audio) &&
     isHomePageCopy(copy.home) &&

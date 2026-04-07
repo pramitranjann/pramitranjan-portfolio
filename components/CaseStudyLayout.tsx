@@ -10,7 +10,7 @@ import { useSiteCopy } from '@/components/SiteCopyProvider'
 import { playNav } from '@/lib/sounds'
 import { GsapReveal } from './GsapReveal'
 import { deriveCaseStudyMediaBlocks } from '@/lib/case-study-media'
-import type { CaseStudyMediaBlock, CaseStudyMediaSettings, CaseStudyUiCopy } from '@/lib/site-content-schema'
+import type { CaseStudyMediaBlock, CaseStudyMediaSettings, CaseStudyNavStyleSettings, CaseStudyUiCopy } from '@/lib/site-content-schema'
 
 interface ProjectLink {
   slug: string
@@ -54,6 +54,7 @@ interface CaseStudyLayoutProps {
   mediaSettings?: CaseStudyMediaSettings
   mediaBlocks?: CaseStudyMediaBlock[]
   uiCopy?: CaseStudyUiCopy
+  navStyle?: CaseStudyNavStyleSettings
   solutionEmbedUrl?: string
   solutionEmbedTitle?: string
   solutionEmbedAspectRatio?: string
@@ -66,7 +67,7 @@ interface CaseStudyLayoutProps {
 
 const labelStyle: React.CSSProperties = {
   fontSize: 'var(--text-eyebrow)',
-  color: '#FF3120',
+  color: 'var(--color-red)',
   letterSpacing: '0.16em',
   lineHeight: 1,
 }
@@ -79,7 +80,7 @@ const gridStyle: React.CSSProperties = {
 const headlineStyle: React.CSSProperties = {
   fontSize: 'var(--text-body-lg, 16px)',
   letterSpacing: '0.01em',
-  color: '#f5f2ed',
+  color: 'var(--color-heading)',
   lineHeight: 1.55,
   marginBottom: '10px',
 }
@@ -320,12 +321,21 @@ export function CaseStudyLayout({
   problem, role, research, challenge, process, usabilityTesting, solution, outcomes,
   problemHeadline, roleHeadline, researchHeadline, challengeHeadline,
   processHeadline, solutionHeadline, outcomesHeadline, pullQuote,
-  heroImage, researchImage, challengeImages, solutionHeroImage, solutionImages, mediaSettings, mediaBlocks, uiCopy,
+  heroImage, researchImage, challengeImages, solutionHeroImage, solutionImages, mediaSettings, mediaBlocks, uiCopy, navStyle,
   solutionEmbedUrl, solutionEmbedTitle = 'Live experience', solutionEmbedAspectRatio = '4 / 3', solutionEmbedCtaLabel = 'OPEN LIVE APP',
   solutionEmbedWidth = 'min(100%, 1120px)', solutionEmbedCalloutLabel, solutionEmbedCalloutTitle, solutionEmbedCalloutBody,
 }: CaseStudyLayoutProps) {
   const basePath = backHref
   const copy = { ...useSiteCopy().caseStudy, ...uiCopy }
+  const resolvedNavStyle = {
+    background: navStyle?.background ?? 'rgba(13,13,13,0.98)',
+    borderColor: navStyle?.borderColor ?? 'var(--color-white)',
+    dividerColor: navStyle?.dividerColor ?? 'var(--color-white)',
+    activeTextColor: navStyle?.activeTextColor ?? '#f5f2ed',
+    inactiveTextColor: navStyle?.inactiveTextColor ?? '#9a9a9a',
+    activeBackground: navStyle?.activeBackground ?? 'rgba(245, 242, 237, 0.08)',
+    activeIndicatorColor: navStyle?.activeIndicatorColor ?? '#FF3120',
+  }
   const heroMedia = resolveMediaSlot(mediaSettings?.hero, {
     height: '280px',
     fit: 'contain',
@@ -601,11 +611,11 @@ export function CaseStudyLayout({
       <main style={{ paddingTop: '57px' }}>
 
         {/* Back link */}
-        <div className="case-study-back" style={{ padding: '24px 40px 0' }}>
+        <div className="case-study-back" style={{ padding: '24px var(--layout-page-gutter) 0' }}>
           <Link
             href={backHref}
             className="font-mono"
-            style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#666666', textDecoration: 'none' }}
+            style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: 'var(--back-link-color)', textDecoration: 'none' }}
             onPointerDown={playNav}
           >
             <span className="arrow-nudge-back">←</span> {backLabel}
@@ -620,18 +630,18 @@ export function CaseStudyLayout({
         >
           <div
             className="case-study-hero-text flex flex-col justify-end border-r border-divider"
-            style={{ padding: '48px 40px' }}
+            style={{ padding: '48px var(--layout-page-gutter)' }}
           >
             <RuleLabel number={type} />
             <h1
               className="font-serif"
-              style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.1 }}
+              style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: 'var(--color-heading)', lineHeight: 1.1 }}
             >
               {title}
             </h1>
             <p
               className="font-mono mt-3"
-              style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#666666', lineHeight: 1.6 }}
+              style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: 'var(--color-label)', lineHeight: 1.6 }}
             >
               {oneliner}
             </p>
@@ -642,7 +652,7 @@ export function CaseStudyLayout({
         </section>
 
         {/* Problem */}
-        <section id="sec-problem" data-section={copy.problemLabel} className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
+        <section id="sec-problem" data-section={copy.problemLabel} className="case-study-section border-b border-divider" style={{ padding: 'var(--layout-compact-section-padding-y) var(--layout-page-gutter)' }}>
           <GsapReveal>
             <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
               <span className="font-mono" style={labelStyle}>{copy.problemLabel}</span>
@@ -650,7 +660,7 @@ export function CaseStudyLayout({
                 {problemHeadline && (
                   <p className="font-mono" style={headlineStyle}>{problemHeadline}</p>
                 )}
-                <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8 }}>
+                <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: 'var(--color-body)', lineHeight: 1.8 }}>
                   {problem ?? copy.defaultProblem}
                 </p>
               </div>
@@ -659,7 +669,7 @@ export function CaseStudyLayout({
         </section>
 
         {/* My Role */}
-        <section id="sec-role" data-section={copy.roleLabel} className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
+        <section id="sec-role" data-section={copy.roleLabel} className="case-study-section border-b border-divider" style={{ padding: 'var(--layout-compact-section-padding-y) var(--layout-page-gutter)' }}>
           <GsapReveal>
             <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
               <span className="font-mono" style={labelStyle}>{copy.roleLabel}</span>
@@ -667,7 +677,7 @@ export function CaseStudyLayout({
                 {roleHeadline && (
                   <p className="font-mono" style={headlineStyle}>{roleHeadline}</p>
                 )}
-                <p className="case-study-body font-mono mb-6" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '640px' }}>
+                <p className="case-study-body font-mono mb-6" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: 'var(--color-body)', lineHeight: 1.8, maxWidth: '640px' }}>
                   {role ?? copy.defaultRole}
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -678,7 +688,7 @@ export function CaseStudyLayout({
                       style={{
                         fontSize: 'var(--text-eyebrow)',
                         letterSpacing: '0.12em',
-                        color: '#666666',
+                        color: 'var(--color-label)',
                         border: '1px solid #1f1f1f',
                         padding: '4px 10px',
                       }}
@@ -699,7 +709,7 @@ export function CaseStudyLayout({
             ref={(node) => { motionSectionRefs.current.research = node }}
             data-section={copy.researchLabel}
             className="case-study-section border-b border-divider"
-            style={{ padding: '32px 40px' }}
+            style={{ padding: 'var(--layout-compact-section-padding-y) var(--layout-page-gutter)' }}
           >
             <GsapReveal>
               <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
@@ -729,7 +739,7 @@ export function CaseStudyLayout({
                     {researchHeadline && (
                       <p className="font-mono" style={headlineStyle}>{researchHeadline}</p>
                     )}
-                    <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8 }}>
+                    <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: 'var(--color-body)', lineHeight: 1.8 }}>
                       {research}
                     </p>
                   </div>
@@ -1015,6 +1025,7 @@ export function CaseStudyLayout({
                   ) : null}
                   <div
                     data-reveal
+                    className="hidden md:block"
                     style={{
                       position: 'relative',
                       width: '100%',
@@ -1048,6 +1059,89 @@ export function CaseStudyLayout({
                           background: '#0d0d0d',
                         }}
                       />
+                    </div>
+                  </div>
+                  <div data-reveal className="md:hidden" style={{ display: 'flex', justifyContent: 'center' }}>
+                    <div
+                      style={{
+                        width: 'min(100%, 380px)',
+                        display: 'grid',
+                        gap: '14px',
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: 'grid',
+                          gap: '10px',
+                          justifyItems: 'center',
+                        }}
+                      >
+                        <span
+                          className="font-mono"
+                          style={{
+                            fontSize: 'var(--text-eyebrow)',
+                            letterSpacing: '0.16em',
+                            color: '#FF3120',
+                          }}
+                        >
+                          MOBILE LIVE VIEW_
+                        </span>
+                        <div
+                          style={{
+                            width: '100%',
+                            padding: '14px',
+                            borderRadius: '28px',
+                            background: 'linear-gradient(180deg, #171717 0%, #0f0f0f 100%)',
+                            border: '1px solid #2a2a2a',
+                            boxShadow: '0 20px 50px rgba(0,0,0,0.45)',
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'center',
+                              marginBottom: '10px',
+                            }}
+                          >
+                            <div
+                              style={{
+                                width: '34%',
+                                height: '4px',
+                                borderRadius: '999px',
+                                background: '#2c2c2c',
+                              }}
+                            />
+                          </div>
+                          <div
+                            style={{
+                              position: 'relative',
+                              width: '100%',
+                              aspectRatio: '9 / 19.5',
+                              borderRadius: '22px',
+                              overflow: 'hidden',
+                              background: '#0d0d0d',
+                              border: '1px solid #1f1f1f',
+                            }}
+                          >
+                            <iframe
+                              src={solutionEmbedUrl}
+                              title={`${solutionEmbedTitle} mobile`}
+                              loading="lazy"
+                              referrerPolicy="strict-origin-when-cross-origin"
+                              allow="fullscreen"
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                border: 0,
+                                background: '#0d0d0d',
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <p className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.04em', color: '#666666', lineHeight: 1.6, margin: 0, textAlign: 'center' }}>
+                          Same live build, framed for the phone viewport.
+                        </p>
+                      </div>
                     </div>
                   </div>
                   <div data-reveal style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -1163,9 +1257,9 @@ export function CaseStudyLayout({
           zIndex: 998,
           display: 'flex',
           alignItems: 'stretch',
-          background: 'rgba(13,13,13,0.98)',
+          background: resolvedNavStyle.background,
           backdropFilter: 'blur(16px)',
-          border: '1px solid var(--color-white)',
+          border: `1px solid ${resolvedNavStyle.borderColor}`,
           boxShadow: '0 10px 36px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(245, 242, 237, 0.06)',
           opacity: navVisible ? 1 : 0,
           pointerEvents: navVisible ? 'auto' : 'none',
@@ -1196,22 +1290,22 @@ export function CaseStudyLayout({
               style={{
                 fontSize: '11px',
                 letterSpacing: '0.14em',
-                color: activeId === item.id ? '#f5f2ed' : '#9a9a9a',
+                color: activeId === item.id ? resolvedNavStyle.activeTextColor : resolvedNavStyle.inactiveTextColor,
                 padding: '11px 16px',
-                background: activeId === item.id ? 'rgba(245, 242, 237, 0.08)' : 'none',
+                background: activeId === item.id ? resolvedNavStyle.activeBackground : 'none',
                 border: 'none',
                 cursor: 'pointer',
                 position: 'relative',
                 flexShrink: 0,
                 whiteSpace: 'nowrap',
-                borderRight: i < navItems.length - 1 ? '1px solid var(--color-white)' : 'none',
+                borderRight: i < navItems.length - 1 ? `1px solid ${resolvedNavStyle.dividerColor}` : 'none',
                 textShadow: activeId === item.id ? '0 0 10px rgba(245, 242, 237, 0.18)' : 'none',
                 transition: 'color 0.15s ease, background 0.15s ease',
               }}
             >
               {item.label}
               {activeId === item.id && (
-                <span style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '2px', background: '#FF3120' }} />
+                <span style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '2px', background: resolvedNavStyle.activeIndicatorColor }} />
               )}
             </button>
           ))}

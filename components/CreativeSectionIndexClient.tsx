@@ -26,16 +26,16 @@ export function CreativeSectionIndexClient({
     <>
       <Nav />
       <main style={{ paddingTop: '57px' }}>
-        <section style={{ padding: '48px 40px' }}>
+        <section style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter)' }}>
           <div style={{ marginBottom: '16px' }}>
-            <Link href={backHref} className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#666666', textDecoration: 'none' }} onPointerDown={playNav}>
+            <Link href={backHref} className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: 'var(--back-link-color)', textDecoration: 'none' }} onPointerDown={playNav}>
               <span className="arrow-nudge-back">←</span> {backLabel}
             </Link>
           </div>
-          <h1 className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '40px' }}>
+          <h1 className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: 'var(--color-heading)', lineHeight: 1.05, marginBottom: '40px' }}>
             {title}
           </h1>
-          <div className={columnsClass} style={{ gap: '16px' }}>
+          <div className={columnsClass} style={{ gap: 'var(--layout-card-gap)' }}>
             {projects.map((project) => (
               <CreativeListingCard
                 key={project.slug}

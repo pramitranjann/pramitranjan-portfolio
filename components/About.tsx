@@ -40,26 +40,26 @@ export function About({
     <section
       ref={secRef}
       className="about-section"
-      style={{ padding: '32px 40px', display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) auto', alignItems: 'center', gap: '48px' }}
+      style={{ padding: 'var(--layout-compact-section-padding-y) var(--layout-page-gutter)', display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) auto', alignItems: 'center', gap: '48px' }}
     >
       <div style={{ minWidth: 0 }}>
         {/* WCAG AA: #666 on #0d0d0d = 3.1:1 — decorative label, large enough */}
         <div
           className="font-mono"
-          style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#666666', marginBottom: '16px' }}
+          style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: 'var(--color-label)', marginBottom: '16px' }}
         >
           {copy.aboutEyebrow}
         </div>
 
         <h2
           className="reveal-text font-serif"
-          style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: '#f5f2ed', lineHeight: 1.05, marginBottom: '20px' }}
+          style={{ fontSize: 'var(--text-h1)', fontWeight: 400, color: 'var(--color-heading)', lineHeight: 1.05, marginBottom: '20px' }}
           dangerouslySetInnerHTML={{ __html: copy.aboutTitleHtml }}
         />
 
         <p
           className="reveal-text font-mono"
-          style={{ fontSize: 'var(--text-body-lg)', color: '#999999', lineHeight: 1.9, maxWidth: '440px', letterSpacing: '0.04em' }}
+          style={{ fontSize: 'var(--text-body-lg)', color: 'var(--color-body)', lineHeight: 1.9, maxWidth: '440px', letterSpacing: '0.04em' }}
         >
           {body}
         </p>
@@ -72,7 +72,7 @@ export function About({
         <Link
           href="/about"
           className="font-mono"
-          style={{ fontSize: 'var(--text-meta)', color: '#FF3120', letterSpacing: '0.12em', textDecoration: 'none', whiteSpace: 'nowrap', justifySelf: 'end', alignSelf: 'end', marginTop: '14px' }}
+          style={{ fontSize: 'var(--text-meta)', color: 'var(--color-red)', letterSpacing: '0.12em', textDecoration: 'none', whiteSpace: 'nowrap', justifySelf: 'end', alignSelf: 'end', marginTop: '14px' }}
         >
               {copy.aboutReadMoreLabel}
         </Link>

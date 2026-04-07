@@ -44,6 +44,9 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const content = await getSiteContent()
   const motion = content.design.motion
+  const layout = content.design.layout
+  const typography = content.design.typography
+  const navigation = content.design.navigation
   const motionCssVars = {
     '--motion-page-reveal-distance': `${motion.pageRevealDistance}px`,
     '--motion-page-reveal-duration': `${motion.pageRevealDuration}s`,
@@ -54,6 +57,43 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     '--motion-eyebrow-label-duration': `${motion.eyebrowLabelDuration}s`,
     '--motion-eyebrow-label-delay': `${motion.eyebrowLabelDelay}s`,
     '--audio-interaction-volume': `${content.design.audio.interactionVolume}`,
+    '--layout-page-gutter': layout.pageGutter,
+    '--layout-hero-padding-y': layout.heroPaddingY,
+    '--layout-section-padding-y': layout.sectionPaddingY,
+    '--layout-compact-section-padding-y': layout.compactSectionPaddingY,
+    '--layout-card-gap': layout.cardGap,
+    '--layout-nav-padding-y': layout.navPaddingY,
+    '--layout-footer-padding-y': layout.footerPaddingY,
+    '--text-display': typography.displaySize,
+    '--text-hero': typography.heroSize,
+    '--text-h1': typography.h1Size,
+    '--text-h2': typography.h2Size,
+    '--text-h3': typography.h3Size,
+    '--text-eyebrow': typography.eyebrowSize,
+    '--text-body-lg': typography.bodyLgSize,
+    '--text-body': typography.bodySize,
+    '--text-meta': typography.metaSize,
+    '--color-heading': typography.headingColor,
+    '--color-body': typography.bodyColor,
+    '--color-label': typography.labelColor,
+    '--color-red': typography.accentColor,
+    '--nav-background': navigation.navBackground,
+    '--nav-border-color': navigation.navBorderColor,
+    '--nav-logo-color': navigation.navLogoColor,
+    '--nav-logo-size': navigation.navLogoSize,
+    '--nav-link-color': navigation.navLinkColor,
+    '--nav-link-hover-color': navigation.navLinkHoverColor,
+    '--nav-link-active-color': navigation.navLinkActiveColor,
+    '--nav-dot-color': navigation.navDotColor,
+    '--nav-link-size': navigation.navLinkSize,
+    '--back-link-color': navigation.backLinkColor,
+    '--reading-track-color': navigation.readingTrackColor,
+    '--reading-fill-color': navigation.readingFillColor,
+    '--footer-border-color': navigation.footerBorderColor,
+    '--footer-text-color': navigation.footerTextColor,
+    '--footer-mark-color': navigation.footerMarkColor,
+    '--social-link-color': navigation.socialLinkColor,
+    '--social-link-underline-color': navigation.socialLinkUnderlineColor,
   } as CSSProperties
 
   return (
