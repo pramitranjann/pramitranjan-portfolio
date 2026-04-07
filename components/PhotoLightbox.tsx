@@ -43,13 +43,11 @@ function PhotoSlide({
     const shouldGoNext = info.offset.x < -SWIPE_OFFSET_THRESHOLD || info.velocity.x < -SWIPE_VELOCITY_THRESHOLD
 
     if (shouldGoPrev && index > 0) {
-      playLightboxNav()
       onPrev()
       return
     }
 
     if (shouldGoNext && index < total - 1) {
-      playLightboxNav()
       onNext()
     }
   }
