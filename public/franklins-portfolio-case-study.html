@@ -15,14 +15,14 @@
     --line: #232323;
     --page-x: 14mm;
     --page-top: 14mm;
-    --footer-line-bottom: 11mm;
+    --footer-line-bottom: 13mm;
     --page-number-bottom: 3.8mm;
     --label-col: 112px;
     --section-gap: 12mm;
     --block-row-height: 72mm;
     --cover-title-band: 139mm;
     --section-title-band: 46mm;
-    --cover-lower-offset: 18mm;
+    --cover-lower-offset: 22mm;
   }
 
   * {
@@ -88,6 +88,17 @@
     letter-spacing: 0.16em;
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum" 1;
+  }
+
+  .page-owner {
+    position: absolute;
+    left: var(--page-x);
+    bottom: var(--page-number-bottom);
+    color: var(--label);
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
   }
 
   .section {
@@ -177,7 +188,15 @@
   .block-title {
     font-size: 24px;
     line-height: 1.02;
-    max-width: 290px;
+    max-width: none;
+  }
+
+  .block-copy {
+    color: #9a9a9a;
+    font-size: 11px;
+    line-height: 1.5;
+    letter-spacing: 0.03em;
+    max-width: none;
   }
 
   .problem-layout {
@@ -210,7 +229,7 @@
     max-width: 620px;
     padding-left: 7mm;
     border-left: 3px solid var(--label);
-    margin-bottom: -6mm;
+    margin-bottom: -15mm;
   }
 
   .key-insight-label {
@@ -232,19 +251,21 @@
   }
 
   .problem-image {
-    border-left: 1px solid var(--line);
     padding-left: 0;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-end;
+    justify-content: flex-end;
     min-width: 0;
     min-height: 0;
+    position: relative;
   }
 
   .problem-image img {
-    width: 100%;
-    height: 100%;
+    width: 106%;
+    height: 106%;
+    margin-bottom: -12mm;
     object-fit: contain;
+    object-position: right bottom;
     display: block;
   }
 
@@ -308,20 +329,22 @@
         <div class="block-grid">
           <article class="block">
             <div class="block-label">Problem_</div>
-            <div class="block-title">Problem heading</div>
+            <div class="block-title">The warmth was real — it just wasn't reaching people before they arrived.</div>
+            <p class="block-copy">Close the gap between what first-time visitors expected digitally and what they actually found when they walked in.</p>
           </article>
           <article class="block">
-            <div class="block-label">Role_</div>
-            <div class="block-title">Role heading</div>
+            <div class="block-label">My Role_</div>
+            <div class="block-title">Team lead on a five-person UXDG 101 project — from fieldwork to final prototype.</div>
           </article>
           <article class="block">
-            <div class="block-label">Direction_</div>
-            <div class="block-title">Direction heading</div>
+            <div class="block-label">Solution_</div>
+            <div class="block-title">The redesign didn't change Franklin's identity — it made it clearer upfront.</div>
           </article>
         </div>
       </div>
     </div>
     <div class="footer-rule"></div>
+    <div class="page-owner">Pramit Ranjan</div>
     <div class="page-number">01</div>
   </section>
 
@@ -352,6 +375,7 @@
       </div>
     </div>
     <div class="footer-rule"></div>
+    <div class="page-owner">Pramit Ranjan</div>
     <div class="page-number">02</div>
   </section>
 
@@ -382,6 +406,7 @@
       </div>
     </div>
     <div class="footer-rule"></div>
+    <div class="page-owner">Pramit Ranjan</div>
     <div class="page-number">03</div>
   </section>
 </body>
