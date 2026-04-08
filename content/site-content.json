@@ -1040,6 +1040,34 @@
           "placement": "side-right",
           "inlineTextWidth": "420px",
           "inlineMediaMinWidth": "640px"
+        },
+        {
+          "id": "research-1775608963007-zy6qts",
+          "section": "research",
+          "hidden": true,
+          "layout": "pair",
+          "placement": "below",
+          "align": "center",
+          "width": "100%",
+          "gap": "2px",
+          "images": [
+            {
+              "src": "/work/atom/Group 446.png",
+              "fit": "contain",
+              "position": "center center",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": "Layout placeholder"
+            },
+            {
+              "src": "/work/atom/Group 447.png",
+              "fit": "contain",
+              "position": "center center",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": "Layout placeholder"
+            }
+          ]
         }
       ]
     },
