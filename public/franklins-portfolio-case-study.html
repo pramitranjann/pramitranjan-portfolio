@@ -21,8 +21,10 @@
     --section-gap: 12mm;
     --block-row-height: 72mm;
     --cover-title-band: 139mm;
-    --section-title-band: 46mm;
+    --section-title-band: 64mm;
     --cover-lower-offset: 22mm;
+    --process-image-band: 122mm;
+    --process-lower-offset: 8mm;
   }
 
   * {
@@ -277,6 +279,90 @@
     align-content: start;
   }
 
+  .process-layout {
+    display: grid;
+    grid-template-rows: var(--section-title-band) auto;
+    gap: 0;
+    align-content: start;
+  }
+
+  .process-layout .section-title {
+    max-width: 760px;
+  }
+
+  .process-heading-stack {
+    display: grid;
+    align-content: start;
+    gap: 14px;
+  }
+
+  .process-content {
+    display: grid;
+    grid-template-rows: auto var(--process-image-band);
+    gap: 6mm;
+    margin-top: var(--process-lower-offset);
+  }
+
+  .text-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    align-items: start;
+    margin-top: -14mm;
+    margin-bottom: 14mm;
+  }
+
+  .text-block {
+    display: grid;
+    align-content: start;
+    gap: 12px;
+    min-height: 0;
+  }
+
+  .text-label {
+    color: var(--label);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .text-title {
+    font-family: "Clash Display", serif;
+    font-weight: 400;
+    color: var(--text);
+    font-size: 21px;
+    line-height: 1.04;
+  }
+
+  .text-copy {
+    color: #9a9a9a;
+    font-size: 10.5px;
+    line-height: 1.46;
+    letter-spacing: 0.03em;
+  }
+
+  .process-image-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    height: var(--process-image-band);
+    margin-bottom: var(--footer-content-gap);
+  }
+
+  .process-image-card {
+    border: 1px solid var(--line);
+    background: #090909;
+    padding: 2mm;
+    height: 100%;
+  }
+
+  .process-image-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
   @media print {
     html,
     body {
@@ -354,21 +440,33 @@
         <div class="section-grid">
           <div class="section-label">Process_</div>
           <div class="section-main process-layout">
-            <h2 class="section-title">Process heading</h2>
+            <div class="process-heading-stack">
+              <h2 class="section-title">Most friction started before anyone walked through the door.</h2>
+              <p class="text-copy">The homepage was restructured to surface practical expectations earlier — seating, service style, hours. Navigation reduced to four items; the order flow redesigned as a clear sequence with explicit progress cues.</p>
+            </div>
 
-            <div class="block-grid">
-              <article class="block">
-                <div class="block-label">Research_</div>
-                <div class="block-title">Research heading</div>
-              </article>
-              <article class="block">
-                <div class="block-label">Process_</div>
-                <div class="block-title">Process heading</div>
-              </article>
-              <article class="block">
-                <div class="block-label">Testing_</div>
-                <div class="block-title">Testing heading</div>
-              </article>
+            <div class="process-content">
+              <div class="text-grid">
+                <article class="text-block">
+                  <div class="text-label">Research_</div>
+                  <div class="text-title">Contextual inquiry at the café.</div>
+                  <p class="text-copy">Barista and customer interviews, plus a SCAD student survey. The website was outdated, the service model unclear, and the in-store warmth had no digital equivalent.</p>
+                </article>
+                <article class="text-block">
+                  <div class="text-label">Challenge_</div>
+                  <div class="text-title">Users don't think in business categories — they think in tasks.</div>
+                  <p class="text-copy">Card sorting on FigJam revealed four natural buckets: Menu, Order, About, Contact. That structure became the backbone of the redesigned IA.</p>
+                </article>
+              </div>
+
+              <div class="process-image-grid">
+                <div class="process-image-card">
+                  <img src="./work/franklins/franklins process 1.jpg" alt="Franklin's hypothesis information architecture">
+                </div>
+                <div class="process-image-card">
+                  <img src="./work/franklins/franklins process 2.jpg" alt="Franklin's card sorting results">
+                </div>
+              </div>
             </div>
           </div>
         </div>
