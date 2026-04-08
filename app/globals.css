@@ -454,20 +454,29 @@ body.carousel-reengaging main {
   /* Case study — 2-col image grids collapse to single column */
   .case-study-image-grid {
     grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+  .case-study-media-block {
+    width: 100% !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+  .case-study-media-block > div {
+    min-height: 240px !important;
   }
 
-  /* Case study — image heights reduced on mobile */
+  /* Case study — image heights increased on mobile for readability */
   .case-study-research-image {
-    height: 200px !important;
+    height: 280px !important;
   }
   .case-study-ideation-image {
-    height: 180px !important;
+    height: 260px !important;
   }
   .case-study-solution-hero {
-    height: 240px !important;
+    height: 320px !important;
   }
   .case-study-solution-image {
-    height: 200px !important;
+    height: 280px !important;
   }
 
   /* Case study — prev/next padding */
