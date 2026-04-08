@@ -15,8 +15,10 @@
     --line: #232323;
     --page-x: 14mm;
     --page-top: 14mm;
+    --page-bottom-safe: 18mm;
     --footer-line-bottom: 13mm;
     --page-number-bottom: 3.8mm;
+    --footer-line-gap: var(--footer-line-bottom);
     --label-col: 112px;
     --section-gap: 12mm;
     --block-row-height: 72mm;
@@ -71,7 +73,7 @@
 
   .page-shell {
     height: 100%;
-    padding: var(--page-top) var(--page-x) 18mm;
+    padding: var(--page-top) var(--page-x) var(--page-bottom-safe);
   }
 
   .footer-rule {
@@ -132,6 +134,17 @@
     align-content: start;
     gap: 18mm;
     min-height: 0;
+  }
+
+  .footer-line-match {
+    margin-bottom: var(--footer-line-gap);
+  }
+
+  .footer-locked-full-bleed {
+    width: 100%;
+    max-width: none;
+    justify-self: stretch;
+    margin-bottom: var(--footer-line-gap);
   }
 
   .heading-stack {
