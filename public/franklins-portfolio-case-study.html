@@ -25,6 +25,8 @@
     --cover-lower-offset: 22mm;
     --process-image-band: 122mm;
     --process-lower-offset: 8mm;
+    --solution-content-height: 183mm;
+    --solution-card-row-height: 52mm;
   }
 
   * {
@@ -363,6 +365,57 @@
     display: block;
   }
 
+  .solution-layout {
+    display: grid;
+    grid-template-rows: var(--section-title-band) var(--solution-content-height);
+    gap: 0;
+    align-content: start;
+  }
+
+  .solution-layout .section-title {
+    max-width: 760px;
+  }
+
+  .solution-heading-stack {
+    display: grid;
+    align-content: start;
+    gap: 14px;
+  }
+
+  .solution-content {
+    display: grid;
+    grid-template-rows: calc(var(--solution-content-height) - var(--solution-card-row-height) - 10mm) var(--solution-card-row-height);
+    gap: 10mm;
+    height: var(--solution-content-height);
+  }
+
+  .solution-content .block-grid,
+  .solution-content .block {
+    height: var(--solution-card-row-height);
+  }
+
+  .solution-image-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    height: 100%;
+    margin-top: -13mm;
+  }
+
+  .solution-image-card {
+    border: 1px solid var(--line);
+    background: #090909;
+    padding: 2mm;
+    height: 100%;
+  }
+
+  .solution-image-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
   @media print {
     html,
     body {
@@ -483,21 +536,35 @@
         <div class="section-grid">
           <div class="section-label">Solution_</div>
           <div class="section-main solution-layout">
-            <h2 class="section-title">Solution heading</h2>
+            <div class="solution-heading-stack">
+              <h2 class="section-title">The redesign didn't change Franklin's identity — it made it clearer upfront.</h2>
+              <p class="text-copy">Task-based navigation, a restructured homepage, a cleaner menu, and a step-by-step order flow from discovery to checkout.</p>
+            </div>
 
-            <div class="block-grid">
-              <article class="block">
-                <div class="block-label">Outcome_</div>
-                <div class="block-title">Outcome heading</div>
-              </article>
-              <article class="block">
-                <div class="block-label">Leadership_</div>
-                <div class="block-title">Leadership heading</div>
-              </article>
-              <article class="block">
-                <div class="block-label">Next_</div>
-                <div class="block-title">Next heading</div>
-              </article>
+            <div class="solution-content">
+              <div class="solution-image-grid">
+                <div class="solution-image-card">
+                  <img src="./work/franklins/Home Page.png" alt="Franklin's homepage redesign">
+                </div>
+                <div class="solution-image-card">
+                  <img src="./Order HomePage.png" alt="Franklin's order flow redesign">
+                </div>
+              </div>
+
+              <div class="block-grid">
+                <article class="block">
+                  <div class="block-label">Outcome_</div>
+                  <div class="block-title">The experience gap wasn't a design problem — it was an information problem.</div>
+                </article>
+                <article class="block">
+                  <div class="block-label">Leadership_</div>
+                  <div class="block-title">The most important job of a team lead is keeping the work honest.</div>
+                </article>
+                <article class="block">
+                  <div class="block-label">Next_</div>
+                  <div class="block-title">Explore in-context digital touchpoints at the storefront itself.</div>
+                </article>
+              </div>
             </div>
           </div>
         </div>
