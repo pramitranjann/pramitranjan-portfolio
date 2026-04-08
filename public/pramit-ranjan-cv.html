@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pramit Ranjan — CV</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+  }
+
+  body {
+    color: #f5f2ed;
+    font-family: 'DM Mono', monospace;
+    font-size: 8.75px;
+    letter-spacing: 0.06em;
+    line-height: 1.68;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    background: #0d0d0d;
+    padding: 17.5mm 14.5mm 8mm 13mm;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  }
+
+  /* HEADER */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 18px;
+    padding-bottom: 13px;
+    border-bottom: 1px solid #1f1f1f;
+    margin-bottom: 14px;
+  }
+
+  .header-name {
+    font-family: 'Clash Display', 'DM Serif Display', serif;
+    font-size: 31px;
+    font-weight: 400;
+    line-height: 1;
+    color: #f5f2ed;
+    margin-bottom: 6px;
+  }
+
+  .header-title {
+    font-size: 8.7px;
+    letter-spacing: 0.18em;
+    color: #FF3120;
+  }
+
+  .header-contact {
+    min-width: 170px;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    justify-content: flex-end;
+  }
+
+  .header-contact a {
+    font-size: 8.5px;
+    letter-spacing: 0.06em;
+    color: #666;
+    text-decoration: none;
+  }
+
+  /* SECTION */
+  .section {
+    display: grid;
+    grid-template-columns: 112px 1fr;
+    column-gap: 8px;
+    row-gap: 0;
+    margin-bottom: 13px;
+    padding-bottom: 13px;
+    border-bottom: 1px solid #1f1f1f;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  .section.compact-section {
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+  }
+
+  .section-label-col {
+    padding-top: 2px;
+  }
+
+  .section-label {
+    display: block;
+    max-width: 100%;
+    font-size: 8.25px;
+    letter-spacing: 0.14em;
+    color: #f5f2ed;
+    line-height: 1.22;
+    white-space: normal;
+  }
+
+  .section-content { }
+
+  /* ENTRY */
+  .entry {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #1a1a1a;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .entry:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .compact-section .entry {
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+  }
+
+  .entry-company {
+    font-family: 'Clash Display', 'DM Serif Display', serif;
+    font-size: 15.3px;
+    font-weight: 400;
+    font-style: italic;
+    color: #f5f2ed;
+    margin-bottom: 0;
+  }
+
+  .entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+
+  .entry-meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+
+  .entry-role {
+    font-size: 8.35px;
+    color: #FF3120;
+    letter-spacing: 0.12em;
+  }
+
+  .entry-date {
+    font-size: 8.35px;
+    color: #666;
+    letter-spacing: 0.1em;
+  }
+
+  .entry-body {
+    font-size: 9.1px;
+    color: #999;
+    line-height: 1.7;
+    letter-spacing: 0.035em;
+  }
+
+  /* TOOLS */
+  .tags {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 8.5px;
+    letter-spacing: 0.1em;
+    color: #666;
+    border: 1px solid #1f1f1f;
+    padding: 4px 9px;
+  }
+
+  .tools-section {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .tools-section .tags {
+    gap: 4px;
+  }
+
+  .tools-section .tag {
+    font-size: 8px;
+    padding: 3px 8px;
+  }
+
+  @media print {
+    html, body {
+      width: auto;
+      height: auto;
+      background: #0d0d0d;
+    }
+    body {
+      display: block;
+      min-height: auto;
+      padding: 0;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0;
+      box-shadow: none;
+    }
+    @page { size: A4; margin: 0; }
+  }
+</style>
+</head>
+<body>
+  <main class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <div class="header-name">Pramit Ranjan</div>
+      <div class="header-title">UX DESIGN STUDENT · SCAD</div>
+    </div>
+    <div class="header-contact">
+      <a href="mailto:pramitranjann@gmail.com">pramitranjann@gmail.com</a>
+      <a href="#">+1 (912) 228 2023</a>
+      <a href="https://linkedin.com/in/pramitranjann/">linkedin.com/in/pramitranjann/</a>
+    </div>
+  </div>
+
+  <!-- EXPERIENCE -->
+  <div class="section">
+    <div class="section-label-col">
+      <div class="section-label">EXPERIENCE_</div>
+    </div>
+    <div class="section-content">
+      <div class="entry">
+        <div class="entry-header">
+          <div class="entry-company">Vircle Malaysia</div>
+          <span class="entry-date">JUL 2024 — AUG 2024</span>
+        </div>
+        <div class="entry-meta-row">
+          <span class="entry-role">GROWTH INTERN</span>
+        </div>
+        <div class="entry-body">Designed sticker packs for Vircle × Minions Despicable Me 4 collaboration — included in the packaging of each card sold. Created hero images and prototyped a school landing page.</div>
+      </div>
+      <div class="entry">
+        <div class="entry-header">
+          <div class="entry-company">SOHO Exhibition</div>
+          <span class="entry-date">SEP 2023 — JAN 2024</span>
+        </div>
+        <div class="entry-meta-row">
+          <span class="entry-role">EXHIBITION DIRECTOR</span>
+        </div>
+        <div class="entry-body">Chaired the annual sixth form art exhibition. Responsible for organising all departments, delegating tasks, managing logistics, and producing all branding and marketing materials.</div>
+      </div>
+      <div class="entry">
+        <div class="entry-header">
+          <div class="entry-company">Moving Walls Malaysia</div>
+          <span class="entry-date">JUL 2023 — AUG 2023</span>
+        </div>
+        <div class="entry-meta-row">
+          <span class="entry-role">MARKETING INTERN</span>
+        </div>
+        <div class="entry-body">Part of the marketing team creating social media content. Tasked with starting and managing the company TikTok page — ideating, filming, and optimising for engagement.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFESSIONAL ACTIVITIES -->
+  <div class="section">
+    <div class="section-label-col">
+      <div class="section-label">PROFESSIONAL ACTIVITIES_</div>
+    </div>
+    <div class="section-content">
+      <div class="entry">
+        <div class="entry-header">
+          <div class="entry-company">FigBuild 2026</div>
+          <span class="entry-date">2026</span>
+        </div>
+        <div class="entry-meta-row">
+          <span class="entry-role">DESIGN CHALLENGE</span>
+        </div>
+        <div class="entry-body">Participated in Figma's design challenge — submitted Accord, a work-readiness app for upper-limb amputee construction workers.</div>
+      </div>
+      <div class="entry">
+        <div class="entry-header">
+          <div class="entry-company">FLUXathon</div>
+          <span class="entry-date">2025</span>
+        </div>
+        <div class="entry-meta-row">
+          <span class="entry-role">48-HOUR DESIGN CHALLENGE</span>
+        </div>
+        <div class="entry-body">Designed a weather forecasting app using Claude AI within a 48-hour sprint. Judged by Google.</div>
+      </div>
+      <div class="entry">
+        <div class="entry-header">
+          <div class="entry-company">Rocket × FLUX</div>
+          <span class="entry-date">2026</span>
+        </div>
+        <div class="entry-meta-row">
+          <span class="entry-role">3-DAY DESIGN SPRINT</span>
+        </div>
+        <div class="entry-body">Redesigned the Passio Go app using Figma Make — exploring how design ideology is shifting in the age of AI.</div>
+      </div>
+      <div class="entry">
+        <div class="entry-header">
+          <div class="entry-company">FLUX Club</div>
+          <span class="entry-date">ONGOING</span>
+        </div>
+        <div class="entry-meta-row">
+          <span class="entry-role">MEMBER</span>
+        </div>
+        <div class="entry-body">Building Figma skills through Figma Fridays — weekly design sessions focused on craft and tooling.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDUCATION -->
+  <div class="section compact-section">
+    <div class="section-label-col">
+      <div class="section-label">EDUCATION_</div>
+    </div>
+    <div class="section-content">
+      <div class="entry">
+        <div class="entry-header">
+          <div class="entry-company">SCAD</div>
+          <span class="entry-date">2025 — PRESENT</span>
+        </div>
+        <div class="entry-meta-row">
+          <span class="entry-role">BFA UX DESIGN</span>
+        </div>
+        <div class="entry-body">Bachelor of Fine Arts in UX Design. Freshman year. Coursework spans interaction design, user research, prototyping, and design systems.</div>
+      </div>
+      <div class="entry">
+        <div class="entry-header">
+          <div class="entry-company">Garden International School</div>
+          <span class="entry-date">SEP 2023 — JUN 2025</span>
+        </div>
+        <div class="entry-meta-row">
+          <span class="entry-role">A LEVELS</span>
+        </div>
+        <div class="entry-body">Photography · Design and Technology · Business Studies</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOLS -->
+  <div class="section compact-section tools-section">
+    <div class="section-label-col">
+      <div class="section-label">TOOLS_</div>
+    </div>
+    <div class="section-content">
+      <div class="tags">
+        <span class="tag">FIGMA</span>
+        <span class="tag">ADOBE CREATIVE SUITE</span>
+        <span class="tag">CLAUDE CODE</span>
+        <span class="tag">VIBE CODING</span>
+      </div>
+    </div>
+  </div>
+
+  </main>
+</body>
+</html>
