@@ -928,7 +928,7 @@
         "slug": "helpoh",
         "title": "HelpOH"
       },
-      "heroImage": "/work/loomlearn/cover-hor-processed.png",
+      "heroImage": "/work/loomlearn/cover-hor.png",
       "solutionHeroImage": "/work/loomlearn/solution-hero-processed.png",
       "solutionImages": [
         "/work/loomlearn/solution-1-processed.png",
@@ -1024,7 +1024,7 @@
         "slug": "atom",
         "title": "Atom OS"
       },
-      "heroImage": "/work/helpoh/cover-processed.png",
+      "heroImage": "/work/helpoh/cover-hor.png",
       "solutionHeroImage": "/work/helpoh/solution-hero-processed.png",
       "solutionImages": [
         "/work/helpoh/solution-1-processed.png",
@@ -1063,7 +1063,7 @@
               "aspectRatio": "16 / 10"
             }
           ],
-          "placement": "side-right",
+          "placement": "below",
           "inlineTextWidth": "420px",
           "inlineMediaMinWidth": "640px"
         },

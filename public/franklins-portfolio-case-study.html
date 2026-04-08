@@ -20,8 +20,9 @@
     --label-col: 112px;
     --section-gap: 12mm;
     --block-row-height: 72mm;
-    --cover-title-band: 82mm;
+    --cover-title-band: 112mm;
     --section-title-band: 46mm;
+    --cover-lower-offset: 18mm;
   }
 
   * {
@@ -122,6 +123,13 @@
     gap: 12mm;
   }
 
+  .page-meta {
+    color: var(--label);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
   .page-title,
   .section-title,
   .block-title {
@@ -179,6 +187,66 @@
     align-content: start;
   }
 
+  .problem-layout .block-grid {
+    margin-top: var(--cover-lower-offset);
+  }
+
+  .problem-hero {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 10mm;
+    height: 100%;
+    align-items: stretch;
+  }
+
+  .problem-copy {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-height: 0;
+  }
+
+  .key-insight {
+    align-self: end;
+    max-width: 620px;
+    padding-left: 7mm;
+    border-left: 3px solid var(--label);
+  }
+
+  .key-insight-label {
+    color: var(--label);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .key-insight-text {
+    font-family: "Clash Display", serif;
+    font-size: 30px;
+    line-height: 1.06;
+    color: var(--text);
+    font-style: italic;
+    font-weight: 400;
+    max-width: 580px;
+  }
+
+  .problem-image {
+    border-left: 1px solid var(--line);
+    padding-left: 8mm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .problem-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
   .process-layout,
   .solution-layout {
     display: grid;
@@ -218,8 +286,22 @@
   <section class="page">
     <div class="page-shell">
       <div class="section problem-layout">
-        <div class="heading-stack">
-          <h1 class="page-title">Franklin's</h1>
+        <div class="problem-hero">
+          <div class="problem-copy">
+            <div class="heading-stack">
+              <div class="page-meta">UX Design · 2026</div>
+              <h1 class="page-title">Franklin's</h1>
+            </div>
+
+            <div class="key-insight">
+              <div class="key-insight-label">Key Insight_</div>
+              <div class="key-insight-text">“The warmth was real. It just wasn't reaching people before they arrived.”</div>
+            </div>
+          </div>
+
+          <div class="problem-image">
+            <img src="./work/franklins/cover.png" alt="Franklin's cover graphic">
+          </div>
         </div>
 
         <div class="block-grid">
