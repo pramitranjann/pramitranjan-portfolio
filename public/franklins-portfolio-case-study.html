@@ -19,6 +19,9 @@
     --page-number-bottom: 3.8mm;
     --label-col: 112px;
     --section-gap: 12mm;
+    --block-row-height: 72mm;
+    --cover-title-band: 82mm;
+    --section-title-band: 46mm;
   }
 
   * {
@@ -88,7 +91,6 @@
 
   .section {
     height: 100%;
-    border-top: 1px solid var(--line);
     padding-top: 10mm;
   }
 
@@ -97,6 +99,7 @@
     grid-template-columns: var(--label-col) 1fr;
     gap: var(--section-gap);
     align-items: start;
+    min-height: 0;
   }
 
   .section-label {
@@ -111,6 +114,7 @@
     display: grid;
     align-content: start;
     gap: 18mm;
+    min-height: 0;
   }
 
   .heading-stack {
@@ -142,10 +146,11 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
+    height: var(--block-row-height);
   }
 
   .block {
-    min-height: 72mm;
+    height: var(--block-row-height);
     border: 1px solid var(--line);
     background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
     padding: 7mm;
@@ -169,16 +174,17 @@
 
   .problem-layout {
     display: grid;
-    grid-template-rows: auto auto;
+    grid-template-rows: var(--cover-title-band) var(--block-row-height);
     gap: 14mm;
-    height: 100%;
+    align-content: start;
   }
 
   .process-layout,
   .solution-layout {
     display: grid;
-    grid-template-rows: auto auto;
+    grid-template-rows: var(--section-title-band) var(--block-row-height);
     gap: 12mm;
+    align-content: start;
   }
 
   @media print {
