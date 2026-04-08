@@ -508,9 +508,15 @@ body.carousel-reengaging main {
   .case-study-inline-layout {
     grid-template-columns: 1fr !important;
     gap: 16px !important;
+    min-width: 0 !important;
+  }
+  .case-study-inline-layout > * {
+    min-width: 0 !important;
   }
   .case-study-inline-media {
     width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
   }
 
   /* About page — WHO I AM sidebar collapses to single column on mobile */
