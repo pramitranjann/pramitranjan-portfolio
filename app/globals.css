@@ -258,6 +258,7 @@ body.carousel-reengaging main {
   width: max-content;
   min-width: 100%;
   gap: 28px;
+  animation: spotify-marquee var(--spotify-marquee-duration, 12s) linear infinite alternate;
 }
 .spotify-marquee-segment {
   flex: 0 0 auto;
@@ -335,10 +336,6 @@ body.carousel-reengaging main {
     --text-h2:      28px;
     --text-h3:      20px;
     --text-body-lg: 16px;
-  }
-
-  .spotify-marquee-track {
-    animation: spotify-marquee var(--spotify-marquee-duration, 12s) linear infinite alternate;
   }
 
   /* Nav — reduce side padding */

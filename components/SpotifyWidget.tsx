@@ -23,7 +23,6 @@ interface SpotifyWidgetProps {
 }
 
 const HOVER_QUERY = '(hover: hover) and (pointer: fine)'
-const MOBILE_QUERY = '(max-width: 767px)'
 
 export function SpotifyWidget({ variant, restingLabel, styleSettings, interactionMode = 'static' }: SpotifyWidgetProps) {
   const [track, setTrack] = useState<Track | null>(null)
@@ -146,8 +145,7 @@ function TrackTitle({
     if (typeof window === 'undefined') return
 
     const checkOverflow = () => {
-      const isMobile = window.matchMedia(MOBILE_QUERY).matches
-      if (!isMobile || expanded) {
+      if (expanded) {
         setShouldMarquee(false)
         return
       }
