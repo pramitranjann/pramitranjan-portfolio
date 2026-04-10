@@ -247,6 +247,22 @@ body.carousel-reengaging main {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.3; }
 }
+@keyframes spotify-marquee {
+  0%, 10% { transform: translateX(0); }
+  45%, 55% { transform: translateX(calc(-50% - 14px)); }
+  90%, 100% { transform: translateX(calc(-50% - 14px)); }
+}
+.spotify-marquee-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  min-width: 100%;
+  gap: 28px;
+}
+.spotify-marquee-segment {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
 .eyebrow-line {
   transform: scaleX(0);
   transform-origin: left;
@@ -306,6 +322,9 @@ body.carousel-reengaging main {
   body.carousel-reengaging main {
     transition: none;
   }
+  .spotify-marquee-track {
+    animation: none !important;
+  }
 }
 
 /* ─── Mobile responsive overrides (< 768px) ──────────────────────────────── */
@@ -316,6 +335,10 @@ body.carousel-reengaging main {
     --text-h2:      28px;
     --text-h3:      20px;
     --text-body-lg: 16px;
+  }
+
+  .spotify-marquee-track {
+    animation: spotify-marquee var(--spotify-marquee-duration, 12s) linear infinite alternate;
   }
 
   /* Nav — reduce side padding */

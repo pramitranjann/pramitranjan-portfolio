@@ -23,6 +23,7 @@ interface SpotifyWidgetProps {
 }
 
 const HOVER_QUERY = '(hover: hover) and (pointer: fine)'
+const MOBILE_QUERY = '(max-width: 767px)'
 
 export function SpotifyWidget({ variant, restingLabel, styleSettings, interactionMode = 'static' }: SpotifyWidgetProps) {
   const [track, setTrack] = useState<Track | null>(null)
@@ -126,6 +127,115 @@ export function SpotifyWidget({ variant, restingLabel, styleSettings, interactio
   )
 }
 
+function TrackTitle({
+  title,
+  fontSize,
+  color,
+  expanded = false,
+}: {
+  title: string
+  fontSize: string
+  color: string
+  expanded?: boolean
+}) {
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const textRef = useRef<HTMLSpanElement | null>(null)
+  const [shouldMarquee, setShouldMarquee] = useState(false)
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const checkOverflow = () => {
+      const isMobile = window.matchMedia(MOBILE_QUERY).matches
+      if (!isMobile || expanded) {
+        setShouldMarquee(false)
+        return
+      }
+
+      const container = containerRef.current
+      const text = textRef.current
+      if (!container || !text) return
+
+      setShouldMarquee(text.scrollWidth > container.clientWidth + 8)
+    }
+
+    checkOverflow()
+    window.addEventListener('resize', checkOverflow)
+
+    let observer: ResizeObserver | null = null
+    if (typeof ResizeObserver !== 'undefined' && containerRef.current) {
+      observer = new ResizeObserver(checkOverflow)
+      observer.observe(containerRef.current)
+    }
+
+    return () => {
+      window.removeEventListener('resize', checkOverflow)
+      observer?.disconnect()
+    }
+  }, [title, expanded])
+
+  return (
+    <div
+      ref={containerRef}
+      style={{
+        overflow: 'hidden',
+        width: '100%',
+        minWidth: 0,
+      }}
+    >
+      {shouldMarquee ? (
+        <div
+          className="spotify-marquee-track"
+          style={{
+            ['--spotify-marquee-duration' as string]: `${Math.max(10, title.length * 0.34)}s`,
+            color,
+            fontSize,
+          }}
+        >
+          <span
+            ref={textRef}
+            className="font-serif spotify-marquee-segment"
+            style={{
+              fontStyle: 'italic',
+              fontWeight: 'var(--font-weight-serif)',
+              lineHeight: 1.3,
+            }}
+          >
+            {title}
+          </span>
+          <span
+            aria-hidden="true"
+            className="font-serif spotify-marquee-segment"
+            style={{
+              fontStyle: 'italic',
+              fontWeight: 'var(--font-weight-serif)',
+              lineHeight: 1.3,
+            }}
+          >
+            {title}
+          </span>
+        </div>
+      ) : (
+        <div
+          className="font-serif"
+          style={{
+            fontSize,
+            fontStyle: 'italic',
+            fontWeight: 'var(--font-weight-serif)',
+            color,
+            whiteSpace: expanded ? 'normal' : 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            lineHeight: expanded ? 1.15 : 1.3,
+          }}
+        >
+          <span ref={textRef}>{title}</span>
+        </div>
+      )}
+    </div>
+  )
+}
+
 function SidebarVariant({
   track,
   progress,
@@ -193,20 +303,13 @@ function SidebarVariant({
           />
         )}
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div
-            className="font-serif"
-            style={{
-              fontSize: expanded ? '22px' : (styleSettings?.titleSize ?? '15px'),
-              fontStyle: 'italic',
-              color: styleSettings?.titleColor ?? '#f5f2ed',
-              whiteSpace: expanded ? 'normal' : 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              lineHeight: expanded ? 1.15 : 1.3,
-              transition: 'font-size 220ms cubic-bezier(0.23, 1, 0.32, 1)',
-            }}
-          >
-            {track.title}
+          <div style={{ transition: 'font-size 220ms cubic-bezier(0.23, 1, 0.32, 1)' }}>
+            <TrackTitle
+              title={track.title}
+              fontSize={expanded ? '22px' : (styleSettings?.titleSize ?? '15px')}
+              color={styleSettings?.titleColor ?? '#f5f2ed'}
+              expanded={expanded}
+            />
           </div>
           <div className="font-mono" style={{ fontSize: styleSettings?.artistSize ?? '10px', letterSpacing: '0.1em', color: styleSettings?.artistColor ?? '#999999', marginTop: '3px' }}>
             {track.artist.toUpperCase()}
@@ -318,8 +421,12 @@ function CellVariant({
             <div style={{ width: styleSettings?.artworkSize ?? '36px', height: styleSettings?.artworkSize ?? '36px', background: styleSettings?.progressTrackColor ?? '#1f1f1f', border: `1px solid ${styleSettings?.artworkBorderColor ?? '#2a2a2a'}`, flexShrink: 0 }} />
           )}
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div className="font-serif" style={{ fontSize: styleSettings?.titleSize ?? '15px', fontStyle: 'italic', fontWeight: 'var(--font-weight-serif)', color: styleSettings?.titleColor ?? '#f5f2ed', lineHeight: 1.3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginBottom: '6px' }}>
-              {track.title}
+            <div style={{ marginBottom: '6px' }}>
+              <TrackTitle
+                title={track.title}
+                fontSize={styleSettings?.titleSize ?? '15px'}
+                color={styleSettings?.titleColor ?? '#f5f2ed'}
+              />
             </div>
             <div className="font-mono" style={{ fontSize: styleSettings?.artistSize ?? '10px', letterSpacing: '0.1em', color: styleSettings?.artistColor ?? '#999999', lineHeight: 1.5 }}>
               {track.artist.toUpperCase()}
