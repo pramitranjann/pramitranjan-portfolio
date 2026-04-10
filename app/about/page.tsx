@@ -10,8 +10,8 @@ import type { NowCardStyleSettings } from '@/lib/site-content-schema'
 function CVButton({ label }: { label: string }) {
   return (
     <a
-      href="/pramit-ranjan-cv.pdf?v=20260409-2054"
-      download="pramit-ranjan-cv.pdf"
+      href="/pramit-ranjan-cv-2026.pdf"
+      download="pramit-ranjan-cv-2026.pdf"
       className="font-mono inline-block"
       style={{
         fontSize: 'var(--text-meta)',
