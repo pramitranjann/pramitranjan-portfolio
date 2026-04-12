@@ -106,7 +106,7 @@ export function SpotifyWidget({ variant, restingLabel, styleSettings, interactio
 
   return (
     <div
-      style={{ width: '100%' }}
+      style={{ width: '100%', minWidth: 0, maxWidth: '100%' }}
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
     >
@@ -158,7 +158,10 @@ function TrackTitle({
     }
 
     checkOverflow()
+    const frameId = window.requestAnimationFrame(checkOverflow)
+    const timeoutId = window.setTimeout(checkOverflow, 120)
     window.addEventListener('resize', checkOverflow)
+    document.fonts?.ready.then(checkOverflow).catch(() => undefined)
 
     let observer: ResizeObserver | null = null
     if (typeof ResizeObserver !== 'undefined' && containerRef.current) {
@@ -167,6 +170,8 @@ function TrackTitle({
     }
 
     return () => {
+      window.cancelAnimationFrame(frameId)
+      window.clearTimeout(timeoutId)
       window.removeEventListener('resize', checkOverflow)
       observer?.disconnect()
     }
@@ -179,6 +184,7 @@ function TrackTitle({
         overflow: 'hidden',
         width: '100%',
         minWidth: 0,
+        maxWidth: '100%',
       }}
     >
       {shouldMarquee ? (
@@ -227,7 +233,15 @@ function TrackTitle({
             lineHeight: expanded ? 1.15 : 1.3,
           }}
         >
-          <span ref={textRef}>{title}</span>
+          <span
+            ref={textRef}
+            style={{
+              display: 'inline-block',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {title}
+          </span>
         </div>
       )}
     </div>
@@ -256,6 +270,8 @@ function SidebarVariant({
         border: `1px solid ${styleSettings?.cardBorderColor ?? '#1f1f1f'}`,
         padding: expanded ? '17px' : (styleSettings?.cardPadding ?? '14px'),
         minHeight: expanded ? (styleSettings?.hoverMinHeight ?? '190px') : '110px',
+        minWidth: 0,
+        maxWidth: '100%',
         transform: expanded ? `scale(${styleSettings?.hoverScale ?? '1.018'})` : 'scale(1)',
         transformOrigin: 'center right',
         boxShadow: expanded ? '0 20px 44px rgba(0,0,0,0.45), 0 0 0 1px rgba(245,242,237,0.04)' : 'none',
@@ -399,8 +415,8 @@ function CellVariant({
   styleSettings?: ListeningCardStyleSettings
 }) {
   return (
-    <div style={{ background: styleSettings?.cardBackground ?? '#0d0d0d', padding: styleSettings?.cardPadding ?? '14px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: `1px solid ${styleSettings?.cardBorderColor ?? 'transparent'}` }}>
-      <div>
+    <div style={{ background: styleSettings?.cardBackground ?? '#0d0d0d', padding: styleSettings?.cardPadding ?? '14px', height: '100%', minWidth: 0, maxWidth: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: `1px solid ${styleSettings?.cardBorderColor ?? 'transparent'}` }}>
+      <div style={{ minWidth: 0 }}>
         <div className="flex items-center" style={{ gap: '8px', marginBottom: '12px' }}>
           <div style={{
             width: '6px', height: '6px', borderRadius: '50%',
@@ -411,7 +427,7 @@ function CellVariant({
             {track.isPlaying ? 'NOW PLAYING' : restingLabel ?? 'LAST PLAYED'}
           </span>
         </div>
-        <div className="flex" style={{ gap: '12px', alignItems: 'center' }}>
+        <div className="flex" style={{ gap: '12px', alignItems: 'center', minWidth: 0 }}>
           {track.albumArt ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={track.albumArt} alt={track.title} style={{ width: styleSettings?.artworkSize ?? '36px', height: styleSettings?.artworkSize ?? '36px', objectFit: 'cover', border: `1px solid ${styleSettings?.artworkBorderColor ?? '#2a2a2a'}`, flexShrink: 0 }} />
