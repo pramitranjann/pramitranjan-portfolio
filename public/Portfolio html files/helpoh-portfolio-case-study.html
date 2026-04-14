@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HelpOH Portfolio Case Study</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --text: #f4f1eb;
+    --label: #ff3120;
+    --line: #232323;
+    --page-x: 14mm;
+    --page-top: 14mm;
+    --page-bottom-safe: 18mm;
+    --footer-line-bottom: 13mm;
+    --page-number-bottom: 3.8mm;
+    --footer-line-gap: var(--footer-line-bottom);
+    --label-col: 112px;
+    --section-gap: 12mm;
+    --block-row-height: 72mm;
+    --cover-title-band: 139mm;
+    --section-title-band: 64mm;
+    --cover-lower-offset: 22mm;
+    --process-image-band: 122mm;
+    --process-lower-offset: 8mm;
+    --solution-content-height: 183mm;
+    --solution-card-row-height: 52mm;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: var(--text);
+  }
+
+  body {
+    font-family: "DM Mono", monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    padding: 18px 0;
+  }
+
+  .page {
+    width: 420mm;
+    height: 297mm;
+    position: relative;
+    overflow: hidden;
+    background: var(--bg);
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.42);
+    page-break-after: always;
+    break-after: page;
+  }
+
+  .page:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
+
+  .page-shell {
+    height: 100%;
+    padding: var(--page-top) var(--page-x) var(--page-bottom-safe);
+  }
+
+  .footer-rule {
+    position: absolute;
+    left: var(--page-x);
+    right: var(--page-x);
+    bottom: var(--footer-line-bottom);
+    height: 1px;
+    background: var(--line);
+  }
+
+  .page-number {
+    position: absolute;
+    right: var(--page-x);
+    bottom: var(--page-number-bottom);
+    color: var(--label);
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: 0.16em;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  .page-owner {
+    position: absolute;
+    left: var(--page-x);
+    bottom: var(--page-number-bottom);
+    color: var(--label);
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .section {
+    height: 100%;
+    padding-top: 10mm;
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: var(--label-col) 1fr;
+    gap: var(--section-gap);
+    align-items: start;
+    min-height: 0;
+  }
+
+  .section-label {
+    color: var(--label);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding-top: 1.5mm;
+  }
+
+  .section-main {
+    display: grid;
+    align-content: start;
+    gap: 18mm;
+    min-height: 0;
+  }
+
+  .footer-line-match {
+    margin-bottom: var(--footer-line-gap);
+  }
+
+  .footer-locked-full-bleed {
+    width: 100%;
+    max-width: none;
+    justify-self: stretch;
+    margin-bottom: var(--footer-line-gap);
+  }
+
+  .heading-stack {
+    display: grid;
+    gap: 12mm;
+  }
+
+  .page-meta {
+    color: var(--label);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .page-title,
+  .section-title,
+  .block-title {
+    font-family: "Clash Display", serif;
+    font-weight: 400;
+    color: var(--text);
+  }
+
+  .page-title {
+    font-size: 76px;
+    line-height: 0.92;
+    max-width: 460px;
+  }
+
+  .section-title {
+    font-size: 40px;
+    line-height: 0.98;
+    max-width: 780px;
+  }
+
+  .block-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    height: var(--block-row-height);
+  }
+
+  .block {
+    height: var(--block-row-height);
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+    padding: 7mm;
+    display: grid;
+    align-content: start;
+    gap: 14px;
+  }
+
+  .block-label {
+    color: var(--label);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .block-title {
+    font-size: 24px;
+    line-height: 1.02;
+    max-width: none;
+  }
+
+  .block-copy {
+    color: #9a9a9a;
+    font-size: 14px;
+    line-height: 1.5;
+    letter-spacing: 0.03em;
+    max-width: none;
+  }
+
+  .problem-layout {
+    display: grid;
+    grid-template-rows: var(--cover-title-band) var(--block-row-height);
+    gap: 14mm;
+    align-content: start;
+  }
+
+  .problem-layout .block-grid {
+    margin-top: var(--cover-lower-offset);
+  }
+
+  .problem-hero {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 6mm;
+    height: 100%;
+    align-items: stretch;
+  }
+
+  .problem-copy {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-height: 0;
+  }
+
+  .key-insight {
+    align-self: end;
+    max-width: 620px;
+    padding-left: 7mm;
+    border-left: 3px solid var(--label);
+    margin-bottom: -15mm;
+  }
+
+  .key-insight-label {
+    color: var(--label);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .key-insight-text {
+    font-family: "Clash Display", serif;
+    font-size: 30px;
+    line-height: 1.06;
+    color: var(--text);
+    font-style: italic;
+    font-weight: 400;
+    max-width: 580px;
+  }
+
+  .problem-image {
+    padding-left: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    min-width: 0;
+    min-height: 0;
+    position: relative;
+  }
+
+  .problem-image img {
+    width: 106%;
+    height: 106%;
+    margin-bottom: -12mm;
+    object-fit: contain;
+    object-position: right bottom;
+    display: block;
+  }
+
+  .process-layout,
+  .solution-layout {
+    display: grid;
+    grid-template-rows: var(--section-title-band) var(--block-row-height);
+    gap: 12mm;
+    align-content: start;
+  }
+
+  .process-layout {
+    display: grid;
+    grid-template-rows: var(--section-title-band) auto;
+    gap: 0;
+    align-content: start;
+  }
+
+  .process-layout .section-title {
+    max-width: 760px;
+  }
+
+  .process-heading-stack {
+    display: grid;
+    align-content: start;
+    gap: 14px;
+  }
+
+  .process-content {
+    display: grid;
+    grid-template-rows: auto var(--process-image-band);
+    gap: 6mm;
+    margin-top: var(--process-lower-offset);
+  }
+
+  .text-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    align-items: start;
+    margin-top: -14mm;
+    margin-bottom: 14mm;
+  }
+
+  .text-block {
+    display: grid;
+    align-content: start;
+    gap: 12px;
+    min-height: 0;
+  }
+
+  .text-label {
+    color: var(--label);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .text-title {
+    font-family: "Clash Display", serif;
+    font-weight: 400;
+    color: var(--text);
+    font-size: 21px;
+    line-height: 1.04;
+  }
+
+  .text-copy {
+    color: #9a9a9a;
+    font-size: 14px;
+    line-height: 1.46;
+    letter-spacing: 0.03em;
+  }
+
+  .process-image-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    height: var(--process-image-band);
+    margin-bottom: var(--footer-content-gap);
+  }
+
+  .process-image-card {
+    border: 1px solid var(--line);
+    background: #090909;
+    padding: 2mm;
+    height: 100%;
+  }
+
+  .process-image-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  .solution-layout {
+    display: grid;
+    grid-template-rows: var(--section-title-band) var(--solution-content-height);
+    gap: 0;
+    align-content: start;
+  }
+
+  .solution-layout .section-title {
+    max-width: 760px;
+  }
+
+  .solution-heading-stack {
+    display: grid;
+    align-content: start;
+    gap: 14px;
+  }
+
+  .live-link {
+    display: inline-grid;
+    justify-items: start;
+    gap: 6px;
+    margin-top: 2px;
+  }
+
+  .live-link-label {
+    color: var(--label);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .live-link a {
+    color: var(--text);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(244, 241, 235, 0.28);
+    padding-bottom: 1px;
+  }
+
+  .solution-content {
+    display: grid;
+    grid-template-rows: calc(var(--solution-content-height) - var(--solution-card-row-height) - 10mm) var(--solution-card-row-height);
+    gap: 10mm;
+    height: var(--solution-content-height);
+  }
+
+  .solution-content .block-grid,
+  .solution-content .block {
+    height: var(--solution-card-row-height);
+  }
+
+  .solution-content .block-grid {
+    margin-top: 3mm;
+  }
+
+  .solution-image-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    height: 100%;
+    margin-top: -26mm;
+  }
+
+  .solution-image-card {
+    border: 0;
+    background: transparent;
+    padding: 0;
+    height: 100%;
+    width: min(100%, 74%);
+  }
+
+  .solution-image-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  @media print {
+    html,
+    body {
+      background: var(--bg);
+    }
+
+    body {
+      padding: 0;
+      gap: 0;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .page {
+      width: 420mm;
+      height: 297mm;
+      box-shadow: none;
+      margin: 0;
+    }
+
+    @page {
+      size: A3 landscape;
+      margin: 0;
+    }
+  }
+</style>
+</head>
+<body>
+  <section class="page">
+    <div class="page-shell">
+      <div class="section problem-layout">
+        <div class="problem-hero">
+          <div class="problem-copy">
+            <div class="heading-stack">
+              <div class="page-meta">UX Design · 2024</div>
+              <h1 class="page-title">HelpOH</h1>
+            </div>
+
+            <div class="key-insight">
+              <div class="key-insight-label">Key Insight_</div>
+              <div class="key-insight-text">“Two very different users, one platform. The design had to serve both without compromising either.”</div>
+            </div>
+          </div>
+
+          <div class="problem-image">
+            <img src="../work/helpoh/cover.png" alt="HelpOH cover graphic">
+          </div>
+        </div>
+
+        <div class="block-grid">
+          <article class="block">
+            <div class="block-label">Problem_</div>
+            <div class="block-title">A two-sided problem: unreliable help for users, unfair work for workers.</div>
+            <p class="block-copy">HelpOH connects users with vetted professionals for household services while giving workers legal protections, training, and consistent income. Designed for Malaysia’s rapidly growing economy.</p>
+          </article>
+          <article class="block">
+            <div class="block-label">My Role_</div>
+            <div class="block-title">Sole designer across research, UX strategy, UI design, and prototyping.</div>
+          </article>
+          <article class="block">
+            <div class="block-label">Solution_</div>
+            <div class="block-title">Search, book, done, with transparent pricing and no friction.</div>
+            <p class="block-copy">A streamlined booking platform with clear service categories, location, date and time selection, and pricing clarity built to create first-time confidence.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+    <div class="footer-rule"></div>
+    <div class="page-owner">Pramit Ranjan</div>
+    <div class="page-number">01</div>
+  </section>
+
+  <section class="page">
+    <div class="page-shell">
+      <div class="section">
+        <div class="section-grid">
+          <div class="section-label">Process_</div>
+          <div class="section-main process-layout">
+            <div class="process-heading-stack">
+              <h2 class="section-title">Two personas, one platform, designed to serve both sides equitably.</h2>
+              <p class="text-copy">The challenge was designing for users who need reliable, affordable household help and workers who need fair pay, trust, and consistent opportunities. The product had to balance both without feeling split in half.</p>
+            </div>
+
+            <div class="process-content">
+              <div class="text-grid">
+                <article class="text-block">
+                  <div class="text-label">Research_</div>
+                  <div class="text-title">Reliability for users, security for workers.</div>
+                  <p class="text-copy">Mapped two personas, Farah and Arif, to make sure the platform worked for both the customer booking help and the worker building a sustainable livelihood.</p>
+                </article>
+                <article class="text-block">
+                  <div class="text-label">Challenge_</div>
+                  <div class="text-title">Booking flows had to feel transparent, fast, and familiar.</div>
+                  <p class="text-copy">The interaction borrowed trust cues from Grab so the experience would feel recognisable in the Southeast Asian market while keeping everything on a single booking surface.</p>
+                </article>
+              </div>
+
+              <div class="process-image-grid">
+                <div class="process-image-card">
+                  <img src="../work/helpoh/Group 442.png" alt="HelpOH Farah persona">
+                </div>
+                <div class="process-image-card">
+                  <img src="../work/helpoh/Group 443.png" alt="HelpOH Arif persona">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-rule"></div>
+    <div class="page-owner">Pramit Ranjan</div>
+    <div class="page-number">02</div>
+  </section>
+
+  <section class="page">
+    <div class="page-shell">
+      <div class="section">
+        <div class="section-grid">
+          <div class="section-label">Solution_</div>
+          <div class="section-main solution-layout">
+            <div class="solution-heading-stack">
+              <h2 class="section-title">Search, book, done, with transparent pricing and no friction.</h2>
+              <p class="text-copy">A desktop platform with streamlined search-and-book, transparent pricing, time selection, and service categorisation. Clarity over density.</p>
+            </div>
+
+            <div class="solution-content">
+              <div class="solution-image-grid">
+                <div class="solution-image-card">
+                  <img src="../work/helpoh/solution-hero.png" alt="HelpOH booking flow">
+                </div>
+              </div>
+
+              <div class="block-grid">
+                <article class="block">
+                  <div class="block-label">Outcome_</div>
+                  <div class="block-title">Designing for two very different users clarified what the product needed to prioritise.</div>
+                </article>
+                <article class="block">
+                  <div class="block-label">Approach_</div>
+                  <div class="block-title">Trust cues, transparency, and a single-surface booking flow drove the interaction model.</div>
+                </article>
+                <article class="block">
+                  <div class="block-label">Next_</div>
+                  <div class="block-title">The next step is a dedicated worker dashboard with job management and training access.</div>
+                </article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-rule"></div>
+    <div class="page-owner">Pramit Ranjan</div>
+    <div class="page-number">03</div>
+  </section>
+</body>
+</html>

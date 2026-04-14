@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>South China Sea Portfolio Case Study</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --text: #f4f1eb;
+    --label: #ff3120;
+    --line: #232323;
+    --page-x: 14mm;
+    --page-top: 14mm;
+    --footer-line-bottom: 13mm;
+    --footer-line-gap: var(--footer-line-bottom);
+    --page-number-bottom: 3.8mm;
+    --label-col: 112px;
+    --section-gap: 12mm;
+    --block-row-height: 72mm;
+    --cover-title-band: 139mm;
+    --section-title-band: 64mm;
+    --cover-lower-offset: 22mm;
+    --footer-reference-depth: calc(var(--cover-title-band) + 14mm + var(--cover-lower-offset) + var(--block-row-height));
+    --footer-reference-bottom: 26mm;
+    --research-image-band: 86mm;
+    --portrait-image-band: 126mm;
+    --hero-image-band: 142mm;
+    --outcome-image-band: 96mm;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: var(--text);
+  }
+
+  body {
+    font-family: "DM Mono", monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    padding: 18px 0;
+  }
+
+  .page {
+    width: 420mm;
+    height: 297mm;
+    position: relative;
+    overflow: hidden;
+    background: var(--bg);
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.42);
+    page-break-after: always;
+    break-after: page;
+  }
+
+  .page:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
+
+  .page-shell {
+    height: 100%;
+    padding: var(--page-top) var(--page-x) 18mm;
+  }
+
+  .footer-rule {
+    position: absolute;
+    left: var(--page-x);
+    right: var(--page-x);
+    bottom: var(--footer-line-bottom);
+    height: 1px;
+    background: var(--line);
+  }
+
+  .page-number {
+    position: absolute;
+    right: var(--page-x);
+    bottom: var(--page-number-bottom);
+    color: var(--label);
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: 0.16em;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  .page-owner {
+    position: absolute;
+    left: var(--page-x);
+    bottom: var(--page-number-bottom);
+    color: var(--label);
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .section {
+    height: 100%;
+    padding-top: 10mm;
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: var(--label-col) 1fr;
+    gap: var(--section-gap);
+    align-items: start;
+    min-height: 0;
+  }
+
+  .section-label {
+    color: var(--label);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding-top: 1.5mm;
+  }
+
+  .section-main {
+    display: grid;
+    align-content: start;
+    gap: 18mm;
+    min-height: 0;
+  }
+
+  .heading-stack {
+    display: grid;
+    gap: 12mm;
+  }
+
+  .page-meta {
+    color: var(--label);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .page-title,
+  .section-title,
+  .block-title,
+  .text-title {
+    font-family: "Clash Display", serif;
+    font-weight: 400;
+    color: var(--text);
+  }
+
+  .page-title {
+    font-size: 76px;
+    line-height: 0.92;
+    max-width: 520px;
+  }
+
+  .section-title {
+    font-size: 40px;
+    line-height: 0.98;
+    max-width: 840px;
+  }
+
+  .text-copy,
+  .block-copy {
+    color: #9a9a9a;
+    font-size: 14px;
+    line-height: 1.48;
+    letter-spacing: 0.03em;
+  }
+
+  .block-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    height: var(--block-row-height);
+  }
+
+  .block {
+    height: var(--block-row-height);
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+    padding: 7mm;
+    display: grid;
+    align-content: start;
+    gap: 14px;
+  }
+
+  .block-label,
+  .text-label,
+  .key-insight-label {
+    color: var(--label);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .block-title {
+    font-size: 24px;
+    line-height: 1.02;
+  }
+
+  .problem-layout {
+    display: grid;
+    grid-template-rows: var(--cover-title-band) var(--block-row-height);
+    gap: 14mm;
+    align-content: start;
+  }
+
+  .problem-layout .block-grid {
+    margin-top: var(--cover-lower-offset);
+  }
+
+  .problem-hero {
+    display: grid;
+    grid-template-columns: 0.84fr 1.16fr;
+    gap: 6mm;
+    height: 100%;
+    align-items: stretch;
+  }
+
+  .problem-copy {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-height: 0;
+  }
+
+  .key-insight {
+    align-self: end;
+    max-width: 660px;
+    padding-left: 7mm;
+    border-left: 3px solid var(--label);
+    margin-bottom: -15mm;
+  }
+
+  .key-insight-label {
+    margin-bottom: 10px;
+  }
+
+  .key-insight-text {
+    font-family: "Clash Display", serif;
+    font-size: 30px;
+    line-height: 1.06;
+    color: var(--text);
+    font-style: italic;
+    font-weight: 400;
+    max-width: 620px;
+  }
+
+  .problem-image {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .problem-image img {
+    width: 100%;
+    height: 106%;
+    object-fit: contain;
+    object-position: right bottom;
+    display: block;
+  }
+
+  .research-layout,
+  .portrait-layout,
+  .installation-layout,
+  .outcome-layout {
+    display: grid;
+    grid-template-rows: var(--section-title-band) auto;
+    gap: 0;
+    align-content: start;
+  }
+
+  .research-layout {
+    display: block;
+    height: var(--footer-reference-depth);
+    min-height: 0;
+  }
+
+  .research-heading-stack,
+  .portrait-heading-stack,
+  .installation-heading-stack,
+  .outcome-heading-stack {
+    display: grid;
+    align-content: start;
+    gap: 14px;
+  }
+
+  .research-content {
+    display: block;
+    margin-top: 12mm;
+    padding-top: 34mm;
+    height: auto;
+    min-height: 0;
+  }
+
+  .text-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+
+  .research-page-image {
+    position: absolute;
+    left: calc(var(--page-x) + var(--label-col) + var(--section-gap));
+    right: var(--page-x);
+    bottom: var(--footer-reference-bottom);
+    height: var(--research-image-band);
+    justify-items: stretch;
+  }
+
+  .text-block {
+    display: grid;
+    align-content: start;
+    gap: 12px;
+  }
+
+  .text-title {
+    font-size: 21px;
+    line-height: 1.04;
+  }
+
+  .single-image-band,
+  .pair-image-band,
+  .outcome-image-band {
+    display: grid;
+    gap: 10px;
+  }
+
+  .single-image-band {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: center;
+    justify-items: center;
+    height: var(--research-image-band);
+  }
+
+  .pair-image-band {
+    grid-template-columns: 1fr 1fr;
+    height: var(--portrait-image-band);
+    margin-top: 12mm;
+  }
+
+  .outcome-image-band {
+    grid-template-columns: 1fr 1fr;
+    height: var(--outcome-image-band);
+    margin-top: 12mm;
+  }
+
+  .image-card,
+  .portrait-card,
+  .wide-card {
+    height: 100%;
+    width: 100%;
+    background: transparent;
+    border: 0;
+    padding: 0;
+  }
+
+  .image-card img,
+  .portrait-card img,
+  .wide-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  .single-image-band .image-card {
+    width: min(100%, 94%);
+  }
+
+  .research-image-card {
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    justify-self: stretch;
+  }
+
+  .footer-locked-full-bleed {
+    width: 100%;
+    max-width: none;
+    justify-self: stretch;
+    margin-bottom: var(--footer-line-gap);
+  }
+
+  .research-page-image .research-image-card {
+    width: 100%;
+    max-width: none;
+  }
+
+  .research-image-card img {
+    object-fit: contain;
+    object-position: right bottom;
+    transform: none;
+  }
+
+  .portrait-card {
+    width: min(100%, 86%);
+    justify-self: center;
+  }
+
+  .portrait-layout .image-card {
+    width: 100%;
+    max-width: none;
+    justify-self: stretch;
+  }
+
+  .portrait-layout .single-image-band {
+    justify-items: stretch;
+    align-items: center;
+  }
+
+  .portrait-layout .image-card img {
+    object-position: center center;
+  }
+
+  .installation-content {
+    display: grid;
+    grid-template-rows: var(--hero-image-band);
+    margin-top: 12mm;
+  }
+
+  .installation-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: end;
+    justify-items: center;
+    height: var(--hero-image-band);
+  }
+
+  .installation-hero .wide-card {
+    width: 35%;
+    justify-self: center;
+    transform: translateY(-23mm);
+  }
+
+  .installation-layout .wide-card img {
+    object-position: center bottom;
+  }
+
+  .outcome-content {
+    display: grid;
+    grid-template-rows: auto var(--outcome-image-band);
+    gap: 8mm;
+    margin-top: 10mm;
+  }
+
+  @media print {
+    html,
+    body {
+      background: var(--bg);
+    }
+
+    body {
+      padding: 0;
+      gap: 0;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .page {
+      width: 420mm;
+      height: 297mm;
+      box-shadow: none;
+      margin: 0;
+    }
+
+    @page {
+      size: A3 landscape;
+      margin: 0;
+    }
+  }
+</style>
+</head>
+<body>
+  <section class="page research-page">
+    <div class="page-shell">
+      <div class="section problem-layout">
+        <div class="problem-hero">
+          <div class="problem-copy">
+            <div class="heading-stack">
+              <div class="page-meta">Mixed Media · 2024</div>
+              <h1 class="page-title">South China Sea</h1>
+            </div>
+
+            <div class="key-insight">
+              <div class="key-insight-label">Key Insight_</div>
+              <div class="key-insight-text">“What ordinary people don't know is already shaping their lives.”</div>
+            </div>
+          </div>
+
+          <div class="problem-image">
+            <img src="../creative/mixed-media/south-china-sea/hero.png" alt="South China Sea cover image">
+          </div>
+        </div>
+
+        <div class="block-grid">
+          <article class="block">
+            <div class="block-label">Problem_</div>
+            <div class="block-title">What ordinary people don't know is already shaping their lives.</div>
+            <p class="block-copy">A large-scale mixed media installation exploring the South China Sea conflict through the lens of public naivety. Presented as a detective board, it connects geopolitics to lived experience through cyanotypes, photograms, coffee-aged maps, and original photography.</p>
+          </article>
+          <article class="block">
+            <div class="block-label">My Role_</div>
+            <div class="block-title">Sole artist across concept, research, photography, darkroom work, and installation.</div>
+          </article>
+          <article class="block">
+            <div class="block-label">Solution_</div>
+            <div class="block-title">A detective board that makes viewers discover the conflict instead of being told it.</div>
+            <p class="block-copy">The final installation combined original photography, cyanotypes, photograms, coffee-aged map prints, handwritten notes, and red string into a seven-foot visual system.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+    <div class="footer-rule"></div>
+    <div class="page-owner">Pramit Ranjan</div>
+    <div class="page-number">01</div>
+  </section>
+
+  <section class="page">
+    <div class="page-shell">
+      <div class="section">
+        <div class="section-grid">
+          <div class="section-label">Research_</div>
+          <div class="section-main research-layout">
+            <div class="research-heading-stack">
+              <h2 class="section-title">Close to home, under-discussed, and layered in tension.</h2>
+              <p class="text-copy">Starting from the wars in Gaza and Ukraine, I narrowed the project to the South China Sea conflict, a crisis close to home but often absent from ordinary public conversation.</p>
+            </div>
+
+            <div class="research-content">
+              <div class="text-grid">
+                <article class="text-block">
+                  <div class="text-label">Research_</div>
+                  <div class="text-title">The public knows fragments, not the full system.</div>
+                  <p class="text-copy">Research focused on how economic, territorial, and military pressures overlap, and how little of that complexity enters everyday understanding.</p>
+                </article>
+                <article class="text-block">
+                  <div class="text-label">Challenge_</div>
+                  <div class="text-title">The work needed a structure that felt investigative, not decorative.</div>
+                  <p class="text-copy">A detective board became the central metaphor: red threads, mapped clues, and layered evidence mirroring how the public tries, and often fails, to connect the dots.</p>
+                </article>
+              </div>
+
+              <div class="single-image-band research-page-image">
+                <div class="image-card research-image-card footer-locked-full-bleed">
+                  <img src="../creative/mixed-media/south-china-sea/research.png" alt="South China Sea research board and visual exploration">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-rule"></div>
+    <div class="page-owner">Pramit Ranjan</div>
+    <div class="page-number">02</div>
+  </section>
+
+  <section class="page">
+    <div class="page-shell">
+      <div class="section">
+        <div class="section-grid">
+          <div class="section-label">Solution_</div>
+          <div class="section-main portrait-layout">
+            <div class="portrait-heading-stack">
+              <h2 class="section-title">Physical processes made the conflict feel discovered rather than explained.</h2>
+              <p class="text-copy">Cyanotypes introduced blue as a material link to the sea. Coffee aging gave archival maps a worn authority. Photograms stripped figures of context and identity, while the detective-board structure held the research together.</p>
+            </div>
+
+            <div class="single-image-band" style="height: var(--portrait-image-band); margin-top: 12mm;">
+              <div class="image-card">
+                <img src="../creative/mixed-media/south-china-sea/ideation-1.png" alt="South China Sea process and ideation board">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-rule"></div>
+    <div class="page-owner">Pramit Ranjan</div>
+    <div class="page-number">03</div>
+  </section>
+
+  <section class="page">
+    <div class="page-shell">
+      <div class="section">
+        <div class="section-grid">
+          <div class="section-label">Solution_</div>
+          <div class="section-main installation-layout">
+            <div class="installation-heading-stack">
+              <h2 class="section-title">The detective board let viewers uncover relationships rather than receive a lecture.</h2>
+              <p class="text-copy">Original photography, cyanotypes, photograms, and red-thread mapping worked together as one visual language. The installation made the conflict legible by turning it into something viewers had to trace for themselves.</p>
+            </div>
+
+            <div class="installation-content">
+              <div class="installation-hero">
+                <div class="wide-card footer-locked-full-bleed">
+                  <img src="../creative/mixed-media/south-china-sea/solution-hero.png" alt="South China Sea final installation board">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-rule"></div>
+    <div class="page-owner">Pramit Ranjan</div>
+    <div class="page-number">04</div>
+  </section>
+
+  <section class="page">
+    <div class="page-shell">
+      <div class="section">
+        <div class="section-grid">
+          <div class="section-label">Outcome_</div>
+          <div class="section-main outcome-layout">
+            <div class="outcome-heading-stack">
+              <h2 class="section-title">The detective board was the right call. The piece lived in visual discovery.</h2>
+              <p class="text-copy">What worked best was making the audience trace relationships for themselves. If revisited, the next step would be adding a stronger sound or ambient layer so the work reaches beyond the visual.</p>
+            </div>
+
+            <div class="outcome-content">
+              <div class="text-grid">
+                <article class="text-block">
+                  <div class="text-label">Outcome_</div>
+                  <div class="text-title">The board made viewers discover connections rather than be told them.</div>
+                  <p class="text-copy">That active reading process became central to the installation's effect and made the conflict feel less distant.</p>
+                </article>
+                <article class="text-block">
+                  <div class="text-label">Next_</div>
+                  <div class="text-title">The next version should add sound and bodily atmosphere.</div>
+                  <p class="text-copy">The visual system carried the project. A stronger ambient or sonic layer would make the tension more immersive.</p>
+                </article>
+              </div>
+
+              <div class="outcome-image-band" style="grid-template-columns: minmax(0, 1fr); justify-items: stretch;">
+                <div class="wide-card footer-locked-full-bleed" style="width: 72%; justify-self: center;">
+                  <img src="../creative/mixed-media/south-china-sea/solution-2.png" alt="South China Sea installation detail">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-rule"></div>
+    <div class="page-owner">Pramit Ranjan</div>
+    <div class="page-number">05</div>
+  </section>
+</body>
+</html>

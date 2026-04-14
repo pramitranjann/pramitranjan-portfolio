@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ho Chi Minh Photography Portfolio</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --text: #f4f1eb;
+    --muted: #9a9a9a;
+    --label: #ff3120;
+    --line: #232323;
+    --page-x: 14mm;
+    --page-top: 14mm;
+    --page-bottom-safe: 18mm;
+    --footer-line-bottom: 13mm;
+    --page-number-bottom: 3.8mm;
+    --label-col: 112px;
+    --section-gap: 12mm;
+    --grid-gap: 10px;
+    --frame-pad: 2.5mm;
+    --cover-hero-height: 139mm;
+    --block-row-height: 44mm;
+    --cover-lower-offset: 50mm;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html,
+  body {
+    background: #050505;
+    color: var(--text);
+  }
+
+  body {
+    font-family: "DM Mono", monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    padding: 18px 0;
+  }
+
+  .page {
+    width: 420mm;
+    height: 297mm;
+    position: relative;
+    overflow: hidden;
+    background: var(--bg);
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.42);
+    page-break-after: always;
+    break-after: page;
+  }
+
+  .page:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
+
+  .page-shell {
+    height: 100%;
+    padding: var(--page-top) var(--page-x) var(--page-bottom-safe);
+  }
+
+  .footer-rule {
+    position: absolute;
+    left: var(--page-x);
+    right: var(--page-x);
+    bottom: var(--footer-line-bottom);
+    height: 1px;
+    background: var(--line);
+  }
+
+  .page-number,
+  .page-owner {
+    position: absolute;
+    bottom: var(--page-number-bottom);
+    color: var(--label);
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  .page-number {
+    right: var(--page-x);
+  }
+
+  .page-owner {
+    left: var(--page-x);
+  }
+
+  .page-meta,
+  .section-label,
+  .sheet-meta {
+    color: var(--label);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .page-title,
+  .section-title {
+    font-family: "Clash Display", serif;
+    font-weight: 400;
+    color: var(--text);
+  }
+
+  .page-title {
+    font-size: 76px;
+    line-height: 0.92;
+    max-width: 420px;
+  }
+
+  .section-title {
+    font-size: 40px;
+    line-height: 0.98;
+    max-width: 860px;
+  }
+
+  .text-copy {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.5;
+    letter-spacing: 0.03em;
+  }
+
+  .cover {
+    display: grid;
+    grid-template-rows: var(--cover-hero-height) var(--block-row-height);
+    gap: 14mm;
+    align-content: start;
+    padding-top: 10mm;
+  }
+
+  .cover-hero {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 6mm;
+    height: 100%;
+    min-height: 0;
+    align-items: stretch;
+  }
+
+  .cover-copy {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: 100%;
+  }
+
+  .cover-stack {
+    display: grid;
+    gap: 14mm;
+  }
+
+  .cover-note {
+    align-self: end;
+    padding-left: 7mm;
+    border-left: 3px solid var(--label);
+    margin-bottom: -21mm;
+  }
+
+  .cover-note-label {
+    color: var(--label);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .cover-note-text {
+    font-family: "Clash Display", serif;
+    font-size: 34px;
+    line-height: 0.98;
+    font-style: italic;
+    max-width: 620px;
+  }
+
+  .cover-image {
+    border: 1px solid var(--line);
+    background: #090909;
+    padding: var(--frame-pad);
+    display: grid;
+    place-items: center;
+    min-height: 0;
+    align-self: end;
+    justify-self: end;
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    margin-bottom: -22mm;
+    overflow: hidden;
+  }
+
+  .cover-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 40% 32%;
+    transform: scale(1.14) translateY(-35%);
+    transform-origin: center center;
+    display: block;
+  }
+
+  .cover-strip {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--grid-gap);
+    height: var(--block-row-height);
+    margin-top: var(--cover-lower-offset);
+  }
+
+  .strip-card {
+    height: var(--block-row-height);
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+    padding: 7mm;
+    display: grid;
+    align-content: start;
+    gap: 14px;
+  }
+
+  .strip-card h3 {
+    color: var(--label);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+
+  .strip-card p {
+    font-family: "Clash Display", serif;
+    font-size: 24px;
+    line-height: 1.02;
+  }
+
+  .gallery-section {
+    height: 100%;
+    padding-top: 10mm;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: var(--label-col) 1fr;
+    gap: var(--section-gap);
+    height: 100%;
+  }
+
+  .section-label {
+    padding-top: 1.5mm;
+  }
+
+  .gallery-main {
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    gap: 12mm;
+    min-height: 0;
+  }
+
+  .gallery-main.compact {
+    grid-template-rows: auto 1fr;
+    gap: 10mm;
+  }
+
+  .gallery-main.template-layout {
+    grid-template-rows: 1fr;
+  }
+
+  .gallery-main.portrait-template-layout {
+    grid-template-rows: 1fr;
+  }
+
+  .sheet-header {
+    display: grid;
+    gap: 10mm;
+  }
+
+  .sheet-intro {
+    max-width: 1040px;
+  }
+
+  .sheet-meta {
+    padding-top: 1.5mm;
+    align-self: start;
+    line-height: 1;
+  }
+
+  .sheet-grid {
+    display: grid;
+    gap: var(--grid-gap);
+    align-content: start;
+    min-height: 0;
+  }
+
+  .sheet-grid.six {
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 6mm;
+  }
+
+  .sheet-grid.landscape-template {
+    grid-template-columns: repeat(3, 1fr);
+    align-content: start;
+    align-self: center;
+    row-gap: 16mm;
+    transform: translateY(-2mm);
+  }
+
+  .sheet-grid.four {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 6mm;
+  }
+
+  .sheet-grid.six .photo-card.landscape {
+    grid-row: span 14;
+  }
+
+  .sheet-grid.six .photo-card.portrait {
+    grid-row: span 21;
+  }
+
+  .sheet-grid.four .photo-card.landscape {
+    grid-row: span 16;
+  }
+
+  .sheet-grid.four .photo-card.portrait {
+    grid-row: span 22;
+  }
+
+  .photo-card {
+    border: 1px solid var(--line);
+    background: #090909;
+    padding: var(--frame-pad);
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+
+  .photo-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    background: #090909;
+  }
+
+  .photo-card img.crop-film-35 {
+    object-fit: cover;
+    object-position: center 18%;
+    transform: scale(1.2);
+    transform-origin: center top;
+  }
+
+  .photo-card img.crop-film-36 {
+    object-fit: cover;
+    object-position: 62% 18%;
+    transform: scale(1.34);
+    transform-origin: center top;
+  }
+
+  .photo-card.template {
+    position: relative;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0)),
+      #090909;
+  }
+
+  .photo-card.template::before {
+    content: attr(data-slot);
+    color: rgba(255,255,255,0.28);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    align-self: start;
+    justify-self: start;
+    line-height: 1;
+  }
+
+  .photo-card.template::after {
+    content: "";
+    position: absolute;
+    inset: var(--frame-pad);
+    border: 1px dashed rgba(255,255,255,0.1);
+    pointer-events: none;
+  }
+
+  .sheet-grid.portrait-template {
+    grid-template-columns: repeat(4, 1fr);
+    align-self: center;
+    align-content: center;
+  }
+
+  .sheet-grid.portrait-template .photo-card.portrait {
+    aspect-ratio: 2 / 3;
+    place-self: start stretch;
+  }
+
+  .sheet-grid.landscape-template .photo-card.landscape {
+    aspect-ratio: 3 / 2;
+    place-self: start stretch;
+  }
+
+  .photo-spacer {
+    visibility: hidden;
+  }
+
+  .photo-spacer.landscape {
+    aspect-ratio: 3 / 2;
+  }
+
+  .photo-spacer.portrait {
+    aspect-ratio: 2 / 3;
+  }
+
+  .final-note {
+    max-width: 560px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.5;
+    letter-spacing: 0.03em;
+  }
+
+  @page {
+    size: A3 landscape;
+    margin: 0;
+  }
+
+  @media print {
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+    }
+
+    body {
+      display: block;
+    }
+
+    .page {
+      box-shadow: none;
+    }
+
+    .cover {
+      padding-top: 8mm;
+      gap: 10mm;
+    }
+
+    .cover-note {
+      margin-bottom: -14mm;
+    }
+
+    .cover-image {
+      margin-bottom: -14mm;
+    }
+
+    .cover-strip {
+      margin-top: 38mm;
+    }
+  }
+</style>
+</head>
+<body>
+
+<section class="page">
+  <div class="page-shell">
+    <div class="cover">
+      <div class="cover-hero">
+        <div class="cover-copy">
+          <div class="cover-stack">
+            <div class="page-meta">Photography · Ho Chi Minh · 2025</div>
+            <h1 class="page-title">Ho Chi Minh</h1>
+          </div>
+          <div class="cover-note">
+            <div class="cover-note-label">Key Insight_</div>
+            <div class="cover-note-text">“The city never really pauses, so the images had to be found inside the motion instead of outside it.”</div>
+          </div>
+        </div>
+        <div class="cover-image">
+          <img src="../creative/photography/hcmc/01.jpg" alt="Ho Chi Minh cover image">
+        </div>
+      </div>
+
+      <div class="cover-strip">
+        <article class="strip-card">
+          <h3>Location_</h3>
+          <p>Ho Chi Minh City, Vietnam.</p>
+        </article>
+        <article class="strip-card">
+          <h3>Approach_</h3>
+          <p>Built around density, motion, and the brief still moments that cut through the city.</p>
+        </article>
+      </div>
+    </div>
+  </div>
+  <div class="footer-rule"></div>
+  <div class="page-owner">Pramit Ranjan</div>
+  <div class="page-number">01</div>
+</section>
+
+<section class="page">
+  <div class="page-shell">
+    <div class="gallery-section">
+      <div class="gallery-grid">
+        <div class="section-label">HCMC_</div>
+        <div class="gallery-main template-layout">
+          <div class="sheet-grid landscape-template">
+            <figure class="photo-card landscape"><img src="../creative/photography/hcmc/03.jpg" alt="Ho Chi Minh 03"></figure>
+            <figure class="photo-card landscape"><img src="../creative/photography/hcmc/05.jpg" alt="Ho Chi Minh 05"></figure>
+            <figure class="photo-card landscape"><img src="../creative/photography/hcmc/08.jpg" alt="Ho Chi Minh 08"></figure>
+            <figure class="photo-card landscape"><img src="../creative/photography/hcmc/11.jpg" alt="Ho Chi Minh 11"></figure>
+            <figure class="photo-card landscape"><img src="../creative/photography/hcmc/14.jpg" alt="Ho Chi Minh 14"></figure>
+            <div class="photo-spacer landscape" aria-hidden="true"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-rule"></div>
+  <div class="page-owner">Pramit Ranjan</div>
+  <div class="page-number">02</div>
+</section>
+
+<section class="page">
+  <div class="page-shell">
+    <div class="gallery-section">
+      <div class="gallery-grid">
+        <div class="section-label">HCMC_</div>
+        <div class="gallery-main portrait-template-layout">
+          <div class="sheet-grid portrait-template">
+            <figure class="photo-card portrait"><img src="../creative/photography/hcmc/02.jpg" alt="Ho Chi Minh 02"></figure>
+            <figure class="photo-card portrait"><img src="../creative/photography/hcmc/04.jpg" alt="Ho Chi Minh 04"></figure>
+            <figure class="photo-card portrait"><img src="../creative/photography/hcmc/06.jpg" alt="Ho Chi Minh 06"></figure>
+            <figure class="photo-card portrait"><img src="../creative/photography/hcmc/07.jpg" alt="Ho Chi Minh 07"></figure>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-rule"></div>
+  <div class="page-owner">Pramit Ranjan</div>
+  <div class="page-number">03</div>
+</section>
+
+<section class="page">
+  <div class="page-shell">
+    <div class="gallery-section">
+      <div class="gallery-grid">
+        <div class="section-label">HCMC_</div>
+        <div class="gallery-main portrait-template-layout">
+          <div class="sheet-grid portrait-template">
+            <figure class="photo-card portrait"><img src="../creative/photography/hcmc/09.jpg" alt="Ho Chi Minh 09"></figure>
+            <figure class="photo-card portrait"><img src="../creative/photography/hcmc/10.jpg" alt="Ho Chi Minh 10"></figure>
+            <figure class="photo-card portrait"><img src="../creative/photography/hcmc/12.jpg" alt="Ho Chi Minh 12"></figure>
+            <figure class="photo-card portrait"><img src="../creative/photography/hcmc/13.jpg" alt="Ho Chi Minh 13"></figure>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-rule"></div>
+  <div class="page-owner">Pramit Ranjan</div>
+  <div class="page-number">04</div>
+</section>
+
+<section class="page">
+  <div class="page-shell">
+    <div class="gallery-section">
+      <div class="gallery-grid">
+        <div class="section-label">HCMC_</div>
+        <div class="gallery-main portrait-template-layout">
+          <div class="sheet-grid portrait-template">
+            <figure class="photo-card portrait"><img src="../creative/photography/hcmc/15.jpg" alt="Ho Chi Minh 15"></figure>
+            <figure class="photo-card portrait"><img src="../creative/photography/hcmc/16.jpg" alt="Ho Chi Minh 16"></figure>
+            <figure class="photo-card portrait"><img src="../creative/photography/hcmc/17.jpg" alt="Ho Chi Minh 17"></figure>
+            <div class="photo-spacer portrait" aria-hidden="true"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-rule"></div>
+  <div class="page-owner">Pramit Ranjan</div>
+  <div class="page-number">05</div>
+</section>
+
+</body>
+</html>
