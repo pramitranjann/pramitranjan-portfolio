@@ -329,7 +329,20 @@ export function CaseStudyLayout({
   solutionEmbedUrl, solutionEmbedTitle = 'Live experience', solutionEmbedAspectRatio = '4 / 3', solutionEmbedCtaLabel = 'OPEN LIVE APP',
   solutionEmbedWidth = 'min(100%, 1120px)', solutionEmbedCalloutLabel, solutionEmbedCalloutTitle, solutionEmbedCalloutBody,
 }: CaseStudyLayoutProps) {
-  const basePath = backHref
+  const [resolvedBackHref, setResolvedBackHref] = useState(backHref)
+  const [resolvedBackLabel, setResolvedBackLabel] = useState(backLabel)
+  const [fromScad, setFromScad] = useState(false)
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('from') === 'scad-scholarship') {
+      setResolvedBackHref('/scad-scholarship')
+      setResolvedBackLabel('SCAD PORTFOLIO')
+      setFromScad(true)
+    }
+  }, [])
+
+  const basePath = resolvedBackHref
   const copy = { ...useSiteCopy().caseStudy, ...uiCopy }
   const resolvedNavStyle = {
     background: navStyle?.background ?? 'rgba(13,13,13,0.98)',
@@ -383,8 +396,8 @@ export function CaseStudyLayout({
     tags,
     prev,
     next,
-    backHref,
-    backLabel,
+    backHref: resolvedBackHref,
+    backLabel: resolvedBackLabel,
     problem,
     role,
     research,
@@ -614,18 +627,42 @@ export function CaseStudyLayout({
   return (
     <>
       <ReadingProgress />
-      <Nav />
+      {fromScad ? (
+        <nav
+          className="site-nav fixed top-0 left-0 right-0 z-50 flex items-center justify-between border-b border-divider"
+          style={{
+            padding: 'var(--layout-nav-padding-y) var(--layout-page-gutter)',
+            backgroundColor: 'var(--nav-background)',
+            backdropFilter: 'blur(8px)',
+            borderColor: 'var(--nav-border-color)',
+          }}
+        >
+          <Link
+            href="/scad-scholarship"
+            className="font-mono"
+            style={{ fontSize: 'var(--nav-logo-size)', letterSpacing: '0.14em', color: 'var(--nav-logo-color)', textDecoration: 'none' }}
+            onPointerDown={playNav}
+          >
+            PR
+          </Link>
+          <span className="font-mono" style={{ fontSize: 'var(--nav-link-size)', letterSpacing: '0.12em', color: '#888888' }}>
+            ← explore the full site
+          </span>
+        </nav>
+      ) : (
+        <Nav />
+      )}
       <main style={{ paddingTop: '57px' }}>
 
         {/* Back link */}
         <div className="case-study-back" style={{ padding: '24px var(--layout-page-gutter) 0' }}>
           <Link
-            href={backHref}
+            href={resolvedBackHref}
             className="font-mono"
             style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: 'var(--back-link-color)', textDecoration: 'none' }}
             onPointerDown={playNav}
           >
-            <span className="arrow-nudge-back">←</span> {backLabel}
+            <span className="arrow-nudge-back">←</span> {resolvedBackLabel}
           </Link>
         </div>
 

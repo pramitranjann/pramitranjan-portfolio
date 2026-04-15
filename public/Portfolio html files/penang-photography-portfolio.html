@@ -432,6 +432,40 @@
     size: A3 landscape;
     margin: 0;
   }
+
+  @media print {
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+    }
+
+    body {
+      display: block;
+    }
+
+    .page {
+      box-shadow: none;
+    }
+
+    .cover {
+      padding-top: 8mm;
+      gap: 10mm;
+    }
+
+    .cover-note {
+      margin-bottom: -14mm;
+    }
+
+    .cover-image {
+      margin-bottom: -14mm;
+    }
+
+    .cover-strip {
+      margin-top: 38mm;
+    }
+  }
 </style>
 </head>
 <body>
