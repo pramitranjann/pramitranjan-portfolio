@@ -207,6 +207,17 @@
         "coverPosition": "center"
       },
       {
+        "title": "Albers",
+        "oneliner": "Colour theory you can actually play with.",
+        "tags": [
+          "UI",
+          "INTERACTION"
+        ],
+        "href": "/work/albers",
+        "cover": "/work/albers/cover-hor.png",
+        "coverPosition": "center"
+      },
+      {
         "title": "LoomLearn",
         "oneliner": "One learning space for students who think differently.",
         "tags": [
@@ -237,17 +248,6 @@
         ],
         "href": "/work/atom",
         "cover": "/work/atom/cover-hor.png",
-        "coverPosition": "center"
-      },
-      {
-        "title": "Albers",
-        "oneliner": "Colour theory you can actually play with.",
-        "tags": [
-          "UI",
-          "INTERACTION"
-        ],
-        "href": "/work/albers",
-        "cover": "/work/albers/cover-hor.png",
         "coverPosition": "center"
       },
       {
@@ -533,7 +533,7 @@
       "hoverMinHeight": "190px",
       "hoverScale": "1.018",
       "hoverProgressHeight": "6px",
-      "hoverCopyPlaying": "Currently making this page look better.",
+      "hoverCopyPlaying": "Currently blessing my ears...",
       "hoverCopyIdle": "Between tracks, or watching a DJ set on Youtube...",
       "progressMetaSize": "7px",
       "cardBackground": "#111111",
