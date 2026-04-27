@@ -907,7 +907,7 @@
       "mediaSettings": {
         "hero": {
           "background": "#FFFFFF",
-          "fit": "cover"
+          "fit": "contain"
         }
       },
       "solutionEmbedAspectRatio": "4 / 3",
