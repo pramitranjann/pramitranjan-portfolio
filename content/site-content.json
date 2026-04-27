@@ -973,7 +973,7 @@
             }
           ],
           "inlineTextWidth": "640px",
-          "inlineMediaMinWidth": "640px"
+          "inlineMediaMinWidth": "360px"
         }
       ],
       "heroImage": "/work/Wander/Mockup-123.png",
