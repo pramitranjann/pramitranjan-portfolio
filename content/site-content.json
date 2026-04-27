@@ -964,10 +964,9 @@
           "gap": "2px",
           "images": [
             {
-              "src": "/work/Wander/Frame 46.png",
-              "fit": "cover",
+              "src": "/work/Wander/Frame 46 1.png",
+              "fit": "contain",
               "position": "center center",
-              "aspectRatio": "4 / 5",
               "background": "#0d0d0d",
               "alt": "Layout placeholder"
             }
