@@ -1474,7 +1474,10 @@
         "slug": "south-china-sea",
         "title": "South China Sea"
       },
-      "next": null,
+      "next": {
+        "slug": "mixed-media-project",
+        "title": "Untitled project"
+      },
       "backHref": "/creative/mixed-media",
       "backLabel": "MIXED MEDIA",
       "heroImage": "/creative/mixed-media/faces-of-power/hero.png",
@@ -1755,6 +1758,146 @@
           "background": "#FFFFFF"
         }
       }
+    },
+    {
+      "slug": "the lines in between",
+      "section": "mixed-media",
+      "title": "The Lines in Between",
+      "oneliner": "A tapestry of cultures, stitched across the transit lines of Kuala Lumpur.",
+      "type": "MIXED MEDIA · 2025",
+      "tags": [
+        "Mixed Media",
+        "Photography",
+        "Conceptual Art",
+        "Installation"
+      ],
+      "prev": {
+        "slug": "faces-of-power",
+        "title": "Faces of Power"
+      },
+      "next": null,
+      "mediaBlocks": [
+        {
+          "section": "research",
+          "layout": "single",
+          "placement": "side-right",
+          "inlineTextWidth": "480px",
+          "inlineMediaMinWidth": "240px",
+          "align": "center",
+          "hidden": true,
+          "images": [
+            {
+              "src": "",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
+          ],
+          "id": "research-1777304490372-m2psgm"
+        },
+        {
+          "section": "challenge",
+          "layout": "single",
+          "placement": "side-right",
+          "inlineTextWidth": "480px",
+          "inlineMediaMinWidth": "240px",
+          "align": "center",
+          "hidden": true,
+          "images": [
+            {
+              "src": "",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
+          ],
+          "id": "challenge-1777304490372-4hgrfm"
+        },
+        {
+          "section": "process",
+          "layout": "pair",
+          "width": "100%",
+          "gap": "2px",
+          "align": "center",
+          "hidden": true,
+          "images": [
+            {
+              "src": "",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            },
+            {
+              "src": "",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
+          ],
+          "id": "process-1777304490372-i5vyle"
+        },
+        {
+          "section": "solution",
+          "layout": "single",
+          "width": "100%",
+          "align": "center",
+          "hidden": true,
+          "images": [
+            {
+              "src": "",
+              "fit": "contain",
+              "aspectRatio": "16 / 10",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
+          ],
+          "id": "solution-1777304490372-aq9zjx"
+        },
+        {
+          "section": "solution",
+          "layout": "pair",
+          "width": "100%",
+          "gap": "2px",
+          "align": "center",
+          "hidden": true,
+          "images": [
+            {
+              "src": "",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            },
+            {
+              "src": "",
+              "fit": "contain",
+              "aspectRatio": "4 / 3",
+              "background": "#0d0d0d",
+              "alt": ""
+            }
+          ],
+          "id": "solution-1777304490372-986it6"
+        }
+      ],
+      "problemHeadline": "Proximity is not the same as union.",
+      "problem": "Given the theme \"Union\", I turned to the city I had just moved to — Kuala Lumpur, where three distinct communities share one space without always sharing one story. The railway connects Chinatown, Kampung Baru, Brickfields. Every day, thousands of strangers share the same carriage and depart in different directions. The question wasn't whether these communities are united. It was whether proximity is the same thing as union.",
+      "role": "A-Level Photography submission at Garden International School, KL. Solo project — research, photography, textile experimentation, and final piece all self-directed.",
+      "roleHeadline": "Sole artist — concept, photography, material fabrication, and installation.",
+      "researchHeadline": "Research split across two threads — documentary photography and textile art — before they converged in the final piece.",
+      "research": "On the photography side: Michael Wolf's Tokyo Compression became the conceptual anchor early on. Strangers pressed together in a subway car, faces against glass, physically touching but completely disconnected — it reframed the entire project. Proximity as its own kind of loneliness. Henri Cartier-Bresson and Robert Doisneau shaped the approach to people — isolated individuals rather than crowds, quiet interactions over spectacle. Tony Ray-Jones pushed further: his notes insisted on getting involved, using humour, never taking boring pictures. That discipline carried into every shoot. Salgado, Gursky, Struth, and Bourke-White provided the wider frame — how traditional identities persist, adapt, or clash inside rapidly modernising cities. Jimmy Nelson, Alex Webb, and David Goldblatt showed communities where the people, not the location, are the subject.\n\nOn the textile side: Yinka Shonibare's use of African patterns on colonial silhouettes was the first real reference point — two cultural histories stitched into one object, neither erasing the other. Billie Zangewa's silk collages brought the personal in — hand-stitching as a way of connecting fragments of experience, each thread linking pieces the way relationships and histories link people. Grayson Perry's tapestries showed how a traditionally high-status medium could carry uncomfortable truths about community and class. The Quilts of Gee's Bend grounded all of it — quilts made from whatever fabric was available, patterns improvised rather than inherited, collective making as a form of survival and identity.\n\nHundertwasser's Five Skins tied both threads together: epidermis, clothing, house, community, environment — individuals and cities as nested, interdependent layers. His framework made visible what the project was really asking. Union creates isolation just as much as it creates connection. A person can feel alone inside a community. A community can feel invisible inside a city.",
+      "challengeHeadline": "How do you show a city's soul without flattening it into a postcard?",
+      "pullQuote": "Every day, thousands of strangers share the same carriage and depart in different directions.",
+      "challenge": "Street photography alone couldn't carry the weight of three distinct communities and their histories. Chinatown, Kampung Baru, and Brickfields are minutes apart on the MRT but generations apart in culture, religion, architecture, and daily rhythm. A photograph of each would show difference. It wouldn't show the tension between separation and coexistence — the fact that these communities have lived alongside each other for over a century without fully merging.The project needed a second layer. Something that could hold patterns, textures, geography, and history all in one surface. Something where the act of making was itself a form of union — fragments brought together, stitched into something that holds but doesn't quite dissolve.The MRT map became that structure. Not because it was a neat metaphor, but because it was true — the rail network is the one system that physically connects every pocket of the city. It runs through all of them without belonging to any of them.",
+      "processHeadline": "Making the piece taught me as much as researching it.",
+      "process": "Photoshoots began in Chinatown — capturing the melting pot at street level. A Buddhist monk and a western backpacker sharing a corner, two entirely different journeys colliding in one place. The best images weren't the obvious ones. They were intersections, sidewalk breaks, a couple holding hands in a crowded market, shadows stretching across road markings. A second shoot attempted the MRT platforms with a long lens — it failed. People spotted the camera and moved away. The lens was too intimidating, the settings too slow to adjust on the fly. Switched to a shorter lens for every shoot after.\nKL Sentral came next — over 200,000 passengers daily, every race and background funnelled through the same concourse, moving in and out without acknowledgment. Shot from the hip, from low angles, looking up at the roof grid and the floor pattern simultaneously. The station's architecture did half the work — leading lines everywhere, light cutting through in strips, bodies in constant motion.\nKampung Baru and Brickfields were the most revealing shoots. Kampung Baru established in 1899, still standing with wooden houses, food stalls, and narrow streets — KLCC towers filling the background like a threat and a promise at once. Brickfields, Little India, where temples and gold shops and banana leaf restaurants sit two minutes from KL Sentral. Both communities defined by the contrast between what surrounds them and what they've chosen to preserve.\nA comparative shoot in Ho Chi Minh City — District 1, Saigon — ran parallel. The images were closer, more intimate, more human. They taught me exactly how near to get to a subject. They were too personal for KL's story, but without them the Kampung Baru and Brickfields work wouldn't have been as strong.\nBy this point the photography was doing one thing well — showing communities in isolation. What it couldn't do was show the system that connects them. That's where the textile work began.\nScreen printing the KL MRT map onto calico was the first attempt — the lines were too fine, they wouldn't burn through the screen properly. Moved to digital printing on calico. Sourced traditional patterns from all three communities online, supplemented with close-up photographs of my mother's Indian textiles — sarees, embroidered fabrics, things she uses for specific occasions. Cut them up. Stitched them together. The act of cutting patterns apart and joining them on a single surface started to feel like the project's real argument — not union as harmony, but union as proximity. Different things sharing the same cloth.\nLearning to stitch took time. French knots first — small, raised, each one requiring the thread to be wrapped around the needle a precise number of times before reinserting. Tying a knot is another term for a marriage. The stitch itself is a union. Chain stitch followed — looping, interlocking, continuous. It looks exactly like a train track. Both stitches were then worked over the MRT lines in the actual colours of each rail line, so the embroidery added real cartographic context rather than just decoration. The map was no longer a backdrop. It was becoming the argument.\nEmbroidery hoops placed over sections of the map push the fabric up slightly, creating an illusion of depth — a magnifying glass effect that pulls certain communities into focus while the rest recedes. Different sized hoops for different areas, placed where the densest cultural enclaves sit on the map. Hundertwasser's nested layers made physical.\nThe final question was how to bring the photography and the textile together without one illustrating the other. The strongest images from each community were printed onto calico and mounted inside the hoops — so the photography sat inside the textile, framed by it, part of the same fabric. The communities weren't illustrated by the map. They were embedded in it.",
+      "solutionHeadline": "Three communities. One surface. ",
+      "solution": "A large-scale calico tapestry, A0 in size. The KL MRT network printed across the full sheet as the backbone — the one system that connects every community without belonging to any of them. The sheet itself was assembled in sections, printed in A3 and joined with seams ironed flat so nothing would pucker under the hoops. A thicker calico backing added structure — hidden, holding everything together from behind.\nCultural patterns from Chinatown, Kampung Baru, and Brickfields fill the space between the lines, each distinct, none dissolving into the others. The strongest photographs from each community are printed on calico and mounted inside embroidery hoops of different sizes — placed where the densest cultural enclaves sit on the map, each hoop a window into one world, sitting inside the same fabric as everything else.\nChain stitch traces the rail lines in each line's actual colour. French knots mark every station. Tying a knot is another name for a marriage. Everything is connected. Nothing is quite touching.",
+      "outcomesHeadline": "A city on cloth.",
+      "outcomes": "The Lines in Between was submitted as a GCE A-Level Photography final piece at Garden International School, Kuala Lumpur, receiving an A*. What the project taught me was the difference between capturing a place like a tourist and capturing it like someone trying to understand it. I didn't want spectacle — I wanted the regularness of life, the day-to-day of a common man in a multicultural city. The roughness of the print quality on calico, which I initially saw as a flaw, started to feel honest. Not every union is clean. There are always tensions between communities with different ideologies and beliefs. The piece reflects that.\nWhat I'd push further: getting closer to individuals within each community, not just their environments. The street photography from KL and Ho Chi Minh City shot during this project lives in the photography series pages."
     }
   ]
 }
