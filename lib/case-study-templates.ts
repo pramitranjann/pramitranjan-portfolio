@@ -71,6 +71,17 @@ export const CASE_STUDY_TEMPLATES: CaseStudyTemplate[] = [
     ],
   },
   {
+    id: 'mixed-media',
+    label: 'Mixed Media',
+    description: 'Editorial photography — full-width imagery with portrait-friendly ratios',
+    blocks: [
+      { section: 'research',  layout: 'single', placement: 'below', inlineTextWidth: '480px', inlineMediaMinWidth: '240px', align: 'center', hidden: true, images: [img('4 / 3')] },
+      { section: 'challenge', layout: 'single', width: '100%', align: 'center', hidden: true, images: [img('4 / 3')] },
+      { section: 'process',   layout: 'single', width: '100%', align: 'center', hidden: true, images: [img('4 / 3')] },
+      { section: 'solution',  layout: 'single', width: '100%', align: 'center', hidden: true, images: [img('4 / 5')] },
+    ],
+  },
+  {
     id: 'blank',
     label: 'Blank',
     description: 'No pre-configured blocks — build from scratch',

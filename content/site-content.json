@@ -860,8 +860,8 @@
         "title": "Franklin's"
       },
       "next": {
-        "slug": "loomlearn",
-        "title": "LoomLearn"
+        "slug": "wander",
+        "title": "Wander"
       },
       "heroImage": "/work/albers/cover-hor.png",
       "solutionHeroImage": "/work/albers/img-6-processed.png",
@@ -919,6 +919,78 @@
       "solutionEmbedCalloutTitle": "The shipped Albers build is embedded below."
     },
     {
+      "slug": "wander",
+      "section": "work",
+      "title": "Wander",
+      "oneliner": "The walk is the point.",
+      "type": "UX DESIGN · 2026",
+      "tags": [
+        "Cornell UX Design Club Design-a-thon",
+        "Mobile UX",
+        "Figma"
+      ],
+      "prev": {
+        "slug": "albers",
+        "title": "Albers"
+      },
+      "next": {
+        "slug": "loomlearn",
+        "title": "LoomLearn"
+      },
+      "problemHeadline": "The tools optimise for speed. Nobody designed for the walk itself.",
+      "problem": "Google Maps optimises for fastest. Strava optimises for performance. 28 of 34 survey respondents said they walk to clear their head — but none described it as intentional. It just happens, in spite of the tools, not because of them.",
+      "roleHeadline": "Designer on a team of two — research through final prototype.",
+      "role": "Co-owned all research, synthesis, concept development, and UI design in Figma across the full 48 hours.",
+      "researchHeadline": "The phone was making the walk worse.",
+      "research": "Short survey to 15 respondents on walking habits and mid-walk phone behaviour, backed by secondary research — attention restoration theory (Kaplan, 1995) and Stanford's study on walking and creative cognition (Oppezzo & Schwartz, 2014). The finding that shaped everything: people already walk to decompress. The tools just get in the way.",
+      "pullQuote": "Walking already works. We just need to protect it from the phone.",
+      "challengeHeadline": "How do you build an app whose job is to get you off the app?",
+      "challenge": "\nWe identified two moments to serve — time with no destination, and a destination with no rush. Both shared the same need: a reset. Unifying them under one product made the concept legible in a single sentence.",
+      "process": "Sourced visual direction on Cosmos, wireframed in Figma, then used AI to rapidly build out the prototype. Once the prototype was done, we moved into Figma to produce the final creatives and presentation assets.",
+      "processHeadline": "\nCosmos to wireframe to prototype — without breaking the sprint.",
+      "usabilityTesting": "\nOnce the walk starts, the app moves to the lock screen widget — prompt and distance only. No step counts. No streaks. No gamification. Every other walking app pulls you into the screen; Wander actively pushes you out of it.",
+      "solutionHeadline": "\nTwo modes, one ritual — built and submitted in 48 hours.",
+      "solution": "Figma prototype covering both modes, the prompt reveal, the active walk state with lock screen widget, and the end-of-walk screen — with stylised maps using Savannah's grid as the test environment.",
+      "outcomesHeadline": "The hardest constraint was intentional disappearance.",
+      "outcomes": "\nBuilding something that works by getting out of the way runs against every instinct in product design. If I were to continue, I'd refine the screens further and sharpen the logic behind both modes — how the loop calculates and adjusts a route, and how the route character system actually works under the hood.",
+      "mediaBlocks": [
+        {
+          "id": "process-1777257091551-m8m6k7",
+          "section": "process",
+          "layout": "single",
+          "placement": "side-right",
+          "align": "center",
+          "width": "60%",
+          "gap": "2px",
+          "images": [
+            {
+              "src": "/work/Wander/Frame 46.png",
+              "fit": "cover",
+              "position": "center center",
+              "aspectRatio": "4 / 5",
+              "background": "#0d0d0d",
+              "alt": "Layout placeholder"
+            }
+          ]
+        }
+      ],
+      "heroImage": "/work/Wander/cover.png",
+      "mediaSettings": {
+        "hero": {
+          "fit": "cover",
+          "background": "#FFFFFF"
+        }
+      },
+      "solutionEmbedAspectRatio": "4 / 3",
+      "solutionEmbedWidth": "min(100%, 1325px)",
+      "solutionEmbedCalloutLabel": "LIVE APP_",
+      "solutionEmbedCalloutBody": "This is the actual live app, not a mockup. You can interact with it here, then open it in a separate tab if you want the full browser context.",
+      "solutionEmbedCtaLabel": "OPEN LIVE APP",
+      "solutionEmbedUrl": "https://wander-nine-tau.vercel.app",
+      "solutionEmbedTitle": "Wander live app",
+      "solutionEmbedCalloutTitle": "The shipped Wander build is embedded below."
+    },
+    {
       "slug": "loomlearn",
       "section": "work",
       "title": "LoomLearn",
@@ -932,8 +1004,8 @@
         "Prototyping"
       ],
       "prev": {
-        "slug": "albers",
-        "title": "Albers"
+        "slug": "wander",
+        "title": "Wander"
       },
       "next": {
         "slug": "helpoh",
@@ -1124,8 +1196,8 @@
         "title": "HelpOH"
       },
       "next": {
-        "slug": "accord",
-        "title": "Accord"
+        "slug": "purcast",
+        "title": "Purcast"
       },
       "heroImage": "/work/atom/cover-hor.png",
       "solutionHeroImage": "/work/atom/solution-hero-processed.png",
@@ -1204,78 +1276,6 @@
       ]
     },
     {
-      "slug": "wander",
-      "section": "work",
-      "title": "Wander",
-      "oneliner": "The walk is the point.",
-      "type": "UX DESIGN · 2026",
-      "tags": [
-        "Cornell UX Design Club Design-a-thon",
-        "Mobile UX",
-        "Figma"
-      ],
-      "prev": {
-        "slug": "atom",
-        "title": "Atom OS"
-      },
-      "next": {
-        "slug": "purcast",
-        "title": "Purcast"
-      },
-      "problemHeadline": "The tools optimise for speed. Nobody designed for the walk itself.",
-      "problem": "Google Maps optimises for fastest. Strava optimises for performance. 28 of 34 survey respondents said they walk to clear their head — but none described it as intentional. It just happens, in spite of the tools, not because of them.",
-      "roleHeadline": "Designer on a team of two — research through final prototype.",
-      "role": "Co-owned all research, synthesis, concept development, and UI design in Figma across the full 48 hours.",
-      "researchHeadline": "The phone was making the walk worse.",
-      "research": "Short survey to 15 respondents on walking habits and mid-walk phone behaviour, backed by secondary research — attention restoration theory (Kaplan, 1995) and Stanford's study on walking and creative cognition (Oppezzo & Schwartz, 2014). The finding that shaped everything: people already walk to decompress. The tools just get in the way.",
-      "pullQuote": "Walking already works. We just need to protect it from the phone.",
-      "challengeHeadline": "How do you build an app whose job is to get you off the app?",
-      "challenge": "\nWe identified two moments to serve — time with no destination, and a destination with no rush. Both shared the same need: a reset. Unifying them under one product made the concept legible in a single sentence.",
-      "process": "Sourced visual direction on Cosmos, wireframed in Figma, then used AI to rapidly build out the prototype. Once the prototype was done, we moved into Figma to produce the final creatives and presentation assets.",
-      "processHeadline": "\nCosmos to wireframe to prototype — without breaking the sprint.",
-      "usabilityTesting": "\nOnce the walk starts, the app moves to the lock screen widget — prompt and distance only. No step counts. No streaks. No gamification. Every other walking app pulls you into the screen; Wander actively pushes you out of it.",
-      "solutionHeadline": "\nTwo modes, one ritual — built and submitted in 48 hours.",
-      "solution": "Figma prototype covering both modes, the prompt reveal, the active walk state with lock screen widget, and the end-of-walk screen — with stylised maps using Savannah's grid as the test environment.",
-      "outcomesHeadline": "The hardest constraint was intentional disappearance.",
-      "outcomes": "\nBuilding something that works by getting out of the way runs against every instinct in product design. If I were to continue, I'd refine the screens further and sharpen the logic behind both modes — how the loop calculates and adjusts a route, and how the route character system actually works under the hood.",
-      "mediaBlocks": [
-        {
-          "id": "process-1777257091551-m8m6k7",
-          "section": "process",
-          "layout": "single",
-          "placement": "side-right",
-          "align": "center",
-          "width": "60%",
-          "gap": "2px",
-          "images": [
-            {
-              "src": "/work/Wander/Frame 46.png",
-              "fit": "cover",
-              "position": "center center",
-              "aspectRatio": "4 / 5",
-              "background": "#0d0d0d",
-              "alt": "Layout placeholder"
-            }
-          ]
-        }
-      ],
-      "heroImage": "/work/Wander/cover.png",
-      "mediaSettings": {
-        "hero": {
-          "fit": "cover",
-          "background": "#FFFFFF"
-        }
-      },
-      "solutionEmbedAspectRatio": "4 / 3",
-      "solutionEmbedWidth": "min(100%, 1325px)",
-      "solutionEmbedCalloutLabel": "LIVE APP_",
-      "solutionEmbedCalloutBody": "This is the actual live app, not a mockup. You can interact with it here, then open it in a separate tab if you want the full browser context.",
-      "solutionEmbedCtaLabel": "OPEN LIVE APP",
-      "solutionEmbedUrl": "https://wander-nine-tau.vercel.app",
-      "solutionEmbedTitle": "Wander live app",
-      "solutionEmbedCalloutTitle": "The shipped Wander build is embedded below."
-    },
-    {
       "slug": "purcast",
       "section": "work",
       "title": "Purcast",
@@ -1288,8 +1288,8 @@
         "Sprint"
       ],
       "prev": {
-        "slug": "accord",
-        "title": "Accord"
+        "slug": "atom",
+        "title": "Atom OS"
       },
       "next": {
         "slug": "designathon-02",

@@ -1143,7 +1143,7 @@ git push`
                   onMove={(direction) => moveCaseStudy(item.slug, direction)}
                 />
               ))}
-              <SidebarButton active={false} label="+ Add Mixed Media" onClick={() => { setPendingNewSection('mixed-media'); setPendingTemplateId('visual-brand') }} />
+              <SidebarButton active={false} label="+ Add Mixed Media" onClick={() => { setPendingNewSection('mixed-media'); setPendingTemplateId('mixed-media') }} />
             </SidebarGroup>
 
             <SidebarGroup title="BRANDING">
