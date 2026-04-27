@@ -979,7 +979,7 @@
       "heroImage": "/work/Wander/Mockup-123.png",
       "mediaSettings": {
         "hero": {
-          "fit": "cover",
+          "fit": "contain",
           "background": "#FFFFFF"
         }
       },
