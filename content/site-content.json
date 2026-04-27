@@ -225,7 +225,7 @@
           "PRODUCT"
         ],
         "href": "/work/wander",
-        "cover": "/work/Wander/cover.png",
+        "cover": "/work/Wander/Mockup-123.png",
         "hoverImage": "/work/Wander/cover image.png"
       },
       {
@@ -965,7 +965,7 @@
           "images": [
             {
               "src": "/work/Wander/Frame 46 1.png",
-              "fit": "contain",
+              "fit": "cover",
               "position": "center center",
               "background": "#0d0d0d",
               "alt": "Layout placeholder"
@@ -973,7 +973,7 @@
           ]
         }
       ],
-      "heroImage": "/work/Wander/cover.png",
+      "heroImage": "/work/Wander/Mockup-123.png",
       "mediaSettings": {
         "hero": {
           "fit": "cover",
