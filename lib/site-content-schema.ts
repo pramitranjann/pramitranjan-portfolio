@@ -397,6 +397,14 @@ export interface CaseStudyContent {
   mediaSettings?: CaseStudyMediaSettings
   mediaBlocks?: CaseStudyMediaBlock[]
   uiCopy?: CaseStudyUiCopy
+  solutionEmbedUrl?: string
+  solutionEmbedTitle?: string
+  solutionEmbedAspectRatio?: string
+  solutionEmbedWidth?: string
+  solutionEmbedCalloutLabel?: string
+  solutionEmbedCalloutTitle?: string
+  solutionEmbedCalloutBody?: string
+  solutionEmbedCtaLabel?: string
 }
 
 export interface SiteContent {
@@ -964,7 +972,15 @@ function isCaseStudyContent(value: unknown): value is CaseStudyContent {
     isOptionalStringArray(item.solutionImages) &&
     (item.mediaSettings === undefined || isCaseStudyMediaSettings(item.mediaSettings)) &&
     (item.mediaBlocks === undefined || (Array.isArray(item.mediaBlocks) && item.mediaBlocks.every(isCaseStudyMediaBlock))) &&
-    (item.uiCopy === undefined || isCaseStudyUiCopy(item.uiCopy))
+    (item.uiCopy === undefined || isCaseStudyUiCopy(item.uiCopy)) &&
+    isOptionalString(item.solutionEmbedUrl) &&
+    isOptionalString(item.solutionEmbedTitle) &&
+    isOptionalString(item.solutionEmbedAspectRatio) &&
+    isOptionalString(item.solutionEmbedWidth) &&
+    isOptionalString(item.solutionEmbedCalloutLabel) &&
+    isOptionalString(item.solutionEmbedCalloutTitle) &&
+    isOptionalString(item.solutionEmbedCalloutBody) &&
+    isOptionalString(item.solutionEmbedCtaLabel)
   )
 }
 

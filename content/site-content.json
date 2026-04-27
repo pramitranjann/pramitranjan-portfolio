@@ -1229,59 +1229,31 @@
       "outcomes": "\nBuilding something that works by getting out of the way runs against every instinct in product design. If I were to continue, I'd refine the screens further and sharpen the logic behind both modes — how the loop calculates and adjusts a route, and how the route character system actually works under the hood.",
       "mediaBlocks": [
         {
-          "section": "solution",
+          "id": "process-1777257091551-m8m6k7",
+          "section": "process",
           "layout": "single",
-          "width": "100%",
+          "placement": "side-right",
           "align": "center",
-          "images": [
-            {
-              "src": "/work/Wander/Mockup-1.png",
-              "fit": "contain",
-              "aspectRatio": "16 / 10",
-              "background": "#0d0d0d",
-              "alt": ""
-            }
-          ],
-          "id": "solution-1777256913118-1ufub6"
-        },
-        {
-          "section": "solution",
-          "layout": "single",
-          "width": "100%",
+          "width": "60%",
           "gap": "2px",
-          "align": "center",
           "images": [
             {
               "src": "/work/Wander/Frame 46.png",
               "fit": "contain",
-              "aspectRatio": "4 / 3",
-              "background": "#0d0d0d",
-              "alt": ""
-            }
-          ],
-          "id": "solution-1777256913118-b8q5we"
-        },
-        {
-          "id": "process-1777257091551-m8m6k7",
-          "section": "process",
-          "layout": "single",
-          "placement": "below",
-          "align": "center",
-          "width": "100%",
-          "gap": "2px",
-          "images": [
-            {
-              "src": "/work/Wander/Mockup.png",
-              "fit": "contain",
               "position": "center center",
-              "aspectRatio": "4 / 3",
+              "aspectRatio": "4 / 5",
               "background": "#0d0d0d",
               "alt": "Layout placeholder"
             }
           ]
         }
       ],
-      "heroImage": "/work/Wander/Mockup-1.png"
+      "heroImage": "/work/Wander/cover image.png",
+      "mediaSettings": {
+        "hero": {
+          "fit": "cover"
+        }
+      }
     },
     {
       "slug": "purcast",

@@ -2413,6 +2413,36 @@ function CaseStudyEditor({
         />
       </SectionFrame>
 
+      <SectionFrame title={`${caseStudy.title} · Solution Embed`}>
+        <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.7 }}>
+          When a URL is set, the embed replaces solution images. Leave blank to use solution images instead.
+        </p>
+        <Field label="Embed URL">
+          <input value={caseStudy.solutionEmbedUrl ?? ''} onChange={(event) => onChange((current) => ({ ...current, solutionEmbedUrl: event.target.value || undefined }))} style={inputStyle()} placeholder="https://your-app.vercel.app" />
+        </Field>
+        <Field label="Embed Title">
+          <input value={caseStudy.solutionEmbedTitle ?? ''} onChange={(event) => onChange((current) => ({ ...current, solutionEmbedTitle: event.target.value || undefined }))} style={inputStyle()} placeholder="Live experience" />
+        </Field>
+        <Field label="Aspect Ratio">
+          <input value={caseStudy.solutionEmbedAspectRatio ?? ''} onChange={(event) => onChange((current) => ({ ...current, solutionEmbedAspectRatio: event.target.value || undefined }))} style={inputStyle()} placeholder="4 / 3" />
+        </Field>
+        <Field label="Width">
+          <input value={caseStudy.solutionEmbedWidth ?? ''} onChange={(event) => onChange((current) => ({ ...current, solutionEmbedWidth: event.target.value || undefined }))} style={inputStyle()} placeholder="min(100%, 1325px)" />
+        </Field>
+        <Field label="Callout Label">
+          <input value={caseStudy.solutionEmbedCalloutLabel ?? ''} onChange={(event) => onChange((current) => ({ ...current, solutionEmbedCalloutLabel: event.target.value || undefined }))} style={inputStyle()} placeholder="LIVE APP_" />
+        </Field>
+        <Field label="Callout Title">
+          <input value={caseStudy.solutionEmbedCalloutTitle ?? ''} onChange={(event) => onChange((current) => ({ ...current, solutionEmbedCalloutTitle: event.target.value || undefined }))} style={inputStyle()} />
+        </Field>
+        <Field label="Callout Body">
+          <textarea value={caseStudy.solutionEmbedCalloutBody ?? ''} onChange={(event) => onChange((current) => ({ ...current, solutionEmbedCalloutBody: event.target.value || undefined }))} style={inputStyle(true)} />
+        </Field>
+        <Field label="CTA Label">
+          <input value={caseStudy.solutionEmbedCtaLabel ?? ''} onChange={(event) => onChange((current) => ({ ...current, solutionEmbedCtaLabel: event.target.value || undefined }))} style={inputStyle()} placeholder="OPEN LIVE APP" />
+        </Field>
+      </SectionFrame>
+
       <SectionFrame title={`${caseStudy.title} · UI Copy`}>
         <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.7 }}>
           These labels are specific to this case study. They start from the shared defaults, then save into this project once you edit them.

@@ -325,10 +325,13 @@ export function CaseStudyLayout({
   problem, role, research, challenge, process, usabilityTesting, solution, outcomes,
   problemHeadline, roleHeadline, researchHeadline, challengeHeadline,
   processHeadline, solutionHeadline, outcomesHeadline, pullQuote,
-  heroImage, researchImage, challengeImages, solutionHeroImage, solutionImages, mediaSettings, mediaBlocks, uiCopy, navStyle,
+  heroImage, researchImage, challengeImages, solutionHeroImage: rawSolutionHeroImage, solutionImages: rawSolutionImages, mediaSettings, mediaBlocks: rawMediaBlocks, uiCopy, navStyle,
   solutionEmbedUrl, solutionEmbedTitle = 'Live experience', solutionEmbedAspectRatio = '4 / 3', solutionEmbedCtaLabel = 'OPEN LIVE APP',
   solutionEmbedWidth = 'min(100%, 1120px)', solutionEmbedCalloutLabel, solutionEmbedCalloutTitle, solutionEmbedCalloutBody,
 }: CaseStudyLayoutProps) {
+  const solutionHeroImage = solutionEmbedUrl ? undefined : rawSolutionHeroImage
+  const solutionImages = solutionEmbedUrl ? undefined : rawSolutionImages
+  const mediaBlocks = solutionEmbedUrl ? rawMediaBlocks?.filter((b) => b.section !== 'solution') : rawMediaBlocks
   const [resolvedBackHref, setResolvedBackHref] = useState(backHref)
   const [resolvedBackLabel, setResolvedBackLabel] = useState(backLabel)
   const [fromScad, setFromScad] = useState(false)
