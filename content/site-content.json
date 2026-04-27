@@ -2,7 +2,7 @@
   "home": {
     "selectedWork": {
       "heading": "Research to resolution.",
-      "body": "Four projects in UX \u2014 each one starting with a question worth asking.",
+      "body": "Four projects in UX — each one starting with a question worth asking.",
       "items": [
         {
           "title": "Franklin's",
@@ -92,25 +92,25 @@
   },
   "aboutPage": {
     "heroBody": "UX design student at SCAD, figuring out what good design can actually do. I think like a designer but see like an artist. Still learning. Always curious.",
-    "whoIAm": "From KL, currently surviving Savannah. I picked up a camera before I picked up Figma \u2014 film photography across Southeast Asia will do that. I think about design the same way: light, framing, what to cut. Still figuring out the rest.",
+    "whoIAm": "From KL, currently surviving Savannah. I picked up a camera before I picked up Figma — film photography across Southeast Asia will do that. I think about design the same way: light, framing, what to cut. Still figuring out the rest.",
     "experience": [
       {
         "org": "Vircle Malaysia",
         "role": "GROWTH INTERN",
-        "date": "JUL 2024 \u2014 AUG 2024",
-        "desc": "Designed sticker packs for Vircle \u00d7 Minions Despicable Me 4 collaboration \u2014 included in the packaging of each card sold. Created hero images and prototyped a school landing page."
+        "date": "JUL 2024 — AUG 2024",
+        "desc": "Designed sticker packs for Vircle × Minions Despicable Me 4 collaboration — included in the packaging of each card sold. Created hero images and prototyped a school landing page."
       },
       {
         "org": "SOHO Exhibition",
         "role": "EXHIBITION DIRECTOR",
-        "date": "SEP 2023 \u2014 JAN 2024",
+        "date": "SEP 2023 — JAN 2024",
         "desc": "Chaired the annual sixth form art exhibition. Responsible for organising all departments, delegating tasks, managing logistics, and producing all branding and marketing materials."
       },
       {
         "org": "Moving Walls Malaysia",
         "role": "MARKETING INTERN",
-        "date": "JUL 2023 \u2014 AUG 2023",
-        "desc": "Part of the marketing team creating social media content. Tasked with starting and managing the company TikTok page \u2014 ideating, filming, and optimising for engagement."
+        "date": "JUL 2023 — AUG 2023",
+        "desc": "Part of the marketing team creating social media content. Tasked with starting and managing the company TikTok page — ideating, filming, and optimising for engagement."
       }
     ],
     "professionalActivities": [
@@ -133,24 +133,24 @@
         "desc": "Building strong Figma skills through Figma Fridays."
       },
       {
-        "org": "Rocket \u00d7 FLUX (3-Day Design Sprint)",
+        "org": "Rocket × FLUX (3-Day Design Sprint)",
         "role": "PARTICIPANT",
         "date": "2026",
-        "desc": "Redesigned the Passio Go app using Figma Make \u2014 exploring how design ideology is shifting in the age of AI."
+        "desc": "Redesigned the Passio Go app using Figma Make — exploring how design ideology is shifting in the age of AI."
       }
     ],
     "education": [
       {
         "org": "Savannah College of Art and Design (SCAD)",
         "role": "BFA, UX DESIGN",
-        "date": "2025 \u2014 PRESENT",
+        "date": "2025 — PRESENT",
         "desc": "Bachelor of Fine Arts in UX Design. Freshman year. Coursework spans interaction design, user research, prototyping, and design systems."
       },
       {
         "org": "Garden International School",
         "role": "A LEVELS",
-        "date": "SEP 2023 \u2014 JUN 2025",
-        "desc": "Photography \u00b7 Design and Technology \u00b7 Business Studies"
+        "date": "SEP 2023 — JUN 2025",
+        "desc": "Photography · Design and Technology · Business Studies"
       }
     ],
     "tools": [
@@ -175,7 +175,7 @@
       {
         "label": "BUILDING_",
         "value": "This portfolio (obviously)",
-        "sub": "Plus Bowl \u2014 Fruit Ninja but in the air"
+        "sub": "Plus Bowl — Fruit Ninja but in the air"
       }
     ],
     "contactTitleHtml": "Let's make something <span style=\"color: #FF3120\">worth making.</span>",
@@ -292,7 +292,7 @@
       {
         "slug": "singapore",
         "title": "Singapore",
-        "desc": "The duality of a city-state \u2014 dense and lush at once.",
+        "desc": "The duality of a city-state — dense and lush at once.",
         "cover": "/creative/photography/singapore/03.jpg",
         "comingSoon": false
       },
@@ -438,7 +438,7 @@
       {
         "slug": "singapore",
         "city": "Singapore",
-        "descriptor": "The duality of a city-state \u2014 dense and lush at once.",
+        "descriptor": "The duality of a city-state — dense and lush at once.",
         "images": [
           "/creative/photography/singapore/01.jpg",
           "/creative/photography/singapore/02.jpg",
@@ -633,27 +633,27 @@
           "number": "01",
           "titleHtml": "<span style=\"color: #FF3120\">Pramit</span><br />Ranjan",
           "body": "UX design student at SCAD. Figuring out what good design can actually do.",
-          "footerLabel": "SCROLL \u2193"
+          "footerLabel": "SCROLL ↓"
         },
         {
           "number": "02",
           "titleHtml": "From <span style=\"color: #FF3120\">Film</span><br />to <span style=\"color: #FF3120\">Figma.</span>",
-          "body": "A creative background shapes how I see problems. Photography, mixed media, and art \u2014 before Figma, before UX."
+          "body": "A creative background shapes how I see problems. Photography, mixed media, and art — before Figma, before UX."
         },
         {
           "number": "03",
           "titleHtml": "Design that <span style=\"color: #FF3120\">solves.</span><br />Art that <span style=\"color: #FF3120\">questions.</span>",
           "body": "UX work grounded in research and empathy. Creative work that pushes further.",
-          "footerLabel": "SEE WORK \u2193"
+          "footerLabel": "SEE WORK ↓"
         }
       ],
       "aboutEyebrow": "ABOUT_",
       "aboutTitleHtml": "Artist.<br />Designer.<br /><span style=\"color: #FF3120\">Human.</span>",
-      "aboutReadMoreLabel": "READ MORE \u2192",
+      "aboutReadMoreLabel": "READ MORE →",
       "photographyEyebrow": "THE EYE CAME FIRST.",
       "photographyTitleHtml": "Before <span style=\"color: #FF3120\">Figma,</span><br />there was <span style=\"color: #FF3120\">film.</span>",
       "photographyBody": "Street photography across Southeast Asia. Shot on 35mm and medium format. Always looking.",
-      "photographyCtaLabel": "VIEW ALL \u2192",
+      "photographyCtaLabel": "VIEW ALL →",
       "contactTitle": "You made it this far.",
       "contactAccent": "Say hello.",
       "contactLinks": [
@@ -675,7 +675,7 @@
       "heroEyebrow": "ABOUT_",
       "heroTitleHtml": "Artist. Designer. <span style=\"color: #FF3120\">Human.</span>",
       "cvLabel": "DOWNLOAD CV",
-      "scrollLabel": "SCROLL \u2193",
+      "scrollLabel": "SCROLL ↓",
       "whoIAmLabel": "WHO I AM_",
       "onRotationLabel": "ON ROTATION_",
       "experienceLabel": "EXPERIENCE_",
@@ -690,7 +690,7 @@
     "creativePage": {
       "eyebrow": "CREATIVE_",
       "heroTitle": "The other half.",
-      "heroBody": "Photography, mixed media, and branding \u2014 the work that exists outside of UX.",
+      "heroBody": "Photography, mixed media, and branding — the work that exists outside of UX.",
       "photographyLabel": "PHOTOGRAPHY",
       "photographyCount": "01",
       "mixedMediaLabel": "MIXED MEDIA",
@@ -730,7 +730,7 @@
       "section": "work",
       "title": "Franklin's",
       "oneliner": "The experience starts before you walk in.",
-      "type": "UX DESIGN \u00b7 2025",
+      "type": "UX DESIGN · 2025",
       "tags": [
         "UX Research",
         "Contextual Inquiry",
@@ -746,22 +746,22 @@
         "title": "Albers"
       },
       "heroImage": "/work/franklins/cover-hor.png",
-      "problemHeadline": "The warmth was real \u2014 it just wasn't reaching people before they arrived.",
+      "problemHeadline": "The warmth was real — it just wasn't reaching people before they arrived.",
       "problem": "Franklin's has a strong in-store experience. The brief: close the gap between what first-time visitors expected digitally and what they actually found when they walked in.",
-      "roleHeadline": "Team lead on a five-person UXDG 101 project \u2014 from fieldwork to final prototype.",
+      "roleHeadline": "Team lead on a five-person UXDG 101 project — from fieldwork to final prototype.",
       "role": "Led and contributed across every stage: structuring the research approach, directing fieldwork, synthesising findings, defining the IA, and driving the high-fidelity Figma prototype.",
       "researchHeadline": "Most friction started before anyone walked through the door.",
-      "research": "Contextual inquiry at the caf\u00e9 \u2014 barista and customer interviews, plus a SCAD student survey. The website was outdated, the service model unclear, and the in-store warmth had no digital equivalent.",
+      "research": "Contextual inquiry at the café — barista and customer interviews, plus a SCAD student survey. The website was outdated, the service model unclear, and the in-store warmth had no digital equivalent.",
       "pullQuote": "Their warmth was real. It just wasn't reaching people before they arrived.",
-      "challengeHeadline": "Users don't think in business categories \u2014 they think in tasks.",
+      "challengeHeadline": "Users don't think in business categories — they think in tasks.",
       "challenge": "Card sorting on FigJam revealed four natural buckets: Menu, Order, About, Contact. That structure became the backbone of the redesigned IA.",
       "processHeadline": "Every design decision traces directly back to a research finding.",
-      "process": "The homepage was restructured to surface practical expectations earlier \u2014 seating, service style, hours. Navigation reduced to four items; the order flow redesigned as a clear sequence with explicit progress cues.",
-      "usabilityTesting": "We tested a full order \u2014 small cappuccino, skim milk, vanilla syrup \u2014 from discovery to checkout. Users completed it with no major breakdowns. The flow held; we made the call not to iterate.",
-      "solutionHeadline": "The redesign didn't change Franklin's identity \u2014 it made it clearer upfront.",
+      "process": "The homepage was restructured to surface practical expectations earlier — seating, service style, hours. Navigation reduced to four items; the order flow redesigned as a clear sequence with explicit progress cues.",
+      "usabilityTesting": "We tested a full order — small cappuccino, skim milk, vanilla syrup — from discovery to checkout. Users completed it with no major breakdowns. The flow held; we made the call not to iterate.",
+      "solutionHeadline": "The redesign didn't change Franklin's identity — it made it clearer upfront.",
       "solution": "Task-based navigation, a restructured homepage, a cleaner menu, and a step-by-step order flow from discovery to checkout.",
       "outcomesHeadline": "The most important job of a team lead is keeping the work honest.",
-      "outcomes": "The experience gap wasn't a design problem \u2014 it was an information problem. If I were to continue, I'd explore in-context digital touchpoints at the storefront itself.",
+      "outcomes": "The experience gap wasn't a design problem — it was an information problem. If I were to continue, I'd explore in-context digital touchpoints at the storefront itself.",
       "mediaSettings": {
         "hero": {
           "fit": "contain",
@@ -844,7 +844,7 @@
       "section": "work",
       "title": "Albers",
       "oneliner": "What if 'interaction of color' was taken literally?",
-      "type": "UI DESIGN \u00b7 2025",
+      "type": "UI DESIGN · 2025",
       "tags": [
         "SwiftUI",
         "AppKit",
@@ -867,21 +867,21 @@
         "/work/albers/img-4-processed.png",
         "/work/albers/img-5-processed.png"
       ],
-      "problemHeadline": "I took 'interaction of color' literally \u2014 and built an app around it.",
+      "problemHeadline": "I took 'interaction of color' literally — and built an app around it.",
       "problem": "ALBERS is a macOS color theory tool named after Josef Albers. It isolates perceptual phenomena like simultaneous contrast and optical mixing, giving users real-time controls to manipulate each one directly.",
-      "roleHeadline": "Sole designer and developer \u2014 concept to shipped macOS app.",
-      "role": "Sole designer and developer \u2014 concept, UI in Figma, and implementation via vibe coding with Claude Code.",
+      "roleHeadline": "Sole designer and developer — concept to shipped macOS app.",
+      "role": "Sole designer and developer — concept, UI in Figma, and implementation via vibe coding with Claude Code.",
       "researchHeadline": "The brief said 'interaction of colors.' As a UX major, that's a UI problem.",
-      "research": "The assignment asked us to explore color harmonies. Most went editorial; I kept returning to the word 'interaction.' Albers's argument \u2014 that color has no fixed identity \u2014 felt like a UI problem as much as an art one.",
+      "research": "The assignment asked us to explore color harmonies. Most went editorial; I kept returning to the word 'interaction.' Albers's argument — that color has no fixed identity — felt like a UI problem as much as an art one.",
       "pullQuote": "When the brief said 'interaction of colors,' I took the word interaction literally.",
       "challengeHeadline": "A proof of concept became a product with a real identity.",
-      "challenge": "The initial submission was lean: a working prototype. Spring break became the space to push it further \u2014 adding modes, tightening the interaction model, and developing a visual identity. The amber terminal HUD aesthetic emerged from an obsession with instrument interfaces \u2014 things that measure, not create.",
+      "challenge": "The initial submission was lean: a working prototype. Spring break became the space to push it further — adding modes, tightening the interaction model, and developing a visual identity. The amber terminal HUD aesthetic emerged from an obsession with instrument interfaces — things that measure, not create.",
       "processHeadline": "Vibe coding collapsed the gap between design intent and working code.",
-      "process": "Figma handled visual direction; iteration happened directly in the app using vibe coding. AI handled implementation while I focused on what the interaction should feel like \u2014 making the gap between design and build much smaller.",
+      "process": "Figma handled visual direction; iteration happened directly in the app using vibe coding. AI handled implementation while I focused on what the interaction should feel like — making the gap between design and build much smaller.",
       "solutionHeadline": "Nine modes. One premise: color has no fixed identity.",
       "solution": "A nine-mode macOS application where each mode isolates one perceptual color phenomenon with real-time controls. The amber HUD frames the app as an instrument of observation, not a creative canvas. Built in SwiftUI with AppKit, targeting macOS 13+.",
-      "outcomesHeadline": "Constraint as identity \u2014 when an interface commits fully, every decision becomes easier.",
-      "outcomes": "Vibe coding pushed me to be more precise about design intent upfront \u2014 the AI needs clarity to move in the right direction. The HUD aesthetic taught me that constraint as identity makes every decision easier. I'd like to eventually publish ALBERS as a genuine teaching tool on the Mac App Store.",
+      "outcomesHeadline": "Constraint as identity — when an interface commits fully, every decision becomes easier.",
+      "outcomes": "Vibe coding pushed me to be more precise about design intent upfront — the AI needs clarity to move in the right direction. The HUD aesthetic taught me that constraint as identity makes every decision easier. I'd like to eventually publish ALBERS as a genuine teaching tool on the Mac App Store.",
       "mediaBlocks": [
         {
           "id": "albers-solution-3",
@@ -903,7 +903,8 @@
       ],
       "mediaSettings": {
         "hero": {
-          "background": "#FFFFFF"
+          "background": "#FFFFFF",
+          "fit": "cover"
         }
       },
       "solutionEmbedAspectRatio": "4 / 3",
@@ -920,7 +921,7 @@
       "section": "work",
       "title": "LoomLearn",
       "oneliner": "One learning space for students who think differently.",
-      "type": "UX DESIGN \u00b7 2024",
+      "type": "UX DESIGN · 2024",
       "tags": [
         "UI/UX",
         "Figma",
@@ -942,21 +943,21 @@
         "/work/loomlearn/solution-1-processed.png",
         "/work/loomlearn/solution-2-processed.png"
       ],
-      "problemHeadline": "The problem wasn't the tools \u2014 it was the switching between them.",
+      "problemHeadline": "The problem wasn't the tools — it was the switching between them.",
       "problem": "LoomLearn integrates Cornell notes, Pomodoro timers, mind maps, spider charts, and flashcards into a single drag-and-drop platform. Designed specifically with dyslexic learners in mind, built for anyone who switches between too many tools to study effectively.",
       "roleHeadline": "Sole designer across research, UX, UI design, and prototyping.",
       "role": "Sole designer across research, UX, UI design, and prototyping.",
       "researchHeadline": "Dyslexic learners don't struggle with the tools. They struggle with context-switching.",
-      "research": "Digital learners \u2014 especially those with dyslexia \u2014 struggle with context-switching between tools, not the tools themselves. I mapped two personas: Emma, a first-year university student recently diagnosed with dyslexia, and Aadi, a high school student preparing for IGCSEs.",
+      "research": "Digital learners — especially those with dyslexia — struggle with context-switching between tools, not the tools themselves. I mapped two personas: Emma, a first-year university student recently diagnosed with dyslexia, and Aadi, a high school student preparing for IGCSEs.",
       "pullQuote": "Building for accessibility first made the product stronger for everyone.",
-      "challengeHeadline": "A drag-and-drop interface inspired by Scratch \u2014 familiar, low-threshold, customisable.",
-      "challenge": "Explored modular, widget-based interfaces. The drag-and-drop system was directly inspired by Scratch \u2014 familiar, low-threshold, and highly customisable without added complexity.",
+      "challengeHeadline": "A drag-and-drop interface inspired by Scratch — familiar, low-threshold, customisable.",
+      "challenge": "Explored modular, widget-based interfaces. The drag-and-drop system was directly inspired by Scratch — familiar, low-threshold, and highly customisable without added complexity.",
       "processHeadline": "A minimal palette to reduce cognitive load. Every technique a draggable icon, not a menu item.",
       "process": "Minimal colour palette to reduce cognitive load and keep focus on content. Multiple workspaces let users separate subjects without losing their setup. Every technique was made available as a draggable icon, not a menu item.",
       "solutionHeadline": "One canvas. Six tools. No switching.",
-      "solution": "A desktop learning platform where Cornell notes, mind maps, to-do lists, spider charts, flashcards, and Pomodoro timers coexist on one canvas \u2014 rearrangeable and resizable per session.",
+      "solution": "A desktop learning platform where Cornell notes, mind maps, to-do lists, spider charts, flashcards, and Pomodoro timers coexist on one canvas — rearrangeable and resizable per session.",
       "outcomesHeadline": "Building for accessibility first made the product stronger for everyone.",
-      "outcomes": "Building for accessibility first made the product stronger for everyone \u2014 that was the clearest takeaway. I'd revisit the onboarding to better communicate how the widgets work together, rather than letting users figure it out alone.",
+      "outcomes": "Building for accessibility first made the product stronger for everyone — that was the clearest takeaway. I'd revisit the onboarding to better communicate how the widgets work together, rather than letting users figure it out alone.",
       "mediaSettings": {
         "hero": {
           "background": "#FFFFFF"
@@ -1017,7 +1018,7 @@
       "section": "work",
       "title": "HelpOH",
       "oneliner": "Connecting homes to trusted help, and workers to fair work.",
-      "type": "UX DESIGN \u00b7 2024",
+      "type": "UX DESIGN · 2024",
       "tags": [
         "UI/UX",
         "Figma",
@@ -1042,14 +1043,14 @@
       "problem": "HelpOH connects users with vetted professionals for household services, while giving workers legal protections, training, and consistent income. Designed for Malaysia's rapidly growing economy.",
       "roleHeadline": "Sole designer across research, UX strategy, UI design, and prototyping.",
       "role": "Sole designer across research, UX strategy, UI design, and prototyping.",
-      "researchHeadline": "Two personas, one platform \u2014 designed to serve both sides equitably.",
-      "research": "A two-sided problem: users struggling to find reliable, affordable help, and workers facing inconsistent pay and limited legal protections. Mapped two personas \u2014 Farah (busy professional) and Arif (skilled tradesman) \u2014 to ensure the platform served both equitably.",
-      "pullQuote": "Two very different users, one platform \u2014 the design had to serve both without compromising either.",
+      "researchHeadline": "Two personas, one platform — designed to serve both sides equitably.",
+      "research": "A two-sided problem: users struggling to find reliable, affordable help, and workers facing inconsistent pay and limited legal protections. Mapped two personas — Farah (busy professional) and Arif (skilled tradesman) — to ensure the platform served both equitably.",
+      "pullQuote": "Two very different users, one platform — the design had to serve both without compromising either.",
       "challengeHeadline": "Booking flows that prioritised transparency and speed.",
       "challenge": "Explored booking flows that prioritised transparency and speed. Drew visual inspiration from Grab to leverage existing trust signals in the Southeast Asian market.",
       "processHeadline": "Green and white to evoke trust. A single-surface booking flow to build first-time confidence.",
-      "process": "Green and white palette chosen to evoke trust and familiarity. The booking flow \u2014 service, location, date, time \u2014 was kept to a single surface to minimise friction and build confidence in first-time users.",
-      "solutionHeadline": "Search, book, done \u2014 with transparent pricing and no friction.",
+      "process": "Green and white palette chosen to evoke trust and familiarity. The booking flow — service, location, date, time — was kept to a single surface to minimise friction and build confidence in first-time users.",
+      "solutionHeadline": "Search, book, done — with transparent pricing and no friction.",
       "solution": "A desktop platform with streamlined search-and-book, transparent pricing, time selection, and service categorisation. Clarity over density.",
       "outcomesHeadline": "The worker side deserved more screen time than I gave it.",
       "outcomes": "HelpOH pushed me to design for two very different users simultaneously. In a next iteration, I'd build out a dedicated worker dashboard with job management and training access.",
@@ -1109,7 +1110,7 @@
       "section": "work",
       "title": "Atom OS",
       "oneliner": "A phone OS that strips your screen down to what actually matters.",
-      "type": "UI/UX \u00b7 2024",
+      "type": "UI/UX · 2024",
       "tags": [
         "UI/UX",
         "Figma",
@@ -1131,19 +1132,19 @@
         "/work/atom/solution-2-processed.png"
       ],
       "problemHeadline": "Subtraction is a design decision.",
-      "problem": "Atom OS redesigns the smartphone experience by removing distractions and replacing them with four intentional widgets. The goal: make the phone feel deliberately limited \u2014 not broken, just focused.",
+      "problem": "Atom OS redesigns the smartphone experience by removing distractions and replacing them with four intentional widgets. The goal: make the phone feel deliberately limited — not broken, just focused.",
       "roleHeadline": "Sole designer across concept, UI design, and prototyping.",
       "role": "Sole designer across concept, UI design, and prototyping.",
-      "researchHeadline": "The need came from exam season \u2014 existing solutions were too rigid or too blunt.",
-      "research": "The concept came from a personal need during exam season \u2014 existing solutions either deleted apps entirely or were too rigid to customise. I mapped two core user types: students managing academic pressure and professionals battling social media anxiety.",
-      "pullQuote": "The hardest part wasn't adding features \u2014 it was deciding what to withhold.",
+      "researchHeadline": "The need came from exam season — existing solutions were too rigid or too blunt.",
+      "research": "The concept came from a personal need during exam season — existing solutions either deleted apps entirely or were too rigid to customise. I mapped two core user types: students managing academic pressure and professionals battling social media anxiety.",
+      "pullQuote": "The hardest part wasn't adding features — it was deciding what to withhold.",
       "challengeHeadline": "What does a 'dumb phone' mode look like without sacrificing utility?",
-      "challenge": "Early explorations focused on widget hierarchy and colour \u2014 settling on black and white to psychologically reduce the pull of the screen. The question was how to make deliberate limitation feel designed, not broken.",
+      "challenge": "Early explorations focused on widget hierarchy and colour — settling on black and white to psychologically reduce the pull of the screen. The question was how to make deliberate limitation feel designed, not broken.",
       "processHeadline": "Micro-interactions were kept minimal by design, not by oversight.",
       "process": "The colour gradient in the screen time dashboard signals which apps help vs. harm, without being prescriptive. Focus mode was made user-configured, not automatic, to preserve autonomy.",
       "solutionHeadline": "Four widgets. One focus. No noise.",
       "solution": "A four-widget home screen with screen time visualisation, app usage breakdowns, and a toggleable Focus mode that blocks selected apps for user-defined periods.",
-      "outcomesHeadline": "The hardest part wasn't adding features \u2014 it was deciding what to withhold.",
+      "outcomesHeadline": "The hardest part wasn't adding features — it was deciding what to withhold.",
       "outcomes": "Atom OS taught me that subtraction is a design decision. I'd revisit the onboarding flow to help users understand the philosophy before they start using it.",
       "mediaSettings": {
         "hero": {
@@ -1205,7 +1206,7 @@
       "section": "work",
       "title": "Wander",
       "oneliner": "The walk is the point.",
-      "type": "UX DESIGN \u00b7 2025",
+      "type": "UX DESIGN · 2025",
       "tags": [
         "Cornell UX Design Club Design-a-thon",
         "Mobile UX",
@@ -1220,21 +1221,21 @@
         "title": "Purcast"
       },
       "problemHeadline": "The tools optimise for speed. Nobody designed for the walk itself.",
-      "problem": "Google Maps optimises for fastest. Strava optimises for performance. 28 of 34 survey respondents said they walk to clear their head \u2014 but none described it as intentional. It just happens, in spite of the tools, not because of them.",
-      "roleHeadline": "Designer on a team of two \u2014 research through final prototype.",
+      "problem": "Google Maps optimises for fastest. Strava optimises for performance. 28 of 34 survey respondents said they walk to clear their head — but none described it as intentional. It just happens, in spite of the tools, not because of them.",
+      "roleHeadline": "Designer on a team of two — research through final prototype.",
       "role": "Co-owned all research, synthesis, concept development, and UI design in Figma across the full 48 hours.",
       "researchHeadline": "The phone was making the walk worse.",
-      "research": "Short survey to 15 respondents on walking habits and mid-walk phone behaviour, backed by secondary research \u2014 attention restoration theory (Kaplan, 1995) and Stanford's study on walking and creative cognition (Oppezzo & Schwartz, 2014). The finding that shaped everything: people already walk to decompress. The tools just get in the way.",
+      "research": "Short survey to 15 respondents on walking habits and mid-walk phone behaviour, backed by secondary research — attention restoration theory (Kaplan, 1995) and Stanford's study on walking and creative cognition (Oppezzo & Schwartz, 2014). The finding that shaped everything: people already walk to decompress. The tools just get in the way.",
       "pullQuote": "Walking already works. We just need to protect it from the phone.",
       "challengeHeadline": "How do you build an app whose job is to get you off the app?",
-      "challenge": "\nWe identified two moments to serve \u2014 time with no destination, and a destination with no rush. Both shared the same need: a reset. Unifying them under one product made the concept legible in a single sentence.",
+      "challenge": "\nWe identified two moments to serve — time with no destination, and a destination with no rush. Both shared the same need: a reset. Unifying them under one product made the concept legible in a single sentence.",
       "process": "Sourced visual direction on Cosmos, wireframed in Figma, then used AI to rapidly build out the prototype. Once the prototype was done, we moved into Figma to produce the final creatives and presentation assets.",
-      "processHeadline": "\nCosmos to wireframe to prototype \u2014 without breaking the sprint.",
-      "usabilityTesting": "\nOnce the walk starts, the app moves to the lock screen widget \u2014 prompt and distance only. No step counts. No streaks. No gamification. Every other walking app pulls you into the screen; Wander actively pushes you out of it.",
-      "solutionHeadline": "\nTwo modes, one ritual \u2014 built and submitted in 48 hours.",
-      "solution": "Figma prototype covering both modes, the prompt reveal, the active walk state with lock screen widget, and the end-of-walk screen \u2014 with stylised maps using Savannah's grid as the test environment.",
+      "processHeadline": "\nCosmos to wireframe to prototype — without breaking the sprint.",
+      "usabilityTesting": "\nOnce the walk starts, the app moves to the lock screen widget — prompt and distance only. No step counts. No streaks. No gamification. Every other walking app pulls you into the screen; Wander actively pushes you out of it.",
+      "solutionHeadline": "\nTwo modes, one ritual — built and submitted in 48 hours.",
+      "solution": "Figma prototype covering both modes, the prompt reveal, the active walk state with lock screen widget, and the end-of-walk screen — with stylised maps using Savannah's grid as the test environment.",
       "outcomesHeadline": "The hardest constraint was intentional disappearance.",
-      "outcomes": "\nBuilding something that works by getting out of the way runs against every instinct in product design. If I were to continue, I'd refine the screens further and sharpen the logic behind both modes \u2014 how the loop calculates and adjusts a route, and how the route character system actually works under the hood.",
+      "outcomes": "\nBuilding something that works by getting out of the way runs against every instinct in product design. If I were to continue, I'd refine the screens further and sharpen the logic behind both modes — how the loop calculates and adjusts a route, and how the route character system actually works under the hood.",
       "mediaBlocks": [
         {
           "id": "process-1777257091551-m8m6k7",
@@ -1259,7 +1260,8 @@
       "heroImage": "/work/Wander/cover image.png",
       "mediaSettings": {
         "hero": {
-          "fit": "contain"
+          "fit": "contain",
+          "background": "#FFFFFF"
         }
       },
       "solutionEmbedAspectRatio": "4 / 3",
@@ -1276,7 +1278,7 @@
       "section": "work",
       "title": "Purcast",
       "oneliner": "A podcast app designed for the Fluxathon.",
-      "type": "UI DESIGN \u00b7 2025",
+      "type": "UI DESIGN · 2025",
       "tags": [
         "UI Design",
         "Figma",
@@ -1298,7 +1300,7 @@
       "section": "work",
       "title": "Design-athon 02",
       "oneliner": "Redesigning Passio Go with Figma Make.",
-      "type": "UI DESIGN \u00b7 2025",
+      "type": "UI DESIGN · 2025",
       "tags": [
         "UI Design",
         "Sprint",
@@ -1316,7 +1318,7 @@
       "section": "mixed-media",
       "title": "South China Sea",
       "oneliner": "What ordinary people don't know is already shaping their lives.",
-      "type": "MIXED MEDIA \u00b7 2024",
+      "type": "MIXED MEDIA · 2024",
       "tags": [
         "Mixed Media",
         "Photography",
@@ -1344,19 +1346,19 @@
       ],
       "problemHeadline": "What ordinary people don't know is already shaping their lives.",
       "problem": "A large-scale mixed media installation exploring the South China Sea conflict through the lens of public naivety. Presented as a detective board, it connects geopolitics to lived experience through cyanotypes, photograms, coffee-aged maps, and original photography.",
-      "roleHeadline": "Sole artist \u2014 concept, research, photography, darkroom work, and installation.",
-      "role": "Sole artist \u2014 concept, research, photography, darkroom work, and installation.",
+      "roleHeadline": "Sole artist — concept, research, photography, darkroom work, and installation.",
+      "role": "Sole artist — concept, research, photography, darkroom work, and installation.",
       "researchHeadline": "Close to home, under-discussed, and deeply layered in tension.",
-      "research": "Starting from observations about the wars in Gaza and Ukraine, I narrowed focus to the South China Sea conflict \u2014 close to home, under-discussed, and deeply layered in economic, territorial, and military tension.",
+      "research": "Starting from observations about the wars in Gaza and Ukraine, I narrowed focus to the South China Sea conflict — close to home, under-discussed, and deeply layered in economic, territorial, and military tension.",
       "pullQuote": "What ordinary people don't know is already shaping their lives.",
-      "challengeHeadline": "A detective board as structural metaphor \u2014 connecting the dots the public fails to.",
-      "challenge": "Used a detective board as the structural metaphor \u2014 red threads connecting images to mirror how the public tries (and often fails) to connect the dots. Developed four photoshoot series exploring China's history, espionage, surveillance, and the conflict's root causes.",
-      "processHeadline": "Physical and tactile \u2014 pushing against the conflict's abstract presence in news media.",
+      "challengeHeadline": "A detective board as structural metaphor — connecting the dots the public fails to.",
+      "challenge": "Used a detective board as the structural metaphor — red threads connecting images to mirror how the public tries (and often fails) to connect the dots. Developed four photoshoot series exploring China's history, espionage, surveillance, and the conflict's root causes.",
+      "processHeadline": "Physical and tactile — pushing against the conflict's abstract presence in news media.",
       "process": "Cyanotypes introduced blue, connecting to the sea. Photograms stripped colour and context, making figures unidentifiable and open to interpretation. Coffee aging added material authenticity to archival maps.",
-      "solutionHeadline": "A 7ft \u00d7 3ft board that makes viewers discover connections rather than be told them.",
-      "solution": "A 7ft \u00d7 3ft detective board combining original photography, cyanotypes, photograms, coffee-aged map prints, and handwritten notes \u2014 all connected by red string.",
+      "solutionHeadline": "A 7ft × 3ft board that makes viewers discover connections rather than be told them.",
+      "solution": "A 7ft × 3ft detective board combining original photography, cyanotypes, photograms, coffee-aged map prints, and handwritten notes — all connected by red string.",
       "outcomesHeadline": "The detective board was the right call. The piece lived very much in the visual.",
-      "outcomes": "The detective board format let viewers discover connections rather than be told them. I'd invest more in the sound or ambient dimension if revisiting \u2014 the piece lived very much in the visual; there's a version that also hits the body.",
+      "outcomes": "The detective board format let viewers discover connections rather than be told them. I'd invest more in the sound or ambient dimension if revisiting — the piece lived very much in the visual; there's a version that also hits the body.",
       "mediaBlocks": [
         {
           "id": "south-china-sea-research-1",
@@ -1459,7 +1461,7 @@
       "section": "mixed-media",
       "title": "Faces of Power",
       "oneliner": "What does power look like up close?",
-      "type": "MIXED MEDIA \u00b7 2024",
+      "type": "MIXED MEDIA · 2024",
       "tags": [
         "Mixed Media",
         "Photography",
@@ -1486,19 +1488,19 @@
       ],
       "problemHeadline": "What does power look like up close?",
       "problem": "A mixed media art project exploring how leaders make decisions that impact millions. Using close-up portraiture, interviews, and layered physical materials, the work interrogates themes of privacy, intimacy, and authority.",
-      "roleHeadline": "Sole artist \u2014 concept, photography, material fabrication, and installation.",
-      "role": "Sole artist \u2014 concept, photography, material fabrication, and installation.",
+      "roleHeadline": "Sole artist — concept, photography, material fabrication, and installation.",
+      "role": "Sole artist — concept, photography, material fabrication, and installation.",
       "researchHeadline": "Shifting focus from geopolitics to the human actors behind it.",
-      "research": "This work extended the South China Sea piece, shifting focus from geopolitics to the human actors behind it. I was interested in what it means to hold power \u2014 and what gets hidden behind a public face.",
-      "pullQuote": "Removing colour and context made the images feel universal \u2014 anyone could be in power.",
-      "challengeHeadline": "Close-up portraits and discomforting questions \u2014 the kind powerful people are rarely asked.",
-      "challenge": "Took close-up portraits and conducted interviews asking discomforting personal questions \u2014 the kind powerful people are rarely asked publicly. Explored masks (literal and metaphorical) as a recurring motif, inspired by Brian Cattle.",
-      "processHeadline": "Layering identities through acetate and light \u2014 together we are one.",
+      "research": "This work extended the South China Sea piece, shifting focus from geopolitics to the human actors behind it. I was interested in what it means to hold power — and what gets hidden behind a public face.",
+      "pullQuote": "Removing colour and context made the images feel universal — anyone could be in power.",
+      "challengeHeadline": "Close-up portraits and discomforting questions — the kind powerful people are rarely asked.",
+      "challenge": "Took close-up portraits and conducted interviews asking discomforting personal questions — the kind powerful people are rarely asked publicly. Explored masks (literal and metaphorical) as a recurring motif, inspired by Brian Cattle.",
+      "processHeadline": "Layering identities through acetate and light — together we are one.",
       "process": "Layered multiple identities into single images using acetate and a custom-built A4 lightbox. Gelli printing added a propaganda aesthetic through paint transfer. Photograms stripped context entirely, leaving figures open to interpretation.",
       "solutionHeadline": "A multi-part installation where power is constructed, projected, and concealed.",
-      "solution": "A multi-part installation combining Mod Roc masks, acetate lightbox prints, gelli prints, and photograms \u2014 each exploring a different facet of how power is constructed, projected, and concealed.",
-      "outcomesHeadline": "Removing colour and context made the images feel universal \u2014 anyone could be in power.",
-      "outcomes": "The most powerful moment was realising that removing colour and context \u2014 the photograms \u2014 made the images feel universal: anyone could be in power. I'd push the interview component further, potentially making it part of the installation itself.",
+      "solution": "A multi-part installation combining Mod Roc masks, acetate lightbox prints, gelli prints, and photograms — each exploring a different facet of how power is constructed, projected, and concealed.",
+      "outcomesHeadline": "Removing colour and context made the images feel universal — anyone could be in power.",
+      "outcomes": "The most powerful moment was realising that removing colour and context — the photograms — made the images feel universal: anyone could be in power. I'd push the interview component further, potentially making it part of the installation itself.",
       "mediaBlocks": [
         {
           "id": "faces-of-power-research-1",
@@ -1563,7 +1565,7 @@
       "section": "branding",
       "title": "Oracle",
       "oneliner": "For trendsetters, by trend haters.",
-      "type": "BRANDING \u00b7 2023",
+      "type": "BRANDING · 2023",
       "tags": [
         "Brand Identity",
         "Graphic Design",
@@ -1577,21 +1579,21 @@
       },
       "backHref": "/creative/branding",
       "backLabel": "BRANDING",
-      "problemHeadline": "No brief, no client, no constraints \u2014 just a mythology and an aesthetic.",
-      "problem": "Oracle was my first self-directed creative project \u2014 no brief, no client, no constraints except my own taste. Inspired by the Matrix trilogy, it was an exercise in branding as world-building rather than identity design.",
+      "problemHeadline": "No brief, no client, no constraints — just a mythology and an aesthetic.",
+      "problem": "Oracle was my first self-directed creative project — no brief, no client, no constraints except my own taste. Inspired by the Matrix trilogy, it was an exercise in branding as world-building rather than identity design.",
       "roleHeadline": "Sole creative director across concept, product design, and marketing.",
       "role": "Sole creative director across concept, product design, and marketing.",
       "researchHeadline": "The Matrix's visual language mapped onto current digital culture.",
-      "research": "Mapped the visual language of the Matrix \u2014 glitch aesthetics, green code, retro-digital imagery \u2014 onto current digital culture: nostalgia, memes, lo-fi visual irony. The target audience wasn't a demographic; it was an attitude.",
+      "research": "Mapped the visual language of the Matrix — glitch aesthetics, green code, retro-digital imagery — onto current digital culture: nostalgia, memes, lo-fi visual irony. The target audience wasn't a demographic; it was an attitude.",
       "pullQuote": "Art allows open interpretation. Branding has to close down meaning enough to be actionable.",
-      "challengeHeadline": "'For trendsetters by trend haters' \u2014 the slogan had to do double work.",
-      "challenge": "Oracle's premise: 'For trendsetters by trend haters.' The slogan had to position the brand as culturally aware while simultaneously rejecting cultural positioning \u2014 existing slightly outside the usual frame of reference.",
+      "challengeHeadline": "'For trendsetters by trend haters' — the slogan had to do double work.",
+      "challenge": "Oracle's premise: 'For trendsetters by trend haters.' The slogan had to position the brand as culturally aware while simultaneously rejecting cultural positioning — existing slightly outside the usual frame of reference.",
       "processHeadline": "Retro-digital formats. Trending meme structures. No paid placement.",
-      "process": "Marketing leaned into retro-digital formats \u2014 'Buy Oracle' on old TVs and vintage monitors. The campaign used trending meme formats and nostalgic visuals to create presence across platforms without paid placement.",
+      "process": "Marketing leaned into retro-digital formats — 'Buy Oracle' on old TVs and vintage monitors. The campaign used trending meme formats and nostalgic visuals to create presence across platforms without paid placement.",
       "solutionHeadline": "A complete brand world: six designs, a full identity, and a multi-format campaign.",
       "solution": "A complete brand system: six t-shirt designs, logo and identity, and a multi-format campaign covering social graphics, vintage screen mockups, and a 'Coming Soon' teaser. All produced as Figma assets and mockups.",
       "outcomesHeadline": "Meaningful branding requires purpose, not just aesthetics.",
-      "outcomes": "Oracle taught me the difference between art and branding. Meaningful branding requires purpose, not just aesthetics \u2014 if extended, it would need lore, a narrative world that rewards attention and gives people something to be part of, not just wear.",
+      "outcomes": "Oracle taught me the difference between art and branding. Meaningful branding requires purpose, not just aesthetics — if extended, it would need lore, a narrative world that rewards attention and gives people something to be part of, not just wear.",
       "mediaBlocks": [
         {
           "id": "oracle-challenge-1",
@@ -1685,7 +1687,7 @@
       "section": "branding",
       "title": "SOHO",
       "oneliner": "A sixth form art exhibition as diverse as the districts it's named after.",
-      "type": "BRANDING \u00b7 2024",
+      "type": "BRANDING · 2024",
       "tags": [
         "Event Design",
         "Brand Identity",
@@ -1707,17 +1709,17 @@
       ],
       "problemHeadline": "One identity for an exhibition as diverse as the districts it's named after.",
       "problem": "SOHO was the 2024 Sixth Form Art Exhibition, planned and organised by students. Named after the culturally dense SOHO districts of London and New York, it brought together art, fashion, music, and more under a single identity.",
-      "roleHeadline": "Chair of the exhibition \u2014 organising, delegating, and leading all branding.",
-      "role": "Chair of the exhibition \u2014 responsible for organising, delegating, managing tasks, and leading all branding.",
+      "roleHeadline": "Chair of the exhibition — organising, delegating, and leading all branding.",
+      "role": "Chair of the exhibition — responsible for organising, delegating, managing tasks, and leading all branding.",
       "researchHeadline": "SOHO as a cultural zone: many creative voices under one name.",
-      "research": "Looked at SOHO as a cultural zone: an amalgamation of different creative voices under one name. That became the conceptual anchor \u2014 each artist is different, but the exhibition holds them together.",
+      "research": "Looked at SOHO as a cultural zone: an amalgamation of different creative voices under one name. That became the conceptual anchor — each artist is different, but the exhibition holds them together.",
       "pullQuote": "Each artist is different. The exhibition holds them together.",
-      "challengeHeadline": "Representing sensory diversity visually \u2014 art is seen, felt, heard, tasted, smelled.",
+      "challengeHeadline": "Representing sensory diversity visually — art is seen, felt, heard, tasted, smelled.",
       "challenge": "Explored how to represent sensory diversity visually. The brand identity used fragmented sensory imagery (eyes, mouths, ears) combined with gradient blobs to represent plurality. Postcards featured each artist's work, sold for charity.",
-      "processHeadline": "Bold typographic lockup with sensory collage \u2014 layered and alive, not institutional.",
+      "processHeadline": "Bold typographic lockup with sensory collage — layered and alive, not institutional.",
       "process": "Bold typographic lockup with sensory collage made the branding feel layered and alive, not institutional. The A3 poster, email banner, and postcard set were designed as a cohesive system, not separate assets.",
       "solutionHeadline": "A full exhibition identity that holds every artist together without flattening any of them.",
-      "solution": "Full exhibition identity including A3 poster, email banner, and a postcard series featuring each participating artist's work \u2014 all cohesive under the SOHO visual system.",
+      "solution": "Full exhibition identity including A3 poster, email banner, and a postcard series featuring each participating artist's work — all cohesive under the SOHO visual system.",
       "outcomesHeadline": "Design leadership is as much about coordination as craft.",
       "outcomes": "Chairing the exhibition taught me that design leadership is as much about coordination as craft. Getting peers to hit deadlines and contribute materials was harder than the visual work. I'd build a clearer production timeline from day one in any future project like this.",
       "mediaBlocks": [
