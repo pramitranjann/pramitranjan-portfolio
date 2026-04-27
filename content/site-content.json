@@ -218,6 +218,17 @@
         "coverPosition": "center"
       },
       {
+        "title": "Wander",
+        "oneliner": "The walk is the point.",
+        "tags": [
+          "UX",
+          "PRODUCT"
+        ],
+        "href": "/work/wander",
+        "cover": "/work/Wander/cover.png",
+        "hoverImage": "/work/Wander/cover image.png"
+      },
+      {
         "title": "LoomLearn",
         "oneliner": "One learning space for students who think differently.",
         "tags": [
@@ -249,17 +260,6 @@
         "href": "/work/atom",
         "cover": "/work/atom/cover-hor.png",
         "coverPosition": "center"
-      },
-      {
-        "title": "Wander",
-        "oneliner": "The walk is the point.",
-        "tags": [
-          "UX",
-          "PRODUCT"
-        ],
-        "href": "/work/wander",
-        "cover": "/work/Wander/cover.png",
-        "hoverImage": "/work/Wander/cover image.png"
       },
       {
         "title": "Purcast",
