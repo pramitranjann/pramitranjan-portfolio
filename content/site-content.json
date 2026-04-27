@@ -1260,7 +1260,7 @@
       "heroImage": "/work/Wander/cover image.png",
       "mediaSettings": {
         "hero": {
-          "fit": "contain",
+          "fit": "cover",
           "background": "#FFFFFF"
         }
       },
