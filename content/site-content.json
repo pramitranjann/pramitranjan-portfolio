@@ -960,17 +960,19 @@
           "layout": "single",
           "placement": "side-right",
           "align": "center",
-          "width": "60%",
+          "width": "100%",
           "gap": "2px",
           "images": [
             {
               "src": "/work/Wander/Frame 46 1.png",
-              "fit": "cover",
-              "position": "center center",
+              "fit": "contain",
               "background": "#0d0d0d",
-              "alt": "Layout placeholder"
+              "alt": "Layout placeholder",
+              "aspectRatio": "3 / 4"
             }
-          ]
+          ],
+          "inlineTextWidth": "420px",
+          "inlineMediaMinWidth": "640px"
         }
       ],
       "heroImage": "/work/Wander/Mockup-123.png",
