@@ -257,7 +257,9 @@
           "UX",
           "PRODUCT"
         ],
-        "href": "/work/wander"
+        "href": "/work/wander",
+        "cover": "/work/Wander/cover.png",
+        "hoverImage": "/work/Wander/cover image.png"
       },
       {
         "title": "Purcast",
