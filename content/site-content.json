@@ -27,6 +27,18 @@
           "coverPosition": "center"
         },
         {
+          "title": "Wander",
+          "oneliner": "The walk is the point.",
+          "tags": [
+            "UX",
+            "CODE"
+          ],
+          "href": "/work/wander",
+          "cover": "/work/Wander/Mockup-123.png",
+          "coverPosition": "center",
+          "hoverImage": "/work/Wander/cover image.png"
+        },
+        {
           "title": "LoomLearn",
           "oneliner": "One learning space for students who think differently.",
           "tags": [
@@ -35,17 +47,6 @@
           ],
           "href": "/work/loomlearn",
           "cover": "/work/loomlearn/cover-hor.png",
-          "coverPosition": "center"
-        },
-        {
-          "title": "Atom OS",
-          "oneliner": "A phone stripped down to what actually matters.",
-          "tags": [
-            "UI",
-            "SYSTEMS"
-          ],
-          "href": "/work/atom",
-          "cover": "/work/atom/cover-hor.png",
           "coverPosition": "center"
         }
       ]
@@ -971,7 +972,7 @@
               "aspectRatio": "3 / 4"
             }
           ],
-          "inlineTextWidth": "420px",
+          "inlineTextWidth": "640px",
           "inlineMediaMinWidth": "640px"
         }
       ],
