@@ -1233,7 +1233,6 @@
           "layout": "single",
           "width": "100%",
           "align": "center",
-          "hidden": true,
           "images": [
             {
               "src": "/work/Wander/Mockup-1.png",
@@ -1251,7 +1250,6 @@
           "width": "100%",
           "gap": "2px",
           "align": "center",
-          "hidden": true,
           "images": [
             {
               "src": "/work/Wander/Frame 46.png",
@@ -1266,7 +1264,6 @@
         {
           "id": "process-1777257091551-m8m6k7",
           "section": "process",
-          "hidden": true,
           "layout": "single",
           "placement": "below",
           "align": "center",
@@ -1283,7 +1280,8 @@
             }
           ]
         }
-      ]
+      ],
+      "heroImage": "/work/Wander/Mockup-1.png"
     },
     {
       "slug": "purcast",
