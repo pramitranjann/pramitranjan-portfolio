@@ -44,6 +44,7 @@ type PageKey =
   | 'homepage'
   | 'about-page'
   | 'work-page'
+  | 'play-page'
   | 'creative-page'
   | 'photography-page'
   | 'case-study-ui'
@@ -762,6 +763,7 @@ git push`
   const groupedCaseStudies = useMemo(
     () => ({
       work: content.caseStudies.filter((item) => item.section === 'work'),
+      play: content.caseStudies.filter((item) => item.section === 'play'),
       mixedMedia: content.caseStudies.filter((item) => item.section === 'mixed-media'),
       branding: content.caseStudies.filter((item) => item.section === 'branding'),
     }),
@@ -1109,6 +1111,7 @@ git push`
               <SidebarButton active={activePage === 'homepage'} label="Homepage" onClick={() => setActivePage('homepage')} />
               <SidebarButton active={activePage === 'about-page'} label="About Page" onClick={() => setActivePage('about-page')} />
               <SidebarButton active={activePage === 'work-page'} label="Work Page" onClick={() => setActivePage('work-page')} />
+              <SidebarButton active={activePage === 'play-page'} label="Play Page" onClick={() => setActivePage('play-page')} />
               <SidebarButton active={activePage === 'creative-page'} label="Creative Page" onClick={() => setActivePage('creative-page')} />
               <SidebarButton active={activePage === 'photography-page'} label="Photography Page" onClick={() => setActivePage('photography-page')} />
               <SidebarButton active={activePage === 'case-study-ui'} label="Case Study Defaults" onClick={() => setActivePage('case-study-ui')} />
@@ -1129,6 +1132,21 @@ git push`
                 />
               ))}
               <SidebarButton active={false} label="+ Add Work Case Study" onClick={() => { setPendingNewSection('work'); setPendingTemplateId('standard-ux') }} />
+            </SidebarGroup>
+
+            <SidebarGroup title="PLAY">
+              {groupedCaseStudies.play.map((item, index) => (
+                <SidebarCaseStudyItem
+                  key={item.slug}
+                  active={activePage === `case-study:${item.slug}`}
+                  label={item.hidden ? `${item.title} [HIDDEN]` : item.title}
+                  onClick={() => setActivePage(`case-study:${item.slug}` as PageKey)}
+                  index={index}
+                  length={groupedCaseStudies.play.length}
+                  onMove={(direction) => moveCaseStudy(item.slug, direction)}
+                />
+              ))}
+              <SidebarButton active={false} label="+ Add Play Project" onClick={() => { setPendingNewSection('play'); setPendingTemplateId('standard-ux') }} />
             </SidebarGroup>
 
             <SidebarGroup title="MIXED MEDIA">
@@ -1226,6 +1244,9 @@ git push`
           ) : null}
           {activePage === 'work-page' ? (
             <WorkPageEditor content={content} updateSection={updateSection} localWriteEnabled={localWriteEnabled} />
+          ) : null}
+          {activePage === 'play-page' ? (
+            <PlayPageEditor content={content} updateSection={updateSection} />
           ) : null}
           {activePage === 'creative-page' ? (
             <CreativePageEditor content={content} updateSection={updateSection} />
@@ -1893,6 +1914,59 @@ function CreativePageEditor({
   )
 }
 
+function PlayPageEditor({
+  content,
+  updateSection,
+}: {
+  content: SiteContent
+  updateSection: <K extends keyof SiteContent>(key: K, value: SiteContent[K]) => void
+}) {
+  return (
+    <SectionFrame title="Play Page">
+      <Field label="Eyebrow">
+        <input
+          value={content.copy.playPage.eyebrow}
+          onChange={(event) => updateSection('copy', {
+            ...content.copy,
+            playPage: { ...content.copy.playPage, eyebrow: event.target.value },
+          })}
+          style={inputStyle()}
+        />
+      </Field>
+      <Field label="Hero Title">
+        <input
+          value={content.copy.playPage.heroTitle}
+          onChange={(event) => updateSection('copy', {
+            ...content.copy,
+            playPage: { ...content.copy.playPage, heroTitle: event.target.value },
+          })}
+          style={inputStyle()}
+        />
+      </Field>
+      <Field label="Hero Body">
+        <textarea
+          value={content.copy.playPage.heroBody}
+          onChange={(event) => updateSection('copy', {
+            ...content.copy,
+            playPage: { ...content.copy.playPage, heroBody: event.target.value },
+          })}
+          style={inputStyle(true)}
+        />
+      </Field>
+      <Field label="Card CTA Label">
+        <input
+          value={content.copy.playPage.cardCtaLabel}
+          onChange={(event) => updateSection('copy', {
+            ...content.copy,
+            playPage: { ...content.copy.playPage, cardCtaLabel: event.target.value },
+          })}
+          style={inputStyle()}
+        />
+      </Field>
+    </SectionFrame>
+  )
+}
+
 function PhotographyPageEditor({
   content,
   updateSection,
@@ -2255,6 +2329,7 @@ function CaseStudyEditor({
             style={inputStyle()}
           >
             <option value="work">Work</option>
+            <option value="play">Play</option>
             <option value="mixed-media">Mixed Media</option>
             <option value="branding">Branding</option>
           </select>

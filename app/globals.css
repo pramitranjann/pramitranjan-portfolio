@@ -446,6 +446,10 @@ body.carousel-reengaging main {
     grid-template-columns: 1fr !important;
     min-height: unset !important;
   }
+  .game-case-study-hero {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
   .case-study-hero-text {
     padding: 32px 24px !important;
     border-right: none !important;

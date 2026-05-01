@@ -19,7 +19,7 @@ interface ProjectLink {
 
 interface CaseStudyLayoutProps {
   slug?: string
-  section?: 'work' | 'mixed-media' | 'branding'
+section?: 'work' | 'mixed-media' | 'branding' | 'play'
   title: string
   oneliner: string
   type: string
@@ -1099,7 +1099,8 @@ export function CaseStudyLayout({
                         title={solutionEmbedTitle}
                         loading="lazy"
                         referrerPolicy="strict-origin-when-cross-origin"
-                        allow="fullscreen"
+                        allow="camera; microphone; fullscreen; autoplay"
+                        allowFullScreen
                         style={{
                           width: '100%',
                           height: '100%',
@@ -1158,7 +1159,8 @@ export function CaseStudyLayout({
                               title={`${solutionEmbedTitle} mobile`}
                               loading="lazy"
                               referrerPolicy="strict-origin-when-cross-origin"
-                              allow="fullscreen"
+                              allow="camera; microphone; fullscreen; autoplay"
+                              allowFullScreen
                               style={{
                                 width: '100%',
                                 height: '100%',

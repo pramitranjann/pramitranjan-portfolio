@@ -276,6 +276,13 @@ export interface CreativePageCopy {
   photoBackLabel: string
 }
 
+export interface PlayPageCopy {
+  eyebrow: string
+  heroTitle: string
+  heroBody: string
+  cardCtaLabel: string
+}
+
 export interface CaseStudyUiCopy {
   problemLabel: string
   roleLabel: string
@@ -303,7 +310,7 @@ export interface ProjectLink {
   title: string
 }
 
-export type CaseStudySection = 'work' | 'mixed-media' | 'branding'
+export type CaseStudySection = 'work' | 'mixed-media' | 'branding' | 'play'
 export type CaseStudyMediaBlockSection = 'research' | 'challenge' | 'process' | 'solution'
 export type CaseStudyMediaBlockLayout = 'single' | 'pair'
 export type CaseStudyMediaAlign = 'left' | 'center' | 'right'
@@ -456,6 +463,7 @@ export interface SiteContent {
     aboutPage: AboutPageCopy
     workPage: WorkPageCopy
     creativePage: CreativePageCopy
+    playPage: PlayPageCopy
     caseStudy: CaseStudyUiCopy
   }
   caseStudies: CaseStudyContent[]
@@ -774,6 +782,17 @@ function isCreativePageCopy(value: unknown): value is CreativePageCopy {
   )
 }
 
+function isPlayPageCopy(value: unknown): value is PlayPageCopy {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return (
+    isString(item.eyebrow) &&
+    isString(item.heroTitle) &&
+    isString(item.heroBody) &&
+    isString(item.cardCtaLabel)
+  )
+}
+
 function isCaseStudyUiCopy(value: unknown): value is CaseStudyUiCopy {
   if (!value || typeof value !== 'object') return false
   const item = value as Record<string, unknown>
@@ -918,7 +937,7 @@ function isProjectLink(value: unknown): value is ProjectLink {
 }
 
 function isCaseStudySection(value: unknown): value is CaseStudySection {
-  return value === 'work' || value === 'mixed-media' || value === 'branding'
+  return value === 'work' || value === 'mixed-media' || value === 'branding' || value === 'play'
 }
 
 function isOptionalString(value: unknown) {
@@ -1051,6 +1070,7 @@ export function isSiteContent(value: unknown): value is SiteContent {
     isAboutPageCopy(copy.aboutPage) &&
     isWorkPageCopy(copy.workPage) &&
     isCreativePageCopy(copy.creativePage) &&
+    isPlayPageCopy(copy.playPage) &&
     isCaseStudyUiCopy(copy.caseStudy) &&
     Array.isArray(content.caseStudies) &&
     content.caseStudies.every(isCaseStudyContent)

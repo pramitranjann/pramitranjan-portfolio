@@ -705,6 +705,12 @@
       "backLabel": "CREATIVE",
       "photoBackLabel": "PHOTOGRAPHY"
     },
+    "playPage": {
+      "eyebrow": "PLAY",
+      "heroTitle": "Games and playable experiments.",
+      "heroBody": "Small interactive systems exploring gesture, timing, motion, and play.",
+      "cardCtaLabel": "PLAY CASE STUDY"
+    },
     "caseStudy": {
       "problemLabel": "PROBLEM_",
       "roleLabel": "MY ROLE_",
@@ -1900,6 +1906,113 @@
       "solution": "A large-scale calico tapestry, A0 in size. The KL MRT network printed across the full sheet as the backbone — the one system that connects every community without belonging to any of them. The sheet itself was assembled in sections, printed in A3 and joined with seams ironed flat so nothing would pucker under the hoops. A thicker calico backing added structure — hidden, holding everything together from behind.\nCultural patterns from Chinatown, Kampung Baru, and Brickfields fill the space between the lines, each distinct, none dissolving into the others. The strongest photographs from each community are printed on calico and mounted inside embroidery hoops of different sizes — placed where the densest cultural enclaves sit on the map, each hoop a window into one world, sitting inside the same fabric as everything else.\nChain stitch traces the rail lines in each line's actual colour. French knots mark every station. Tying a knot is another name for a marriage. Everything is connected. Nothing is quite touching.",
       "outcomesHeadline": "A city on cloth.",
       "outcomes": "The Lines in Between was submitted as a GCE A-Level Photography final piece at Garden International School, Kuala Lumpur, receiving an A*. What the project taught me was the difference between capturing a place like a tourist and capturing it like someone trying to understand it. I didn't want spectacle — I wanted the regularness of life, the day-to-day of a common man in a multicultural city. The roughness of the print quality on calico, which I initially saw as a flaw, started to feel honest. Not every union is clean. There are always tensions between communities with different ideologies and beliefs. The piece reflects that.\nWhat I'd push further: getting closer to individuals within each community, not just their environments. The street photography from KL and Ho Chi Minh City shot during this project lives in the photography series pages."
+    },
+    {
+      "slug": "fruit-slice",
+      "section": "play",
+      "title": "Fruit Slice",
+      "oneliner": "A webcam-controlled slicing game where your hand becomes the controller.",
+      "type": "WEB GAME · 2026",
+      "tags": [
+        "MediaPipe",
+        "JavaScript",
+        "Webcam",
+        "Vercel"
+      ],
+      "prev": null,
+      "next": {
+        "slug": "game-two",
+        "title": "Game Two"
+      },
+      "backHref": "/play",
+      "backLabel": "PLAY",
+      "solution": "This game explores gesture-based interaction by replacing mouse input with webcam hand tracking. The focus was on making the mechanic feel immediate, playful, and easy to understand.",
+      "outcomes": "This project helped me understand how much game feel depends on feedback, timing, and forgiveness, not just whether the interaction technically works.",
+      "solutionEmbedCalloutLabel": "PLAYABLE BUILD",
+      "solutionEmbedCalloutTitle": "Live build coming soon.",
+      "solutionEmbedCalloutBody": "A Vercel embed URL can be added here when the build is ready.",
+      "solutionEmbedCtaLabel": "OPEN FULLSCREEN"
+    },
+    {
+      "slug": "game-two",
+      "section": "play",
+      "title": "Game Two",
+      "oneliner": "Replace this with a one-sentence explanation of the second game.",
+      "type": "WEB GAME · 2026",
+      "tags": [
+        "JavaScript",
+        "Interaction Design",
+        "Vercel"
+      ],
+      "prev": {
+        "slug": "fruit-slice",
+        "title": "Fruit Slice"
+      },
+      "next": {
+        "slug": "game-three",
+        "title": "Game Three"
+      },
+      "backHref": "/play",
+      "backLabel": "PLAY",
+      "solution": "Replace this with a brief explanation of what the game is, what interaction it explores, and what makes it interesting.",
+      "outcomes": "Replace this with one short reflection about what you learned while making the game.",
+      "solutionEmbedCalloutLabel": "PLAYABLE BUILD",
+      "solutionEmbedCalloutTitle": "Live build coming soon.",
+      "solutionEmbedCalloutBody": "Add the Vercel URL when the second game is ready to embed.",
+      "solutionEmbedCtaLabel": "OPEN FULLSCREEN"
+    },
+    {
+      "slug": "game-three",
+      "section": "play",
+      "title": "Game Three",
+      "oneliner": "Replace this with a one-sentence explanation of the third game.",
+      "type": "WEB GAME · 2026",
+      "tags": [
+        "JavaScript",
+        "Game Design",
+        "Vercel"
+      ],
+      "prev": {
+        "slug": "game-two",
+        "title": "Game Two"
+      },
+      "next": {
+        "slug": "game-four",
+        "title": "Game Four"
+      },
+      "backHref": "/play",
+      "backLabel": "PLAY",
+      "solution": "Replace this with a brief explanation of what the game is, what interaction it explores, and what makes it interesting.",
+      "outcomes": "Replace this with one short reflection about what you learned while making the game.",
+      "solutionEmbedCalloutLabel": "PLAYABLE BUILD",
+      "solutionEmbedCalloutTitle": "Live build coming soon.",
+      "solutionEmbedCalloutBody": "Add the Vercel URL when the third game is ready to embed.",
+      "solutionEmbedCtaLabel": "OPEN FULLSCREEN"
+    },
+    {
+      "slug": "game-four",
+      "section": "play",
+      "title": "Game Four",
+      "oneliner": "Replace this with a one-sentence explanation of the fourth game.",
+      "type": "WEB GAME · 2026",
+      "tags": [
+        "JavaScript",
+        "Interactive Prototype",
+        "Vercel"
+      ],
+      "prev": {
+        "slug": "game-three",
+        "title": "Game Three"
+      },
+      "next": null,
+      "backHref": "/play",
+      "backLabel": "PLAY",
+      "solution": "Replace this with a brief explanation of what the game is, what interaction it explores, and what makes it interesting.",
+      "outcomes": "Replace this with one short reflection about what you learned while making the game.",
+      "solutionEmbedCalloutLabel": "PLAYABLE BUILD",
+      "solutionEmbedCalloutTitle": "Live build coming soon.",
+      "solutionEmbedCalloutBody": "Add the Vercel URL when the fourth game is ready to embed.",
+      "solutionEmbedCtaLabel": "OPEN FULLSCREEN"
     }
   ]
 }

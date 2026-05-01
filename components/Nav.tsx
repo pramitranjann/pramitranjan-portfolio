@@ -6,6 +6,7 @@ import { playNav } from '@/lib/sounds'
 
 const links = [
   { href: '/work',     label: 'WORK' },
+  { href: '/play',     label: 'PLAY' },
   { href: '/creative', label: 'CREATIVE' },
   { href: '/about',    label: 'ABOUT' },
 ]
