@@ -708,8 +708,8 @@
     "playPage": {
       "eyebrow": "PLAY",
       "heroTitle": "Games and playable experiments.",
-      "heroBody": "Small interactive systems exploring gesture, timing, motion, and play.",
-      "cardCtaLabel": "PLAY CASE STUDY"
+      "heroBody": "Small interactive systems exploring gesture, timing, motion, and play.\n\nPage still in construction",
+      "cardCtaLabel": "PLAY NOW"
     },
     "caseStudy": {
       "problemLabel": "PROBLEM_",
@@ -1929,7 +1929,8 @@
       "outcomes": "This project helped me understand how much game feel depends on feedback, timing, and forgiveness, not just whether the interaction technically works.",
       "solutionEmbedCalloutLabel": "LIVE GAME_",
       "solutionEmbedCtaLabel": "OPEN FULLSCREEN",
-      "solutionEmbedUrl": "https://bowl-nu.vercel.app"
+      "solutionEmbedUrl": "https://bowl-nu.vercel.app",
+      "hidden": true
     },
     {
       "slug": "sling",
@@ -1956,7 +1957,8 @@
       "outcomes": "Replace this with one short reflection about what you learned while making the game.",
       "solutionEmbedCalloutTitle": "LIVE GAME_",
       "solutionEmbedCtaLabel": "OPEN FULLSCREEN",
-      "solutionEmbedUrl": "https://sling-nine.vercel.app"
+      "solutionEmbedUrl": "https://sling-nine.vercel.app",
+      "hidden": true
     },
     {
       "slug": "game-three",
@@ -1984,7 +1986,8 @@
       "solutionEmbedCalloutLabel": "PLAYABLE BUILD",
       "solutionEmbedCalloutTitle": "Live build coming soon.",
       "solutionEmbedCalloutBody": "Add the Vercel URL when the third game is ready to embed.",
-      "solutionEmbedCtaLabel": "OPEN FULLSCREEN"
+      "solutionEmbedCtaLabel": "OPEN FULLSCREEN",
+      "hidden": true
     },
     {
       "slug": "game-four",
@@ -2009,7 +2012,8 @@
       "solutionEmbedCalloutLabel": "PLAYABLE BUILD",
       "solutionEmbedCalloutTitle": "Live build coming soon.",
       "solutionEmbedCalloutBody": "Add the Vercel URL when the fourth game is ready to embed.",
-      "solutionEmbedCtaLabel": "OPEN FULLSCREEN"
+      "solutionEmbedCtaLabel": "OPEN FULLSCREEN",
+      "hidden": true
     }
   ]
 }
