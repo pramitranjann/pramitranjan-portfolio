@@ -1908,16 +1908,15 @@
       "outcomes": "The Lines in Between was submitted as a GCE A-Level Photography final piece at Garden International School, Kuala Lumpur, receiving an A*. What the project taught me was the difference between capturing a place like a tourist and capturing it like someone trying to understand it. I didn't want spectacle — I wanted the regularness of life, the day-to-day of a common man in a multicultural city. The roughness of the print quality on calico, which I initially saw as a flaw, started to feel honest. Not every union is clean. There are always tensions between communities with different ideologies and beliefs. The piece reflects that.\nWhat I'd push further: getting closer to individuals within each community, not just their environments. The street photography from KL and Ho Chi Minh City shot during this project lives in the photography series pages."
     },
     {
-      "slug": "fruit-slice",
+      "slug": "bowl",
       "section": "play",
-      "title": "Fruit Slice",
-      "oneliner": "A webcam-controlled slicing game where your hand becomes the controller.",
+      "title": "bowl",
+      "oneliner": "A Malaysian inspired reddition of Fruit NInja",
       "type": "WEB GAME · 2026",
       "tags": [
         "MediaPipe",
         "JavaScript",
-        "Webcam",
-        "Vercel"
+        "Webcam"
       ],
       "prev": null,
       "next": {
@@ -1928,25 +1927,24 @@
       "backLabel": "PLAY",
       "solution": "This game explores gesture-based interaction by replacing mouse input with webcam hand tracking. The focus was on making the mechanic feel immediate, playful, and easy to understand.",
       "outcomes": "This project helped me understand how much game feel depends on feedback, timing, and forgiveness, not just whether the interaction technically works.",
-      "solutionEmbedCalloutLabel": "PLAYABLE BUILD",
-      "solutionEmbedCalloutTitle": "Live build coming soon.",
-      "solutionEmbedCalloutBody": "A Vercel embed URL can be added here when the build is ready.",
-      "solutionEmbedCtaLabel": "OPEN FULLSCREEN"
+      "solutionEmbedCalloutLabel": "LIVE GAME_",
+      "solutionEmbedCtaLabel": "OPEN FULLSCREEN",
+      "solutionEmbedUrl": "https://bowl-nu.vercel.app"
     },
     {
-      "slug": "game-two",
+      "slug": "sling",
       "section": "play",
-      "title": "Game Two",
-      "oneliner": "Replace this with a one-sentence explanation of the second game.",
+      "title": "sling",
+      "oneliner": "A webcam-controlled demolition game",
       "type": "WEB GAME · 2026",
       "tags": [
+        "MediaPipe",
         "JavaScript",
-        "Interaction Design",
-        "Vercel"
+        "Webcam"
       ],
       "prev": {
-        "slug": "fruit-slice",
-        "title": "Fruit Slice"
+        "slug": "bowl",
+        "title": "bowl"
       },
       "next": {
         "slug": "game-three",
@@ -1956,10 +1954,9 @@
       "backLabel": "PLAY",
       "solution": "Replace this with a brief explanation of what the game is, what interaction it explores, and what makes it interesting.",
       "outcomes": "Replace this with one short reflection about what you learned while making the game.",
-      "solutionEmbedCalloutLabel": "PLAYABLE BUILD",
-      "solutionEmbedCalloutTitle": "Live build coming soon.",
-      "solutionEmbedCalloutBody": "Add the Vercel URL when the second game is ready to embed.",
-      "solutionEmbedCtaLabel": "OPEN FULLSCREEN"
+      "solutionEmbedCalloutTitle": "LIVE GAME_",
+      "solutionEmbedCtaLabel": "OPEN FULLSCREEN",
+      "solutionEmbedUrl": "https://sling-nine.vercel.app"
     },
     {
       "slug": "game-three",
