@@ -706,9 +706,9 @@
       "photoBackLabel": "PHOTOGRAPHY"
     },
     "playPage": {
-      "eyebrow": "PLAY",
+      "eyebrow": "PLAY_",
       "heroTitle": "Games and playable experiments.",
-      "heroBody": "Small interactive systems exploring gesture, timing, motion, and play.\n\nPage still in construction",
+      "heroBody": "Small interactive systems exploring gesture, timing, motion, and play.",
       "cardCtaLabel": "PLAY NOW"
     },
     "caseStudy": {
@@ -1911,7 +1911,7 @@
       "slug": "bowl",
       "section": "play",
       "title": "bowl",
-      "oneliner": "A Malaysian inspired reddition of Fruit NInja",
+      "oneliner": "A Malaysian inspired reddition of Fruit Ninja",
       "type": "WEB GAME · 2026",
       "tags": [
         "MediaPipe",

@@ -110,7 +110,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" />
 <script dangerouslySetInnerHTML={{ __html: `document.documentElement.classList.add('js-ready')` }} />
       </head>
-      <body style={{ backgroundColor: '#0d0d0d', color: '#f5f2ed', ...motionCssVars }}>
+      <body style={{ backgroundColor: '#0d0d0d', color: 'rgb(245, 242, 237)', ...motionCssVars }}>
         <SoundRouteListener />
         <ScrollToTopOnRouteChange />
         <MotionSettingsProvider settings={motion}>

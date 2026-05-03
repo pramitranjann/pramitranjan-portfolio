@@ -148,6 +148,24 @@ body.carousel-reengaging main {
   }
 }
 
+@media (max-width: 767px) {
+  .game-intro-stage-grid {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+  }
+
+  .game-intro-preview {
+    display: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .play-card-grid {
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+  }
+}
+
 .card-title-inner {
   display: inline;
 }
@@ -239,6 +257,21 @@ body.carousel-reengaging main {
 }
 
 /* Section eyebrow — scroll-in animation */
+@keyframes game-stage-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [style*="game-stage-progress"] {
+    animation: none !important;
+  }
+}
+
 @keyframes eyebrow-label {
   from { opacity: 0; transform: translateX(calc(var(--motion-eyebrow-offset) * -1)); }
   to   { opacity: 1; transform: translateX(0); }
