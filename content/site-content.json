@@ -1928,6 +1928,7 @@
       "solution": "This game explores gesture-based interaction by replacing mouse input with webcam hand tracking. The focus was on making the mechanic feel immediate, playful, and easy to understand.",
       "solutionEmbedCalloutLabel": "LIVE GAME_",
       "solutionEmbedCtaLabel": "OPEN FULLSCREEN",
+      "useEmbedPreview": true,
       "solutionEmbedUrl": "https://bowl-nu.vercel.app",
       "hidden": true
     },
@@ -1954,6 +1955,7 @@
       "backLabel": "PLAY",
       "solutionEmbedCalloutTitle": "LIVE GAME_",
       "solutionEmbedCtaLabel": "OPEN FULLSCREEN",
+      "useEmbedPreview": true,
       "solutionEmbedUrl": "https://sling-nine.vercel.app",
       "hidden": true
     },

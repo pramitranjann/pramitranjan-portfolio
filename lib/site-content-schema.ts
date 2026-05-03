@@ -367,6 +367,7 @@ export interface CaseStudyMediaBlock {
 export interface CaseStudyContent {
   slug: string
   section: CaseStudySection
+  useEmbedPreview?: boolean
   hidden?: boolean
   title: string
   oneliner: string
@@ -992,8 +993,9 @@ function isCaseStudyContent(value: unknown): value is CaseStudyContent {
     (item.mediaSettings === undefined || isCaseStudyMediaSettings(item.mediaSettings)) &&
     (item.mediaBlocks === undefined || (Array.isArray(item.mediaBlocks) && item.mediaBlocks.every(isCaseStudyMediaBlock))) &&
     (item.uiCopy === undefined || isCaseStudyUiCopy(item.uiCopy)) &&
-    isOptionalString(item.solutionEmbedUrl) &&
-    isOptionalString(item.solutionEmbedTitle) &&
+(item.useEmbedPreview === undefined || typeof item.useEmbedPreview === 'boolean') &&
+isOptionalString(item.solutionEmbedUrl) &&
+isOptionalString(item.solutionEmbedTitle) &&
     isOptionalString(item.solutionEmbedAspectRatio) &&
     isOptionalString(item.solutionEmbedWidth) &&
     isOptionalString(item.solutionEmbedCalloutLabel) &&

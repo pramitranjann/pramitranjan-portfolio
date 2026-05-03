@@ -7,7 +7,7 @@ import { getPublicSiteContent } from '@/lib/site-content'
 import { UnderConstructionPage } from '@/components/UnderConstructionPage'
 
 
-export async function PlayPage() {
+export default async function PlayPageLive() {
   /*
     CONTENT SOURCE
     This pulls your site content from your content system.

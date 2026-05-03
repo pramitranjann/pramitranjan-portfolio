@@ -294,44 +294,60 @@ function enterGame() {
         overflow: 'hidden',
       }}
     >
-      {embedUrl ? (
-        <iframe
-          src={embedUrl}
-          title={`${embedTitle} preview`}
-          loading="lazy"
-          referrerPolicy="strict-origin-when-cross-origin"
-          allow="camera; microphone; fullscreen; autoplay"
-          allowFullScreen
-          style={{
-            width: '100%',
-            height: '100%',
-            border: 0,
-            background: '#0d0d0d',
+{project.useEmbedPreview && embedUrl ? (
+  <iframe
+    src={embedUrl}
+    title={`${embedTitle} preview`}
+    loading="lazy"
+    referrerPolicy="strict-origin-when-cross-origin"
+    allow="camera; microphone; fullscreen; autoplay"
+    allowFullScreen
+    style={{
+      width: '100%',
+      height: '100%',
+      border: 0,
+      background: '#0d0d0d',
 
-            /*
-              IMPORTANT:
-              The iframe is visible but not directly interactive in this stage.
-              The overlay button below sits above it and captures the click.
-            */
-            pointerEvents: 'none',
-          }}
-        />
-      ) : (
-        <div
-          className="font-mono"
-          style={{
-            position: 'absolute',
-            inset: 0,
-            display: 'grid',
-            placeItems: 'center',
-            color: '#444444',
-            fontSize: 'var(--text-meta)',
-            letterSpacing: '0.16em',
-          }}
-        >
-          LIVE BUILD URL PENDING
-        </div>
-      )}
+      /*
+        This keeps the preview visible but prevents users from playing
+        before they intentionally click the overlay.
+      */
+      pointerEvents: 'none',
+    }}
+  />
+) : project.heroImage ? (
+  <img
+    src={project.heroImage}
+    alt={`${project.title} preview`}
+    style={{
+      position: 'absolute',
+      inset: 0,
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover',
+      objectPosition: 'center center',
+      opacity: isLoadingStage ? 0.35 : 0.9,
+      transition: 'opacity 240ms ease',
+    }}
+  />
+) : (
+  <div
+    className="font-mono"
+    style={{
+      position: 'absolute',
+      inset: 0,
+      display: 'grid',
+      placeItems: 'center',
+      color: '#444444',
+      fontSize: 'var(--text-meta)',
+      letterSpacing: '0.16em',
+      background:
+        'linear-gradient(135deg, rgba(255,49,32,0.08), rgba(255,255,255,0.02)), #0d0d0d',
+    }}
+  >
+    {embedUrl ? 'LIVE BUILD READY' : 'LIVE BUILD URL PENDING'}
+  </div>
+)}
 
       {/* 
         CLICK OVERLAY
