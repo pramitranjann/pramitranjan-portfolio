@@ -1277,7 +1277,12 @@ git push`
             <WorkPageEditor content={content} updateSection={updateSection} localWriteEnabled={localWriteEnabled} />
           ) : null}
           {activePage === 'play-page' ? (
-            <PlayPageEditor content={content} updateSection={updateSection} />
+            <PlayPageEditor
+              content={content}
+              updateSection={updateSection}
+              playGames={groupedCaseStudies.play}
+              onOpenCaseStudy={(slug) => setActivePage(`case-study:${slug}` as PageKey)}
+            />
           ) : null}
           {activePage === 'creative-page' ? (
             <CreativePageEditor content={content} updateSection={updateSection} />
@@ -2137,53 +2142,128 @@ function CreativePageEditor({
 function PlayPageEditor({
   content,
   updateSection,
+  playGames,
+  onOpenCaseStudy,
 }: {
   content: SiteContent
   updateSection: <K extends keyof SiteContent>(key: K, value: SiteContent[K]) => void
+  playGames: CaseStudyContent[]
+  onOpenCaseStudy: (slug: string) => void
 }) {
   return (
-    <SectionFrame title="Play Page">
-      <Field label="Eyebrow">
-        <input
-          value={content.copy.playPage.eyebrow}
-          onChange={(event) => updateSection('copy', {
-            ...content.copy,
-            playPage: { ...content.copy.playPage, eyebrow: event.target.value },
-          })}
-          style={inputStyle()}
-        />
-      </Field>
-      <Field label="Hero Title">
-        <input
-          value={content.copy.playPage.heroTitle}
-          onChange={(event) => updateSection('copy', {
-            ...content.copy,
-            playPage: { ...content.copy.playPage, heroTitle: event.target.value },
-          })}
-          style={inputStyle()}
-        />
-      </Field>
-      <Field label="Hero Body">
-        <textarea
-          value={content.copy.playPage.heroBody}
-          onChange={(event) => updateSection('copy', {
-            ...content.copy,
-            playPage: { ...content.copy.playPage, heroBody: event.target.value },
-          })}
-          style={inputStyle(true)}
-        />
-      </Field>
-      <Field label="Card CTA Label">
-        <input
-          value={content.copy.playPage.cardCtaLabel}
-          onChange={(event) => updateSection('copy', {
-            ...content.copy,
-            playPage: { ...content.copy.playPage, cardCtaLabel: event.target.value },
-          })}
-          style={inputStyle()}
-        />
-      </Field>
-    </SectionFrame>
+    <>
+      <SectionFrame title="Play Page">
+        <Field label="Eyebrow">
+          <input
+            value={content.copy.playPage.eyebrow}
+            onChange={(event) => updateSection('copy', {
+              ...content.copy,
+              playPage: { ...content.copy.playPage, eyebrow: event.target.value },
+            })}
+            style={inputStyle()}
+          />
+        </Field>
+        <Field label="Hero Title">
+          <input
+            value={content.copy.playPage.heroTitle}
+            onChange={(event) => updateSection('copy', {
+              ...content.copy,
+              playPage: { ...content.copy.playPage, heroTitle: event.target.value },
+            })}
+            style={inputStyle()}
+          />
+        </Field>
+        <Field label="Hero Body">
+          <textarea
+            value={content.copy.playPage.heroBody}
+            onChange={(event) => updateSection('copy', {
+              ...content.copy,
+              playPage: { ...content.copy.playPage, heroBody: event.target.value },
+            })}
+            style={inputStyle(true)}
+          />
+        </Field>
+        <Field label="Card CTA Label">
+          <input
+            value={content.copy.playPage.cardCtaLabel}
+            onChange={(event) => updateSection('copy', {
+              ...content.copy,
+              playPage: { ...content.copy.playPage, cardCtaLabel: event.target.value },
+            })}
+            style={inputStyle()}
+          />
+        </Field>
+      </SectionFrame>
+
+      <SectionFrame title="Play Games">
+        <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.7 }}>
+          Play page cards come from case studies where <span style={{ color: '#f5f2ed' }}>section = play</span>.
+          Edit a game below to control whether its card appears on the Play page, its preview image, embed URL, and Stage 1 preview behavior.
+        </p>
+
+        <div style={{ display: 'grid', gap: '12px' }}>
+          {playGames.length ? playGames.map((game) => (
+            <div
+              key={game.slug}
+              style={{
+                border: '1px solid #1f1f1f',
+                background: '#0f0f0f',
+                padding: '14px',
+                display: 'grid',
+                gap: '12px',
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  gap: '12px',
+                  alignItems: 'flex-start',
+                }}
+              >
+                <div style={{ minWidth: 0 }}>
+                  <div className="font-serif" style={{ fontSize: '32px', color: '#f5f2ed', lineHeight: 1.1 }}>
+                    {game.title}
+                  </div>
+                  <div className="font-mono" style={{ fontSize: '12px', color: '#777777', letterSpacing: '0.12em', marginTop: '6px' }}>
+                    /PLAY/{game.slug.toUpperCase()}
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => onOpenCaseStudy(game.slug)}
+                  className="font-mono"
+                  style={{ background: 'transparent', border: '1px solid #2a2a2a', color: '#FF3120', padding: '10px 14px', cursor: 'pointer', letterSpacing: '0.12em', whiteSpace: 'nowrap' }}
+                >
+                  EDIT GAME
+                </button>
+              </div>
+
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                <span className="font-mono" style={{ fontSize: '12px', color: game.hidden ? '#777777' : '#f5f2ed', border: '1px solid #2a2a2a', padding: '6px 10px', letterSpacing: '0.08em' }}>
+                  {game.hidden ? 'CARD HIDDEN' : 'CARD VISIBLE'}
+                </span>
+                <span className="font-mono" style={{ fontSize: '12px', color: game.useEmbedPreview ? '#f5f2ed' : '#777777', border: '1px solid #2a2a2a', padding: '6px 10px', letterSpacing: '0.08em' }}>
+                  {game.useEmbedPreview ? 'LIVE PREVIEW ON' : 'LIVE PREVIEW OFF'}
+                </span>
+                <span className="font-mono" style={{ fontSize: '12px', color: game.solutionEmbedUrl ? '#f5f2ed' : '#777777', border: '1px solid #2a2a2a', padding: '6px 10px', letterSpacing: '0.08em' }}>
+                  {game.solutionEmbedUrl ? 'EMBED URL SET' : 'EMBED URL MISSING'}
+                </span>
+              </div>
+
+              <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.7, margin: 0 }}>
+                {game.oneliner || 'No game description yet.'}
+              </p>
+            </div>
+          )) : (
+            <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#777777', lineHeight: 1.7, margin: 0 }}>
+              No Play games yet. Use <span style={{ color: '#f5f2ed' }}>+ Add Play Game</span> in the left sidebar.
+            </p>
+          )}
+        </div>
+      </SectionFrame>
+    </>
   )
 }
 

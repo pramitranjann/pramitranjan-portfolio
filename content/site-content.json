@@ -1968,7 +1968,8 @@
       "solutionEmbedCtaLabel": "OPEN FULLSCREEN",
       "useEmbedPreview": true,
       "solutionEmbedUrl": "https://bowl-nu.vercel.app",
-      "hidden": false
+      "hidden": false,
+      "heroImage": "/Play/bowl preview.png"
     },
     {
       "slug": "sling",
@@ -1994,7 +1995,8 @@
       "solutionEmbedCalloutTitle": "LIVE GAME_",
       "solutionEmbedCtaLabel": "OPEN FULLSCREEN",
       "useEmbedPreview": false,
-      "solutionEmbedUrl": "https://sling-nine.vercel.app"
+      "solutionEmbedUrl": "https://sling-nine.vercel.app",
+      "heroImage": "/Play/sling preview.png"
     },
     {
       "slug": "game-three",
