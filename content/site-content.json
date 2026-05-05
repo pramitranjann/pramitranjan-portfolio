@@ -747,8 +747,8 @@
       "label": "PLAY",
       "href": "/play",
       "order": 2,
-      "visible": false,
-      "status": "construction",
+      "visible": true,
+      "status": "live",
       "constructionTitle": "Play is warming up.",
       "constructionBody": "This section is being built around playable web games and interaction experiments. It will be live once the games are ready.",
       "constructionCtaLabel": "BACK TO WORK",
@@ -1994,8 +1994,7 @@
       "solutionEmbedCalloutTitle": "LIVE GAME_",
       "solutionEmbedCtaLabel": "OPEN FULLSCREEN",
       "useEmbedPreview": false,
-      "solutionEmbedUrl": "https://sling-nine.vercel.app",
-      "hidden": true
+      "solutionEmbedUrl": "https://sling-nine.vercel.app"
     },
     {
       "slug": "game-three",
