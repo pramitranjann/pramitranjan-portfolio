@@ -733,6 +733,44 @@
       "defaultRole": "Led end-to-end UX design including research planning, synthesis, interaction design, and high-fidelity prototyping."
     }
   },
+  "sitePages": [
+    {
+      "key": "work",
+      "label": "WORK",
+      "href": "/work",
+      "order": 1,
+      "visible": true,
+      "status": "live"
+    },
+    {
+      "key": "play",
+      "label": "PLAY",
+      "href": "/play",
+      "order": 2,
+      "visible": false,
+      "status": "construction",
+      "constructionTitle": "Play is warming up.",
+      "constructionBody": "This section is being built around playable web games and interaction experiments. It will be live once the games are ready.",
+      "constructionCtaLabel": "BACK TO WORK",
+      "constructionCtaHref": "/work"
+    },
+    {
+      "key": "creative",
+      "label": "CREATIVE",
+      "href": "/creative",
+      "order": 3,
+      "visible": true,
+      "status": "live"
+    },
+    {
+      "key": "about",
+      "label": "ABOUT",
+      "href": "/about",
+      "order": 4,
+      "visible": true,
+      "status": "live"
+    }
+  ],
   "caseStudies": [
     {
       "slug": "franklins",
@@ -1930,7 +1968,7 @@
       "solutionEmbedCtaLabel": "OPEN FULLSCREEN",
       "useEmbedPreview": true,
       "solutionEmbedUrl": "https://bowl-nu.vercel.app",
-      "hidden": true
+      "hidden": false
     },
     {
       "slug": "sling",
@@ -1955,7 +1993,7 @@
       "backLabel": "PLAY",
       "solutionEmbedCalloutTitle": "LIVE GAME_",
       "solutionEmbedCtaLabel": "OPEN FULLSCREEN",
-      "useEmbedPreview": true,
+      "useEmbedPreview": false,
       "solutionEmbedUrl": "https://sling-nine.vercel.app",
       "hidden": true
     },

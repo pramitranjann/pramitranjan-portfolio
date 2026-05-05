@@ -114,7 +114,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <SoundRouteListener />
         <ScrollToTopOnRouteChange />
         <MotionSettingsProvider settings={motion}>
-          <SiteCopyProvider copy={content.copy}>
+          <SiteCopyProvider copy={content.copy} sitePages={content.sitePages}>
             {children}
           </SiteCopyProvider>
         </MotionSettingsProvider>

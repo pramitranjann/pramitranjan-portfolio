@@ -31,6 +31,7 @@ import type {
   PhotographyGallery,
   ProjectLink,
   SiteContent,
+  SitePageKey,
   TypographySettings,
   WorkProject,
 } from '@/lib/site-content-schema'
@@ -42,6 +43,7 @@ type EditorProps = {
 
 type PageKey =
   | 'homepage'
+  | 'site-pages'
   | 'about-page'
   | 'work-page'
   | 'play-page'
@@ -487,6 +489,31 @@ function createCaseStudyDraft(section: CaseStudySection, existing: CaseStudyCont
   while (existing.some((item) => item.slug === slug)) {
     slug = `${baseSlug}-${counter}`
     counter += 1
+  }
+
+  if (section === 'play') {
+    return {
+      slug,
+      section,
+      hidden: true,
+      title: 'New Game',
+      oneliner: 'Short game description.',
+      type: 'WEB GAME · 2026',
+      tags: ['JavaScript'],
+      prev: null,
+      next: null,
+      backHref: '/play',
+      backLabel: 'PLAY',
+      heroImage: '',
+      solution: 'Briefly explain what the game is and what interaction it explores.',
+      outcomes: 'Brief reflection or learning.',
+      solutionEmbedUrl: '',
+      solutionEmbedTitle: 'New Game live game',
+      solutionEmbedAspectRatio: '16 / 9',
+      solutionEmbedCalloutLabel: 'LIVE GAME_',
+      solutionEmbedCtaLabel: 'OPEN FULLSCREEN',
+      useEmbedPreview: false,
+    } satisfies CaseStudyContent
   }
 
   return {
@@ -1109,6 +1136,7 @@ git push`
           <div style={{ display: 'grid', gap: '18px' }}>
             <SidebarGroup title="SITE PAGES">
               <SidebarButton active={activePage === 'homepage'} label="Homepage" onClick={() => setActivePage('homepage')} />
+              <SidebarButton active={activePage === 'site-pages'} label="Site Pages" onClick={() => setActivePage('site-pages')} />
               <SidebarButton active={activePage === 'about-page'} label="About Page" onClick={() => setActivePage('about-page')} />
               <SidebarButton active={activePage === 'work-page'} label="Work Page" onClick={() => setActivePage('work-page')} />
               <SidebarButton active={activePage === 'play-page'} label="Play Page" onClick={() => setActivePage('play-page')} />
@@ -1146,7 +1174,7 @@ git push`
                   onMove={(direction) => moveCaseStudy(item.slug, direction)}
                 />
               ))}
-              <SidebarButton active={false} label="+ Add Play Project" onClick={() => { setPendingNewSection('play'); setPendingTemplateId('standard-ux') }} />
+              <SidebarButton active={false} label="+ Add Play Game" onClick={() => { setPendingNewSection('play'); setPendingTemplateId('standard-ux') }} />
             </SidebarGroup>
 
             <SidebarGroup title="MIXED MEDIA">
@@ -1238,6 +1266,9 @@ git push`
         <fieldset disabled={!editingEnabled || saving || !localWriteEnabled} style={{ display: 'grid', gap: '24px', opacity: !editingEnabled || !localWriteEnabled ? 0.58 : 1, transition: 'opacity 0.18s ease', minWidth: 0 }}>
           {activePage === 'homepage' ? (
             <HomepageEditor content={content} updateSection={updateSection} localWriteEnabled={localWriteEnabled} />
+          ) : null}
+          {activePage === 'site-pages' ? (
+            <SitePagesEditor content={content} updateSection={updateSection} />
           ) : null}
           {activePage === 'about-page' ? (
             <AboutPageEditor content={content} updateSection={updateSection} />
@@ -1768,6 +1799,195 @@ function WorkPageEditor({
         />
       </SectionFrame>
     </>
+  )
+}
+
+function SitePagesEditor({
+  content,
+  updateSection,
+}: {
+  content: SiteContent
+  updateSection: <K extends keyof SiteContent>(key: K, value: SiteContent[K]) => void
+}) {
+  function updatePage(
+    key: SitePageKey,
+    patch: Partial<SiteContent['sitePages'][number]>
+  ) {
+    updateSection(
+      'sitePages',
+      content.sitePages.map((page) => (page.key === key ? { ...page, ...patch } : page))
+    )
+  }
+
+  function movePage(key: SitePageKey, direction: -1 | 1) {
+    const sorted = [...content.sitePages].sort((a, b) => a.order - b.order)
+    const index = sorted.findIndex((page) => page.key === key)
+    const nextIndex = index + direction
+
+    if (index < 0 || nextIndex < 0 || nextIndex >= sorted.length) return
+
+    const moved = [...sorted]
+    const [item] = moved.splice(index, 1)
+    moved.splice(nextIndex, 0, item)
+
+    updateSection(
+      'sitePages',
+      moved.map((page, orderIndex) => ({
+        ...page,
+        order: orderIndex + 1,
+      }))
+    )
+  }
+
+  return (
+    <SectionFrame title="Site Pages / Navigation Visibility">
+      <p
+        className="font-mono"
+        style={{
+          fontSize: '12px',
+          color: '#999999',
+          lineHeight: 1.7,
+          marginBottom: '16px',
+        }}
+      >
+        Control which main pages appear in navigation, what order they appear in,
+        and whether unfinished routes show a construction template.
+      </p>
+
+      <div style={{ display: 'grid', gap: '14px' }}>
+        {[...content.sitePages]
+          .sort((a, b) => a.order - b.order)
+          .map((page, index, list) => (
+            <div
+              key={page.key}
+              style={{
+                border: '1px solid #1f1f1f',
+                background: '#0f0f0f',
+                padding: '14px',
+                display: 'grid',
+                gap: '12px',
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  gap: '12px',
+                  alignItems: 'center',
+                }}
+              >
+                <strong
+                  className="font-mono"
+                  style={{
+                    color: '#f5f2ed',
+                    fontSize: '12px',
+                    letterSpacing: '0.14em',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {page.label} / {page.href}
+                </strong>
+
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button
+                    type="button"
+                    onClick={() => movePage(page.key, -1)}
+                    disabled={index === 0}
+                    className="font-mono"
+                    style={{ background: 'transparent', border: '1px solid #2a2a2a', color: index === 0 ? '#444444' : '#999999', padding: '8px 12px', cursor: index === 0 ? 'default' : 'pointer', letterSpacing: '0.1em' }}
+                  >
+                    ↑
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => movePage(page.key, 1)}
+                    disabled={index === list.length - 1}
+                    className="font-mono"
+                    style={{ background: 'transparent', border: '1px solid #2a2a2a', color: index === list.length - 1 ? '#444444' : '#999999', padding: '8px 12px', cursor: index === list.length - 1 ? 'default' : 'pointer', letterSpacing: '0.1em' }}
+                  >
+                    ↓
+                  </button>
+                </div>
+              </div>
+
+              <Field label="Nav Label">
+                <input
+                  value={page.label}
+                  onChange={(event) => updatePage(page.key, { label: event.target.value })}
+                  style={inputStyle()}
+                />
+              </Field>
+
+              <Field label="Href">
+                <input
+                  value={page.href}
+                  onChange={(event) => updatePage(page.key, { href: event.target.value })}
+                  style={inputStyle()}
+                />
+              </Field>
+
+              <Field label="Show in Nav">
+                <select
+                  value={page.visible ? 'visible' : 'hidden'}
+                  onChange={(event) => updatePage(page.key, { visible: event.target.value === 'visible' })}
+                  style={inputStyle()}
+                >
+                  <option value="visible">Visible in nav</option>
+                  <option value="hidden">Hidden from nav</option>
+                </select>
+              </Field>
+
+              <Field label="Page Status">
+                <select
+                  value={page.status}
+                  onChange={(event) =>
+                    updatePage(page.key, {
+                      status: event.target.value as SiteContent['sitePages'][number]['status'],
+                    })
+                  }
+                  style={inputStyle()}
+                >
+                  <option value="live">Live</option>
+                  <option value="construction">Construction Page</option>
+                  <option value="hidden">Hidden Page</option>
+                </select>
+              </Field>
+
+              <Field label="Construction Title">
+                <input
+                  value={page.constructionTitle ?? ''}
+                  onChange={(event) => updatePage(page.key, { constructionTitle: event.target.value || undefined })}
+                  style={inputStyle()}
+                />
+              </Field>
+
+              <Field label="Construction Body">
+                <textarea
+                  value={page.constructionBody ?? ''}
+                  onChange={(event) => updatePage(page.key, { constructionBody: event.target.value || undefined })}
+                  style={inputStyle(true)}
+                />
+              </Field>
+
+              <Field label="Construction CTA Label">
+                <input
+                  value={page.constructionCtaLabel ?? ''}
+                  onChange={(event) => updatePage(page.key, { constructionCtaLabel: event.target.value || undefined })}
+                  style={inputStyle()}
+                />
+              </Field>
+
+              <Field label="Construction CTA Href">
+                <input
+                  value={page.constructionCtaHref ?? ''}
+                  onChange={(event) => updatePage(page.key, { constructionCtaHref: event.target.value || undefined })}
+                  style={inputStyle()}
+                />
+              </Field>
+            </div>
+          ))}
+      </div>
+    </SectionFrame>
   )
 }
 
@@ -2311,17 +2531,35 @@ function CaseStudyEditor({
         >
           REMOVE CASE STUDY
         </button>
-        <label className="font-mono" style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', color: '#d2cec8', letterSpacing: '0.12em' }}>
-          <input
-            type="checkbox"
-            checked={Boolean(caseStudy.hidden)}
-            onChange={(event) => onChange((current) => ({ ...current, hidden: event.target.checked || undefined }))}
-          />
-          Hide From Public Site
-        </label>
-        <p className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#777777', lineHeight: 1.6, margin: 0 }}>
-          Hidden case studies stay visible locally in the dashboard and on localhost, but won’t show on the public site.
-        </p>
+        {caseStudy.section === 'play' ? (
+          <>
+            <label className="font-mono" style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', color: '#d2cec8', letterSpacing: '0.12em' }}>
+              <input
+                type="checkbox"
+                checked={!Boolean(caseStudy.hidden)}
+                onChange={(event) => onChange((current) => ({ ...current, hidden: event.target.checked ? undefined : true }))}
+              />
+              Show card on Play page
+            </label>
+            <p className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#777777', lineHeight: 1.6, margin: 0 }}>
+              Turn this off to keep the game route editable in content while removing the card from the Play listing.
+            </p>
+          </>
+        ) : (
+          <>
+            <label className="font-mono" style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', color: '#d2cec8', letterSpacing: '0.12em' }}>
+              <input
+                type="checkbox"
+                checked={Boolean(caseStudy.hidden)}
+                onChange={(event) => onChange((current) => ({ ...current, hidden: event.target.checked || undefined }))}
+              />
+              Hide From Public Site
+            </label>
+            <p className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#777777', lineHeight: 1.6, margin: 0 }}>
+              Hidden case studies stay visible locally in the dashboard and on localhost, but won’t show on the public site.
+            </p>
+          </>
+        )}
         <Field label="Section">
           <select
             value={caseStudy.section}
@@ -2337,16 +2575,16 @@ function CaseStudyEditor({
         <Field label="Slug">
           <input value={caseStudy.slug} onChange={(event) => onChange((current) => ({ ...current, slug: event.target.value }))} style={inputStyle()} />
         </Field>
-        <Field label="Title">
+        <Field label={caseStudy.section === 'play' ? 'Game Title' : 'Title'}>
           <input value={caseStudy.title} onChange={(event) => onChange((current) => ({ ...current, title: event.target.value }))} style={inputStyle()} />
         </Field>
-        <Field label="One-liner">
+        <Field label={caseStudy.section === 'play' ? 'One-line Description' : 'One-liner'}>
           <textarea value={caseStudy.oneliner} onChange={(event) => onChange((current) => ({ ...current, oneliner: event.target.value }))} style={inputStyle(true)} />
         </Field>
-        <Field label="Type">
+        <Field label={caseStudy.section === 'play' ? 'Type / Year' : 'Type'}>
           <input value={caseStudy.type} onChange={(event) => onChange((current) => ({ ...current, type: event.target.value }))} style={inputStyle()} />
         </Field>
-        <Field label="Tags (comma separated)">
+        <Field label={caseStudy.section === 'play' ? 'Tags' : 'Tags (comma separated)'}>
           <input value={tagsToText(caseStudy.tags)} onChange={(event) => onChange((current) => ({ ...current, tags: textToTags(event.target.value) }))} style={inputStyle()} />
         </Field>
       </SectionFrame>
@@ -2372,7 +2610,7 @@ function CaseStudyEditor({
 
       <SectionFrame title={`${caseStudy.title} · Media`}>
         <SourcePathField
-          label="Hero Image"
+          label={caseStudy.section === 'play' ? 'Card / Preview Image' : 'Hero Image'}
           value={caseStudy.heroImage ?? ''}
           localWriteEnabled={localWriteEnabled}
           onChange={(value) => onChange((current) => ({ ...current, heroImage: value || undefined }))}
@@ -2490,16 +2728,42 @@ function CaseStudyEditor({
 
       <SectionFrame title={`${caseStudy.title} · Solution Embed`}>
         <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.7 }}>
-          When a URL is set, the embed replaces solution images. Leave blank to use solution images instead.
+          {caseStudy.section === 'play'
+            ? 'Use the live game URL and preview controls here. Leave the URL blank if the game is not ready to open yet.'
+            : 'When a URL is set, the embed replaces solution images. Leave blank to use solution images instead.'}
         </p>
-        <Field label="Embed URL">
+        {caseStudy.section === 'play' ? (
+          <Field label="Use live iframe preview before play mode">
+            <div style={{ display: 'grid', gap: '8px' }}>
+              <label className="font-mono" style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', color: '#d2cec8', letterSpacing: '0.12em' }}>
+                <input
+                  type="checkbox"
+                  checked={caseStudy.useEmbedPreview ?? false}
+                  onChange={(event) => onChange((current) => ({ ...current, useEmbedPreview: event.target.checked }))}
+                />
+                Enable live preview panel
+              </label>
+              <p className="font-mono" style={{ fontSize: '12px', color: '#777777', lineHeight: 1.6, margin: 0 }}>
+                If on, the intro preview loads the real Vercel embed behind the click overlay. Turn this off if the game breaks, shows 403, asks for camera too early, or loads slowly.
+              </p>
+            </div>
+          </Field>
+        ) : null}
+        <Field label={caseStudy.section === 'play' ? 'Live Vercel URL' : 'Embed URL'}>
           <input value={caseStudy.solutionEmbedUrl ?? ''} onChange={(event) => onChange((current) => ({ ...current, solutionEmbedUrl: event.target.value || undefined }))} style={inputStyle()} placeholder="https://your-app.vercel.app" />
         </Field>
         <Field label="Embed Title">
           <input value={caseStudy.solutionEmbedTitle ?? ''} onChange={(event) => onChange((current) => ({ ...current, solutionEmbedTitle: event.target.value || undefined }))} style={inputStyle()} placeholder="Live experience" />
         </Field>
-        <Field label="Aspect Ratio">
-          <input value={caseStudy.solutionEmbedAspectRatio ?? ''} onChange={(event) => onChange((current) => ({ ...current, solutionEmbedAspectRatio: event.target.value || undefined }))} style={inputStyle()} placeholder="4 / 3" />
+        <Field label={caseStudy.section === 'play' ? 'Embed Aspect Ratio' : 'Aspect Ratio'}>
+          <div style={{ display: 'grid', gap: '8px' }}>
+            <input value={caseStudy.solutionEmbedAspectRatio ?? ''} onChange={(event) => onChange((current) => ({ ...current, solutionEmbedAspectRatio: event.target.value || undefined }))} style={inputStyle()} placeholder="4 / 3" />
+            {caseStudy.section === 'play' ? (
+              <p className="font-mono" style={{ fontSize: '12px', color: '#777777', lineHeight: 1.6, margin: 0 }}>
+                Examples: 16 / 9, 16 / 10, 4 / 3, 9 / 16
+              </p>
+            ) : null}
+          </div>
         </Field>
         <Field label="Width">
           <input value={caseStudy.solutionEmbedWidth ?? ''} onChange={(event) => onChange((current) => ({ ...current, solutionEmbedWidth: event.target.value || undefined }))} style={inputStyle()} placeholder="min(100%, 1325px)" />
@@ -2513,7 +2777,7 @@ function CaseStudyEditor({
         <Field label="Callout Body">
           <textarea value={caseStudy.solutionEmbedCalloutBody ?? ''} onChange={(event) => onChange((current) => ({ ...current, solutionEmbedCalloutBody: event.target.value || undefined }))} style={inputStyle(true)} />
         </Field>
-        <Field label="CTA Label">
+        <Field label={caseStudy.section === 'play' ? 'Fullscreen CTA Label' : 'CTA Label'}>
           <input value={caseStudy.solutionEmbedCtaLabel ?? ''} onChange={(event) => onChange((current) => ({ ...current, solutionEmbedCtaLabel: event.target.value || undefined }))} style={inputStyle()} placeholder="OPEN LIVE APP" />
         </Field>
       </SectionFrame>

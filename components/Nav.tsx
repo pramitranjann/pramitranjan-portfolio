@@ -2,17 +2,14 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useSitePages } from '@/components/SiteCopyProvider'
+import { getSortedVisibleSitePages } from '@/lib/site-pages'
 import { playNav } from '@/lib/sounds'
-
-const links = [
-  { href: '/work',     label: 'WORK' },
-  { href: '/play',     label: 'PLAY' },
-  { href: '/creative', label: 'CREATIVE' },
-  { href: '/about',    label: 'ABOUT' },
-]
 
 export function Nav() {
   const pathname = usePathname()
+  const sitePages = useSitePages()
+  const navItems = getSortedVisibleSitePages({ sitePages })
 
   return (
     <nav
@@ -33,11 +30,11 @@ export function Nav() {
         PR
       </Link>
       <div className="flex gap-6">
-        {links.map(({ href, label }) => {
+        {navItems.map(({ key, href, label }) => {
           const active = pathname === href || pathname.startsWith(href + '/')
           return (
             <Link
-              key={href}
+              key={key}
               href={href}
               className={`nav-link font-mono${active ? ' active' : ''}`}
               style={{ fontSize: 'var(--nav-link-size)', letterSpacing: '0.14em', textDecoration: 'none' }}

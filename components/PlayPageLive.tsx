@@ -4,16 +4,20 @@ import { GsapReveal } from '@/components/GsapReveal'
 import { Footer } from '@/components/Footer'
 import { Nav } from '@/components/Nav'
 import { getPublicSiteContent } from '@/lib/site-content'
-import { UnderConstructionPage } from '@/components/UnderConstructionPage'
+import type { SiteContent } from '@/lib/site-content-schema'
 
 
-export default async function PlayPageLive() {
+export default async function PlayPageLive({
+  content: providedContent,
+}: {
+  content?: SiteContent
+} = {}) {
   /*
     CONTENT SOURCE
     This pulls your site content from your content system.
     The games are stored inside caseStudies and filtered by section: 'play'.
   */
-  const content = await getPublicSiteContent()
+  const content = providedContent ?? await getPublicSiteContent()
 
   /*
     GAMES LIST
@@ -21,7 +25,7 @@ export default async function PlayPageLive() {
     If a game is not showing, check that its content entry has:
     section: 'play'
   */
-  const games = content.caseStudies.filter((item) => item.section === 'play')
+  const games = content.caseStudies.filter((item) => item.section === 'play' && !item.hidden)
 
   /*
     PLAY PAGE COPY

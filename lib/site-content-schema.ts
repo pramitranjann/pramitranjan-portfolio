@@ -260,6 +260,22 @@ export interface WorkPageCopy {
   emptyStateLabel: string
 }
 
+export type SitePageKey = 'work' | 'play' | 'creative' | 'about'
+export type SitePageStatus = 'live' | 'construction' | 'hidden'
+
+export interface SitePageSettings {
+  key: SitePageKey
+  label: string
+  href: string
+  order: number
+  visible: boolean
+  status: SitePageStatus
+  constructionTitle?: string
+  constructionBody?: string
+  constructionCtaLabel?: string
+  constructionCtaHref?: string
+}
+
 export interface CreativePageCopy {
   eyebrow: string
   heroTitle: string
@@ -467,6 +483,7 @@ export interface SiteContent {
     playPage: PlayPageCopy
     caseStudy: CaseStudyUiCopy
   }
+  sitePages: SitePageSettings[]
   caseStudies: CaseStudyContent[]
 }
 
@@ -761,6 +778,32 @@ function isWorkPageCopy(value: unknown): value is WorkPageCopy {
   if (!value || typeof value !== 'object') return false
   const item = value as Record<string, unknown>
   return isString(item.eyebrow) && isString(item.emptyStateLabel)
+}
+
+function isSitePageKey(value: unknown): value is SitePageKey {
+  return value === 'work' || value === 'play' || value === 'creative' || value === 'about'
+}
+
+function isSitePageStatus(value: unknown): value is SitePageStatus {
+  return value === 'live' || value === 'construction' || value === 'hidden'
+}
+
+function isSitePageSettings(value: unknown): value is SitePageSettings {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+
+  return (
+    isSitePageKey(item.key) &&
+    isString(item.label) &&
+    isString(item.href) &&
+    typeof item.order === 'number' &&
+    typeof item.visible === 'boolean' &&
+    isSitePageStatus(item.status) &&
+    isOptionalString(item.constructionTitle) &&
+    isOptionalString(item.constructionBody) &&
+    isOptionalString(item.constructionCtaLabel) &&
+    isOptionalString(item.constructionCtaHref)
+  )
 }
 
 function isCreativePageCopy(value: unknown): value is CreativePageCopy {
@@ -1074,6 +1117,8 @@ export function isSiteContent(value: unknown): value is SiteContent {
     isCreativePageCopy(copy.creativePage) &&
     isPlayPageCopy(copy.playPage) &&
     isCaseStudyUiCopy(copy.caseStudy) &&
+    Array.isArray(content.sitePages) &&
+    content.sitePages.every(isSitePageSettings) &&
     Array.isArray(content.caseStudies) &&
     content.caseStudies.every(isCaseStudyContent)
   )

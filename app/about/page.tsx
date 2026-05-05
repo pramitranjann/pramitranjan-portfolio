@@ -1,9 +1,11 @@
 // app/about/page.tsx
+import { UnderConstructionPage } from '@/components/UnderConstructionPage'
 import { Nav } from '@/components/Nav'
 import { Footer } from '@/components/Footer'
 import { SpotifyWidget } from '@/components/SpotifyWidget'
 import { GsapReveal } from '@/components/GsapReveal'
-import { getSiteContent } from '@/lib/site-content'
+import { getPublicSiteContent } from '@/lib/site-content'
+import { getSitePage } from '@/lib/site-pages'
 import { AnimatedEyebrow } from '@/components/AnimatedEyebrow'
 import type { NowCardStyleSettings } from '@/lib/site-content-schema'
 
@@ -90,8 +92,33 @@ function NowCell({
 }
 
 export default async function AboutPage() {
-  const content = await getSiteContent()
+  const content = await getPublicSiteContent()
+  const pageSettings = getSitePage(content, 'about')
   const copy = content.copy.aboutPage
+
+  if (pageSettings?.status === 'construction') {
+    return (
+      <UnderConstructionPage
+        label="ABOUT_"
+        title={pageSettings.constructionTitle}
+        body={pageSettings.constructionBody}
+        ctaLabel={pageSettings.constructionCtaLabel}
+        ctaHref={pageSettings.constructionCtaHref ?? '/'}
+      />
+    )
+  }
+
+  if (pageSettings?.status === 'hidden') {
+    return (
+      <UnderConstructionPage
+        label="HIDDEN_"
+        title="This page is not currently public."
+        body="This section is temporarily hidden while the work is being updated."
+        ctaLabel="BACK TO HOME"
+        ctaHref="/"
+      />
+    )
+  }
 
   return (
     <>
