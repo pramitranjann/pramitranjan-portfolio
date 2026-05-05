@@ -54,7 +54,11 @@ export function Contact() {
             style={{
               fontSize: 'var(--text-meta)',
               letterSpacing: '0.14em',
-              paddingBottom: '2px',
+              color: '#FF3120',
+              border: '1px solid #FF3120',
+              padding: '10px 20px',
+              textDecoration: 'none',
+              
             }}
           >
             {label}

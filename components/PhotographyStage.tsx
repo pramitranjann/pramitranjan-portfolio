@@ -59,7 +59,7 @@ export function PhotographyStage() {
           </p>
         </div>
         <Link href="/creative/photography" className="font-mono" style={{ display: 'inline-block', marginTop: '24px', fontSize: 'var(--text-meta)', color: 'var(--color-red)', letterSpacing: '0.12em', textDecoration: 'none' }}>
-          {copy.photographyCtaLabel} →
+          {copy.photographyCtaLabel}
         </Link>
       </div>
 
