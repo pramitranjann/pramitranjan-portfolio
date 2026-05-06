@@ -206,6 +206,63 @@ function enterGame() {
                     </span>
                   ))}
                 </div>
+
+                {embedUrl ? (
+                  <div
+                    className="game-intro-inline-actions"
+                    style={{
+                      gap: '12px',
+                      marginTop: '24px',
+                    }}
+                  >
+                    <button
+                      type="button"
+                      onPointerDown={playNav}
+                      onClick={enterGame}
+                      disabled={isLoadingStage}
+                      className="font-mono"
+                      style={{
+                        border: '1px solid var(--color-red)',
+                        background: isLoadingStage ? '#161616' : 'transparent',
+                        color: 'var(--color-red)',
+                        padding: '12px 16px',
+                        letterSpacing: '0.14em',
+                        fontSize: 'var(--text-meta)',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: '12px',
+                        cursor: isLoadingStage ? 'default' : 'pointer',
+                      }}
+                    >
+                      <span>{isLoadingStage ? 'PREPARING EMBED' : 'ENTER NOW'}</span>
+                      <span className="arrow-nudge">→</span>
+                    </button>
+
+                    <a
+                      href={embedUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      onPointerDown={playNav}
+                      className="font-mono"
+                      style={{
+                        border: '1px solid #2a2a2a',
+                        color: 'var(--color-heading)',
+                        padding: '12px 16px',
+                        letterSpacing: '0.14em',
+                        fontSize: 'var(--text-meta)',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: '12px',
+                        textDecoration: 'none',
+                      }}
+                    >
+                      <span>{project.solutionEmbedCtaLabel ?? 'OPEN FULLSCREEN'}</span>
+                      <span className="arrow-nudge">↗</span>
+                    </a>
+                  </div>
+                ) : null}
               </div>
 
               {/* 
@@ -446,6 +503,7 @@ function enterGame() {
       - Open Fullscreen button that still goes to the Vercel site
     */}
     <div
+      className="game-play-stage-header"
       style={{
         display: 'grid',
         gridTemplateColumns: '1fr auto',
@@ -495,7 +553,7 @@ function enterGame() {
         </div>
 
         <p
-          className="font-mono"
+          className="font-mono game-play-stage-note"
           style={{
             fontSize: 'var(--text-meta)',
             letterSpacing: '0.04em',
@@ -517,7 +575,7 @@ function enterGame() {
           href={embedUrl}
           target="_blank"
           rel="noreferrer"
-          className="font-mono"
+          className="font-mono game-play-stage-cta"
           onPointerDown={playNav}
           style={{
             fontSize: 'var(--text-meta)',

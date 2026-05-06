@@ -155,7 +155,26 @@ body.carousel-reengaging main {
   }
 
   .game-intro-preview {
-    display: none !important;
+    display: block !important;
+  }
+
+  .game-intro-inline-actions {
+    display: grid !important;
+    gap: 12px !important;
+  }
+
+  .game-play-stage-header {
+    grid-template-columns: 1fr !important;
+  }
+
+  .game-play-stage-note {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+  }
+
+  .game-play-stage-cta {
+    justify-self: start;
   }
 }
 
@@ -171,6 +190,10 @@ body.carousel-reengaging main {
 }
 .card-cta-inner {
   display: inline;
+}
+
+.game-intro-inline-actions {
+  display: none;
 }
 
 /* Arrow nudge — forward links */
