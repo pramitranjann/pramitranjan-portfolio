@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Footer } from './Footer'
 import { Nav } from './Nav'
@@ -29,11 +29,31 @@ export function GameCaseStudyLayout({ project }: GameCaseStudyLayoutProps) {
   - embed appears after loading finishes
 */
 const [stage, setStage] = useState<'intro' | 'loading' | 'play'>('intro')
+const [isMobileViewport, setIsMobileViewport] = useState(false)
 
-const showPlayStage = stage === 'play'
+useEffect(() => {
+  const mediaQuery = window.matchMedia('(max-width: 767px)')
+  const syncViewport = () => setIsMobileViewport(mediaQuery.matches)
+
+  syncViewport()
+  mediaQuery.addEventListener('change', syncViewport)
+
+  return () => {
+    mediaQuery.removeEventListener('change', syncViewport)
+  }
+}, [])
+
+const showPlayStage = !isMobileViewport && stage === 'play'
 const isLoadingStage = stage === 'loading'
 
 function enterGame() {
+  if (isMobileViewport) {
+    if (embedUrl) {
+      window.location.assign(embedUrl)
+    }
+    return
+  }
+
   if (stage !== 'intro') return
 
   setStage('loading')
@@ -62,6 +82,10 @@ function enterGame() {
 
   const backHref = project.backHref ?? '/play'
   const backLabel = project.backLabel ?? 'PLAY'
+  const embedSupportNote = isMobileViewport
+    ? 'Phone preview only. Open the full game to play it properly.'
+    : (project.solutionEmbedCalloutBody ??
+      'Best experienced on desktop. Open fullscreen if the embed feels cramped.')
 
   return (
     <>
@@ -110,11 +134,11 @@ function enterGame() {
           The preview panel is separate from the left description column.
           Do not place the preview panel inside the left text div.
         */}
-        {stage !== 'play' ? (
+        {stage !== 'play' || isMobileViewport ? (
           <section
-            className="border-b border-divider"
+            className="border-b border-divider game-intro-section"
             style={{
-              minHeight: 'calc(100vh - 220px)',
+              minHeight: isMobileViewport ? 'auto' : 'calc(100vh - 220px)',
               padding: '64px var(--layout-page-gutter) 72px',
               overflow: 'hidden',
             }}
@@ -207,7 +231,7 @@ function enterGame() {
                   ))}
                 </div>
 
-                {embedUrl ? (
+                {embedUrl && !isMobileViewport ? (
                   <div
                     className="game-intro-inline-actions"
                     style={{
@@ -332,7 +356,7 @@ function enterGame() {
           color: '#666666',
         }}
       >
-        {isLoadingStage ? 'LOADING BUILD_' : 'LIVE PREVIEW_'}
+        {isLoadingStage ? 'LOADING BUILD_' : (isMobileViewport ? 'PHONE PREVIEW_' : 'LIVE PREVIEW_')}
       </span>
     </div>
 
@@ -441,7 +465,7 @@ function enterGame() {
             letterSpacing: '0.14em',
           }}
         >
-          {isLoadingStage ? 'PREPARING EMBED' : 'CLICK TO PLAY'}
+          {isLoadingStage ? 'PREPARING EMBED' : (isMobileViewport ? 'OPEN FULL GAME' : 'CLICK TO PLAY')}
         </span>
 
         <span
@@ -451,10 +475,26 @@ function enterGame() {
             letterSpacing: '0.14em',
           }}
         >
-          →
+          {isMobileViewport ? '↗' : '→'}
         </span>
       </button>
     </div>
+
+    {isMobileViewport ? (
+      <p
+        className="font-mono"
+        style={{
+          marginTop: '12px',
+          marginBottom: 0,
+          fontSize: 'var(--text-meta)',
+          letterSpacing: '0.04em',
+          color: 'var(--color-body)',
+          lineHeight: 1.55,
+        }}
+      >
+        {embedSupportNote}
+      </p>
+    ) : null}
   </div>
 </div>
             </div>
@@ -565,8 +605,7 @@ function enterGame() {
             whiteSpace: 'nowrap',
           }}
         >
-          {project.solutionEmbedCalloutBody ??
-            'Best experienced on desktop. Open fullscreen if the embed feels cramped.'}
+          {embedSupportNote}
         </p>
       </div>
 

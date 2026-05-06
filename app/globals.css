@@ -149,18 +149,31 @@ body.carousel-reengaging main {
 }
 
 @media (max-width: 767px) {
+  .game-intro-section {
+    padding: 28px 24px 40px !important;
+    min-height: auto !important;
+  }
+
   .game-intro-stage-grid {
     grid-template-columns: 1fr !important;
-    gap: 28px !important;
+    gap: 20px !important;
   }
 
   .game-intro-preview {
     display: block !important;
+    margin-top: 4px;
   }
 
   .game-intro-inline-actions {
-    display: grid !important;
-    gap: 12px !important;
+    display: none !important;
+  }
+
+  .game-intro-preview > div {
+    padding: 10px !important;
+  }
+
+  .game-intro-preview button {
+    padding: 16px !important;
   }
 
   .game-play-stage-header {
@@ -193,7 +206,8 @@ body.carousel-reengaging main {
 }
 
 .game-intro-inline-actions {
-  display: none;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 /* Arrow nudge — forward links */
