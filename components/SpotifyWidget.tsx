@@ -181,7 +181,7 @@ function TrackTitle({
     <div
       ref={containerRef}
       style={{
-        overflow: 'hidden',
+        overflow: expanded ? 'visible' : 'hidden',
         width: '100%',
         minWidth: 0,
         maxWidth: '100%',
@@ -228,16 +228,17 @@ function TrackTitle({
             fontWeight: 'var(--font-weight-serif)',
             color,
             whiteSpace: expanded ? 'normal' : 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
+            overflow: expanded ? 'visible' : 'hidden',
+            textOverflow: expanded ? 'clip' : 'ellipsis',
             lineHeight: expanded ? 1.15 : 1.3,
+            paddingRight: expanded ? '0.08em' : 0,
           }}
         >
           <span
             ref={textRef}
             style={{
               display: 'inline-block',
-              whiteSpace: 'nowrap',
+              whiteSpace: expanded ? 'normal' : 'nowrap',
             }}
           >
             {title}

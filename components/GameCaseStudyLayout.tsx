@@ -49,7 +49,7 @@ const isLoadingStage = stage === 'loading'
 function enterGame() {
   if (isMobileViewport) {
     if (embedUrl) {
-      window.location.assign(embedUrl)
+      window.open(embedUrl, '_blank', 'noopener,noreferrer')
     }
     return
   }
