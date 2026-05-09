@@ -37,18 +37,28 @@ export function PlayPageClient({
     const ctx = gsap.context(() => {
       const cards = grid.querySelectorAll('.portfolio-card')
       gsap.set(cards, { opacity: 0, scale: motion.gridStartScale })
+
+      const animateCards = () => {
+        gsap.to(cards, {
+          opacity: 1,
+          scale: 1,
+          duration: motion.gridRevealDuration,
+          ease: 'power2.out',
+          stagger: motion.gridRevealStagger,
+        })
+      }
+
+      const gridAlreadyVisible = grid.getBoundingClientRect().top <= window.innerHeight * 0.85
+
+      if (gridAlreadyVisible) {
+        gsap.delayedCall(0.18, animateCards)
+        return
+      }
+
       ScrollTrigger.create({
         trigger: grid,
         start: 'top 85%',
-        onEnter: () => {
-          gsap.to(cards, {
-            opacity: 1,
-            scale: 1,
-            duration: motion.gridRevealDuration,
-            ease: 'power2.out',
-            stagger: motion.gridRevealStagger,
-          })
-        },
+        onEnter: animateCards,
         once: true,
       })
     }, grid)

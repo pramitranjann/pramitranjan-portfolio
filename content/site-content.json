@@ -1970,7 +1970,7 @@
       "useEmbedPreview": true,
       "solutionEmbedUrl": "https://bowl-nu.vercel.app",
       "hidden": false,
-      "heroImage": "/Play/bowl preview.png"
+      "heroImage": "/Play/bowl preview1.png"
     },
     {
       "slug": "sling",
@@ -1997,7 +1997,7 @@
       "solutionEmbedCtaLabel": "OPEN FULLSCREEN",
       "useEmbedPreview": false,
       "solutionEmbedUrl": "https://sling-nine.vercel.app",
-      "heroImage": "/Play/sling preview.png"
+      "heroImage": "/Play/sling preview1.png"
     },
     {
       "slug": "game-three",
