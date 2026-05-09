@@ -2002,7 +2002,12 @@
       "solutionEmbedCtaLabel": "OPEN FULLSCREEN",
       "useEmbedPreview": false,
       "solutionEmbedUrl": "https://sling-nine.vercel.app",
-      "heroImage": "/Play/sling preview1.png"
+      "heroImage": "/Play/sling preview1.png",
+      "mediaSettings": {
+        "hero": {
+          "fit": "cover"
+        }
+      }
     },
     {
       "slug": "game-three",
