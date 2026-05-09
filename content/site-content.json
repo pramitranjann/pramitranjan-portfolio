@@ -1970,7 +1970,12 @@
       "useEmbedPreview": true,
       "solutionEmbedUrl": "https://bowl-nu.vercel.app",
       "hidden": false,
-      "heroImage": "/Play/bowl preview1.png"
+      "heroImage": "/Play/bowl preview1.png",
+      "mediaSettings": {
+        "hero": {
+          "fit": "cover"
+        }
+      }
     },
     {
       "slug": "sling",
