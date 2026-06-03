@@ -244,7 +244,7 @@ export function ProjectSpotifySection({
           padding: '12px',
           background: 'rgba(12, 12, 12, 0.94)',
           border: '1px solid #242424',
-          boxShadow: '0 14px 40px rgba(0,0,0,0.24)',
+          boxShadow: '0 1px 0 rgba(255,49,32,0.18) inset, 0 14px 40px rgba(0,0,0,0.24), 0 0 28px rgba(255,49,32,0.08)',
         }}
       >
         <div
@@ -252,17 +252,35 @@ export function ProjectSpotifySection({
             padding: '2px 2px 6px',
           }}
         >
-          <div className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.16em', color: '#666666', marginBottom: '8px' }}>
-            WHY THIS IS HERE
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              marginBottom: '10px',
+            }}
+          >
+            <div
+              aria-hidden="true"
+              style={{
+                width: '18px',
+                height: '1px',
+                background: 'rgba(255,49,32,0.8)',
+                boxShadow: '0 0 12px rgba(255,49,32,0.28)',
+              }}
+            />
+            <div className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.16em', color: '#8f8680' }}>
+              WHY THIS IS HERE
+            </div>
           </div>
           <p
             className="font-mono"
             style={{
               margin: 0,
               fontSize: '11px',
-              letterSpacing: '0.03em',
-              color: '#b4b4b4',
-              lineHeight: 1.7,
+              letterSpacing: '0.035em',
+              color: '#d0c8c0',
+              lineHeight: 1.75,
               textWrap: 'pretty',
             }}
           >
