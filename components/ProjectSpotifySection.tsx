@@ -28,6 +28,7 @@ interface SpotifyPlaylistSummary {
 }
 
 const DEFAULT_SPOTIFY_CONTEXT = 'These songs encapsulate the mood and emotional texture of the work.'
+const DESKTOP_WIDGET_QUERY = '(hover: hover) and (pointer: fine)'
 
 function getReferenceQueryValue(value: ProjectSpotifyMedia['soundtrack'] | ProjectSpotifyMedia['playlist']) {
   return value?.spotifyUrl?.trim() || value?.spotifyId?.trim() || ''
@@ -174,6 +175,16 @@ export function ProjectSpotifySection({
   const [soundtrack, setSoundtrack] = useState<SpotifyTrackSummary | null>(null)
   const [playlist, setPlaylist] = useState<SpotifyPlaylistSummary | null>(null)
   const [activePlayer, setActivePlayer] = useState<'soundtrack' | 'playlist'>('soundtrack')
+  const [showOnThisDevice, setShowOnThisDevice] = useState(false)
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const media = window.matchMedia(DESKTOP_WIDGET_QUERY)
+    const sync = () => setShowOnThisDevice(media.matches)
+    sync()
+    media.addEventListener('change', sync)
+    return () => media.removeEventListener('change', sync)
+  }, [])
 
   useEffect(() => {
     const soundtrackQuery = getReferenceQueryValue(spotify?.soundtrack)
@@ -201,6 +212,10 @@ export function ProjectSpotifySection({
   }, [spotify?.playlist, spotify?.soundtrack])
 
   if (!soundtrackReference && !playlistReference) {
+    return null
+  }
+
+  if (!showOnThisDevice) {
     return null
   }
 
@@ -233,15 +248,15 @@ export function ProjectSpotifySection({
         right: '16px',
         bottom: '16px',
         zIndex: 40,
-        width: 'min(360px, calc(100vw - 24px))',
+        width: 'min(320px, calc(100vw - 24px))',
         pointerEvents: 'auto',
       }}
     >
       <div
         style={{
           display: 'grid',
-          gap: '10px',
-          padding: '12px',
+          gap: '8px',
+          padding: '10px',
           background: 'rgba(12, 12, 12, 0.94)',
           border: '1px solid #242424',
           boxShadow: '0 1px 0 rgba(255,49,32,0.18) inset, 0 14px 40px rgba(0,0,0,0.24), 0 0 28px rgba(255,49,32,0.08)',
@@ -249,7 +264,7 @@ export function ProjectSpotifySection({
       >
         <div
           style={{
-            padding: '2px 2px 6px',
+            padding: '1px 1px 5px',
           }}
         >
           <div
@@ -257,19 +272,19 @@ export function ProjectSpotifySection({
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              marginBottom: '10px',
+              marginBottom: '8px',
             }}
           >
             <div
               aria-hidden="true"
               style={{
-                width: '18px',
+                width: '14px',
                 height: '1px',
                 background: 'rgba(255,49,32,0.8)',
                 boxShadow: '0 0 12px rgba(255,49,32,0.28)',
               }}
             />
-            <div className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.16em', color: '#8f8680' }}>
+            <div className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.16em', color: '#ff6a5c' }}>
               WHY THIS IS HERE
             </div>
           </div>
@@ -277,10 +292,10 @@ export function ProjectSpotifySection({
             className="font-mono"
             style={{
               margin: 0,
-              fontSize: '11px',
+              fontSize: '10px',
               letterSpacing: '0.035em',
-              color: '#d0c8c0',
-              lineHeight: 1.75,
+              color: '#f0b2ab',
+              lineHeight: 1.7,
               textWrap: 'pretty',
             }}
           >
@@ -299,8 +314,8 @@ export function ProjectSpotifySection({
                   border: `1px solid ${resolvedActivePlayer === 'soundtrack' ? '#3a3a3a' : '#242424'}`,
                   background: resolvedActivePlayer === 'soundtrack' ? '#151515' : 'transparent',
                   color: resolvedActivePlayer === 'soundtrack' ? '#f5f2ed' : '#8f8f8f',
-                  padding: '8px 10px',
-                  fontSize: '10px',
+                  padding: '7px 9px',
+                  fontSize: '9px',
                   letterSpacing: '0.14em',
                   cursor: 'pointer',
                 }}
@@ -315,8 +330,8 @@ export function ProjectSpotifySection({
                   border: `1px solid ${resolvedActivePlayer === 'playlist' ? '#3a3a3a' : '#242424'}`,
                   background: resolvedActivePlayer === 'playlist' ? '#151515' : 'transparent',
                   color: resolvedActivePlayer === 'playlist' ? '#f5f2ed' : '#8f8f8f',
-                  padding: '8px 10px',
-                  fontSize: '10px',
+                  padding: '7px 9px',
+                  fontSize: '9px',
                   letterSpacing: '0.14em',
                   cursor: 'pointer',
                 }}
@@ -366,13 +381,13 @@ export function ProjectSpotifySection({
               loading="lazy"
               allow="encrypted-media"
               title={activeEmbedTitle}
-              style={{
-                width: '100%',
-                height: '152px',
-                border: 0,
-                background: 'transparent',
-              }}
-            />
+            style={{
+              width: '100%',
+              height: '132px',
+              border: 0,
+              background: 'transparent',
+            }}
+          />
           </div>
         ) : null}
       </div>
