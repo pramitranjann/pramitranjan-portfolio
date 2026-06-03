@@ -1,7 +1,9 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import { useEffect, useState } from 'react'
 import { Component, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 import type { ProjectSpotifyMedia } from '@/lib/site-content-schema'
 
 const ProjectSpotifySection = dynamic(
@@ -37,11 +39,19 @@ export function SafeProjectSpotifySection({
 }: {
   spotify?: ProjectSpotifyMedia
 }) {
-  if (!spotify) return null
+  const [mounted, setMounted] = useState(false)
 
-  return (
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!spotify) return null
+  if (!mounted) return null
+
+  return createPortal(
     <SpotifySectionBoundary>
       <ProjectSpotifySection spotify={spotify} />
-    </SpotifySectionBoundary>
+    </SpotifySectionBoundary>,
+    document.body,
   )
 }
