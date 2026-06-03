@@ -84,6 +84,7 @@ export interface SpotifyPlaylistReference extends SpotifyReference {
 }
 
 export interface ProjectSpotifyMedia {
+  context?: string
   soundtrack?: SpotifyTrackReference
   playlist?: SpotifyPlaylistReference
 }
@@ -628,6 +629,7 @@ function isProjectSpotifyMedia(value: unknown): value is ProjectSpotifyMedia {
   if (!value || typeof value !== 'object') return false
   const item = value as Record<string, unknown>
   return (
+    isOptionalString(item.context) &&
     (item.soundtrack === undefined || isSpotifyReference(item.soundtrack)) &&
     (item.playlist === undefined || isSpotifyPlaylistReference(item.playlist))
   )

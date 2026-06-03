@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { playNav } from '@/lib/sounds'
 import { resolveSpotifyReference } from '@/lib/spotify-reference'
 import type { ProjectSpotifyMedia } from '@/lib/site-content-schema'
@@ -13,7 +13,6 @@ interface SpotifyTrackSummary {
   album: string
   coverArt: string | null
   externalUrl: string
-  embedUrl: string
 }
 
 interface SpotifyPlaylistSummary {
@@ -24,54 +23,42 @@ interface SpotifyPlaylistSummary {
   owner: string | null
   coverArt: string | null
   externalUrl: string
-  embedUrl: string
 }
 
 function getReferenceQueryValue(value: ProjectSpotifyMedia['soundtrack'] | ProjectSpotifyMedia['playlist']) {
   return value?.spotifyUrl?.trim() || value?.spotifyId?.trim() || ''
 }
 
-function SpotifyMediaCard({
+function FloatingSpotifyEntry({
   label,
   title,
   subtitle,
-  description,
   artwork,
-  openLabel,
-  openUrl,
-  embedUrl,
-  embedTitle,
-  embedHeight,
-  shouldLoadEmbed,
+  ctaLabel,
+  href,
 }: {
   label: string
   title: string
   subtitle?: string | null
-  description?: string | null
   artwork?: string | null
-  openLabel: string
-  openUrl: string
-  embedUrl: string
-  embedTitle: string
-  embedHeight: number
-  shouldLoadEmbed: boolean
+  ctaLabel: string
+  href: string
 }) {
   return (
     <div
       style={{
         display: 'grid',
-        gap: '14px',
+        gap: '12px',
         padding: '14px',
         background: '#111111',
-        border: '1px solid #1f1f1f',
-        boxShadow: '0 10px 28px rgba(0, 0, 0, 0.18)',
+        border: '1px solid #242424',
+        boxShadow: '0 14px 40px rgba(0,0,0,0.28)',
       }}
     >
       <div className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.16em', color: '#666666' }}>
         {label.toUpperCase()}
       </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '56px minmax(0, 1fr)', gap: '12px', alignItems: 'start' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '44px minmax(0, 1fr)', gap: '12px', alignItems: 'start' }}>
         {artwork ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -79,8 +66,8 @@ function SpotifyMediaCard({
             alt=""
             aria-hidden="true"
             style={{
-              width: '56px',
-              height: '56px',
+              width: '44px',
+              height: '44px',
               objectFit: 'cover',
               border: '1px solid rgba(255,255,255,0.08)',
               background: '#1a1a1a',
@@ -90,19 +77,18 @@ function SpotifyMediaCard({
           <div
             aria-hidden="true"
             style={{
-              width: '56px',
-              height: '56px',
+              width: '44px',
+              height: '44px',
               border: '1px solid rgba(255,255,255,0.08)',
               background: '#151515',
             }}
           />
         )}
-
         <div style={{ minWidth: 0 }}>
           <div
             className="font-serif"
             style={{
-              fontSize: '18px',
+              fontSize: '17px',
               fontStyle: 'italic',
               fontWeight: 'var(--font-weight-serif)',
               color: '#f5f2ed',
@@ -127,23 +113,8 @@ function SpotifyMediaCard({
               {subtitle}
             </div>
           ) : null}
-          {description ? (
-            <p
-              className="font-mono"
-              style={{
-                margin: '9px 0 0',
-                fontSize: '11px',
-                letterSpacing: '0.03em',
-                color: '#7d7d7d',
-                lineHeight: 1.7,
-                textWrap: 'pretty',
-              }}
-            >
-              {description}
-            </p>
-          ) : null}
           <a
-            href={openUrl}
+            href={href}
             target="_blank"
             rel="noreferrer"
             onClick={playNav}
@@ -157,25 +128,10 @@ function SpotifyMediaCard({
               textDecoration: 'none',
             }}
           >
-            {openLabel} →
+            {ctaLabel} →
           </a>
         </div>
       </div>
-
-      {shouldLoadEmbed ? (
-        <iframe
-          src={embedUrl}
-          loading="lazy"
-          allow="encrypted-media"
-          title={embedTitle}
-          style={{
-            width: '100%',
-            height: `${embedHeight}px`,
-            border: 0,
-            background: 'transparent',
-          }}
-        />
-      ) : null}
     </div>
   )
 }
@@ -195,25 +151,6 @@ export function ProjectSpotifySection({
   )
   const [soundtrack, setSoundtrack] = useState<SpotifyTrackSummary | null>(null)
   const [playlist, setPlaylist] = useState<SpotifyPlaylistSummary | null>(null)
-  const [shouldLoadEmbed, setShouldLoadEmbed] = useState(false)
-  const sectionRef = useRef<HTMLDivElement | null>(null)
-
-  useEffect(() => {
-    const node = sectionRef.current
-    if (!node || shouldLoadEmbed) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return
-        setShouldLoadEmbed(true)
-        observer.disconnect()
-      },
-      { rootMargin: '160px 0px' },
-    )
-
-    observer.observe(node)
-    return () => observer.disconnect()
-  }, [shouldLoadEmbed])
 
   useEffect(() => {
     const soundtrackQuery = getReferenceQueryValue(spotify?.soundtrack)
@@ -246,49 +183,75 @@ export function ProjectSpotifySection({
 
   const soundtrackOpenUrl = soundtrack?.externalUrl ?? soundtrackReference?.openUrl
   const playlistOpenUrl = playlist?.externalUrl ?? playlistReference?.openUrl
-  const soundtrackEmbedUrl = soundtrack?.embedUrl ?? soundtrackReference?.embedUrl
-  const playlistEmbedUrl = playlist?.embedUrl ?? playlistReference?.embedUrl
+  const hasContext = Boolean(spotify?.context?.trim())
 
   return (
-    <div
-      ref={sectionRef}
+    <aside
       style={{
+        position: 'fixed',
+        right: '16px',
+        bottom: '16px',
+        zIndex: 40,
+        width: 'min(360px, calc(100vw - 24px))',
         display: 'grid',
-        gap: '12px',
-        width: 'min(100%, 720px)',
-        marginTop: '28px',
+        gap: '10px',
+        pointerEvents: 'none',
       }}
     >
-      {soundtrackReference && soundtrackOpenUrl && soundtrackEmbedUrl ? (
-        <SpotifyMediaCard
-          label="Soundtrack"
-          title={soundtrack?.title ?? 'Spotify soundtrack'}
-          subtitle={soundtrack?.artist ?? null}
-          artwork={soundtrack?.coverArt ?? null}
-          openLabel="Listen on Spotify"
-          openUrl={soundtrackOpenUrl}
-          embedUrl={soundtrackEmbedUrl}
-          embedTitle={`${soundtrack?.title ?? 'Spotify soundtrack'} embed`}
-          embedHeight={152}
-          shouldLoadEmbed={shouldLoadEmbed}
-        />
+      {hasContext ? (
+        <div
+          style={{
+            padding: '12px 14px',
+            background: 'rgba(12, 12, 12, 0.92)',
+            border: '1px solid #242424',
+            boxShadow: '0 14px 40px rgba(0,0,0,0.24)',
+            pointerEvents: 'auto',
+          }}
+        >
+          <div className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.16em', color: '#666666', marginBottom: '8px' }}>
+            SOUND CONTEXT
+          </div>
+          <p
+            className="font-mono"
+            style={{
+              margin: 0,
+              fontSize: '11px',
+              letterSpacing: '0.03em',
+              color: '#b4b4b4',
+              lineHeight: 1.7,
+              textWrap: 'pretty',
+            }}
+          >
+            {spotify?.context}
+          </p>
+        </div>
       ) : null}
 
-      {playlistReference && playlistOpenUrl && playlistEmbedUrl ? (
-        <SpotifyMediaCard
-          label="Playlist"
-          title={playlist?.title ?? 'Spotify playlist'}
-          subtitle={playlist?.owner ? `Curated by ${playlist.owner}` : null}
-          description={spotify?.playlist?.description ?? playlist?.description ?? null}
-          artwork={playlist?.coverArt ?? null}
-          openLabel="Open playlist"
-          openUrl={playlistOpenUrl}
-          embedUrl={playlistEmbedUrl}
-          embedTitle={`${playlist?.title ?? 'Spotify playlist'} embed`}
-          embedHeight={152}
-          shouldLoadEmbed={shouldLoadEmbed}
-        />
+      {soundtrackOpenUrl ? (
+        <div style={{ pointerEvents: 'auto' }}>
+          <FloatingSpotifyEntry
+            label="Soundtrack"
+            title={soundtrack?.title ?? 'Spotify soundtrack'}
+            subtitle={soundtrack?.artist ?? null}
+            artwork={soundtrack?.coverArt ?? null}
+            ctaLabel="Listen on Spotify"
+            href={soundtrackOpenUrl}
+          />
+        </div>
       ) : null}
-    </div>
+
+      {playlistOpenUrl ? (
+        <div style={{ pointerEvents: 'auto' }}>
+          <FloatingSpotifyEntry
+            label="Playlist"
+            title={playlist?.title ?? 'Spotify playlist'}
+            subtitle={spotify?.playlist?.description ?? playlist?.description ?? playlist?.owner ?? null}
+            artwork={playlist?.coverArt ?? null}
+            ctaLabel="Open playlist"
+            href={playlistOpenUrl}
+          />
+        </div>
+      ) : null}
+    </aside>
   )
 }

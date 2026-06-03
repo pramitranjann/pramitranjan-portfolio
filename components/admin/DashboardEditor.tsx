@@ -4331,6 +4331,17 @@ function ProjectSpotifyEditor({
 
   return (
     <div style={{ display: 'grid', gap: '12px' }}>
+      <Field label="Music Context">
+        <textarea
+          value={next.context ?? ''}
+          onChange={(event) => update({ context: event.target.value || undefined })}
+          placeholder="Optional note about why this soundtrack or playlist fits the work. Hidden if blank."
+          style={inputStyle(true)}
+        />
+      </Field>
+      <p className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#777777', lineHeight: 1.6, margin: 0 }}>
+        Paste a Spotify URL or Spotify ID manually. The app uses the Spotify API only to fetch the title, artist, artwork, and playlist metadata from whatever you enter here.
+      </p>
       <SpotifyReferenceEditor
         title="Soundtrack"
         value={next.soundtrack}
