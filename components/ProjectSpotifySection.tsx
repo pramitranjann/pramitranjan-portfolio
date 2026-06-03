@@ -156,6 +156,35 @@ function FloatingSpotifyEntry({
   )
 }
 
+function PlayerModeButton({
+  label,
+  active,
+  onClick,
+}: {
+  label: string
+  active: boolean
+  onClick: () => void
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="font-mono"
+      style={{
+        border: `1px solid ${active ? '#3a3a3a' : '#242424'}`,
+        background: active ? '#151515' : 'transparent',
+        color: active ? '#f5f2ed' : '#8f8f8f',
+        padding: '8px 10px',
+        fontSize: '10px',
+        letterSpacing: '0.14em',
+        cursor: 'pointer',
+      }}
+    >
+      {label.toUpperCase()}
+    </button>
+  )
+}
+
 export function ProjectSpotifySection({
   spotify,
 }: {
@@ -215,6 +244,8 @@ export function ProjectSpotifySection({
   const activeEmbedTitle = resolvedActivePlayer === 'playlist'
     ? `${playlist?.title ?? 'Spotify playlist'} player`
     : `${soundtrack?.title ?? 'Spotify soundtrack'} player`
+  const activeOpenUrl = resolvedActivePlayer === 'playlist' ? playlistOpenUrl : soundtrackOpenUrl
+  const activeCtaLabel = resolvedActivePlayer === 'playlist' ? 'Open playlist' : 'Listen on Spotify'
 
   useEffect(() => {
     if (!hasSoundtrack && hasPlaylist) {
@@ -268,31 +299,80 @@ export function ProjectSpotifySection({
         </div>
         ) : null}
 
-        {hasSoundtrack ? (
-          <FloatingSpotifyEntry
-            label="Soundtrack"
-            title={soundtrack?.title ?? 'Spotify soundtrack'}
-            subtitle={soundtrack?.artist ?? null}
-            artwork={soundtrack?.coverArt ?? null}
-            ctaLabel="Listen on Spotify"
-            href={soundtrackOpenUrl!}
-            selected={resolvedActivePlayer === 'soundtrack'}
-            onSelect={soundtrackEmbedUrl && hasPlaylist ? () => setActivePlayer('soundtrack') : undefined}
-          />
-        ) : null}
+        {activeEmbedUrl ? (
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '10px',
+              flexWrap: 'wrap',
+            }}
+          >
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+              {hasSoundtrack ? (
+                <PlayerModeButton
+                  label="Soundtrack"
+                  active={resolvedActivePlayer === 'soundtrack'}
+                  onClick={() => setActivePlayer('soundtrack')}
+                />
+              ) : null}
+              {hasPlaylist ? (
+                <PlayerModeButton
+                  label="Playlist"
+                  active={resolvedActivePlayer === 'playlist'}
+                  onClick={() => setActivePlayer('playlist')}
+                />
+              ) : null}
+            </div>
+            {activeOpenUrl ? (
+              <a
+                href={activeOpenUrl}
+                target="_blank"
+                rel="noreferrer"
+                onClick={playNav}
+                className="font-mono"
+                style={{
+                  display: 'inline-block',
+                  fontSize: '11px',
+                  letterSpacing: '0.14em',
+                  color: '#FF3120',
+                  textDecoration: 'none',
+                }}
+              >
+                {activeCtaLabel} →
+              </a>
+            ) : null}
+          </div>
+        ) : (
+          <>
+            {hasSoundtrack ? (
+              <FloatingSpotifyEntry
+                label="Soundtrack"
+                title={soundtrack?.title ?? 'Spotify soundtrack'}
+                subtitle={soundtrack?.artist ?? null}
+                artwork={soundtrack?.coverArt ?? null}
+                ctaLabel="Listen on Spotify"
+                href={soundtrackOpenUrl!}
+                selected={resolvedActivePlayer === 'soundtrack'}
+                onSelect={soundtrackEmbedUrl && hasPlaylist ? () => setActivePlayer('soundtrack') : undefined}
+              />
+            ) : null}
 
-        {hasPlaylist ? (
-          <FloatingSpotifyEntry
-            label="Playlist"
-            title={playlist?.title ?? 'Spotify playlist'}
-            subtitle={spotify?.playlist?.description ?? playlist?.description ?? playlist?.owner ?? null}
-            artwork={playlist?.coverArt ?? null}
-            ctaLabel="Open playlist"
-            href={playlistOpenUrl!}
-            selected={resolvedActivePlayer === 'playlist'}
-            onSelect={playlistEmbedUrl && hasSoundtrack ? () => setActivePlayer('playlist') : undefined}
-          />
-        ) : null}
+            {hasPlaylist ? (
+              <FloatingSpotifyEntry
+                label="Playlist"
+                title={playlist?.title ?? 'Spotify playlist'}
+                subtitle={spotify?.playlist?.description ?? playlist?.description ?? playlist?.owner ?? null}
+                artwork={playlist?.coverArt ?? null}
+                ctaLabel="Open playlist"
+                href={playlistOpenUrl!}
+                selected={resolvedActivePlayer === 'playlist'}
+                onSelect={playlistEmbedUrl && hasSoundtrack ? () => setActivePlayer('playlist') : undefined}
+              />
+            ) : null}
+          </>
+        )}
 
         {activeEmbedUrl ? (
           <div
