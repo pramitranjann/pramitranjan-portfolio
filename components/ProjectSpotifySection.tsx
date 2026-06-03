@@ -6,6 +6,8 @@ import type { ProjectSpotifyMedia } from '@/lib/site-content-schema'
 
 const DEFAULT_SPOTIFY_CONTEXT = 'These songs encapsulate the mood and emotional texture of the work.'
 const MIN_WIDGET_VIEWPORT_WIDTH = 768
+const TRACK_EMBED_HEIGHT = 80
+const PLAYLIST_EMBED_HEIGHT = 152
 
 export function ProjectSpotifySection({
   spotify,
@@ -48,6 +50,8 @@ export function ProjectSpotifySection({
     spotify?.context?.trim() ||
     spotify?.playlist?.description?.trim() ||
     DEFAULT_SPOTIFY_CONTEXT
+  const activeEmbedHeight =
+    activeReference.kind === 'playlist' ? PLAYLIST_EMBED_HEIGHT : TRACK_EMBED_HEIGHT
 
   return (
     <aside
@@ -56,21 +60,21 @@ export function ProjectSpotifySection({
         right: '16px',
         bottom: '16px',
         zIndex: 40,
-        width: 'min(320px, calc(100vw - 24px))',
+        width: 'min(352px, calc(100vw - 24px))',
         pointerEvents: 'auto',
       }}
     >
       <div
         style={{
           display: 'grid',
-          gap: '8px',
-          padding: '10px',
-          background: 'rgba(12, 12, 12, 0.94)',
-          border: '1px solid #242424',
-          boxShadow: '0 1px 0 rgba(255,49,32,0.18) inset, 0 14px 40px rgba(0,0,0,0.24), 0 0 28px rgba(255,49,32,0.08)',
+          gap: '10px',
+          padding: '12px',
+          background: 'rgba(17, 17, 17, 0.96)',
+          border: '1px solid var(--color-divider)',
+          boxShadow: '0 12px 30px rgba(0,0,0,0.16)',
         }}
       >
-        <div style={{ padding: '1px 1px 5px' }}>
+        <div style={{ padding: '1px 1px 3px' }}>
           <div
             style={{
               display: 'flex',
@@ -84,11 +88,10 @@ export function ProjectSpotifySection({
               style={{
                 width: '14px',
                 height: '1px',
-                background: 'rgba(255,49,32,0.8)',
-                boxShadow: '0 0 12px rgba(255,49,32,0.28)',
+                background: 'var(--color-red)',
               }}
             />
-            <div className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.16em', color: '#ff6a5c' }}>
+            <div className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.16em', color: 'var(--color-red)' }}>
               WHY THIS IS HERE
             </div>
           </div>
@@ -96,10 +99,10 @@ export function ProjectSpotifySection({
             className="font-mono"
             style={{
               margin: 0,
-              fontSize: '10px',
-              letterSpacing: '0.035em',
-              color: '#f0b2ab',
-              lineHeight: 1.7,
+              fontSize: '13px',
+              letterSpacing: '0.04em',
+              color: 'var(--color-body)',
+              lineHeight: 1.6,
               textWrap: 'pretty',
             }}
           >
@@ -114,12 +117,12 @@ export function ProjectSpotifySection({
               onClick={() => setActivePlayer('soundtrack')}
               className="font-mono"
               style={{
-                border: `1px solid ${resolvedActivePlayer === 'soundtrack' ? '#3a3a3a' : '#242424'}`,
-                background: resolvedActivePlayer === 'soundtrack' ? '#151515' : 'transparent',
-                color: resolvedActivePlayer === 'soundtrack' ? '#f5f2ed' : '#8f8f8f',
-                padding: '7px 9px',
-                fontSize: '9px',
-                letterSpacing: '0.14em',
+                border: `1px solid ${resolvedActivePlayer === 'soundtrack' ? 'var(--color-frameborder)' : 'var(--color-divider)'}`,
+                background: resolvedActivePlayer === 'soundtrack' ? 'rgba(255,255,255,0.03)' : 'transparent',
+                color: resolvedActivePlayer === 'soundtrack' ? 'var(--color-heading)' : 'var(--color-label)',
+                padding: '8px 10px',
+                fontSize: 'var(--text-meta)',
+                letterSpacing: '0.12em',
                 cursor: 'pointer',
               }}
             >
@@ -130,12 +133,12 @@ export function ProjectSpotifySection({
               onClick={() => setActivePlayer('playlist')}
               className="font-mono"
               style={{
-                border: `1px solid ${resolvedActivePlayer === 'playlist' ? '#3a3a3a' : '#242424'}`,
-                background: resolvedActivePlayer === 'playlist' ? '#151515' : 'transparent',
-                color: resolvedActivePlayer === 'playlist' ? '#f5f2ed' : '#8f8f8f',
-                padding: '7px 9px',
-                fontSize: '9px',
-                letterSpacing: '0.14em',
+                border: `1px solid ${resolvedActivePlayer === 'playlist' ? 'var(--color-frameborder)' : 'var(--color-divider)'}`,
+                background: resolvedActivePlayer === 'playlist' ? 'rgba(255,255,255,0.03)' : 'transparent',
+                color: resolvedActivePlayer === 'playlist' ? 'var(--color-heading)' : 'var(--color-label)',
+                padding: '8px 10px',
+                fontSize: 'var(--text-meta)',
+                letterSpacing: '0.12em',
                 cursor: 'pointer',
               }}
             >
@@ -152,7 +155,7 @@ export function ProjectSpotifySection({
             title={`${activeReference.kind} player`}
             style={{
               width: '100%',
-              height: '132px',
+              height: `${activeEmbedHeight}px`,
               border: 0,
               background: 'transparent',
             }}
