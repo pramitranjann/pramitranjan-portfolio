@@ -179,11 +179,11 @@ export function ProjectSpotifySection({
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    const media = window.matchMedia(DESKTOP_WIDGET_QUERY)
-    const sync = () => setShowOnThisDevice(media.matches)
-    sync()
-    media.addEventListener('change', sync)
-    return () => media.removeEventListener('change', sync)
+    try {
+      setShowOnThisDevice(window.matchMedia(DESKTOP_WIDGET_QUERY).matches)
+    } catch {
+      setShowOnThisDevice(false)
+    }
   }, [])
 
   useEffect(() => {
