@@ -6,6 +6,7 @@ import { AnimatePresence } from 'motion/react'
 import { Nav } from './Nav'
 import { Footer } from './Footer'
 import { PhotoLightbox } from './PhotoLightbox'
+import { SafeProjectSpotifySection } from './SafeProjectSpotifySection'
 import { useSiteCopy } from '@/components/SiteCopyProvider'
 import { playNav } from '@/lib/sounds'
 import type { GalleryStyleSettings, PhotographyImageDetails, ProjectSpotifyMedia } from '@/lib/site-content-schema'
@@ -74,6 +75,7 @@ export function PhotoGalleryLayout({ city, descriptor, images, contextTitle, con
               ) : null}
             </div>
           ) : null}
+          <SafeProjectSpotifySection spotify={spotify} />
           {/* Photo grid — 4 col desktop, 3 col mobile */}
           <div className="grid grid-cols-3 md:grid-cols-4" style={{ gap: styleSettings.gridGap }}>
             {images.map((src, i) => (

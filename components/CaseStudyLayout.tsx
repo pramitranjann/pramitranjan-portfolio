@@ -6,6 +6,7 @@ import { Nav } from './Nav'
 import { Footer } from './Footer'
 import { RuleLabel } from './RuleLabel'
 import { ReadingProgress } from './ReadingProgress'
+import { SafeProjectSpotifySection } from './SafeProjectSpotifySection'
 import { useSiteCopy } from '@/components/SiteCopyProvider'
 import { playNav } from '@/lib/sounds'
 import { GsapReveal } from './GsapReveal'
@@ -694,6 +695,7 @@ export function CaseStudyLayout({
             >
               {oneliner}
             </p>
+            {section !== 'work' ? <SafeProjectSpotifySection spotify={spotify} /> : null}
           </div>
           <div className="case-study-hero-image" style={{ position: 'relative', backgroundColor: heroMedia.background, overflow: 'hidden', minHeight: heroMedia.height }}>
             {heroImage && <Image src={heroImage} alt={title} fill style={{ objectFit: heroMedia.fit, objectPosition: heroMedia.position }} sizes="50vw" />}
