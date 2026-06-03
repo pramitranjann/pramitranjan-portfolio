@@ -9,7 +9,7 @@ import { PhotoLightbox } from './PhotoLightbox'
 import { SafeProjectSpotifySection } from './SafeProjectSpotifySection'
 import { useSiteCopy } from '@/components/SiteCopyProvider'
 import { playNav } from '@/lib/sounds'
-import type { GalleryStyleSettings, PhotographyImageDetails, ProjectSpotifyMedia } from '@/lib/site-content-schema'
+import type { GalleryStyleSettings, ListeningCardStyleSettings, PhotographyImageDetails, ProjectSpotifyMedia } from '@/lib/site-content-schema'
 
 interface PhotoGalleryLayoutProps {
   city: string
@@ -19,10 +19,11 @@ interface PhotoGalleryLayoutProps {
   contextBody?: string
   imageDetails?: PhotographyImageDetails[]
   styleSettings: GalleryStyleSettings
+  listeningStyle: ListeningCardStyleSettings
   spotify?: ProjectSpotifyMedia
 }
 
-export function PhotoGalleryLayout({ city, descriptor, images, contextTitle, contextBody, imageDetails, styleSettings, spotify }: PhotoGalleryLayoutProps) {
+export function PhotoGalleryLayout({ city, descriptor, images, contextTitle, contextBody, imageDetails, styleSettings, listeningStyle, spotify }: PhotoGalleryLayoutProps) {
   const [selected, setSelected] = useState<number | null>(null)
   const [direction, setDirection] = useState(1)
   const copy = useSiteCopy().creativePage
@@ -75,7 +76,7 @@ export function PhotoGalleryLayout({ city, descriptor, images, contextTitle, con
               ) : null}
             </div>
           ) : null}
-          <SafeProjectSpotifySection spotify={spotify} />
+          <SafeProjectSpotifySection spotify={spotify} listeningStyle={listeningStyle} />
           {/* Photo grid — 4 col desktop, 3 col mobile */}
           <div className="grid grid-cols-3 md:grid-cols-4" style={{ gap: styleSettings.gridGap }}>
             {images.map((src, i) => (

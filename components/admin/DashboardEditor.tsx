@@ -4586,6 +4586,15 @@ function ListeningCardStyleEditor({
       <Field label="Artist Size">
         <input value={styleSettings.artistSize} onChange={(event) => onChange({ ...styleSettings, artistSize: event.target.value })} style={inputStyle()} />
       </Field>
+      <Field label="Creative Widget Callout">
+        <input value={styleSettings.creativeWidgetRestingLabel} onChange={(event) => onChange({ ...styleSettings, creativeWidgetRestingLabel: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Creative Widget Subcopy">
+        <input value={styleSettings.creativeWidgetRestingSubcopy} onChange={(event) => onChange({ ...styleSettings, creativeWidgetRestingSubcopy: event.target.value })} style={inputStyle()} />
+      </Field>
+      <Field label="Creative Widget Heading">
+        <input value={styleSettings.creativeWidgetHeading} onChange={(event) => onChange({ ...styleSettings, creativeWidgetHeading: event.target.value })} style={inputStyle()} />
+      </Field>
       <Field label="Card Padding">
         <input value={styleSettings.cardPadding} onChange={(event) => onChange({ ...styleSettings, cardPadding: event.target.value })} style={inputStyle()} />
       </Field>

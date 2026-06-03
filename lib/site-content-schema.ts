@@ -144,6 +144,9 @@ export interface ListeningCardStyleSettings {
   labelSize: string
   titleSize: string
   artistSize: string
+  creativeWidgetRestingLabel: string
+  creativeWidgetRestingSubcopy: string
+  creativeWidgetHeading: string
   cardPadding: string
   artworkSize: string
   hoverArtworkSize: string
@@ -704,6 +707,9 @@ function isListeningCardStyleSettings(value: unknown): value is ListeningCardSty
     isString(item.labelSize) &&
     isString(item.titleSize) &&
     isString(item.artistSize) &&
+    isString(item.creativeWidgetRestingLabel) &&
+    isString(item.creativeWidgetRestingSubcopy) &&
+    isString(item.creativeWidgetHeading) &&
     isString(item.cardPadding) &&
     isString(item.artworkSize) &&
     isString(item.hoverArtworkSize) &&

@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 import { Component, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
-import type { ProjectSpotifyMedia } from '@/lib/site-content-schema'
+import type { ListeningCardStyleSettings, ProjectSpotifyMedia } from '@/lib/site-content-schema'
 
 const ProjectSpotifySection = dynamic(
   () => import('./ProjectSpotifySection').then((module) => module.ProjectSpotifySection),
@@ -36,8 +36,10 @@ class SpotifySectionBoundary extends Component<
 
 export function SafeProjectSpotifySection({
   spotify,
+  listeningStyle,
 }: {
   spotify?: ProjectSpotifyMedia
+  listeningStyle?: ListeningCardStyleSettings
 }) {
   const [mounted, setMounted] = useState(false)
 
@@ -50,7 +52,7 @@ export function SafeProjectSpotifySection({
 
   return createPortal(
     <SpotifySectionBoundary>
-      <ProjectSpotifySection spotify={spotify} />
+      <ProjectSpotifySection spotify={spotify} listeningStyle={listeningStyle} />
     </SpotifySectionBoundary>,
     document.body,
   )

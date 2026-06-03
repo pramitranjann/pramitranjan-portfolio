@@ -105,6 +105,7 @@ export async function getCaseStudyContent(slug: string) {
   return {
     ...caseStudy,
     navStyle: content.design.caseStudyNav,
+    listeningStyle: content.design.listeningCard,
     prev: caseStudy.prev && visibleSlugs.has(caseStudy.prev.slug) ? caseStudy.prev : null,
     next: caseStudy.next && visibleSlugs.has(caseStudy.next.slug) ? caseStudy.next : null,
   }

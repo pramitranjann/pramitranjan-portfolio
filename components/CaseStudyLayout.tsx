@@ -11,7 +11,7 @@ import { useSiteCopy } from '@/components/SiteCopyProvider'
 import { playNav } from '@/lib/sounds'
 import { GsapReveal } from './GsapReveal'
 import { deriveCaseStudyMediaBlocks } from '@/lib/case-study-media'
-import type { CaseStudyMediaBlock, CaseStudyMediaSettings, CaseStudyNavStyleSettings, CaseStudyUiCopy, ProjectSpotifyMedia } from '@/lib/site-content-schema'
+import type { CaseStudyMediaBlock, CaseStudyMediaSettings, CaseStudyNavStyleSettings, CaseStudyUiCopy, ListeningCardStyleSettings, ProjectSpotifyMedia } from '@/lib/site-content-schema'
 
 interface ProjectLink {
   slug: string
@@ -65,6 +65,7 @@ section?: 'work' | 'mixed-media' | 'branding' | 'play'
   solutionEmbedCalloutTitle?: string
   solutionEmbedCalloutBody?: string
   spotify?: ProjectSpotifyMedia
+  listeningStyle?: ListeningCardStyleSettings
 }
 
 const labelStyle: React.CSSProperties = {
@@ -329,7 +330,7 @@ export function CaseStudyLayout({
   processHeadline, solutionHeadline, outcomesHeadline, pullQuote,
   heroImage, researchImage, challengeImages, solutionHeroImage: rawSolutionHeroImage, solutionImages: rawSolutionImages, mediaSettings, mediaBlocks: rawMediaBlocks, uiCopy, navStyle,
   solutionEmbedUrl, solutionEmbedTitle = 'Live experience', solutionEmbedAspectRatio = '4 / 3', solutionEmbedCtaLabel = 'OPEN LIVE APP',
-  solutionEmbedWidth = 'min(100%, 1120px)', solutionEmbedCalloutLabel, solutionEmbedCalloutTitle, solutionEmbedCalloutBody, spotify,
+  solutionEmbedWidth = 'min(100%, 1120px)', solutionEmbedCalloutLabel, solutionEmbedCalloutTitle, solutionEmbedCalloutBody, spotify, listeningStyle,
 }: CaseStudyLayoutProps) {
   const solutionHeroImage = solutionEmbedUrl ? undefined : rawSolutionHeroImage
   const solutionImages = solutionEmbedUrl ? undefined : rawSolutionImages
@@ -695,7 +696,7 @@ export function CaseStudyLayout({
             >
               {oneliner}
             </p>
-            {section !== 'work' ? <SafeProjectSpotifySection spotify={spotify} /> : null}
+            {section !== 'work' ? <SafeProjectSpotifySection spotify={spotify} listeningStyle={listeningStyle} /> : null}
           </div>
           <div className="case-study-hero-image" style={{ position: 'relative', backgroundColor: heroMedia.background, overflow: 'hidden', minHeight: heroMedia.height }}>
             {heroImage && <Image src={heroImage} alt={title} fill style={{ objectFit: heroMedia.fit, objectPosition: heroMedia.position }} sizes="50vw" />}
