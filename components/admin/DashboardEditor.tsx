@@ -4335,7 +4335,7 @@ function ProjectSpotifyEditor({
         <textarea
           value={next.context ?? ''}
           onChange={(event) => update({ context: event.target.value || undefined })}
-          placeholder="Optional note explaining why this widget, song, or playlist is on the page. Hidden if blank."
+          placeholder="These songs encapsulate the mood and emotional texture of the work. Hidden if blank."
           style={inputStyle(true)}
         />
       </Field>
