@@ -1522,6 +1522,11 @@
         "hero": {
           "fit": "cover"
         }
+      },
+      "spotify": {
+        "soundtrack": {
+          "spotifyUrl": "https://open.spotify.com/track/6fn4RaCKoRpdwxrAETkZIP?si=b94bd61be7914e5f"
+        }
       }
     },
     {
@@ -1628,6 +1633,11 @@
       "mediaSettings": {
         "hero": {
           "fit": "cover"
+        }
+      },
+      "spotify": {
+        "soundtrack": {
+          "spotifyUrl": "https://open.spotify.com/track/0XGuDA5xXdvMVIQPFXTkCK?si=99a71a0ab58846ad"
         }
       }
     },
