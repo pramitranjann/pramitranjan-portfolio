@@ -13,6 +13,7 @@ interface SpotifyTrackSummary {
   album: string
   coverArt: string | null
   externalUrl: string
+  embedUrl: string
 }
 
 interface SpotifyPlaylistSummary {
@@ -23,6 +24,7 @@ interface SpotifyPlaylistSummary {
   owner: string | null
   coverArt: string | null
   externalUrl: string
+  embedUrl: string
 }
 
 function getReferenceQueryValue(value: ProjectSpotifyMedia['soundtrack'] | ProjectSpotifyMedia['playlist']) {
@@ -36,6 +38,9 @@ function FloatingSpotifyEntry({
   artwork,
   ctaLabel,
   href,
+  isActive,
+  onPreviewToggle,
+  canPreview,
 }: {
   label: string
   title: string
@@ -43,6 +48,9 @@ function FloatingSpotifyEntry({
   artwork?: string | null
   ctaLabel: string
   href: string
+  isActive: boolean
+  onPreviewToggle?: () => void
+  canPreview?: boolean
 }) {
   return (
     <div
@@ -52,7 +60,6 @@ function FloatingSpotifyEntry({
         padding: '14px',
         background: '#111111',
         border: '1px solid #242424',
-        boxShadow: '0 14px 40px rgba(0,0,0,0.28)',
       }}
     >
       <div className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.16em', color: '#666666' }}>
@@ -113,23 +120,43 @@ function FloatingSpotifyEntry({
               {subtitle}
             </div>
           ) : null}
-          <a
-            href={href}
-            target="_blank"
-            rel="noreferrer"
-            onClick={playNav}
-            className="font-mono"
-            style={{
-              display: 'inline-block',
-              marginTop: '10px',
-              fontSize: '11px',
-              letterSpacing: '0.14em',
-              color: '#FF3120',
-              textDecoration: 'none',
-            }}
-          >
-            {ctaLabel} →
-          </a>
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '10px' }}>
+            {canPreview ? (
+              <button
+                type="button"
+                onClick={onPreviewToggle}
+                className="font-mono"
+                style={{
+                  background: 'transparent',
+                  border: '1px solid #2a2a2a',
+                  color: isActive ? '#f5f2ed' : '#777777',
+                  padding: '8px 10px',
+                  fontSize: '10px',
+                  letterSpacing: '0.14em',
+                  cursor: 'pointer',
+                }}
+              >
+                {isActive ? 'HIDE PLAYER' : 'PLAY HERE'}
+              </button>
+            ) : null}
+            <a
+              href={href}
+              target="_blank"
+              rel="noreferrer"
+              onClick={playNav}
+              className="font-mono"
+              style={{
+                display: 'inline-block',
+                fontSize: '11px',
+                letterSpacing: '0.14em',
+                color: '#FF3120',
+                textDecoration: 'none',
+                alignSelf: 'center',
+              }}
+            >
+              {ctaLabel} →
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -151,6 +178,8 @@ export function ProjectSpotifySection({
   )
   const [soundtrack, setSoundtrack] = useState<SpotifyTrackSummary | null>(null)
   const [playlist, setPlaylist] = useState<SpotifyPlaylistSummary | null>(null)
+  const [playerOpen, setPlayerOpen] = useState(false)
+  const [activePlayer, setActivePlayer] = useState<'soundtrack' | 'playlist'>('soundtrack')
 
   useEffect(() => {
     const soundtrackQuery = getReferenceQueryValue(spotify?.soundtrack)
@@ -183,7 +212,33 @@ export function ProjectSpotifySection({
 
   const soundtrackOpenUrl = soundtrack?.externalUrl ?? soundtrackReference?.openUrl
   const playlistOpenUrl = playlist?.externalUrl ?? playlistReference?.openUrl
-  const hasContext = Boolean(spotify?.context?.trim())
+  const soundtrackEmbedUrl = soundtrack?.embedUrl ?? soundtrackReference?.embedUrl
+  const playlistEmbedUrl = playlist?.embedUrl ?? playlistReference?.embedUrl
+  const hasContext = Boolean(spotify?.context?.trim() || spotify?.playlist?.description?.trim())
+  const contextCopy = spotify?.context?.trim() || spotify?.playlist?.description?.trim() || ''
+  const hasSoundtrack = Boolean(soundtrackOpenUrl)
+  const hasPlaylist = Boolean(playlistOpenUrl)
+  const resolvedActivePlayer = activePlayer === 'playlist' && hasPlaylist ? 'playlist' : 'soundtrack'
+  const activeEmbedUrl = resolvedActivePlayer === 'playlist' ? playlistEmbedUrl : soundtrackEmbedUrl
+  const activeEmbedTitle = resolvedActivePlayer === 'playlist'
+    ? `${playlist?.title ?? 'Spotify playlist'} player`
+    : `${soundtrack?.title ?? 'Spotify soundtrack'} player`
+
+  useEffect(() => {
+    if (!hasSoundtrack && hasPlaylist) {
+      setActivePlayer('playlist')
+    }
+  }, [hasPlaylist, hasSoundtrack])
+
+  function togglePreview(target: 'soundtrack' | 'playlist') {
+    if (playerOpen && activePlayer === target) {
+      setPlayerOpen(false)
+      return
+    }
+
+    setActivePlayer(target)
+    setPlayerOpen(true)
+  }
 
   return (
     <aside
@@ -193,23 +248,27 @@ export function ProjectSpotifySection({
         bottom: '16px',
         zIndex: 40,
         width: 'min(360px, calc(100vw - 24px))',
-        display: 'grid',
-        gap: '10px',
-        pointerEvents: 'none',
+        pointerEvents: 'auto',
       }}
     >
-      {hasContext ? (
+      <div
+        style={{
+          display: 'grid',
+          gap: '10px',
+          padding: '12px',
+          background: 'rgba(12, 12, 12, 0.94)',
+          border: '1px solid #242424',
+          boxShadow: '0 14px 40px rgba(0,0,0,0.24)',
+        }}
+      >
+        {hasContext ? (
         <div
           style={{
-            padding: '12px 14px',
-            background: 'rgba(12, 12, 12, 0.92)',
-            border: '1px solid #242424',
-            boxShadow: '0 14px 40px rgba(0,0,0,0.24)',
-            pointerEvents: 'auto',
+            padding: '2px 2px 6px',
           }}
         >
           <div className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.16em', color: '#666666', marginBottom: '8px' }}>
-            SOUND CONTEXT
+            WHY THIS IS HERE
           </div>
           <p
             className="font-mono"
@@ -222,36 +281,60 @@ export function ProjectSpotifySection({
               textWrap: 'pretty',
             }}
           >
-            {spotify?.context}
+            {contextCopy}
           </p>
         </div>
-      ) : null}
+        ) : null}
 
-      {soundtrackOpenUrl ? (
-        <div style={{ pointerEvents: 'auto' }}>
+        {hasSoundtrack ? (
           <FloatingSpotifyEntry
             label="Soundtrack"
             title={soundtrack?.title ?? 'Spotify soundtrack'}
             subtitle={soundtrack?.artist ?? null}
             artwork={soundtrack?.coverArt ?? null}
             ctaLabel="Listen on Spotify"
-            href={soundtrackOpenUrl}
+            href={soundtrackOpenUrl!}
+            canPreview={Boolean(soundtrackEmbedUrl)}
+            isActive={playerOpen && activePlayer === 'soundtrack'}
+            onPreviewToggle={() => togglePreview('soundtrack')}
           />
-        </div>
-      ) : null}
+        ) : null}
 
-      {playlistOpenUrl ? (
-        <div style={{ pointerEvents: 'auto' }}>
+        {hasPlaylist ? (
           <FloatingSpotifyEntry
             label="Playlist"
             title={playlist?.title ?? 'Spotify playlist'}
             subtitle={spotify?.playlist?.description ?? playlist?.description ?? playlist?.owner ?? null}
             artwork={playlist?.coverArt ?? null}
             ctaLabel="Open playlist"
-            href={playlistOpenUrl}
+            href={playlistOpenUrl!}
+            canPreview={Boolean(playlistEmbedUrl)}
+            isActive={playerOpen && activePlayer === 'playlist'}
+            onPreviewToggle={() => togglePreview('playlist')}
           />
-        </div>
-      ) : null}
+        ) : null}
+
+        {playerOpen && activeEmbedUrl ? (
+          <div
+            style={{
+              paddingTop: '2px',
+            }}
+          >
+            <iframe
+              src={activeEmbedUrl}
+              loading="lazy"
+              allow="encrypted-media"
+              title={activeEmbedTitle}
+              style={{
+                width: '100%',
+                height: '152px',
+                border: 0,
+                background: 'transparent',
+              }}
+            />
+          </div>
+        ) : null}
+      </div>
     </aside>
   )
 }

@@ -4331,11 +4331,11 @@ function ProjectSpotifyEditor({
 
   return (
     <div style={{ display: 'grid', gap: '12px' }}>
-      <Field label="Music Context">
+      <Field label="Why This Is Here">
         <textarea
           value={next.context ?? ''}
           onChange={(event) => update({ context: event.target.value || undefined })}
-          placeholder="Optional note about why this soundtrack or playlist fits the work. Hidden if blank."
+          placeholder="Optional note explaining why this widget, song, or playlist is on the page. Hidden if blank."
           style={inputStyle(true)}
         />
       </Field>
