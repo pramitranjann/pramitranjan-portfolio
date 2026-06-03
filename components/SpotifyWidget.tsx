@@ -29,6 +29,7 @@ export function SpotifyWidget({ variant, restingLabel, styleSettings, interactio
   const [liveProgress, setLiveProgress] = useState<number | undefined>(undefined)
   const [canHover, setCanHover] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
+  const [isTapExpanded, setIsTapExpanded] = useState(false)
   const tickRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const hoverOpenRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const hoverCloseRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -80,15 +81,23 @@ export function SpotifyWidget({ variant, restingLabel, styleSettings, interactio
     }
   }, [])
 
+  useEffect(() => {
+    if (canHover) {
+      setIsTapExpanded(false)
+    }
+  }, [canHover])
+
   if (!track) return null  // parent renders static content as fallback
 
   const progress = liveProgress ?? track.progress
   const pct = progress !== undefined && track.duration !== undefined
     ? Math.min(Math.round((progress / track.duration) * 100), 100)
     : 0
-  const isInteractive = variant === 'sidebar' && interactionMode === 'hover-expand' && canHover
+  const isHoverInteractive = variant === 'sidebar' && interactionMode === 'hover-expand' && canHover
+  const isTapInteractive = variant === 'sidebar' && interactionMode === 'hover-expand' && !canHover
+  const isExpanded = isHoverInteractive ? isHovered : isTapInteractive ? isTapExpanded : false
 
-  const handlePointerEnter = isInteractive
+  const handlePointerEnter = isHoverInteractive
     ? () => {
         if (hoverCloseRef.current) clearTimeout(hoverCloseRef.current)
         if (hoverOpenRef.current) clearTimeout(hoverOpenRef.current)
@@ -96,7 +105,7 @@ export function SpotifyWidget({ variant, restingLabel, styleSettings, interactio
       }
     : undefined
 
-  const handlePointerLeave = isInteractive
+  const handlePointerLeave = isHoverInteractive
     ? () => {
         if (hoverOpenRef.current) clearTimeout(hoverOpenRef.current)
         if (hoverCloseRef.current) clearTimeout(hoverCloseRef.current)
@@ -104,11 +113,31 @@ export function SpotifyWidget({ variant, restingLabel, styleSettings, interactio
       }
     : undefined
 
+  const handleTapToggle = isTapInteractive
+    ? () => setIsTapExpanded((current) => !current)
+    : undefined
+
   return (
     <div
-      style={{ width: '100%', minWidth: 0, maxWidth: '100%' }}
+      style={{
+        width: '100%',
+        minWidth: 0,
+        maxWidth: '100%',
+        cursor: isTapInteractive ? 'pointer' : 'default',
+      }}
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
+      onClick={handleTapToggle}
+      onKeyDown={isTapInteractive
+        ? (event) => {
+            if (event.key !== 'Enter' && event.key !== ' ') return
+            event.preventDefault()
+            handleTapToggle?.()
+          }
+        : undefined}
+      role={isTapInteractive ? 'button' : undefined}
+      tabIndex={isTapInteractive ? 0 : undefined}
+      aria-expanded={isTapInteractive ? isExpanded : undefined}
     >
       {variant === 'cell' ? (
         <CellVariant track={track} pct={pct} restingLabel={restingLabel} styleSettings={styleSettings} />
@@ -119,7 +148,8 @@ export function SpotifyWidget({ variant, restingLabel, styleSettings, interactio
           pct={pct}
           restingLabel={restingLabel}
           styleSettings={styleSettings}
-          expanded={isInteractive && isHovered}
+          expanded={isExpanded}
+          isTapInteractive={isTapInteractive}
         />
       )}
     </div>
@@ -256,6 +286,7 @@ function SidebarVariant({
   restingLabel,
   styleSettings,
   expanded = false,
+  isTapInteractive = false,
 }: {
   track: Track
   progress: number | undefined
@@ -263,6 +294,7 @@ function SidebarVariant({
   restingLabel?: string
   styleSettings?: ListeningCardStyleSettings
   expanded?: boolean
+  isTapInteractive?: boolean
 }) {
   return (
     <div
@@ -288,6 +320,11 @@ function SidebarVariant({
         <span className="font-mono" style={{ fontSize: styleSettings?.labelSize ?? '11px', letterSpacing: '0.14em', color: styleSettings?.labelColor ?? '#666666' }}>
           {track.isPlaying ? 'NOW PLAYING' : restingLabel ?? 'LAST PLAYED'}
         </span>
+        {isTapInteractive ? (
+          <span className="font-mono" style={{ marginLeft: 'auto', fontSize: '10px', letterSpacing: '0.12em', color: '#4f4f4f' }}>
+            {expanded ? 'TAP TO CLOSE' : 'TAP TO OPEN'}
+          </span>
+        ) : null}
       </div>
       <div className="flex" style={{ gap: expanded ? '16px' : '10px', alignItems: 'center', transition: 'gap 220ms cubic-bezier(0.23, 1, 0.32, 1)' }}>
         {track.albumArt ? (
@@ -386,7 +423,10 @@ function SidebarVariant({
             target="_blank"
             rel="noreferrer"
             className="font-mono"
-            onClick={playNav}
+            onClick={(event) => {
+              event.stopPropagation()
+              playNav()
+            }}
             style={{
               color: styleSettings?.progressFillColor ?? '#FF3120',
               fontSize: '11px',

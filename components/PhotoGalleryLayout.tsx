@@ -6,18 +6,20 @@ import { AnimatePresence } from 'motion/react'
 import { Nav } from './Nav'
 import { Footer } from './Footer'
 import { PhotoLightbox } from './PhotoLightbox'
+import { ProjectSpotifySection } from './ProjectSpotifySection'
 import { useSiteCopy } from '@/components/SiteCopyProvider'
 import { playNav } from '@/lib/sounds'
-import type { GalleryStyleSettings } from '@/lib/site-content-schema'
+import type { GalleryStyleSettings, ProjectSpotifyMedia } from '@/lib/site-content-schema'
 
 interface PhotoGalleryLayoutProps {
   city: string
   descriptor: string
   images: string[]
   styleSettings: GalleryStyleSettings
+  spotify?: ProjectSpotifyMedia
 }
 
-export function PhotoGalleryLayout({ city, descriptor, images, styleSettings }: PhotoGalleryLayoutProps) {
+export function PhotoGalleryLayout({ city, descriptor, images, styleSettings, spotify }: PhotoGalleryLayoutProps) {
   const [selected, setSelected] = useState<number | null>(null)
   const [direction, setDirection] = useState(1)
   const copy = useSiteCopy().creativePage
@@ -49,6 +51,7 @@ export function PhotoGalleryLayout({ city, descriptor, images, styleSettings }: 
           <p className="font-mono" style={{ fontSize: styleSettings.descriptorSize, letterSpacing: '0.1em', color: '#999999', marginBottom: '40px' }}>
             {descriptor}
           </p>
+          <ProjectSpotifySection spotify={spotify} />
 
           {/* Photo grid — 4 col desktop, 3 col mobile */}
           <div className="grid grid-cols-3 md:grid-cols-4" style={{ gap: styleSettings.gridGap }}>

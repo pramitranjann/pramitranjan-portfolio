@@ -59,6 +59,23 @@ export interface PhotographyGallery {
   city: string
   descriptor: string
   images: string[]
+  spotify?: ProjectSpotifyMedia
+}
+
+export interface SpotifyReference {
+  spotifyId?: string
+  spotifyUrl?: string
+}
+
+export interface SpotifyTrackReference extends SpotifyReference {}
+
+export interface SpotifyPlaylistReference extends SpotifyReference {
+  description?: string
+}
+
+export interface ProjectSpotifyMedia {
+  soundtrack?: SpotifyTrackReference
+  playlist?: SpotifyPlaylistReference
 }
 
 export interface CardStyleSettings {
@@ -429,6 +446,7 @@ export interface CaseStudyContent {
   solutionEmbedCalloutTitle?: string
   solutionEmbedCalloutBody?: string
   solutionEmbedCtaLabel?: string
+  spotify?: ProjectSpotifyMedia
 }
 
 export interface SiteContent {
@@ -561,7 +579,34 @@ function isHomeSection(value: unknown): value is HomeSection {
 function isPhotographyGallery(value: unknown): value is PhotographyGallery {
   if (!value || typeof value !== 'object') return false
   const item = value as Record<string, unknown>
-  return isString(item.slug) && isString(item.city) && isString(item.descriptor) && isStringArray(item.images)
+  return (
+    isString(item.slug) &&
+    isString(item.city) &&
+    isString(item.descriptor) &&
+    isStringArray(item.images) &&
+    (item.spotify === undefined || isProjectSpotifyMedia(item.spotify))
+  )
+}
+
+function isSpotifyReference(value: unknown): value is SpotifyReference {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return isOptionalString(item.spotifyId) && isOptionalString(item.spotifyUrl)
+}
+
+function isSpotifyPlaylistReference(value: unknown): value is SpotifyPlaylistReference {
+  if (!isSpotifyReference(value)) return false
+  const item = value as Record<string, unknown>
+  return isOptionalString(item.description)
+}
+
+function isProjectSpotifyMedia(value: unknown): value is ProjectSpotifyMedia {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return (
+    (item.soundtrack === undefined || isSpotifyReference(item.soundtrack)) &&
+    (item.playlist === undefined || isSpotifyPlaylistReference(item.playlist))
+  )
 }
 
 function isCardStyleSettings(value: unknown): value is CardStyleSettings {
@@ -1044,7 +1089,8 @@ isOptionalString(item.solutionEmbedTitle) &&
     isOptionalString(item.solutionEmbedCalloutLabel) &&
     isOptionalString(item.solutionEmbedCalloutTitle) &&
     isOptionalString(item.solutionEmbedCalloutBody) &&
-    isOptionalString(item.solutionEmbedCtaLabel)
+    isOptionalString(item.solutionEmbedCtaLabel) &&
+    (item.spotify === undefined || isProjectSpotifyMedia(item.spotify))
   )
 }
 

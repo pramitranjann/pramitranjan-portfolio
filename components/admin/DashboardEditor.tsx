@@ -29,9 +29,12 @@ import type {
   PhotographyCardStyleSettings,
   PhotographyCity,
   PhotographyGallery,
+  ProjectSpotifyMedia,
   ProjectLink,
   SiteContent,
   SitePageKey,
+  SpotifyPlaylistReference,
+  SpotifyTrackReference,
   TypographySettings,
   WorkProject,
 } from '@/lib/site-content-schema'
@@ -2669,6 +2672,16 @@ function CaseStudyEditor({
         </Field>
       </SectionFrame>
 
+      <SectionFrame title={`${caseStudy.title} · Spotify`}>
+        <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.7 }}>
+          Optional soundtrack and playlist for this project. Use a Spotify ID, a Spotify URL, or both. The public page stays hidden until at least one reference is set.
+        </p>
+        <ProjectSpotifyEditor
+          value={caseStudy.spotify}
+          onChange={(spotify) => onChange((current) => ({ ...current, spotify }))}
+        />
+      </SectionFrame>
+
       <SectionFrame title={`${caseStudy.title} · Navigation`}>
         <ProjectLinkEditor
           label="Previous Project"
@@ -4034,6 +4047,10 @@ function PhotographyGalleryListEditor({
           <Field label="Descriptor">
             <textarea value={item.descriptor} onChange={(event) => onChange(updateAt(items, index, { ...item, descriptor: event.target.value }))} style={inputStyle(true)} />
           </Field>
+          <ProjectSpotifyEditor
+            value={item.spotify}
+            onChange={(spotify) => onChange(updateAt(items, index, { ...item, spotify }))}
+          />
           <ImageListEditor images={item.images} onChange={(images) => onChange(updateAt(items, index, { ...item, images }))} />
           <button
             type="button"
@@ -4092,6 +4109,94 @@ function ImageListEditor({
           </button>
         </EditorItemCard>
       ))}
+    </div>
+  )
+}
+
+function SpotifyReferenceEditor({
+  title,
+  value,
+  onChange,
+  includeDescription = false,
+}: {
+  title: string
+  value: SpotifyTrackReference | SpotifyPlaylistReference | undefined
+  onChange: (value: SpotifyTrackReference | SpotifyPlaylistReference | undefined) => void
+  includeDescription?: boolean
+}) {
+  const next = value ?? {}
+
+  function update(
+    patch: Partial<SpotifyTrackReference & SpotifyPlaylistReference>,
+  ) {
+    const merged = { ...next, ...patch }
+    const hasValues = Object.values(merged).some(Boolean)
+    onChange(hasValues ? merged : undefined)
+  }
+
+  return (
+    <div style={{ display: 'grid', gap: '12px', border: '1px solid #1f1f1f', padding: '16px' }}>
+      <div className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.1em' }}>
+        {title.toUpperCase()}
+      </div>
+      <Field label={`${title} Spotify ID`}>
+        <input
+          value={next.spotifyId ?? ''}
+          onChange={(event) => update({ spotifyId: event.target.value || undefined })}
+          placeholder="Spotify ID (22 chars)"
+          style={inputStyle()}
+        />
+      </Field>
+      <Field label={`${title} Spotify URL`}>
+        <input
+          value={next.spotifyUrl ?? ''}
+          onChange={(event) => update({ spotifyUrl: event.target.value || undefined })}
+          placeholder="https://open.spotify.com/track/... or /playlist/..."
+          style={inputStyle()}
+        />
+      </Field>
+      {includeDescription ? (
+        <Field label={`${title} Description Override`}>
+          <textarea
+            value={(next as SpotifyPlaylistReference).description ?? ''}
+            onChange={(event) => update({ description: event.target.value || undefined })}
+            placeholder="Optional short note shown above the embed."
+            style={inputStyle(true)}
+          />
+        </Field>
+      ) : null}
+    </div>
+  )
+}
+
+function ProjectSpotifyEditor({
+  value,
+  onChange,
+}: {
+  value: ProjectSpotifyMedia | undefined
+  onChange: (value: ProjectSpotifyMedia | undefined) => void
+}) {
+  const next = value ?? {}
+
+  function update(patch: Partial<ProjectSpotifyMedia>) {
+    const merged = { ...next, ...patch }
+    const hasValues = Boolean(merged.soundtrack || merged.playlist)
+    onChange(hasValues ? merged : undefined)
+  }
+
+  return (
+    <div style={{ display: 'grid', gap: '12px' }}>
+      <SpotifyReferenceEditor
+        title="Soundtrack"
+        value={next.soundtrack}
+        onChange={(soundtrack) => update({ soundtrack })}
+      />
+      <SpotifyReferenceEditor
+        title="Playlist"
+        value={next.playlist}
+        includeDescription
+        onChange={(playlist) => update({ playlist: playlist as SpotifyPlaylistReference | undefined })}
+      />
     </div>
   )
 }

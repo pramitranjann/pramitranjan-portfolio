@@ -10,6 +10,7 @@ let _ctx: AudioContext | null = null
 let _unlocking: Promise<void> | null = null
 const IMMEDIATE_SOUND_WINDOW_MS = 220
 const SOUND_SAMPLE_RATE = 22050
+const MOBILE_SOUND_BLOCK_QUERY = '(hover: none), (pointer: coarse)'
 const soundUrls = new Map<'nav' | 'lightbox' | 'card' | 'intro-p' | 'intro-r' | 'intro-lift', string>()
 
 function getInteractionVolume() {
@@ -20,8 +21,16 @@ function getInteractionVolume() {
   return Math.max(0, Math.min(parsed, 1.5))
 }
 
+function areInteractionSoundsEnabled() {
+  if (typeof window === 'undefined') return false
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false
+  if (window.matchMedia(MOBILE_SOUND_BLOCK_QUERY).matches) return false
+  return true
+}
+
 function getCtx(): AudioContext | null {
   if (typeof window === 'undefined') return null
+  if (!areInteractionSoundsEnabled()) return null
   try {
     const AudioContextCtor = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
     if (!AudioContextCtor) return null
@@ -198,6 +207,7 @@ function getSoundUrl(kind: 'nav' | 'lightbox' | 'card' | 'intro-p' | 'intro-r' |
 
 function playGeneratedSound(kind: 'nav' | 'lightbox' | 'card' | 'intro-p' | 'intro-r' | 'intro-lift') {
   if (typeof window === 'undefined') return
+  if (!areInteractionSoundsEnabled()) return
 
   try {
     const audio = new Audio(getSoundUrl(kind))

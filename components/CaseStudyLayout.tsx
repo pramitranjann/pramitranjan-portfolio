@@ -6,11 +6,12 @@ import { Nav } from './Nav'
 import { Footer } from './Footer'
 import { RuleLabel } from './RuleLabel'
 import { ReadingProgress } from './ReadingProgress'
+import { ProjectSpotifySection } from './ProjectSpotifySection'
 import { useSiteCopy } from '@/components/SiteCopyProvider'
 import { playNav } from '@/lib/sounds'
 import { GsapReveal } from './GsapReveal'
 import { deriveCaseStudyMediaBlocks } from '@/lib/case-study-media'
-import type { CaseStudyMediaBlock, CaseStudyMediaSettings, CaseStudyNavStyleSettings, CaseStudyUiCopy } from '@/lib/site-content-schema'
+import type { CaseStudyMediaBlock, CaseStudyMediaSettings, CaseStudyNavStyleSettings, CaseStudyUiCopy, ProjectSpotifyMedia } from '@/lib/site-content-schema'
 
 interface ProjectLink {
   slug: string
@@ -63,6 +64,7 @@ section?: 'work' | 'mixed-media' | 'branding' | 'play'
   solutionEmbedCalloutLabel?: string
   solutionEmbedCalloutTitle?: string
   solutionEmbedCalloutBody?: string
+  spotify?: ProjectSpotifyMedia
 }
 
 const labelStyle: React.CSSProperties = {
@@ -327,7 +329,7 @@ export function CaseStudyLayout({
   processHeadline, solutionHeadline, outcomesHeadline, pullQuote,
   heroImage, researchImage, challengeImages, solutionHeroImage: rawSolutionHeroImage, solutionImages: rawSolutionImages, mediaSettings, mediaBlocks: rawMediaBlocks, uiCopy, navStyle,
   solutionEmbedUrl, solutionEmbedTitle = 'Live experience', solutionEmbedAspectRatio = '4 / 3', solutionEmbedCtaLabel = 'OPEN LIVE APP',
-  solutionEmbedWidth = 'min(100%, 1120px)', solutionEmbedCalloutLabel, solutionEmbedCalloutTitle, solutionEmbedCalloutBody,
+  solutionEmbedWidth = 'min(100%, 1120px)', solutionEmbedCalloutLabel, solutionEmbedCalloutTitle, solutionEmbedCalloutBody, spotify,
 }: CaseStudyLayoutProps) {
   const solutionHeroImage = solutionEmbedUrl ? undefined : rawSolutionHeroImage
   const solutionImages = solutionEmbedUrl ? undefined : rawSolutionImages
@@ -693,6 +695,7 @@ export function CaseStudyLayout({
             >
               {oneliner}
             </p>
+            <ProjectSpotifySection spotify={spotify} />
           </div>
           <div className="case-study-hero-image" style={{ position: 'relative', backgroundColor: heroMedia.background, overflow: 'hidden', minHeight: heroMedia.height }}>
             {heroImage && <Image src={heroImage} alt={title} fill style={{ objectFit: heroMedia.fit, objectPosition: heroMedia.position }} sizes="50vw" />}
