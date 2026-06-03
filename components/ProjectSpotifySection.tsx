@@ -28,7 +28,7 @@ interface SpotifyPlaylistSummary {
 }
 
 const DEFAULT_SPOTIFY_CONTEXT = 'These songs encapsulate the mood and emotional texture of the work.'
-const DESKTOP_WIDGET_QUERY = '(hover: hover) and (pointer: fine)'
+const MIN_WIDGET_VIEWPORT_WIDTH = 768
 
 function getReferenceQueryValue(value: ProjectSpotifyMedia['soundtrack'] | ProjectSpotifyMedia['playlist']) {
   return value?.spotifyUrl?.trim() || value?.spotifyId?.trim() || ''
@@ -180,7 +180,7 @@ export function ProjectSpotifySection({
   useEffect(() => {
     if (typeof window === 'undefined') return
     try {
-      setShowOnThisDevice(window.matchMedia(DESKTOP_WIDGET_QUERY).matches)
+      setShowOnThisDevice(window.innerWidth >= MIN_WIDGET_VIEWPORT_WIDTH)
     } catch {
       setShowOnThisDevice(false)
     }
