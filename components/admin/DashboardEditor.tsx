@@ -29,6 +29,7 @@ import type {
   PhotographyCardStyleSettings,
   PhotographyCity,
   PhotographyGallery,
+  PhotographyImageDetails,
   ProjectSpotifyMedia,
   ProjectLink,
   SiteContent,
@@ -55,6 +56,7 @@ type PageKey =
   | 'case-study-ui'
   | 'design-system'
   | 'motion'
+  | `photo-gallery:${string}`
   | `case-study:${string}`
 
 type PresetOption = {
@@ -925,6 +927,26 @@ git push`
     }))
   }
 
+  function updatePhotographyGallery(slug: string, updater: (item: PhotographyGallery) => PhotographyGallery) {
+    applyContentChange((current) => {
+      let nextSlug = slug
+      const galleries = current.photography.galleries.map((item) => {
+        if (item.slug !== slug) return item
+        const updated = updater(item)
+        nextSlug = updated.slug
+        return updated
+      })
+      setActivePage(`photo-gallery:${nextSlug}`)
+      return {
+        ...current,
+        photography: {
+          ...current.photography,
+          galleries,
+        },
+      }
+    })
+  }
+
   function handleUndo() {
     setHistory((current) => {
       if (current.past.length === 0) return current
@@ -1004,6 +1026,9 @@ git push`
 
   const activeCaseStudy = activePage.startsWith('case-study:')
     ? content.caseStudies.find((item) => item.slug === activePage.replace('case-study:', '')) ?? null
+    : null
+  const activePhotographyGallery = activePage.startsWith('photo-gallery:')
+    ? content.photography.galleries.find((item) => item.slug === activePage.replace('photo-gallery:', '')) ?? null
     : null
 
   return (
@@ -1209,6 +1234,17 @@ git push`
               ))}
               <SidebarButton active={false} label="+ Add Branding" onClick={() => { setPendingNewSection('branding'); setPendingTemplateId('visual-brand') }} />
             </SidebarGroup>
+
+            <SidebarGroup title="PHOTOGRAPHY PAGES">
+              {content.photography.galleries.map((item) => (
+                <SidebarButton
+                  key={item.slug}
+                  active={activePage === `photo-gallery:${item.slug}`}
+                  label={item.city || item.slug || 'Untitled Gallery'}
+                  onClick={() => setActivePage(`photo-gallery:${item.slug}` as PageKey)}
+                />
+              ))}
+            </SidebarGroup>
             {pendingNewSection && (
               <div style={{ border: '1px solid #333', padding: '14px', marginTop: '8px', background: '#111' }}>
                 <p className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.14em', color: '#f5f2ed', textTransform: 'uppercase', marginBottom: '10px' }}>
@@ -1309,6 +1345,12 @@ git push`
               localWriteEnabled={localWriteEnabled}
               onChange={(updater) => updateCaseStudy(activeCaseStudy.slug, updater)}
               onDelete={() => removeCaseStudy(activeCaseStudy.slug)}
+            />
+          ) : null}
+          {activePhotographyGallery ? (
+            <PhotographyGalleryEditor
+              gallery={activePhotographyGallery}
+              onChange={(updater) => updatePhotographyGallery(activePhotographyGallery.slug, updater)}
             />
           ) : null}
         </fieldset>
@@ -4038,20 +4080,10 @@ function PhotographyGalleryListEditor({
           defaultOpen={index === 0}
         >
           <ReorderButtons index={index} length={items.length} onMove={(direction) => onChange(moveItem(items, index, direction))} />
-          <Field label="Slug">
-            <input value={item.slug} onChange={(event) => onChange(updateAt(items, index, { ...item, slug: event.target.value }))} style={inputStyle()} />
-          </Field>
-          <Field label="City">
-            <input value={item.city} onChange={(event) => onChange(updateAt(items, index, { ...item, city: event.target.value }))} style={inputStyle()} />
-          </Field>
-          <Field label="Descriptor">
-            <textarea value={item.descriptor} onChange={(event) => onChange(updateAt(items, index, { ...item, descriptor: event.target.value }))} style={inputStyle(true)} />
-          </Field>
-          <ProjectSpotifyEditor
-            value={item.spotify}
-            onChange={(spotify) => onChange(updateAt(items, index, { ...item, spotify }))}
+          <PhotographyGalleryFields
+            gallery={item}
+            onChange={(updater) => onChange(updateAt(items, index, updater(item)))}
           />
-          <ImageListEditor images={item.images} onChange={(images) => onChange(updateAt(items, index, { ...item, images }))} />
           <button
             type="button"
             onClick={() => onChange(removeAt(items, index))}
@@ -4066,13 +4098,114 @@ function PhotographyGalleryListEditor({
   )
 }
 
-function ImageListEditor({
+function PhotographyGalleryEditor({
+  gallery,
+  onChange,
+}: {
+  gallery: PhotographyGallery
+  onChange: (updater: (gallery: PhotographyGallery) => PhotographyGallery) => void
+}) {
+  return (
+    <SectionFrame title={`${gallery.city || gallery.slug || 'Photography Gallery'} · Gallery Page`}>
+      <PhotographyGalleryFields gallery={gallery} onChange={onChange} />
+    </SectionFrame>
+  )
+}
+
+function PhotographyGalleryFields({
+  gallery,
+  onChange,
+}: {
+  gallery: PhotographyGallery
+  onChange: (updater: (gallery: PhotographyGallery) => PhotographyGallery) => void
+}) {
+  return (
+    <>
+      <Field label="Slug">
+        <input value={gallery.slug} onChange={(event) => onChange((current) => ({ ...current, slug: event.target.value }))} style={inputStyle()} />
+      </Field>
+      <Field label="City">
+        <input value={gallery.city} onChange={(event) => onChange((current) => ({ ...current, city: event.target.value }))} style={inputStyle()} />
+      </Field>
+      <Field label="Descriptor">
+        <textarea value={gallery.descriptor} onChange={(event) => onChange((current) => ({ ...current, descriptor: event.target.value }))} style={inputStyle(true)} />
+      </Field>
+      <Field label="Context Title">
+        <input value={gallery.contextTitle ?? ''} onChange={(event) => onChange((current) => ({ ...current, contextTitle: event.target.value || undefined }))} style={inputStyle()} placeholder="Optional. Hidden if blank." />
+      </Field>
+      <Field label="Context Body">
+        <textarea value={gallery.contextBody ?? ''} onChange={(event) => onChange((current) => ({ ...current, contextBody: event.target.value || undefined }))} style={inputStyle(true)} placeholder="Optional. Hidden if blank." />
+      </Field>
+      <ProjectSpotifyEditor
+        value={gallery.spotify}
+        onChange={(spotify) => onChange((current) => ({ ...current, spotify }))}
+      />
+      <GalleryImageListEditor
+        images={gallery.images}
+        imageDetails={gallery.imageDetails}
+        onChange={(images, imageDetails) => onChange((current) => ({ ...current, images, imageDetails }))}
+      />
+    </>
+  )
+}
+
+function GalleryImageListEditor({
   images,
+  imageDetails,
   onChange,
 }: {
   images: string[]
-  onChange: (images: string[]) => void
+  imageDetails?: PhotographyImageDetails[]
+  onChange: (images: string[], imageDetails: PhotographyImageDetails[] | undefined) => void
 }) {
+  function updateImage(index: number, value: string) {
+    onChange(updateAt(images, index, value), imageDetails)
+  }
+
+  function updateDetails(index: number, patch: Partial<PhotographyImageDetails>) {
+    const nextDetails = [...(imageDetails ?? [])]
+    const currentDetails = nextDetails[index] ?? {}
+    const merged = { ...currentDetails, ...patch }
+    const hasValues = Object.values(merged).some(Boolean)
+
+    if (hasValues) {
+      nextDetails[index] = merged
+    } else {
+      nextDetails[index] = {}
+    }
+
+    const trimmed = nextDetails.some((item) => item && Object.values(item).some(Boolean))
+      ? nextDetails
+      : undefined
+
+    onChange(images, trimmed)
+  }
+
+  function moveGalleryImage(index: number, direction: -1 | 1) {
+    const nextIndex = index + direction
+    if (nextIndex < 0 || nextIndex >= images.length) return
+    const nextImages = moveItem(images, index, direction)
+    const normalizedDetails = [...(imageDetails ?? Array.from({ length: images.length }, () => ({} as PhotographyImageDetails)))]
+    const nextDetails = moveItem(normalizedDetails, index, direction)
+    const trimmed = nextDetails.some((item) => item && Object.values(item).some(Boolean))
+      ? nextDetails
+      : undefined
+    onChange(nextImages, trimmed)
+  }
+
+  function removeGalleryImage(index: number) {
+    const nextImages = removeAt(images, index)
+    const nextDetails = imageDetails ? removeAt(imageDetails, index) : undefined
+    const trimmed = nextDetails && nextDetails.some((item) => item && Object.values(item).some(Boolean))
+      ? nextDetails
+      : undefined
+    onChange(nextImages, trimmed)
+  }
+
+  function addGalleryImage() {
+    onChange([...images, ''], imageDetails)
+  }
+
   return (
     <div style={{ display: 'grid', gap: '12px' }}>
       <div className="flex items-center justify-between" style={{ gap: '12px' }}>
@@ -4081,7 +4214,7 @@ function ImageListEditor({
         </span>
         <button
           type="button"
-          onClick={() => onChange([...images, ''])}
+          onClick={addGalleryImage}
           className="font-mono"
           style={{ background: 'transparent', border: '1px solid #2a2a2a', color: '#FF3120', padding: '8px 12px', cursor: 'pointer', letterSpacing: '0.1em' }}
         >
@@ -4095,13 +4228,25 @@ function ImageListEditor({
           subtitle={image || 'Gallery frame'}
           defaultOpen={index === 0}
         >
-          <ReorderButtons index={index} length={images.length} onMove={(direction) => onChange(moveItem(images, index, direction))} />
+          <ReorderButtons index={index} length={images.length} onMove={(direction) => moveGalleryImage(index, direction)} />
           <Field label={`Image ${index + 1}`}>
-            <input value={image} onChange={(event) => onChange(updateAt(images, index, event.target.value))} style={inputStyle()} />
+            <input value={image} onChange={(event) => updateImage(index, event.target.value)} style={inputStyle()} />
+          </Field>
+          <Field label="Alt Text">
+            <input value={imageDetails?.[index]?.alt ?? ''} onChange={(event) => updateDetails(index, { alt: event.target.value || undefined })} style={inputStyle()} placeholder="Optional accessibility text" />
+          </Field>
+          <Field label="Lightbox Title">
+            <input value={imageDetails?.[index]?.title ?? ''} onChange={(event) => updateDetails(index, { title: event.target.value || undefined })} style={inputStyle()} placeholder="Optional. Hidden if blank." />
+          </Field>
+          <Field label="Lightbox Meta">
+            <input value={imageDetails?.[index]?.meta ?? ''} onChange={(event) => updateDetails(index, { meta: event.target.value || undefined })} style={inputStyle()} placeholder="Optional location, date, stock, etc." />
+          </Field>
+          <Field label="Lightbox Caption">
+            <textarea value={imageDetails?.[index]?.caption ?? ''} onChange={(event) => updateDetails(index, { caption: event.target.value || undefined })} style={inputStyle(true)} placeholder="Optional. Hidden if blank." />
           </Field>
           <button
             type="button"
-            onClick={() => onChange(removeAt(images, index))}
+            onClick={() => removeGalleryImage(index)}
             className="font-mono"
             style={{ justifySelf: 'start', background: 'transparent', border: '1px solid #2a2a2a', color: '#999999', padding: '8px 12px', cursor: 'pointer', letterSpacing: '0.1em' }}
           >

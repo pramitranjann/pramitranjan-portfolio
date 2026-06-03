@@ -59,7 +59,17 @@ export interface PhotographyGallery {
   city: string
   descriptor: string
   images: string[]
+  contextTitle?: string
+  contextBody?: string
+  imageDetails?: PhotographyImageDetails[]
   spotify?: ProjectSpotifyMedia
+}
+
+export interface PhotographyImageDetails {
+  alt?: string
+  title?: string
+  meta?: string
+  caption?: string
 }
 
 export interface SpotifyReference {
@@ -584,7 +594,21 @@ function isPhotographyGallery(value: unknown): value is PhotographyGallery {
     isString(item.city) &&
     isString(item.descriptor) &&
     isStringArray(item.images) &&
+    isOptionalString(item.contextTitle) &&
+    isOptionalString(item.contextBody) &&
+    (item.imageDetails === undefined || (Array.isArray(item.imageDetails) && item.imageDetails.every(isPhotographyImageDetails))) &&
     (item.spotify === undefined || isProjectSpotifyMedia(item.spotify))
+  )
+}
+
+function isPhotographyImageDetails(value: unknown): value is PhotographyImageDetails {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return (
+    isOptionalString(item.alt) &&
+    isOptionalString(item.title) &&
+    isOptionalString(item.meta) &&
+    isOptionalString(item.caption)
   )
 }
 

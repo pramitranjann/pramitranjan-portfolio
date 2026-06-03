@@ -695,7 +695,7 @@ export function CaseStudyLayout({
             >
               {oneliner}
             </p>
-            <ProjectSpotifySection spotify={spotify} />
+            {section !== 'work' ? <ProjectSpotifySection spotify={spotify} /> : null}
           </div>
           <div className="case-study-hero-image" style={{ position: 'relative', backgroundColor: heroMedia.background, overflow: 'hidden', minHeight: heroMedia.height }}>
             {heroImage && <Image src={heroImage} alt={title} fill style={{ objectFit: heroMedia.fit, objectPosition: heroMedia.position }} sizes="50vw" />}

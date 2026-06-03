@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { useEffect } from 'react'
 import { motion, AnimatePresence, usePresenceData } from 'motion/react'
 import { playLightboxNav } from '@/lib/sounds'
+import type { PhotographyImageDetails } from '@/lib/site-content-schema'
 
 interface PhotoLightboxProps {
   src: string
@@ -10,6 +11,7 @@ interface PhotoLightboxProps {
   index: number
   total: number
   direction: number
+  details?: PhotographyImageDetails
   onClose: () => void
   onPrev: () => void
   onNext: () => void
@@ -23,6 +25,7 @@ function PhotoSlide({
   alt,
   index,
   total,
+  details,
   onPrev,
   onNext,
 }: {
@@ -30,6 +33,7 @@ function PhotoSlide({
   alt: string
   index: number
   total: number
+  details?: PhotographyImageDetails
   onPrev: () => void
   onNext: () => void
 }) {
@@ -91,11 +95,48 @@ function PhotoSlide({
       <div className="font-mono" style={{ fontSize: '9px', letterSpacing: '0.14em', color: '#444444' }}>
         {String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
       </div>
+      {details && (details.title || details.meta || details.caption) ? (
+        <div
+          style={{
+            width: 'min(90vw, 560px)',
+            padding: '12px 14px',
+            background: 'rgba(12, 12, 12, 0.82)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            boxShadow: '0 14px 40px rgba(0,0,0,0.28)',
+            backdropFilter: 'blur(10px)',
+          }}
+        >
+          {details.title ? (
+            <div
+              className="font-serif"
+              style={{ fontSize: '18px', fontStyle: 'italic', fontWeight: 'var(--font-weight-serif)', color: '#f5f2ed', lineHeight: 1.2, textWrap: 'balance' }}
+            >
+              {details.title}
+            </div>
+          ) : null}
+          {details.meta ? (
+            <div
+              className="font-mono"
+              style={{ marginTop: details.title ? '6px' : 0, fontSize: '10px', letterSpacing: '0.12em', color: '#8a8a8a', lineHeight: 1.6, textTransform: 'uppercase' }}
+            >
+              {details.meta}
+            </div>
+          ) : null}
+          {details.caption ? (
+            <p
+              className="font-mono"
+              style={{ margin: details.title || details.meta ? '8px 0 0' : 0, fontSize: '11px', letterSpacing: '0.03em', color: '#b4b4b4', lineHeight: 1.7, textWrap: 'pretty' }}
+            >
+              {details.caption}
+            </p>
+          ) : null}
+        </div>
+      ) : null}
     </motion.div>
   )
 }
 
-export function PhotoLightbox({ src, alt, index, total, direction, onClose, onPrev, onNext }: PhotoLightboxProps) {
+export function PhotoLightbox({ src, alt, index, total, direction, details, onClose, onPrev, onNext }: PhotoLightboxProps) {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -131,7 +172,7 @@ export function PhotoLightbox({ src, alt, index, total, direction, onClose, onPr
         style={{ position: 'relative', width: '100%', height: '100%' }}
       >
         <AnimatePresence custom={direction} mode="popLayout">
-          <PhotoSlide key={index} src={src} alt={alt} index={index} total={total} onPrev={onPrev} onNext={onNext} />
+          <PhotoSlide key={index} src={src} alt={alt} index={index} total={total} details={details} onPrev={onPrev} onNext={onNext} />
         </AnimatePresence>
 
         {/* Prev */}

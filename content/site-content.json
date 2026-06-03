@@ -393,7 +393,12 @@
           "/creative/photography/kl/77.jpg",
           "/creative/photography/kl/78.jpg",
           "/creative/photography/kl/79.jpg"
-        ]
+        ],
+        "spotify": {
+          "playlist": {
+            "spotifyUrl": "https://open.spotify.com/playlist/44mG2qIxKByXGayAOyZq1f?si=ac5404f0120f4197"
+          }
+        }
       },
       {
         "slug": "penang",
@@ -436,7 +441,12 @@
           "/creative/photography/penang/34.jpg",
           "/creative/photography/penang/35.jpg",
           "/creative/photography/penang/36.jpg"
-        ]
+        ],
+        "spotify": {
+          "soundtrack": {
+            "spotifyUrl": "https://open.spotify.com/track/3FXxyRH1ziiMIuRqrPvgsw?si=b865de3195d04833"
+          }
+        }
       },
       {
         "slug": "singapore",
@@ -452,7 +462,12 @@
           "/creative/photography/singapore/07.jpg",
           "/creative/photography/singapore/08.jpg",
           "/creative/photography/singapore/09.jpg"
-        ]
+        ],
+        "spotify": {
+          "soundtrack": {
+            "spotifyUrl": "https://open.spotify.com/track/3lcUQs5nyrjoHpQR9Vo2aA?si=45bb1512a6e7433a"
+          }
+        }
       },
       {
         "slug": "hcmc",
@@ -476,7 +491,12 @@
           "/creative/photography/hcmc/15.jpg",
           "/creative/photography/hcmc/16.jpg",
           "/creative/photography/hcmc/17.jpg"
-        ]
+        ],
+        "spotify": {
+          "playlist": {
+            "spotifyUrl": "https://open.spotify.com/playlist/74ChTJcY6qX2bvgnneomml?si=ca7c5ac3020f46e3"
+          }
+        }
       }
     ]
   },
