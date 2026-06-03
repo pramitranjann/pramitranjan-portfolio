@@ -38,9 +38,8 @@ function FloatingSpotifyEntry({
   artwork,
   ctaLabel,
   href,
-  isActive,
-  onPreviewToggle,
-  canPreview,
+  selected = false,
+  onSelect,
 }: {
   label: string
   title: string
@@ -48,18 +47,27 @@ function FloatingSpotifyEntry({
   artwork?: string | null
   ctaLabel: string
   href: string
-  isActive: boolean
-  onPreviewToggle?: () => void
-  canPreview?: boolean
+  selected?: boolean
+  onSelect?: () => void
 }) {
   return (
     <div
+      role={onSelect ? 'button' : undefined}
+      tabIndex={onSelect ? 0 : undefined}
+      onClick={onSelect}
+      onKeyDown={onSelect ? (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault()
+          onSelect()
+        }
+      } : undefined}
       style={{
         display: 'grid',
         gap: '12px',
         padding: '14px',
         background: '#111111',
-        border: '1px solid #242424',
+        border: selected ? '1px solid #3a3a3a' : '1px solid #242424',
+        cursor: onSelect ? 'pointer' : 'default',
       }}
     >
       <div className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.16em', color: '#666666' }}>
@@ -121,29 +129,14 @@ function FloatingSpotifyEntry({
             </div>
           ) : null}
           <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '10px' }}>
-            {canPreview ? (
-              <button
-                type="button"
-                onClick={onPreviewToggle}
-                className="font-mono"
-                style={{
-                  background: 'transparent',
-                  border: '1px solid #2a2a2a',
-                  color: isActive ? '#f5f2ed' : '#777777',
-                  padding: '8px 10px',
-                  fontSize: '10px',
-                  letterSpacing: '0.14em',
-                  cursor: 'pointer',
-                }}
-              >
-                {isActive ? 'HIDE PLAYER' : 'PLAY HERE'}
-              </button>
-            ) : null}
             <a
               href={href}
               target="_blank"
               rel="noreferrer"
-              onClick={playNav}
+              onClick={(event) => {
+                event.stopPropagation()
+                playNav()
+              }}
               className="font-mono"
               style={{
                 display: 'inline-block',
@@ -178,7 +171,6 @@ export function ProjectSpotifySection({
   )
   const [soundtrack, setSoundtrack] = useState<SpotifyTrackSummary | null>(null)
   const [playlist, setPlaylist] = useState<SpotifyPlaylistSummary | null>(null)
-  const [playerOpen, setPlayerOpen] = useState(false)
   const [activePlayer, setActivePlayer] = useState<'soundtrack' | 'playlist'>('soundtrack')
 
   useEffect(() => {
@@ -229,16 +221,6 @@ export function ProjectSpotifySection({
       setActivePlayer('playlist')
     }
   }, [hasPlaylist, hasSoundtrack])
-
-  function togglePreview(target: 'soundtrack' | 'playlist') {
-    if (playerOpen && activePlayer === target) {
-      setPlayerOpen(false)
-      return
-    }
-
-    setActivePlayer(target)
-    setPlayerOpen(true)
-  }
 
   return (
     <aside
@@ -294,9 +276,8 @@ export function ProjectSpotifySection({
             artwork={soundtrack?.coverArt ?? null}
             ctaLabel="Listen on Spotify"
             href={soundtrackOpenUrl!}
-            canPreview={Boolean(soundtrackEmbedUrl)}
-            isActive={playerOpen && activePlayer === 'soundtrack'}
-            onPreviewToggle={() => togglePreview('soundtrack')}
+            selected={resolvedActivePlayer === 'soundtrack'}
+            onSelect={soundtrackEmbedUrl && hasPlaylist ? () => setActivePlayer('soundtrack') : undefined}
           />
         ) : null}
 
@@ -308,13 +289,12 @@ export function ProjectSpotifySection({
             artwork={playlist?.coverArt ?? null}
             ctaLabel="Open playlist"
             href={playlistOpenUrl!}
-            canPreview={Boolean(playlistEmbedUrl)}
-            isActive={playerOpen && activePlayer === 'playlist'}
-            onPreviewToggle={() => togglePreview('playlist')}
+            selected={resolvedActivePlayer === 'playlist'}
+            onSelect={playlistEmbedUrl && hasSoundtrack ? () => setActivePlayer('playlist') : undefined}
           />
         ) : null}
 
-        {playerOpen && activeEmbedUrl ? (
+        {activeEmbedUrl ? (
           <div
             style={{
               paddingTop: '2px',
