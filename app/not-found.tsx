@@ -81,16 +81,6 @@ export default function NotFound() {
           >
             BACK TO HOME →
           </Link>
-          {/* Film strip stripe at bottom */}
-          <div style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: '4px',
-            background: 'repeating-linear-gradient(90deg, #FF3120 0px, #FF3120 24px, transparent 24px, transparent 36px)',
-            opacity: 0.3,
-          }} />
         </section>
       </main>
       <Footer />
