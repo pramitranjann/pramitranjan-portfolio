@@ -15,13 +15,13 @@ export default async function DashboardPage() {
   const localWriteEnabled = isLocalDashboardWriteEnabled()
 
   return (
-    <main style={{ minHeight: '100vh', background: '#0a0a0a', padding: '40px 24px 64px' }}>
-      <div style={{ maxWidth: '1080px', margin: '0 auto', display: 'grid', gap: '24px' }}>
+    <main className="dashboard-shell" style={{ minHeight: '100vh', background: '#0a0a0a', padding: '40px 24px 64px' }}>
+      <div className="dashboard-stack" style={{ maxWidth: '1080px', margin: '0 auto', display: 'grid', gap: '24px' }}>
         <div>
           <p className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#FF3120', marginBottom: '12px' }}>
             DASHBOARD_ · {getDashboardWriteModeLabel()}
           </p>
-          <h1 className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 'var(--font-weight-serif)', color: '#f5f2ed', lineHeight: 1.05, marginBottom: '12px' }}>
+          <h1 className="font-serif dashboard-page-title" style={{ fontSize: 'var(--text-h1)', fontWeight: 'var(--font-weight-serif)', color: '#f5f2ed', lineHeight: 1.05, marginBottom: '12px' }}>
             {writeMode === 'github'
               ? 'Edit on the dashboard, publish to GitHub, and let Vercel deploy it.'
               : writeMode === 'local'

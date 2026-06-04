@@ -1044,8 +1044,8 @@ git push`
     : null
 
   return (
-    <div style={{ display: 'grid', gap: '24px' }}>
-      <div style={{ border: `1px solid ${saveEnabled ? '#1f1f1f' : '#5f2a23'}`, background: '#111111', padding: '16px 18px' }}>
+    <div className="dashboard-editor-shell" style={{ display: 'grid', gap: '24px' }}>
+      <div className="dashboard-info-card" style={{ border: `1px solid ${saveEnabled ? '#1f1f1f' : '#5f2a23'}`, background: '#111111', padding: '16px 18px' }}>
         <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: saveEnabled ? '#999999' : '#f5f2ed', lineHeight: 1.8 }}>
           {writeMode === 'github'
             ? 'GitHub publish mode: SAVE CHANGES commits this content JSON to your configured repo branch. Vercel will pick up that commit and deploy it.'
@@ -1056,7 +1056,7 @@ git push`
       </div>
 
       {showGitPrompt && writeMode === 'local' ? (
-        <div style={{ border: '1px solid #FF3120', background: '#111111', padding: '16px 18px', display: 'grid', gap: '14px' }}>
+        <div className="dashboard-prompt-card" style={{ border: '1px solid #FF3120', background: '#111111', padding: '16px 18px', display: 'grid', gap: '14px' }}>
           <div className="flex items-center justify-between" style={{ gap: '12px', flexWrap: 'wrap' }}>
             <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#f5f2ed', lineHeight: 1.7 }}>
               Saved to <span style={{ color: '#FF3120' }}>content/site-content.json</span>. Next step: review the diff, commit it, and push it.
@@ -1102,7 +1102,7 @@ git push`
       ) : null}
 
       {lastCommitUrl && writeMode === 'github' ? (
-        <div style={{ border: '1px solid #1f1f1f', background: '#111111', padding: '16px 18px' }}>
+        <div className="dashboard-info-card" style={{ border: '1px solid #1f1f1f', background: '#111111', padding: '16px 18px' }}>
           <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#f5f2ed', lineHeight: 1.7, margin: 0 }}>
             Published to GitHub.{' '}
             <a href={lastCommitUrl} target="_blank" rel="noreferrer" style={{ color: '#FF3120', textDecoration: 'none' }}>
@@ -1112,11 +1112,11 @@ git push`
         </div>
       ) : null}
 
-      <div className="flex items-center justify-between" style={{ gap: '16px', flexWrap: 'wrap' }}>
-        <p className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.08em' }}>
+      <div className="dashboard-toolbar" style={{ display: 'grid', gap: '14px' }}>
+        <p className="font-mono dashboard-status-line" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.08em' }}>
           {isDirty ? `${status} · UNSAVED` : status}
         </p>
-        <div className="flex" style={{ gap: '12px', flexWrap: 'wrap' }}>
+        <div className="dashboard-actions" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
           <button
             type="button"
             onClick={handleEditingToggle}
@@ -1177,7 +1177,7 @@ git push`
       </div>
 
       {!editingEnabled && saveEnabled ? (
-        <div style={{ border: '1px solid #1f1f1f', background: '#111111', padding: '16px 18px' }}>
+        <div className="dashboard-info-card" style={{ border: '1px solid #1f1f1f', background: '#111111', padding: '16px 18px' }}>
           <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.7 }}>
             Dashboard is currently read-only. Use <span style={{ color: '#f5f2ed' }}>ENABLE EDITING</span> to confirm you want to make changes before any field becomes editable.
           </p>
@@ -1185,7 +1185,7 @@ git push`
       ) : null}
 
       <div className="dashboard-grid" style={{ display: 'grid', gridTemplateColumns: '260px minmax(0, 1fr)', gap: '24px', alignItems: 'start' }}>
-        <aside style={{ border: '1px solid #1f1f1f', background: '#111111', padding: '16px', position: 'sticky', top: '96px', maxHeight: 'calc(100vh - 112px)', overflowY: 'auto' }}>
+        <aside className="dashboard-sidebar" style={{ border: '1px solid #1f1f1f', background: '#111111', padding: '16px', position: 'sticky', top: '96px', maxHeight: 'calc(100vh - 112px)', overflowY: 'auto' }}>
           <div style={{ display: 'grid', gap: '18px' }}>
             <SidebarGroup title="SITE PAGES">
               <SidebarButton active={activePage === 'homepage'} label="Homepage" onClick={() => setActivePage('homepage')} />
