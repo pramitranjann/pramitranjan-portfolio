@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import type { DashboardWriteMode } from '@/lib/dashboard-storage'
 import { deriveCaseStudyMediaBlocks } from '@/lib/case-study-media'
 import { applyTemplate, CASE_STUDY_TEMPLATES } from '@/lib/case-study-templates'
 import type {
@@ -42,7 +43,9 @@ import type {
 
 type EditorProps = {
   initialContent: SiteContent
+  saveEnabled: boolean
   localWriteEnabled: boolean
+  writeMode: DashboardWriteMode
 }
 
 type PageKey =
@@ -767,7 +770,7 @@ function ReorderButtons({
   )
 }
 
-export function DashboardEditor({ initialContent, localWriteEnabled }: EditorProps) {
+export function DashboardEditor({ initialContent, saveEnabled, localWriteEnabled, writeMode }: EditorProps) {
   const gitCommands = `git status
 git diff
 git add -A
@@ -786,6 +789,7 @@ git push`
   const [saveHovered, setSaveHovered] = useState(false)
   const [showGitPrompt, setShowGitPrompt] = useState(false)
   const [copiedGitCommands, setCopiedGitCommands] = useState(false)
+  const [lastCommitUrl, setLastCommitUrl] = useState<string | null>(null)
   const [pendingNewSection, setPendingNewSection] = useState<CaseStudySection | null>(null)
   const [pendingTemplateId, setPendingTemplateId] = useState('standard-ux')
 
@@ -817,7 +821,7 @@ git push`
   }
 
   function handleEditingToggle() {
-    if (!localWriteEnabled) return
+    if (!saveEnabled) return
 
     if (!editingEnabled) {
       requestEditingAccess()
@@ -976,8 +980,8 @@ git push`
   }
 
   async function handleSave() {
-    if (!localWriteEnabled) {
-      setStatus('Vercel mode is view-only. Save locally, then commit and push.')
+    if (!saveEnabled) {
+      setStatus('Publishing is not configured here.')
       return
     }
 
@@ -1002,11 +1006,19 @@ git push`
       return
     }
 
+    const data = await response.json().catch(() => null)
     setSavedContent(content)
-    setStatus('Saved')
+    if (data?.mode === 'github') {
+      setLastCommitUrl(typeof data?.commitUrl === 'string' ? data.commitUrl : null)
+      setStatus('Published. Vercel should deploy this commit shortly.')
+      setShowGitPrompt(false)
+    } else {
+      setLastCommitUrl(null)
+      setStatus('Saved locally')
+      setShowGitPrompt(true)
+      setCopiedGitCommands(false)
+    }
     setSaving(false)
-    setShowGitPrompt(true)
-    setCopiedGitCommands(false)
   }
 
   async function handleCopyGitCommands() {
@@ -1033,15 +1045,17 @@ git push`
 
   return (
     <div style={{ display: 'grid', gap: '24px' }}>
-      <div style={{ border: `1px solid ${localWriteEnabled ? '#1f1f1f' : '#5f2a23'}`, background: '#111111', padding: '16px 18px' }}>
-        <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: localWriteEnabled ? '#999999' : '#f5f2ed', lineHeight: 1.8 }}>
-          {localWriteEnabled
+      <div style={{ border: `1px solid ${saveEnabled ? '#1f1f1f' : '#5f2a23'}`, background: '#111111', padding: '16px 18px' }}>
+        <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: saveEnabled ? '#999999' : '#f5f2ed', lineHeight: 1.8 }}>
+          {writeMode === 'github'
+            ? 'GitHub publish mode: SAVE CHANGES commits this content JSON to your configured repo branch. Vercel will pick up that commit and deploy it.'
+            : writeMode === 'local'
             ? 'Local save mode: SAVE CHANGES writes to content/site-content.json on this machine. After that, review the git diff, commit it, and push it.'
-            : 'Vercel mode: this dashboard is read-only for persistence. Use it locally if you want SAVE CHANGES to write to content/site-content.json.'}
+            : 'This dashboard is read-only for persistence. Configure GitHub publishing to make phone edits deployable.'}
         </p>
       </div>
 
-      {showGitPrompt && localWriteEnabled ? (
+      {showGitPrompt && writeMode === 'local' ? (
         <div style={{ border: '1px solid #FF3120', background: '#111111', padding: '16px 18px', display: 'grid', gap: '14px' }}>
           <div className="flex items-center justify-between" style={{ gap: '12px', flexWrap: 'wrap' }}>
             <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#f5f2ed', lineHeight: 1.7 }}>
@@ -1087,6 +1101,17 @@ git push`
         </div>
       ) : null}
 
+      {lastCommitUrl && writeMode === 'github' ? (
+        <div style={{ border: '1px solid #1f1f1f', background: '#111111', padding: '16px 18px' }}>
+          <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#f5f2ed', lineHeight: 1.7, margin: 0 }}>
+            Published to GitHub.{' '}
+            <a href={lastCommitUrl} target="_blank" rel="noreferrer" style={{ color: '#FF3120', textDecoration: 'none' }}>
+              View commit
+            </a>
+          </p>
+        </div>
+      ) : null}
+
       <div className="flex items-center justify-between" style={{ gap: '16px', flexWrap: 'wrap' }}>
         <p className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.08em' }}>
           {isDirty ? `${status} · UNSAVED` : status}
@@ -1096,8 +1121,8 @@ git push`
             type="button"
             onClick={handleEditingToggle}
             className="font-mono"
-            disabled={!localWriteEnabled}
-            style={{ background: editingEnabled ? '#181818' : 'transparent', border: '1px solid #2a2a2a', color: !localWriteEnabled ? '#444444' : editingEnabled ? '#f5f2ed' : '#999999', padding: '12px 16px', letterSpacing: '0.1em', cursor: localWriteEnabled ? 'pointer' : 'default' }}
+            disabled={!saveEnabled}
+            style={{ background: editingEnabled ? '#181818' : 'transparent', border: '1px solid #2a2a2a', color: !saveEnabled ? '#444444' : editingEnabled ? '#f5f2ed' : '#999999', padding: '12px 16px', letterSpacing: '0.1em', cursor: saveEnabled ? 'pointer' : 'default' }}
           >
             {editingEnabled ? 'TURN EDITING OFF' : 'ENABLE EDITING'}
           </button>
@@ -1130,28 +1155,28 @@ git push`
           <button
             type="button"
             onClick={handleSave}
-            disabled={saving || !editingEnabled || !isDirty || !localWriteEnabled}
+            disabled={saving || !editingEnabled || !isDirty || !saveEnabled}
             className="font-mono"
             onMouseEnter={() => setSaveHovered(true)}
             onMouseLeave={() => setSaveHovered(false)}
             style={{
-              background: saving || !editingEnabled || !isDirty || !localWriteEnabled ? '#3a1d18' : saveHovered ? '#ff5a4d' : '#FF3120',
+              background: saving || !editingEnabled || !isDirty || !saveEnabled ? '#3a1d18' : saveHovered ? '#ff5a4d' : '#FF3120',
               border: 'none',
-              color: saving || !editingEnabled || !isDirty || !localWriteEnabled ? '#7a5a55' : '#0d0d0d',
+              color: saving || !editingEnabled || !isDirty || !saveEnabled ? '#7a5a55' : '#0d0d0d',
               padding: '12px 16px',
               letterSpacing: '0.1em',
-              cursor: saving || !editingEnabled || !isDirty || !localWriteEnabled ? 'default' : 'pointer',
-              boxShadow: saveHovered && editingEnabled && isDirty && localWriteEnabled ? '0 0 0 1px rgba(255, 49, 32, 0.45), 0 8px 28px rgba(255, 49, 32, 0.22)' : 'none',
-              transform: saveHovered && editingEnabled && isDirty && localWriteEnabled ? 'translateY(-1px)' : 'none',
+              cursor: saving || !editingEnabled || !isDirty || !saveEnabled ? 'default' : 'pointer',
+              boxShadow: saveHovered && editingEnabled && isDirty && saveEnabled ? '0 0 0 1px rgba(255, 49, 32, 0.45), 0 8px 28px rgba(255, 49, 32, 0.22)' : 'none',
+              transform: saveHovered && editingEnabled && isDirty && saveEnabled ? 'translateY(-1px)' : 'none',
               transition: 'background 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease',
             }}
           >
-            {saving ? 'SAVING...' : 'SAVE CHANGES'}
+            {saving ? (writeMode === 'github' ? 'PUBLISHING...' : 'SAVING...') : (writeMode === 'github' ? 'PUBLISH CHANGES' : 'SAVE CHANGES')}
           </button>
         </div>
       </div>
 
-      {!editingEnabled && localWriteEnabled ? (
+      {!editingEnabled && saveEnabled ? (
         <div style={{ border: '1px solid #1f1f1f', background: '#111111', padding: '16px 18px' }}>
           <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.7 }}>
             Dashboard is currently read-only. Use <span style={{ color: '#f5f2ed' }}>ENABLE EDITING</span> to confirm you want to make changes before any field becomes editable.
@@ -1302,7 +1327,7 @@ git push`
           </div>
         </aside>
 
-        <fieldset disabled={!editingEnabled || saving || !localWriteEnabled} style={{ display: 'grid', gap: '24px', opacity: !editingEnabled || !localWriteEnabled ? 0.58 : 1, transition: 'opacity 0.18s ease', minWidth: 0 }}>
+        <fieldset disabled={!editingEnabled || saving || !saveEnabled} style={{ display: 'grid', gap: '24px', opacity: !editingEnabled || !saveEnabled ? 0.58 : 1, transition: 'opacity 0.18s ease', minWidth: 0 }}>
           {activePage === 'homepage' ? (
             <HomepageEditor content={content} updateSection={updateSection} localWriteEnabled={localWriteEnabled} />
           ) : null}

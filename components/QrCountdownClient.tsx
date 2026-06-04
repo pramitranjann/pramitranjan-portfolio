@@ -1,13 +1,31 @@
 'use client'
 
+import { track } from '@vercel/analytics'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const REDIRECT_DELAY_MS = 4200
 const TICK_MS = 100
+const STATUS_LINES = [
+  'Dusting off the portfolio.',
+  'Straightening the typography.',
+  'Opening the good stuff.',
+]
 
 export function QrCountdownClient() {
   const [remainingMs, setRemainingMs] = useState(REDIRECT_DELAY_MS)
+  const hasTrackedView = useRef(false)
+  const hasRedirected = useRef(false)
+
+  useEffect(() => {
+    if (hasTrackedView.current) return
+    hasTrackedView.current = true
+
+    track('QR Page Viewed', {
+      hasReferrer: document.referrer.length > 0,
+      viewportWidth: window.innerWidth,
+    })
+  }, [])
 
   useEffect(() => {
     const start = Date.now()
@@ -17,9 +35,15 @@ export function QrCountdownClient() {
       const nextRemaining = Math.max(0, REDIRECT_DELAY_MS - elapsed)
       setRemainingMs(nextRemaining)
 
-      if (nextRemaining === 0) {
+      if (nextRemaining === 0 && !hasRedirected.current) {
+        hasRedirected.current = true
         window.clearInterval(interval)
-        window.location.replace('https://www.pramitranjan.com/')
+        track('QR Auto Redirected', {
+          redirectDelayMs: REDIRECT_DELAY_MS,
+        })
+        window.setTimeout(() => {
+          window.location.replace('https://www.pramitranjan.com/')
+        }, 120)
       }
     }, TICK_MS)
 
@@ -28,6 +52,10 @@ export function QrCountdownClient() {
 
   const seconds = Math.max(1, Math.ceil(remainingMs / 1000))
   const progress = 1 - remainingMs / REDIRECT_DELAY_MS
+  const statusIndex = Math.min(
+    STATUS_LINES.length - 1,
+    Math.floor((progress * STATUS_LINES.length))
+  )
 
   return (
     <div style={{ display: 'grid', gap: '18px' }}>
@@ -64,10 +92,16 @@ export function QrCountdownClient() {
         }}
       >
         <span>REDIRECTING IN {seconds}S</span>
+        <span style={{ color: 'var(--color-label)', letterSpacing: '0.04em', textTransform: 'none' }}>{STATUS_LINES[statusIndex]}</span>
         <div className="qr-actions-grid" style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
           <Link
             href="/"
             className="font-mono"
+            onClick={() => {
+              track('QR Skip Clicked', {
+                secondsRemaining: seconds,
+              })
+            }}
             style={{
               minHeight: '40px',
               padding: '10px 18px',

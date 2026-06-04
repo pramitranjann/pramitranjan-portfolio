@@ -1,7 +1,8 @@
 import { revalidatePath } from 'next/cache'
 import { NextResponse } from 'next/server'
 import { isValidAdminSessionToken, getAdminCookieName } from '@/lib/admin-auth'
-import { isLocalDashboardWriteEnabled } from '@/lib/dashboard-storage'
+import { getDashboardWriteMode } from '@/lib/dashboard-storage'
+import { publishSiteContentToGitHub } from '@/lib/github-content'
 import { getSiteContent, saveSiteContent } from '@/lib/site-content'
 import { isSiteContent } from '@/lib/site-content-schema'
 
@@ -32,21 +33,40 @@ export async function PUT(request: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  if (!isLocalDashboardWriteEnabled()) {
-    return NextResponse.json(
-      {
-        error: 'Dashboard saves are disabled on Vercel. Run the site locally, save to site-content.json, then commit and push the file changes.',
-      },
-      { status: 409 }
-    )
-  }
+  try {
+    const body: unknown = await request.json()
+    if (!isSiteContent(body)) {
+      return NextResponse.json({ error: 'Invalid content shape' }, { status: 400 })
+    }
 
-  const body: unknown = await request.json()
-  if (!isSiteContent(body)) {
-    return NextResponse.json({ error: 'Invalid content shape' }, { status: 400 })
-  }
+    const writeMode = getDashboardWriteMode()
 
-  await saveSiteContent(body)
-  revalidatePath('/', 'layout')
-  return NextResponse.json({ ok: true })
+    if (writeMode === 'readonly') {
+      return NextResponse.json(
+        {
+          error: 'Dashboard saves are not configured here. Set up GitHub publish env vars or run the site locally.',
+        },
+        { status: 409 }
+      )
+    }
+
+    if (writeMode === 'local') {
+      await saveSiteContent(body)
+      revalidatePath('/', 'layout')
+      return NextResponse.json({ ok: true, mode: 'local' })
+    }
+
+    const result = await publishSiteContentToGitHub(body)
+    revalidatePath('/', 'layout')
+    return NextResponse.json({
+      ok: true,
+      mode: 'github',
+      commitSha: result.commitSha,
+      commitUrl: result.commitUrl,
+      path: result.path,
+    })
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Save failed'
+    return NextResponse.json({ error: message }, { status: 500 })
+  }
 }
