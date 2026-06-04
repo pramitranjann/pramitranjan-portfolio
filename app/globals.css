@@ -210,6 +210,40 @@ body.carousel-reengaging main {
   flex-wrap: wrap;
 }
 
+.qr-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+}
+
+.qr-actions-grid {
+  align-items: flex-start;
+}
+
+.qr-card-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.75fr);
+}
+
+@media (max-width: 900px) {
+  .qr-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .qr-detail-grid > div:first-child {
+    border-right: none !important;
+    border-bottom: 1px solid #1f1f1f;
+  }
+
+  .qr-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .qr-card-grid > div:first-child {
+    border-right: none !important;
+    border-bottom: 1px solid #1f1f1f;
+  }
+}
+
 /* Arrow nudge — forward links */
 .arrow-nudge {
   display: inline-block;
