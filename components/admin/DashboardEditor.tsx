@@ -1064,16 +1064,6 @@ git push`
 
   return (
     <div className="dashboard-editor-shell" style={{ display: 'grid', gap: '24px' }}>
-      <div className="dashboard-info-card" style={{ border: `1px solid ${saveEnabled ? '#1f1f1f' : '#5f2a23'}`, background: '#111111', padding: '16px 18px' }}>
-        <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: saveEnabled ? '#999999' : '#f5f2ed', lineHeight: 1.8 }}>
-          {writeMode === 'github'
-            ? 'GitHub publish mode: SAVE CHANGES commits this content JSON to your configured repo branch. Vercel will pick up that commit and deploy it.'
-            : writeMode === 'local'
-            ? 'Local save mode: SAVE CHANGES writes to content/site-content.json on this machine. After that, review the git diff, commit it, and push it.'
-            : 'This dashboard is read-only for persistence. Configure GitHub publishing to make phone edits deployable.'}
-        </p>
-      </div>
-
       {showGitPrompt && writeMode === 'local' ? (
         <div className="dashboard-prompt-card" style={{ border: '1px solid #FF3120', background: '#111111', padding: '16px 18px', display: 'grid', gap: '14px' }}>
           <div className="flex items-center justify-between" style={{ gap: '12px', flexWrap: 'wrap' }}>
