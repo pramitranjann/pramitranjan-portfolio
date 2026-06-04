@@ -81,22 +81,6 @@ export function QrCountdownClient() {
           >
             SKIP THE SUSPENSE <span className="arrow-nudge" style={{ marginLeft: '8px' }}>→</span>
           </Link>
-          <Link
-            href="/about"
-            className="font-mono"
-            style={{
-              minHeight: '40px',
-              padding: '10px 18px',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'var(--color-body)',
-              border: '1px solid var(--color-divider)',
-              textDecoration: 'none',
-            }}
-          >
-            TAKE THE SCENIC ROUTE
-          </Link>
         </div>
       </div>
     </div>
