@@ -37,7 +37,7 @@ export function PhotographyIndexClient({
               const inner = (
                 <div className="portfolio-card flex flex-col h-full" style={{ backgroundColor: '#1c1c1c', padding: cardStyle.cardPadding }}>
                   <div style={{ position: 'relative', width: '100%', aspectRatio: cardStyle.imageAspectRatio, backgroundColor: '#252525', border: '1px solid #333333', marginBottom: '12px', overflow: 'hidden' }}>
-                    <Image src={city.cover} alt={city.title} fill priority={index < 4} style={{ objectFit: 'cover', objectPosition: city.imagePosition ?? 'center', transform: `scale(${city.imageScale ?? '1'})` }} sizes="(max-width: 768px) 50vw, 25vw" />
+                    <Image className="card-media-image" src={city.cover} alt={city.title} fill priority={index < 4} style={{ objectFit: 'cover', objectPosition: city.imagePosition ?? 'center', transform: `scale(${city.imageScale ?? '1'})` }} sizes="(max-width: 768px) 50vw, 25vw" />
                   </div>
                   <h2 className="font-serif" style={{ fontSize: cardStyle.titleSize, fontWeight: 'var(--font-weight-serif)', color: '#f5f2ed', marginBottom: '4px' }}>{city.title}</h2>
                   <p className="font-mono flex-1" style={{ fontSize: cardStyle.bodySize, letterSpacing: '0.04em', color: '#999999', lineHeight: 1.6, marginBottom: '12px' }}>{city.desc}</p>

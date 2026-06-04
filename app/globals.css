@@ -135,6 +135,13 @@ body.carousel-reengaging main {
 /* Card images — fill container correctly regardless of source dimensions */
 .portfolio-card img { object-fit: cover; object-position: top; }
 
+@media (max-width: 767px) {
+  .portfolio-card .card-media-image {
+    object-fit: contain !important;
+    object-position: center !important;
+  }
+}
+
 /* Card hover — subtle lift only; richer state is handled by the preview layer */
 .portfolio-card {
   border: 1px solid #2a2a2a;
@@ -447,7 +454,7 @@ body.carousel-reengaging main {
 @media (max-width: 767px) {
   .contact-links-row {
     display: grid !important;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px !important;
     justify-items: stretch;
   }

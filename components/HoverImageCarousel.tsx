@@ -83,6 +83,7 @@ export function HoverImageCarousel({
           src={image}
           alt={alt}
           fill
+          className="card-media-image"
           sizes={sizes}
           priority={priorityFirstFrame && index === 0}
           onError={() => {

@@ -56,8 +56,8 @@ export function CreativeListingCard({
           marginBottom: '12px',
           overflow: 'hidden',
         }}
-      >
-        {cardImages.length ? <Image src={cardImages[0]} alt={title} fill priority={priorityImage} style={{ objectFit: cardStyle?.imageFit ?? 'cover', objectPosition: imagePosition, transform: `scale(${imageScale ?? '1'})` }} sizes="(max-width: 768px) 50vw, 25vw" /> : null}
+        >
+        {cardImages.length ? <Image className="card-media-image" src={cardImages[0]} alt={title} fill priority={priorityImage} style={{ objectFit: cardStyle?.imageFit ?? 'cover', objectPosition: imagePosition, transform: `scale(${imageScale ?? '1'})` }} sizes="(max-width: 768px) 50vw, 25vw" /> : null}
       </div>
       <h3 className="font-serif" style={{ fontSize: cardStyle?.titleSize ?? 'var(--text-body)', fontWeight: 'var(--font-weight-serif)', color: 'var(--color-heading)', marginBottom: '4px' }}>
         <span className="card-title-inner">{title}</span>
