@@ -251,11 +251,20 @@ body.carousel-reengaging main {
     grid-template-columns: 1fr !important;
   }
 
+  .dashboard-mobile-nav-toggle {
+    display: block !important;
+  }
+
   .dashboard-sidebar {
     position: static !important;
     top: auto !important;
     max-height: none !important;
     overflow: visible !important;
+    display: none;
+  }
+
+  .dashboard-sidebar.dashboard-sidebar-open {
+    display: block;
   }
 }
 

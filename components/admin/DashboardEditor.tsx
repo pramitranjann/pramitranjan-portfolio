@@ -790,6 +790,7 @@ git push`
   const [showGitPrompt, setShowGitPrompt] = useState(false)
   const [copiedGitCommands, setCopiedGitCommands] = useState(false)
   const [lastCommitUrl, setLastCommitUrl] = useState<string | null>(null)
+  const [mobileNavigatorOpen, setMobileNavigatorOpen] = useState(false)
   const [pendingNewSection, setPendingNewSection] = useState<CaseStudySection | null>(null)
   const [pendingTemplateId, setPendingTemplateId] = useState('standard-ux')
 
@@ -1042,6 +1043,24 @@ git push`
   const activePhotographyGallery = activePage.startsWith('photo-gallery:')
     ? content.photography.galleries.find((item) => item.slug === activePage.replace('photo-gallery:', '')) ?? null
     : null
+  const activePageLabel =
+    activePage === 'homepage' ? 'Homepage'
+    : activePage === 'site-pages' ? 'Site Pages'
+    : activePage === 'about-page' ? 'About Page'
+    : activePage === 'work-page' ? 'Work Page'
+    : activePage === 'play-page' ? 'Play Page'
+    : activePage === 'creative-page' ? 'Creative Page'
+    : activePage === 'photography-page' ? 'Photography Page'
+    : activePage === 'case-study-ui' ? 'Case Study Defaults'
+    : activePage === 'design-system' ? 'Design System'
+    : activePage === 'motion' ? 'Motion'
+    : activeCaseStudy?.title
+      ? activeCaseStudy.hidden ? `${activeCaseStudy.title} [HIDDEN]` : activeCaseStudy.title
+      : activePhotographyGallery?.city || activePhotographyGallery?.slug || 'Current section'
+
+  useEffect(() => {
+    setMobileNavigatorOpen(false)
+  }, [activePage])
 
   return (
     <div className="dashboard-editor-shell" style={{ display: 'grid', gap: '24px' }}>
@@ -1184,8 +1203,33 @@ git push`
         </div>
       ) : null}
 
+      <div className="dashboard-mobile-nav-toggle" style={{ display: 'none' }}>
+        <button
+          type="button"
+          onClick={() => setMobileNavigatorOpen((current) => !current)}
+          className="font-mono"
+          style={{
+            width: '100%',
+            minHeight: '44px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '12px',
+            background: '#111111',
+            border: '1px solid #1f1f1f',
+            color: '#f5f2ed',
+            padding: '12px 14px',
+            letterSpacing: '0.1em',
+            cursor: 'pointer',
+          }}
+        >
+          <span style={{ minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{activePageLabel}</span>
+          <span style={{ color: '#FF3120', flexShrink: 0 }}>{mobileNavigatorOpen ? 'HIDE' : 'JUMP'}</span>
+        </button>
+      </div>
+
       <div className="dashboard-grid" style={{ display: 'grid', gridTemplateColumns: '260px minmax(0, 1fr)', gap: '24px', alignItems: 'start' }}>
-        <aside className="dashboard-sidebar" style={{ border: '1px solid #1f1f1f', background: '#111111', padding: '16px', position: 'sticky', top: '96px', maxHeight: 'calc(100vh - 112px)', overflowY: 'auto' }}>
+        <aside className={`dashboard-sidebar${mobileNavigatorOpen ? ' dashboard-sidebar-open' : ''}`} style={{ border: '1px solid #1f1f1f', background: '#111111', padding: '16px', position: 'sticky', top: '96px', maxHeight: 'calc(100vh - 112px)', overflowY: 'auto' }}>
           <div style={{ display: 'grid', gap: '18px' }}>
             <SidebarGroup title="SITE PAGES">
               <SidebarButton active={activePage === 'homepage'} label="Homepage" onClick={() => setActivePage('homepage')} />
