@@ -244,6 +244,47 @@ body.carousel-reengaging main {
   }
 }
 
+@media (max-width: 767px) {
+  .qr-page-shell {
+    min-height: 100dvh !important;
+  }
+
+  .qr-page-stage {
+    min-height: calc(100dvh - 57px) !important;
+    padding: 16px 16px 20px !important;
+    align-items: stretch !important;
+  }
+
+  .qr-card-grid {
+    align-self: center;
+  }
+
+  .qr-card-copy {
+    padding: 22px 18px !important;
+  }
+
+  .qr-card-actions {
+    padding: 18px !important;
+    gap: 18px !important;
+  }
+
+  .qr-card-title {
+    font-size: clamp(34px, 11vw, 48px) !important;
+    line-height: 0.98 !important;
+    margin-bottom: 14px !important;
+  }
+
+  .qr-card-body {
+    font-size: 14px !important;
+    line-height: 1.65 !important;
+    margin-bottom: 20px !important;
+  }
+
+  .qr-actions-grid > a {
+    width: 100%;
+  }
+}
+
 /* Arrow nudge — forward links */
 .arrow-nudge {
   display: inline-block;

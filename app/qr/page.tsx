@@ -18,12 +18,14 @@ export default function QrPage() {
     <>
       <Nav />
       <main
+        className="qr-page-shell"
         style={{
           paddingTop: '57px',
           minHeight: '100vh',
         }}
       >
         <section
+          className="qr-page-stage"
           style={{
             minHeight: 'calc(100vh - 57px)',
             padding: '28px 40px 40px',
@@ -40,14 +42,14 @@ export default function QrPage() {
               background: 'var(--color-card)',
             }}
           >
-            <div style={{ padding: 'clamp(28px, 4vw, 44px)', borderRight: '1px solid var(--color-divider)' }}>
+            <div className="qr-card-copy" style={{ padding: 'clamp(28px, 4vw, 44px)', borderRight: '1px solid var(--color-divider)' }}>
               <GsapReveal>
                 <div data-reveal>
                   <AnimatedEyebrow label="QR_" marginBottom="20px" />
                 </div>
                 <h1
                   data-reveal
-                  className="font-serif"
+                  className="font-serif qr-card-title"
                   style={{
                     fontSize: 'clamp(44px, 6vw, 72px)',
                     fontWeight: 'var(--font-weight-serif)',
@@ -62,7 +64,7 @@ export default function QrPage() {
                 </h1>
                 <p
                   data-reveal
-                  className="font-mono"
+                  className="font-mono qr-card-body"
                   style={{
                     fontSize: 'var(--text-body)',
                     letterSpacing: '0.03em',
@@ -80,7 +82,7 @@ export default function QrPage() {
               </GsapReveal>
             </div>
 
-            <div style={{ padding: 'clamp(24px, 3vw, 32px)', display: 'grid', alignContent: 'space-between', gap: '24px' }}>
+            <div className="qr-card-actions" style={{ padding: 'clamp(24px, 3vw, 32px)', display: 'grid', alignContent: 'space-between', gap: '24px' }}>
               <GsapReveal>
                 <div
                   data-reveal
