@@ -43,14 +43,14 @@ export function Contact() {
         {copy.contactAccent}
       </div>
 
-      <div className="reveal-text flex justify-center" style={{ gap: '28px' }}>
+      <div className="reveal-text contact-links-row flex justify-center" style={{ gap: '28px', flexWrap: 'wrap' }}>
         {copy.contactLinks.map(({ label, href }) => (
           <a
             key={label}
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="social-link font-mono"
+            className="social-link contact-link-button font-mono"
             style={{
               fontSize: 'var(--text-meta)',
               letterSpacing: '0.14em',
@@ -58,7 +58,7 @@ export function Contact() {
               border: '1px solid #FF3120',
               padding: '10px 20px',
               textDecoration: 'none',
-              
+              minHeight: '44px',
             }}
           >
             {label}

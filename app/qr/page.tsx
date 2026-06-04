@@ -60,7 +60,7 @@ export default function QrPage() {
                     textWrap: 'balance',
                   }}
                 >
-                  Strong curiosity. Respect.
+                  Curiosity detected.
                 </h1>
                 <p
                   data-reveal
@@ -70,11 +70,11 @@ export default function QrPage() {
                     letterSpacing: '0.03em',
                     color: 'var(--color-body)',
                     lineHeight: 1.8,
-                    maxWidth: '40ch',
-                    marginBottom: '28px',
+                    maxWidth: '32ch',
+                    marginBottom: '20px',
                   }}
                 >
-                  You scanned the square. That earns a brief detour, a small wink, and then a clean handoff to the actual portfolio.
+                  That&apos;s either efficient or suspicious.
                 </p>
                 <div data-reveal className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.14em', color: '#666666' }}>
                   SCAN COMPLETE
@@ -96,7 +96,7 @@ export default function QrPage() {
                   }}
                 >
                   <span style={{ color: 'var(--color-red)' }}>NEXT MOVE</span>
-                  <span>Short pause. Then redirect.</span>
+                  <span>Short pause. Then we pretend this was all very technical.</span>
                 </div>
                 <div data-reveal style={{ marginTop: '18px' }}>
                   <QrCountdownClient />

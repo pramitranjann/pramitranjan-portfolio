@@ -440,6 +440,26 @@ body.carousel-reengaging main {
   transform: scaleX(1);
 }
 
+.contact-links-row {
+  width: 100%;
+}
+
+@media (max-width: 767px) {
+  .contact-links-row {
+    display: grid !important;
+    grid-template-columns: 1fr;
+    gap: 12px !important;
+    justify-items: stretch;
+  }
+
+  .contact-link-button {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    padding: 12px 16px !important;
+  }
+}
+
 /* Section eyebrow — scroll-in animation */
 @keyframes game-stage-progress {
   from {

@@ -7,9 +7,9 @@ import { useEffect, useRef, useState } from 'react'
 const REDIRECT_DELAY_MS = 4200
 const TICK_MS = 100
 const STATUS_LINES = [
-  'Dusting off the portfolio.',
-  'Straightening the typography.',
-  'Opening the good stuff.',
+  'Checking taste...',
+  'Polishing pixels...',
+  'Opening portfolio...',
 ]
 
 export function QrCountdownClient() {
@@ -113,7 +113,7 @@ export function QrCountdownClient() {
               textDecoration: 'none',
             }}
           >
-            SKIP THE SUSPENSE <span className="arrow-nudge" style={{ marginLeft: '8px' }}>→</span>
+            SKIP THE DRAMA <span className="arrow-nudge" style={{ marginLeft: '8px' }}>→</span>
           </Link>
         </div>
       </div>
