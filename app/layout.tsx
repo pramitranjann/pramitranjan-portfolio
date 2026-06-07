@@ -26,18 +26,18 @@ const dmMono = DM_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.pramitranjan.com'),
   title: 'Pramit Ranjan',
-  description: 'UX designer and photographer. Portfolio of case studies, creative work, and photography.',
+  description: 'UX design student at SCAD. Portfolio of research-led product design, creative work, and photography.',
   openGraph: {
-    title: 'Pramit Ranjan',
-    description: 'UX designer and photographer.',
+    title: 'Pramit Ranjan | Portfolio',
+    description: 'UX design student at SCAD. Research-led product design, creative work, and photography.',
     url: 'https://www.pramitranjan.com',
     siteName: 'Pramit Ranjan',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Pramit Ranjan',
-    description: 'UX designer and photographer.',
+    title: 'Pramit Ranjan | Portfolio',
+    description: 'UX design student at SCAD. Research-led product design, creative work, and photography.',
   },
 }
 
