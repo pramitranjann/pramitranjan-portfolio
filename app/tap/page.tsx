@@ -41,13 +41,13 @@ const tapActions = [
 export default function TapPage() {
   return (
     <main
-      className="qr-page-shell"
+      className="qr-page-shell tap-page-shell"
       style={{
         minHeight: '100vh',
       }}
     >
       <section
-        className="qr-page-stage"
+        className="qr-page-stage tap-page-stage"
         style={{
           minHeight: '100vh',
           padding: '28px 40px 40px',

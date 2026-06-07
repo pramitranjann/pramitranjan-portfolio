@@ -315,6 +315,15 @@ body.carousel-reengaging main {
     width: 100%;
   }
 
+  .tap-page-shell,
+  .tap-page-stage {
+    min-height: 100dvh !important;
+  }
+
+  .tap-page-stage {
+    padding-bottom: max(12px, env(safe-area-inset-bottom)) !important;
+  }
+
   .dashboard-shell {
     padding: 20px 12px 32px !important;
   }
