@@ -17,21 +17,25 @@ const tapActions = [
     label: 'VIEW WEBSITE',
     href: 'https://www.pramitranjan.com/',
     external: false,
+    tone: 'primary',
   },
   {
     label: 'VIEW CV',
     href: '/pramit-ranjan-cv-2026.pdf',
     external: true,
+    tone: 'primary',
   },
   {
     label: 'EMAIL ME',
     href: 'mailto:pramit@pramitranjann.com',
     external: false,
+    tone: 'secondary',
   },
   {
     label: 'LINKEDIN',
     href: 'https://www.linkedin.com/in/pramitranjann/',
     external: true,
+    tone: 'secondary',
   },
 ] as const
 
@@ -78,11 +82,11 @@ export default function TapPage() {
                     color: 'var(--color-heading)',
                     lineHeight: 0.96,
                     marginBottom: '20px',
-                    maxWidth: '8ch',
+                    maxWidth: '10ch',
                     textWrap: 'balance',
                   }}
                 >
-                  Good to meet you.
+                  Pramit Ranjan.
                 </h1>
                 <p
                   data-reveal
@@ -93,11 +97,26 @@ export default function TapPage() {
                     color: 'var(--color-body)',
                     lineHeight: 1.8,
                     maxWidth: '32ch',
-                    marginBottom: '20px',
+                    marginBottom: '14px',
                   }}
                 >
-                  Here are the relevant links.
+                  Product designer, researcher, and builder.
                 </p>
+                <div
+                  data-reveal
+                  className="font-mono"
+                  style={{
+                    fontSize: 'var(--text-body)',
+                    letterSpacing: '0.03em',
+                    color: 'var(--color-body)',
+                    lineHeight: 1.8,
+                    maxWidth: '34ch',
+                    marginBottom: '24px',
+                    textWrap: 'pretty',
+                  }}
+                >
+                  Use this page for the practical things: website, CV, or direct contact.
+                </div>
                 <div
                   data-reveal
                   className="font-mono"
@@ -128,8 +147,8 @@ export default function TapPage() {
                     color: '#666666',
                   }}
                 >
-                  <span style={{ color: 'var(--color-red)' }}>LINKS</span>
-                  <span>Website, CV, and a direct way to reach me.</span>
+                  <span style={{ color: 'var(--color-red)' }}>SELECT AN OPTION</span>
+                  <span>Start with the site, or go straight to the point.</span>
                 </div>
                 <div
                   data-reveal
@@ -140,7 +159,7 @@ export default function TapPage() {
                     marginTop: '18px',
                   }}
                 >
-                  {tapActions.map(({ label, href, external }) => (
+                  {tapActions.map(({ label, href, external, tone }) => (
                     <a
                       key={label}
                       href={href}
@@ -150,8 +169,9 @@ export default function TapPage() {
                       style={{
                         fontSize: 'var(--text-meta)',
                         letterSpacing: '0.14em',
-                        color: 'var(--color-red)',
-                        border: '1px solid var(--color-red)',
+                        color: tone === 'primary' ? 'var(--color-heading)' : 'var(--color-red)',
+                        border: `1px solid ${tone === 'primary' ? 'var(--color-divider)' : 'var(--color-red)'}`,
+                        background: tone === 'primary' ? 'rgba(255, 255, 255, 0.02)' : 'transparent',
                         padding: '14px 16px',
                         textDecoration: 'none',
                         minHeight: '48px',
