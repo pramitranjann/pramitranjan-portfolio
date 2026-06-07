@@ -2,16 +2,38 @@ import type { Metadata } from 'next'
 import { AnimatedEyebrow } from '@/components/AnimatedEyebrow'
 import { GsapReveal } from '@/components/GsapReveal'
 import { Nav } from '@/components/Nav'
-import { NfcCountdownClient } from '@/components/NfcCountdownClient'
 
 export const metadata: Metadata = {
   title: 'Tap',
-  description: 'A brief detour before the portfolio.',
+  description: 'Direct contact links for Pramit Ranjan.',
   robots: {
     index: false,
     follow: true,
   },
 }
+
+const tapActions = [
+  {
+    label: 'VIEW WEBSITE',
+    href: 'https://www.pramitranjan.com/',
+    external: false,
+  },
+  {
+    label: 'VIEW CV',
+    href: '/pramit-ranjan-cv-2026.pdf',
+    external: true,
+  },
+  {
+    label: 'EMAIL ME',
+    href: 'mailto:pramit@pramitranjann.com',
+    external: false,
+  },
+  {
+    label: 'LINKEDIN',
+    href: 'https://www.linkedin.com/in/pramitranjann/',
+    external: true,
+  },
+] as const
 
 export default function TapPage() {
   return (
@@ -60,7 +82,7 @@ export default function TapPage() {
                     textWrap: 'balance',
                   }}
                 >
-                  Contact established.
+                  Good to meet you.
                 </h1>
                 <p
                   data-reveal
@@ -74,10 +96,21 @@ export default function TapPage() {
                     marginBottom: '20px',
                   }}
                 >
-                  No camera. No fumbling. Very efficient. Slightly show-offy.
+                  Here are the relevant links.
                 </p>
-                <div data-reveal className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.14em', color: '#666666' }}>
-                  TAP COMPLETE
+                <div
+                  data-reveal
+                  className="font-mono"
+                  style={{
+                    fontSize: 'var(--text-meta)',
+                    letterSpacing: '0.14em',
+                    color: '#666666',
+                    display: 'grid',
+                    gap: '8px',
+                  }}
+                >
+                  <span style={{ color: 'var(--color-red)' }}>DIRECT CONTACT</span>
+                  <span>pramit@pramitranjann.com</span>
                 </div>
               </GsapReveal>
             </div>
@@ -95,11 +128,43 @@ export default function TapPage() {
                     color: '#666666',
                   }}
                 >
-                  <span style={{ color: 'var(--color-red)' }}>NEXT MOVE</span>
-                  <span>Short pause. Then we act like this was completely seamless.</span>
+                  <span style={{ color: 'var(--color-red)' }}>LINKS</span>
+                  <span>Website, CV, and a direct way to reach me.</span>
                 </div>
-                <div data-reveal style={{ marginTop: '18px' }}>
-                  <NfcCountdownClient />
+                <div
+                  data-reveal
+                  className="qr-actions-grid"
+                  style={{
+                    display: 'grid',
+                    gap: '12px',
+                    marginTop: '18px',
+                  }}
+                >
+                  {tapActions.map(({ label, href, external }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      target={external ? '_blank' : undefined}
+                      rel={external ? 'noopener noreferrer' : undefined}
+                      className="font-mono"
+                      style={{
+                        fontSize: 'var(--text-meta)',
+                        letterSpacing: '0.14em',
+                        color: 'var(--color-red)',
+                        border: '1px solid var(--color-red)',
+                        padding: '14px 16px',
+                        textDecoration: 'none',
+                        minHeight: '48px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: '12px',
+                      }}
+                    >
+                      <span>{label}</span>
+                      <span aria-hidden="true">→</span>
+                    </a>
+                  ))}
                 </div>
               </GsapReveal>
             </div>
