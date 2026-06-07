@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { AnimatedEyebrow } from '@/components/AnimatedEyebrow'
 import { GsapReveal } from '@/components/GsapReveal'
 import { Nav } from '@/components/Nav'
-import { getPublicSiteContent } from '@/lib/site-content'
 
 export const metadata: Metadata = {
   title: 'Tap',
@@ -40,11 +39,7 @@ const tapActions = [
   },
 ] as const
 
-export default async function TapPage() {
-  const content = await getPublicSiteContent()
-  const aboutHero = content.aboutPage.heroBody
-  const aboutWhoIAm = content.aboutPage.whoIAm
-
+export default function TapPage() {
   return (
     <>
       <Nav />
@@ -82,11 +77,11 @@ export default async function TapPage() {
                   data-reveal
                   className="font-serif qr-card-title"
                   style={{
-                    fontSize: 'clamp(44px, 6vw, 72px)',
+                    fontSize: 'clamp(42px, 6vw, 68px)',
                     fontWeight: 'var(--font-weight-serif)',
                     color: 'var(--color-heading)',
                     lineHeight: 0.96,
-                    marginBottom: '20px',
+                    marginBottom: '14px',
                     maxWidth: '10ch',
                     textWrap: 'balance',
                   }}
@@ -97,44 +92,27 @@ export default async function TapPage() {
                   data-reveal
                   className="font-mono qr-card-body"
                   style={{
-                    fontSize: 'var(--text-body-lg)',
+                    fontSize: 'var(--text-body)',
                     letterSpacing: '0.03em',
-                    color: 'var(--color-heading)',
-                    lineHeight: 1.75,
-                    maxWidth: '34ch',
-                    marginBottom: '14px',
+                    color: 'var(--color-body)',
+                    lineHeight: 1.7,
+                    maxWidth: '28ch',
+                    marginBottom: '18px',
                     textWrap: 'pretty',
                   }}
                 >
-                  {aboutHero}
+                  UX design student at SCAD. Designer with an artist&apos;s eye.
                 </p>
                 <div
                   data-reveal
                   className="font-mono"
                   style={{
-                    fontSize: 'var(--text-body)',
-                    letterSpacing: '0.03em',
-                    color: 'var(--color-body)',
-                    lineHeight: 1.8,
-                    maxWidth: '34ch',
-                    marginBottom: '24px',
-                    textWrap: 'pretty',
-                  }}
-                >
-                  {aboutWhoIAm}
-                </div>
-                <div
-                  data-reveal
-                  className="font-mono"
-                  style={{
-                    fontSize: 'var(--text-body)',
-                    letterSpacing: '0.04em',
-                    color: 'var(--color-heading)',
+                    fontSize: 'var(--text-meta)',
+                    letterSpacing: '0.14em',
                     display: 'grid',
-                    gap: '6px',
+                    gap: '10px',
                   }}
                 >
-                  <span style={{ color: 'var(--color-red)', fontSize: 'var(--text-meta)', letterSpacing: '0.14em' }}>DIRECT CONTACT</span>
                   <a
                     href="mailto:pramit@pramitranjann.com"
                     style={{
@@ -143,8 +121,9 @@ export default async function TapPage() {
                       width: 'fit-content',
                     }}
                   >
-                    pramit@pramitranjann.com
+                    PRAMIT@PRAMITRANJANN.COM
                   </a>
+                  <span style={{ color: 'var(--color-label)' }}>KUALA LUMPUR / SAVANNAH</span>
                 </div>
               </GsapReveal>
             </div>
@@ -153,25 +132,10 @@ export default async function TapPage() {
               <GsapReveal>
                 <div
                   data-reveal
-                  className="font-mono"
-                  style={{
-                    display: 'grid',
-                    gap: '10px',
-                    fontSize: 'var(--text-meta)',
-                    letterSpacing: '0.14em',
-                    color: '#666666',
-                  }}
-                >
-                  <span style={{ color: 'var(--color-red)' }}>START HERE</span>
-                  <span>Website first, then the rest if you need it.</span>
-                </div>
-                <div
-                  data-reveal
                   className="qr-actions-grid"
                   style={{
                     display: 'grid',
                     gap: '12px',
-                    marginTop: '18px',
                   }}
                 >
                   {tapActions.map(({ label, href, external, tone }) => (
