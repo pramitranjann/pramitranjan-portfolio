@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { AnimatedEyebrow } from '@/components/AnimatedEyebrow'
-import { CopyEmailButton } from '@/components/CopyEmailButton'
 import { GsapReveal } from '@/components/GsapReveal'
 import { Nav } from '@/components/Nav'
 
@@ -110,24 +109,10 @@ export default function TapPage() {
                   style={{
                     fontSize: 'var(--text-meta)',
                     letterSpacing: '0.14em',
-                    display: 'grid',
-                    gap: '10px',
+                    color: 'var(--color-label)',
                   }}
                 >
-                  <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '10px' }}>
-                    <a
-                      href="mailto:pramitranjann@gmail.com"
-                      style={{
-                        color: 'var(--color-red)',
-                        textDecoration: 'none',
-                        width: 'fit-content',
-                      }}
-                    >
-                      PRAMITRANJANN@GMAIL.COM
-                    </a>
-                    <CopyEmailButton email="pramitranjann@gmail.com" />
-                  </div>
-                  <span style={{ color: 'var(--color-label)' }}>KUALA LUMPUR / SAVANNAH</span>
+                  KUALA LUMPUR / SAVANNAH
                 </div>
               </GsapReveal>
             </div>
