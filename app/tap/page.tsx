@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { AnimatedEyebrow } from '@/components/AnimatedEyebrow'
 import { GsapReveal } from '@/components/GsapReveal'
 import { Nav } from '@/components/Nav'
+import { getPublicSiteContent } from '@/lib/site-content'
 
 export const metadata: Metadata = {
   title: 'Tap',
@@ -20,15 +21,15 @@ const tapActions = [
     tone: 'primary',
   },
   {
-    label: 'VIEW CV',
-    href: '/pramit-ranjan-cv-2026.pdf',
-    external: true,
-    tone: 'primary',
-  },
-  {
     label: 'EMAIL ME',
     href: 'mailto:pramit@pramitranjann.com',
     external: false,
+    tone: 'priority',
+  },
+  {
+    label: 'VIEW CV',
+    href: '/pramit-ranjan-cv-2026.pdf',
+    external: true,
     tone: 'secondary',
   },
   {
@@ -39,7 +40,11 @@ const tapActions = [
   },
 ] as const
 
-export default function TapPage() {
+export default async function TapPage() {
+  const content = await getPublicSiteContent()
+  const aboutHero = content.aboutPage.heroBody
+  const aboutWhoIAm = content.aboutPage.whoIAm
+
   return (
     <>
       <Nav />
@@ -92,15 +97,16 @@ export default function TapPage() {
                   data-reveal
                   className="font-mono qr-card-body"
                   style={{
-                    fontSize: 'var(--text-body)',
+                    fontSize: 'var(--text-body-lg)',
                     letterSpacing: '0.03em',
-                    color: 'var(--color-body)',
-                    lineHeight: 1.8,
-                    maxWidth: '32ch',
+                    color: 'var(--color-heading)',
+                    lineHeight: 1.75,
+                    maxWidth: '34ch',
                     marginBottom: '14px',
+                    textWrap: 'pretty',
                   }}
                 >
-                  Product designer, researcher, and builder.
+                  {aboutHero}
                 </p>
                 <div
                   data-reveal
@@ -115,21 +121,30 @@ export default function TapPage() {
                     textWrap: 'pretty',
                   }}
                 >
-                  Use this page for the practical things: website, CV, or direct contact.
+                  {aboutWhoIAm}
                 </div>
                 <div
                   data-reveal
                   className="font-mono"
                   style={{
-                    fontSize: 'var(--text-meta)',
-                    letterSpacing: '0.14em',
-                    color: '#666666',
+                    fontSize: 'var(--text-body)',
+                    letterSpacing: '0.04em',
+                    color: 'var(--color-heading)',
                     display: 'grid',
-                    gap: '8px',
+                    gap: '6px',
                   }}
                 >
-                  <span style={{ color: 'var(--color-red)' }}>DIRECT CONTACT</span>
-                  <span>pramit@pramitranjann.com</span>
+                  <span style={{ color: 'var(--color-red)', fontSize: 'var(--text-meta)', letterSpacing: '0.14em' }}>DIRECT CONTACT</span>
+                  <a
+                    href="mailto:pramit@pramitranjann.com"
+                    style={{
+                      color: 'var(--color-red)',
+                      textDecoration: 'none',
+                      width: 'fit-content',
+                    }}
+                  >
+                    pramit@pramitranjann.com
+                  </a>
                 </div>
               </GsapReveal>
             </div>
@@ -147,8 +162,8 @@ export default function TapPage() {
                     color: '#666666',
                   }}
                 >
-                  <span style={{ color: 'var(--color-red)' }}>SELECT AN OPTION</span>
-                  <span>Start with the site, or go straight to the point.</span>
+                  <span style={{ color: 'var(--color-red)' }}>START HERE</span>
+                  <span>Website first, then the rest if you need it.</span>
                 </div>
                 <div
                   data-reveal
@@ -169,9 +184,24 @@ export default function TapPage() {
                       style={{
                         fontSize: 'var(--text-meta)',
                         letterSpacing: '0.14em',
-                        color: tone === 'primary' ? 'var(--color-heading)' : 'var(--color-red)',
-                        border: `1px solid ${tone === 'primary' ? 'var(--color-divider)' : 'var(--color-red)'}`,
-                        background: tone === 'primary' ? 'rgba(255, 255, 255, 0.02)' : 'transparent',
+                        color:
+                          tone === 'primary'
+                            ? 'var(--color-bg)'
+                            : tone === 'priority'
+                              ? 'var(--color-red)'
+                              : 'var(--color-heading)',
+                        border:
+                          tone === 'primary'
+                            ? '1px solid var(--color-red)'
+                            : tone === 'priority'
+                              ? '1px solid var(--color-red)'
+                              : '1px solid var(--color-divider)',
+                        background:
+                          tone === 'primary'
+                            ? 'var(--color-red)'
+                            : tone === 'priority'
+                              ? 'transparent'
+                              : 'rgba(255, 255, 255, 0.02)',
                         padding: '14px 16px',
                         textDecoration: 'none',
                         minHeight: '48px',
