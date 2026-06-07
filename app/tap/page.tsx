@@ -21,7 +21,7 @@ const tapActions = [
   },
   {
     label: 'EMAIL ME',
-    href: 'mailto:pramit@pramitranjann.com',
+    href: 'mailto:pramitranjann@gmail.com',
     external: false,
     tone: 'priority',
   },
@@ -71,7 +71,7 @@ export default function TapPage() {
             <div className="qr-card-copy" style={{ padding: 'clamp(28px, 4vw, 44px)', borderRight: '1px solid var(--color-divider)' }}>
               <GsapReveal>
                 <div data-reveal>
-                  <AnimatedEyebrow label="TAP_" marginBottom="20px" />
+                  <AnimatedEyebrow label="CONTACT_" marginBottom="20px" />
                 </div>
                 <h1
                   data-reveal
@@ -114,14 +114,14 @@ export default function TapPage() {
                   }}
                 >
                   <a
-                    href="mailto:pramit@pramitranjann.com"
+                    href="mailto:pramitranjann@gmail.com"
                     style={{
                       color: 'var(--color-red)',
                       textDecoration: 'none',
                       width: 'fit-content',
                     }}
                   >
-                    PRAMIT@PRAMITRANJANN.COM
+                    PRAMITRANJANN@GMAIL.COM
                   </a>
                   <span style={{ color: 'var(--color-label)' }}>KUALA LUMPUR / SAVANNAH</span>
                 </div>
