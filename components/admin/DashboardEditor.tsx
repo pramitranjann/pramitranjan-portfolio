@@ -3759,7 +3759,7 @@ function HeroStageListEditor({
       </div>
       {items.map((item, index) => (
         <EditorItemCard
-          key={`${item.number}-${index}`}
+          key={`hero-stage-${index}`}
           title={`Stage ${item.number || String(index + 1).padStart(2, '0')}`}
           subtitle={item.footerLabel || 'Homepage intro stage'}
           defaultOpen={index === 0}
@@ -3817,7 +3817,7 @@ function LinkItemListEditor({
       </div>
       {items.map((item, index) => (
         <EditorItemCard
-          key={`${item.label}-${index}`}
+          key={`link-item-${index}`}
           title={item.label || `Link ${index + 1}`}
           subtitle={item.href || 'Navigation link'}
           defaultOpen={index === 0}
@@ -3871,7 +3871,7 @@ function WorkProjectListEditor({
       </div>
       {items.map((item, index) => (
         <EditorItemCard
-          key={`${item.title}-${index}`}
+          key={`work-project-${index}`}
           title={item.title || `Work item ${index + 1}`}
           subtitle={item.href || item.oneliner || 'Work card'}
           defaultOpen={index === 0}
@@ -3953,7 +3953,7 @@ function EntryListEditor({
       </div>
       {items.map((item, index) => (
         <EditorItemCard
-          key={`${item.org}-${index}`}
+          key={`entry-item-${index}`}
           title={item.org || `Entry ${index + 1}`}
           subtitle={[item.role, item.date].filter(Boolean).join(' · ') || 'Timeline item'}
           defaultOpen={index === 0}
@@ -4003,7 +4003,7 @@ function NowCardListEditor({ items, onChange }: { items: NowCard[]; onChange: (i
       </div>
       {items.map((item, index) => (
         <EditorItemCard
-          key={`${item.label}-${index}`}
+          key={`now-card-${index}`}
           title={item.label || `Card ${index + 1}`}
           subtitle={item.value || 'Now card'}
           defaultOpen={index === 0}
@@ -4058,7 +4058,7 @@ function PhotographyCityListEditor({
       </div>
       {items.map((item, index) => (
         <EditorItemCard
-          key={`${item.slug}-${index}`}
+          key={`photo-city-${index}`}
           title={item.title || item.slug || `City ${index + 1}`}
           subtitle={item.comingSoon ? 'Coming soon card' : item.desc || 'Photography card'}
           defaultOpen={index === 0}
@@ -4133,7 +4133,7 @@ function PhotographyGalleryListEditor({
       </div>
       {items.map((item, index) => (
         <EditorItemCard
-          key={`${item.slug}-${index}`}
+          key={`photo-gallery-${index}`}
           title={item.city || item.slug || `Gallery ${index + 1}`}
           subtitle={item.descriptor || 'Photography gallery'}
           defaultOpen={index === 0}
@@ -4282,7 +4282,7 @@ function GalleryImageListEditor({
       </div>
       {images.map((image, index) => (
         <EditorItemCard
-          key={`${image}-${index}`}
+          key={`gallery-image-${index}`}
           title={`Image ${index + 1}`}
           subtitle={image || 'Gallery frame'}
           defaultOpen={index === 0}
