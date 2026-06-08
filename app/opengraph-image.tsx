@@ -28,113 +28,37 @@ export default async function OGImage() {
             width: '100%',
             height: '100%',
             border: '1px solid #1f1f1f',
-            background:
-              'radial-gradient(circle at top right, rgba(255, 49, 32, 0.08), transparent 22%), linear-gradient(180deg, #111111 0%, #0d0d0d 100%)',
-            padding: '56px 72px',
+            background: 'linear-gradient(180deg, #111111 0%, #0d0d0d 100%)',
+            padding: '72px 80px',
             flexDirection: 'column',
-            justifyContent: 'space-between',
+            justifyContent: 'center',
+            gap: 18,
           }}
         >
           <div
             style={{
               display: 'flex',
-              alignItems: 'center',
+              fontSize: 132,
+              lineHeight: 0.9,
+              letterSpacing: '-0.06em',
+              color: '#f5f2ed',
             }}
           >
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 18,
-                fontFamily: 'monospace',
-                fontSize: 20,
-                letterSpacing: '0.24em',
-                color: '#FF3120',
-              }}
-            >
-              <div style={{ width: 54, height: 2, background: '#FF3120', display: 'flex' }} />
-              <div style={{ display: 'flex' }}>PR_</div>
-            </div>
+            Pramit Ranjan
           </div>
 
           <div
             style={{
               display: 'flex',
-              flexDirection: 'column',
-              gap: 24,
-              maxWidth: 760,
-              marginBottom: 18,
-            }}
-          >
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                fontSize: 110,
-                lineHeight: 0.9,
-                letterSpacing: '-0.055em',
-                color: '#f5f2ed',
-              }}
-            >
-              Pramit Ranjan.
-            </div>
-
-            <div
-              style={{
-                display: 'flex',
-                maxWidth: 650,
-                fontSize: 62,
-                lineHeight: 0.96,
-                letterSpacing: '-0.045em',
-                color: '#f5f2ed',
-              }}
-            >
-              Designer with an
-              <span style={{ display: 'flex', color: '#FF3120', marginLeft: 14 }}>artist&apos;s eye.</span>
-            </div>
-
-            <div
-              style={{
-                display: 'flex',
-                fontFamily: 'monospace',
-                fontSize: 24,
-                letterSpacing: '0.05em',
-                lineHeight: 1.6,
-                color: '#999999',
-                maxWidth: 620,
-              }}
-            >
-              UX design student at SCAD. Research-led product design, creative work, and photography.
-            </div>
-          </div>
-
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
               fontFamily: 'monospace',
-              fontSize: 20,
+              fontSize: 34,
+              lineHeight: 1,
               letterSpacing: '0.18em',
+              color: '#FF3120',
+              textTransform: 'uppercase',
             }}
           >
-            <div
-              style={{
-                display: 'flex',
-                color: '#f5f2ed',
-              }}
-            >
-              PRAMITRANJAN.COM
-            </div>
-
-            <div
-              style={{
-                display: 'flex',
-                color: '#FF3120',
-              }}
-            >
-              PORTFOLIO
-            </div>
+            Portfolio | 2026
           </div>
         </div>
       </div>
