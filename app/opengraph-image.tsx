@@ -29,8 +29,8 @@ export default async function OGImage() {
             height: '100%',
             border: '1px solid #1f1f1f',
             background:
-              'radial-gradient(circle at top right, rgba(255, 49, 32, 0.12), transparent 24%), linear-gradient(180deg, #111111 0%, #0d0d0d 100%)',
-            padding: '46px 48px',
+              'radial-gradient(circle at top right, rgba(255, 49, 32, 0.08), transparent 22%), linear-gradient(180deg, #111111 0%, #0d0d0d 100%)',
+            padding: '56px 72px',
             flexDirection: 'column',
             justifyContent: 'space-between',
           }}
@@ -38,7 +38,6 @@ export default async function OGImage() {
           <div
             style={{
               display: 'flex',
-              justifyContent: 'space-between',
               alignItems: 'center',
             }}
           >
@@ -56,33 +55,22 @@ export default async function OGImage() {
               <div style={{ width: 54, height: 2, background: '#FF3120', display: 'flex' }} />
               <div style={{ display: 'flex' }}>PR_</div>
             </div>
-
-            <div
-              style={{
-                display: 'flex',
-                fontFamily: 'monospace',
-                fontSize: 18,
-                letterSpacing: '0.16em',
-                color: '#666666',
-              }}
-            >
-              PORTFOLIO
-            </div>
           </div>
 
           <div
             style={{
               display: 'flex',
               flexDirection: 'column',
-              gap: 22,
-              maxWidth: 880,
+              gap: 24,
+              maxWidth: 760,
+              marginBottom: 18,
             }}
           >
             <div
               style={{
                 display: 'flex',
                 flexWrap: 'wrap',
-                fontSize: 104,
+                fontSize: 110,
                 lineHeight: 0.9,
                 letterSpacing: '-0.055em',
                 color: '#f5f2ed',
@@ -94,29 +82,26 @@ export default async function OGImage() {
             <div
               style={{
                 display: 'flex',
-                flexWrap: 'wrap',
-                alignItems: 'baseline',
-                gap: 12,
-                fontSize: 70,
-                lineHeight: 0.95,
-                letterSpacing: '-0.05em',
+                maxWidth: 650,
+                fontSize: 62,
+                lineHeight: 0.96,
+                letterSpacing: '-0.045em',
                 color: '#f5f2ed',
               }}
             >
-              <span style={{ display: 'flex' }}>Artist.</span>
-              <span style={{ display: 'flex' }}>Designer.</span>
-              <span style={{ display: 'flex', color: '#FF3120' }}>Human.</span>
+              Designer with an
+              <span style={{ display: 'flex', color: '#FF3120', marginLeft: 14 }}>artist&apos;s eye.</span>
             </div>
 
             <div
               style={{
                 display: 'flex',
                 fontFamily: 'monospace',
-                fontSize: 22,
+                fontSize: 24,
                 letterSpacing: '0.05em',
                 lineHeight: 1.6,
                 color: '#999999',
-                maxWidth: 760,
+                maxWidth: 620,
               }}
             >
               UX design student at SCAD. Research-led product design, creative work, and photography.
@@ -127,64 +112,28 @@ export default async function OGImage() {
             style={{
               display: 'flex',
               justifyContent: 'space-between',
-              alignItems: 'flex-end',
+              alignItems: 'center',
+              fontFamily: 'monospace',
+              fontSize: 20,
+              letterSpacing: '0.18em',
             }}
           >
             <div
               style={{
                 display: 'flex',
-                gap: 12,
-                fontFamily: 'monospace',
-                fontSize: 18,
-                letterSpacing: '0.16em',
-                color: '#666666',
+                color: '#f5f2ed',
               }}
             >
-              <div
-                style={{
-                  display: 'flex',
-                  border: '1px solid #1f1f1f',
-                  background: 'rgba(255, 255, 255, 0.02)',
-                  padding: '12px 16px',
-                }}
-              >
-                WORK
-              </div>
-              <div
-                style={{
-                  display: 'flex',
-                  border: '1px solid #1f1f1f',
-                  background: 'rgba(255, 255, 255, 0.02)',
-                  padding: '12px 16px',
-                }}
-              >
-                PLAY
-              </div>
-              <div
-                style={{
-                  display: 'flex',
-                  border: '1px solid #1f1f1f',
-                  background: 'rgba(255, 255, 255, 0.02)',
-                  padding: '12px 16px',
-                }}
-              >
-                CREATIVE
-              </div>
+              PRAMITRANJAN.COM
             </div>
 
             <div
               style={{
                 display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-end',
-                gap: 8,
-                fontFamily: 'monospace',
-                fontSize: 18,
-                letterSpacing: '0.16em',
+                color: '#FF3120',
               }}
             >
-              <div style={{ display: 'flex', color: '#f5f2ed' }}>PRAMITRANJAN.COM</div>
-              <div style={{ display: 'flex', color: '#666666' }}>KUALA LUMPUR / SAVANNAH</div>
+              PORTFOLIO
             </div>
           </div>
         </div>
