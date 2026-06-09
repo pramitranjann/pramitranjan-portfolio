@@ -96,6 +96,12 @@
     "whoIAm": "From KL, currently surviving Savannah. I picked up a camera before I picked up Figma — film photography across Southeast Asia will do that. I think about design the same way: light, framing, what to cut. Still figuring out the rest.",
     "experience": [
       {
+        "org": "Swipey ",
+        "role": "Product Intern",
+        "date": "JUN 2026 - PRESENT ",
+        "desc": "Just getting started…"
+      },
+      {
         "org": "Vircle Malaysia",
         "role": "GROWTH INTERN",
         "date": "JUL 2024 — AUG 2024",
@@ -194,7 +200,7 @@
   },
   "workPage": {
     "heroTitle": "All projects.",
-    "heroBody": "Five projects across UX, UI, and interaction design.",
+    "heroBody": "Projects across UX, UI, and interaction design.",
     "projects": [
       {
         "title": "Franklin's",
