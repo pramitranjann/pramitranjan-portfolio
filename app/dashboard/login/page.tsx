@@ -15,9 +15,16 @@ export const metadata: Metadata = {
   },
 }
 
-export default async function DashboardLoginPage() {
+export default async function DashboardLoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string }>
+}) {
+  const params = await searchParams
+  const nextPath = params.next?.startsWith('/') ? params.next : '/dashboard'
+
   if (await isAdminSession()) {
-    redirect('/dashboard')
+    redirect(nextPath as never)
   }
 
   return (
@@ -32,7 +39,7 @@ export default async function DashboardLoginPage() {
         <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.7, marginBottom: '24px' }}>
           Private entrance for local-first edits to the homepage, About, Work, and photography before committing and pushing them properly.
         </p>
-        <DashboardLoginForm />
+        <DashboardLoginForm nextPath={nextPath} />
       </section>
     </main>
   )

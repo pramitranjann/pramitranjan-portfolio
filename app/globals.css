@@ -810,3 +810,341 @@ body.carousel-reengaging main {
     grid-template-columns: repeat(2, 1fr) !important;
   }
 }
+
+.life-shell {
+  --life-bg: #f4efe5;
+  --life-card: rgba(255, 252, 245, 0.88);
+  --life-card-border: rgba(39, 58, 71, 0.14);
+  --life-text: #142332;
+  --life-muted: #5e6f7d;
+  --life-accent: #174f59;
+  --life-accent-strong: #0f3740;
+  --life-accent-soft: #dce9e4;
+  --life-danger: #9b3a2e;
+  --life-shadow: 0 18px 50px rgba(20, 35, 50, 0.08);
+  min-height: 100vh;
+  color: var(--life-text);
+  background:
+    radial-gradient(circle at top left, rgba(217, 229, 221, 0.9), transparent 42%),
+    radial-gradient(circle at top right, rgba(223, 211, 188, 0.85), transparent 36%),
+    linear-gradient(180deg, #f7f1e7 0%, var(--life-bg) 100%);
+}
+
+.life-shell * {
+  box-sizing: border-box;
+}
+
+.life-shell a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.life-shell button,
+.life-shell input,
+.life-shell textarea {
+  font: inherit;
+}
+
+.life-app-shell {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 24px 18px 48px;
+}
+
+.life-shell .topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.life-shell .brand {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+}
+
+.life-shell .nav-links {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.life-shell .nav-links a {
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.42);
+  border: 1px solid rgba(20, 35, 50, 0.08);
+  backdrop-filter: blur(12px);
+}
+
+.life-shell .content-shell,
+.life-shell .page-grid,
+.life-shell .history-grid,
+.life-shell .capture-stack,
+.life-shell .detail-stack,
+.life-shell .report-stack,
+.life-shell .timeline-list,
+.life-shell .history-list {
+  display: grid;
+}
+
+.life-shell .page-grid,
+.life-shell .history-grid {
+  gap: 18px;
+}
+
+.life-shell .capture-stack,
+.life-shell .detail-stack,
+.life-shell .report-stack,
+.life-shell .timeline-list,
+.life-shell .history-list {
+  gap: 12px;
+}
+
+.life-shell .hero-card,
+.life-shell .panel-card,
+.life-shell .subtle-card {
+  border: 1px solid var(--life-card-border);
+  background: var(--life-card);
+  box-shadow: var(--life-shadow);
+  backdrop-filter: blur(12px);
+  border-radius: 28px;
+  padding: 22px;
+}
+
+.life-shell .hero-card h1 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(2.6rem, 8vw, 4.4rem);
+  line-height: 0.92;
+  color: var(--life-text);
+}
+
+.life-shell .hero-copy,
+.life-shell .muted-text,
+.life-shell .timeline-item p,
+.life-shell .markdown-body p {
+  color: var(--life-muted);
+  line-height: 1.6;
+}
+
+.life-shell .eyebrow {
+  margin: 0 0 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.75rem;
+  color: var(--life-accent);
+}
+
+.life-shell .mic-button,
+.life-shell .primary-button,
+.life-shell .history-row {
+  border: 0;
+  cursor: pointer;
+}
+
+.life-shell .mic-button,
+.life-shell .primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  border-radius: 18px;
+  padding: 14px 18px;
+  transition: transform 180ms ease, background 180ms ease, opacity 180ms ease;
+}
+
+.life-shell .mic-button {
+  background: linear-gradient(180deg, var(--life-accent) 0%, var(--life-accent-strong) 100%);
+  color: white;
+}
+
+.life-shell .mic-button.is-live {
+  background: linear-gradient(180deg, #285d66 0%, #112c32 100%);
+  transform: translateY(-1px);
+}
+
+.life-shell .primary-button {
+  background: var(--life-text);
+  color: white;
+}
+
+.life-shell .primary-button:disabled,
+.life-shell .mic-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.life-shell .draft-area,
+.life-shell .text-input {
+  width: 100%;
+  border-radius: 18px;
+  border: 1px solid rgba(20, 35, 50, 0.12);
+  background: rgba(255, 255, 255, 0.72);
+  padding: 14px 16px;
+  color: var(--life-text);
+}
+
+.life-shell .draft-area {
+  resize: vertical;
+  min-height: 160px;
+}
+
+.life-shell .field {
+  display: grid;
+  gap: 8px;
+}
+
+.life-shell .field span {
+  font-size: 0.9rem;
+  color: var(--life-muted);
+}
+
+.life-shell .compact-field {
+  max-width: 220px;
+}
+
+.life-shell .section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.life-shell .section-head h2,
+.life-shell .detail-stack h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--life-text);
+}
+
+.life-shell .count-pill,
+.life-shell .badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--life-accent-soft);
+  color: var(--life-accent-strong);
+  font-size: 0.82rem;
+}
+
+.life-shell .badge.secondary {
+  background: rgba(20, 35, 50, 0.08);
+  color: var(--life-text);
+}
+
+.life-shell .timeline-list,
+.life-shell .history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.life-shell .timeline-item {
+  border-top: 1px solid rgba(20, 35, 50, 0.08);
+  padding-top: 12px;
+}
+
+.life-shell .timeline-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--life-muted);
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+
+.life-shell .summary-toggle {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.life-shell .interim-chip {
+  border-radius: 999px;
+  padding: 10px 14px;
+  background: rgba(23, 79, 89, 0.1);
+  color: var(--life-accent-strong);
+}
+
+.life-shell .toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: end;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.life-shell .report-panel {
+  min-height: 320px;
+}
+
+.life-shell .history-row {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.42);
+}
+
+.life-shell .history-row.is-selected {
+  background: var(--life-accent-soft);
+}
+
+.life-shell .badge-row {
+  display: flex;
+  gap: 8px;
+}
+
+.life-shell .detail-panel {
+  min-height: 520px;
+}
+
+.life-shell .subtle-card {
+  border-radius: 22px;
+  padding: 18px;
+}
+
+.life-shell .error-text {
+  color: var(--life-danger);
+  margin: 0;
+}
+
+.life-shell .markdown-body :first-child {
+  margin-top: 0;
+}
+
+.life-shell .markdown-body :last-child {
+  margin-bottom: 0;
+}
+
+.life-shell .markdown-body ul,
+.life-shell .markdown-body ol {
+  padding-left: 1.2rem;
+}
+
+@media (min-width: 880px) {
+  .life-shell .page-grid {
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: start;
+  }
+
+  .life-shell .hero-card {
+    grid-column: 1 / -1;
+  }
+
+  .life-shell .history-grid {
+    grid-template-columns: 0.88fr 1.12fr;
+    align-items: start;
+  }
+}

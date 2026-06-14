@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-export function DashboardLoginForm() {
+export function DashboardLoginForm({ nextPath = '/dashboard' }: { nextPath?: string }) {
   const router = useRouter()
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -27,7 +27,7 @@ export function DashboardLoginForm() {
       return
     }
 
-    router.push('/dashboard')
+    router.push(nextPath as never)
     router.refresh()
   }
 
