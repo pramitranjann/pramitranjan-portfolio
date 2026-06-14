@@ -53,6 +53,7 @@ interface SpeechRecognitionLike extends EventTarget {
 
 declare global {
   interface Window {
+    SpeechRecognition?: new () => SpeechRecognitionLike;
     webkitSpeechRecognition?: new () => SpeechRecognitionLike;
   }
 }
@@ -125,7 +126,10 @@ export function TodayClient() {
 
     load();
 
-    const Recognition = typeof window !== "undefined" ? window.webkitSpeechRecognition : undefined;
+    const Recognition =
+      typeof window !== 'undefined'
+        ? window.SpeechRecognition || window.webkitSpeechRecognition
+        : undefined;
     if (Recognition) {
       const recognition = new Recognition();
       recognition.continuous = false;
