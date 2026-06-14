@@ -40,12 +40,17 @@ interface SpeechRecognitionEventLike extends Event {
   results: ArrayLike<SpeechRecognitionResultLike>;
 }
 
+interface SpeechRecognitionErrorEventLike extends Event {
+  error?: string;
+  message?: string;
+}
+
 interface SpeechRecognitionLike extends EventTarget {
   continuous: boolean;
   interimResults: boolean;
   lang: string;
   onend: (() => void) | null;
-  onerror: ((event: Event) => void) | null;
+  onerror: ((event: SpeechRecognitionErrorEventLike) => void) | null;
   onresult: ((event: SpeechRecognitionEventLike) => void) | null;
   start(): void;
   stop(): void;
@@ -71,6 +76,7 @@ export function TodayClient() {
   const [listening, setListening] = useState(false);
   const [interimTranscript, setInterimTranscript] = useState("");
   const [voiceSupported, setVoiceSupported] = useState(false);
+  const [voiceHint, setVoiceHint] = useState("Best on Safari for iPhone. Text input is always available.");
   const [error, setError] = useState<string | null>(null);
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const finalTranscriptRef = useRef("");
@@ -126,52 +132,30 @@ export function TodayClient() {
 
     load();
 
-    const Recognition =
-      typeof window !== 'undefined'
-        ? window.SpeechRecognition || window.webkitSpeechRecognition
-        : undefined;
+    const Recognition = typeof window !== 'undefined'
+      ? window.SpeechRecognition || window.webkitSpeechRecognition
+      : undefined;
+
     if (Recognition) {
-      const recognition = new Recognition();
-      recognition.continuous = false;
-      recognition.interimResults = true;
-      recognition.lang = "en-US";
-      recognition.onresult = (event) => {
-        let finalText = "";
-        let interimText = "";
-
-        for (let index = event.resultIndex; index < event.results.length; index += 1) {
-          const result = event.results[index];
-          const transcript = result[0].transcript;
-          if (result.isFinal) {
-            finalText += transcript;
-          } else {
-            interimText += transcript;
-          }
-        }
-
-        if (finalText) {
-          finalTranscriptRef.current = `${finalTranscriptRef.current} ${finalText}`.trim();
-          setDraft(finalTranscriptRef.current);
-          setDraftSource("voice");
-        }
-
-        setInterimTranscript(interimText.trim());
-      };
-      recognition.onerror = () => {
-        setListening(false);
-        setError("Voice capture failed. Safari on iPhone is the most reliable option.");
-      };
-      recognition.onend = () => {
-        setListening(false);
-        setInterimTranscript("");
-        if (finalTranscriptRef.current) {
-          setDraft(finalTranscriptRef.current);
-          setDraftSource("voice");
-        }
-      };
-
-      recognitionRef.current = recognition;
       setVoiceSupported(true);
+      setVoiceHint("Tap once, allow microphone access if Safari asks, then speak.");
+    } else {
+      setVoiceHint(
+        window.isSecureContext
+          ? "Safari did not expose speech recognition here. Use the keyboard mic in the textarea instead."
+          : "Voice capture requires HTTPS. Open the deployed site instead of a local or insecure page.",
+      );
+    }
+
+    if (navigator.permissions?.query) {
+      navigator.permissions
+        .query({ name: "microphone" as PermissionName })
+        .then((status) => {
+          if (!cancelled && status.state === "denied") {
+            setError("Microphone access is blocked for this site in Safari settings.");
+          }
+        })
+        .catch(() => null);
     }
 
     return () => {
@@ -180,23 +164,122 @@ export function TodayClient() {
     };
   }, []);
 
-  function toggleListening() {
-    if (!recognitionRef.current) {
-      setError("Voice capture is unavailable in this browser.");
+  function getSpeechErrorMessage(error?: string) {
+    switch (error) {
+      case "not-allowed":
+      case "service-not-allowed":
+        return "Safari blocked speech recognition. Reopen the page in Safari, allow mic access, and try again.";
+      case "audio-capture":
+        return "Safari could not access the microphone. Check Safari site settings and iPhone microphone permissions.";
+      case "network":
+        return "Speech recognition hit a network error. Try again on a stronger connection.";
+      case "no-speech":
+        return "No speech was detected. Try again and speak right after tapping the button.";
+      case "aborted":
+        return "Voice capture stopped before transcription finished.";
+      default:
+        return "Voice capture failed. If Safari keeps rejecting it, use the keyboard mic in the textarea.";
+    }
+  }
+
+  function getRecognition() {
+    if (recognitionRef.current) {
+      return recognitionRef.current;
+    }
+
+    const Recognition =
+      typeof window !== "undefined"
+        ? window.SpeechRecognition || window.webkitSpeechRecognition
+        : undefined;
+
+    if (!Recognition) {
+      return null;
+    }
+
+    const recognition = new Recognition();
+    recognition.continuous = false;
+    recognition.interimResults = true;
+    recognition.lang = "en-US";
+    recognition.onresult = (event) => {
+      let finalText = "";
+      let interimText = "";
+
+      for (let index = event.resultIndex; index < event.results.length; index += 1) {
+        const result = event.results[index];
+        const transcript = result[0].transcript;
+        if (result.isFinal) {
+          finalText += transcript;
+        } else {
+          interimText += transcript;
+        }
+      }
+
+      if (finalText) {
+        finalTranscriptRef.current = `${finalTranscriptRef.current} ${finalText}`.trim();
+        setDraft(finalTranscriptRef.current);
+        setDraftSource("voice");
+      }
+
+      setInterimTranscript(interimText.trim());
+    };
+    recognition.onerror = (event) => {
+      setListening(false);
+      setError(getSpeechErrorMessage(event.error));
+    };
+    recognition.onend = () => {
+      setListening(false);
+      setInterimTranscript("");
+      if (finalTranscriptRef.current) {
+        setDraft(finalTranscriptRef.current);
+        setDraftSource("voice");
+      }
+    };
+
+    recognitionRef.current = recognition;
+    return recognition;
+  }
+
+  async function requestMicrophoneAccess() {
+    if (!navigator.mediaDevices?.getUserMedia) {
+      return;
+    }
+
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    stream.getTracks().forEach((track) => track.stop());
+  }
+
+  async function toggleListening() {
+    if (!voiceSupported) {
+      setError("Voice capture is unavailable in this browser context. Use the keyboard mic in the textarea.");
       return;
     }
 
     setError(null);
 
     if (listening) {
-      recognitionRef.current.stop();
+      recognitionRef.current?.stop();
       return;
     }
 
     finalTranscriptRef.current = draftSource === "voice" ? draft : "";
     setInterimTranscript("");
-    recognitionRef.current.start();
-    setListening(true);
+
+    try {
+      await requestMicrophoneAccess();
+      const recognition = getRecognition();
+
+      if (!recognition) {
+        setVoiceSupported(false);
+        setError("Safari did not expose speech recognition here. Use the keyboard mic in the textarea instead.");
+        return;
+      }
+
+      recognition.start();
+      setListening(true);
+    } catch (startError) {
+      setListening(false);
+      setError(startError instanceof Error ? startError.message : "Voice capture failed to start.");
+    }
   }
 
   async function saveEntry() {
@@ -263,9 +346,7 @@ export function TodayClient() {
           >
             {listening ? "Stop listening" : voiceSupported ? "Start voice capture" : "Voice unavailable"}
           </button>
-          <p className="muted-text">
-            Best on Safari for iPhone. Text input is always available.
-          </p>
+          <p className="muted-text">{voiceHint}</p>
           {interimTranscript ? <div className="interim-chip">Live: {interimTranscript}</div> : null}
           <textarea
             className="draft-area"
