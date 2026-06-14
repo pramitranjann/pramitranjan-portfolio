@@ -40,25 +40,24 @@ export default async function LifeTasksPage({
   const groupedTasks = groupTasks(tasks)
 
   return (
-    <div className="page-grid">
-      <section className="hero-card">
-        <p className="eyebrow">Tasks</p>
-        <h1>Turn open loops into tracked moves.</h1>
-        <p className="hero-copy">
-          Tasks are extracted from the daily and weekly brief, but you can pin manual ones here too.
-        </p>
+    <div className="life-planning-grid">
+      <section className="hero-card life-planning-hero">
+        <div className="life-page-head">
+          <p className="eyebrow">Tasks</p>
+          <span className="count-pill">{tasks.length}</span>
+        </div>
 
-        <form action="/api/life/tasks" className="capture-stack" method="post">
+        <form action="/api/life/tasks" className="capture-stack life-task-form" method="post">
           <input name="redirectTo" type="hidden" value="/life/tasks" />
           <label className="field">
-            <span>Task title</span>
-            <input className="text-input" name="title" placeholder="Ship Robin follow-up notes" required type="text" />
+            <span>Title</span>
+            <input className="text-input" name="title" placeholder="Robin follow-up" required type="text" />
           </label>
           <label className="field">
-            <span>Context</span>
-            <textarea className="draft-area" name="details" placeholder="Optional context for future you." rows={4} />
+            <span>Notes</span>
+            <textarea className="draft-area" name="details" placeholder="Optional." rows={4} />
           </label>
-          <div className="toolbar">
+          <div className="life-entry-controls life-task-inputs">
             <label className="field compact-field">
               <span>Project</span>
               <select className="text-input" defaultValue="" name="projectSlug">
@@ -79,31 +78,27 @@ export default async function LifeTasksPage({
               </select>
             </label>
             <label className="field compact-field">
-              <span>Due date</span>
+              <span>Due</span>
               <input className="text-input" name="dueLocalDate" type="date" />
             </label>
           </div>
           <button className="primary-button" type="submit">
-            Add task
+            Add
           </button>
           {error ? <p className="error-text">{error}</p> : null}
         </form>
       </section>
 
-      <section className="panel-card">
-        <div className="section-head">
-          <h2>Filters</h2>
-          <span className="count-pill">{tasks.length}</span>
-        </div>
+      <section className="panel-card life-filter-card">
         <div className="toolbar">
           <Link className={`filter-chip ${status === 'active' ? 'is-active' : ''}`} href="/life/tasks?status=active">
             Active
           </Link>
           <Link className={`filter-chip ${status === 'open' ? 'is-active' : ''}`} href="/life/tasks?status=open">
-            Open only
+            Open
           </Link>
           <Link className={`filter-chip ${status === 'in_progress' ? 'is-active' : ''}`} href="/life/tasks?status=in_progress">
-            In progress
+            Doing
           </Link>
           <Link className={`filter-chip ${status === 'done' ? 'is-active' : ''}`} href="/life/tasks?status=done">
             Done
@@ -131,10 +126,9 @@ export default async function LifeTasksPage({
         </div>
       </section>
 
-      <section className="panel-card" style={{ gridColumn: '1 / -1' }}>
+      <section className="panel-card life-task-board-card">
         <div className="section-head">
-          <h2>Task board</h2>
-          <span className="count-pill">{tasks.length}</span>
+          <h2>Board</h2>
         </div>
         {tasks.length === 0 ? <p className="muted-text">No tasks in this slice.</p> : null}
         <div className="task-group-grid">

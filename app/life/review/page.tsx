@@ -85,13 +85,13 @@ export default async function LifeWeeklyReviewPage({
   const groupedOpenTasks = groupByProject(taskSnapshot.openTasks)
 
   return (
-    <div className="page-grid">
-      <section className="hero-card">
-        <p className="eyebrow">Weekly review</p>
+    <div className="life-planning-grid">
+      <section className="hero-card life-planning-hero">
+        <div className="life-page-head">
+          <p className="eyebrow">Weekly</p>
+          <span className="count-pill">{selectedWeek}</span>
+        </div>
         <h1>{getDisplayDate(selectedWeek, timezone)} to {getDisplayDate(weekEnd, timezone)}</h1>
-        <p className="hero-copy">
-          Weekly review compresses the thread into project pulse, open loops, and what next week needs to protect.
-        </p>
 
         <div className="toolbar">
           <form action="/api/life/synthesis/weekly" method="post">
@@ -99,57 +99,57 @@ export default async function LifeWeeklyReviewPage({
             <input name="weekStart" type="hidden" value={selectedWeek} />
             <input name="force" type="hidden" value="true" />
             <button className="primary-button" type="submit">
-              Generate weekly review
+              Refresh
             </button>
           </form>
         </div>
         {params.error ? <p className="error-text">{params.error}</p> : null}
       </section>
 
-      <section className="panel-card">
+      <section className="panel-card life-week-metrics-card">
         <div className="section-head">
-          <h2>Week snapshot</h2>
+          <h2>Snapshot</h2>
           <span className="count-pill">{entryCount || 0}</span>
         </div>
         <div className="detail-stack">
           <div className="metric-row">
             <strong>{entryCount || 0}</strong>
-            <span className="muted-text">entries captured</span>
+            <span className="muted-text">entries</span>
           </div>
           <div className="metric-row">
             <strong>{eodCount || 0}</strong>
-            <span className="muted-text">daily reports generated</span>
+            <span className="muted-text">EODs</span>
           </div>
           <div className="metric-row">
             <strong>{taskSnapshot.completedTasks.length}</strong>
-            <span className="muted-text">tasks completed that week</span>
+            <span className="muted-text">done</span>
           </div>
           <div className="metric-row">
             <strong>{taskSnapshot.openTasks.length}</strong>
-            <span className="muted-text">open tasks still in play</span>
+            <span className="muted-text">open</span>
           </div>
         </div>
       </section>
 
-      <section className="panel-card" style={{ gridColumn: '1 / -1' }}>
+      <section className="panel-card life-week-review-card">
         <div className="section-head">
-          <h2>Weekly review</h2>
+          <h2>Review</h2>
           <span className="badge secondary">{review ? 'Ready' : 'Missing'}</span>
         </div>
         {review ? <MarkdownCard content={review.content} /> : <p className="muted-text">No weekly review generated for this week yet.</p>}
       </section>
 
-      <section className="panel-card">
+      <section className="panel-card life-week-summary-card">
         <div className="section-head">
-          <h2>Compressed context</h2>
+          <h2>Context</h2>
           <span className="badge secondary">{summary ? 'Saved' : 'Missing'}</span>
         </div>
         {summary ? <MarkdownCard content={summary.content} /> : <p className="muted-text">No weekly summary yet.</p>}
       </section>
 
-      <section className="panel-card">
+      <section className="panel-card life-week-open-card">
         <div className="section-head">
-          <h2>Open tasks by project</h2>
+          <h2>Open</h2>
           <span className="count-pill">{taskSnapshot.openTasks.length}</span>
         </div>
         {groupedOpenTasks.length === 0 ? <p className="muted-text">No active tasks.</p> : null}

@@ -100,11 +100,11 @@ export function ReportClient() {
   return (
     <div className="page-grid">
       <section className="hero-card">
-        <p className="eyebrow">End of day</p>
-        <h1>Review the thread, not the fragments.</h1>
-        <p className="hero-copy">
-          Pull the latest EOD report or generate today&apos;s on demand before the scheduled run.
-        </p>
+        <div className="life-page-head">
+          <p className="eyebrow">Report</p>
+          <span className="count-pill">{selectedDate || todayDate || 'Today'}</span>
+        </div>
+        <h1>EOD</h1>
 
         <div className="toolbar">
           <label className="field compact-field">
@@ -118,7 +118,7 @@ export function ReportClient() {
           </label>
           {showGenerate ? (
             <button className="primary-button" onClick={generateNow} type="button">
-              Generate now
+              Generate
             </button>
           ) : null}
         </div>

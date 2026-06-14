@@ -9,8 +9,9 @@ import { getProjectLabel, LIFE_PROJECTS } from '@/lib/life/projects'
 import { getOwnerSettings } from '@/lib/life/settings'
 import { generateMorningBrief } from '@/lib/life/synthesis'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
+import { getTasks } from '@/lib/life/tasks'
 import { getCurrentLocalDate, getDisplayDate, getLocalTimeLabel, isMorningBriefWindow } from '@/lib/life/time'
-import type { CalendarEventRecord, EntryRecord, ReportRecord } from '@/lib/life/types'
+import type { CalendarEventRecord, EntryRecord, ReportRecord, TaskRecord } from '@/lib/life/types'
 
 export default async function LifeTodayPage({
   searchParams,
@@ -29,6 +30,7 @@ export default async function LifeTodayPage({
   let entries: EntryRecord[] = []
   let events: CalendarEventRecord[] = []
   let morningReport: ReportRecord | null = null
+  let activeTasks: TaskRecord[] = []
   let calendarError: string | null = null
   let loadError: string | null = null
 
@@ -47,7 +49,7 @@ export default async function LifeTodayPage({
     try {
       const supabase = getSupabaseAdmin()
 
-      const [entriesResult, eventsResult, reportsResult] = await Promise.all([
+      const [entriesResult, eventsResult, reportsResult, taskRows] = await Promise.all([
         supabase
           .from('entries')
           .select('*')
@@ -66,6 +68,7 @@ export default async function LifeTodayPage({
           .eq('user_id', OWNER_ID)
           .eq('local_date', localDate)
           .order('created_at', { ascending: false }),
+        getTasks({ status: 'active' }),
       ])
 
       if (entriesResult.error) throw entriesResult.error
@@ -74,6 +77,7 @@ export default async function LifeTodayPage({
 
       entries = (entriesResult.data || []) as EntryRecord[]
       events = (eventsResult.data || []) as CalendarEventRecord[]
+      activeTasks = taskRows.slice(0, 6)
       morningReport = ((reportsResult.data || []) as ReportRecord[]).find((report) => report.type === 'morning') || null
 
       if (!morningReport && isMorningBriefWindow(timezone)) {
@@ -96,82 +100,101 @@ export default async function LifeTodayPage({
   const sourceInputId = 'life-entry-source'
 
   return (
-    <div className="page-grid">
-      <section className="hero-card">
-        <p className="eyebrow">Today</p>
-        <h1>{displayDate}</h1>
-        <p className="hero-copy">
-          Capture the day in fragments. The app stores each note under the owner timezone,
-          then turns the full thread into an end-of-day brief.
-        </p>
+    <div className="life-home-grid">
+      <section className="hero-card life-capture-card">
+        <div className="life-page-head">
+          <p className="eyebrow">Today</p>
+          <span className="count-pill">{displayDate}</span>
+        </div>
 
-        <form action="/api/life/entries" className="capture-stack" method="post">
+        <form action="/api/life/entries" className="capture-stack life-capture-stack" method="post">
           <input id={sourceInputId} name="source" type="hidden" defaultValue="text" />
           <VoiceCaptureControl sourceInputId={sourceInputId} textareaId={textareaId} />
           <textarea
-            className="draft-area"
+            className="draft-area life-entry-area"
             id={textareaId}
             name="content"
             rows={6}
-            placeholder="Type or dictate the raw note here."
+            placeholder="Capture."
           />
-          <label className="field compact-field">
-            <span>Project</span>
-            <select className="text-input" defaultValue="" name="projectSlug">
-              <option value="">Auto-detect</option>
-              {LIFE_PROJECTS.map((project) => (
-                <option key={project.slug} value={project.slug}>
-                  {project.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <button className="primary-button" type="submit">
-            Save entry
-          </button>
+          <div className="life-entry-controls">
+            <label className="field compact-field">
+              <span>Project</span>
+              <select className="text-input" defaultValue="" name="projectSlug">
+                <option value="">Auto</option>
+                {LIFE_PROJECTS.map((project) => (
+                  <option key={project.slug} value={project.slug}>
+                    {project.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <button className="primary-button" type="submit">
+              Save
+            </button>
+          </div>
           {formError ? <p className="error-text">{formError}</p> : null}
           {loadError ? <p className="error-text">{loadError}</p> : null}
         </form>
       </section>
 
-      {morningReport ? (
-        <section className="panel-card">
-          <details>
-            <summary className="summary-toggle">Morning brief</summary>
+      <div className="life-home-secondary">
+        {morningReport ? (
+          <section className="panel-card life-brief-card">
+            <div className="section-head">
+              <h2>AM</h2>
+            </div>
             <MarkdownCard content={morningReport.content} />
-          </details>
-        </section>
-      ) : null}
+          </section>
+        ) : null}
 
-      <section className="panel-card">
-        <div className="section-head">
-          <h2>Scheduled today</h2>
-          <span className="count-pill">{events.length}</span>
-        </div>
-        {events.length === 0 ? (
-          <p className="muted-text">No synced calendar events yet.</p>
-        ) : (
-          <ul className="timeline-list">
-            {events.map((event) => (
-              <li className="timeline-item" key={event.id}>
-                <div>
+        <section className="panel-card life-plan-card">
+          <div className="section-head">
+            <h2>Tasks</h2>
+            <span className="count-pill">{activeTasks.length}</span>
+          </div>
+          {activeTasks.length === 0 ? <p className="muted-text">Clear.</p> : null}
+          <ul className="timeline-list life-task-strip">
+            {activeTasks.map((task) => (
+              <li className="timeline-item" key={task.id}>
+                <strong>{task.title}</strong>
+                <p className="muted-text">
+                  {task.project_slug ? `${getProjectLabel(task.project_slug) || task.project_slug}` : 'General'}
+                  {task.due_local_date ? ` • ${task.due_local_date}` : ''}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="panel-card life-calendar-card">
+          <div className="section-head">
+            <h2>Cal</h2>
+            <span className="count-pill">{events.length}</span>
+          </div>
+          {events.length === 0 ? (
+            <p className="muted-text">No events.</p>
+          ) : (
+            <ul className="timeline-list">
+              {events.map((event) => (
+                <li className="timeline-item" key={event.id}>
                   <strong>{event.title || '(Untitled event)'}</strong>
                   <p className="muted-text">
                     {event.all_day
                       ? 'All day'
                       : `${event.start_time ? getLocalTimeLabel(event.start_time, timezone) : 'Unknown'} to ${event.end_time ? getLocalTimeLabel(event.end_time, timezone) : 'Unknown'}`}
                   </p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-        {calendarError ? <p className="error-text">{calendarError}</p> : null}
-      </section>
+                </li>
+              ))}
+            </ul>
+          )}
+          {calendarError ? <p className="error-text">{calendarError}</p> : null}
+        </section>
+      </div>
 
-      <section className="panel-card">
+      <section className="panel-card life-entry-log-card">
         <div className="section-head">
-          <h2>Today&apos;s entries</h2>
+          <h2>Entries</h2>
           <span className="count-pill">{entries.length}</span>
         </div>
         {entries.length === 0 ? <p className="muted-text">No entries yet.</p> : null}
@@ -182,8 +205,10 @@ export default async function LifeTodayPage({
                 <span>{getLocalTimeLabel(entry.created_at, timezone)}</span>
                 <span>{entry.source}</span>
               </div>
-              {entry.project_slug ? <span className="badge secondary">{getProjectLabel(entry.project_slug) || entry.project_slug}</span> : null}
-              <p>{entry.content}</p>
+              <div className="life-entry-line">
+                {entry.project_slug ? <span className="badge secondary">{getProjectLabel(entry.project_slug) || entry.project_slug}</span> : null}
+                <p>{entry.content}</p>
+              </div>
             </li>
           ))}
         </ul>

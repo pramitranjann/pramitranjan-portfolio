@@ -812,22 +812,19 @@ body.carousel-reengaging main {
 }
 
 .life-shell {
-  --life-bg: #f4efe5;
-  --life-card: rgba(255, 252, 245, 0.88);
-  --life-card-border: rgba(39, 58, 71, 0.14);
-  --life-text: #142332;
-  --life-muted: #5e6f7d;
-  --life-accent: #174f59;
-  --life-accent-strong: #0f3740;
-  --life-accent-soft: #dce9e4;
-  --life-danger: #9b3a2e;
-  --life-shadow: 0 18px 50px rgba(20, 35, 50, 0.08);
+  --life-bg: #0a0a0a;
+  --life-panel: #111111;
+  --life-panel-muted: #0d0d0d;
+  --life-border: #1f1f1f;
+  --life-text: #f5f2ed;
+  --life-muted: #999999;
+  --life-label: #666666;
+  --life-accent: #ff3120;
+  --life-danger: #ff6c61;
   min-height: 100vh;
+  background: var(--life-bg);
   color: var(--life-text);
-  background:
-    radial-gradient(circle at top left, rgba(217, 229, 221, 0.9), transparent 42%),
-    radial-gradient(circle at top right, rgba(223, 211, 188, 0.85), transparent 36%),
-    linear-gradient(180deg, #f7f1e7 0%, var(--life-bg) 100%);
+  -webkit-font-smoothing: antialiased;
 }
 
 .life-shell * {
@@ -847,37 +844,37 @@ body.carousel-reengaging main {
 }
 
 .life-app-shell {
-  max-width: 1120px;
+  max-width: 1220px;
   margin: 0 auto;
-  padding: 24px 18px 48px;
+  padding: 32px 40px 64px;
 }
 
-.life-shell .topbar {
+.life-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 20px;
+  padding-bottom: 20px;
   margin-bottom: 24px;
+  border-bottom: 1px solid var(--life-border);
 }
 
 .life-shell .brand {
-  font-family: var(--font-serif);
-  font-size: 2rem;
-  letter-spacing: -0.02em;
+  font-family: var(--font-mono);
+  font-size: var(--nav-logo-size);
+  letter-spacing: 0.14em;
+  color: var(--life-accent);
 }
 
-.life-shell .nav-links {
+.life-nav {
   display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
 }
 
-.life-shell .nav-links a {
-  padding: 10px 14px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.42);
-  border: 1px solid rgba(20, 35, 50, 0.08);
-  backdrop-filter: blur(12px);
+.life-nav .nav-link {
+  font-size: var(--nav-link-size);
+  letter-spacing: 0.14em;
 }
 
 .life-shell .content-shell,
@@ -887,125 +884,191 @@ body.carousel-reengaging main {
 .life-shell .detail-stack,
 .life-shell .report-stack,
 .life-shell .timeline-list,
-.life-shell .history-list {
+.life-shell .history-list,
+.life-login-form,
+.life-shell .task-group-grid,
+.life-shell .life-home-grid,
+.life-shell .life-planning-grid,
+.life-shell .life-home-secondary,
+.life-shell .life-entry-controls,
+.life-shell .task-row,
+.life-shell .task-copy,
+.life-shell .life-entry-line {
   display: grid;
 }
 
+.life-shell .content-shell,
 .life-shell .page-grid,
-.life-shell .history-grid {
-  gap: 18px;
+.life-shell .history-grid,
+.life-shell .life-home-grid,
+.life-shell .life-planning-grid {
+  gap: 24px;
 }
 
 .life-shell .capture-stack,
 .life-shell .detail-stack,
 .life-shell .report-stack,
 .life-shell .timeline-list,
-.life-shell .history-list {
-  gap: 12px;
+.life-shell .history-list,
+.life-login-form,
+.life-shell .task-group-grid,
+.life-shell .life-home-secondary,
+.life-shell .task-copy,
+.life-shell .life-entry-line {
+  gap: 14px;
 }
 
 .life-shell .hero-card,
 .life-shell .panel-card,
 .life-shell .subtle-card {
-  border: 1px solid var(--life-card-border);
-  background: var(--life-card);
-  box-shadow: var(--life-shadow);
-  backdrop-filter: blur(12px);
-  border-radius: 28px;
-  padding: 22px;
+  border: 1px solid var(--life-border);
+  background: var(--life-panel);
+  padding: 18px;
+}
+
+.life-shell .subtle-card {
+  background: var(--life-panel-muted);
 }
 
 .life-shell .hero-card h1 {
   margin: 0;
   font-family: var(--font-serif);
-  font-size: clamp(2.6rem, 8vw, 4.4rem);
-  line-height: 0.92;
+  font-size: clamp(42px, 6vw, 64px);
+  line-height: 0.98;
   color: var(--life-text);
+  text-wrap: balance;
+}
+
+.life-login-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--life-bg);
+}
+
+.life-login-card {
+  width: min(100%, 420px);
+  display: grid;
+  gap: 18px;
+  padding: 24px;
+  border: 1px solid var(--life-border);
+  background: var(--life-panel);
+}
+
+.life-login-title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(42px, 12vw, 60px);
+  line-height: 0.96;
+  color: var(--life-text);
+}
+
+.life-login-card .muted-text {
+  margin: -4px 0 0;
 }
 
 .life-shell .hero-copy,
 .life-shell .muted-text,
 .life-shell .timeline-item p,
 .life-shell .markdown-body p {
+  margin: 0;
   color: var(--life-muted);
-  line-height: 1.6;
+  line-height: 1.8;
+  letter-spacing: 0.04em;
 }
 
 .life-shell .eyebrow {
-  margin: 0 0 10px;
+  margin: 0;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  font-size: var(--text-eyebrow);
   color: var(--life-accent);
+  font-family: var(--font-mono);
 }
 
 .life-shell .mic-button,
 .life-shell .primary-button,
 .life-shell .secondary-button,
+.life-shell .filter-chip,
 .life-shell .history-row {
-  border: 0;
-  cursor: pointer;
-}
-
-.life-shell .mic-button,
-.life-shell .primary-button,
-.life-shell .secondary-button,
-.life-shell .filter-chip {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 52px;
-  border-radius: 18px;
-  padding: 14px 18px;
-  transition: transform 180ms ease, background 180ms ease, opacity 180ms ease;
+  border: 1px solid var(--life-border);
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  font-family: var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: var(--text-meta);
 }
 
 .life-shell .mic-button {
-  background: linear-gradient(180deg, var(--life-accent) 0%, var(--life-accent-strong) 100%);
-  color: white;
+  width: 100%;
+  min-height: 180px;
+  padding: 24px;
+  border-color: var(--life-accent);
+  background: var(--life-accent);
+  color: #0d0d0d;
 }
 
 .life-shell .mic-button.is-live {
-  background: linear-gradient(180deg, #285d66 0%, #112c32 100%);
-  transform: translateY(-1px);
+  background: #f5f2ed;
+  color: #0d0d0d;
+}
+
+.life-shell .primary-button,
+.life-shell .secondary-button,
+.life-shell .filter-chip,
+.life-shell .history-row {
+  min-height: 46px;
+  padding: 12px 16px;
 }
 
 .life-shell .primary-button {
-  background: var(--life-text);
-  color: white;
+  background: var(--life-accent);
+  border-color: var(--life-accent);
+  color: #0d0d0d;
 }
 
 .life-shell .secondary-button,
-.life-shell .filter-chip {
-  background: rgba(255, 255, 255, 0.72);
+.life-shell .filter-chip,
+.life-shell .history-row {
+  background: var(--life-panel-muted);
   color: var(--life-text);
-  border: 1px solid rgba(20, 35, 50, 0.12);
 }
 
-.life-shell .filter-chip.is-active {
-  background: var(--life-accent-soft);
-  color: var(--life-accent-strong);
+.life-shell .filter-chip.is-active,
+.life-shell .history-row.is-selected {
+  color: var(--life-accent);
+  border-color: var(--life-accent);
 }
 
 .life-shell .primary-button:disabled,
 .life-shell .mic-button:disabled {
-  opacity: 0.55;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
 .life-shell .draft-area,
 .life-shell .text-input {
   width: 100%;
-  border-radius: 18px;
-  border: 1px solid rgba(20, 35, 50, 0.12);
-  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--life-border);
+  background: var(--life-panel-muted);
   padding: 14px 16px;
   color: var(--life-text);
+  outline: none;
+}
+
+.life-shell .draft-area:focus,
+.life-shell .text-input:focus {
+  border-color: var(--life-accent);
 }
 
 .life-shell .draft-area {
   resize: vertical;
-  min-height: 160px;
+  min-height: 180px;
 }
 
 .life-shell .field {
@@ -1014,45 +1077,67 @@ body.carousel-reengaging main {
 }
 
 .life-shell .field span {
-  font-size: 0.9rem;
-  color: var(--life-muted);
+  font-size: var(--text-meta);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--life-label);
+  font-family: var(--font-mono);
 }
 
 .life-shell .compact-field {
   max-width: 220px;
 }
 
-.life-shell .section-head {
+.life-shell .section-head,
+.life-shell .life-page-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 14px;
+}
+
+.life-shell .life-page-head {
+  margin-bottom: 18px;
 }
 
 .life-shell .section-head h2,
 .life-shell .detail-stack h3 {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: var(--text-meta);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
   color: var(--life-text);
 }
 
 .life-shell .count-pill,
-.life-shell .badge {
+.life-shell .badge,
+.life-shell .priority-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 32px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: var(--life-accent-soft);
-  color: var(--life-accent-strong);
-  font-size: 0.82rem;
+  min-height: 28px;
+  padding: 4px 8px;
+  border: 1px solid var(--life-border);
+  background: var(--life-panel-muted);
+  color: var(--life-label);
+  font-size: var(--text-meta);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
 }
 
-.life-shell .badge.secondary {
-  background: rgba(20, 35, 50, 0.08);
+.life-shell .badge.secondary,
+.life-shell .priority-medium {
   color: var(--life-text);
+}
+
+.life-shell .priority-high {
+  color: var(--life-danger);
+}
+
+.life-shell .priority-low {
+  color: var(--life-label);
 }
 
 .life-shell .timeline-list,
@@ -1063,8 +1148,13 @@ body.carousel-reengaging main {
 }
 
 .life-shell .timeline-item {
-  border-top: 1px solid rgba(20, 35, 50, 0.08);
   padding-top: 12px;
+  border-top: 1px solid var(--life-border);
+}
+
+.life-shell .timeline-list > .timeline-item:first-child {
+  padding-top: 0;
+  border-top: 0;
 }
 
 .life-shell .timeline-meta {
@@ -1072,68 +1162,59 @@ body.carousel-reengaging main {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  color: var(--life-muted);
-  font-size: 0.85rem;
-  margin-bottom: 8px;
+  color: var(--life-label);
+  font-size: var(--text-meta);
+  font-family: var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
 }
 
 .life-shell .summary-toggle {
   cursor: pointer;
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .life-shell .interim-chip {
-  border-radius: 999px;
-  padding: 10px 14px;
-  background: rgba(23, 79, 89, 0.1);
-  color: var(--life-accent-strong);
+  padding: 10px 12px;
+  border: 1px solid var(--life-accent);
+  color: var(--life-accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
-.life-shell .toolbar {
+.life-shell .toolbar,
+.life-shell .badge-row,
+.life-shell .task-meta-row,
+.life-shell .task-actions {
   display: flex;
-  gap: 12px;
-  align-items: end;
+  align-items: center;
+  gap: 8px;
   flex-wrap: wrap;
-  margin-top: 18px;
 }
 
+.life-shell .detail-panel,
 .life-shell .report-panel {
-  min-height: 320px;
+  min-height: 100%;
 }
 
 .life-shell .history-row {
   width: 100%;
-  text-align: left;
-  display: flex;
-  align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 14px 16px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.42);
-}
-
-.life-shell .history-row.is-selected {
-  background: var(--life-accent-soft);
-}
-
-.life-shell .badge-row {
-  display: flex;
-  gap: 8px;
-}
-
-.life-shell .detail-panel {
-  min-height: 520px;
-}
-
-.life-shell .subtle-card {
-  border-radius: 22px;
-  padding: 18px;
+  text-align: left;
 }
 
 .life-shell .error-text {
   color: var(--life-danger);
   margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  letter-spacing: 0.08em;
 }
 
 .life-shell .markdown-body :first-child {
@@ -1149,92 +1230,164 @@ body.carousel-reengaging main {
   padding-left: 1.2rem;
 }
 
-.life-shell .task-group-grid {
-  display: grid;
+.life-shell .metric-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
   gap: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--life-border);
+}
+
+.life-shell .detail-stack > .metric-row:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.life-shell .task-row,
+.life-shell .life-entry-controls {
+  gap: 12px;
 }
 
 .life-shell .task-group-card h3 {
   margin: 0;
 }
 
-.life-shell .task-row {
-  display: grid;
-  gap: 12px;
+.life-shell .life-entry-area {
+  min-height: 220px;
 }
 
-.life-shell .task-copy {
-  display: grid;
-  gap: 8px;
+.life-shell .life-entry-log-card .timeline-item p,
+.life-shell .task-copy p {
+  margin: 0;
 }
 
-.life-shell .task-meta-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+.life-shell .life-filter-card .toolbar,
+.life-shell .life-planning-hero .toolbar {
+  margin-top: 0;
 }
 
-.life-shell .task-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+.life-shell .life-brief-card .markdown-body,
+.life-shell .life-week-review-card .markdown-body,
+.life-shell .life-week-summary-card .markdown-body {
+  font-size: var(--text-body);
 }
 
-.life-shell .priority-pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  padding: 6px 10px;
-  font-size: 0.8rem;
-  text-transform: capitalize;
+@media (max-width: 699px) {
+  .life-app-shell {
+    padding: 20px 16px 40px;
+  }
+
+  .life-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .life-nav {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    white-space: nowrap;
+  }
+
+  .life-shell .hero-card h1,
+  .life-login-title {
+    font-size: clamp(38px, 14vw, 52px);
+  }
+
+  .life-shell .mic-button {
+    min-height: 132px;
+  }
+
+  .life-shell .life-entry-controls,
+  .life-shell .task-row {
+    grid-template-columns: 1fr;
+  }
+
+  .life-login-shell {
+    padding: 16px;
+  }
+
+  .life-login-card {
+    padding: 20px;
+  }
 }
 
-.life-shell .priority-high {
-  background: rgba(155, 58, 46, 0.14);
-  color: var(--life-danger);
-}
+@media (min-width: 700px) and (max-width: 1099px) {
+  .life-app-shell {
+    padding: 24px 24px 56px;
+  }
 
-.life-shell .priority-medium {
-  background: rgba(23, 79, 89, 0.1);
-  color: var(--life-accent-strong);
-}
-
-.life-shell .priority-low {
-  background: rgba(20, 35, 50, 0.08);
-  color: var(--life-muted);
-}
-
-.life-shell .metric-row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-  border-top: 1px solid rgba(20, 35, 50, 0.08);
-  padding-top: 12px;
-}
-
-@media (min-width: 880px) {
-  .life-shell .page-grid {
-    grid-template-columns: 1.15fr 0.85fr;
+  .life-shell .page-grid,
+  .life-shell .history-grid,
+  .life-shell .life-home-grid,
+  .life-shell .life-planning-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     align-items: start;
   }
 
-  .life-shell .hero-card {
+  .life-shell .hero-card,
+  .life-shell .life-entry-log-card,
+  .life-shell .life-task-board-card,
+  .life-shell .life-week-review-card,
+  .life-shell .life-week-summary-card,
+  .life-shell .life-week-open-card,
+  .life-shell .report-panel,
+  .life-shell .detail-panel {
     grid-column: 1 / -1;
   }
 
+  .life-shell .life-entry-controls,
+  .life-shell .task-row,
+  .life-shell .life-task-inputs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1100px) {
+  .life-shell .page-grid,
   .life-shell .history-grid {
-    grid-template-columns: 0.88fr 1.12fr;
+    grid-template-columns: 320px minmax(0, 1fr);
     align-items: start;
   }
 
-  .life-shell .task-group-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .life-shell .life-home-grid {
+    grid-template-columns: minmax(0, 1.18fr) 320px;
+    align-items: start;
   }
 
-  .life-shell .task-row {
-    grid-template-columns: minmax(0, 1fr) auto;
+  .life-shell .life-entry-log-card {
+    grid-column: 1 / -1;
+  }
+
+  .life-shell .life-planning-grid {
+    grid-template-columns: 320px minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .life-shell .life-planning-hero {
+    grid-column: 1 / -1;
+  }
+
+  .life-shell .life-filter-card,
+  .life-shell .life-week-metrics-card {
+    grid-column: 1;
+  }
+
+  .life-shell .life-task-board-card,
+  .life-shell .life-week-review-card,
+  .life-shell .life-week-summary-card {
+    grid-column: 2;
+  }
+
+  .life-shell .life-week-open-card {
+    grid-column: 1 / -1;
+  }
+
+  .life-shell .life-entry-controls,
+  .life-shell .task-row,
+  .life-shell .life-task-inputs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     align-items: start;
   }
 }
