@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import type { CSSProperties } from 'react'
 import { DM_Serif_Display, DM_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { Agentation } from 'agentation'
 import './globals.css'
 import { JsonLd } from '@/components/JsonLd'
 import { MotionSettingsProvider } from '@/components/MotionSettingsProvider'
@@ -176,6 +177,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </SiteCopyProvider>
         </MotionSettingsProvider>
         <Analytics />
+        {process.env.NODE_ENV === 'development' && <Agentation />}
       </body>
     </html>
   )
