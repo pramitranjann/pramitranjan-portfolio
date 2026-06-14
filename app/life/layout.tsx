@@ -23,7 +23,9 @@ export default function LifeLayout({ children }: { children: React.ReactNode }) 
           </Link>
           <nav className="nav-links">
             <Link href="/life">Today</Link>
+            <Link href="/life/tasks">Tasks</Link>
             <Link href="/life/report">Report</Link>
+            <Link href="/life/review">Weekly</Link>
             <Link href="/life/history">History</Link>
             <Link href="/dashboard">Dashboard</Link>
           </nav>

@@ -841,7 +841,8 @@ body.carousel-reengaging main {
 
 .life-shell button,
 .life-shell input,
-.life-shell textarea {
+.life-shell textarea,
+.life-shell select {
   font: inherit;
 }
 
@@ -940,13 +941,16 @@ body.carousel-reengaging main {
 
 .life-shell .mic-button,
 .life-shell .primary-button,
+.life-shell .secondary-button,
 .life-shell .history-row {
   border: 0;
   cursor: pointer;
 }
 
 .life-shell .mic-button,
-.life-shell .primary-button {
+.life-shell .primary-button,
+.life-shell .secondary-button,
+.life-shell .filter-chip {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -969,6 +973,18 @@ body.carousel-reengaging main {
 .life-shell .primary-button {
   background: var(--life-text);
   color: white;
+}
+
+.life-shell .secondary-button,
+.life-shell .filter-chip {
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--life-text);
+  border: 1px solid rgba(20, 35, 50, 0.12);
+}
+
+.life-shell .filter-chip.is-active {
+  background: var(--life-accent-soft);
+  color: var(--life-accent-strong);
 }
 
 .life-shell .primary-button:disabled,
@@ -1133,6 +1149,71 @@ body.carousel-reengaging main {
   padding-left: 1.2rem;
 }
 
+.life-shell .task-group-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.life-shell .task-group-card h3 {
+  margin: 0;
+}
+
+.life-shell .task-row {
+  display: grid;
+  gap: 12px;
+}
+
+.life-shell .task-copy {
+  display: grid;
+  gap: 8px;
+}
+
+.life-shell .task-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.life-shell .task-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.life-shell .priority-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+}
+
+.life-shell .priority-high {
+  background: rgba(155, 58, 46, 0.14);
+  color: var(--life-danger);
+}
+
+.life-shell .priority-medium {
+  background: rgba(23, 79, 89, 0.1);
+  color: var(--life-accent-strong);
+}
+
+.life-shell .priority-low {
+  background: rgba(20, 35, 50, 0.08);
+  color: var(--life-muted);
+}
+
+.life-shell .metric-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid rgba(20, 35, 50, 0.08);
+  padding-top: 12px;
+}
+
 @media (min-width: 880px) {
   .life-shell .page-grid {
     grid-template-columns: 1.15fr 0.85fr;
@@ -1145,6 +1226,15 @@ body.carousel-reengaging main {
 
   .life-shell .history-grid {
     grid-template-columns: 0.88fr 1.12fr;
+    align-items: start;
+  }
+
+  .life-shell .task-group-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .life-shell .task-row {
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: start;
   }
 }

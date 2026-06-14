@@ -3,6 +3,7 @@
 import { useDeferredValue, useEffect, useState } from "react";
 
 import { fetchJson } from '@/lib/life/client'
+import { getProjectLabel } from '@/lib/life/projects'
 import { getDisplayDate, getLocalTimeLabel } from '@/lib/life/time'
 import type { CalendarEventRecord, DayHistory, EntryRecord, ReportRecord } from '@/lib/life/types'
 import { MarkdownCard } from '@/components/life/MarkdownCard'
@@ -153,6 +154,7 @@ export function HistoryClient() {
                     <span>{getLocalTimeLabel(entry.created_at, timezone)}</span>
                     <span>{entry.source}</span>
                   </div>
+                  {entry.project_slug ? <span className="badge secondary">{getProjectLabel(entry.project_slug) || entry.project_slug}</span> : null}
                   <p>{entry.content}</p>
                 </li>
               ))}

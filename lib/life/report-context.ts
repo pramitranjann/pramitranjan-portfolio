@@ -1,19 +1,20 @@
 import { OWNER_ID, OWNER_PROFILE } from '@/lib/life/constants'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
 import { getLocalTimeLabel } from '@/lib/life/time'
-import type { CalendarEventRecord, EntryRecord, ReportRecord, SummaryRecord } from '@/lib/life/types'
+import type { CalendarEventRecord, EntryRecord, ReportRecord, SummaryRecord, TaskRecord } from '@/lib/life/types'
 
 export interface ReportContext {
   summaries: SummaryRecord[];
   priorEods: ReportRecord[];
   events: CalendarEventRecord[];
   entries: EntryRecord[];
+  openTasks: TaskRecord[];
 }
 
 export async function loadDailyContext(localDate: string) {
   const supabase = getSupabaseAdmin();
 
-  const [{ data: summaries, error: summariesError }, { data: priorEods, error: reportsError }, { data: events, error: eventsError }, { data: entries, error: entriesError }] = await Promise.all([
+  const [{ data: summaries, error: summariesError }, { data: priorEods, error: reportsError }, { data: events, error: eventsError }, { data: entries, error: entriesError }, { data: openTasks, error: openTasksError }] = await Promise.all([
     supabase
       .from("summaries")
       .select("*")
@@ -44,10 +45,19 @@ export async function loadDailyContext(localDate: string) {
       .eq("local_date", localDate)
       .order("created_at", { ascending: true })
       .returns<EntryRecord[]>(),
+    supabase
+      .from("tasks")
+      .select("*")
+      .eq("user_id", OWNER_ID)
+      .in("status", ["open", "in_progress"])
+      .order("priority", { ascending: true })
+      .order("due_local_date", { ascending: true, nullsFirst: false })
+      .limit(12)
+      .returns<TaskRecord[]>(),
   ]);
 
-  if (summariesError || reportsError || eventsError || entriesError) {
-    throw summariesError || reportsError || eventsError || entriesError;
+  if (summariesError || reportsError || eventsError || entriesError || openTasksError) {
+    throw summariesError || reportsError || eventsError || entriesError || openTasksError;
   }
 
   return {
@@ -55,6 +65,7 @@ export async function loadDailyContext(localDate: string) {
     priorEods: priorEods || [],
     events: events || [],
     entries: entries || [],
+    openTasks: openTasks || [],
   } satisfies ReportContext;
 }
 
@@ -83,6 +94,20 @@ function formatEntries(entries: EntryRecord[], timeZone: string) {
     .join("\n");
 }
 
+function formatTasks(tasks: TaskRecord[]) {
+  if (tasks.length === 0) {
+    return "No open tasks currently tracked.";
+  }
+
+  return tasks
+    .map((task) => {
+      const due = task.due_local_date ? ` due ${task.due_local_date}` : ''
+      const project = task.project_slug ? ` [${task.project_slug}]` : ''
+      return `- ${task.title}${project}${due} (${task.status})`
+    })
+    .join('\n')
+}
+
 export function buildEodPrompt(localDate: string, timeZone: string, context: ReportContext) {
   const recentSummaries = context.summaries.length
     ? context.summaries.map((summary) => `Week of ${summary.week_start}\n${summary.content}`).join("\n\n")
@@ -96,6 +121,7 @@ export function buildEodPrompt(localDate: string, timeZone: string, context: Rep
     `Target local date: ${localDate}`,
     `Recent weekly summaries:\n${recentSummaries}`,
     `Last end-of-day reports:\n${priorReports}`,
+    `Current open tasks:\n${formatTasks(context.openTasks)}`,
     `Today's calendar events:\n${formatEvents(context.events, timeZone)}`,
     `Today's entries in chronological order:\n${formatEntries(context.entries, timeZone)}`,
   ].join("\n\n");
@@ -107,6 +133,7 @@ export function buildMorningPrompt(localDate: string, timeZone: string, yesterda
     `Target local date: ${localDate}`,
     `Yesterday's end-of-day report:\n${yesterdayReport?.content || "No EOD report for yesterday."}`,
     `Recent weekly summaries:\n${context.summaries.map((summary) => `Week of ${summary.week_start}\n${summary.content}`).join("\n\n") || "No weekly summaries yet."}`,
+    `Current open tasks:\n${formatTasks(context.openTasks)}`,
     `Today's calendar events:\n${formatEvents(context.events, timeZone)}`,
   ].join("\n\n");
 }

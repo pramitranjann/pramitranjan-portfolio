@@ -303,6 +303,7 @@ export function TodayClient({ initialError = null }: { initialError?: string | n
       user_id: "owner",
       content,
       source: draftSource,
+      project_slug: null,
       local_date: localDate,
       created_at: new Date().toISOString(),
     };

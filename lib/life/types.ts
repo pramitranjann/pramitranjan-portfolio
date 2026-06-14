@@ -1,11 +1,14 @@
 export type EntrySource = "voice" | "text";
-export type ReportType = "eod" | "morning";
+export type ReportType = "eod" | "morning" | "weekly";
+export type TaskStatus = "open" | "in_progress" | "done" | "dismissed";
+export type TaskPriority = "high" | "medium" | "low";
 
 export interface EntryRecord {
   id: string;
   user_id: string;
   content: string;
   source: EntrySource;
+  project_slug: string | null;
   local_date: string;
   created_at: string;
 }
@@ -52,4 +55,31 @@ export interface DayHistory {
   entryCount: number;
   hasEod: boolean;
   hasMorning: boolean;
+}
+
+export interface TaskRecord {
+  id: string;
+  user_id: string;
+  title: string;
+  details: string | null;
+  project_slug: string | null;
+  status: TaskStatus;
+  priority: TaskPriority;
+  due_local_date: string | null;
+  source_type: string;
+  source_local_date: string | null;
+  source_report_id: string | null;
+  auto_generated: boolean;
+  fingerprint: string | null;
+  created_at: string;
+  updated_at: string;
+  completed_at: string | null;
+}
+
+export interface TaskCandidate {
+  title: string;
+  details: string | null;
+  projectSlug: string | null;
+  priority: TaskPriority;
+  dueLocalDate: string | null;
 }

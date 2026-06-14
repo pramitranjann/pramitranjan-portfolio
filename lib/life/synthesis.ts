@@ -1,10 +1,11 @@
-import { EOD_SYSTEM_PROMPT, MORNING_SYSTEM_PROMPT, OWNER_ID, WEEKLY_SYSTEM_PROMPT } from '@/lib/life/constants'
+import { EOD_SYSTEM_PROMPT, MORNING_SYSTEM_PROMPT, OWNER_ID, WEEKLY_REVIEW_SYSTEM_PROMPT, WEEKLY_SYSTEM_PROMPT } from '@/lib/life/constants'
 import { callClaude } from '@/lib/life/claude'
 import { buildEodPrompt, buildMorningPrompt, loadDailyContext } from '@/lib/life/report-context'
 import { syncCalendarEvents } from '@/lib/life/calendar'
 import { sendReportEmail } from '@/lib/life/email'
 import { getOwnerSettings } from '@/lib/life/settings'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
+import { getWeeklyTaskSnapshot, syncTasksFromReport } from '@/lib/life/tasks'
 import { addDays, getCurrentLocalClock, getCurrentLocalDate, getWeekStart, isMorningBriefWindow } from '@/lib/life/time'
 import type { ReportRecord, SummaryRecord } from '@/lib/life/types'
 
@@ -78,6 +79,13 @@ export async function generateEodReport(options?: { localDate?: string; force?: 
   if (error) {
     throw error;
   }
+
+  await syncTasksFromReport({
+    localDate,
+    sourceType: 'eod',
+    reportId: data.id,
+    reportContent: markdown,
+  })
 
   void sendReportEmail(`EOD — ${localDate}`, markdown);
 
@@ -155,6 +163,13 @@ export async function generateMorningBrief(options?: { localDate?: string; force
     throw error;
   }
 
+  await syncTasksFromReport({
+    localDate,
+    sourceType: 'morning',
+    reportId: data.id,
+    reportContent: markdown,
+  })
+
   void sendReportEmail(`Morning — ${localDate}`, markdown);
 
   return {
@@ -165,13 +180,13 @@ export async function generateMorningBrief(options?: { localDate?: string; force
   };
 }
 
-export async function generateWeeklySummary(options?: { localDate?: string; force?: boolean }) {
+export async function generateWeeklySummary(options?: { localDate?: string; weekStart?: string; force?: boolean }) {
   const settings = await getOwnerSettings();
   const timeZone = settings.timezone;
   const today = options?.localDate || getCurrentLocalDate(timeZone);
   const currentWeekStart = getWeekStart(today);
-  const targetWeekStart = addDays(currentWeekStart, -7);
-  const targetWeekEnd = addDays(currentWeekStart, -1);
+  const targetWeekStart = options?.weekStart || addDays(currentWeekStart, -7);
+  const targetWeekEnd = addDays(targetWeekStart, 6);
   const supabase = getSupabaseAdmin();
 
   const { data: existing, error: existingError } = await supabase
@@ -197,7 +212,7 @@ export async function generateWeeklySummary(options?: { localDate?: string; forc
   const [{ data: entries, error: entriesError }, { data: reports, error: reportsError }] = await Promise.all([
     supabase
       .from("entries")
-      .select("local_date, created_at, content")
+      .select("local_date, created_at, content, project_slug")
       .eq("user_id", OWNER_ID)
       .gte("local_date", targetWeekStart)
       .lte("local_date", targetWeekEnd)
@@ -216,10 +231,12 @@ export async function generateWeeklySummary(options?: { localDate?: string; forc
     throw entriesError || reportsError;
   }
 
+  const weeklyTasks = await getWeeklyTaskSnapshot(targetWeekStart)
+
   const input = [
     `Week start: ${targetWeekStart}`,
     `Week end: ${targetWeekEnd}`,
-    `Entries:\n${(entries || []).map((entry) => `- ${entry.local_date} ${entry.created_at}: ${entry.content}`).join("\n") || "No entries."}`,
+    `Entries:\n${(entries || []).map((entry) => `- ${entry.local_date} ${entry.created_at}${entry.project_slug ? ` [${entry.project_slug}]` : ''}: ${entry.content}`).join("\n") || "No entries."}`,
     `Reports:\n${(reports || []).map((report) => `- ${report.local_date} ${report.type}: ${report.content}`).join("\n\n") || "No reports."}`,
   ].join("\n\n");
 
@@ -246,9 +263,49 @@ export async function generateWeeklySummary(options?: { localDate?: string; forc
     throw error;
   }
 
+  const weeklyReviewMarkdown = await callClaude({
+    system: WEEKLY_REVIEW_SYSTEM_PROMPT,
+    user: [
+      `Week start: ${targetWeekStart}`,
+      `Week end: ${targetWeekEnd}`,
+      `Compressed weekly summary:\n${content}`,
+      `Entries:\n${(entries || []).map((entry) => `- ${entry.local_date}${entry.project_slug ? ` [${entry.project_slug}]` : ''}: ${entry.content}`).join("\n") || "No entries."}`,
+      `Reports:\n${(reports || []).map((report) => `- ${report.local_date} ${report.type}: ${report.content}`).join("\n\n") || "No reports."}`,
+      `Open tasks:\n${weeklyTasks.openTasks.map((task) => `- ${task.title}${task.project_slug ? ` [${task.project_slug}]` : ''}`).join("\n") || "No open tasks."}`,
+      `Completed tasks this week:\n${weeklyTasks.completedTasks.map((task) => `- ${task.title}${task.project_slug ? ` [${task.project_slug}]` : ''}`).join("\n") || "No completed tasks."}`,
+    ].join('\n\n'),
+    maxTokens: 1100,
+  })
+
+  const { data: weeklyReport, error: weeklyReportError } = await supabase
+    .from('reports')
+    .upsert(
+      {
+        user_id: OWNER_ID,
+        type: 'weekly',
+        content: weeklyReviewMarkdown,
+        local_date: targetWeekStart,
+      },
+      { onConflict: 'user_id,type,local_date' },
+    )
+    .select('*')
+    .single()
+
+  if (weeklyReportError) {
+    throw weeklyReportError
+  }
+
+  await syncTasksFromReport({
+    localDate: targetWeekStart,
+    sourceType: 'weekly',
+    reportId: weeklyReport.id,
+    reportContent: weeklyReviewMarkdown,
+  })
+
   return {
     skipped: false,
     weekStart: targetWeekStart,
     summary: data,
+    report: weeklyReport,
   };
 }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { OWNER_ID } from '@/lib/life/constants'
 import { isAuthenticatedLifeRequest, unauthorizedJson } from '@/lib/life/auth'
+import { detectProjectSlug, normalizeProjectSlug } from '@/lib/life/projects'
 import { getOwnerSettings } from '@/lib/life/settings'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
 import { getCurrentLocalDate } from '@/lib/life/time'
@@ -43,15 +44,18 @@ export async function POST(request: NextRequest) {
   const isJsonRequest = contentType.includes("application/json");
   let content = "";
   let source: EntrySource = "voice";
+  let projectSlug: string | null = null;
 
   if (isJsonRequest) {
-    const body = (await request.json().catch(() => null)) as { content?: string; source?: EntrySource } | null;
+    const body = (await request.json().catch(() => null)) as { content?: string; source?: EntrySource; projectSlug?: string | null } | null;
     content = body?.content?.trim() || "";
     source = body?.source === "text" ? "text" : "voice";
+    projectSlug = normalizeProjectSlug(body?.projectSlug) || null;
   } else {
     const formData = await request.formData().catch(() => null);
     content = typeof formData?.get("content") === "string" ? String(formData.get("content")).trim() : "";
     source = formData?.get("source") === "voice" ? "voice" : "text";
+    projectSlug = normalizeProjectSlug(typeof formData?.get("projectSlug") === "string" ? String(formData.get("projectSlug")) : null) || null;
   }
 
   if (!content) {
@@ -70,6 +74,7 @@ export async function POST(request: NextRequest) {
       user_id: OWNER_ID,
       content,
       source,
+      project_slug: projectSlug || detectProjectSlug(content),
       local_date: localDate,
     })
     .select("*")

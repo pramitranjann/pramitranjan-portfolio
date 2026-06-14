@@ -5,6 +5,7 @@ import { VoiceCaptureControl } from '@/components/life/VoiceCaptureControl'
 import { OWNER_ID } from '@/lib/life/constants'
 import { isAdminSession } from '@/lib/admin-auth'
 import { syncCalendarEvents } from '@/lib/life/calendar'
+import { getProjectLabel, LIFE_PROJECTS } from '@/lib/life/projects'
 import { getOwnerSettings } from '@/lib/life/settings'
 import { generateMorningBrief } from '@/lib/life/synthesis'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
@@ -114,6 +115,17 @@ export default async function LifeTodayPage({
             rows={6}
             placeholder="Type or dictate the raw note here."
           />
+          <label className="field compact-field">
+            <span>Project</span>
+            <select className="text-input" defaultValue="" name="projectSlug">
+              <option value="">Auto-detect</option>
+              {LIFE_PROJECTS.map((project) => (
+                <option key={project.slug} value={project.slug}>
+                  {project.name}
+                </option>
+              ))}
+            </select>
+          </label>
           <button className="primary-button" type="submit">
             Save entry
           </button>
@@ -170,6 +182,7 @@ export default async function LifeTodayPage({
                 <span>{getLocalTimeLabel(entry.created_at, timezone)}</span>
                 <span>{entry.source}</span>
               </div>
+              {entry.project_slug ? <span className="badge secondary">{getProjectLabel(entry.project_slug) || entry.project_slug}</span> : null}
               <p>{entry.content}</p>
             </li>
           ))}
