@@ -72,15 +72,33 @@ export function VoiceCaptureControl({
   const [hint, setHint] = useState('Voice capture requires the page to finish loading in Safari.')
   const [error, setError] = useState<string | null>(null)
   const [interimTranscript, setInterimTranscript] = useState('')
+  const recognitionConstructorRef = useRef<(new () => SpeechRecognitionLike) | null>(null)
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null)
   const finalTranscriptRef = useRef('')
-  const autoSubmittingRef = useRef(false)
+  const pendingSubmitRef = useRef(false)
+  const stoppingRef = useRef(false)
+
+  function destroyRecognition(recognition?: SpeechRecognitionLike | null) {
+    if (!recognition) {
+      return
+    }
+
+    recognition.onend = null
+    recognition.onerror = null
+    recognition.onresult = null
+
+    if (recognitionRef.current === recognition) {
+      recognitionRef.current = null
+    }
+  }
 
   function forceStopRecognition() {
     const recognition = recognitionRef.current
     if (!recognition) {
       return
     }
+
+    stoppingRef.current = true
 
     if (typeof recognition.abort === 'function') {
       recognition.abort()
@@ -107,6 +125,51 @@ export function VoiceCaptureControl({
       return
     }
 
+    recognitionConstructorRef.current = Recognition
+    setSupported(true)
+    setHint('Tap once, allow microphone access if Safari asks, then speak. Say save entry to submit by voice.')
+
+    const handlePageHide = () => {
+      setListening(false)
+      forceStopRecognition()
+    }
+
+    document.addEventListener('visibilitychange', handlePageHide)
+    window.addEventListener('pagehide', handlePageHide)
+
+    return () => {
+      document.removeEventListener('visibilitychange', handlePageHide)
+      window.removeEventListener('pagehide', handlePageHide)
+      forceStopRecognition()
+      destroyRecognition(recognitionRef.current)
+    }
+  }, [sourceInputId, textareaId])
+
+  async function toggleListening() {
+    const Recognition = recognitionConstructorRef.current
+    if (!Recognition) {
+      setError('Voice capture is unavailable in this browser context. Use the keyboard mic in the textarea.')
+      return
+    }
+
+    setError(null)
+
+    if (listening) {
+      setListening(false)
+      pendingSubmitRef.current = false
+      forceStopRecognition()
+      return
+    }
+
+    const textarea = document.getElementById(textareaId) as HTMLTextAreaElement | null
+    const sourceInput = document.getElementById(sourceInputId) as HTMLInputElement | null
+    finalTranscriptRef.current = textarea?.value.trim() || ''
+    setInterimTranscript('')
+    pendingSubmitRef.current = false
+    stoppingRef.current = false
+
+    destroyRecognition(recognitionRef.current)
+
     const recognition = new Recognition()
     recognition.continuous = false
     recognition.interimResults = true
@@ -129,24 +192,23 @@ export function VoiceCaptureControl({
         finalTranscriptRef.current = `${finalTranscriptRef.current} ${finalText}`.trim()
         const parsed = extractSaveCommand(finalTranscriptRef.current)
         finalTranscriptRef.current = parsed.content
-        const textarea = document.getElementById(textareaId) as HTMLTextAreaElement | null
+        const textareaElement = document.getElementById(textareaId) as HTMLTextAreaElement | null
         const sourceInput = document.getElementById(sourceInputId) as HTMLInputElement | null
-        if (textarea) {
-          textarea.value = parsed.content
+        if (textareaElement) {
+          textareaElement.value = parsed.content
         }
         if (sourceInput) {
           sourceInput.value = 'voice'
         }
 
-        if (parsed.shouldSubmit && !autoSubmittingRef.current) {
+        if (parsed.shouldSubmit && !pendingSubmitRef.current) {
           if (!parsed.content) {
             setError('Dictate some content before saying save entry.')
             return
           }
 
-          autoSubmittingRef.current = true
+          pendingSubmitRef.current = true
           forceStopRecognition()
-          textarea?.form?.requestSubmit()
           return
         }
       }
@@ -154,63 +216,42 @@ export function VoiceCaptureControl({
       setInterimTranscript(interimText.trim())
     }
     recognition.onerror = (event) => {
-      setListening(false)
-      setError(getSpeechErrorMessage(event.error))
-    }
-    recognition.onend = () => {
+      const wasStopping = stoppingRef.current
       setListening(false)
       setInterimTranscript('')
-      autoSubmittingRef.current = false
+
+      if (!(wasStopping && event.error === 'aborted')) {
+        setError(getSpeechErrorMessage(event.error))
+      }
+    }
+    recognition.onend = () => {
+      const shouldSubmit = pendingSubmitRef.current
+      const textareaElement = document.getElementById(textareaId) as HTMLTextAreaElement | null
+      const form = textareaElement?.form
+
+      setListening(false)
+      setInterimTranscript('')
+      pendingSubmitRef.current = false
+      stoppingRef.current = false
+      destroyRecognition(recognition)
+
+      if (shouldSubmit && form) {
+        form.requestSubmit()
+      }
     }
 
     recognitionRef.current = recognition
-    setSupported(true)
-    setHint('Tap once, allow microphone access if Safari asks, then speak. Say save entry to submit by voice.')
-
-    const handlePageHide = () => {
-      setListening(false)
-      forceStopRecognition()
-    }
-
-    document.addEventListener('visibilitychange', handlePageHide)
-    window.addEventListener('pagehide', handlePageHide)
-
-    return () => {
-      document.removeEventListener('visibilitychange', handlePageHide)
-      window.removeEventListener('pagehide', handlePageHide)
-      forceStopRecognition()
-    }
-  }, [sourceInputId, textareaId])
-
-  async function toggleListening() {
-    if (!recognitionRef.current) {
-      setError('Voice capture is unavailable in this browser context. Use the keyboard mic in the textarea.')
-      return
-    }
-
-    setError(null)
-    autoSubmittingRef.current = false
-
-    if (listening) {
-      setListening(false)
-      forceStopRecognition()
-      return
-    }
-
-    const textarea = document.getElementById(textareaId) as HTMLTextAreaElement | null
-    const sourceInput = document.getElementById(sourceInputId) as HTMLInputElement | null
-    finalTranscriptRef.current = textarea?.value.trim() || ''
-    setInterimTranscript('')
 
     try {
       if (sourceInput) {
         sourceInput.value = 'voice'
       }
 
-      recognitionRef.current.start()
+      recognition.start()
       setListening(true)
     } catch (startError) {
       setListening(false)
+      destroyRecognition(recognition)
       setError(startError instanceof Error ? startError.message : 'Voice capture failed to start.')
     }
   }
