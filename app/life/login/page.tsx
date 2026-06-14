@@ -19,11 +19,10 @@ export const metadata: Metadata = {
 export default async function LifeLoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string; next?: string }>
+  searchParams: Promise<{ next?: string }>
 }) {
   const params = await searchParams
   const nextPath = params.next?.startsWith('/') ? params.next : '/life'
-  const error = params.error === 'invalid' ? 'Invalid password' : params.error === 'rate_limited' ? 'Too many login attempts. Try again later.' : null
 
   if (await isAdminSession()) {
     redirect(nextPath as never)
@@ -41,7 +40,7 @@ export default async function LifeLoginPage({
         <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.7, marginBottom: '24px' }}>
           Uses the same password as the dashboard, but with its own entrance.
         </p>
-        <DashboardLoginForm nextPath={nextPath} error={error} />
+        <DashboardLoginForm nextPath={nextPath} />
       </section>
     </main>
   )

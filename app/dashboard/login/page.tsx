@@ -15,17 +15,9 @@ export const metadata: Metadata = {
   },
 }
 
-export default async function DashboardLoginPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ error?: string; next?: string }>
-}) {
-  const params = await searchParams
-  const nextPath = params.next?.startsWith('/') ? params.next : '/dashboard'
-  const error = params.error === 'invalid' ? 'Invalid password' : params.error === 'rate_limited' ? 'Too many login attempts. Try again later.' : null
-
+export default async function DashboardLoginPage() {
   if (await isAdminSession()) {
-    redirect(nextPath as never)
+    redirect('/dashboard')
   }
 
   return (
@@ -40,7 +32,7 @@ export default async function DashboardLoginPage({
         <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.7, marginBottom: '24px' }}>
           Private entrance for local-first edits to the homepage, About, Work, and photography before committing and pushing them properly.
         </p>
-        <DashboardLoginForm nextPath={nextPath} error={error} />
+        <DashboardLoginForm />
       </section>
     </main>
   )

@@ -822,6 +822,8 @@ git push`
   }
 
   function handleEditingToggle() {
+    if (!saveEnabled) return
+
     if (!editingEnabled) {
       requestEditingAccess()
       return
@@ -1128,7 +1130,8 @@ git push`
             type="button"
             onClick={handleEditingToggle}
             className="font-mono"
-            style={{ background: editingEnabled ? '#181818' : 'transparent', border: '1px solid #2a2a2a', color: editingEnabled ? '#f5f2ed' : '#999999', padding: '12px 16px', letterSpacing: '0.1em', cursor: 'pointer' }}
+            disabled={!saveEnabled}
+            style={{ background: editingEnabled ? '#181818' : 'transparent', border: '1px solid #2a2a2a', color: !saveEnabled ? '#444444' : editingEnabled ? '#f5f2ed' : '#999999', padding: '12px 16px', letterSpacing: '0.1em', cursor: saveEnabled ? 'pointer' : 'default' }}
           >
             {editingEnabled ? 'TURN EDITING OFF' : 'ENABLE EDITING'}
           </button>
@@ -1182,18 +1185,10 @@ git push`
         </div>
       </div>
 
-      {!editingEnabled ? (
+      {!editingEnabled && saveEnabled ? (
         <div className="dashboard-info-card" style={{ border: '1px solid #1f1f1f', background: '#111111', padding: '16px 18px' }}>
           <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.7 }}>
             Dashboard is currently read-only. Use <span style={{ color: '#f5f2ed' }}>ENABLE EDITING</span> to confirm you want to make changes before any field becomes editable.
-          </p>
-        </div>
-      ) : null}
-
-      {editingEnabled && !saveEnabled ? (
-        <div className="dashboard-info-card" style={{ border: '1px solid #1f1f1f', background: '#111111', padding: '16px 18px' }}>
-          <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.7 }}>
-            Editing is enabled, but saving is unavailable in the current environment. Your changes will stay in the page until you refresh.
           </p>
         </div>
       ) : null}
@@ -1366,7 +1361,7 @@ git push`
           </div>
         </aside>
 
-        <fieldset disabled={!editingEnabled || saving} style={{ display: 'grid', gap: '24px', opacity: !editingEnabled ? 0.58 : 1, transition: 'opacity 0.18s ease', minWidth: 0 }}>
+        <fieldset disabled={!editingEnabled || saving || !saveEnabled} style={{ display: 'grid', gap: '24px', opacity: !editingEnabled || !saveEnabled ? 0.58 : 1, transition: 'opacity 0.18s ease', minWidth: 0 }}>
           {activePage === 'homepage' ? (
             <HomepageEditor content={content} updateSection={updateSection} localWriteEnabled={localWriteEnabled} />
           ) : null}
