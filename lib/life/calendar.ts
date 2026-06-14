@@ -14,8 +14,49 @@ function getCalendarClient() {
   return google.calendar({ version: "v3", auth: oauth2Client });
 }
 
-export async function syncCalendarEvents(targetLocalDate?: string) {
+function getConfiguredCalendarIds() {
   const { googleCalendarId } = getLifeServerEnv()
+  const normalized = googleCalendarId.trim()
+  if (!normalized || normalized === 'primary') {
+    return []
+  }
+
+  return normalized
+    .split(',')
+    .map((calendarId) => calendarId.trim())
+    .filter(Boolean)
+}
+
+async function getCalendarIdsToSync(calendar: ReturnType<typeof google.calendar>) {
+  const configuredCalendarIds = getConfiguredCalendarIds()
+  if (configuredCalendarIds.length > 0) {
+    return configuredCalendarIds
+  }
+
+  const response = await calendar.calendarList.list({
+    showDeleted: false,
+    showHidden: false,
+  })
+
+  const calendarIds = new Set<string>()
+  for (const item of response.data.items || []) {
+    if (!item.id) {
+      continue
+    }
+
+    if (item.primary || item.selected) {
+      calendarIds.add(item.id)
+    }
+  }
+
+  if (calendarIds.size === 0) {
+    calendarIds.add('primary')
+  }
+
+  return Array.from(calendarIds)
+}
+
+export async function syncCalendarEvents(targetLocalDate?: string) {
   const settings = await getOwnerSettings();
   const timeZone = settings.timezone;
   const supabase = getSupabaseAdmin();
@@ -25,19 +66,28 @@ export async function syncCalendarEvents(targetLocalDate?: string) {
   const windowEnd = addDays(baseDate, 7);
   const timeMin = getLocalDayRange(windowStart, timeZone).start.toISOString();
   const timeMax = getLocalDayRange(windowEnd, timeZone).end.toISOString();
+  const calendarIds = await getCalendarIdsToSync(calendar)
 
-  const response = await calendar.events.list({
-    calendarId: googleCalendarId,
-    singleEvents: true,
-    orderBy: "startTime",
-    timeMin,
-    timeMax,
-    maxResults: 250,
-  });
+  const responses = await Promise.all(
+    calendarIds.map((calendarId) =>
+      calendar.events.list({
+        calendarId,
+        singleEvents: true,
+        orderBy: "startTime",
+        timeMin,
+        timeMax,
+        maxResults: 250,
+      }).then((response) => ({ calendarId, items: response.data.items || [] })),
+    ),
+  )
 
-  const events = (response.data.items || [])
-    .filter((event) => event.id)
-    .map((event) => {
+  const eventMap = new Map<string, CalendarEventRecord>()
+  for (const { items } of responses) {
+    for (const event of items) {
+      if (!event.id && !event.iCalUID) {
+        continue
+      }
+
       const isAllDay = Boolean(event.start?.date && !event.start?.dateTime);
       const startDate = event.start?.date;
       const startTime = event.start?.dateTime;
@@ -47,8 +97,8 @@ export async function syncCalendarEvents(targetLocalDate?: string) {
         ? startDate
         : getLocalDateString(new Date(startTime || event.created || Date.now()), timeZone);
 
-      return {
-        id: event.id as string,
+      const mappedEvent = {
+        id: (event.iCalUID || event.id) as string,
         user_id: OWNER_ID,
         title: event.summary || "(Untitled event)",
         start_time: isAllDay && startDate
@@ -62,7 +112,24 @@ export async function syncCalendarEvents(targetLocalDate?: string) {
         local_date: localDate,
         synced_at: new Date().toISOString(),
       } satisfies CalendarEventRecord;
-    });
+
+      eventMap.set(mappedEvent.id, mappedEvent)
+    }
+  }
+
+  const events = Array.from(eventMap.values())
+
+  const { error: deleteError } = await supabase
+    .from("calendar_events")
+    .delete()
+    .eq("user_id", OWNER_ID)
+    .eq("source", "google")
+    .gte("local_date", windowStart)
+    .lte("local_date", windowEnd)
+
+  if (deleteError) {
+    throw deleteError
+  }
 
   if (events.length > 0) {
     const { error } = await supabase
@@ -78,6 +145,7 @@ export async function syncCalendarEvents(targetLocalDate?: string) {
     synced: events.length,
     localDate: baseDate,
     timeZone,
+    calendarIds,
     events,
   };
 }

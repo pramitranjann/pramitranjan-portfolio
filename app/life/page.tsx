@@ -27,6 +27,7 @@ export default async function LifeTodayPage({
   let entries: EntryRecord[] = []
   let events: CalendarEventRecord[] = []
   let morningReport: ReportRecord | null = null
+  let calendarError: string | null = null
   let loadError: string | null = null
 
   try {
@@ -34,38 +35,47 @@ export default async function LifeTodayPage({
     timezone = settings.timezone
     localDate = getCurrentLocalDate(timezone)
 
-    await syncCalendarEvents(localDate)
+    try {
+      await syncCalendarEvents(localDate)
+    } catch (error) {
+      console.error('Life calendar sync failed during page load', error)
+      calendarError = 'Calendar sync is unavailable right now.'
+    }
 
-    const supabase = getSupabaseAdmin()
+    try {
+      const supabase = getSupabaseAdmin()
 
-    const [entriesResult, eventsResult, reportsResult] = await Promise.all([
-      supabase
-        .from('entries')
-        .select('*')
-        .eq('user_id', OWNER_ID)
-        .eq('local_date', localDate)
-        .order('created_at', { ascending: false }),
-      supabase
-        .from('calendar_events')
-        .select('*')
-        .eq('user_id', OWNER_ID)
-        .eq('local_date', localDate)
-        .order('start_time', { ascending: true }),
-      supabase
-        .from('reports')
-        .select('*')
-        .eq('user_id', OWNER_ID)
-        .eq('local_date', localDate)
-        .order('created_at', { ascending: false }),
-    ])
+      const [entriesResult, eventsResult, reportsResult] = await Promise.all([
+        supabase
+          .from('entries')
+          .select('*')
+          .eq('user_id', OWNER_ID)
+          .eq('local_date', localDate)
+          .order('created_at', { ascending: false }),
+        supabase
+          .from('calendar_events')
+          .select('*')
+          .eq('user_id', OWNER_ID)
+          .eq('local_date', localDate)
+          .order('start_time', { ascending: true }),
+        supabase
+          .from('reports')
+          .select('*')
+          .eq('user_id', OWNER_ID)
+          .eq('local_date', localDate)
+          .order('created_at', { ascending: false }),
+      ])
 
-    if (entriesResult.error) throw entriesResult.error
-    if (eventsResult.error) throw eventsResult.error
-    if (reportsResult.error) throw reportsResult.error
+      if (entriesResult.error) throw entriesResult.error
+      if (eventsResult.error) throw eventsResult.error
+      if (reportsResult.error) throw reportsResult.error
 
-    entries = (entriesResult.data || []) as EntryRecord[]
-    events = (eventsResult.data || []) as CalendarEventRecord[]
-    morningReport = ((reportsResult.data || []) as ReportRecord[]).find((report) => report.type === 'morning') || null
+      entries = (entriesResult.data || []) as EntryRecord[]
+      events = (eventsResult.data || []) as CalendarEventRecord[]
+      morningReport = ((reportsResult.data || []) as ReportRecord[]).find((report) => report.type === 'morning') || null
+    } catch (error) {
+      loadError = error instanceof Error ? error.message : 'Failed to load today.'
+    }
   } catch (error) {
     loadError = error instanceof Error ? error.message : 'Failed to load today.'
   }
@@ -134,6 +144,7 @@ export default async function LifeTodayPage({
             ))}
           </ul>
         )}
+        {calendarError ? <p className="error-text">{calendarError}</p> : null}
       </section>
 
       <section className="panel-card">
