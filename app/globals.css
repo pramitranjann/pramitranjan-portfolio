@@ -1285,6 +1285,34 @@ body.carousel-reengaging main {
   gap: 16px;
 }
 
+.life-shell .life-typing-controls {
+  display: grid;
+  gap: 16px;
+}
+
+.life-shell .life-typing-controls.is-collapsed .life-entry-area {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.life-shell .life-type-fallback-trigger {
+  background: transparent;
+  border: 1px solid var(--life-hairline);
+  color: var(--life-muted);
+  padding: 10px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  align-self: center;
+}
+
 .life-shell .life-live-transcript {
   min-height: 64px;
   font-size: 17px;

@@ -1,11 +1,12 @@
 import { redirect } from 'next/navigation'
 
+import { CaptureTypingControls } from '@/components/life/CaptureTypingControls'
 import { MarkdownCard } from '@/components/life/MarkdownCard'
 import { VoiceCaptureControl } from '@/components/life/VoiceCaptureControl'
 import { OWNER_ID } from '@/lib/life/constants'
 import { isAdminSession } from '@/lib/admin-auth'
 import { syncCalendarEvents } from '@/lib/life/calendar'
-import { getProjectLabel, LIFE_PROJECTS } from '@/lib/life/projects'
+import { getProjectLabel } from '@/lib/life/projects'
 import { getOwnerSettings } from '@/lib/life/settings'
 import { generateMorningBrief } from '@/lib/life/synthesis'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
@@ -106,29 +107,7 @@ export default async function LifeTodayPage({
             liveTranscriptId="life-live-transcript"
           />
           <div id="life-live-transcript" className="life-live-transcript" aria-live="polite" />
-          <textarea
-            className="draft-area life-entry-area"
-            id={textareaId}
-            name="content"
-            rows={6}
-            placeholder="Capture."
-          />
-          <div className="life-entry-controls">
-            <label className="field compact-field">
-              <span>Project</span>
-              <select className="text-input" defaultValue="" name="projectSlug">
-                <option value="">Auto</option>
-                {LIFE_PROJECTS.map((project) => (
-                  <option key={project.slug} value={project.slug}>
-                    {project.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <button className="primary-button" type="submit">
-              Save
-            </button>
-          </div>
+          <CaptureTypingControls textareaId={textareaId} />
           {formError ? <p className="error-text">{formError}</p> : null}
           {loadError ? <p className="error-text">{loadError}</p> : null}
         </form>
