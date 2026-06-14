@@ -2,9 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { isAuthenticatedLifeRequest, unauthorizedJson } from '@/lib/life/auth'
 import { syncCalendarEvents } from '@/lib/life/calendar'
-import { generateEodReport, generateWeeklySummary } from '@/lib/life/synthesis'
+import { generateEodReport, generateWeekAheadBrief, generateWeeklySummary } from '@/lib/life/synthesis'
 import { getOwnerSettings } from '@/lib/life/settings'
 import { getCurrentLocalDate } from '@/lib/life/time'
+
+function getLocalDayOfWeek(localDate: string): number {
+  const [y, m, d] = localDate.split('-').map(Number)
+  return new Date(Date.UTC(y, m - 1, d, 12, 0, 0)).getUTCDay()
+}
 
 export async function GET(request: NextRequest) {
   if (!isAuthenticatedLifeRequest(request)) {
@@ -18,12 +23,19 @@ export async function GET(request: NextRequest) {
     const eod = await generateEodReport({ localDate })
     const weekly = await generateWeeklySummary({ localDate })
 
+    // Sunday (local time): generate and email the forward-looking week-ahead brief.
+    const dow = getLocalDayOfWeek(localDate)
+    const brief = dow === 0
+      ? await generateWeekAheadBrief({ localDate })
+      : { skipped: true as const, reason: 'Not Sunday.' }
+
     return NextResponse.json({
       localDate,
       timezone: settings.timezone,
       calendar,
       eod,
       weekly,
+      brief,
     })
   } catch (error) {
     console.error("Daily life cron failed", error);

@@ -1,146 +1,133 @@
-"use client";
+'use client'
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useMemo, useState } from 'react'
 
+import { MarkdownCard } from '@/components/life/MarkdownCard'
+import { ReportsSidebar } from '@/components/life/reports/ReportsSidebar'
+import { SectionCard } from '@/components/life/reports/SectionCard'
 import { fetchJson } from '@/lib/life/client'
+import { parseReportSections } from '@/lib/life/markdown-sections'
 import { getDisplayDate } from '@/lib/life/time'
 import type { ReportRecord } from '@/lib/life/types'
-import { MarkdownCard } from '@/components/life/MarkdownCard'
 
-interface ReportsResponse {
-  localDate: string;
-  timezone: string;
-  reports: ReportRecord[];
-}
-
-interface SynthesisResponse {
-  skipped: boolean;
-  report?: ReportRecord;
+interface ReportsListResponse {
+  localDate: string
+  timezone: string
+  reports: ReportRecord[]
 }
 
 export function ReportClient() {
-  const [selectedDate, setSelectedDate] = useState("");
-  const [todayDate, setTodayDate] = useState("");
-  const [timezone, setTimezone] = useState("UTC");
-  const [report, setReport] = useState<ReportRecord | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [isPending, startTransition] = useTransition();
+  const [reports, setReports] = useState<ReportRecord[]>([])
+  const [selected, setSelected] = useState<ReportRecord | null>(null)
+  const [timezone, setTimezone] = useState('UTC')
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [drawerOpen, setDrawerOpen] = useState(false)
 
   useEffect(() => {
-    let cancelled = false;
-
-    async function loadInitial() {
-      try {
-        const payload = await fetchJson<ReportsResponse>('/api/life/reports?type=eod');
-        if (cancelled) {
-          return;
-        }
-
-        setTimezone(payload.timezone);
-        setTodayDate(payload.localDate);
-        const latest = payload.reports[0] || null;
-        setReport(latest);
-        setSelectedDate(latest?.local_date || payload.localDate);
-      } catch (loadError) {
+    let cancelled = false
+    fetchJson<ReportsListResponse>('/api/life/reports?all=true')
+      .then((payload) => {
+        if (cancelled) return
+        setReports(payload.reports)
+        setTimezone(payload.timezone)
+        const todayEod = payload.reports.find(
+          (r) => r.local_date === payload.localDate && r.type === 'eod',
+        )
+        setSelected(
+          todayEod ||
+            payload.reports.find((r) => r.type === 'eod') ||
+            payload.reports[0] ||
+            null,
+        )
+      })
+      .catch((err) => {
         if (!cancelled) {
-          setError(loadError instanceof Error ? loadError.message : "Failed to load reports.");
+          setError(err instanceof Error ? err.message : 'Failed to load reports.')
         }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
-      }
-    }
-
-    loadInitial();
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
     return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!selectedDate) {
-      return;
+      cancelled = true
     }
+  }, [])
 
-    startTransition(async () => {
-      try {
-        const payload = await fetchJson<ReportsResponse>(`/api/life/reports?type=eod&date=${selectedDate}`);
-        setTimezone(payload.timezone);
-        setReport(payload.reports[0] || null);
-      } catch (loadError) {
-        setError(loadError instanceof Error ? loadError.message : "Failed to load report.");
-      }
-    });
-  }, [selectedDate]);
+  const sections = useMemo(
+    () => (selected ? parseReportSections(selected.content) : []),
+    [selected],
+  )
 
-  async function generateNow() {
-    try {
-      setError(null);
-      const payload = await fetchJson<SynthesisResponse>('/api/life/synthesis/eod', {
-        method: 'POST',
-        body: JSON.stringify({
-          localDate: selectedDate || todayDate,
-          force: true,
-        }),
-      });
-
-      if (payload.report) {
-        setReport(payload.report);
-        setSelectedDate(payload.report.local_date);
-      }
-    } catch (generateError) {
-      setError(generateError instanceof Error ? generateError.message : "Failed to generate report.");
-    }
+  function handleSelect(r: ReportRecord) {
+    setSelected(r)
+    setDrawerOpen(false)
   }
 
-  const showGenerate = Boolean(todayDate) && selectedDate === todayDate && !report;
-
   return (
-    <div className="page-grid">
-      <section className="hero-card">
-        <div className="life-page-head">
-          <p className="eyebrow">Report</p>
-          <span className="count-pill">{selectedDate || todayDate || 'Today'}</span>
+    <div className="life-reports-shell">
+      <aside className="life-reports-aside">
+        <div className="section-head">
+          <h2>Reports</h2>
+          <span className="count-pill">{reports.length}</span>
         </div>
-        <h1>EOD</h1>
+        <ReportsSidebar
+          reports={reports}
+          selectedId={selected?.id || null}
+          onSelect={handleSelect}
+        />
+      </aside>
 
-        <div className="toolbar">
-          <label className="field compact-field">
-            <span>Date</span>
-            <input
-              className="text-input"
-              type="date"
-              value={selectedDate}
-              onChange={(event) => setSelectedDate(event.target.value)}
-            />
-          </label>
-          {showGenerate ? (
-            <button className="primary-button" onClick={generateNow} type="button">
-              Generate
+      <button
+        type="button"
+        className="life-reports-drawer-trigger"
+        onClick={() => setDrawerOpen(true)}
+      >
+        Browse reports
+      </button>
+
+      {drawerOpen ? (
+        <div className="life-reports-drawer" role="dialog">
+          <div className="life-reports-drawer-head">
+            <h2>Reports</h2>
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={() => setDrawerOpen(false)}
+            >
+              Close
             </button>
-          ) : null}
+          </div>
+          <ReportsSidebar
+            reports={reports}
+            selectedId={selected?.id || null}
+            onSelect={handleSelect}
+          />
         </div>
-      </section>
+      ) : null}
 
-      <section className="panel-card report-panel">
-        {loading || isPending ? <p className="muted-text">Loading report...</p> : null}
+      <section className="life-reports-reader">
+        {loading ? <p className="muted-text">Loading…</p> : null}
         {error ? <p className="error-text">{error}</p> : null}
-        {!loading && !isPending && !report ? (
-          <p className="muted-text">
-            No EOD report for {selectedDate ? getDisplayDate(selectedDate, timezone) : "this day"}.
-          </p>
-        ) : null}
-        {report ? (
+        {!loading && !selected ? <p className="muted-text">No report selected.</p> : null}
+        {selected ? (
           <>
-            <div className="section-head">
-              <h2>{getDisplayDate(report.local_date, timezone)}</h2>
-            </div>
-            <MarkdownCard content={report.content} />
+            <header className="life-reports-reader-head">
+              <p className="eyebrow">{selected.type}</p>
+              <h1>{getDisplayDate(selected.local_date, timezone)}</h1>
+            </header>
+            {sections.length > 0 ? (
+              <div className="life-reports-sections">
+                {sections.map((section, index) => (
+                  <SectionCard key={`${section.label}-${index}`} section={section} />
+                ))}
+              </div>
+            ) : (
+              <MarkdownCard content={selected.content} />
+            )}
           </>
         ) : null}
       </section>
     </div>
-  );
+  )
 }

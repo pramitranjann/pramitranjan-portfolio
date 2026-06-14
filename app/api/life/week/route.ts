@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import { isAdminSession } from '@/lib/admin-auth'
+import { isAuthenticatedLifeRequest, unauthorizedJson } from '@/lib/life/auth'
 import { OWNER_ID } from '@/lib/life/constants'
 import { syncCalendarEvents } from '@/lib/life/calendar'
 import { getOwnerSettings } from '@/lib/life/settings'
@@ -8,8 +8,8 @@ import { getSupabaseAdmin } from '@/lib/life/supabase'
 import { getTasks } from '@/lib/life/tasks'
 
 export async function GET(request: NextRequest) {
-  if (!(await isAdminSession())) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  if (!isAuthenticatedLifeRequest(request)) {
+    return unauthorizedJson()
   }
 
   const url = new URL(request.url)

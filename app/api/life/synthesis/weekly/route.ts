@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { isAuthenticatedLifeRequest, unauthorizedJson } from '@/lib/life/auth'
-import { generateWeeklySummary } from '@/lib/life/synthesis'
+import { generateWeekAheadBrief, generateWeeklySummary } from '@/lib/life/synthesis'
 
 export async function POST(request: NextRequest) {
   if (!isAuthenticatedLifeRequest(request)) {
@@ -29,9 +29,13 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const result = await generateWeeklySummary({
+    const summary = await generateWeeklySummary({
       localDate,
       weekStart,
+      force,
+    });
+    const brief = await generateWeekAheadBrief({
+      localDate,
       force,
     });
 
@@ -41,7 +45,7 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    return NextResponse.json(result, { status: result.skipped ? 202 : 200 });
+    return NextResponse.json({ summary, brief }, { status: summary.skipped && brief.skipped ? 202 : 200 });
   } catch (error) {
     console.error("Weekly synthesis failed", error);
     if (!isJsonRequest) {
