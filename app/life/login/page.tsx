@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 
-import { DashboardLoginForm } from '@/components/admin/DashboardLoginForm'
+import { LifeLoginForm } from '@/components/life/LifeLoginForm'
 import { isAdminSession } from '@/lib/admin-auth'
 
 export const metadata: Metadata = {
@@ -40,7 +40,7 @@ export default async function LifeLoginPage({
         <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.7, marginBottom: '24px' }}>
           Uses the same password as the dashboard, but with its own entrance.
         </p>
-        <DashboardLoginForm nextPath={nextPath} />
+        <LifeLoginForm nextPath={nextPath} />
       </section>
     </main>
   )

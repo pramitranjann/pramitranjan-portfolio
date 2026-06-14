@@ -56,13 +56,6 @@ interface SpeechRecognitionLike extends EventTarget {
   stop(): void;
 }
 
-declare global {
-  interface Window {
-    SpeechRecognition?: new () => SpeechRecognitionLike;
-    webkitSpeechRecognition?: new () => SpeechRecognitionLike;
-  }
-}
-
 export function TodayClient({ initialError = null }: { initialError?: string | null }) {
   const [entries, setEntries] = useState<EntryRecord[]>([]);
   const [events, setEvents] = useState<CalendarEventRecord[]>([]);
@@ -133,7 +126,14 @@ export function TodayClient({ initialError = null }: { initialError?: string | n
     load();
 
     const Recognition = typeof window !== 'undefined'
-      ? window.SpeechRecognition || window.webkitSpeechRecognition
+      ? (window as Window & {
+          SpeechRecognition?: new () => SpeechRecognitionLike;
+          webkitSpeechRecognition?: new () => SpeechRecognitionLike;
+        }).SpeechRecognition ||
+        (window as Window & {
+          SpeechRecognition?: new () => SpeechRecognitionLike;
+          webkitSpeechRecognition?: new () => SpeechRecognitionLike;
+        }).webkitSpeechRecognition
       : undefined;
 
     if (Recognition) {
@@ -189,7 +189,14 @@ export function TodayClient({ initialError = null }: { initialError?: string | n
 
     const Recognition =
       typeof window !== "undefined"
-        ? window.SpeechRecognition || window.webkitSpeechRecognition
+        ? (window as Window & {
+            SpeechRecognition?: new () => SpeechRecognitionLike;
+            webkitSpeechRecognition?: new () => SpeechRecognitionLike;
+          }).SpeechRecognition ||
+          (window as Window & {
+            SpeechRecognition?: new () => SpeechRecognitionLike;
+            webkitSpeechRecognition?: new () => SpeechRecognitionLike;
+          }).webkitSpeechRecognition
         : undefined;
 
     if (!Recognition) {
