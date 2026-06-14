@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { OWNER_ID } from '@/lib/life/constants'
 import { isAuthenticatedLifeRequest, unauthorizedJson } from '@/lib/life/auth'
+import { syncCalendarEvents } from '@/lib/life/calendar'
 import { getOwnerSettings } from '@/lib/life/settings'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
 import { getCurrentLocalDate } from '@/lib/life/time'
@@ -13,6 +14,13 @@ export async function GET(request: NextRequest) {
 
   const settings = await getOwnerSettings();
   const localDate = request.nextUrl.searchParams.get("date") || getCurrentLocalDate(settings.timezone);
+
+  try {
+    await syncCalendarEvents(localDate);
+  } catch (error) {
+    console.error("Calendar sync failed during read", error);
+  }
+
   const supabase = getSupabaseAdmin();
   const { data, error } = await supabase
     .from("calendar_events")

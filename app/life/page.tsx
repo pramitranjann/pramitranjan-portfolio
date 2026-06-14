@@ -4,6 +4,7 @@ import { MarkdownCard } from '@/components/life/MarkdownCard'
 import { VoiceCaptureControl } from '@/components/life/VoiceCaptureControl'
 import { OWNER_ID } from '@/lib/life/constants'
 import { isAdminSession } from '@/lib/admin-auth'
+import { syncCalendarEvents } from '@/lib/life/calendar'
 import { getOwnerSettings } from '@/lib/life/settings'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
 import { getCurrentLocalDate, getDisplayDate, getLocalTimeLabel } from '@/lib/life/time'
@@ -32,6 +33,9 @@ export default async function LifeTodayPage({
     const settings = await getOwnerSettings()
     timezone = settings.timezone
     localDate = getCurrentLocalDate(timezone)
+
+    await syncCalendarEvents(localDate)
+
     const supabase = getSupabaseAdmin()
 
     const [entriesResult, eventsResult, reportsResult] = await Promise.all([
