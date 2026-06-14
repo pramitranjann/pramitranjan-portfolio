@@ -848,9 +848,16 @@ body.carousel-reengaging main {
 }
 
 .life-app-shell {
-  max-width: 1220px;
+  width: 100%;
+  max-width: 1680px;
   margin: 0 auto;
-  padding: 32px 40px 64px;
+  padding: 32px 48px 64px;
+}
+
+@media (min-width: 1680px) {
+  .life-app-shell {
+    padding: 40px 64px 80px;
+  }
 }
 
 .life-header {
@@ -944,7 +951,7 @@ body.carousel-reengaging main {
   background: var(--life-panel-muted);
   padding: 14px 16px;
   border: 1px solid var(--life-hairline);
-  border-radius: 6px;
+  border-radius: 0;
 }
 
 .life-shell .hero-card h1 {
@@ -1014,7 +1021,7 @@ body.carousel-reengaging main {
   letter-spacing: 0;
   font-size: 14px;
   border: 1px solid var(--life-border);
-  border-radius: 6px;
+  border-radius: 0;
 }
 
 .life-shell .mic-button {
@@ -1027,7 +1034,7 @@ body.carousel-reengaging main {
   border: 1px solid var(--life-accent);
   background: var(--life-accent);
   color: #0d0d0d;
-  border-radius: 10px;
+  border-radius: 0;
 }
 
 .life-shell .mic-button:active {
@@ -1039,7 +1046,7 @@ body.carousel-reengaging main {
   width: 220px;
   margin: 24px auto;
   padding: 24px;
-  border-radius: 50%;
+  border-radius: 0;
   text-align: center;
 }
 
@@ -1090,7 +1097,7 @@ body.carousel-reengaging main {
 .life-shell .filter-chip {
   background: transparent;
   color: var(--life-muted);
-  border-radius: 999px;
+  border-radius: 0;
   padding: 6px 12px;
   min-height: 32px;
 }
@@ -1110,7 +1117,7 @@ body.carousel-reengaging main {
 .life-shell .segmented {
   display: inline-flex;
   border: 1px solid var(--life-border);
-  border-radius: 8px;
+  border-radius: 0;
   padding: 2px;
   background: var(--life-panel-muted);
 }
@@ -1121,7 +1128,7 @@ body.carousel-reengaging main {
   background: transparent;
   color: var(--life-muted);
   min-height: 32px;
-  border-radius: 6px;
+  border-radius: 0;
 }
 
 .life-shell .segmented-item.is-active {
@@ -1145,7 +1152,7 @@ body.carousel-reengaging main {
   padding: 12px 14px;
   color: var(--life-text);
   outline: none;
-  border-radius: 6px;
+  border-radius: 0;
 }
 
 .life-shell .draft-area {
@@ -1208,7 +1215,7 @@ body.carousel-reengaging main {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-family: var(--font-mono);
-  border-radius: 999px;
+  border-radius: 0;
 }
 
 .life-shell .badge.secondary,
@@ -1307,7 +1314,7 @@ body.carousel-reengaging main {
   border: 1px solid var(--life-hairline);
   color: var(--life-muted);
   padding: 10px 14px;
-  border-radius: 6px;
+  border-radius: 0;
   cursor: pointer;
   font-size: 13px;
   align-self: center;
@@ -1328,7 +1335,7 @@ body.carousel-reengaging main {
   justify-content: space-between;
   padding: 10px 14px;
   border: 1px solid var(--life-accent);
-  border-radius: 8px;
+  border-radius: 0;
   background: var(--life-accent-soft);
   color: var(--life-accent);
   font-size: 13px;
@@ -1445,7 +1452,7 @@ body.carousel-reengaging main {
   padding: 10px 12px;
   width: 100%;
   text-align: left;
-  border-radius: 6px;
+  border-radius: 0;
   cursor: pointer;
   font-size: 13px;
 }
@@ -1455,7 +1462,7 @@ body.carousel-reengaging main {
   gap: 8px;
   padding: 12px;
   border: 1px solid var(--life-border);
-  border-radius: 6px;
+  border-radius: 0;
   background: var(--life-panel-muted);
 }
 
@@ -1477,7 +1484,7 @@ body.carousel-reengaging main {
   gap: 12px;
   padding: 16px;
   border: 1px solid var(--life-hairline);
-  border-radius: 8px;
+  border-radius: 0;
   background: var(--life-panel-muted);
 }
 
@@ -1503,7 +1510,7 @@ body.carousel-reengaging main {
   padding: 6px 10px;
   background: var(--life-panel);
   border: 1px solid var(--life-hairline);
-  border-radius: 6px;
+  border-radius: 0;
   cursor: grab;
 }
 
@@ -1661,7 +1668,7 @@ body.carousel-reengaging main {
   gap: 10px;
   padding: 14px;
   border: 1px solid var(--life-hairline);
-  border-radius: 8px;
+  border-radius: 0;
   background: var(--life-panel-muted);
 }
 
@@ -1758,7 +1765,7 @@ body.carousel-reengaging main {
   border: 1px solid var(--life-border);
   background: var(--life-panel);
   color: var(--life-text);
-  border-radius: 6px;
+  border-radius: 0;
   cursor: pointer;
   font-size: 13px;
 }
@@ -1780,7 +1787,7 @@ body.carousel-reengaging main {
   border: 1px solid var(--life-hairline);
   background: var(--life-panel-muted);
   color: var(--life-text);
-  border-radius: 6px;
+  border-radius: 0;
   cursor: pointer;
   font-size: 13px;
 }
