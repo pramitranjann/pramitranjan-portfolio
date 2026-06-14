@@ -23,6 +23,7 @@ interface SpeechRecognitionLike extends EventTarget {
   onend: (() => void) | null
   onerror: ((event: SpeechRecognitionErrorEventLike) => void) | null
   onresult: ((event: SpeechRecognitionEventLike) => void) | null
+  abort?(): void
   start(): void
   stop(): void
 }
@@ -74,6 +75,20 @@ export function VoiceCaptureControl({
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null)
   const finalTranscriptRef = useRef('')
   const autoSubmittingRef = useRef(false)
+
+  function forceStopRecognition() {
+    const recognition = recognitionRef.current
+    if (!recognition) {
+      return
+    }
+
+    if (typeof recognition.abort === 'function') {
+      recognition.abort()
+      return
+    }
+
+    recognition.stop()
+  }
 
   useEffect(() => {
     setMounted(true)
@@ -130,7 +145,7 @@ export function VoiceCaptureControl({
           }
 
           autoSubmittingRef.current = true
-          recognition.stop()
+          forceStopRecognition()
           textarea?.form?.requestSubmit()
           return
         }
@@ -152,8 +167,18 @@ export function VoiceCaptureControl({
     setSupported(true)
     setHint('Tap once, allow microphone access if Safari asks, then speak. Say save entry to submit by voice.')
 
+    const handlePageHide = () => {
+      setListening(false)
+      forceStopRecognition()
+    }
+
+    document.addEventListener('visibilitychange', handlePageHide)
+    window.addEventListener('pagehide', handlePageHide)
+
     return () => {
-      recognition.stop()
+      document.removeEventListener('visibilitychange', handlePageHide)
+      window.removeEventListener('pagehide', handlePageHide)
+      forceStopRecognition()
     }
   }, [sourceInputId, textareaId])
 
@@ -167,7 +192,8 @@ export function VoiceCaptureControl({
     autoSubmittingRef.current = false
 
     if (listening) {
-      recognitionRef.current.stop()
+      setListening(false)
+      forceStopRecognition()
       return
     }
 
@@ -177,11 +203,6 @@ export function VoiceCaptureControl({
     setInterimTranscript('')
 
     try {
-      if (navigator.mediaDevices?.getUserMedia) {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-        stream.getTracks().forEach((track) => track.stop())
-      }
-
       if (sourceInput) {
         sourceInput.value = 'voice'
       }
