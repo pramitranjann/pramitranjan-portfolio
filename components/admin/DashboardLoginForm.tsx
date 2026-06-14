@@ -1,10 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 
 export function DashboardLoginForm({ nextPath = '/dashboard' }: { nextPath?: string }) {
-  const router = useRouter()
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -27,8 +25,7 @@ export function DashboardLoginForm({ nextPath = '/dashboard' }: { nextPath?: str
       return
     }
 
-    router.push(nextPath as never)
-    router.refresh()
+    window.location.assign(nextPath)
   }
 
   return (
