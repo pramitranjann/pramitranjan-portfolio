@@ -97,17 +97,8 @@ export function VoiceCaptureControl({
     return [finalTranscriptRef.current, interimTranscriptRef.current].filter(Boolean).join(' ').trim()
   }
 
-  function handlePotentialSaveCommand(transcript: string) {
+  function queueSaveCommand(transcript: string) {
     const parsed = extractSaveCommand(transcript)
-    if (!parsed.content && !parsed.shouldSubmit) {
-      return false
-    }
-
-    finalTranscriptRef.current = parsed.content
-    interimTranscriptRef.current = ''
-    setTextareaValue(parsed.content)
-    setVoiceSource()
-
     if (!parsed.shouldSubmit || pendingSubmitRef.current) {
       return false
     }
@@ -117,6 +108,10 @@ export function VoiceCaptureControl({
       return true
     }
 
+    finalTranscriptRef.current = parsed.content
+    interimTranscriptRef.current = ''
+    setTextareaValue(parsed.content)
+    setVoiceSource()
     pendingSubmitRef.current = true
     forceStopRecognition()
     return true
@@ -234,14 +229,11 @@ export function VoiceCaptureControl({
 
       if (finalText) {
         finalTranscriptRef.current = `${finalTranscriptRef.current} ${finalText}`.trim()
-        if (handlePotentialSaveCommand(getCombinedTranscript())) {
-          return
-        }
       }
 
       interimTranscriptRef.current = interimText.trim()
 
-      if (handlePotentialSaveCommand(getCombinedTranscript())) {
+      if (queueSaveCommand(getCombinedTranscript())) {
         setInterimTranscript('')
         return
       }
@@ -262,7 +254,18 @@ export function VoiceCaptureControl({
     }
     recognition.onend = () => {
       if (!pendingSubmitRef.current) {
-        handlePotentialSaveCommand(getCombinedTranscript())
+        const parsed = extractSaveCommand(getCombinedTranscript())
+        if (parsed.shouldSubmit) {
+          if (!parsed.content) {
+            setError('Dictate some content before saying save entry.')
+          } else {
+            finalTranscriptRef.current = parsed.content
+            interimTranscriptRef.current = ''
+            setTextareaValue(parsed.content)
+            setVoiceSource()
+            pendingSubmitRef.current = true
+          }
+        }
       }
 
       const shouldSubmit = pendingSubmitRef.current
