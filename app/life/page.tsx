@@ -11,7 +11,7 @@ import { generateMorningBrief } from '@/lib/life/synthesis'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
 import { getTasks } from '@/lib/life/tasks'
 import { getCurrentLocalDate, getDisplayDate, getLocalTimeLabel, isMorningBriefWindow } from '@/lib/life/time'
-import type { CalendarEventRecord, EntryRecord, ReportRecord, TaskRecord } from '@/lib/life/types'
+import type { CalendarEventRecord, ReportRecord, TaskRecord } from '@/lib/life/types'
 
 export default async function LifeTodayPage({
   searchParams,
@@ -27,7 +27,6 @@ export default async function LifeTodayPage({
 
   let timezone = 'UTC'
   let localDate = ''
-  let entries: EntryRecord[] = []
   let events: CalendarEventRecord[] = []
   let morningReport: ReportRecord | null = null
   let activeTasks: TaskRecord[] = []
@@ -49,13 +48,7 @@ export default async function LifeTodayPage({
     try {
       const supabase = getSupabaseAdmin()
 
-      const [entriesResult, eventsResult, reportsResult, taskRows] = await Promise.all([
-        supabase
-          .from('entries')
-          .select('*')
-          .eq('user_id', OWNER_ID)
-          .eq('local_date', localDate)
-          .order('created_at', { ascending: false }),
+      const [eventsResult, reportsResult, taskRows] = await Promise.all([
         supabase
           .from('calendar_events')
           .select('*')
@@ -71,14 +64,13 @@ export default async function LifeTodayPage({
         getTasks({ status: 'active' }),
       ])
 
-      if (entriesResult.error) throw entriesResult.error
       if (eventsResult.error) throw eventsResult.error
       if (reportsResult.error) throw reportsResult.error
 
-      entries = (entriesResult.data || []) as EntryRecord[]
       events = (eventsResult.data || []) as CalendarEventRecord[]
       activeTasks = taskRows.slice(0, 6)
-      morningReport = ((reportsResult.data || []) as ReportRecord[]).find((report) => report.type === 'morning') || null
+      morningReport =
+        ((reportsResult.data || []) as ReportRecord[]).find((report) => report.type === 'morning') || null
 
       if (!morningReport && isMorningBriefWindow(timezone)) {
         try {
@@ -103,13 +95,17 @@ export default async function LifeTodayPage({
     <div className="life-home-grid">
       <section className="hero-card life-capture-card">
         <div className="life-page-head">
-          <p className="eyebrow">Today</p>
-          <span className="count-pill">{displayDate}</span>
+          <p className="eyebrow">Today · {displayDate}</p>
         </div>
 
         <form action="/api/life/entries" className="capture-stack life-capture-stack" method="post">
           <input id={sourceInputId} name="source" type="hidden" defaultValue="text" />
-          <VoiceCaptureControl sourceInputId={sourceInputId} textareaId={textareaId} />
+          <VoiceCaptureControl
+            sourceInputId={sourceInputId}
+            textareaId={textareaId}
+            liveTranscriptId="life-live-transcript"
+          />
+          <div id="life-live-transcript" className="life-live-transcript" aria-live="polite" />
           <textarea
             className="draft-area life-entry-area"
             id={textareaId}
@@ -138,11 +134,11 @@ export default async function LifeTodayPage({
         </form>
       </section>
 
-      <div className="life-home-secondary">
+      <aside className="life-home-sidebar">
         {morningReport ? (
           <section className="panel-card life-brief-card">
             <div className="section-head">
-              <h2>AM</h2>
+              <h2>AM brief</h2>
             </div>
             <MarkdownCard content={morningReport.content} />
           </section>
@@ -190,29 +186,7 @@ export default async function LifeTodayPage({
           )}
           {calendarError ? <p className="error-text">{calendarError}</p> : null}
         </section>
-      </div>
-
-      <section className="panel-card life-entry-log-card">
-        <div className="section-head">
-          <h2>Entries</h2>
-          <span className="count-pill">{entries.length}</span>
-        </div>
-        {entries.length === 0 ? <p className="muted-text">No entries yet.</p> : null}
-        <ul className="timeline-list">
-          {entries.map((entry) => (
-            <li className="timeline-item" key={entry.id}>
-              <div className="timeline-meta">
-                <span>{getLocalTimeLabel(entry.created_at, timezone)}</span>
-                <span>{entry.source}</span>
-              </div>
-              <div className="life-entry-line">
-                {entry.project_slug ? <span className="badge secondary">{getProjectLabel(entry.project_slug) || entry.project_slug}</span> : null}
-                <p>{entry.content}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </section>
+      </aside>
     </div>
   )
 }
