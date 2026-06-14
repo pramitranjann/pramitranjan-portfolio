@@ -75,8 +75,52 @@ export function VoiceCaptureControl({
   const recognitionConstructorRef = useRef<(new () => SpeechRecognitionLike) | null>(null)
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null)
   const finalTranscriptRef = useRef('')
+  const interimTranscriptRef = useRef('')
   const pendingSubmitRef = useRef(false)
   const stoppingRef = useRef(false)
+
+  function setTextareaValue(content: string) {
+    const textareaElement = document.getElementById(textareaId) as HTMLTextAreaElement | null
+    if (textareaElement) {
+      textareaElement.value = content
+    }
+  }
+
+  function setVoiceSource() {
+    const sourceInput = document.getElementById(sourceInputId) as HTMLInputElement | null
+    if (sourceInput) {
+      sourceInput.value = 'voice'
+    }
+  }
+
+  function getCombinedTranscript() {
+    return [finalTranscriptRef.current, interimTranscriptRef.current].filter(Boolean).join(' ').trim()
+  }
+
+  function handlePotentialSaveCommand(transcript: string) {
+    const parsed = extractSaveCommand(transcript)
+    if (!parsed.content && !parsed.shouldSubmit) {
+      return false
+    }
+
+    finalTranscriptRef.current = parsed.content
+    interimTranscriptRef.current = ''
+    setTextareaValue(parsed.content)
+    setVoiceSource()
+
+    if (!parsed.shouldSubmit || pendingSubmitRef.current) {
+      return false
+    }
+
+    if (!parsed.content) {
+      setError('Dictate some content before saying save entry.')
+      return true
+    }
+
+    pendingSubmitRef.current = true
+    forceStopRecognition()
+    return true
+  }
 
   function destroyRecognition(recognition?: SpeechRecognitionLike | null) {
     if (!recognition) {
@@ -162,8 +206,8 @@ export function VoiceCaptureControl({
     }
 
     const textarea = document.getElementById(textareaId) as HTMLTextAreaElement | null
-    const sourceInput = document.getElementById(sourceInputId) as HTMLInputElement | null
     finalTranscriptRef.current = textarea?.value.trim() || ''
+    interimTranscriptRef.current = ''
     setInterimTranscript('')
     pendingSubmitRef.current = false
     stoppingRef.current = false
@@ -190,34 +234,26 @@ export function VoiceCaptureControl({
 
       if (finalText) {
         finalTranscriptRef.current = `${finalTranscriptRef.current} ${finalText}`.trim()
-        const parsed = extractSaveCommand(finalTranscriptRef.current)
-        finalTranscriptRef.current = parsed.content
-        const textareaElement = document.getElementById(textareaId) as HTMLTextAreaElement | null
-        const sourceInput = document.getElementById(sourceInputId) as HTMLInputElement | null
-        if (textareaElement) {
-          textareaElement.value = parsed.content
-        }
-        if (sourceInput) {
-          sourceInput.value = 'voice'
-        }
-
-        if (parsed.shouldSubmit && !pendingSubmitRef.current) {
-          if (!parsed.content) {
-            setError('Dictate some content before saying save entry.')
-            return
-          }
-
-          pendingSubmitRef.current = true
-          forceStopRecognition()
+        if (handlePotentialSaveCommand(getCombinedTranscript())) {
           return
         }
       }
 
-      setInterimTranscript(interimText.trim())
+      interimTranscriptRef.current = interimText.trim()
+
+      if (handlePotentialSaveCommand(getCombinedTranscript())) {
+        setInterimTranscript('')
+        return
+      }
+
+      setTextareaValue(getCombinedTranscript())
+      setVoiceSource()
+      setInterimTranscript(interimTranscriptRef.current)
     }
     recognition.onerror = (event) => {
       const wasStopping = stoppingRef.current
       setListening(false)
+      interimTranscriptRef.current = ''
       setInterimTranscript('')
 
       if (!(wasStopping && event.error === 'aborted')) {
@@ -225,11 +261,16 @@ export function VoiceCaptureControl({
       }
     }
     recognition.onend = () => {
+      if (!pendingSubmitRef.current) {
+        handlePotentialSaveCommand(getCombinedTranscript())
+      }
+
       const shouldSubmit = pendingSubmitRef.current
       const textareaElement = document.getElementById(textareaId) as HTMLTextAreaElement | null
       const form = textareaElement?.form
 
       setListening(false)
+      interimTranscriptRef.current = ''
       setInterimTranscript('')
       pendingSubmitRef.current = false
       stoppingRef.current = false
@@ -243,10 +284,7 @@ export function VoiceCaptureControl({
     recognitionRef.current = recognition
 
     try {
-      if (sourceInput) {
-        sourceInput.value = 'voice'
-      }
-
+      setVoiceSource()
       recognition.start()
       setListening(true)
     } catch (startError) {
