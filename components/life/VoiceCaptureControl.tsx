@@ -45,6 +45,19 @@ function getSpeechErrorMessage(error?: string) {
   }
 }
 
+function extractSaveCommand(value: string) {
+  const normalized = value.trim().replace(/\s+/g, ' ')
+  const commandPattern = /\b(?:save entry|save note|save this entry|save this note)\b[.!?]*$/i
+  if (!commandPattern.test(normalized)) {
+    return { content: normalized, shouldSubmit: false }
+  }
+
+  return {
+    content: normalized.replace(commandPattern, '').trim(),
+    shouldSubmit: true,
+  }
+}
+
 export function VoiceCaptureControl({
   textareaId,
   sourceInputId,
@@ -60,6 +73,7 @@ export function VoiceCaptureControl({
   const [interimTranscript, setInterimTranscript] = useState('')
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null)
   const finalTranscriptRef = useRef('')
+  const autoSubmittingRef = useRef(false)
 
   useEffect(() => {
     setMounted(true)
@@ -98,13 +112,27 @@ export function VoiceCaptureControl({
 
       if (finalText) {
         finalTranscriptRef.current = `${finalTranscriptRef.current} ${finalText}`.trim()
+        const parsed = extractSaveCommand(finalTranscriptRef.current)
+        finalTranscriptRef.current = parsed.content
         const textarea = document.getElementById(textareaId) as HTMLTextAreaElement | null
         const sourceInput = document.getElementById(sourceInputId) as HTMLInputElement | null
         if (textarea) {
-          textarea.value = finalTranscriptRef.current
+          textarea.value = parsed.content
         }
         if (sourceInput) {
           sourceInput.value = 'voice'
+        }
+
+        if (parsed.shouldSubmit && !autoSubmittingRef.current) {
+          if (!parsed.content) {
+            setError('Dictate some content before saying save entry.')
+            return
+          }
+
+          autoSubmittingRef.current = true
+          recognition.stop()
+          textarea?.form?.requestSubmit()
+          return
         }
       }
 
@@ -117,11 +145,12 @@ export function VoiceCaptureControl({
     recognition.onend = () => {
       setListening(false)
       setInterimTranscript('')
+      autoSubmittingRef.current = false
     }
 
     recognitionRef.current = recognition
     setSupported(true)
-    setHint('Tap once, allow microphone access if Safari asks, then speak.')
+    setHint('Tap once, allow microphone access if Safari asks, then speak. Say save entry to submit by voice.')
 
     return () => {
       recognition.stop()
@@ -135,6 +164,7 @@ export function VoiceCaptureControl({
     }
 
     setError(null)
+    autoSubmittingRef.current = false
 
     if (listening) {
       recognitionRef.current.stop()
