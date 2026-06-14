@@ -164,21 +164,27 @@ export function VoiceCaptureControl({
     }
   }
 
-  if (!mounted) {
-    return <p className="muted-text">Voice capture loads after the page JS starts. If it does not, use the keyboard mic in the textarea.</p>
-  }
-
   return (
     <>
       <button
         className={`mic-button ${listening ? 'is-live' : ''}`}
-        disabled={!supported}
+        disabled={!mounted || !supported}
         onClick={toggleListening}
         type="button"
       >
-        {listening ? 'Stop listening' : supported ? 'Start voice capture' : 'Voice unavailable'}
+        {listening
+          ? 'Stop listening'
+          : !mounted
+            ? 'Loading voice capture'
+            : supported
+              ? 'Start voice capture'
+              : 'Voice unavailable'}
       </button>
-      <p className="muted-text">{hint}</p>
+      <p className="muted-text">
+        {!mounted
+          ? 'Voice capture loads after the page JS starts. If it does not, use the keyboard mic in the textarea.'
+          : hint}
+      </p>
       {interimTranscript ? <div className="interim-chip">Live: {interimTranscript}</div> : null}
       {error ? <p className="error-text">{error}</p> : null}
     </>
