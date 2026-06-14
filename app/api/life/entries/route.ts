@@ -39,11 +39,25 @@ export async function POST(request: NextRequest) {
     return unauthorizedJson();
   }
 
-  const body = (await request.json().catch(() => null)) as { content?: string; source?: EntrySource } | null;
-  const content = body?.content?.trim();
-  const source = body?.source === "text" ? "text" : "voice";
+  const contentType = request.headers.get("content-type") || "";
+  const isJsonRequest = contentType.includes("application/json");
+  let content = "";
+  let source: EntrySource = "voice";
+
+  if (isJsonRequest) {
+    const body = (await request.json().catch(() => null)) as { content?: string; source?: EntrySource } | null;
+    content = body?.content?.trim() || "";
+    source = body?.source === "text" ? "text" : "voice";
+  } else {
+    const formData = await request.formData().catch(() => null);
+    content = typeof formData?.get("content") === "string" ? String(formData.get("content")).trim() : "";
+    source = formData?.get("source") === "voice" ? "voice" : "text";
+  }
 
   if (!content) {
+    if (!isJsonRequest) {
+      return NextResponse.redirect(new URL("/life?error=content", request.url), { status: 303 });
+    }
     return NextResponse.json({ error: "Content is required." }, { status: 400 });
   }
 
@@ -62,7 +76,14 @@ export async function POST(request: NextRequest) {
     .single();
 
   if (error) {
+    if (!isJsonRequest) {
+      return NextResponse.redirect(new URL(`/life?error=${encodeURIComponent(error.message)}`, request.url), { status: 303 });
+    }
     return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  if (!isJsonRequest) {
+    return NextResponse.redirect(new URL("/life", request.url), { status: 303 });
   }
 
   return NextResponse.json({

@@ -1,41 +1,18 @@
-'use client'
-
-import { useState } from 'react'
-
-export function DashboardLoginForm({ nextPath = '/dashboard' }: { nextPath?: string }) {
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [submitting, setSubmitting] = useState(false)
-
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setSubmitting(true)
-    setError('')
-
-    const response = await fetch('/api/admin/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password }),
-    })
-
-    if (!response.ok) {
-      const data = await response.json().catch(() => null)
-      setError(data?.error ?? 'Login failed')
-      setSubmitting(false)
-      return
-    }
-
-    window.location.assign(nextPath)
-  }
-
+export function DashboardLoginForm({
+  nextPath = '/dashboard',
+  error,
+}: {
+  nextPath?: string
+  error?: string | null
+}) {
   return (
-    <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '16px' }}>
+    <form action="/api/admin/login" method="post" style={{ display: 'grid', gap: '16px' }}>
+      <input type="hidden" name="nextPath" value={nextPath} />
       <label className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#999999' }}>
         ADMIN PASSWORD
         <input
+          name="password"
           type="password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
           required
           style={{
             width: '100%',
@@ -55,7 +32,6 @@ export function DashboardLoginForm({ nextPath = '/dashboard' }: { nextPath?: str
       ) : null}
       <button
         type="submit"
-        disabled={submitting}
         className="font-mono"
         style={{
           background: '#FF3120',
@@ -67,7 +43,7 @@ export function DashboardLoginForm({ nextPath = '/dashboard' }: { nextPath?: str
           fontSize: 'var(--text-meta)',
         }}
       >
-        {submitting ? 'SIGNING IN...' : 'SIGN IN'}
+        SIGN IN
       </button>
     </form>
   )

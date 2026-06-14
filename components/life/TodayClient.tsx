@@ -63,7 +63,7 @@ declare global {
   }
 }
 
-export function TodayClient() {
+export function TodayClient({ initialError = null }: { initialError?: string | null }) {
   const [entries, setEntries] = useState<EntryRecord[]>([]);
   const [events, setEvents] = useState<CalendarEventRecord[]>([]);
   const [morningReport, setMorningReport] = useState<ReportRecord | null>(null);
@@ -77,7 +77,7 @@ export function TodayClient() {
   const [interimTranscript, setInterimTranscript] = useState("");
   const [voiceSupported, setVoiceSupported] = useState(false);
   const [voiceHint, setVoiceHint] = useState("Best on Safari for iPhone. Text input is always available.");
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(initialError);
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const finalTranscriptRef = useRef("");
 
@@ -327,6 +327,11 @@ export function TodayClient() {
     }
   }
 
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    await saveEntry();
+  }
+
   return (
     <div className="page-grid">
       <section className="hero-card">
@@ -337,7 +342,8 @@ export function TodayClient() {
           then turns the full thread into an end-of-day brief.
         </p>
 
-        <div className="capture-stack">
+        <form action="/api/life/entries" className="capture-stack" method="post" onSubmit={handleSubmit}>
+          <input name="source" type="hidden" value={draftSource} />
           <button
             className={`mic-button ${listening ? "is-live" : ""}`}
             disabled={!voiceSupported}
@@ -350,6 +356,7 @@ export function TodayClient() {
           {interimTranscript ? <div className="interim-chip">Live: {interimTranscript}</div> : null}
           <textarea
             className="draft-area"
+            name="content"
             rows={6}
             value={draft}
             onChange={(event) => {
@@ -358,11 +365,15 @@ export function TodayClient() {
             }}
             placeholder="Type or dictate the raw note here."
           />
-          <button className="primary-button" disabled={saving || !draft.trim()} onClick={saveEntry} type="button">
+          <button
+            className="primary-button"
+            disabled={saving || (typeof window !== "undefined" ? !draft.trim() : false)}
+            type="submit"
+          >
             {saving ? "Saving..." : "Save entry"}
           </button>
           {error ? <p className="error-text">{error}</p> : null}
-        </div>
+        </form>
       </section>
 
       {morningReport ? (

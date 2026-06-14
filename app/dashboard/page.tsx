@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { DashboardEditor } from '@/components/admin/DashboardEditor'
 import { isAdminSession } from '@/lib/admin-auth'
@@ -38,24 +37,6 @@ export default async function DashboardPage() {
           <h1 className="font-serif dashboard-page-title" style={{ fontSize: 'var(--text-h1)', fontWeight: 'var(--font-weight-serif)', color: '#f5f2ed', lineHeight: 1.05, marginBottom: 0 }}>
             Dashboard
           </h1>
-          <div style={{ marginTop: '18px' }}>
-            <Link
-              href="/life"
-              className="font-mono"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                border: '1px solid #2a2a2a',
-                color: '#f5f2ed',
-                padding: '12px 16px',
-                letterSpacing: '0.12em',
-                fontSize: 'var(--text-meta)',
-              }}
-            >
-              OPEN CHIEF OF STAFF
-            </Link>
-          </div>
         </div>
 
         <DashboardEditor initialContent={content} saveEnabled={saveEnabled} localWriteEnabled={localWriteEnabled} writeMode={writeMode} />

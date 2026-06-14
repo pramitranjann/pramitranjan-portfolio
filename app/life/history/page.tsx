@@ -5,7 +5,7 @@ import { isAdminSession } from '@/lib/admin-auth'
 
 export default async function LifeHistoryPage() {
   if (!(await isAdminSession())) {
-    redirect('/dashboard/login?next=/life/history')
+    redirect('/life/login?next=/life/history')
   }
 
   return <HistoryClient />

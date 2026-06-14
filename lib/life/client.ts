@@ -10,7 +10,7 @@ export async function fetchJson<T>(input: RequestInfo | URL, init?: RequestInit)
   const payload = (await response.json().catch(() => null)) as T | { error?: string } | null;
 
   if (response.status === 401 && typeof window !== "undefined") {
-    window.location.href = '/dashboard/login'
+    window.location.href = '/life/login'
     throw new Error("Unauthorized");
   }
 
