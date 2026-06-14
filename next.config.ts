@@ -3,13 +3,19 @@ import type { NextConfig } from "next";
 const projectRoot = __dirname
 
 const isProduction = process.env.NODE_ENV === 'production'
+const scriptSrc = [
+  "'self'",
+  "'unsafe-inline'",
+  ...(!isProduction ? ["'unsafe-eval'"] : []),
+  'https://va.vercel-scripts.com',
+].join(' ')
 const contentSecurityPolicy = [
   "default-src 'self'",
   "base-uri 'self'",
   "frame-ancestors 'none'",
   "form-action 'self'",
   "object-src 'none'",
-  "script-src 'self' 'sha256-guSI2zj8gHGt5f0f1vPAxThirS5G2tnJlrq1jikLmy0=' https://va.vercel-scripts.com",
+  `script-src ${scriptSrc}`,
   "style-src 'self' 'unsafe-inline' https://api.fontshare.com",
   "font-src 'self' data: https:",
   "img-src 'self' data: blob: https:",
