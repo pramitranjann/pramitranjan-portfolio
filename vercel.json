@@ -1,0 +1,20 @@
+{
+  "crons": [
+    {
+      "path": "/api/life/calendar/sync",
+      "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/life/synthesis/morning",
+      "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/life/synthesis/eod",
+      "schedule": "*/30 * * * *"
+    },
+    {
+      "path": "/api/life/synthesis/weekly",
+      "schedule": "30 0 * * 1"
+    }
+  ]
+}

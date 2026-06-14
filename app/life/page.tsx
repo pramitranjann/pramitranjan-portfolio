@@ -6,8 +6,9 @@ import { OWNER_ID } from '@/lib/life/constants'
 import { isAdminSession } from '@/lib/admin-auth'
 import { syncCalendarEvents } from '@/lib/life/calendar'
 import { getOwnerSettings } from '@/lib/life/settings'
+import { generateMorningBrief } from '@/lib/life/synthesis'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
-import { getCurrentLocalDate, getDisplayDate, getLocalTimeLabel } from '@/lib/life/time'
+import { getCurrentLocalDate, getDisplayDate, getLocalTimeLabel, isMorningBriefWindow } from '@/lib/life/time'
 import type { CalendarEventRecord, EntryRecord, ReportRecord } from '@/lib/life/types'
 
 export default async function LifeTodayPage({
@@ -73,6 +74,15 @@ export default async function LifeTodayPage({
       entries = (entriesResult.data || []) as EntryRecord[]
       events = (eventsResult.data || []) as CalendarEventRecord[]
       morningReport = ((reportsResult.data || []) as ReportRecord[]).find((report) => report.type === 'morning') || null
+
+      if (!morningReport && isMorningBriefWindow(timezone)) {
+        try {
+          const morningResult = await generateMorningBrief({ localDate })
+          morningReport = (morningResult.report as ReportRecord | undefined) || null
+        } catch (error) {
+          console.error('Life morning brief generation failed during page load', error)
+        }
+      }
     } catch (error) {
       loadError = error instanceof Error ? error.message : 'Failed to load today.'
     }

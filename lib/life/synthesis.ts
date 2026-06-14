@@ -5,7 +5,7 @@ import { syncCalendarEvents } from '@/lib/life/calendar'
 import { sendReportEmail } from '@/lib/life/email'
 import { getOwnerSettings } from '@/lib/life/settings'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
-import { addDays, getCurrentLocalClock, getCurrentLocalDate, getWeekStart, isBeforeNoon } from '@/lib/life/time'
+import { addDays, getCurrentLocalClock, getCurrentLocalDate, getWeekStart, isMorningBriefWindow } from '@/lib/life/time'
 import type { ReportRecord, SummaryRecord } from '@/lib/life/types'
 
 export async function getExistingReport(localDate: string, type: "eod" | "morning") {
@@ -95,7 +95,7 @@ export async function generateMorningBrief(options?: { localDate?: string; force
   const localDate = options?.localDate || getCurrentLocalDate(timeZone);
   const force = Boolean(options?.force);
 
-  if (!force && !isBeforeNoon(timeZone)) {
+  if (!force && !isMorningBriefWindow(timeZone)) {
     return {
       skipped: true,
       reason: "Morning brief window has passed.",

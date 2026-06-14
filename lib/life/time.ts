@@ -107,6 +107,11 @@ export function isBeforeNoon(timeZone: string, now = new Date()) {
   return getCurrentLocalClock(timeZone, now).hour < 12;
 }
 
+export function isMorningBriefWindow(timeZone: string, now = new Date()) {
+  const { hour } = getCurrentLocalClock(timeZone, now)
+  return hour >= 5 && hour < 12
+}
+
 export function getWeekStart(localDate: string) {
   const [year, month, day] = localDate.split("-").map(Number);
   const utc = new Date(Date.UTC(year, month - 1, day, 12, 0, 0));
