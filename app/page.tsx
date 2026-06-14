@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { Nav }              from '@/components/Nav'
 import { HeroCarousel }     from '@/components/HeroCarousel'
 import { SelectedWork }     from '@/components/SelectedWork'
@@ -6,7 +7,15 @@ import { About }            from '@/components/About'
 import { Contact }          from '@/components/Contact'
 import { Footer }          from '@/components/Footer'
 import { IntroAnimation }  from '@/components/IntroAnimation'
+import { DEFAULT_DESCRIPTION, PERSON_KEYWORDS, buildMetadata } from '@/lib/seo'
 import { getPublicSiteContent } from '@/lib/site-content'
+
+export const metadata: Metadata = buildMetadata({
+  title: 'UX Designer',
+  description: DEFAULT_DESCRIPTION,
+  path: '/',
+  keywords: PERSON_KEYWORDS,
+})
 
 export default async function HomePage() {
   const content = await getPublicSiteContent()

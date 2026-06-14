@@ -1,6 +1,19 @@
+import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { DashboardLoginForm } from '@/components/admin/DashboardLoginForm'
 import { isAdminSession } from '@/lib/admin-auth'
+
+export const metadata: Metadata = {
+  title: 'Dashboard Login',
+  robots: {
+    index: false,
+    follow: false,
+    googleBot: {
+      index: false,
+      follow: false,
+    },
+  },
+}
 
 export default async function DashboardLoginPage() {
   if (await isAdminSession()) {

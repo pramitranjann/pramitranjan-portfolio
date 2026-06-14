@@ -1,7 +1,9 @@
 import 'server-only'
 
 import crypto from 'node:crypto'
+import type { NextRequest } from 'next/server'
 import { cookies } from 'next/headers'
+import { constantTimeEqual } from '@/lib/security'
 
 const SESSION_COOKIE = 'portfolio_admin_session'
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 14
@@ -24,7 +26,7 @@ function sign(value: string) {
 
 export function verifyAdminPassword(password: string) {
   const expected = getAdminPassword()
-  return crypto.timingSafeEqual(Buffer.from(password), Buffer.from(expected))
+  return constantTimeEqual(password, expected)
 }
 
 export function createAdminSessionToken() {
@@ -38,12 +40,16 @@ export function isValidAdminSessionToken(token: string | undefined) {
 
   const [payload, signature] = token.split('.')
   if (!payload || !signature) return false
-  if (sign(payload) !== signature) return false
+  if (!constantTimeEqual(sign(payload), signature)) return false
 
   const expiresAt = Number(payload)
   if (!Number.isFinite(expiresAt)) return false
 
   return Date.now() < expiresAt
+}
+
+export function hasValidAdminSession(request: NextRequest) {
+  return isValidAdminSessionToken(request.cookies.get(SESSION_COOKIE)?.value)
 }
 
 export async function isAdminSession() {

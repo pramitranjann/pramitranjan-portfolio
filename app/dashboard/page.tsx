@@ -1,8 +1,21 @@
+import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { DashboardEditor } from '@/components/admin/DashboardEditor'
 import { isAdminSession } from '@/lib/admin-auth'
 import { getDashboardWriteMode, getDashboardWriteModeLabel, isDashboardSaveEnabled, isLocalDashboardWriteEnabled } from '@/lib/dashboard-storage'
 import { getSiteContent } from '@/lib/site-content'
+
+export const metadata: Metadata = {
+  title: 'Dashboard',
+  robots: {
+    index: false,
+    follow: false,
+    googleBot: {
+      index: false,
+      follow: false,
+    },
+  },
+}
 
 export default async function DashboardPage() {
   if (!(await isAdminSession())) {

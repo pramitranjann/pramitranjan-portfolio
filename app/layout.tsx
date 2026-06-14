@@ -3,10 +3,23 @@ import type { CSSProperties } from 'react'
 import { DM_Serif_Display, DM_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
+import { JsonLd } from '@/components/JsonLd'
 import { MotionSettingsProvider } from '@/components/MotionSettingsProvider'
 import { SiteCopyProvider } from '@/components/SiteCopyProvider'
 import { SoundRouteListener } from '@/components/SoundRouteListener'
 import { ScrollToTopOnRouteChange } from '@/components/ScrollToTopOnRouteChange'
+import {
+  DEFAULT_DESCRIPTION,
+  DEFAULT_OG_IMAGE,
+  HOME_TITLE,
+  PERSON_KEYWORDS,
+  SITE_NAME,
+  SITE_URL,
+  buildPersonJsonLd,
+  buildWebSiteJsonLd,
+  getEmailFromLinks,
+  getSameAsLinks,
+} from '@/lib/seo'
 import { getSiteContent } from '@/lib/site-content'
 
 const dmSerif = DM_Serif_Display({
@@ -24,20 +37,51 @@ const dmMono = DM_Mono({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://www.pramitranjan.com'),
-  title: 'Pramit Ranjan',
-  description: 'UX design student at SCAD. Portfolio of research-led product design, creative work, and photography.',
+  metadataBase: new URL(SITE_URL),
+  applicationName: SITE_NAME,
+  title: {
+    default: HOME_TITLE,
+    template: '%s | Pramit Ranjan',
+  },
+  description: DEFAULT_DESCRIPTION,
+  keywords: PERSON_KEYWORDS,
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  alternates: {
+    canonical: '/',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
   openGraph: {
-    title: 'Pramit Ranjan | Portfolio',
-    description: 'UX design student at SCAD. Research-led product design, creative work, and photography.',
-    url: 'https://www.pramitranjan.com',
-    siteName: 'Pramit Ranjan',
+    title: HOME_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    url: SITE_URL,
+    siteName: SITE_NAME,
     type: 'website',
+    images: [
+      {
+        url: DEFAULT_OG_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: HOME_TITLE,
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Pramit Ranjan | Portfolio',
-    description: 'UX design student at SCAD. Research-led product design, creative work, and photography.',
+    title: HOME_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    images: [DEFAULT_OG_IMAGE],
   },
 }
 
@@ -47,6 +91,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const layout = content.design.layout
   const typography = content.design.typography
   const navigation = content.design.navigation
+  const contactLinks = [...content.copy.home.contactLinks, ...content.aboutPage.contactLinks]
+  const sameAsLinks = getSameAsLinks(contactLinks)
+  const email = getEmailFromLinks(contactLinks)
   const selectedDisplayFont =
     typography.displayFont === 'clash-display'
       ? '"Clash Display", var(--font-dm-serif), serif'
@@ -108,7 +155,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         <link rel="preconnect" href="https://api.fontshare.com" />
         <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" />
-<script dangerouslySetInnerHTML={{ __html: `document.documentElement.classList.add('js-ready')` }} />
+        <script dangerouslySetInnerHTML={{ __html: `document.documentElement.classList.add('js-ready')` }} />
+        <JsonLd
+          data={[
+            buildWebSiteJsonLd(DEFAULT_DESCRIPTION),
+            buildPersonJsonLd({
+              description: content.aboutPage.heroBody || DEFAULT_DESCRIPTION,
+              sameAs: sameAsLinks,
+              email,
+            }),
+          ]}
+        />
       </head>
       <body style={{ backgroundColor: '#0d0d0d', color: 'rgb(245, 242, 237)', ...motionCssVars }}>
         <SoundRouteListener />

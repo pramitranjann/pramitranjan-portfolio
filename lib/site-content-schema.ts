@@ -1,3 +1,5 @@
+import { isSafeEmbedUrl, isSafeLinkHref, isSafeRichTextHtml } from '@/lib/security'
+
 export interface WorkProject {
   title: string
   oneliner: string
@@ -539,6 +541,7 @@ function isWorkProject(value: unknown): value is WorkProject {
     isString(item.oneliner) &&
     isStringArray(item.tags) &&
     isString(item.href) &&
+    isSafeLinkHref(item.href) &&
     (item.cover === undefined || isString(item.cover)) &&
     (item.hoverImage === undefined || isString(item.hoverImage)) &&
     (item.coverPosition === undefined || isString(item.coverPosition)) &&
@@ -558,7 +561,7 @@ function isEntryItem(value: unknown): value is EntryItem {
 function isLinkItem(value: unknown): value is LinkItem {
   if (!value || typeof value !== 'object') return false
   const item = value as Record<string, unknown>
-  return isString(item.label) && isString(item.href)
+  return isString(item.label) && isString(item.href) && isSafeLinkHref(item.href)
 }
 
 function isNowCard(value: unknown): value is NowCard {
@@ -750,7 +753,13 @@ function isCaseStudyNavStyleSettings(value: unknown): value is CaseStudyNavStyle
 function isHeroStageCopy(value: unknown): value is HeroStageCopy {
   if (!value || typeof value !== 'object') return false
   const item = value as Record<string, unknown>
-  return isString(item.number) && isString(item.titleHtml) && isString(item.body) && isOptionalString(item.footerLabel)
+  return (
+    isString(item.number) &&
+    isString(item.titleHtml) &&
+    isSafeRichTextHtml(item.titleHtml) &&
+    isString(item.body) &&
+    isOptionalString(item.footerLabel)
+  )
 }
 
 function isLayoutSettings(value: unknown): value is LayoutSettings {
@@ -822,9 +831,11 @@ function isHomePageCopy(value: unknown): value is HomePageCopy {
     item.heroStages.every(isHeroStageCopy) &&
     isString(item.aboutEyebrow) &&
     isString(item.aboutTitleHtml) &&
+    isSafeRichTextHtml(item.aboutTitleHtml) &&
     isString(item.aboutReadMoreLabel) &&
     isString(item.photographyEyebrow) &&
     isString(item.photographyTitleHtml) &&
+    isSafeRichTextHtml(item.photographyTitleHtml) &&
     isString(item.photographyBody) &&
     isString(item.photographyCtaLabel) &&
     isString(item.contactTitle) &&
@@ -840,6 +851,7 @@ function isAboutPageCopy(value: unknown): value is AboutPageCopy {
   return (
     isString(item.heroEyebrow) &&
     isString(item.heroTitleHtml) &&
+    isSafeRichTextHtml(item.heroTitleHtml) &&
     isString(item.cvLabel) &&
     isString(item.scrollLabel) &&
     isString(item.whoIAmLabel) &&
@@ -873,13 +885,14 @@ function isSitePageSettings(value: unknown): value is SitePageSettings {
     isSitePageKey(item.key) &&
     isString(item.label) &&
     isString(item.href) &&
+    isSafeLinkHref(item.href) &&
     typeof item.order === 'number' &&
     typeof item.visible === 'boolean' &&
     isSitePageStatus(item.status) &&
     isOptionalString(item.constructionTitle) &&
     isOptionalString(item.constructionBody) &&
     isOptionalString(item.constructionCtaLabel) &&
-    isOptionalString(item.constructionCtaHref)
+    (item.constructionCtaHref === undefined || (isString(item.constructionCtaHref) && isSafeLinkHref(item.constructionCtaHref)))
   )
 }
 
@@ -1083,7 +1096,7 @@ function isCaseStudyContent(value: unknown): value is CaseStudyContent {
     isStringArray(item.tags) &&
     isNullable(item.prev, isProjectLink) &&
     isNullable(item.next, isProjectLink) &&
-    isOptionalString(item.backHref) &&
+    (item.backHref === undefined || (isString(item.backHref) && isSafeLinkHref(item.backHref))) &&
     isOptionalString(item.backLabel) &&
     isOptionalString(item.problem) &&
     isOptionalString(item.role) &&
@@ -1113,9 +1126,9 @@ function isCaseStudyContent(value: unknown): value is CaseStudyContent {
     (item.mediaSettings === undefined || isCaseStudyMediaSettings(item.mediaSettings)) &&
     (item.mediaBlocks === undefined || (Array.isArray(item.mediaBlocks) && item.mediaBlocks.every(isCaseStudyMediaBlock))) &&
     (item.uiCopy === undefined || isCaseStudyUiCopy(item.uiCopy)) &&
-(item.useEmbedPreview === undefined || typeof item.useEmbedPreview === 'boolean') &&
-isOptionalString(item.solutionEmbedUrl) &&
-isOptionalString(item.solutionEmbedTitle) &&
+    (item.useEmbedPreview === undefined || typeof item.useEmbedPreview === 'boolean') &&
+    (item.solutionEmbedUrl === undefined || (isString(item.solutionEmbedUrl) && isSafeEmbedUrl(item.solutionEmbedUrl))) &&
+    isOptionalString(item.solutionEmbedTitle) &&
     isOptionalString(item.solutionEmbedAspectRatio) &&
     isOptionalString(item.solutionEmbedWidth) &&
     isOptionalString(item.solutionEmbedCalloutLabel) &&
@@ -1165,6 +1178,7 @@ export function isSiteContent(value: unknown): value is SiteContent {
     Array.isArray(aboutPage.nowCards) &&
     aboutPage.nowCards.every(isNowCard) &&
     isString(aboutPage.contactTitleHtml) &&
+    isSafeRichTextHtml(aboutPage.contactTitleHtml) &&
     isString(aboutPage.contactBody) &&
     Array.isArray(aboutPage.contactLinks) &&
     aboutPage.contactLinks.every(isLinkItem) &&

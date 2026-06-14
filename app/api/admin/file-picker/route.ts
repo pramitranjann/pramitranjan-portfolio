@@ -1,31 +1,23 @@
 import path from 'node:path'
 import { execFile } from 'node:child_process'
 import { promisify } from 'node:util'
-import { NextResponse } from 'next/server'
-import { getAdminCookieName, isValidAdminSessionToken } from '@/lib/admin-auth'
+import { NextRequest, NextResponse } from 'next/server'
+import { hasValidAdminSession } from '@/lib/admin-auth'
 import { isLocalDashboardWriteEnabled } from '@/lib/dashboard-storage'
+import { isSameOriginRequest } from '@/lib/security'
 
 const execFileAsync = promisify(execFile)
-
-function isAuthorized(request: Request) {
-  const cookieHeader = request.headers.get('cookie') ?? ''
-  const session = cookieHeader
-    .split(';')
-    .map((part) => part.trim())
-    .find((part) => part.startsWith(`${getAdminCookieName()}=`))
-    ?.split('=')
-    .slice(1)
-    .join('=')
-
-  return isValidAdminSessionToken(session)
-}
 
 function escapeAppleScript(value: string) {
   return value.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
 }
 
-export async function POST(request: Request) {
-  if (!isAuthorized(request)) {
+export async function POST(request: NextRequest) {
+  if (!isSameOriginRequest(request)) {
+    return NextResponse.json({ error: 'Invalid origin' }, { status: 403 })
+  }
+
+  if (!hasValidAdminSession(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -71,7 +63,6 @@ end try
     const relativePath = path.relative(normalizedPublicDir, normalizedChosenPath).split(path.sep).join('/')
     return NextResponse.json({
       src: `/${relativePath}`,
-      absolutePath: normalizedChosenPath,
     })
   } catch {
     return NextResponse.json({ error: 'Could not open Finder.' }, { status: 500 })

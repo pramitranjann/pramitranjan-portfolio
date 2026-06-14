@@ -1,26 +1,14 @@
 import { revalidatePath } from 'next/cache'
-import { NextResponse } from 'next/server'
-import { isValidAdminSessionToken, getAdminCookieName } from '@/lib/admin-auth'
+import { NextRequest, NextResponse } from 'next/server'
+import { hasValidAdminSession } from '@/lib/admin-auth'
 import { getDashboardWriteMode } from '@/lib/dashboard-storage'
 import { publishSiteContentToGitHub } from '@/lib/github-content'
 import { getSiteContent, saveSiteContent } from '@/lib/site-content'
+import { isSameOriginRequest } from '@/lib/security'
 import { isSiteContent } from '@/lib/site-content-schema'
 
-function isAuthorized(request: Request) {
-  const cookieHeader = request.headers.get('cookie') ?? ''
-  const session = cookieHeader
-    .split(';')
-    .map((part) => part.trim())
-    .find((part) => part.startsWith(`${getAdminCookieName()}=`))
-    ?.split('=')
-    .slice(1)
-    .join('=')
-
-  return isValidAdminSessionToken(session)
-}
-
-export async function GET(request: Request) {
-  if (!isAuthorized(request)) {
+export async function GET(request: NextRequest) {
+  if (!hasValidAdminSession(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -28,8 +16,12 @@ export async function GET(request: Request) {
   return NextResponse.json(content)
 }
 
-export async function PUT(request: Request) {
-  if (!isAuthorized(request)) {
+export async function PUT(request: NextRequest) {
+  if (!isSameOriginRequest(request)) {
+    return NextResponse.json({ error: 'Invalid origin' }, { status: 403 })
+  }
+
+  if (!hasValidAdminSession(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

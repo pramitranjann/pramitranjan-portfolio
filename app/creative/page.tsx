@@ -1,8 +1,23 @@
+import type { Metadata } from 'next'
 import { UnderConstructionPage } from '@/components/UnderConstructionPage'
 import { CreativePageClient } from '@/components/CreativePageClient'
+import { buildMetadata, shouldIndexPage } from '@/lib/seo'
 import { getPublicSiteContent } from '@/lib/site-content'
 import { getSitePage } from '@/lib/site-pages'
 import { getPhotographyPreviewImages } from '@/lib/preview-images'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPublicSiteContent()
+  const pageSettings = getSitePage(content, 'creative')
+
+  return buildMetadata({
+    title: 'Creative Work & Photography',
+    description: `${content.copy.creativePage.heroTitle}. ${content.copy.creativePage.heroBody}`,
+    path: '/creative',
+    keywords: ['Pramit Ranjan creative work', 'Pramit Ranjan photography', 'creative portfolio'],
+    noIndex: !shouldIndexPage(pageSettings?.status),
+  })
+}
 
 export default async function CreativePage() {
   const content = await getPublicSiteContent()

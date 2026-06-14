@@ -1,7 +1,22 @@
+import type { Metadata } from 'next'
 import { UnderConstructionPage } from '@/components/UnderConstructionPage'
 import { WorkPageClient } from '@/components/WorkPageClient'
+import { buildMetadata, shouldIndexPage } from '@/lib/seo'
 import { getPublicSiteContent } from '@/lib/site-content'
 import { getSitePage } from '@/lib/site-pages'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPublicSiteContent()
+  const pageSettings = getSitePage(content, 'work')
+
+  return buildMetadata({
+    title: 'UX Design Work',
+    description: `${content.workPage.heroTitle} ${content.workPage.heroBody}`,
+    path: '/work',
+    keywords: ['Pramit Ranjan work', 'UX case studies', 'product design portfolio'],
+    noIndex: !shouldIndexPage(pageSettings?.status),
+  })
+}
 
 export default async function WorkPage() {
   const content = await getPublicSiteContent()

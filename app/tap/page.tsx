@@ -97,7 +97,7 @@ export default function TapPage() {
                   textWrap: 'pretty',
                 }}
               >
-                UX design student at SCAD. Designer with an artist&apos;s eye.
+                UX design student at SCAD. Student with an artist&apos;s eye.
               </p>
               <div
                 data-reveal
