@@ -15,25 +15,34 @@ export async function GET(request: NextRequest) {
   const supabase = getSupabaseAdmin();
   const date = request.nextUrl.searchParams.get("date");
   const type = request.nextUrl.searchParams.get("type");
+  const all = request.nextUrl.searchParams.get("all") === 'true';
   const localDate = date || getCurrentLocalDate(settings.timezone);
+
   let query = supabase
     .from("reports")
     .select("*")
     .eq("user_id", OWNER_ID);
 
-  if (type) {
-    query = query.eq("type", type);
-  }
-
-  if (date) {
-    query = query.eq("local_date", localDate);
-  } else if (type) {
-    query = query.order("local_date", { ascending: false }).limit(1);
+  if (all) {
+    query = query
+      .order('local_date', { ascending: false })
+      .order('created_at', { ascending: false })
+      .limit(14);
   } else {
-    query = query.eq("local_date", localDate);
+    if (type) {
+      query = query.eq("type", type);
+    }
+    if (date) {
+      query = query.eq("local_date", localDate);
+    } else if (type) {
+      query = query.order("local_date", { ascending: false }).limit(1);
+    } else {
+      query = query.eq("local_date", localDate);
+    }
+    query = query.order("created_at", { ascending: false });
   }
 
-  const { data, error } = await query.order("created_at", { ascending: false });
+  const { data, error } = await query;
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });

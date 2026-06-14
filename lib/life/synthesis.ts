@@ -1,4 +1,10 @@
-import { EOD_SYSTEM_PROMPT, MORNING_SYSTEM_PROMPT, OWNER_ID, WEEKLY_REVIEW_SYSTEM_PROMPT, WEEKLY_SYSTEM_PROMPT } from '@/lib/life/constants'
+import {
+  EOD_SYSTEM_PROMPT,
+  MORNING_SYSTEM_PROMPT,
+  OWNER_ID,
+  WEEKLY_SYSTEM_PROMPT,
+  WEEK_AHEAD_SYSTEM_PROMPT,
+} from '@/lib/life/constants'
 import { callClaude } from '@/lib/life/claude'
 import { buildEodPrompt, buildMorningPrompt, loadDailyContext } from '@/lib/life/report-context'
 import { syncCalendarEvents } from '@/lib/life/calendar'
@@ -7,7 +13,6 @@ import { getOwnerSettings } from '@/lib/life/settings'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
 import { getWeeklyTaskSnapshot, syncTasksFromReport } from '@/lib/life/tasks'
 import { addDays, getCurrentLocalClock, getCurrentLocalDate, getWeekStart, isMorningBriefWindow } from '@/lib/life/time'
-import type { ReportRecord, SummaryRecord } from '@/lib/life/types'
 
 export async function getExistingReport(localDate: string, type: "eod" | "morning") {
   const supabase = getSupabaseAdmin();
@@ -180,6 +185,10 @@ export async function generateMorningBrief(options?: { localDate?: string; force
   };
 }
 
+/**
+ * Compresses the past week's entries + reports into a `summaries` row.
+ * This is durable context that future EOD prompts can reference.
+ */
 export async function generateWeeklySummary(options?: { localDate?: string; weekStart?: string; force?: boolean }) {
   const settings = await getOwnerSettings();
   const timeZone = settings.timezone;
@@ -231,8 +240,6 @@ export async function generateWeeklySummary(options?: { localDate?: string; week
     throw entriesError || reportsError;
   }
 
-  const weeklyTasks = await getWeeklyTaskSnapshot(targetWeekStart)
-
   const input = [
     `Week start: ${targetWeekStart}`,
     `Week end: ${targetWeekEnd}`,
@@ -263,27 +270,99 @@ export async function generateWeeklySummary(options?: { localDate?: string; week
     throw error;
   }
 
-  const weeklyReviewMarkdown = await callClaude({
-    system: WEEKLY_REVIEW_SYSTEM_PROMPT,
-    user: [
-      `Week start: ${targetWeekStart}`,
-      `Week end: ${targetWeekEnd}`,
-      `Compressed weekly summary:\n${content}`,
-      `Entries:\n${(entries || []).map((entry) => `- ${entry.local_date}${entry.project_slug ? ` [${entry.project_slug}]` : ''}: ${entry.content}`).join("\n") || "No entries."}`,
-      `Reports:\n${(reports || []).map((report) => `- ${report.local_date} ${report.type}: ${report.content}`).join("\n\n") || "No reports."}`,
-      `Open tasks:\n${weeklyTasks.openTasks.map((task) => `- ${task.title}${task.project_slug ? ` [${task.project_slug}]` : ''}`).join("\n") || "No open tasks."}`,
-      `Completed tasks this week:\n${weeklyTasks.completedTasks.map((task) => `- ${task.title}${task.project_slug ? ` [${task.project_slug}]` : ''}`).join("\n") || "No completed tasks."}`,
-    ].join('\n\n'),
+  return {
+    skipped: false,
+    weekStart: targetWeekStart,
+    summary: data,
+  };
+}
+
+/**
+ * Forward-looking week-ahead briefing for the upcoming Mon–Sun.
+ * Written to the `reports` table with type='weekly' and local_date=<upcoming Monday>,
+ * then emailed.
+ */
+export async function generateWeekAheadBrief(options?: {
+  localDate?: string
+  weekStart?: string
+  force?: boolean
+}) {
+  const settings = await getOwnerSettings()
+  const timeZone = settings.timezone
+  const today = options?.localDate || getCurrentLocalDate(timeZone)
+  const currentWeekStart = getWeekStart(today)
+  const targetWeekStart = options?.weekStart || addDays(currentWeekStart, 7)
+  const targetWeekEnd = addDays(targetWeekStart, 6)
+  const supabase = getSupabaseAdmin()
+
+  if (!options?.force) {
+    const { data: existing, error: existingError } = await supabase
+      .from('reports')
+      .select('*')
+      .eq('user_id', OWNER_ID)
+      .eq('type', 'weekly')
+      .eq('local_date', targetWeekStart)
+      .maybeSingle()
+
+    if (existingError) {
+      throw existingError
+    }
+
+    if (existing) {
+      return {
+        skipped: true,
+        reason: 'Week-ahead brief already exists.',
+        weekStart: targetWeekStart,
+        report: existing,
+      }
+    }
+  }
+
+  const lastWeekStart = addDays(targetWeekStart, -7)
+  const { data: lastWeekSummary } = await supabase
+    .from('summaries')
+    .select('*')
+    .eq('user_id', OWNER_ID)
+    .eq('week_start', lastWeekStart)
+    .maybeSingle()
+
+  try {
+    await syncCalendarEvents(targetWeekStart, targetWeekEnd)
+  } catch (error) {
+    console.error('Week-ahead calendar sync failed', error)
+  }
+
+  const { data: upcomingEvents } = await supabase
+    .from('calendar_events')
+    .select('*')
+    .eq('user_id', OWNER_ID)
+    .gte('local_date', targetWeekStart)
+    .lte('local_date', targetWeekEnd)
+    .order('start_time', { ascending: true })
+
+  const weeklyTasks = await getWeeklyTaskSnapshot(targetWeekStart)
+
+  const userInput = [
+    `Today: ${today}`,
+    `Target week: ${targetWeekStart} → ${targetWeekEnd}`,
+    `Last week summary:\n${lastWeekSummary?.content || 'None.'}`,
+    `Upcoming events:\n${(upcomingEvents || []).map((ev) => `- ${ev.local_date} ${ev.all_day ? 'all day' : ev.start_time || ''}: ${ev.title || '(untitled)'}`).join('\n') || 'None.'}`,
+    `Open tasks:\n${weeklyTasks.openTasks.map((task) => `- ${task.title}${task.project_slug ? ` [${task.project_slug}]` : ''}${task.due_local_date ? ` (due ${task.due_local_date})` : ''}`).join('\n') || 'None.'}`,
+  ].join('\n\n')
+
+  const content = await callClaude({
+    system: WEEK_AHEAD_SYSTEM_PROMPT,
+    user: userInput,
     maxTokens: 1100,
   })
 
-  const { data: weeklyReport, error: weeklyReportError } = await supabase
+  const { data: weeklyReport, error } = await supabase
     .from('reports')
     .upsert(
       {
         user_id: OWNER_ID,
         type: 'weekly',
-        content: weeklyReviewMarkdown,
+        content,
         local_date: targetWeekStart,
       },
       { onConflict: 'user_id,type,local_date' },
@@ -291,21 +370,15 @@ export async function generateWeeklySummary(options?: { localDate?: string; week
     .select('*')
     .single()
 
-  if (weeklyReportError) {
-    throw weeklyReportError
+  if (error) {
+    throw error
   }
 
-  await syncTasksFromReport({
-    localDate: targetWeekStart,
-    sourceType: 'weekly',
-    reportId: weeklyReport.id,
-    reportContent: weeklyReviewMarkdown,
-  })
+  void sendReportEmail(`Week ahead — ${targetWeekStart}`, content)
 
   return {
     skipped: false,
     weekStart: targetWeekStart,
-    summary: data,
     report: weeklyReport,
-  };
+  }
 }

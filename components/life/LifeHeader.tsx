@@ -3,12 +3,12 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-const LIFE_NAV_ITEMS = [
+const LIFE_NAV_ITEMS: Array<{ href: string; label: string; phoneHidden?: boolean }> = [
   { href: '/life', label: 'Today' },
   { href: '/life/tasks', label: 'Tasks' },
-  { href: '/life/report', label: 'Report' },
-  { href: '/life/review', label: 'Weekly' },
-  { href: '/life/history', label: 'History' },
+  { href: '/life/review', label: 'Week' },
+  { href: '/life/report', label: 'Reports' },
+  { href: '/life/history', label: 'History', phoneHidden: true },
 ]
 
 export function LifeHeader() {
@@ -27,7 +27,7 @@ export function LifeHeader() {
             <Link
               key={item.href}
               href={item.href}
-              className={`nav-link font-mono${active ? ' active' : ''}`}
+              className={`nav-link font-mono${active ? ' active' : ''}${item.phoneHidden ? ' phone-hidden' : ''}`}
             >
               {item.label}
             </Link>

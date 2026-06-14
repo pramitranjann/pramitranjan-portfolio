@@ -56,14 +56,18 @@ async function getCalendarIdsToSync(calendar: ReturnType<typeof google.calendar>
   return Array.from(calendarIds)
 }
 
-export async function syncCalendarEvents(targetLocalDate?: string) {
+export async function syncCalendarEvents(
+  startLocalDate?: string,
+  endLocalDate?: string,
+) {
   const settings = await getOwnerSettings();
   const timeZone = settings.timezone;
   const supabase = getSupabaseAdmin();
   const calendar = getCalendarClient();
-  const baseDate = targetLocalDate || getCurrentLocalDate(timeZone);
-  const windowStart = addDays(baseDate, -1);
-  const windowEnd = addDays(baseDate, 7);
+  const baseStart = startLocalDate || getCurrentLocalDate(timeZone);
+  const baseEnd = endLocalDate || baseStart;
+  const windowStart = addDays(baseStart, -1);
+  const windowEnd = addDays(baseEnd, 7);
   const timeMin = getLocalDayRange(windowStart, timeZone).start.toISOString();
   const timeMax = getLocalDayRange(windowEnd, timeZone).end.toISOString();
   const calendarIds = await getCalendarIdsToSync(calendar)
@@ -143,7 +147,9 @@ export async function syncCalendarEvents(targetLocalDate?: string) {
 
   return {
     synced: events.length,
-    localDate: baseDate,
+    startLocalDate: baseStart,
+    endLocalDate: baseEnd,
+    localDate: baseStart,
     timeZone,
     calendarIds,
     events,
