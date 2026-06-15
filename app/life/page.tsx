@@ -159,35 +159,35 @@ export default async function LifeTodayPage({
         <p className="eyebrow">
           Today · <b>{eyebrowDate}</b>
         </p>
-        <h1 className=”life-greeting”>{greetingForHour(hour)}, Pramit.</h1>
+        <h1 className="life-greeting">{greetingForHour(hour)}, Pramit.</h1>
 
-        <form action=”/api/life/entries” method=”post”>
-          <input id={sourceInputId} name=”source” type=”hidden” defaultValue=”text” />
-          <div className=”life-composer-outer”>
-            <div className=”life-composer”>
+        <form action="/api/life/entries" method="post">
+          <input id={sourceInputId} name="source" type="hidden" defaultValue="text" />
+          <div className="life-composer-outer">
+            <div className="life-composer">
               <textarea
-                className=”life-composer-input”
+                className="life-composer-input"
                 id={textareaId}
-                name=”content”
-                placeholder=”Brain-dump anything — “book flights, crit went well, gym at 4…””
+                name="content"
+                placeholder="Brain-dump anything — book flights, crit went well, gym at 4…"
               />
-              <div className=”life-composer-bar”>
+              <div className="life-composer-bar">
                 <VoiceCaptureControl
                   sourceInputId={sourceInputId}
                   textareaId={textareaId}
-                  liveTranscriptId=”life-live-transcript”
+                  liveTranscriptId="life-live-transcript"
                 />
-                <span className=”spacer” />
-                <button className=”life-btn ghost life-clear” type=”reset”>
+                <span className="spacer" />
+                <button className="life-btn ghost life-clear" type="reset">
                   Clear
                 </button>
-                <button className=”life-btn primary life-save” type=”submit”>
+                <button className="life-btn primary life-save" type="submit">
                   Save entry
                 </button>
               </div>
             </div>
             {/* Phone-only: save button below the textarea */}
-            <button className=”life-save-below” type=”submit”>
+            <button className="life-save-below" type="submit">
               Save entry
             </button>
           </div>
