@@ -1167,7 +1167,7 @@ body.carousel-reengaging main {
   /* Stops the auto-scroll-to-today (and manual scrolling) from tucking the
      "today" row up under the sticky header. ~132px ≈ header + toolbar height. */
   .life-shell .life-day-cell {
-    scroll-margin-top: 132px;
+    scroll-margin-top: calc(132px + env(safe-area-inset-top));
   }
 }
 
@@ -1284,8 +1284,12 @@ body.carousel-reengaging main {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
-    margin: -16px -16px 16px;
-    padding: 12px 16px;
+    /* margin pulls the header flush with the shell edges; the -top value must
+       cancel the shell's padding so the header touches the very top of the
+       viewport. env(safe-area-inset-top) is 0 on non-notch devices and ~50px
+       on Face ID iPhones, so the negative margin swallows both. */
+    margin: calc(-16px - env(safe-area-inset-top)) -16px 16px;
+    padding: calc(12px + env(safe-area-inset-top)) 16px 12px;
     background: rgba(10, 10, 10, 0.85);
     -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
