@@ -58,7 +58,7 @@ export async function generateEodReport(options?: { localDate?: string; force?: 
     };
   }
 
-  await syncCalendarEvents(localDate);
+  await syncCalendarEvents(localDate, undefined, { force: true });
   const context = await loadDailyContext(localDate, timeZone);
 
   if (context.completedTasks.length === 0 && !force) {
@@ -138,7 +138,7 @@ export async function generateMorningBrief(options?: { localDate?: string; force
     };
   }
 
-  await syncCalendarEvents(localDate);
+  await syncCalendarEvents(localDate, undefined, { force: true });
   const yesterday = addDays(localDate, -1);
   const supabase = getSupabaseAdmin();
   const { data: yesterdayReport, error: yesterdayError } = await supabase
@@ -348,7 +348,7 @@ export async function generateWeekAheadBrief(options?: {
     .maybeSingle()
 
   try {
-    await syncCalendarEvents(targetWeekStart, targetWeekEnd)
+    await syncCalendarEvents(targetWeekStart, targetWeekEnd, { force: true })
   } catch (error) {
     console.error('Week-ahead calendar sync failed', error)
   }

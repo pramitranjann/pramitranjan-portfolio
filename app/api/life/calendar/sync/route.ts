@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
   const body = (await request.json().catch(() => null)) as { localDate?: string } | null;
 
   try {
-    const result = await syncCalendarEvents(body?.localDate);
+    const result = await syncCalendarEvents(body?.localDate, undefined, { force: true });
     return NextResponse.json(result);
   } catch (error) {
     console.error("Calendar sync failed", error);

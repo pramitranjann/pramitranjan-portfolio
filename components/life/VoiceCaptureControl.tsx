@@ -274,25 +274,32 @@ export function VoiceCaptureControl({
   function onPointerDown(event: React.PointerEvent<HTMLButtonElement>) {
     if (!isHoldMode) return
     if (!supported) return
-    // Suppress iOS's long-press text-selection / callout. Without this the
-    // touch-and-hold gesture starts selecting the button label and the live
-    // transcript text (the blue selection handles in the bug report). The CSS
-    // (user-select:none / -webkit-touch-callout:none / touch-action:none) is
-    // the primary guard; this preventDefault backs it up across browsers.
-    event.preventDefault()
-    event.currentTarget.setPointerCapture(event.pointerId)
+    // Don't preventDefault or setPointerCapture here — that would block the
+    // page from scrolling when the user pans vertically with a finger on the
+    // mic. Instead, wait the HOLD_THRESHOLD_MS still-hold window before
+    // engaging. If the browser interprets the gesture as a scroll it will
+    // fire pointercancel, which clears the timer in onPointerEndLike.
+    const target = event.currentTarget
+    const pointerId = event.pointerId
     setError(null)
     startedRef.current = false
     cancelAutosave()
-    if (navigator.vibrate) {
+    holdTimerRef.current = window.setTimeout(() => {
+      holdTimerRef.current = null
+      // Now we're committing to the hold: capture the pointer, suppress the
+      // iOS long-press selection/callout, and start recognition.
       try {
-        navigator.vibrate(20)
+        target.setPointerCapture(pointerId)
       } catch {
         /* ignore */
       }
-    }
-    holdTimerRef.current = window.setTimeout(() => {
-      holdTimerRef.current = null
+      if (navigator.vibrate) {
+        try {
+          navigator.vibrate(20)
+        } catch {
+          /* ignore */
+        }
+      }
       startRecognition()
     }, HOLD_THRESHOLD_MS)
   }
@@ -359,7 +366,10 @@ export function VoiceCaptureControl({
           WebkitUserSelect: 'none',
           userSelect: 'none',
           WebkitTouchCallout: 'none',
-          touchAction: 'none',
+          // pan-y lets vertical page scroll initiate from a finger on the
+          // mic; the hold timer in onPointerDown only engages after a 300 ms
+          // still-hold, so scrolls cancel the timer via pointercancel.
+          touchAction: isHoldMode ? 'pan-y' : 'manipulation',
         }}
         onContextMenu={(event) => {
           if (isHoldMode) event.preventDefault()

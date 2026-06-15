@@ -838,7 +838,7 @@ body.carousel-reengaging main {
   background: var(--life-bg);
   color: var(--life-text);
   -webkit-font-smoothing: antialiased;
-  font-family: system-ui, -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
+  font-family: var(--font-mono);
 }
 .life-shell * { box-sizing: border-box; }
 .life-shell a { color: inherit; text-decoration: none; }
@@ -851,7 +851,7 @@ body.carousel-reengaging main {
 .life-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-bottom: 18px; margin-bottom: 28px; border-bottom: 1px solid var(--life-hairline); }
 .life-shell .brand { font-family: var(--font-mono); font-size: 14px; line-height: 1.3; letter-spacing: 0.14em; color: var(--life-accent); }
 .life-nav { display: flex; align-items: center; gap: 4px; }
-.life-nav .nav-link { font-family: system-ui, sans-serif; font-size: 14px; letter-spacing: 0; color: var(--life-muted); padding: 7px 14px; border-radius: 0; transition: color 0.15s ease, background 0.15s ease; }
+.life-nav .nav-link { font-family: var(--font-mono); font-size: 14px; letter-spacing: 0; color: var(--life-muted); padding: 7px 14px; border-radius: 0; transition: color 0.15s ease, background 0.15s ease; }
 .life-nav .nav-link::before { display: none; }
 .life-nav .nav-link:hover { color: var(--life-text); background: var(--life-panel); }
 .life-nav .nav-link.active { color: var(--life-text); background: var(--life-panel-2); box-shadow: inset 0 -2px 0 var(--life-accent); }
@@ -1197,6 +1197,12 @@ body.carousel-reengaging main {
     display: none;
   }
 
+  /* Phone: composer + save are visually distinct cards. */
+  .life-shell .life-composer-outer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
   /* BIG square mic button — fills the full width, equally tall (true square). */
   .life-shell .life-mic.is-hold {
     width: 100%;
@@ -1204,9 +1210,10 @@ body.carousel-reengaging main {
     justify-content: center;
     flex-direction: column;
     gap: 14px;
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: var(--font-weight-mono);
+    letter-spacing: 0.12em;
     text-transform: uppercase;
   }
   .life-shell .life-mic.is-hold .life-mic-dot {
@@ -1225,14 +1232,14 @@ body.carousel-reengaging main {
     align-items: center;
     justify-content: center;
     width: 100%;
-    min-height: 52px;
+    min-height: 46px;
     border: 1px solid var(--life-accent);
     background: var(--life-accent);
     color: #0a0a0a;
     font-family: var(--font-mono);
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
+    font-size: 14px;
+    font-weight: var(--font-weight-mono);
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     cursor: pointer;
     border-radius: 0;
@@ -1253,8 +1260,12 @@ body.carousel-reengaging main {
     user-select: none;
     -webkit-touch-callout: none;
   }
+  /* Allow vertical page scroll to start with a finger on the mic — the JS
+     handler only engages the hold gesture after a 300 ms still hold, so any
+     pan-y intent is interpreted as scrolling and the browser scrolls the
+     page without us blocking it. */
   .life-shell .life-mic.is-hold {
-    touch-action: none;
+    touch-action: pan-y;
   }
 }
 

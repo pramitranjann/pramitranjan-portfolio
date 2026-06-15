@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
     const event = await createCalendarEvent({ title, localDate, startTime, endTime, allDay })
 
     try {
-      await syncCalendarEvents(localDate)
+      await syncCalendarEvents(localDate, undefined, { force: true })
     } catch (syncError) {
       console.error('Calendar sync after event creation failed', syncError)
     }

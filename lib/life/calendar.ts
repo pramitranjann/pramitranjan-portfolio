@@ -113,16 +113,42 @@ export async function createCalendarEvent(input: {
   return response.data
 }
 
+// In-memory throttle so that rapid navigations between Life pages don't each
+// pay the full Google Calendar round-trip + Supabase delete/upsert. The cron
+// and explicit user actions pass `{ force: true }` to bypass.
+const SYNC_TTL_MS = 5 * 60 * 1000
+const lastSyncedAt = new Map<string, number>()
+
 export async function syncCalendarEvents(
   startLocalDate?: string,
   endLocalDate?: string,
+  options?: { force?: boolean },
 ) {
   const settings = await getOwnerSettings();
   const timeZone = settings.timezone;
-  const supabase = getSupabaseAdmin();
-  const calendar = getCalendarClient();
   const baseStart = startLocalDate || getCurrentLocalDate(timeZone);
   const baseEnd = endLocalDate || baseStart;
+
+  const cacheKey = `${baseStart}:${baseEnd}`
+  if (!options?.force) {
+    const last = lastSyncedAt.get(cacheKey)
+    if (last && Date.now() - last < SYNC_TTL_MS) {
+      return {
+        synced: 0,
+        skipped: true as const,
+        cached: true as const,
+        startLocalDate: baseStart,
+        endLocalDate: baseEnd,
+        localDate: baseStart,
+        timeZone,
+        calendarIds: [] as string[],
+        events: [] as CalendarEventRecord[],
+      }
+    }
+  }
+
+  const supabase = getSupabaseAdmin();
+  const calendar = getCalendarClient();
   const windowStart = addDays(baseStart, -1);
   const windowEnd = addDays(baseEnd, 7);
   const timeMin = getLocalDayRange(windowStart, timeZone).start.toISOString();
@@ -201,6 +227,8 @@ export async function syncCalendarEvents(
       throw error;
     }
   }
+
+  lastSyncedAt.set(cacheKey, Date.now())
 
   return {
     synced: events.length,

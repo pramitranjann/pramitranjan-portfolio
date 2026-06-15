@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import type { CSSProperties } from 'react'
 import { DM_Serif_Display, DM_Mono } from 'next/font/google'
+import localFont from 'next/font/local'
 import { Analytics } from '@vercel/analytics/next'
 import { Agentation } from 'agentation'
 import './globals.css'
@@ -34,6 +35,13 @@ const dmMono = DM_Mono({
   weight: '400',
   subsets: ['latin'],
   variable: '--font-mono',
+  display: 'swap',
+})
+
+const clashDisplay = localFont({
+  src: './fonts/clash-display/ClashDisplay-Variable.woff2',
+  weight: '200 700',
+  variable: '--font-clash-display',
   display: 'swap',
 })
 
@@ -97,7 +105,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const email = getEmailFromLinks(contactLinks)
   const selectedDisplayFont =
     typography.displayFont === 'clash-display'
-      ? '"Clash Display", var(--font-dm-serif), serif'
+      ? 'var(--font-clash-display), var(--font-dm-serif), serif'
       : 'var(--font-dm-serif), serif'
   const motionCssVars = {
     '--motion-page-reveal-distance': `${motion.pageRevealDistance}px`,
@@ -152,10 +160,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   } as CSSProperties
 
   return (
-    <html lang="en" className={`${dmSerif.variable} ${dmMono.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${dmSerif.variable} ${dmMono.variable} ${clashDisplay.variable}`}
+      suppressHydrationWarning
+    >
       <head>
-        <link rel="preconnect" href="https://api.fontshare.com" />
-        <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" />
         <script dangerouslySetInnerHTML={{ __html: `document.documentElement.classList.add('js-ready')` }} />
         <JsonLd
           data={[

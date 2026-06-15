@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
   try {
     const settings = await getOwnerSettings()
     const localDate = getCurrentLocalDate(settings.timezone)
-    const calendar = await syncCalendarEvents(localDate)
+    const calendar = await syncCalendarEvents(localDate, undefined, { force: true })
     const eod = await generateEodReport({ localDate })
     const weekly = await generateWeeklySummary({ localDate })
 
