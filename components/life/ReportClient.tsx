@@ -16,13 +16,18 @@ interface ReportsListResponse {
   reports: ReportRecord[]
 }
 
+const TYPE_LABEL: Record<string, string> = {
+  eod: 'Evening brief',
+  morning: 'Morning brief',
+  weekly: 'Week ahead',
+}
+
 export function ReportClient() {
   const [reports, setReports] = useState<ReportRecord[]>([])
   const [selected, setSelected] = useState<ReportRecord | null>(null)
   const [timezone, setTimezone] = useState('UTC')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [drawerOpen, setDrawerOpen] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -59,75 +64,46 @@ export function ReportClient() {
     [selected],
   )
 
-  function handleSelect(r: ReportRecord) {
-    setSelected(r)
-    setDrawerOpen(false)
-  }
-
   return (
-    <div className="life-reports-shell">
-      <aside className="life-reports-aside">
-        <div className="section-head">
-          <h2>Reports</h2>
-          <span className="count-pill">{reports.length}</span>
+    <div>
+      <div className="life-page-head">
+        <div>
+          <p className="eyebrow">Reports</p>
+          <h1>Briefs &amp; reflections</h1>
         </div>
+      </div>
+
+      <div className="life-reports-shell">
         <ReportsSidebar
           reports={reports}
           selectedId={selected?.id || null}
-          onSelect={handleSelect}
+          onSelect={setSelected}
+          timezone={timezone}
         />
-      </aside>
 
-      <button
-        type="button"
-        className="life-reports-drawer-trigger"
-        onClick={() => setDrawerOpen(true)}
-      >
-        Browse reports
-      </button>
-
-      {drawerOpen ? (
-        <div className="life-reports-drawer" role="dialog">
-          <div className="life-reports-drawer-head">
-            <h2>Reports</h2>
-            <button
-              type="button"
-              className="secondary-button"
-              onClick={() => setDrawerOpen(false)}
-            >
-              Close
-            </button>
-          </div>
-          <ReportsSidebar
-            reports={reports}
-            selectedId={selected?.id || null}
-            onSelect={handleSelect}
-          />
-        </div>
-      ) : null}
-
-      <section className="life-reports-reader">
-        {loading ? <p className="muted-text">Loading…</p> : null}
-        {error ? <p className="error-text">{error}</p> : null}
-        {!loading && !selected ? <p className="muted-text">No report selected.</p> : null}
-        {selected ? (
-          <>
-            <header className="life-reports-reader-head">
-              <p className="eyebrow">{selected.type}</p>
-              <h1>{getDisplayDate(selected.local_date, timezone)}</h1>
-            </header>
-            {sections.length > 0 ? (
-              <div className="life-reports-sections">
-                {sections.map((section, index) => (
-                  <SectionCard key={`${section.label}-${index}`} section={section} />
-                ))}
-              </div>
-            ) : (
-              <MarkdownCard content={selected.content} />
-            )}
-          </>
-        ) : null}
-      </section>
+        <article className="life-reports-reader">
+          {loading ? <p className="muted-text">Loading…</p> : null}
+          {error ? <p className="error-text">{error}</p> : null}
+          {!loading && !selected ? <p className="muted-text">No report selected.</p> : null}
+          {selected ? (
+            <>
+              <header className="life-reports-reader-head">
+                <p className="eyebrow">{TYPE_LABEL[selected.type] || selected.type}</p>
+                <h1>{getDisplayDate(selected.local_date, timezone)}</h1>
+              </header>
+              {sections.length > 0 ? (
+                <div className="life-reports-sections">
+                  {sections.map((section, index) => (
+                    <SectionCard key={`${section.label}-${index}`} section={section} />
+                  ))}
+                </div>
+              ) : (
+                <MarkdownCard content={selected.content} />
+              )}
+            </>
+          ) : null}
+        </article>
+      </div>
     </div>
   )
 }

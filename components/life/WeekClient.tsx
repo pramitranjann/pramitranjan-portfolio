@@ -2,9 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 
-import { DayCell } from '@/components/life/week/DayCell'
 import { fetchJson } from '@/lib/life/client'
-import { addDays, getDisplayDate, getWeekStart } from '@/lib/life/time'
+import { addDays, getLocalTimeLabel, getWeekStart, localDateTimeToUtc } from '@/lib/life/time'
 import type { CalendarEventRecord, TaskRecord } from '@/lib/life/types'
 
 interface WeekResponse {
@@ -21,6 +20,38 @@ function range(start: string, days: number): string[] {
   return Array.from({ length: days }, (_, i) => addDays(start, i))
 }
 
+function isoWeek(dateStr: string): number {
+  const [y, m, d] = dateStr.split('-').map(Number)
+  const date = new Date(Date.UTC(y, m - 1, d))
+  const dayNum = (date.getUTCDay() + 6) % 7
+  date.setUTCDate(date.getUTCDate() - dayNum + 3)
+  const firstThursday = date.getTime()
+  date.setUTCMonth(0, 1)
+  if (date.getUTCDay() !== 4) {
+    date.setUTCMonth(0, 1 + ((4 - date.getUTCDay() + 7) % 7))
+  }
+  return 1 + Math.round((firstThursday - date.getTime()) / (7 * 24 * 3600 * 1000))
+}
+
+function dayMonth(localDate: string, timeZone: string) {
+  const date = localDateTimeToUtc(localDate, timeZone, 12, 0)
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone,
+    day: 'numeric',
+    month: 'short',
+  }).formatToParts(date)
+  const lookup = Object.fromEntries(parts.map((p) => [p.type, p.value]))
+  return { day: lookup.day, month: lookup.month }
+}
+
+function formatRange(start: string, end: string, timeZone: string) {
+  const s = dayMonth(start, timeZone)
+  const e = dayMonth(end, timeZone)
+  return s.month === e.month
+    ? `${s.day} – ${e.day} ${e.month}`
+    : `${s.day} ${s.month} – ${e.day} ${e.month}`
+}
+
 export function WeekClient({
   initialStart,
   today,
@@ -31,16 +62,13 @@ export function WeekClient({
   timezone: string
 }) {
   const [weekStart, setWeekStart] = useState(initialStart)
-  const [twoWeek, setTwoWeek] = useState(false)
   const [data, setData] = useState<WeekResponse | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
   const todayRef = useRef<HTMLDivElement | null>(null)
 
-  const days = twoWeek ? 14 : 7
-  const weekEnd = useMemo(() => addDays(weekStart, days - 1), [weekStart, days])
-  const dayList = useMemo(() => range(weekStart, days), [weekStart, days])
+  const weekEnd = useMemo(() => addDays(weekStart, 6), [weekStart])
+  const dayList = useMemo(() => range(weekStart, 7), [weekStart])
 
   useEffect(() => {
     let cancelled = false
@@ -62,13 +90,8 @@ export function WeekClient({
   }, [weekStart, weekEnd])
 
   useEffect(() => {
-    const past = new Set(dayList.filter((d) => d < today))
-    setCollapsed(past)
-  }, [dayList, today])
-
-  useEffect(() => {
     if (typeof window === 'undefined') return
-    if (window.innerWidth >= 1100) return
+    if (window.innerWidth >= 981) return
     todayRef.current?.scrollIntoView({ block: 'start', behavior: 'smooth' })
   }, [data, weekStart])
 
@@ -93,107 +116,90 @@ export function WeekClient({
     return map
   }, [data])
 
-  function stepWeek(direction: -1 | 1) {
-    setWeekStart((current) => addDays(current, 7 * direction))
-  }
-
-  function snapToToday() {
-    setWeekStart(getWeekStart(today))
-  }
-
-  function expandDay(date: string) {
-    setCollapsed((c) => {
-      const next = new Set(c)
-      next.delete(date)
-      return next
-    })
-  }
-
-  const headerLabel = `${getDisplayDate(weekStart, timezone)} — ${getDisplayDate(weekEnd, timezone)}`
   const tz = data?.timezone || timezone
 
   return (
     <div className="life-week-shell">
-      <div className="life-week-toolbar">
-        <button
-          type="button"
-          className="secondary-button"
-          onClick={() => stepWeek(-1)}
-          aria-label="Previous week"
-        >
-          ←
-        </button>
-        <span className="life-week-range">{headerLabel}</span>
-        <button
-          type="button"
-          className="secondary-button"
-          onClick={() => stepWeek(1)}
-          aria-label="Next week"
-        >
-          →
-        </button>
-        <button type="button" className="secondary-button" onClick={snapToToday}>
-          Today
-        </button>
-        <div className="segmented">
+      <div className="life-page-head">
+        <div>
+          <p className="eyebrow">Week {isoWeek(weekStart)}</p>
+          <h1>This week</h1>
+        </div>
+        <div className="life-week-toolbar">
+          <span className="life-week-range">{formatRange(weekStart, weekEnd, tz)}</span>
           <button
             type="button"
-            className={`segmented-item ${!twoWeek ? 'is-active' : ''}`}
-            onClick={() => setTwoWeek(false)}
+            className="life-icon-btn"
+            onClick={() => setWeekStart((current) => addDays(current, -7))}
+            aria-label="Previous week"
           >
-            1w
+            ←
           </button>
           <button
             type="button"
-            className={`segmented-item ${twoWeek ? 'is-active' : ''}`}
-            onClick={() => setTwoWeek(true)}
+            className="life-btn ghost"
+            onClick={() => setWeekStart(getWeekStart(today))}
           >
-            2w
+            Today
+          </button>
+          <button
+            type="button"
+            className="life-icon-btn"
+            onClick={() => setWeekStart((current) => addDays(current, 7))}
+            aria-label="Next week"
+          >
+            →
           </button>
         </div>
       </div>
+
       {error ? <p className="error-text">{error}</p> : null}
       {loading && !data ? <p className="muted-text">Loading week…</p> : null}
-      <div className={`life-week-grid ${twoWeek ? 'is-two' : 'is-one'}`}>
+
+      <div className="life-week-grid">
         {dayList.map((date, index) => {
-          const status = date < today ? 'past' : date === today ? 'today' : 'future'
-          const weekday = WEEKDAY_NAMES[index % 7]
-          const dayLabel = date.slice(8)
-          const isCollapsed = collapsed.has(date)
+          const isToday = date === today
+          const isPast = date < today
+          const dayNum = date.slice(8).replace(/^0/, '')
           const cellEvents = eventsByDate.get(date) || []
           const cellTasks = tasksByDueDate.get(date) || []
-
-          if (isCollapsed) {
-            return (
-              <button
-                key={date}
-                type="button"
-                className="life-day-collapsed"
-                onClick={() => expandDay(date)}
-              >
-                <span className="life-day-collapsed-label">
-                  {weekday} {dayLabel}
-                </span>
-                <span className="muted-text">
-                  {cellEvents.length} events · {cellTasks.length} tasks
-                </span>
-              </button>
-            )
-          }
+          const isEmpty = cellEvents.length === 0 && cellTasks.length === 0
 
           return (
-            <div key={date} ref={status === 'today' ? todayRef : undefined}>
-              <DayCell
-                date={date}
-                weekday={weekday}
-                dayLabel={dayLabel}
-                status={status}
-                events={cellEvents}
-                tasks={cellTasks}
-                timezone={tz}
-                redirectTo={`/life/review?week=${weekStart}`}
-                variant="grid"
-              />
+            <div
+              key={date}
+              ref={isToday ? todayRef : undefined}
+              className={`life-day-cell${isToday ? ' life-day-today' : ''}${isPast ? ' life-day-past' : ''}`}
+            >
+              <div className="life-day-head">
+                <span className="life-day-weekday">{WEEKDAY_NAMES[index % 7]}</span>
+                <span className="life-day-date">{dayNum}</span>
+              </div>
+              <div className="life-day-events">
+                {cellEvents.map((event) => (
+                  <div className="life-day-event" key={event.id}>
+                    <span className="life-day-event-time">
+                      {event.all_day
+                        ? 'All day'
+                        : event.start_time
+                          ? getLocalTimeLabel(event.start_time, tz)
+                          : ''}
+                    </span>
+                    <span className="life-day-event-title">{event.title || '(Untitled)'}</span>
+                  </div>
+                ))}
+                {isEmpty ? <span className="life-day-empty">—</span> : null}
+              </div>
+              {cellTasks.length ? (
+                <div className="life-day-tasks">
+                  {cellTasks.map((task) => (
+                    <span className="life-day-task" key={task.id}>
+                      <span className={`pri-dot pri-${task.priority}`} />
+                      {task.title}
+                    </span>
+                  ))}
+                </div>
+              ) : null}
             </div>
           )
         })}

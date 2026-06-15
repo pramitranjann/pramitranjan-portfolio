@@ -19,12 +19,6 @@ export default async function LifeWeekPage({
   const today = getCurrentLocalDate(settings.timezone)
   const initialStart = params.week || getWeekStart(today)
 
-  return (
-    <div className="life-week-page">
-      <div className="life-page-head">
-        <p className="eyebrow">Week</p>
-      </div>
-      <WeekClient initialStart={initialStart} today={today} timezone={settings.timezone} />
-    </div>
-  )
+  return <WeekClient initialStart={initialStart} today={today} timezone={settings.timezone} />
+
 }

@@ -82,6 +82,7 @@ export function VoiceCaptureControl({
   const interimRef = useRef('')
   const holdTimerRef = useRef<number | null>(null)
   const autosaveTimerRef = useRef<number | null>(null)
+  const forceCleanupTimerRef = useRef<number | null>(null)
   const startedRef = useRef(false)
   const stoppingRef = useRef(false)
 
@@ -94,22 +95,68 @@ export function VoiceCaptureControl({
       window.clearTimeout(autosaveTimerRef.current)
       autosaveTimerRef.current = null
     }
+    if (forceCleanupTimerRef.current !== null) {
+      window.clearTimeout(forceCleanupTimerRef.current)
+      forceCleanupTimerRef.current = null
+    }
+  }
+
+  function destroyRecognition(recognition?: SpeechRecognitionLike | null) {
+    if (!recognition) return
+    recognition.onend = null
+    recognition.onerror = null
+    recognition.onresult = null
+    if (recognitionRef.current === recognition) {
+      recognitionRef.current = null
+    }
   }
 
   function forceStopRecognition() {
     const r = recognitionRef.current
     if (!r) return
     stoppingRef.current = true
-    if (typeof r.abort === 'function') r.abort()
-    else r.stop()
+
+    if (forceCleanupTimerRef.current !== null) {
+      window.clearTimeout(forceCleanupTimerRef.current)
+    }
+
+    forceCleanupTimerRef.current = window.setTimeout(() => {
+      forceCleanupTimerRef.current = null
+      setListening(false)
+      destroyRecognition(r)
+      stoppingRef.current = false
+    }, 1200)
+
+    try {
+      if (typeof r.abort === 'function') {
+        r.abort()
+      } else {
+        r.stop()
+      }
+    } catch {
+      setListening(false)
+      destroyRecognition(r)
+      stoppingRef.current = false
+    }
   }
 
   useEffect(() => {
     setMounted(true)
     setSupported(Boolean(getRecognitionCtor()))
+
+    const handlePageHide = () => {
+      forceStopRecognition()
+    }
+
+    document.addEventListener('visibilitychange', handlePageHide)
+    window.addEventListener('pagehide', handlePageHide)
+
     return () => {
+      document.removeEventListener('visibilitychange', handlePageHide)
+      window.removeEventListener('pagehide', handlePageHide)
       cancelAllTimers()
       forceStopRecognition()
+      destroyRecognition(recognitionRef.current)
     }
   }, [])
 
@@ -160,6 +207,12 @@ export function VoiceCaptureControl({
     recognition.onerror = (event) => {
       const wasStopping = stoppingRef.current
       setListening(false)
+      destroyRecognition(recognition)
+      if (forceCleanupTimerRef.current !== null) {
+        window.clearTimeout(forceCleanupTimerRef.current)
+        forceCleanupTimerRef.current = null
+      }
+      stoppingRef.current = false
       if (!(wasStopping && event.error === 'aborted')) {
         const msg = getSpeechErrorMessage(event.error)
         if (msg) setError(msg)
@@ -168,8 +221,12 @@ export function VoiceCaptureControl({
     recognition.onend = () => {
       setListening(false)
       interimRef.current = ''
+      if (forceCleanupTimerRef.current !== null) {
+        window.clearTimeout(forceCleanupTimerRef.current)
+        forceCleanupTimerRef.current = null
+      }
+      destroyRecognition(recognition)
       stoppingRef.current = false
-      recognitionRef.current = null
       const draft = combined()
       writeToDraft(draft)
       if (draft) scheduleAutosave()
@@ -272,21 +329,21 @@ export function VoiceCaptureControl({
   }, [countdownActive, textareaId])
 
   const label = !mounted
-    ? 'Loading voice capture'
+    ? 'Voice capture'
     : !supported
       ? 'Voice unavailable'
       : isHoldMode
         ? listening
-          ? 'Recording — release to save'
-          : 'Hold to record'
+          ? 'Listening…'
+          : 'Hold to capture'
         : listening
-          ? 'Stop'
-          : 'Start voice capture'
+          ? 'Listening…'
+          : 'Capture'
 
   return (
     <>
       <button
-        className={`mic-button ${listening ? 'is-live' : ''} ${isHoldMode ? 'is-hold' : 'is-toggle'}`}
+        className={`life-mic ${listening ? 'is-live' : ''} ${isHoldMode ? 'is-hold' : 'is-toggle'}`}
         disabled={!mounted || !supported}
         type="button"
         onPointerDown={onPointerDown}
@@ -295,8 +352,8 @@ export function VoiceCaptureControl({
         onPointerLeave={onPointerEndLike}
         onClick={onToggleClick}
       >
-        <span className="mic-button-label">{label}</span>
-        {listening ? <span className="mic-button-dot" aria-hidden="true" /> : null}
+        <span className="life-mic-dot" aria-hidden="true" />
+        <span className="life-mic-label">{label}</span>
       </button>
       {countdownActive ? (
         <div className="autosave-chip">

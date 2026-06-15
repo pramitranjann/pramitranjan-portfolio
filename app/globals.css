@@ -812,1177 +812,320 @@ body.carousel-reengaging main {
 }
 
 
+/* ── Life surface — redesigned app shell ─────────────────────────────────────
+   Ported from the design handoff (ui_kits/life/life.css). Near-black ground,
+   signal-red accent, mono labels, sans body, hard square edges, hairline
+   structure. A "functional extras" block at the end wires the prototype markup
+   to the real app behaviours (autosave chip, inline add-task forms, etc.). */
+
 .life-shell {
   --life-bg: #0a0a0a;
   --life-panel: #111111;
-  --life-panel-muted: #0d0d0d;
-  --life-border: #1f1f1f;
-  --life-hairline: #1a1a1a;
+  --life-panel-2: #141414;
+  --life-muted-bg: #0d0d0d;
+  --life-border: #232323;
+  --life-hairline: #1c1c1c;
   --life-text: #f5f2ed;
   --life-muted: #a4a4a4;
-  --life-label: #6b6b6b;
+  --life-label: #6f6f6f;
   --life-accent: #ff3120;
-  --life-accent-soft: rgba(255, 49, 32, 0.12);
+  --life-accent-soft: rgba(255, 49, 32, 0.10);
+  --life-accent-line: rgba(255, 49, 32, 0.35);
   --life-danger: #ff6c61;
+  --life-amber: #f5a623;
+  --life-green: #5bd07a;
   min-height: 100vh;
   background: var(--life-bg);
   color: var(--life-text);
   -webkit-font-smoothing: antialiased;
-  font-family: var(--font-sans, system-ui, -apple-system, 'SF Pro Text', sans-serif);
-}
-
-.life-shell * {
-  box-sizing: border-box;
-}
-
-.life-shell a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.life-shell button,
-.life-shell input,
-.life-shell textarea,
-.life-shell select {
-  font: inherit;
-}
-
-.life-app-shell {
-  width: 100%;
-  max-width: 1680px;
-  margin: 0 auto;
-  padding: 32px 48px 64px;
-}
-
-@media (min-width: 1680px) {
-  .life-app-shell {
-    padding: 40px 64px 80px;
-  }
-}
-
-.life-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  padding-bottom: 20px;
-  margin-bottom: 32px;
-  border-bottom: 1px solid var(--life-hairline);
-}
-
-.life-shell .brand {
-  font-family: var(--font-mono);
-  font-size: var(--nav-logo-size);
-  letter-spacing: 0.14em;
-  color: var(--life-accent);
-}
-
-.life-nav {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-}
-
-.life-nav .nav-link {
-  font-size: var(--nav-link-size);
-  letter-spacing: 0.06em;
-  color: var(--life-muted);
-  padding: 4px 0;
-}
-
-.life-nav .nav-link.active {
-  color: var(--life-accent);
-  border-bottom: 1px solid var(--life-accent);
-}
-
-.life-shell .content-shell,
-.life-shell .capture-stack,
-.life-shell .detail-stack,
-.life-shell .report-stack,
-.life-shell .timeline-list,
-.life-shell .history-list,
-.life-login-form,
-.life-shell .life-home-grid,
-.life-shell .life-home-secondary,
-.life-shell .life-entry-controls,
-.life-shell .task-row,
-.life-shell .task-copy,
-.life-shell .life-entry-line,
-.life-shell .life-home-sidebar {
-  display: grid;
-}
-
-.life-shell .content-shell,
-.life-shell .life-home-grid {
-  gap: 32px;
-}
-
-.life-shell .capture-stack,
-.life-shell .detail-stack,
-.life-shell .report-stack,
-.life-shell .timeline-list,
-.life-shell .history-list,
-.life-login-form,
-.life-shell .task-copy,
-.life-shell .life-entry-line,
-.life-shell .life-home-sidebar {
-  gap: 16px;
-}
-
-.life-shell .hero-card {
-  border: 1px solid var(--life-border);
-  background: var(--life-panel);
-  padding: 32px;
-  border-radius: 0;
-}
-
-.life-shell .panel-card {
-  border: 0;
-  background: transparent;
-  padding: 16px 0;
-  border-bottom: 1px solid var(--life-hairline);
-}
-
-.life-shell .panel-card:last-child {
-  border-bottom: 0;
-}
-
-.life-shell .subtle-card {
-  background: var(--life-panel-muted);
-  padding: 14px 16px;
-  border: 1px solid var(--life-hairline);
-  border-radius: 0;
-}
-
-.life-shell .hero-card h1 {
-  font-size: clamp(40px, 7vw, 60px);
-  line-height: 1.05;
-  letter-spacing: -0.015em;
-  margin: 0;
-  color: var(--life-text);
-}
-
-.life-login-shell {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  background: var(--life-bg);
-}
-
-.life-login-card {
-  width: min(420px, calc(100% - 32px));
-  padding: 28px;
-  border: 1px solid var(--life-border);
-  background: var(--life-panel);
-}
-
-.life-login-title {
-  margin: 0 0 12px;
-  font-size: clamp(38px, 8vw, 56px);
-  color: var(--life-text);
-}
-
-.life-login-card .muted-text {
-  margin-top: 6px;
-}
-
-.life-shell .hero-copy,
-.life-shell .muted-text,
-.life-shell .timeline-item p,
-.life-shell .markdown-body p {
-  margin: 0;
-  color: var(--life-muted);
-  line-height: 1.55;
-}
-
-.life-shell .eyebrow {
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  font-size: var(--text-eyebrow, 11px);
-  color: var(--life-label);
-  font-family: var(--font-mono);
-}
-
-.life-shell .mic-button,
-.life-shell .primary-button,
-.life-shell .secondary-button,
-.life-shell .filter-chip,
-.life-shell .segmented-item,
-.life-shell .history-row {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 80ms ease;
-  font-family: inherit;
-  font-weight: 500;
-  text-transform: none;
-  letter-spacing: 0;
-  font-size: 14px;
-  border: 1px solid var(--life-border);
-  border-radius: 0;
-}
-
-.life-shell .mic-button {
-  position: relative;
-  width: 100%;
-  min-height: 88px;
-  padding: 18px;
-  gap: 12px;
-  font-weight: 600;
-  border: 1px solid var(--life-accent);
-  background: var(--life-accent);
-  color: #0d0d0d;
-  border-radius: 0;
-}
-
-.life-shell .mic-button:active {
-  transform: scale(0.99);
-}
-
-.life-shell .mic-button.is-hold {
-  min-height: 220px;
-  width: 220px;
-  margin: 24px auto;
-  padding: 24px;
-  border-radius: 0;
-  text-align: center;
-}
-
-.life-shell .mic-button.is-live {
-  background: var(--life-panel);
-  color: var(--life-accent);
-  border-color: var(--life-accent);
-}
-
-.life-shell .mic-button-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: currentColor;
-  animation: life-pulse 1.4s ease-in-out infinite;
-}
-
-@keyframes life-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.35; transform: scale(0.85); }
-}
-
-.life-shell .mic-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.life-shell .primary-button,
-.life-shell .secondary-button,
-.life-shell .filter-chip,
-.life-shell .history-row {
-  min-height: 40px;
-  padding: 8px 14px;
-}
-
-.life-shell .primary-button {
-  background: var(--life-accent);
-  border-color: var(--life-accent);
-  color: #0d0d0d;
-}
-
-.life-shell .secondary-button,
-.life-shell .history-row {
-  background: var(--life-panel-muted);
-  color: var(--life-text);
-}
-
-.life-shell .filter-chip {
-  background: transparent;
-  color: var(--life-muted);
-  border-radius: 0;
-  padding: 6px 12px;
-  min-height: 32px;
-}
-
-.life-shell .filter-chip.is-active,
-.life-shell .history-row.is-selected {
-  color: var(--life-accent);
-  background: var(--life-accent-soft);
-  border-color: var(--life-accent);
-}
-
-.life-shell .primary-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.life-shell .segmented {
-  display: inline-flex;
-  border: 1px solid var(--life-border);
-  border-radius: 0;
-  padding: 2px;
-  background: var(--life-panel-muted);
-}
-
-.life-shell .segmented-item {
-  padding: 6px 12px;
-  border: 0;
-  background: transparent;
-  color: var(--life-muted);
-  min-height: 32px;
-  border-radius: 0;
-}
-
-.life-shell .segmented-item.is-active {
-  background: var(--life-panel);
-  color: var(--life-text);
-}
-
-.life-shell button:focus-visible,
-.life-shell input:focus-visible,
-.life-shell select:focus-visible,
-.life-shell textarea:focus-visible {
-  outline: 2px solid var(--life-accent);
-  outline-offset: 2px;
-}
-
-.life-shell .draft-area,
-.life-shell .text-input {
-  width: 100%;
-  border: 1px solid var(--life-border);
-  background: var(--life-panel-muted);
-  padding: 12px 14px;
-  color: var(--life-text);
-  outline: none;
-  border-radius: 0;
-}
-
-.life-shell .draft-area {
-  resize: vertical;
-  min-height: 140px;
-}
-
-.life-shell .field {
-  display: grid;
-  gap: 6px;
-}
-
-.life-shell .field span {
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--life-label);
-  font-family: var(--font-mono);
-}
-
-.life-shell .compact-field {
-  max-width: 220px;
-}
-
-.life-shell .section-head,
-.life-shell .life-page-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.life-shell .life-page-head {
-  margin-bottom: 24px;
-}
-
-.life-shell .section-head h2,
-.life-shell .detail-stack h3 {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  letter-spacing: -0.005em;
-  text-transform: none;
-  font-family: inherit;
-  color: var(--life-text);
-}
-
-.life-shell .count-pill,
-.life-shell .badge,
-.life-shell .priority-pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 24px;
-  padding: 2px 8px;
-  border: 1px solid var(--life-hairline);
-  background: var(--life-panel-muted);
-  color: var(--life-muted);
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-family: var(--font-mono);
-  border-radius: 0;
-}
-
-.life-shell .badge.secondary,
-.life-shell .priority-medium {
-  color: var(--life-text);
-}
-
-.life-shell .priority-high {
-  color: var(--life-danger);
-  border-color: var(--life-danger);
-}
-
-.life-shell .priority-low {
-  color: var(--life-label);
-}
-
-.life-shell .timeline-list,
-.life-shell .history-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.life-shell .timeline-item {
-  padding: 10px 0;
-  border-top: 1px solid var(--life-hairline);
-}
-
-.life-shell .timeline-list > .timeline-item:first-child {
-  padding-top: 0;
-  border-top: 0;
-}
-
-.life-shell .timeline-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  color: var(--life-label);
-  font-size: 11px;
-  font-family: var(--font-mono);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-variant-numeric: tabular-nums;
-}
-
-.life-shell .toolbar,
-.life-shell .badge-row,
-.life-shell .task-meta-row,
-.life-shell .task-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.life-shell .error-text {
-  color: var(--life-danger);
-  margin: 0;
-  font-size: 13px;
-  letter-spacing: 0;
-}
-
-.life-shell .markdown-body :first-child { margin-top: 0; }
-.life-shell .markdown-body :last-child { margin-bottom: 0; }
-.life-shell .markdown-body p { font-size: 16px; line-height: 1.6; }
-.life-shell .markdown-body ul,
-.life-shell .markdown-body ol { padding-left: 1.2rem; }
-
-/* --- Capture (Today) --- */
-
-.life-shell .life-capture-card {
-  display: grid;
-  gap: 16px;
-}
-
-.life-shell .life-typing-controls {
-  display: grid;
-  gap: 16px;
-}
-
-.life-shell .life-typing-controls.is-collapsed .life-entry-area {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-.life-shell .life-type-fallback-trigger {
-  background: transparent;
-  border: 1px solid var(--life-hairline);
-  color: var(--life-muted);
-  padding: 10px 14px;
-  border-radius: 0;
-  cursor: pointer;
-  font-size: 13px;
-  align-self: center;
-}
-
-.life-shell .life-live-transcript {
-  min-height: 64px;
-  font-size: 17px;
-  line-height: 1.5;
-  color: var(--life-text);
-  padding: 12px 0;
-}
-
-.life-shell .autosave-chip {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 14px;
-  border: 1px solid var(--life-accent);
-  border-radius: 0;
-  background: var(--life-accent-soft);
-  color: var(--life-accent);
-  font-size: 13px;
-  overflow: hidden;
-}
-
-.life-shell .autosave-undo {
-  background: transparent;
-  border: 0;
-  color: var(--life-accent);
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.life-shell .autosave-chip-bar {
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 2px;
-  background: var(--life-accent);
-  transform-origin: left;
-  animation: life-countdown 2s linear forwards;
-}
-
-@keyframes life-countdown {
-  from { transform: scaleX(1); }
-  to { transform: scaleX(0); }
-}
-
-/* --- Tasks views --- */
-
-.life-shell .life-tasks-shell {
-  display: grid;
-  gap: 24px;
-}
-
-.life-shell .life-tasks-toolbar-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.life-shell .life-tasks-toolbar-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
-}
-
-.life-shell .life-task-row {
-  display: grid;
-  grid-template-columns: 24px 1fr auto;
-  gap: 12px;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--life-hairline);
-  align-items: start;
-}
-
-.life-shell .life-task-row-check {
-  display: flex;
-}
-
-.life-shell .life-task-checkbox {
-  background: transparent;
-  border: 0;
-  color: var(--life-muted);
-  font-size: 18px;
-  cursor: pointer;
-  padding: 0;
-  line-height: 1;
-}
-
-.life-shell .life-task-row-body {
-  display: grid;
-  gap: 4px;
-}
-
-.life-shell .life-task-title {
-  font-size: 15px;
-}
-
-.life-shell .life-task-title.is-done {
-  color: var(--life-muted);
-  text-decoration: line-through;
-}
-
-.life-shell .life-task-row-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.life-shell .life-task-row-actions {
-  display: flex;
-  gap: 6px;
-}
-
-.life-shell .life-task-row-actions .secondary-button {
-  min-height: 28px;
-  padding: 4px 10px;
-  font-size: 12px;
-}
-
-.life-shell .life-task-row-checklist .life-task-row-meta,
-.life-shell .life-task-row-checklist .life-task-row-actions {
-  display: none;
-}
-
-.life-shell .life-add-inline-trigger {
-  background: transparent;
-  border: 1px dashed var(--life-border);
-  color: var(--life-muted);
-  padding: 10px 12px;
-  width: 100%;
-  text-align: left;
-  border-radius: 0;
-  cursor: pointer;
-  font-size: 13px;
-}
-
-.life-shell .life-add-inline {
-  display: grid;
-  gap: 8px;
-  padding: 12px;
-  border: 1px solid var(--life-border);
-  border-radius: 0;
-  background: var(--life-panel-muted);
-}
-
-.life-shell .life-add-inline-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 8px;
-  align-items: end;
-}
-
-.life-shell .life-kanban {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.life-shell .life-kanban-col {
-  display: grid;
-  gap: 12px;
-  padding: 16px;
-  border: 1px solid var(--life-hairline);
-  border-radius: 0;
-  background: var(--life-panel-muted);
-}
-
-.life-shell .life-kanban-col.is-drop {
-  border-color: var(--life-accent);
-  background: var(--life-accent-soft);
-}
-
-.life-shell .life-kanban-col-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.life-shell .life-kanban-col-head h3 {
-  margin: 0;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--life-text);
-}
-
-.life-shell .life-kanban-card {
-  padding: 6px 10px;
-  background: var(--life-panel);
-  border: 1px solid var(--life-hairline);
-  border-radius: 0;
-  cursor: grab;
-}
-
-.life-shell .life-kanban-card:active {
-  cursor: grabbing;
-}
-
-.life-shell .life-kanban-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 8px;
-}
-
-.life-shell .life-inbox {
-  display: grid;
-  gap: 32px;
-}
-
-.life-shell .life-inbox-focus,
-.life-shell .life-inbox-rest {
-  display: grid;
-  gap: 12px;
-}
-
-.life-shell .life-inbox-focus-list,
-.life-shell .life-inbox-group-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.life-shell .life-inbox-group {
-  display: grid;
-  gap: 4px;
-  padding: 8px 0;
-}
-
-.life-shell .life-inbox-group-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  background: transparent;
-  border: 0;
-  padding: 8px 0;
-  cursor: pointer;
-  color: var(--life-text);
-  gap: 12px;
-}
-
-.life-shell .life-inbox-group-head h3 {
-  margin: 0;
-  font-size: 14px;
-  font-weight: 600;
-  flex: 1;
-  text-align: left;
-}
-
-.life-shell .life-list {
-  display: grid;
-  gap: 16px;
-}
-
-.life-shell .life-list-toolbar {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.life-shell .life-list-group {
-  display: grid;
-  gap: 4px;
-}
-
-.life-shell .life-list-group-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 0;
-}
-
-.life-shell .life-list-group-head h3 {
-  margin: 0;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--life-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.life-shell .life-list-rows {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.life-shell .life-checklist {
-  display: grid;
-  gap: 12px;
-}
-
-.life-shell .life-checklist-toolbar {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.life-shell .life-checklist-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.life-shell .life-checklist-done summary {
-  cursor: pointer;
-  padding: 8px 0;
-  color: var(--life-muted);
-  font-size: 13px;
-}
-
-/* --- Week --- */
-
-.life-shell .life-week-shell {
-  display: grid;
-  gap: 16px;
-}
-
-.life-shell .life-week-toolbar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.life-shell .life-week-range {
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-
-.life-shell .life-week-grid {
-  display: grid;
-  gap: 12px;
-  margin-top: 8px;
-}
-
-.life-shell .life-week-grid.is-one {
-  grid-template-columns: 1fr;
-}
-
-.life-shell .life-day-cell {
-  display: grid;
-  gap: 10px;
-  padding: 14px;
-  border: 1px solid var(--life-hairline);
-  border-radius: 0;
-  background: var(--life-panel-muted);
-}
-
-.life-shell .life-day-today {
-  border-color: var(--life-accent);
-}
-
-.life-shell .life-day-past {
-  opacity: 0.55;
-}
-
-.life-shell .life-day-cell-head {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-}
-
-.life-shell .life-day-weekday {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--life-label);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.life-shell .life-day-date {
-  font-size: 22px;
-  font-weight: 600;
-}
-
-.life-shell .life-day-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-  margin-left: auto;
-}
-
-.life-shell .life-day-dot-today { color: var(--life-accent); }
-.life-shell .life-day-dot-future { color: var(--life-muted); }
-.life-shell .life-day-dot-past { color: var(--life-label); }
-
-.life-shell .life-day-events,
-.life-shell .life-day-tasks {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 4px;
-  font-size: 13px;
-}
-
-.life-shell .life-day-event-time {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--life-muted);
-  margin-right: 8px;
-}
-
-.life-shell .life-day-empty {
-  font-size: 13px;
-}
-
-.life-shell .life-day-collapsed {
-  display: none;
-  width: 100%;
-  text-align: left;
-  background: transparent;
-  border: 0;
-  border-bottom: 1px solid var(--life-hairline);
-  padding: 10px 0;
-  cursor: pointer;
-  color: var(--life-muted);
-  justify-content: space-between;
-  font-size: 13px;
-}
-
-/* --- Reports --- */
-
-.life-shell .life-reports-shell {
-  display: grid;
-  gap: 24px;
-}
-
-.life-shell .life-reports-aside {
-  display: none;
-  gap: 12px;
-}
-
-.life-shell .life-reports-drawer-trigger {
-  display: inline-flex;
-  width: max-content;
-  padding: 8px 14px;
-  border: 1px solid var(--life-border);
-  background: var(--life-panel);
-  color: var(--life-text);
-  border-radius: 0;
-  cursor: pointer;
-  font-size: 13px;
-}
-
-.life-shell .life-reports-sidebar {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 4px;
-}
-
-.life-shell .life-reports-row {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 12px;
-  border: 1px solid var(--life-hairline);
-  background: var(--life-panel-muted);
-  color: var(--life-text);
-  border-radius: 0;
-  cursor: pointer;
-  font-size: 13px;
-}
-
-.life-shell .life-reports-row.is-selected {
-  border-color: var(--life-accent);
-  color: var(--life-accent);
-  background: var(--life-accent-soft);
-}
-
-.life-shell .life-reports-row-date {
-  font-family: var(--font-mono);
-}
-
-.life-shell .life-reports-row-type {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--life-label);
-}
-
-.life-shell .life-reports-reader {
-  display: grid;
-  gap: 24px;
-  max-width: 64ch;
-  margin: 0 auto;
-}
-
-.life-shell .life-reports-reader-head h1 {
-  font-size: clamp(28px, 6vw, 40px);
-  margin: 0;
-  letter-spacing: -0.015em;
-}
-
-.life-shell .life-reports-sections {
-  display: grid;
-  gap: 16px;
-}
-
-.life-shell .life-section-card {
-  display: grid;
-  gap: 8px;
-  padding: 16px 0;
-  border-bottom: 1px solid var(--life-hairline);
-}
-
-.life-shell .life-section-card:last-child {
-  border-bottom: 0;
-}
-
-.life-shell .life-section-pullquote {
-  text-align: center;
-  padding: 32px 0;
-}
-
-.life-shell .life-section-pullquote .markdown-body p {
-  font-size: 22px;
-  font-style: italic;
-  line-height: 1.45;
-  color: var(--life-text);
-}
-
-.life-shell .life-section-tension {
-  border-left: 2px solid var(--life-accent);
-  padding-left: 16px;
-}
-
-.life-shell .life-reports-drawer {
-  position: fixed;
-  inset: 0;
-  background: var(--life-bg);
-  z-index: 30;
-  padding: 16px;
-  display: grid;
-  gap: 16px;
-  grid-template-rows: auto 1fr;
-}
-
-.life-shell .life-reports-drawer-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-/* --- Responsive --- */
-
+  font-family: system-ui, -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
+}
+.life-shell * { box-sizing: border-box; }
+.life-shell a { color: inherit; text-decoration: none; }
+.life-shell button, .life-shell input, .life-shell textarea, .life-shell select { font: inherit; }
+.life-shell ul { list-style: none; margin: 0; padding: 0; }
+
+.life-app-shell { width: 100%; max-width: 1240px; margin: 0 auto; padding: 28px 40px 64px; }
+
+/* ── Header ─────────────────────────────────────────────────────────────── */
+.life-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-bottom: 18px; margin-bottom: 28px; border-bottom: 1px solid var(--life-hairline); }
+.life-shell .brand { font-family: var(--font-mono); font-size: 14px; line-height: 1.3; letter-spacing: 0.14em; color: var(--life-accent); }
+.life-nav { display: flex; align-items: center; gap: 4px; }
+.life-nav .nav-link { font-family: system-ui, sans-serif; font-size: 14px; letter-spacing: 0; color: var(--life-muted); padding: 7px 14px; border-radius: 0; transition: color 0.15s ease, background 0.15s ease; }
+.life-nav .nav-link::before { display: none; }
+.life-nav .nav-link:hover { color: var(--life-text); background: var(--life-panel); }
+.life-nav .nav-link.active { color: var(--life-text); background: var(--life-panel-2); box-shadow: inset 0 -2px 0 var(--life-accent); }
+
+/* ── Shared label + eyebrow ─────────────────────────────────────────────── */
+.life-shell .eyebrow { margin: 0; text-transform: uppercase; letter-spacing: 0.16em; font-size: 11px; color: var(--life-label); font-family: var(--font-mono); white-space: nowrap; }
+.life-shell .eyebrow b { color: var(--life-accent); font-weight: 400; }
+.life-shell .muted-text { margin: 0; color: var(--life-muted); line-height: 1.55; }
+.life-shell .life-page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+.life-shell .life-page-head h1 { font-family: system-ui, sans-serif; font-size: 26px; font-weight: 600; letter-spacing: -0.01em; margin: 4px 0 0; }
+.life-shell .life-page-head .eyebrow { margin-bottom: 0; }
+
+/* ── Card primitive ─────────────────────────────────────────────────────── */
+.life-shell .life-card { border: 1px solid var(--life-border); background: var(--life-panel); }
+.life-shell .life-card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 13px 16px; border-bottom: 1px solid var(--life-hairline); }
+.life-shell .life-card-head h2, .life-shell .life-card-head h3 { margin: 0; font-size: 13px; font-weight: 600; letter-spacing: 0.02em; }
+.life-shell .life-card-head .eyebrow { font-size: 10px; }
+.life-shell .life-card-body { padding: 6px 16px 12px; }
+.life-shell .count-pill { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 20px; padding: 0 6px; border: 1px solid var(--life-border); background: var(--life-muted-bg); color: var(--life-muted); font-size: 11px; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+/* ── Buttons ────────────────────────────────────────────────────────────── */
+.life-shell .life-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 38px; padding: 0 16px; border: 1px solid var(--life-border); background: var(--life-panel-2); color: var(--life-text); cursor: pointer; font-size: 14px; font-weight: 500; transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease; }
+.life-shell .life-btn:hover { border-color: var(--life-muted); }
+.life-shell .life-btn.primary { background: var(--life-accent); border-color: var(--life-accent); color: #0a0a0a; font-weight: 600; }
+.life-shell .life-btn.primary:hover { filter: brightness(1.08); }
+.life-shell .life-btn.primary:disabled { opacity: 0.45; cursor: not-allowed; filter: none; }
+.life-shell .life-btn.ghost { background: transparent; border-color: transparent; color: var(--life-muted); }
+.life-shell .life-btn.ghost:hover { color: var(--life-text); background: var(--life-panel-2); border-color: transparent; }
+.life-shell .life-icon-btn { width: 38px; height: 38px; padding: 0; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--life-border); background: var(--life-panel-2); color: var(--life-muted); cursor: pointer; font-size: 16px; transition: color 0.15s, border-color 0.15s; }
+.life-shell .life-icon-btn:hover { color: var(--life-text); border-color: var(--life-muted); }
+
+/* ── Chips / filters / segmented ────────────────────────────────────────── */
+.life-shell .filter-chip { display: inline-flex; align-items: center; gap: 7px; min-height: 32px; padding: 0 13px; border: 1px solid var(--life-border); background: transparent; color: var(--life-muted); cursor: pointer; font-size: 13px; transition: color 0.15s, background 0.15s, border-color 0.15s; }
+.life-shell .filter-chip:hover { color: var(--life-text); }
+.life-shell .filter-chip.is-active { color: var(--life-accent); background: var(--life-accent-soft); border-color: var(--life-accent-line); }
+.life-shell .filter-chip .chip-count { font-family: var(--font-mono); font-size: 11px; color: var(--life-label); }
+.life-shell .filter-chip.is-active .chip-count { color: var(--life-accent); }
+.life-shell .segmented { display: inline-flex; border: 1px solid var(--life-border); padding: 3px; background: var(--life-muted-bg); gap: 2px; }
+.life-shell .segmented-item { padding: 0 14px; min-height: 28px; border: 0; background: transparent; color: var(--life-muted); cursor: pointer; font-size: 13px; font-weight: 500; }
+.life-shell .segmented-item.is-active { background: var(--life-panel-2); color: var(--life-text); }
+
+/* ── Priority dots / tags ───────────────────────────────────────────────── */
+.life-shell .pri-dot { width: 7px; height: 7px; border-radius: 50%; flex: 0 0 auto; }
+.life-shell .pri-high { background: var(--life-danger); }
+.life-shell .pri-medium { background: var(--life-amber); }
+.life-shell .pri-low { background: var(--life-label); }
+.life-shell .life-tag { display: inline-flex; align-items: center; height: 20px; padding: 0 7px; border: 1px solid var(--life-hairline); background: var(--life-muted-bg); color: var(--life-muted); font-size: 11px; font-family: var(--font-mono); letter-spacing: 0.04em; }
+.life-shell .time-chip { display: inline-flex; align-items: center; justify-content: center; min-width: 52px; height: 24px; padding: 0 8px; background: var(--life-muted-bg); border: 1px solid var(--life-hairline); color: var(--life-muted); font-family: var(--font-mono); font-size: 12px; font-variant-numeric: tabular-nums; }
+
+/* ── Today ──────────────────────────────────────────────────────────────── */
+.life-shell .life-today { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 24px; align-items: start; }
+.life-shell .life-capture { display: grid; gap: 0; }
+.life-shell .life-greeting { font-family: system-ui, sans-serif; font-size: clamp(30px, 4vw, 40px); font-weight: 600; line-height: 1.08; letter-spacing: -0.02em; margin: 14px 0 8px; }
+.life-shell .life-greeting-sub { color: var(--life-muted); font-size: 15px; line-height: 1.55; margin: 0 0 22px; max-width: 46ch; }
+
+.life-shell .life-composer { border: 1px solid var(--life-border); background: var(--life-panel); }
+.life-shell .life-composer-input { width: 100%; border: 0; background: transparent; color: var(--life-text); padding: 18px; font-size: 16px; line-height: 1.6; resize: none; min-height: 120px; outline: none; }
+.life-shell .life-composer-input::placeholder { color: var(--life-label); }
+.life-shell .life-composer-bar { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-top: 1px solid var(--life-hairline); background: var(--life-muted-bg); }
+.life-shell .life-mic { display: inline-flex; align-items: center; gap: 9px; min-height: 40px; padding: 0 16px; border: 1px solid var(--life-accent); background: transparent; color: var(--life-accent); cursor: pointer; font-size: 14px; font-weight: 600; transition: background 0.15s ease, color 0.15s ease; }
+.life-shell .life-mic:hover { background: var(--life-accent-soft); }
+.life-shell .life-mic.is-live { background: var(--life-accent); color: #0a0a0a; }
+.life-shell .life-mic:disabled { opacity: 0.5; cursor: not-allowed; }
+.life-shell .life-mic-dot { width: 9px; height: 9px; border-radius: 50%; background: currentColor; }
+.life-shell .life-mic.is-live .life-mic-dot { animation: life-pulse 1.2s ease-in-out infinite; }
+@keyframes life-pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(0.7); } }
+.life-shell .life-composer-bar .spacer { flex: 1; }
+.life-shell .life-composer-hint { font-size: 12px; color: var(--life-label); font-family: var(--font-mono); }
+
+.life-shell .life-quick { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+.life-shell .life-quick-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--life-label); margin-right: 4px; }
+.life-shell .life-quick-chip { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border: 1px dashed var(--life-border); background: transparent; color: var(--life-muted); cursor: pointer; font-size: 13px; transition: color 0.15s, border-color 0.15s; }
+.life-shell .life-quick-chip:hover { color: var(--life-text); border-color: var(--life-muted); }
+
+/* sidebar */
+.life-shell .life-side { display: grid; gap: 16px; }
+.life-shell .life-brief-body { padding: 14px 16px 16px; }
+.life-shell .life-brief-body p { margin: 0; color: var(--life-muted); font-size: 14px; line-height: 1.6; }
+.life-shell .life-brief-body .accent-line { border-left: 2px solid var(--life-accent); padding-left: 12px; margin-top: 12px; color: var(--life-text); font-size: 13px; }
+
+/* compact rows in sidebar cards */
+.life-shell .life-rows { display: grid; }
+.life-shell .life-row { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 11px; padding: 10px 16px; border-top: 1px solid var(--life-hairline); transition: background 0.12s ease; }
+.life-shell .life-row:first-child { border-top: 0; }
+.life-shell .life-row:hover { background: var(--life-panel-2); }
+.life-shell .life-check { width: 18px; height: 18px; border: 1.5px solid var(--life-border); background: transparent; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: transparent; font-size: 11px; transition: border-color 0.15s, color 0.15s; padding: 0; border-radius: 50%; }
+.life-shell .life-check:hover { border-color: var(--life-muted); }
+.life-shell .life-check.is-done { background: var(--life-accent); border-color: var(--life-accent); color: #0a0a0a; }
+.life-shell .life-row-body { min-width: 0; display: grid; gap: 3px; }
+.life-shell .life-row-title { font-size: 14px; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.life-shell .life-row-title.is-done { color: var(--life-muted); text-decoration: line-through; }
+.life-shell .life-row-meta { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--life-label); }
+.life-shell .life-row-meta .dot-sep { width: 2px; height: 2px; border-radius: 50%; background: var(--life-label); }
+.life-shell .life-row-aside { font-family: var(--font-mono); font-size: 11px; color: var(--life-label); white-space: nowrap; }
+.life-shell .life-empty { padding: 16px; color: var(--life-label); font-size: 13px; }
+.life-shell .life-card-foot { padding: 11px 16px; border-top: 1px solid var(--life-hairline); }
+.life-shell .life-card-foot a, .life-shell .life-card-foot button { color: var(--life-muted); font-size: 13px; background: none; border: 0; cursor: pointer; padding: 0; transition: color 0.15s; }
+.life-shell .life-card-foot a:hover, .life-shell .life-card-foot button:hover { color: var(--life-accent); }
+
+/* ── Tasks ──────────────────────────────────────────────────────────────── */
+.life-shell .life-tasks-shell { display: grid; gap: 18px; }
+.life-shell .life-tasks-toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+.life-shell .life-tasks-filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+.life-shell .life-list { border: 1px solid var(--life-border); background: var(--life-panel); }
+.life-shell .life-task-row { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px; padding: 13px 18px; border-top: 1px solid var(--life-hairline); transition: background 0.12s ease; }
+.life-shell .life-task-row:first-child { border-top: 0; }
+.life-shell .life-task-row:hover { background: var(--life-panel-2); }
+.life-shell .life-task-main { min-width: 0; display: flex; align-items: center; gap: 11px; }
+.life-shell .life-task-title { font-size: 15px; }
+.life-shell .life-task-title.is-done { color: var(--life-muted); text-decoration: line-through; }
+.life-shell .life-task-meta { display: flex; align-items: center; gap: 8px; }
+
+.life-shell .life-kanban { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.life-shell .life-kanban-col { display: flex; flex-direction: column; border: 1px solid var(--life-border); background: var(--life-muted-bg); min-height: 220px; }
+.life-shell .life-kanban-col-head { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-bottom: 1px solid var(--life-hairline); }
+.life-shell .life-kanban-col-head .col-mark { width: 8px; height: 8px; border-radius: 50%; }
+.life-shell .life-kanban-col-head h3 { margin: 0; font-size: 13px; font-weight: 600; flex: 1; }
+.life-shell .life-kanban-list { display: grid; gap: 10px; padding: 12px; flex: 1; }
+.life-shell .life-kanban-card { padding: 12px; background: var(--life-panel); border: 1px solid var(--life-border); cursor: grab; transition: border-color 0.15s ease, opacity 0.15s ease; }
+.life-shell .life-kanban-card:hover { border-color: var(--life-muted); }
+.life-shell .life-kanban-card:active { cursor: grabbing; }
+.life-shell .life-kanban-card.is-dragging { opacity: 0.4; }
+.life-shell .life-kanban-col.is-dragover { background: var(--life-accent-soft); box-shadow: inset 0 0 0 1px var(--life-accent-line); }
+.life-shell .life-kanban-card-title { font-size: 14px; line-height: 1.35; margin-bottom: 10px; }
+.life-shell .life-kanban-card-meta { display: flex; align-items: center; gap: 8px; }
+.life-shell .life-kanban-empty { padding: 12px; color: var(--life-label); font-size: 13px; }
+
+/* ── Week ───────────────────────────────────────────────────────────────── */
+.life-shell .life-week-shell { display: grid; gap: 18px; }
+.life-shell .life-week-toolbar { display: flex; align-items: center; gap: 10px; flex-wrap: nowrap; }
+.life-shell .life-week-range { font-size: 22px; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; }
+.life-shell .life-week-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); border: 1px solid var(--life-border); background: var(--life-panel); }
+.life-shell .life-day-cell { display: flex; flex-direction: column; gap: 10px; padding: 12px; border-left: 1px solid var(--life-hairline); min-height: 200px; }
+.life-shell .life-day-cell:first-child { border-left: 0; }
+.life-shell .life-day-today { background: var(--life-accent-soft); box-shadow: inset 0 2px 0 var(--life-accent); }
+.life-shell .life-day-past { opacity: 0.5; }
+.life-shell .life-day-head { display: flex; align-items: baseline; gap: 6px; }
+.life-shell .life-day-weekday { font-family: var(--font-mono); font-size: 10px; color: var(--life-label); letter-spacing: 0.1em; text-transform: uppercase; }
+.life-shell .life-day-date { font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.life-shell .life-day-today .life-day-date { color: var(--life-accent); }
+.life-shell .life-day-events { display: grid; gap: 6px; }
+.life-shell .life-day-event { display: grid; gap: 3px; padding: 7px 8px; background: var(--life-muted-bg); border-left: 2px solid var(--life-accent-line); }
+.life-shell .life-day-event-time { font-family: var(--font-mono); font-size: 10px; color: var(--life-muted); }
+.life-shell .life-day-event-title { font-size: 12px; line-height: 1.3; }
+.life-shell .life-day-tasks { display: grid; gap: 5px; margin-top: auto; }
+.life-shell .life-day-task { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--life-muted); }
+.life-shell .life-day-empty { font-size: 12px; color: var(--life-label); }
+
+/* ── Reports ────────────────────────────────────────────────────────────── */
+.life-shell .life-reports-shell { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 28px; align-items: start; }
+.life-shell .life-reports-sidebar { display: grid; gap: 6px; }
+.life-shell .life-reports-row { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px; border: 1px solid var(--life-border); background: var(--life-panel); color: var(--life-text); cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+.life-shell .life-reports-row:hover { border-color: var(--life-muted); }
+.life-shell .life-reports-row.is-selected { border-color: var(--life-accent-line); background: var(--life-accent-soft); }
+.life-shell .life-reports-row-date { font-family: var(--font-mono); font-size: 13px; white-space: nowrap; }
+.life-shell .life-reports-row.is-selected .life-reports-row-date { color: var(--life-accent); }
+.life-shell .life-reports-row-type { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--life-label); }
+.life-shell .life-reports-reader { max-width: 62ch; display: grid; gap: 22px; }
+.life-shell .life-reports-reader-head .eyebrow { margin-bottom: 12px; }
+.life-shell .life-reports-reader-head h1 { font-family: system-ui, sans-serif; font-size: clamp(28px, 4vw, 38px); font-weight: 600; letter-spacing: -0.02em; margin: 0; line-height: 1.1; }
+.life-shell .life-section-card { display: grid; gap: 8px; padding: 18px 0; border-bottom: 1px solid var(--life-hairline); }
+.life-shell .life-section-card:last-child { border-bottom: 0; }
+.life-shell .life-section-card h3 { margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--life-label); font-family: var(--font-mono); }
+.life-shell .life-section-card p { margin: 0; color: var(--life-muted); line-height: 1.65; font-size: 15px; }
+.life-shell .life-section-pullquote { text-align: left; padding: 4px 0 18px; border: 0; }
+.life-shell .life-section-pullquote p { font-size: 22px; font-weight: 500; line-height: 1.4; color: var(--life-text); letter-spacing: -0.01em; }
+.life-shell .life-section-pullquote .mark { color: var(--life-accent); }
+.life-shell .life-section-tension { border-left: 2px solid var(--life-accent); padding: 4px 0 18px 16px; }
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 980px) {
+  .life-app-shell { padding: 20px 18px 48px; }
+  .life-shell .life-today { grid-template-columns: 1fr; }
+  .life-shell .life-kanban { grid-template-columns: 1fr; }
+  .life-shell .life-week-grid { grid-template-columns: 1fr; }
+  .life-shell .life-day-cell { border-left: 0; border-top: 1px solid var(--life-hairline); min-height: 0; flex-direction: row; align-items: flex-start; }
+  .life-shell .life-day-cell:first-child { border-top: 0; }
+  .life-shell .life-day-head { width: 64px; flex-direction: column; }
+  .life-shell .life-reports-shell { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .life-header { flex-direction: column; align-items: flex-start; }
+  .life-nav { width: 100%; overflow-x: auto; }
+}
+
+/* ── Functional extras — wiring prototype markup to real app behaviour ───── */
+/* Save / Clear reflect composer empty-state without JS (placeholder-shown) */
+.life-shell .life-composer { position: relative; }
+.life-shell .life-composer-input:placeholder-shown ~ .life-composer-bar .life-save { opacity: 0.45; pointer-events: none; }
+.life-shell .life-composer-input:placeholder-shown ~ .life-composer-bar .life-clear { display: none; }
+
+/* Autosave countdown chip (voice release → auto-submit with 2s undo) */
+.life-shell .autosave-chip { position: absolute; top: 10px; right: 10px; display: inline-flex; align-items: center; gap: 10px; padding: 6px 12px; background: var(--life-panel-2); border: 1px solid var(--life-accent-line); color: var(--life-text); font-size: 12px; z-index: 3; overflow: hidden; }
+.life-shell .autosave-chip-label { font-family: var(--font-mono); font-size: 11px; color: var(--life-muted); }
+.life-shell .autosave-undo { background: none; border: 0; color: var(--life-accent); cursor: pointer; font-size: 12px; font-weight: 600; padding: 0; }
+.life-shell .autosave-chip-bar { position: absolute; left: 0; bottom: 0; height: 2px; background: var(--life-accent); animation: life-countdown 2s linear forwards; }
+@keyframes life-countdown { from { width: 100%; } to { width: 0; } }
+
+/* Live transcript region — visually hidden, text mirrors into the composer */
+.life-shell .life-live-transcript { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Shared helpers used by retained components (AddTaskInline, error states) */
+.life-shell .error-text { color: var(--life-danger); font-size: 13px; margin: 8px 0 0; }
+.life-shell .text-input { width: 100%; min-height: 36px; padding: 8px 12px; background: var(--life-muted-bg); border: 1px solid var(--life-border); color: var(--life-text); font-size: 14px; outline: none; }
+.life-shell .text-input:focus-visible { outline: 2px solid var(--life-accent); outline-offset: 1px; }
+.life-shell .primary-button { display: inline-flex; align-items: center; justify-content: center; min-height: 36px; padding: 0 16px; border: 1px solid var(--life-accent); background: var(--life-accent); color: #0a0a0a; font-weight: 600; font-size: 14px; cursor: pointer; transition: filter 0.15s ease; }
+.life-shell .primary-button:hover { filter: brightness(1.08); }
+.life-shell .secondary-button { display: inline-flex; align-items: center; justify-content: center; min-height: 36px; padding: 0 14px; border: 1px solid var(--life-border); background: var(--life-panel-2); color: var(--life-text); font-size: 14px; cursor: pointer; transition: border-color 0.15s ease, color 0.15s ease; }
+.life-shell .secondary-button:hover { border-color: var(--life-muted); }
+
+/* Inline add-task (Tasks "New task") */
+.life-shell .life-add-inline-trigger { background: transparent; border: 1px dashed var(--life-border); color: var(--life-muted); padding: 11px 14px; width: 100%; text-align: left; cursor: pointer; font-size: 13px; transition: color 0.15s, border-color 0.15s; }
+.life-shell .life-add-inline-trigger:hover { color: var(--life-text); border-color: var(--life-muted); }
+.life-shell .life-add-inline { display: grid; gap: 10px; padding: 14px; border: 1px solid var(--life-border); background: var(--life-panel); }
+.life-shell .life-add-inline-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.life-shell .life-add-inline-row .text-input { width: auto; flex: 0 1 auto; }
+
+/* History (desktop/tablet only) hidden on phone */
 @media (max-width: 699px) {
-  .life-app-shell {
-    padding: 20px 16px 40px;
-  }
-
-  .life-header {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .life-nav {
-    width: 100%;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    white-space: nowrap;
-    position: relative;
-  }
-
-  .life-shell .nav-link.phone-hidden {
-    display: none;
-  }
-
-  .life-shell .life-home-sidebar {
-    display: none;
-  }
-
-  .life-shell .life-entry-controls {
-    grid-template-columns: 1fr;
-  }
-
-  .life-login-shell {
-    padding: 16px;
-  }
-
-  .life-login-card {
-    padding: 20px;
-  }
-
-  .life-shell .life-kanban {
-    grid-template-columns: 1fr;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    grid-auto-flow: column;
-    grid-auto-columns: 85%;
-  }
-
-  .life-shell .life-kanban-col {
-    scroll-snap-align: start;
-  }
-
-  .life-shell .life-day-collapsed {
-    display: flex;
-  }
-
-  .life-shell .life-week-grid {
-    grid-template-columns: 1fr;
-  }
+  .life-shell .phone-hidden { display: none; }
 }
 
-@media (min-width: 700px) and (max-width: 1099px) {
-  .life-app-shell {
-    padding: 24px 24px 56px;
-  }
-
-  .life-shell .life-home-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: start;
-  }
-
-  .life-shell .hero-card {
-    grid-column: 1 / -1;
-  }
-
-  .life-shell .life-day-collapsed {
-    display: flex;
-  }
-
-  .life-shell .life-week-grid {
-    grid-template-columns: 1fr;
-  }
+/* ── History (desktop/tablet only — not part of the redesign prototype, ─────
+   restyled here with the new tokens so it stays coherent) */
+.life-shell .history-grid { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 24px; align-items: start; }
+.life-shell .panel-card { border: 1px solid var(--life-border); background: var(--life-panel); padding: 16px; display: grid; gap: 14px; }
+.life-shell .panel-card .section-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.life-shell .panel-card .section-head h1, .life-shell .panel-card .section-head h2 { margin: 0; font-size: 18px; font-weight: 600; letter-spacing: -0.01em; }
+.life-shell .field { display: grid; gap: 6px; }
+.life-shell .field > span { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--life-label); }
+.life-shell .history-list { display: grid; gap: 6px; }
+.life-shell .history-row { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px 13px; border: 1px solid var(--life-border); background: var(--life-muted-bg); color: var(--life-text); cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s; }
+.life-shell .history-row:hover { border-color: var(--life-muted); }
+.life-shell .history-row.is-selected { border-color: var(--life-accent-line); background: var(--life-accent-soft); }
+.life-shell .history-row strong { font-size: 14px; font-weight: 600; }
+.life-shell .history-row .muted-text { font-size: 12px; }
+.life-shell .badge-row { display: inline-flex; gap: 6px; }
+.life-shell .badge { display: inline-flex; align-items: center; height: 20px; padding: 0 7px; border: 1px solid var(--life-accent-line); background: var(--life-accent-soft); color: var(--life-accent); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; }
+.life-shell .badge.secondary { border-color: var(--life-hairline); background: var(--life-muted-bg); color: var(--life-muted); }
+.life-shell .detail-stack { display: grid; gap: 24px; }
+.life-shell .detail-stack h3 { margin: 0 0 10px; font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--life-label); }
+.life-shell .timeline-list { display: grid; gap: 10px; }
+.life-shell .timeline-item { display: grid; gap: 5px; padding: 11px 12px; border: 1px solid var(--life-hairline); background: var(--life-muted-bg); }
+.life-shell .timeline-item strong { font-size: 14px; }
+.life-shell .timeline-item p { margin: 0; color: var(--life-muted); font-size: 13px; line-height: 1.5; }
+.life-shell .timeline-meta { display: flex; gap: 10px; font-family: var(--font-mono); font-size: 11px; color: var(--life-label); }
+.life-shell .report-stack { display: grid; gap: 14px; }
+.life-shell .subtle-card { border: 1px solid var(--life-hairline); background: var(--life-muted-bg); padding: 14px; display: grid; gap: 8px; }
+@media (max-width: 980px) {
+  .life-shell .history-grid { grid-template-columns: 1fr; }
 }
 
-@media (min-width: 1100px) {
-  .life-shell .life-home-grid {
-    grid-template-columns: minmax(0, 1.18fr) 320px;
-    align-items: start;
-  }
+/* ── Markdown rendering inside life surfaces (briefs, reports, history) ──── */
+.life-shell .markdown-body { display: grid; gap: 10px; }
+.life-shell .markdown-body > :first-child { margin-top: 0; }
+.life-shell .markdown-body p { margin: 0; color: var(--life-muted); line-height: 1.65; font-size: 15px; }
+.life-shell .markdown-body ul, .life-shell .markdown-body ol { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+.life-shell .markdown-body li { color: var(--life-muted); line-height: 1.6; font-size: 15px; }
+.life-shell .markdown-body strong { color: var(--life-text); font-weight: 600; }
+.life-shell .markdown-body em { font-style: italic; }
+.life-shell .markdown-body a { color: var(--life-accent); text-decoration: underline; text-underline-offset: 2px; }
+.life-shell .markdown-body h1, .life-shell .markdown-body h2, .life-shell .markdown-body h3 { margin: 4px 0 0; font-size: 15px; font-weight: 600; color: var(--life-text); }
+.life-shell .markdown-body blockquote { margin: 0; padding-left: 12px; border-left: 2px solid var(--life-accent); color: var(--life-text); }
+.life-shell .markdown-body code { font-family: var(--font-mono); font-size: 0.9em; background: var(--life-muted-bg); padding: 1px 5px; border: 1px solid var(--life-hairline); }
+/* Brief card sizing override (slightly smaller) */
+.life-shell .life-brief-body .markdown-body p, .life-shell .life-brief-body .markdown-body li { font-size: 14px; }
 
-  .life-shell .life-reports-shell {
-    grid-template-columns: 280px minmax(0, 1fr);
-    align-items: start;
-  }
-
-  .life-shell .life-reports-aside {
-    display: grid;
-  }
-
-  .life-shell .life-reports-drawer-trigger,
-  .life-shell .life-reports-drawer {
-    display: none;
-  }
-
-  .life-shell .life-week-grid.is-one,
-  .life-shell .life-week-grid.is-two {
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-    grid-auto-rows: minmax(0, 1fr);
-  }
-
-  .life-shell .life-day-collapsed {
-    display: none;
-  }
-}
+/* ── Quick add (Today) — Task / Note / Event / Habit creators ───────────── */
+.life-shell .life-quick-wrap { margin-top: 16px; display: grid; gap: 12px; }
+.life-shell .life-quick-wrap .life-quick { margin-top: 0; }
+.life-shell .life-quick-chip.is-open { color: var(--life-accent); border-style: solid; border-color: var(--life-accent-line); background: var(--life-accent-soft); }
+.life-shell .life-quick-form { display: grid; gap: 10px; padding: 14px; border: 1px solid var(--life-border); background: var(--life-panel); }
+.life-shell .life-quick-form-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.life-shell .life-quick-form-row .text-input { width: auto; flex: 0 1 auto; min-width: 120px; }
+.life-shell .life-quick-check { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--life-muted); white-space: nowrap; }
+.life-shell .life-quick-check input { accent-color: var(--life-accent); }
