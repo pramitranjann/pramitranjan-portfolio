@@ -27,7 +27,6 @@ const contentSecurityPolicy = [
 ].join('; ')
 
 const nextConfig: NextConfig = {
-  cacheComponents: true,
   turbopack: {
     root: projectRoot,
   },

@@ -3,11 +3,8 @@ import 'server-only'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { notFound } from 'next/navigation'
-import { cacheLife, cacheTag, revalidateTag } from 'next/cache'
 import { type CaseStudyContent, isSiteContent, type SiteContent } from '@/lib/site-content-schema'
 import { getCaseStudyPreviewImages, getCaseStudyWorkHoverImage, mergePreviewImages } from '@/lib/preview-images'
-
-const SITE_CONTENT_TAG = 'site-content'
 
 const contentPath = path.join(process.cwd(), 'content', 'site-content.json')
 
@@ -85,9 +82,6 @@ function filterWorkProjectsByVisibleCaseStudies(content: SiteContent) {
 }
 
 export async function getSiteContent() {
-  'use cache'
-  cacheLife('hours')
-  cacheTag(SITE_CONTENT_TAG)
   return readSiteContentFile()
 }
 
@@ -140,5 +134,4 @@ export async function saveSiteContent(content: SiteContent) {
 
   await mkdir(path.dirname(contentPath), { recursive: true })
   await writeFile(contentPath, `${JSON.stringify(content, null, 2)}\n`, 'utf8')
-  revalidateTag(SITE_CONTENT_TAG, 'max')
 }
