@@ -1,3 +1,5 @@
+import { cacheLife } from 'next/cache'
+
 import { TASK_EXTRACTION_SYSTEM_PROMPT, OWNER_ID } from '@/lib/life/constants'
 import { callClaude } from '@/lib/life/claude'
 import { detectProjectSlug, LIFE_PROJECTS, normalizeProjectSlug } from '@/lib/life/projects'
@@ -103,6 +105,12 @@ export async function getTasks(options?: {
   status?: TaskStatus | 'active' | 'all'
   projectSlug?: string | null
 }) {
+  'use cache'
+  // Short TTL — tasks change on user action (form POST redirects invalidate
+  // the page anyway), so 30 s is enough to deduplicate parallel calls within
+  // the same page render without serving stale state after mutations.
+  cacheLife({ revalidate: 30, expire: 60 })
+
   const supabase = getSupabaseAdmin()
   let query = supabase
     .from('tasks')

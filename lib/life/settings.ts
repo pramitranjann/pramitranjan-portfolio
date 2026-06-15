@@ -1,10 +1,20 @@
+import { cache } from 'react'
+import { cacheLife } from 'next/cache'
+
 import type { SettingsRecord } from '@/lib/life/types'
 
 import { OWNER_ID } from '@/lib/life/constants'
 import { getLifeServerEnv } from '@/lib/life/env'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
 
-export async function getOwnerSettings() {
+// React cache() deduplicates within a single render; 'use cache' + cacheLife
+// caches the result across requests for up to 5 minutes. Settings almost
+// never change mid-session so this is safe and eliminates a Supabase
+// round-trip on every page navigation.
+export const getOwnerSettings = cache(async function getOwnerSettings() {
+  'use cache'
+  cacheLife('minutes')
+
   const supabase = getSupabaseAdmin();
   const { ownerTimezone } = getLifeServerEnv()
   const { data, error } = await supabase
@@ -45,4 +55,4 @@ export async function getOwnerSettings() {
     ...inserted,
     timezone: inserted.timezone || ownerTimezone,
   };
-}
+})

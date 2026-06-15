@@ -869,6 +869,18 @@ body.carousel-reengaging main {
 .life-shell .life-card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 13px 16px; border-bottom: 1px solid var(--life-hairline); }
 .life-shell .life-card-head h2, .life-shell .life-card-head h3 { margin: 0; font-size: 13px; font-weight: 600; letter-spacing: 0.02em; }
 .life-shell .life-card-head .eyebrow { font-size: 10px; }
+
+/* Skeleton shimmer — used while side-cards stream in */
+@keyframes life-shimmer { from { background-position: -200% 0 } to { background-position: 200% 0 } }
+.life-shell .skeleton-line {
+  height: 12px; border-radius: 2px; margin: 14px 16px;
+  background: linear-gradient(90deg, var(--life-muted-bg) 25%, var(--life-hairline) 50%, var(--life-muted-bg) 75%);
+  background-size: 200% 100%;
+  animation: life-shimmer 1.4s ease infinite;
+}
+.life-shell .skeleton-title { height: 13px; width: 40%; margin: 13px 16px; }
+.life-shell .skeleton-short { width: 55%; }
+.life-shell .life-card-skeleton { pointer-events: none; }
 .life-shell .life-card-body { padding: 6px 16px 12px; }
 .life-shell .count-pill { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 20px; padding: 0 6px; border: 1px solid var(--life-border); background: var(--life-muted-bg); color: var(--life-muted); font-size: 11px; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 

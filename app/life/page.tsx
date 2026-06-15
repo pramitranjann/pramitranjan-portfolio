@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
@@ -6,18 +7,15 @@ import { QuickAdd } from '@/components/life/QuickAdd'
 import { VoiceCaptureControl } from '@/components/life/VoiceCaptureControl'
 import { OWNER_ID } from '@/lib/life/constants'
 import { isAdminSession } from '@/lib/admin-auth'
-import { syncCalendarEvents } from '@/lib/life/calendar'
 import { getHabitsForDate } from '@/lib/life/habits'
 import { getProjectLabel } from '@/lib/life/projects'
 import { getOwnerSettings } from '@/lib/life/settings'
-import { generateMorningBrief } from '@/lib/life/synthesis'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
 import { getTasks } from '@/lib/life/tasks'
 import {
   getCurrentLocalClock,
   getCurrentLocalDate,
   getLocalTimeLabel,
-  isMorningBriefWindow,
   localDateTimeToUtc,
 } from '@/lib/life/time'
 import type {
@@ -28,7 +26,6 @@ import type {
 } from '@/lib/life/types'
 
 function shortDate(localDate: string, timeZone: string) {
-  // "Sun 15 Jun"
   const date = localDateTimeToUtc(localDate, timeZone, 12, 0)
   const parts = new Intl.DateTimeFormat('en-GB', {
     timeZone,
@@ -41,7 +38,6 @@ function shortDate(localDate: string, timeZone: string) {
 }
 
 function shortDay(localDate: string, timeZone: string) {
-  // "15 Jun"
   const date = localDateTimeToUtc(localDate, timeZone, 12, 0)
   const parts = new Intl.DateTimeFormat('en-GB', {
     timeZone,
@@ -58,6 +54,191 @@ function greetingForHour(hour: number) {
   return 'Good evening'
 }
 
+// ── Side cards (streams in via Suspense) ─────────────────────────────────────
+
+async function TodayCards({
+  localDate,
+  timezone,
+}: {
+  localDate: string
+  timezone: string
+}) {
+  const supabase = getSupabaseAdmin()
+
+  // All four data sources run in parallel — nothing sequential.
+  const [eventsResult, reportsResult, taskRows, habits] = await Promise.all([
+    supabase
+      .from('calendar_events')
+      .select('*')
+      .eq('user_id', OWNER_ID)
+      .eq('local_date', localDate)
+      .order('start_time', { ascending: true }),
+    supabase
+      .from('reports')
+      .select('*')
+      .eq('user_id', OWNER_ID)
+      .eq('local_date', localDate)
+      .order('created_at', { ascending: false }),
+    getTasks({ status: 'active' }),
+    getHabitsForDate(localDate).catch(() => [] as HabitWithStatus[]),
+  ])
+
+  const events = (eventsResult.data || []) as CalendarEventRecord[]
+  const activeTasks = taskRows as TaskRecord[]
+  const morningReport =
+    ((reportsResult.data || []) as ReportRecord[]).find((r) => r.type === 'morning') || null
+  const briefTime = morningReport ? getLocalTimeLabel(morningReport.created_at, timezone) : null
+  const dueToday = activeTasks.filter((t) => t.due_local_date === localDate)
+  const todayTasks = (dueToday.length ? dueToday : activeTasks).slice(0, 6)
+  const habitsDone = habits.filter((h) => h.done).length
+
+  return (
+    <>
+      <div className="life-card">
+        <div className="life-card-head">
+          <h2>Morning brief</h2>
+          {briefTime ? <span className="eyebrow">{briefTime}</span> : null}
+        </div>
+        <div className="life-brief-body">
+          {morningReport ? (
+            <MarkdownCard content={morningReport.content} />
+          ) : (
+            <p>No brief yet today. It lands in the morning.</p>
+          )}
+        </div>
+      </div>
+
+      <div className="life-card">
+        <div className="life-card-head">
+          <h2>Today&rsquo;s tasks</h2>
+          <span className="count-pill">{todayTasks.length}</span>
+        </div>
+        {todayTasks.length === 0 ? (
+          <div className="life-empty">Nothing queued.</div>
+        ) : (
+          <ul className="life-rows">
+            {todayTasks.map((task) => {
+              const isDone = task.status === 'done'
+              const projectLabel = task.project_slug
+                ? getProjectLabel(task.project_slug) || task.project_slug
+                : 'General'
+              const dueLabel =
+                task.due_local_date === localDate
+                  ? 'Today'
+                  : task.due_local_date
+                    ? shortDay(task.due_local_date, timezone)
+                    : ''
+              return (
+                <li className="life-row" key={task.id}>
+                  <form action={`/api/life/tasks/${task.id}`} method="post">
+                    <input type="hidden" name="redirectTo" value="/life" />
+                    <input type="hidden" name="status" value={isDone ? 'open' : 'done'} />
+                    <button
+                      type="submit"
+                      className={`life-check${isDone ? ' is-done' : ''}`}
+                      aria-label={isDone ? 'Reopen task' : 'Mark task done'}
+                    >
+                      ✓
+                    </button>
+                  </form>
+                  <div className="life-row-body">
+                    <span className={`life-row-title${isDone ? ' is-done' : ''}`}>{task.title}</span>
+                    <span className="life-row-meta">
+                      <span className={`pri-dot pri-${task.priority}`} />
+                      {projectLabel}
+                    </span>
+                  </div>
+                  {dueLabel ? <span className="life-row-aside">{dueLabel}</span> : <span />}
+                </li>
+              )
+            })}
+          </ul>
+        )}
+        <div className="life-card-foot">
+          <Link href="/life/tasks">View all tasks →</Link>
+        </div>
+      </div>
+
+      <div className="life-card">
+        <div className="life-card-head">
+          <h2>Schedule</h2>
+          <span className="count-pill">{events.length}</span>
+        </div>
+        {events.length === 0 ? (
+          <div className="life-empty">No events.</div>
+        ) : (
+          <ul className="life-rows">
+            {events.map((event) => (
+              <li className="life-row" key={event.id} style={{ gridTemplateColumns: 'auto 1fr' }}>
+                <span className="time-chip">
+                  {event.all_day
+                    ? 'All day'
+                    : event.start_time
+                      ? getLocalTimeLabel(event.start_time, timezone)
+                      : '—'}
+                </span>
+                <span className="life-row-title">{event.title || '(Untitled event)'}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <div className="life-card">
+        <div className="life-card-head">
+          <h2>Habits</h2>
+          {habits.length > 0 ? (
+            <span className="count-pill">
+              {habitsDone}/{habits.length}
+            </span>
+          ) : null}
+        </div>
+        {habits.length === 0 ? (
+          <div className="life-empty">No habits yet. Add one from Quick add.</div>
+        ) : (
+          <ul className="life-rows">
+            {habits.map((habit) => (
+              <li className="life-row" key={habit.id} style={{ gridTemplateColumns: 'auto 1fr' }}>
+                <form action={`/api/life/habits/${habit.id}`} method="post">
+                  <input type="hidden" name="redirectTo" value="/life" />
+                  <input type="hidden" name="localDate" value={localDate} />
+                  <button
+                    type="submit"
+                    className={`life-check${habit.done ? ' is-done' : ''}`}
+                    aria-label={habit.done ? 'Mark habit not done' : 'Mark habit done'}
+                  >
+                    ✓
+                  </button>
+                </form>
+                <span className={`life-row-title${habit.done ? ' is-done' : ''}`}>{habit.title}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </>
+  )
+}
+
+function CardsSkeleton() {
+  return (
+    <>
+      {[1, 2, 3, 4].map((i) => (
+        <div key={i} className="life-card life-card-skeleton">
+          <div className="life-card-head">
+            <div className="skeleton-line skeleton-title" />
+          </div>
+          <div className="skeleton-line" />
+          <div className="skeleton-line skeleton-short" />
+          <div className="skeleton-line" />
+        </div>
+      ))}
+    </>
+  )
+}
+
+// ── Page ─────────────────────────────────────────────────────────────────────
+
 export default async function LifeTodayPage({
   searchParams,
 }: {
@@ -70,91 +251,19 @@ export default async function LifeTodayPage({
   const params = await searchParams
   const formError = params.error === 'content' ? 'Content is required.' : params.error || null
 
-  let timezone = 'UTC'
-  let localDate = ''
-  let hour = 9
-  let events: CalendarEventRecord[] = []
-  let morningReport: ReportRecord | null = null
-  let activeTasks: TaskRecord[] = []
-  let calendarError: string | null = null
-  let loadError: string | null = null
-
-  try {
-    const settings = await getOwnerSettings()
-    timezone = settings.timezone
-    localDate = getCurrentLocalDate(timezone)
-    hour = getCurrentLocalClock(timezone).hour
-
-    try {
-      await syncCalendarEvents(localDate)
-    } catch (error) {
-      console.error('Life calendar sync failed during page load', error)
-      calendarError = 'Calendar sync is unavailable right now.'
-    }
-
-    try {
-      const supabase = getSupabaseAdmin()
-
-      const [eventsResult, reportsResult, taskRows] = await Promise.all([
-        supabase
-          .from('calendar_events')
-          .select('*')
-          .eq('user_id', OWNER_ID)
-          .eq('local_date', localDate)
-          .order('start_time', { ascending: true }),
-        supabase
-          .from('reports')
-          .select('*')
-          .eq('user_id', OWNER_ID)
-          .eq('local_date', localDate)
-          .order('created_at', { ascending: false }),
-        getTasks({ status: 'active' }),
-      ])
-
-      if (eventsResult.error) throw eventsResult.error
-      if (reportsResult.error) throw reportsResult.error
-
-      events = (eventsResult.data || []) as CalendarEventRecord[]
-      activeTasks = taskRows as TaskRecord[]
-      morningReport =
-        ((reportsResult.data || []) as ReportRecord[]).find((report) => report.type === 'morning') || null
-
-      if (!morningReport && isMorningBriefWindow(timezone)) {
-        try {
-          const morningResult = await generateMorningBrief({ localDate })
-          morningReport = (morningResult.report as ReportRecord | undefined) || null
-        } catch (error) {
-          console.error('Life morning brief generation failed during page load', error)
-        }
-      }
-    } catch (error) {
-      loadError = error instanceof Error ? error.message : 'Failed to load today.'
-    }
-  } catch (error) {
-    loadError = error instanceof Error ? error.message : 'Failed to load today.'
-  }
-
-  let habits: HabitWithStatus[] = []
-  if (localDate) {
-    try {
-      habits = await getHabitsForDate(localDate)
-    } catch (error) {
-      // Habits table may not be migrated yet — degrade gracefully.
-      console.error('Life habits load failed', error)
-    }
-  }
-
-  const eyebrowDate = localDate ? shortDate(localDate, timezone) : 'Today'
-  const habitsDone = habits.filter((habit) => habit.done).length
-  const dueToday = activeTasks.filter((task) => task.due_local_date === localDate)
-  const todayTasks = (dueToday.length ? dueToday : activeTasks).slice(0, 6)
-  const briefTime = morningReport ? getLocalTimeLabel(morningReport.created_at, timezone) : null
+  // Settings are cached — this is a fast cache hit after the first request.
+  const settings = await getOwnerSettings()
+  const timezone = settings.timezone
+  const localDate = getCurrentLocalDate(timezone)
+  const hour = getCurrentLocalClock(timezone).hour
+  const eyebrowDate = shortDate(localDate, timezone)
 
   const textareaId = 'life-entry-textarea'
   const sourceInputId = 'life-entry-source'
 
   return (
     <div className="life-today">
+      {/* Left column: no DB dependencies — paints immediately */}
       <section className="life-capture">
         <p className="eyebrow">
           Today · <b>{eyebrowDate}</b>
@@ -186,7 +295,6 @@ export default async function LifeTodayPage({
                 </button>
               </div>
             </div>
-            {/* Phone-only: save button below the textarea */}
             <button className="life-save-below" type="submit">
               Save entry
             </button>
@@ -194,135 +302,15 @@ export default async function LifeTodayPage({
         </form>
         <div id="life-live-transcript" className="life-live-transcript" aria-live="polite" />
         {formError ? <p className="error-text">{formError}</p> : null}
-        {loadError ? <p className="error-text">{loadError}</p> : null}
 
         <QuickAdd redirectTo="/life" localDate={localDate} textareaId={textareaId} />
       </section>
 
+      {/* Right column: streams in while the left column is already interactive */}
       <aside className="life-side">
-        <div className="life-card">
-          <div className="life-card-head">
-            <h2>Morning brief</h2>
-            {briefTime ? <span className="eyebrow">{briefTime}</span> : null}
-          </div>
-          <div className="life-brief-body">
-            {morningReport ? (
-              <MarkdownCard content={morningReport.content} />
-            ) : (
-              <p>No brief yet today. It lands in the morning.</p>
-            )}
-          </div>
-        </div>
-
-        <div className="life-card">
-          <div className="life-card-head">
-            <h2>Today&rsquo;s tasks</h2>
-            <span className="count-pill">{todayTasks.length}</span>
-          </div>
-          {todayTasks.length === 0 ? (
-            <div className="life-empty">Nothing queued.</div>
-          ) : (
-            <ul className="life-rows">
-              {todayTasks.map((task) => {
-                const isDone = task.status === 'done'
-                const projectLabel = task.project_slug
-                  ? getProjectLabel(task.project_slug) || task.project_slug
-                  : 'General'
-                const dueLabel =
-                  task.due_local_date === localDate
-                    ? 'Today'
-                    : task.due_local_date
-                      ? shortDay(task.due_local_date, timezone)
-                      : ''
-                return (
-                  <li className="life-row" key={task.id}>
-                    <form action={`/api/life/tasks/${task.id}`} method="post">
-                      <input type="hidden" name="redirectTo" value="/life" />
-                      <input type="hidden" name="status" value={isDone ? 'open' : 'done'} />
-                      <button
-                        type="submit"
-                        className={`life-check${isDone ? ' is-done' : ''}`}
-                        aria-label={isDone ? 'Reopen task' : 'Mark task done'}
-                      >
-                        ✓
-                      </button>
-                    </form>
-                    <div className="life-row-body">
-                      <span className={`life-row-title${isDone ? ' is-done' : ''}`}>{task.title}</span>
-                      <span className="life-row-meta">
-                        <span className={`pri-dot pri-${task.priority}`} />
-                        {projectLabel}
-                      </span>
-                    </div>
-                    {dueLabel ? <span className="life-row-aside">{dueLabel}</span> : <span />}
-                  </li>
-                )
-              })}
-            </ul>
-          )}
-          <div className="life-card-foot">
-            <Link href="/life/tasks">View all tasks →</Link>
-          </div>
-        </div>
-
-        <div className="life-card">
-          <div className="life-card-head">
-            <h2>Schedule</h2>
-            <span className="count-pill">{events.length}</span>
-          </div>
-          {events.length === 0 ? (
-            <div className="life-empty">No events.</div>
-          ) : (
-            <ul className="life-rows">
-              {events.map((event) => (
-                <li className="life-row" key={event.id} style={{ gridTemplateColumns: 'auto 1fr' }}>
-                  <span className="time-chip">
-                    {event.all_day
-                      ? 'All day'
-                      : event.start_time
-                        ? getLocalTimeLabel(event.start_time, timezone)
-                        : '—'}
-                  </span>
-                  <span className="life-row-title">{event.title || '(Untitled event)'}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-          {calendarError ? <div className="life-empty">{calendarError}</div> : null}
-        </div>
-
-        <div className="life-card">
-          <div className="life-card-head">
-            <h2>Habits</h2>
-            {habits.length > 0 ? (
-              <span className="count-pill">
-                {habitsDone}/{habits.length}
-              </span>
-            ) : null}
-          </div>
-          {habits.length === 0 ? (
-            <div className="life-empty">No habits yet. Add one from Quick add.</div>
-          ) : (
-            <ul className="life-rows">
-              {habits.map((habit) => (
-                <li className="life-row" key={habit.id} style={{ gridTemplateColumns: 'auto 1fr' }}>
-                  <form action={`/api/life/habits/${habit.id}`} method="post">
-                    <input type="hidden" name="redirectTo" value="/life" />
-                    <input type="hidden" name="localDate" value={localDate} />
-                    <button
-                      type="submit"
-                      className={`life-check${habit.done ? ' is-done' : ''}`}
-                      aria-label={habit.done ? 'Mark habit not done' : 'Mark habit done'}
-                    >
-                      ✓
-                    </button>
-                  </form>
-                  <span className={`life-row-title${habit.done ? ' is-done' : ''}`}>{habit.title}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        <Suspense fallback={<CardsSkeleton />}>
+          <TodayCards localDate={localDate} timezone={timezone} />
+        </Suspense>
       </aside>
     </div>
   )
