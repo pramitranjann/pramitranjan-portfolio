@@ -159,35 +159,37 @@ export default async function LifeTodayPage({
         <p className="eyebrow">
           Today · <b>{eyebrowDate}</b>
         </p>
-        <h1 className="life-greeting">{greetingForHour(hour)}, Pramit.</h1>
-        <p className="life-greeting-sub">
-          What&rsquo;s on your mind? Speak it or type it — I&rsquo;ll sort the tasks, notes, and
-          events out for you.
-        </p>
+        <h1 className=”life-greeting”>{greetingForHour(hour)}, Pramit.</h1>
 
-        <form action="/api/life/entries" method="post">
-          <input id={sourceInputId} name="source" type="hidden" defaultValue="text" />
-          <div className="life-composer">
-            <textarea
-              className="life-composer-input"
-              id={textareaId}
-              name="content"
-              placeholder="Brain-dump anything — “book flights, crit went well, gym at 4…”"
-            />
-            <div className="life-composer-bar">
-              <VoiceCaptureControl
-                sourceInputId={sourceInputId}
-                textareaId={textareaId}
-                liveTranscriptId="life-live-transcript"
+        <form action=”/api/life/entries” method=”post”>
+          <input id={sourceInputId} name=”source” type=”hidden” defaultValue=”text” />
+          <div className=”life-composer-outer”>
+            <div className=”life-composer”>
+              <textarea
+                className=”life-composer-input”
+                id={textareaId}
+                name=”content”
+                placeholder=”Brain-dump anything — “book flights, crit went well, gym at 4…””
               />
-              <span className="spacer" />
-              <button className="life-btn ghost life-clear" type="reset">
-                Clear
-              </button>
-              <button className="life-btn primary life-save" type="submit">
-                Save entry
-              </button>
+              <div className=”life-composer-bar”>
+                <VoiceCaptureControl
+                  sourceInputId={sourceInputId}
+                  textareaId={textareaId}
+                  liveTranscriptId=”life-live-transcript”
+                />
+                <span className=”spacer” />
+                <button className=”life-btn ghost life-clear” type=”reset”>
+                  Clear
+                </button>
+                <button className=”life-btn primary life-save” type=”submit”>
+                  Save entry
+                </button>
+              </div>
             </div>
+            {/* Phone-only: save button below the textarea */}
+            <button className=”life-save-below” type=”submit”>
+              Save entry
+            </button>
           </div>
         </form>
         <div id="life-live-transcript" className="life-live-transcript" aria-live="polite" />
