@@ -59,7 +59,17 @@ export async function generateEodReport(options?: { localDate?: string; force?: 
   }
 
   await syncCalendarEvents(localDate);
-  const context = await loadDailyContext(localDate);
+  const context = await loadDailyContext(localDate, timeZone);
+
+  if (context.completedTasks.length === 0 && !force) {
+    return {
+      skipped: true,
+      reason: "No tasks completed today — nothing to report.",
+      localDate,
+      timeZone,
+    };
+  }
+
   const markdown = await callClaude({
     system: EOD_SYSTEM_PROMPT,
     user: buildEodPrompt(localDate, timeZone, context),
@@ -143,7 +153,18 @@ export async function generateMorningBrief(options?: { localDate?: string; force
     throw yesterdayError;
   }
 
-  const context = await loadDailyContext(localDate);
+  const context = await loadDailyContext(localDate, timeZone);
+  const tasksDueToday = context.openTasks.filter((t) => t.due_local_date === localDate);
+
+  if (tasksDueToday.length < 3 && !force) {
+    return {
+      skipped: true,
+      reason: `Only ${tasksDueToday.length} task(s) due today — morning brief threshold not met (need ≥ 3).`,
+      localDate,
+      timeZone,
+    };
+  }
+
   const markdown = await callClaude({
     system: MORNING_SYSTEM_PROMPT,
     user: buildMorningPrompt(localDate, timeZone, yesterdayReport, context),

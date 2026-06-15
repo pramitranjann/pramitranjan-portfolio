@@ -66,9 +66,28 @@ export function WeekClient({
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const todayRef = useRef<HTMLDivElement | null>(null)
+  // Auto-scroll-to-today must happen at most ONCE, on first load of the current
+  // week. Re-running it on every `data` refresh yanked the scroll position out
+  // from under the user (it fired the moment the async week payload arrived),
+  // which read as "the arrows / header jump while I'm scrolling".
+  const didInitialScrollRef = useRef(false)
 
   const weekEnd = useMemo(() => addDays(weekStart, 6), [weekStart])
   const dayList = useMemo(() => range(weekStart, 7), [weekStart])
+  // The Monday of the week that actually contains `today`.
+  const currentWeekStart = useMemo(() => getWeekStart(today), [today])
+
+  // Relative heading: "This week" only when you're on the current week; otherwise
+  // "Last week" / "Next week", and "Week NN" for anything further out. (Previously
+  // the <h1> was hardcoded to "This week" no matter which week you paged to.)
+  const weekHeading = useMemo(() => {
+    if (weekStart === currentWeekStart) return 'This week'
+    if (weekStart === addDays(currentWeekStart, -7)) return 'Last week'
+    if (weekStart === addDays(currentWeekStart, 7)) return 'Next week'
+    return `Week ${isoWeek(weekStart)}`
+  }, [weekStart, currentWeekStart])
+
+  const isCurrentWeek = weekStart === currentWeekStart
 
   useEffect(() => {
     let cancelled = false
@@ -89,11 +108,23 @@ export function WeekClient({
     }
   }, [weekStart, weekEnd])
 
+  // Reset the one-shot scroll flag whenever the user pages to a different week,
+  // so navigating away and back to the current week scrolls to today again.
+  useEffect(() => {
+    didInitialScrollRef.current = false
+  }, [weekStart])
+
   useEffect(() => {
     if (typeof window === 'undefined') return
-    if (window.innerWidth >= 981) return
-    todayRef.current?.scrollIntoView({ block: 'start', behavior: 'smooth' })
-  }, [data, weekStart])
+    if (window.innerWidth >= 700) return // phone only (matches useViewportMode)
+    if (didInitialScrollRef.current) return
+    if (!isCurrentWeek) return // never auto-scroll on weeks that don't contain today
+    if (!data) return
+    didInitialScrollRef.current = true
+    // 'auto' (instant) — a smooth animation here competes with the user's own
+    // scrolling. scroll-margin-top in CSS keeps the row clear of the sticky header.
+    todayRef.current?.scrollIntoView({ block: 'start', behavior: 'auto' })
+  }, [data, isCurrentWeek])
 
   const eventsByDate = useMemo(() => {
     const map = new Map<string, CalendarEventRecord[]>()
@@ -123,7 +154,7 @@ export function WeekClient({
       <div className="life-page-head">
         <div>
           <p className="eyebrow">Week {isoWeek(weekStart)}</p>
-          <h1>This week</h1>
+          <h1>{weekHeading}</h1>
         </div>
         <div className="life-week-toolbar">
           <span className="life-week-range">{formatRange(weekStart, weekEnd, tz)}</span>
@@ -139,6 +170,7 @@ export function WeekClient({
             type="button"
             className="life-btn ghost"
             onClick={() => setWeekStart(getWeekStart(today))}
+            disabled={isCurrentWeek}
           >
             Today
           </button>

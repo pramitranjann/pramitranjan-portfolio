@@ -21,7 +21,16 @@ export function LifeHeader() {
       </Link>
       <nav className="life-nav" aria-label="Life">
         {LIFE_NAV_ITEMS.map((item) => {
-          const active = pathname === item.href || pathname.startsWith(`${item.href}/`)
+          // The Today tab lives at the index route ('/life'). Because every other
+          // Life route ALSO begins with '/life/', a `startsWith('/life/')` test
+          // marks Today active on every page — which is why Today + the current
+          // tab both showed the red underline. The index route must match exactly;
+          // only sub-routes use the prefix test (so e.g. '/life/tasks/123' still
+          // lights up Tasks).
+          const active =
+            item.href === '/life'
+              ? pathname === '/life'
+              : pathname === item.href || pathname.startsWith(`${item.href}/`)
 
           return (
             <Link

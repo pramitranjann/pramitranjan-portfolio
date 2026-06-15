@@ -1129,3 +1129,156 @@ body.carousel-reengaging main {
 .life-shell .life-quick-form-row .text-input { width: auto; flex: 0 1 auto; min-width: 120px; }
 .life-shell .life-quick-check { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--life-muted); white-space: nowrap; }
 .life-shell .life-quick-check input { accent-color: var(--life-accent); }
+
+/* LIFE — PHONE ─────────────────────────────────────────────────────────────
+   All rules below are scoped to ≤699px (phone), matching useViewportMode.ts.
+   Desktop and tablet are byte-for-byte unchanged.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* ── Week view phone fixes ──────────────────────────────────────────────── */
+@media (max-width: 699px) {
+  /* Keep the week date-nav (range + ← Today →) pinned to the top while the
+     7-day list scrolls underneath, so the arrows never scroll out of reach.
+     The negative margin + matching padding lets the sticky bar bleed to the
+     screen edges over the app-shell's 16px gutter. */
+  .life-shell .life-week-shell .life-page-head {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--life-bg);
+    margin: 0 -16px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--life-hairline);
+    align-items: center;
+  }
+
+  /* Toolbar fills the row and wraps gracefully under the title. */
+  .life-shell .life-week-toolbar {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .life-shell .life-week-range {
+    flex: 1 1 100%;
+    font-size: 20px;
+  }
+
+  /* Stops the auto-scroll-to-today (and manual scrolling) from tucking the
+     "today" row up under the sticky header. ~132px ≈ header + toolbar height. */
+  .life-shell .life-day-cell {
+    scroll-margin-top: 132px;
+  }
+}
+
+/* ── Hold-to-speak phone fixes ──────────────────────────────────────────── */
+@media (max-width: 699px) {
+  /* The composer action bar wraps so the big mic gets its own full-width row,
+     while Clear / Save stay on the row above. */
+  .life-shell .life-composer-bar {
+    flex-wrap: wrap;
+    row-gap: 12px;
+  }
+
+  /* BIG hold-to-speak button. Square edges per the brand (radius 0). */
+  .life-shell .life-mic.is-hold {
+    order: 3;            /* drop below the spacer + Clear/Save row */
+    flex: 1 1 100%;
+    width: 100%;
+    min-height: 64px;
+    justify-content: center;
+    gap: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+  .life-shell .life-mic.is-hold .life-mic-dot {
+    width: 11px;
+    height: 11px;
+  }
+
+  /* Pressed / recording: solid red fill (the .is-live rule already flips
+     colours; this just reinforces the active ring on the big control). */
+  .life-shell .life-mic.is-hold.is-live {
+    box-shadow: inset 0 0 0 1px var(--life-accent);
+  }
+
+  /* THE FIX for the selection bug — no text selection or callout menu anywhere
+     in the capture region during a hold. The button also carries these inline
+     (see the component) so they apply even before this stylesheet loads. */
+  .life-shell .life-mic,
+  .life-shell .life-mic-label,
+  .life-shell .life-mic-dot,
+  .life-shell .life-live-transcript {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+  .life-shell .life-mic.is-hold {
+    touch-action: none;  /* page doesn't scroll while you hold the button */
+  }
+}
+
+/* ── Deeper phone optimization ──────────────────────────────────────────── */
+@media (max-width: 699px) {
+  /* ── Safe areas + tighter gutters ──────────────────────────────────────── */
+  .life-shell .life-app-shell {
+    padding: 16px 16px calc(28px + env(safe-area-inset-bottom));
+  }
+
+  /* ── Sticky, blurred top bar with real 44px tap targets ────────────────── */
+  .life-shell .life-header {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin: -16px -16px 16px;
+    padding: 12px 16px;
+    background: rgba(10, 10, 10, 0.85);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--life-hairline);
+  }
+  .life-shell .life-nav {
+    width: 100%;
+    gap: 2px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .life-shell .life-nav::-webkit-scrollbar { display: none; }
+  .life-shell .life-nav .nav-link {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 14px;
+    font-size: 15px;
+    white-space: nowrap;
+  }
+  /* History is flagged phone-hidden in LifeHeader — keep it off the phone bar. */
+  .life-shell .life-nav .nav-link.phone-hidden { display: none; }
+
+  /* ── Minimum 44px hit targets on every control ─────────────────────────── */
+  .life-shell .life-btn { min-height: 46px; padding: 0 18px; }
+  .life-shell .life-icon-btn { width: 46px; height: 46px; font-size: 18px; }
+  .life-shell .filter-chip { min-height: 40px; }
+  .life-shell .segmented-item { min-height: 38px; }
+  .life-shell .life-quick-chip { height: 38px; }
+  .life-shell .life-check { width: 24px; height: 24px; }
+
+  /* ── Today: roomier composer, no iOS zoom-on-focus (needs 16px font) ───── */
+  .life-shell .life-today { gap: 16px; }
+  .life-shell .life-composer-input { min-height: 140px; font-size: 16px; }
+  .life-shell .life-greeting { font-size: 28px; }
+  .life-shell .life-greeting-sub { font-size: 15px; }
+  .life-shell .life-page-head h1 { font-size: 24px; }
+
+  /* ── Cards: edge-to-edge feel, comfortable row height ──────────────────── */
+  .life-shell .life-row { padding: 14px 16px; }
+  .life-shell .life-row-title { font-size: 15px; }
+
+  /* ── Reports: comfortable reading measure ──────────────────────────────── */
+  .life-shell .life-reports-reader { max-width: none; }
+  .life-shell .life-section-pullquote p { font-size: 20px; }
+}

@@ -274,6 +274,12 @@ export function VoiceCaptureControl({
   function onPointerDown(event: React.PointerEvent<HTMLButtonElement>) {
     if (!isHoldMode) return
     if (!supported) return
+    // Suppress iOS's long-press text-selection / callout. Without this the
+    // touch-and-hold gesture starts selecting the button label and the live
+    // transcript text (the blue selection handles in the bug report). The CSS
+    // (user-select:none / -webkit-touch-callout:none / touch-action:none) is
+    // the primary guard; this preventDefault backs it up across browsers.
+    event.preventDefault()
     event.currentTarget.setPointerCapture(event.pointerId)
     setError(null)
     startedRef.current = false
@@ -335,7 +341,7 @@ export function VoiceCaptureControl({
       : isHoldMode
         ? listening
           ? 'Listening…'
-          : 'Hold to capture'
+          : 'Hold to speak'
         : listening
           ? 'Listening…'
           : 'Capture'
@@ -346,6 +352,18 @@ export function VoiceCaptureControl({
         className={`life-mic ${listening ? 'is-live' : ''} ${isHoldMode ? 'is-hold' : 'is-toggle'}`}
         disabled={!mounted || !supported}
         type="button"
+        draggable={false}
+        // Belt-and-braces with voice-phone.css: kill text selection / the
+        // iOS callout menu so touch-and-hold never selects the label text.
+        style={{
+          WebkitUserSelect: 'none',
+          userSelect: 'none',
+          WebkitTouchCallout: 'none',
+          touchAction: 'none',
+        }}
+        onContextMenu={(event) => {
+          if (isHoldMode) event.preventDefault()
+        }}
         onPointerDown={onPointerDown}
         onPointerUp={onPointerEndLike}
         onPointerCancel={onPointerEndLike}
