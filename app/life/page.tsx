@@ -8,7 +8,6 @@ import { QuickAdd } from '@/components/life/QuickAdd'
 import { VoiceCaptureControl } from '@/components/life/VoiceCaptureControl'
 import { OWNER_ID } from '@/lib/life/constants'
 import { isAdminSession } from '@/lib/admin-auth'
-import { getHabitsForDate } from '@/lib/life/habits'
 import { getProjectLabel } from '@/lib/life/projects'
 import { getOwnerSettings } from '@/lib/life/settings'
 import { generateMorningBrief } from '@/lib/life/synthesis'
@@ -24,7 +23,6 @@ import {
 import type {
   CalendarEventRecord,
   EntryRecord,
-  HabitWithStatus,
   ReportRecord,
   TaskRecord,
 } from '@/lib/life/types'
@@ -70,7 +68,7 @@ async function TodayCards({
   const supabase = getSupabaseAdmin()
 
   // All data sources run in parallel — nothing sequential.
-  const [eventsResult, reportsResult, entriesResult, taskRows, habits] = await Promise.all([
+  const [eventsResult, reportsResult, entriesResult, taskRows] = await Promise.all([
     supabase
       .from('calendar_events')
       .select('*')
@@ -90,7 +88,6 @@ async function TodayCards({
       .eq('local_date', localDate)
       .order('created_at', { ascending: false }),
     getTasks({ status: 'active' }),
-    getHabitsForDate(localDate).catch(() => [] as HabitWithStatus[]),
   ])
 
   const events = (eventsResult.data || []) as CalendarEventRecord[]
@@ -101,7 +98,6 @@ async function TodayCards({
   const briefTime = morningReport ? getLocalTimeLabel(morningReport.created_at, timezone) : null
   const dueToday = activeTasks.filter((t) => t.due_local_date === localDate)
   const todayTasks = (dueToday.length ? dueToday : activeTasks).slice(0, 6)
-  const habitsDone = habits.filter((h) => h.done).length
 
   return (
     <>
@@ -221,39 +217,6 @@ async function TodayCards({
                       : '—'}
                 </span>
                 <span className="life-row-title">{event.title || '(Untitled event)'}</span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-
-      <div className="life-card">
-        <div className="life-card-head">
-          <h2>Habits</h2>
-          {habits.length > 0 ? (
-            <span className="count-pill">
-              {habitsDone}/{habits.length}
-            </span>
-          ) : null}
-        </div>
-        {habits.length === 0 ? (
-          <div className="life-empty">No habits yet. Add one from Quick add.</div>
-        ) : (
-          <ul className="life-rows">
-            {habits.map((habit) => (
-              <li className="life-row" key={habit.id} style={{ gridTemplateColumns: 'auto 1fr' }}>
-                <form action={`/api/life/habits/${habit.id}`} method="post">
-                  <input type="hidden" name="redirectTo" value="/life" />
-                  <input type="hidden" name="localDate" value={localDate} />
-                  <button
-                    type="submit"
-                    className={`life-check${habit.done ? ' is-done' : ''}`}
-                    aria-label={habit.done ? 'Mark habit not done' : 'Mark habit done'}
-                  >
-                    ✓
-                  </button>
-                </form>
-                <span className={`life-row-title${habit.done ? ' is-done' : ''}`}>{habit.title}</span>
               </li>
             ))}
           </ul>

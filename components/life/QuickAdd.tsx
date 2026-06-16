@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 import { LIFE_PROJECTS } from '@/lib/life/projects'
 
-type QuickKind = 'Task' | 'Event' | 'Habit'
+type QuickKind = 'Task' | 'Event'
 
 export function QuickAdd({
   redirectTo,
@@ -51,13 +51,6 @@ export function QuickAdd({
         >
           ＋ Event
         </button>
-        <button
-          type="button"
-          className={`life-quick-chip${open === 'Habit' ? ' is-open' : ''}`}
-          onClick={() => toggle('Habit')}
-        >
-          ＋ Habit
-        </button>
       </div>
 
       {open === 'Task' ? (
@@ -99,22 +92,6 @@ export function QuickAdd({
             </label>
             <button type="submit" className="primary-button">
               Add event
-            </button>
-          </div>
-        </form>
-      ) : null}
-
-      {open === 'Habit' ? (
-        <form action="/api/life/habits" method="post" className="life-quick-form">
-          <input type="hidden" name="redirectTo" value={redirectTo} />
-          <input autoFocus required type="text" name="title" placeholder="Habit (e.g. Read 20 pages)" className="text-input" />
-          <div className="life-quick-form-row">
-            <select className="text-input" defaultValue="daily" name="cadence">
-              <option value="daily">Daily</option>
-              <option value="weekly">Weekly</option>
-            </select>
-            <button type="submit" className="primary-button">
-              Add habit
             </button>
           </div>
         </form>

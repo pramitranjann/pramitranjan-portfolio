@@ -86,6 +86,15 @@ export function WeekClient({
   const [error, setError] = useState<string | null>(null)
   const [expandedDate, setExpandedDate] = useState<string | null>(null)
   const [nowMinutes, setNowMinutes] = useState<number | null>(null)
+  const [refreshKey, setRefreshKey] = useState(0)
+  // Inline event composer: which {date, hour} slot is being filled, plus its
+  // editable fields and save state.
+  const [draft, setDraft] = useState<{ date: string; hour: number } | null>(null)
+  const [draftTitle, setDraftTitle] = useState('')
+  const [draftStart, setDraftStart] = useState('')
+  const [draftEnd, setDraftEnd] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
   const todayRef = useRef<HTMLDivElement | null>(null)
   // Auto-scroll-to-today must happen at most ONCE, on first load of the current
   // week. Re-running it on every `data` refresh yanked the scroll position out
@@ -127,14 +136,52 @@ export function WeekClient({
     return () => {
       cancelled = true
     }
-  }, [weekStart, weekEnd])
+  }, [weekStart, weekEnd, refreshKey])
 
   // Reset the one-shot scroll flag whenever the user pages to a different week,
   // so navigating away and back to the current week scrolls to today again.
   useEffect(() => {
     didInitialScrollRef.current = false
     setExpandedDate(null)
+    setDraft(null)
   }, [weekStart])
+
+  function openDraft(date: string, hour: number) {
+    setSaveError(null)
+    setDraftTitle('')
+    setDraftStart(`${String(hour).padStart(2, '0')}:00`)
+    setDraftEnd(`${String(Math.min(hour + 1, 23)).padStart(2, '0')}:00`)
+    setDraft({ date, hour })
+  }
+
+  async function saveDraft() {
+    if (!draft) return
+    const title = draftTitle.trim()
+    if (!title) {
+      setSaveError('Title required.')
+      return
+    }
+    setSaving(true)
+    setSaveError(null)
+    try {
+      await fetchJson('/api/life/calendar/events', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          title,
+          localDate: draft.date,
+          startTime: draftStart || null,
+          endTime: draftEnd || null,
+        }),
+      })
+      setDraft(null)
+      setRefreshKey((key) => key + 1) // re-pull the week so the new event appears
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : 'Could not create event.')
+    } finally {
+      setSaving(false)
+    }
+  }
 
   // Live clock for current-time indicator (updates every minute).
   useEffect(() => {
@@ -285,10 +332,16 @@ export function WeekClient({
                       const h = DAY_START_HOUR + i
                       const label = h === 12 ? '12 PM' : h < 12 ? `${h} AM` : `${h - 12} PM`
                       return (
-                        <div key={h} className="life-tl-row">
+                        <button
+                          type="button"
+                          key={h}
+                          className="life-tl-row"
+                          onClick={() => openDraft(date, h)}
+                          aria-label={`Add event at ${label}`}
+                        >
                           <span className="life-tl-label">{label}</span>
                           <span className="life-tl-line" />
-                        </div>
+                        </button>
                       )
                     })}
 
@@ -317,6 +370,59 @@ export function WeekClient({
                       <div className="life-tl-now" style={{ top: `${nowTop}%` }}>
                         <span className="life-tl-now-dot" />
                         <span className="life-tl-now-line" />
+                      </div>
+                    )}
+
+                    {draft && draft.date === date && (
+                      <div
+                        className="life-tl-draft"
+                        style={{ top: `${eventTopPct(draft.hour * 60)}%` }}
+                      >
+                        <input
+                          autoFocus
+                          type="text"
+                          className="text-input"
+                          placeholder="New event…"
+                          value={draftTitle}
+                          onChange={(e) => setDraftTitle(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') saveDraft()
+                            if (e.key === 'Escape') setDraft(null)
+                          }}
+                        />
+                        <div className="life-tl-draft-row">
+                          <input
+                            type="time"
+                            className="text-input"
+                            value={draftStart}
+                            aria-label="Start time"
+                            onChange={(e) => setDraftStart(e.target.value)}
+                          />
+                          <input
+                            type="time"
+                            className="text-input"
+                            value={draftEnd}
+                            aria-label="End time"
+                            onChange={(e) => setDraftEnd(e.target.value)}
+                          />
+                          <button
+                            type="button"
+                            className="primary-button"
+                            onClick={saveDraft}
+                            disabled={saving}
+                          >
+                            {saving ? 'Saving…' : 'Add'}
+                          </button>
+                          <button
+                            type="button"
+                            className="secondary-button"
+                            onClick={() => setDraft(null)}
+                            disabled={saving}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                        {saveError ? <span className="error-text">{saveError}</span> : null}
                       </div>
                     )}
                   </div>

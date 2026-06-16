@@ -848,13 +848,27 @@ body.carousel-reengaging main {
 .life-app-shell { width: 100%; max-width: 1240px; margin: 0 auto; padding: 28px 40px 64px; }
 
 /* ── Header ─────────────────────────────────────────────────────────────── */
-.life-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-bottom: 18px; margin-bottom: 28px; border-bottom: 1px solid var(--life-hairline); }
-.life-shell .brand { font-family: var(--font-mono); font-size: 14px; line-height: 1.3; letter-spacing: 0.14em; color: var(--life-accent); }
+.life-header { display: flex; flex-direction: column; gap: 14px; padding-bottom: 14px; margin-bottom: 28px; border-bottom: 1px solid var(--life-hairline); }
+.life-header-top { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.life-shell .brand { font-family: var(--font-mono); font-size: 14px; line-height: 1.3; letter-spacing: 0.14em; color: var(--life-accent); white-space: nowrap; }
 .life-nav { display: flex; align-items: center; gap: 4px; }
 .life-nav .nav-link { font-family: var(--font-mono); font-size: 14px; letter-spacing: 0; color: var(--life-muted); padding: 7px 14px; border-radius: 0; transition: color 0.15s ease, background 0.15s ease; }
 .life-nav .nav-link::before { display: none; }
 .life-nav .nav-link:hover { color: var(--life-text); background: var(--life-panel); }
 .life-nav .nav-link.active { color: var(--life-text); background: var(--life-panel-2); box-shadow: inset 0 -2px 0 var(--life-accent); }
+
+/* Header search */
+.life-shell .life-search { display: flex; align-items: center; gap: 6px; min-width: 0; width: 200px; padding: 0 10px; border: 1px solid var(--life-border); background: var(--life-muted-bg); transition: border-color 0.15s ease; }
+.life-shell .life-search:focus-within { border-color: var(--life-muted); }
+.life-shell .life-search-icon { color: var(--life-label); font-size: 15px; line-height: 1; }
+.life-shell .life-search-input { flex: 1; min-width: 0; height: 34px; border: 0; background: transparent; color: var(--life-text); font-size: 13px; outline: none; }
+.life-shell .life-search-input::placeholder { color: var(--life-label); }
+
+/* Secondary sub-nav (per active group) */
+.life-subnav { display: flex; align-items: center; gap: 2px; }
+.life-shell .life-subnav-link { font-family: var(--font-mono); font-size: 13px; color: var(--life-label); padding: 6px 12px; border: 1px solid transparent; transition: color 0.15s ease, border-color 0.15s ease; }
+.life-shell .life-subnav-link:hover { color: var(--life-text); }
+.life-shell .life-subnav-link.active { color: var(--life-accent); border-color: var(--life-accent-line); background: var(--life-accent-soft); }
 
 /* ── Shared label + eyebrow ─────────────────────────────────────────────── */
 .life-shell .eyebrow { margin: 0; text-transform: uppercase; letter-spacing: 0.16em; font-size: 11px; color: var(--life-label); font-family: var(--font-mono); white-space: nowrap; }
@@ -1036,7 +1050,12 @@ body.carousel-reengaging main {
 .life-shell .life-day-allday-strip { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 0 12px; border-bottom: 1px solid var(--life-hairline); margin-bottom: 0; }
 .life-shell .life-day-allday-badge { font-size: 12px; padding: 3px 8px; background: var(--life-accent-soft); border: 1px solid var(--life-accent-line); color: var(--life-text); }
 .life-shell .life-day-timeline-body { position: relative; }
-.life-shell .life-tl-row { display: flex; align-items: flex-start; height: 52px; }
+.life-shell .life-tl-row { display: flex; align-items: flex-start; height: 52px; width: 100%; padding: 0; margin: 0; border: 0; background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; -webkit-appearance: none; appearance: none; transition: background 0.12s ease; }
+.life-shell .life-tl-row:hover { background: var(--life-accent-soft); }
+.life-shell .life-tl-draft { position: absolute; left: 44px; right: 0; z-index: 3; display: grid; gap: 6px; padding: 8px; background: var(--life-panel-2); border: 1px solid var(--life-accent-line); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4); }
+.life-shell .life-tl-draft-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.life-shell .life-tl-draft-row .text-input { width: auto; flex: 0 1 auto; min-height: 32px; }
+.life-shell .life-tl-draft-row .primary-button, .life-shell .life-tl-draft-row .secondary-button { min-height: 32px; }
 .life-shell .life-tl-label { font-family: var(--font-mono); font-size: 10px; color: var(--life-label); letter-spacing: 0.06em; width: 44px; flex-shrink: 0; padding-top: 0; line-height: 1; margin-top: -5px; }
 .life-shell .life-tl-line { flex: 1; height: 1px; background: var(--life-hairline); margin-top: 0; }
 .life-shell .life-tl-event { position: absolute; left: 44px; right: 0; padding: 4px 8px; background: var(--life-muted-bg); border-left: 2px solid var(--life-accent); overflow: hidden; display: flex; flex-direction: column; gap: 2px; box-sizing: border-box; min-height: 22px; z-index: 1; }
@@ -1047,6 +1066,41 @@ body.carousel-reengaging main {
 .life-shell .life-tl-now-line { flex: 1; height: 1.5px; background: var(--life-accent); }
 .life-shell .life-day-tasks-expanded { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--life-hairline); }
 .life-shell .life-day-empty-tl { display: block; padding: 20px 0; text-align: center; font-size: 13px; color: var(--life-label); }
+
+/* ── Projects ───────────────────────────────────────────────────────────── */
+.life-shell .life-projects-shell { display: grid; gap: 18px; }
+.life-shell .life-projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; align-items: start; }
+.life-shell .life-project-card { display: flex; flex-direction: column; }
+.life-shell .life-project-summary { margin: 0; padding: 10px 16px 4px; color: var(--life-label); font-size: 12px; line-height: 1.5; }
+
+/* ── Month ──────────────────────────────────────────────────────────────── */
+.life-shell .life-month-weekdays { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); margin-bottom: 6px; }
+.life-shell .life-month-weekday { font-family: var(--font-mono); font-size: 10px; color: var(--life-label); letter-spacing: 0.1em; text-transform: uppercase; padding: 0 6px; }
+.life-shell .life-month-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); border: 1px solid var(--life-border); background: var(--life-panel); }
+.life-shell .life-month-cell { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; min-height: 96px; padding: 8px; border-left: 1px solid var(--life-hairline); border-top: 1px solid var(--life-hairline); background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; -webkit-appearance: none; appearance: none; transition: background 0.12s ease; }
+.life-shell .life-month-cell:nth-child(7n + 1) { border-left: 0; }
+.life-shell .life-month-grid > .life-month-cell:nth-child(-n + 7) { border-top: 0; }
+.life-shell .life-month-cell:hover { background: var(--life-panel-2); }
+.life-shell .life-month-out { opacity: 0.4; }
+.life-shell .life-month-today { background: var(--life-accent-soft); box-shadow: inset 0 2px 0 var(--life-accent); }
+.life-shell .life-month-date { font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.life-shell .life-month-today .life-month-date { color: var(--life-accent); }
+.life-shell .life-month-marks { display: flex; flex-direction: column; gap: 4px; margin-top: auto; }
+.life-shell .life-month-dots { display: flex; gap: 3px; }
+.life-shell .life-month-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--life-accent-line); }
+.life-shell .life-month-task-count { font-family: var(--font-mono); font-size: 10px; color: var(--life-label); }
+
+/* ── Search ─────────────────────────────────────────────────────────────── */
+.life-shell .life-search-shell { display: grid; gap: 18px; }
+.life-shell .life-search-page-form { display: flex; gap: 8px; align-items: center; }
+.life-shell .life-search-page-form .text-input { flex: 1; }
+.life-shell .life-search-results { display: grid; gap: 16px; }
+
+@media (max-width: 699px) {
+  .life-shell .life-month-cell { min-height: 64px; gap: 4px; padding: 5px; }
+  .life-shell .life-month-date { font-size: 12px; }
+  .life-shell .life-month-task-count { font-size: 9px; }
+}
 
 /* ── Reports ────────────────────────────────────────────────────────────── */
 .life-shell .life-reports-shell { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 28px; align-items: start; }
@@ -1167,7 +1221,7 @@ body.carousel-reengaging main {
 /* Brief card sizing override (slightly smaller) */
 .life-shell .life-brief-body .markdown-body p, .life-shell .life-brief-body .markdown-body li { font-size: 14px; }
 
-/* ── Quick add (Today) — Task / Note / Event / Habit creators ───────────── */
+/* ── Quick add (Today) — Task / Note / Event creators ───────────────────── */
 .life-shell .life-quick-wrap { margin-top: 16px; display: grid; gap: 12px; }
 .life-shell .life-quick-wrap .life-quick { margin-top: 0; }
 .life-shell .life-quick-chip.is-open { color: var(--life-accent); border-style: solid; border-color: var(--life-accent-line); background: var(--life-accent-soft); }
@@ -1358,7 +1412,22 @@ body.carousel-reengaging main {
     white-space: nowrap;
   }
   /* History is flagged phone-hidden in LifeHeader — keep it off the phone bar. */
-  .life-shell .life-nav .nav-link.phone-hidden { display: none; }
+  .life-shell .life-nav .nav-link.phone-hidden,
+  .life-shell .life-subnav-link.phone-hidden { display: none; }
+
+  /* Header top row wraps: brand + nav on one line, search drops full-width. */
+  .life-shell .life-header-top { width: 100%; flex-wrap: wrap; gap: 10px; }
+  .life-shell .life-search { width: 100%; order: 3; }
+  .life-shell .life-search-input { height: 40px; font-size: 16px; }
+  /* Sub-nav scrolls horizontally like the primary nav. */
+  .life-shell .life-subnav {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .life-shell .life-subnav::-webkit-scrollbar { display: none; }
+  .life-shell .life-subnav-link { min-height: 40px; display: inline-flex; align-items: center; white-space: nowrap; font-size: 14px; }
 
   /* ── Minimum 44px hit targets on every control ─────────────────────────── */
   .life-shell .life-btn { min-height: 46px; padding: 0 18px; }

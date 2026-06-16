@@ -83,24 +83,3 @@ export interface TaskCandidate {
   priority: TaskPriority;
   dueLocalDate: string | null;
 }
-
-export interface HabitRecord {
-  id: string;
-  user_id: string;
-  title: string;
-  cadence: string;
-  archived: boolean;
-  created_at: string;
-}
-
-export interface HabitLogRecord {
-  id: string;
-  habit_id: string;
-  user_id: string;
-  local_date: string;
-  created_at: string;
-}
-
-export interface HabitWithStatus extends HabitRecord {
-  done: boolean;
-}
