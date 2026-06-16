@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 
+import { useViewportMode } from '@/hooks/useViewportMode'
 import { fetchJson } from '@/lib/life/client'
 import { addDays, getLocalTimeLabel, getTimeParts, getWeekStart, localDateTimeToUtc } from '@/lib/life/time'
 import type { CalendarEventRecord, TaskRecord } from '@/lib/life/types'
@@ -80,6 +81,7 @@ export function WeekClient({
   today: string
   timezone: string
 }) {
+  const viewport = useViewportMode()
   const [weekStart, setWeekStart] = useState(initialStart)
   const [data, setData] = useState<WeekResponse | null>(null)
   const [loading, setLoading] = useState(true)
@@ -195,8 +197,7 @@ export function WeekClient({
   }, [])
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
-    if (window.innerWidth >= 700) return // phone only (matches useViewportMode)
+    if (viewport !== 'phone') return
     if (didInitialScrollRef.current) return
     if (!isCurrentWeek) return // never auto-scroll on weeks that don't contain today
     if (!data) return
@@ -204,7 +205,7 @@ export function WeekClient({
     // 'auto' (instant) — a smooth animation here competes with the user's own
     // scrolling. scroll-margin-top in CSS keeps the row clear of the sticky header.
     todayRef.current?.scrollIntoView({ block: 'start', behavior: 'auto' })
-  }, [data, isCurrentWeek])
+  }, [data, isCurrentWeek, viewport])
 
   const eventsByDate = useMemo(() => {
     const map = new Map<string, CalendarEventRecord[]>()
@@ -228,6 +229,111 @@ export function WeekClient({
   }, [data])
 
   const tz = data?.timezone || timezone
+  const hourRows = useMemo(
+    () =>
+      Array.from({ length: DAY_END_HOUR - DAY_START_HOUR }, (_, i) => {
+        const h = DAY_START_HOUR + i
+        return {
+          hour: h,
+          label: h === 12 ? '12 PM' : h < 12 ? `${h} AM` : `${h - 12} PM`,
+        }
+      }),
+    [],
+  )
+
+  const desktopWeek = (
+    <div className="life-week-desktop">
+      <div className="life-week-desktop-head">
+        <div className="life-week-corner" />
+        {dayList.map((date, index) => {
+          const isToday = date === today
+          const { day } = dayMonth(date, tz)
+          return (
+            <div
+              key={date}
+              className={`life-week-col-head${isToday ? ' is-today' : ''}`}
+            >
+              <div className="life-week-col-weekday">{WEEKDAY_NAMES[index % 7]}</div>
+              <div className="life-week-col-date">{day}</div>
+            </div>
+          )
+        })}
+      </div>
+
+      <div className="life-week-allday-row">
+        <div className="life-week-allday-label">All-day</div>
+        {dayList.map((date) => {
+          const allDayEvents = (eventsByDate.get(date) || []).filter((event) => event.all_day)
+          return (
+            <div
+              key={`${date}-all-day`}
+              className={`life-week-allday-cell${date === today ? ' is-today' : ''}`}
+            >
+              {allDayEvents.map((event) => (
+                <span key={event.id} className="life-week-allday-badge">
+                  {event.title || '(Untitled)'}
+                </span>
+              ))}
+            </div>
+          )
+        })}
+      </div>
+
+      <div className="life-week-timeline">
+        <div className="life-week-hour-rail">
+          {hourRows.map((row, index) => (
+            <span
+              key={row.hour}
+              className="life-week-hour-label"
+              style={{ top: `${(index / hourRows.length) * 100}%` }}
+            >
+              {row.label}
+            </span>
+          ))}
+        </div>
+
+        {dayList.map((date) => {
+          const isToday = date === today
+          const timedEvents = (eventsByDate.get(date) || []).filter((event) => !event.all_day && event.start_time)
+          const nowTop = isToday && nowMinutes !== null ? eventTopPct(nowMinutes) : null
+
+          return (
+            <div key={`${date}-timeline`} className={`life-week-day-col${isToday ? ' is-today' : ''}`}>
+              {hourRows.map((row) => (
+                <div key={`${date}-${row.hour}`} className="life-week-hour-line" />
+              ))}
+
+              {timedEvents.map((event) => {
+                const startMin = getMinutesFromMidnight(event.start_time!, tz)
+                const endMin = event.end_time
+                  ? getMinutesFromMidnight(event.end_time, tz)
+                  : startMin + 60
+                const top = eventTopPct(startMin)
+                const height = eventHeightPct(startMin, endMin)
+
+                return (
+                  <div
+                    key={event.id}
+                    className="life-week-event-card"
+                    style={{ top: `${top}%`, height: `${height}%` }}
+                  >
+                    <div className="life-week-event-time">{getLocalTimeLabel(event.start_time!, tz)}</div>
+                    <div className="life-week-event-title">{event.title || '(Untitled)'}</div>
+                  </div>
+                )
+              })}
+
+              {nowTop !== null ? (
+                <div className="life-week-now-line" style={{ top: `${nowTop}%` }}>
+                  <span className="life-week-now-dot" />
+                </div>
+              ) : null}
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
 
   return (
     <div className="life-week-shell">
@@ -268,7 +374,8 @@ export function WeekClient({
       {error ? <p className="error-text">{error}</p> : null}
       {loading && !data ? <p className="muted-text">Loading week…</p> : null}
 
-      <div className="life-week-grid">
+      {viewport === 'phone' ? (
+        <div className="life-week-grid">
         {dayList.map((date, index) => {
           const isToday = date === today
           const isPast = date < today
@@ -474,7 +581,10 @@ export function WeekClient({
             </div>
           )
         })}
-      </div>
+        </div>
+      ) : (
+        desktopWeek
+      )}
     </div>
   )
 }

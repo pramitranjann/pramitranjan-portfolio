@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 
 import { isAdminSession } from '@/lib/admin-auth'
 import { OWNER_ID } from '@/lib/life/constants'
+import { getEntryPresentation } from '@/lib/life/entries'
 import { getProjectLabel } from '@/lib/life/projects'
 import { getOwnerSettings } from '@/lib/life/settings'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
@@ -151,19 +152,31 @@ export default async function LifeSearchPage({
           {entries.length > 0 ? (
             <section className="life-card">
               <div className="life-card-head">
-                <h2>Notes</h2>
+                <h2>Entries</h2>
                 <span className="count-pill">{entries.length}</span>
               </div>
               <ul className="life-rows">
-                {entries.map((entry) => (
-                  <li className="life-row life-entry-row" key={entry.id} style={{ gridTemplateColumns: '1fr auto' }}>
-                    <div className="life-row-body">
-                      <span className="life-entry-text">{entry.content}</span>
-                      <span className="life-row-meta">{shortDay(entry.local_date, tz)}</span>
-                    </div>
-                    <span className="life-row-aside">{getLocalTimeLabel(entry.created_at, tz)}</span>
-                  </li>
-                ))}
+                {entries.map((entry) => {
+                  const presentation = getEntryPresentation(entry)
+                  const projectLabel = entry.project_slug
+                    ? getProjectLabel(entry.project_slug) || entry.project_slug
+                    : null
+                  return (
+                    <li className="life-row life-entry-row" key={entry.id} style={{ gridTemplateColumns: '1fr auto' }}>
+                      <div className="life-row-body">
+                        <span className="life-entry-text">{entry.content}</span>
+                        <span className="life-row-meta">
+                          <span className="life-entry-kind" style={{ color: presentation.color }}>
+                            {presentation.kind}
+                          </span>
+                          <span>{shortDay(entry.local_date, tz)}</span>
+                          {projectLabel ? <span className="life-tag">{projectLabel}</span> : null}
+                        </span>
+                      </div>
+                      <span className="life-row-aside">{getLocalTimeLabel(entry.created_at, tz)}</span>
+                    </li>
+                  )
+                })}
               </ul>
             </section>
           ) : null}

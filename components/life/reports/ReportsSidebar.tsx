@@ -47,7 +47,28 @@ export function ReportsSidebar({
           </button>
         </li>
       ))}
-      {reports.length === 0 ? <li className="muted-text">No reports yet.</li> : null}
+      {reports.length === 0 ? (
+        <>
+          <li>
+            <div className="life-reports-row life-reports-row-empty">
+              <span className="life-reports-row-date">No reports yet</span>
+              <span className="life-reports-row-type">Empty</span>
+            </div>
+          </li>
+          <li>
+            <div className="life-reports-row life-reports-row-empty">
+              <span className="life-reports-row-date">Morning brief</span>
+              <span className="life-reports-row-type">Soon</span>
+            </div>
+          </li>
+          <li>
+            <div className="life-reports-row life-reports-row-empty">
+              <span className="life-reports-row-date">Evening brief</span>
+              <span className="life-reports-row-type">Soon</span>
+            </div>
+          </li>
+        </>
+      ) : null}
     </ul>
   )
 }

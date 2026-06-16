@@ -147,7 +147,6 @@ export function MonthClient({
       </div>
 
       {error ? <p className="error-text">{error}</p> : null}
-      {loading && !data ? <p className="muted-text">Loading month…</p> : null}
 
       <div className="life-month-weekdays">
         {WEEKDAY_NAMES.map((name) => (

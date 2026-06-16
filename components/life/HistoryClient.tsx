@@ -2,6 +2,7 @@
 
 import { useDeferredValue, useEffect, useState } from "react";
 
+import { getEntryPresentation } from '@/lib/life/entries'
 import { fetchJson } from '@/lib/life/client'
 import { getProjectLabel } from '@/lib/life/projects'
 import { getDisplayDate, getLocalTimeLabel } from '@/lib/life/time'
@@ -62,72 +63,85 @@ export function HistoryClient() {
   }, [deferredQuery, selectedDate]);
 
   return (
-    <div className="history-grid">
-      <section className="panel-card">
-        <div className="section-head">
-          <h1>Entries</h1>
+    <div className="life-history-shell">
+      <div className="life-page-head">
+        <div>
+          <p className="eyebrow">Entries</p>
+          <h1>Everything you captured</h1>
         </div>
-        <label className="field compact-field">
-          <span>Search</span>
-          <input
-            className="text-input"
-            type="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search entries…"
-          />
-        </label>
+        <span className="life-row-aside">{days.reduce((sum, day) => sum + day.entryCount, 0)} total</span>
+      </div>
 
-        {loading ? <p className="muted-text">Loading…</p> : null}
-        {error ? <p className="error-text">{error}</p> : null}
-        <ul className="history-list">
-          {days.map((day) => (
-            <li key={day.localDate}>
-              <button
-                className={`history-row${selectedDate === day.localDate ? " is-selected" : ""}`}
-                onClick={() => setSelectedDate(day.localDate)}
-                type="button"
-              >
-                <div>
-                  <strong>{getDisplayDate(day.localDate, timezone)}</strong>
-                  <p className="muted-text">{day.entryCount} entries</p>
-                </div>
-              </button>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="panel-card detail-panel">
-        {selectedDate ? (
-          <div className="section-head">
-            <h2>{getDisplayDate(selectedDate, timezone)}</h2>
+      <div className="life-history-grid">
+        <aside className="life-card life-history-sidebar">
+          <div className="life-card-head">
+            <h2>Days</h2>
+            <span className="count-pill">{days.length}</span>
           </div>
-        ) : null}
+          <label className="field compact-field life-history-search">
+            <span>Search</span>
+            <input
+              className="text-input"
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search entries…"
+            />
+          </label>
 
-        <div className="detail-stack">
-          {entries.length === 0 ? (
-            <p className="muted-text">No entries for this day.</p>
-          ) : (
-            <ul className="timeline-list">
-              {entries.map((entry) => (
-                <li className="timeline-item" key={entry.id}>
-                  <div className="timeline-meta">
-                    <span>{getLocalTimeLabel(entry.created_at, timezone)}</span>
-                    <span style={{ color: entry.source === 'voice' ? 'var(--life-accent)' : 'var(--life-label)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                      {entry.source === 'voice' ? 'Voice' : 'Text'}
-                    </span>
+          {loading ? <p className="muted-text">Loading…</p> : null}
+          {error ? <p className="error-text">{error}</p> : null}
+          <ul className="life-history-days">
+            {days.map((day) => (
+              <li key={day.localDate}>
+                <button
+                  className={`life-history-day${selectedDate === day.localDate ? " is-selected" : ""}`}
+                  onClick={() => setSelectedDate(day.localDate)}
+                  type="button"
+                >
+                  <div>
+                    <strong>{getDisplayDate(day.localDate, timezone)}</strong>
+                    <p className="muted-text">{day.entryCount} entries</p>
                   </div>
-                  {entry.project_slug ? (
-                    <span className="badge secondary">{getProjectLabel(entry.project_slug) || entry.project_slug}</span>
-                  ) : null}
-                  <p>{entry.content}</p>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </section>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </aside>
+
+        <section className="life-card life-history-detail">
+          <div className="life-card-head">
+            <h2>{selectedDate ? getDisplayDate(selectedDate, timezone) : 'Select a day'}</h2>
+            {selectedDate ? <span className="count-pill">{entries.length}</span> : null}
+          </div>
+
+          <div className="life-history-detail-body">
+            {entries.length === 0 ? (
+              <p className="muted-text">No entries for this day.</p>
+            ) : (
+              <ul className="life-history-list">
+                {entries.map((entry) => {
+                  const presentation = getEntryPresentation(entry)
+                  return (
+                    <li className="life-history-entry" key={entry.id}>
+                      <div className="life-history-entry-head">
+                        <span className="life-capture-time">{getLocalTimeLabel(entry.created_at, timezone)}</span>
+                        <span className="life-entry-kind" style={{ color: presentation.color }}>
+                          {presentation.kind}
+                        </span>
+                      </div>
+                      {entry.project_slug ? (
+                        <span className="life-tag">{getProjectLabel(entry.project_slug) || entry.project_slug}</span>
+                      ) : null}
+                      <p className="life-capture-text">{entry.content}</p>
+                    </li>
+                  )
+                })}
+              </ul>
+            )}
+          </div>
+        </section>
+      </div>
     </div>
   );
 }

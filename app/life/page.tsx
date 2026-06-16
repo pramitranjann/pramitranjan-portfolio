@@ -7,6 +7,7 @@ import { MarkdownCard } from '@/components/life/MarkdownCard'
 import { QuickAdd } from '@/components/life/QuickAdd'
 import { VoiceCaptureControl } from '@/components/life/VoiceCaptureControl'
 import { OWNER_ID } from '@/lib/life/constants'
+import { getEntryPresentation } from '@/lib/life/entries'
 import { isAdminSession } from '@/lib/admin-auth'
 import { getProjectLabel } from '@/lib/life/projects'
 import { getOwnerSettings } from '@/lib/life/settings'
@@ -58,7 +59,62 @@ function greetingForHour(hour: number) {
 
 // ── Side cards (streams in via Suspense) ─────────────────────────────────────
 
-async function TodayCards({
+async function CapturedTodayCard({
+  localDate,
+  timezone,
+}: {
+  localDate: string
+  timezone: string
+}) {
+  const supabase = getSupabaseAdmin()
+  const entriesResult = await supabase
+    .from('entries')
+    .select('*')
+    .eq('user_id', OWNER_ID)
+    .eq('local_date', localDate)
+    .order('created_at', { ascending: false })
+
+  const entries = (entriesResult.data || []) as EntryRecord[]
+
+  return (
+    <div className="life-card">
+      <div className="life-card-head">
+        <h2>Captured today</h2>
+        <Link href="/life/history" className="life-card-action">
+          All entries →
+        </Link>
+      </div>
+      {entries.length === 0 ? (
+        <div className="life-empty">Nothing captured yet.</div>
+      ) : (
+        <ul className="life-capture-feed">
+          {entries.map((entry) => {
+            const presentation = getEntryPresentation(entry)
+            const projectLabel = entry.project_slug
+              ? getProjectLabel(entry.project_slug) || entry.project_slug
+              : null
+            return (
+              <li className="life-capture-item" key={entry.id}>
+                <span className="life-capture-time">{getLocalTimeLabel(entry.created_at, timezone)}</span>
+                <div className="life-capture-body">
+                  <div className="life-capture-meta">
+                    <span className="life-entry-kind" style={{ color: presentation.color }}>
+                      {presentation.kind}
+                    </span>
+                    {projectLabel ? <span className="life-tag">{projectLabel}</span> : null}
+                  </div>
+                  <p className="life-capture-text">{entry.content}</p>
+                </div>
+              </li>
+            )
+          })}
+        </ul>
+      )}
+    </div>
+  )
+}
+
+async function TodaySideCards({
   localDate,
   timezone,
 }: {
@@ -68,7 +124,7 @@ async function TodayCards({
   const supabase = getSupabaseAdmin()
 
   // All data sources run in parallel — nothing sequential.
-  const [eventsResult, reportsResult, entriesResult, taskRows] = await Promise.all([
+  const [eventsResult, reportsResult, taskRows] = await Promise.all([
     supabase
       .from('calendar_events')
       .select('*')
@@ -81,17 +137,10 @@ async function TodayCards({
       .eq('user_id', OWNER_ID)
       .eq('local_date', localDate)
       .order('created_at', { ascending: false }),
-    supabase
-      .from('entries')
-      .select('*')
-      .eq('user_id', OWNER_ID)
-      .eq('local_date', localDate)
-      .order('created_at', { ascending: false }),
     getTasks({ status: 'active' }),
   ])
 
   const events = (eventsResult.data || []) as CalendarEventRecord[]
-  const entries = (entriesResult.data || []) as EntryRecord[]
   const activeTasks = taskRows as TaskRecord[]
   const morningReport =
     ((reportsResult.data || []) as ReportRecord[]).find((r) => r.type === 'morning') || null
@@ -168,38 +217,6 @@ async function TodayCards({
 
       <div className="life-card">
         <div className="life-card-head">
-          <h2>Captured today</h2>
-          <span className="count-pill">{entries.length}</span>
-        </div>
-        {entries.length === 0 ? (
-          <div className="life-empty">Nothing captured yet.</div>
-        ) : (
-          <ul className="life-rows">
-            {entries.map((entry) => {
-              const projectLabel = entry.project_slug
-                ? getProjectLabel(entry.project_slug) || entry.project_slug
-                : null
-              return (
-                <li className="life-row life-entry-row" key={entry.id}>
-                  <div className="life-row-body">
-                    <span className="life-entry-text">{entry.content}</span>
-                    <span className="life-row-meta">
-                      <span className={`entry-source entry-source-${entry.source}`}>
-                        {entry.source === 'voice' ? '🎤 Voice' : '✎ Text'}
-                      </span>
-                      {projectLabel ? <span>· {projectLabel}</span> : null}
-                    </span>
-                  </div>
-                  <span className="life-row-aside">{getLocalTimeLabel(entry.created_at, timezone)}</span>
-                </li>
-              )
-            })}
-          </ul>
-        )}
-      </div>
-
-      <div className="life-card">
-        <div className="life-card-head">
           <h2>Schedule</h2>
           <span className="count-pill">{events.length}</span>
         </div>
@@ -229,7 +246,7 @@ async function TodayCards({
 function CardsSkeleton() {
   return (
     <>
-      {[1, 2, 3, 4].map((i) => (
+      {[1, 2, 3].map((i) => (
         <div key={i} className="life-card life-card-skeleton">
           <div className="life-card-head">
             <div className="skeleton-line skeleton-title" />
@@ -240,6 +257,19 @@ function CardsSkeleton() {
         </div>
       ))}
     </>
+  )
+}
+
+function CapturedCardSkeleton() {
+  return (
+    <div className="life-card life-card-skeleton">
+      <div className="life-card-head">
+        <div className="skeleton-line skeleton-title" />
+      </div>
+      <div className="skeleton-line" />
+      <div className="skeleton-line" />
+      <div className="skeleton-line skeleton-short" />
+    </div>
   )
 }
 
@@ -292,6 +322,10 @@ export default async function LifeTodayPage({
           Today · <b>{eyebrowDate}</b>
         </p>
         <h1 className="life-greeting">{greetingForHour(hour)}, Pramit.</h1>
+        <p className="life-greeting-sub">
+          What&apos;s on your mind? Speak it or type it. I&apos;ll sort the tasks, notes, and
+          events out for you.
+        </p>
 
         <form action="/api/life/entries" method="post">
           <input id={sourceInputId} name="source" type="hidden" defaultValue="text" />
@@ -327,12 +361,18 @@ export default async function LifeTodayPage({
         {formError ? <p className="error-text">{formError}</p> : null}
 
         <QuickAdd redirectTo="/life" localDate={localDate} textareaId={textareaId} />
+
+        <section className="life-capture-stream">
+          <Suspense fallback={<CapturedCardSkeleton />}>
+            <CapturedTodayCard localDate={localDate} timezone={timezone} />
+          </Suspense>
+        </section>
       </section>
 
       {/* Right column: streams in while the left column is already interactive */}
       <aside className="life-side">
         <Suspense fallback={<CardsSkeleton />}>
-          <TodayCards localDate={localDate} timezone={timezone} />
+          <TodaySideCards localDate={localDate} timezone={timezone} />
         </Suspense>
       </aside>
     </div>

@@ -15,7 +15,7 @@ interface NavLeaf {
 // as a secondary sub-tab strip beneath the primary nav.
 const LIFE_NAV_GROUPS: Array<{ label: string; leaves: NavLeaf[] }> = [
   {
-    label: 'Today',
+    label: 'Workspace',
     leaves: [
       { href: '/life', label: 'Today' },
       { href: '/life/tasks', label: 'Tasks' },
@@ -84,23 +84,26 @@ export function LifeHeader() {
       {/* Secondary row: the active group's view sub-tabs (e.g. Week / Month)
           sit on the left, with search pushed to the right end of the same line. */}
       <div className="life-header-sub">
-        {activeGroup.leaves.length > 1 ? (
-          <nav className="life-subnav" aria-label={`${activeGroup.label} views`}>
-            {activeGroup.leaves.map((leaf) => (
-              <Link
-                key={leaf.href}
-                href={leaf.href}
-                className={`life-subnav-link${isLeafActive(leaf.href, pathname) ? ' active' : ''}${
-                  leaf.phoneHidden ? ' phone-hidden' : ''
-                }`}
-              >
-                {leaf.label}
-              </Link>
-            ))}
-          </nav>
-        ) : (
-          <span />
-        )}
+        <div className="life-header-section">
+          <span className="life-section-label">{activeGroup.label}</span>
+          {activeGroup.leaves.length > 1 ? (
+            <nav className="life-subnav" aria-label={`${activeGroup.label} views`}>
+              {activeGroup.leaves.map((leaf) => (
+                <Link
+                  key={leaf.href}
+                  href={leaf.href}
+                  className={`life-subnav-link${isLeafActive(leaf.href, pathname) ? ' active' : ''}${
+                    leaf.phoneHidden ? ' phone-hidden' : ''
+                  }`}
+                >
+                  {leaf.label}
+                </Link>
+              ))}
+            </nav>
+          ) : (
+            <span />
+          )}
+        </div>
         <form className="life-search" role="search" onSubmit={onSearch}>
           <span className="life-search-icon" aria-hidden>
             ⌕
@@ -108,7 +111,7 @@ export function LifeHeader() {
           <input
             type="search"
             className="life-search-input"
-            placeholder="Search…"
+            placeholder="Search tasks, entries, reports…"
             aria-label="Search life"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
