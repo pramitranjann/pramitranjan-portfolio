@@ -3,8 +3,27 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { fetchJson } from '@/lib/life/client'
-import { addDays, getLocalTimeLabel, getWeekStart, localDateTimeToUtc } from '@/lib/life/time'
+import { addDays, getLocalTimeLabel, getTimeParts, getWeekStart, localDateTimeToUtc } from '@/lib/life/time'
 import type { CalendarEventRecord, TaskRecord } from '@/lib/life/types'
+
+const DAY_START_HOUR = 7
+const DAY_END_HOUR = 22
+const DAY_TOTAL_MINUTES = (DAY_END_HOUR - DAY_START_HOUR) * 60
+
+function getMinutesFromMidnight(utcString: string, tz: string): number {
+  const parts = getTimeParts(new Date(utcString), tz)
+  return parts.hour * 60 + parts.minute
+}
+
+function eventTopPct(startMin: number): number {
+  return Math.max(0, ((startMin - DAY_START_HOUR * 60) / DAY_TOTAL_MINUTES) * 100)
+}
+
+function eventHeightPct(startMin: number, endMin: number): number {
+  const clampedStart = Math.max(startMin, DAY_START_HOUR * 60)
+  const clampedEnd = Math.min(endMin, DAY_END_HOUR * 60)
+  return Math.max(2, ((clampedEnd - clampedStart) / DAY_TOTAL_MINUTES) * 100)
+}
 
 interface WeekResponse {
   start: string
@@ -65,6 +84,8 @@ export function WeekClient({
   const [data, setData] = useState<WeekResponse | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [expandedDate, setExpandedDate] = useState<string | null>(null)
+  const [nowMinutes, setNowMinutes] = useState<number | null>(null)
   const todayRef = useRef<HTMLDivElement | null>(null)
   // Auto-scroll-to-today must happen at most ONCE, on first load of the current
   // week. Re-running it on every `data` refresh yanked the scroll position out
@@ -112,7 +133,19 @@ export function WeekClient({
   // so navigating away and back to the current week scrolls to today again.
   useEffect(() => {
     didInitialScrollRef.current = false
+    setExpandedDate(null)
   }, [weekStart])
+
+  // Live clock for current-time indicator (updates every minute).
+  useEffect(() => {
+    function tick() {
+      const now = new Date()
+      setNowMinutes(now.getHours() * 60 + now.getMinutes())
+    }
+    tick()
+    const id = setInterval(tick, 60_000)
+    return () => clearInterval(id)
+  }, [])
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -192,46 +225,146 @@ export function WeekClient({
         {dayList.map((date, index) => {
           const isToday = date === today
           const isPast = date < today
+          const isExpanded = expandedDate === date
           const dayNum = date.slice(8).replace(/^0/, '')
           const cellEvents = eventsByDate.get(date) || []
           const cellTasks = tasksByDueDate.get(date) || []
           const isEmpty = cellEvents.length === 0 && cellTasks.length === 0
+          const timedEvents = cellEvents.filter((e) => !e.all_day && e.start_time)
+          const allDayEvents = cellEvents.filter((e) => e.all_day)
+
+          const nowTop =
+            isToday && nowMinutes !== null
+              ? eventTopPct(nowMinutes)
+              : null
 
           return (
             <div
               key={date}
               ref={isToday ? todayRef : undefined}
-              className={`life-day-cell${isToday ? ' life-day-today' : ''}${isPast ? ' life-day-past' : ''}`}
+              className={[
+                'life-day-cell',
+                isToday ? 'life-day-today' : '',
+                isPast ? 'life-day-past' : '',
+                isExpanded ? 'life-day-expanded' : '',
+              ]
+                .filter(Boolean)
+                .join(' ')}
             >
-              <div className="life-day-head">
+              <button
+                type="button"
+                className="life-day-head life-day-head-btn"
+                onClick={() => setExpandedDate(isExpanded ? null : date)}
+                aria-expanded={isExpanded}
+                aria-label={`${WEEKDAY_NAMES[index % 7]} ${dayNum} — ${isExpanded ? 'collapse' : 'expand'}`}
+              >
                 <span className="life-day-weekday">{WEEKDAY_NAMES[index % 7]}</span>
                 <span className="life-day-date">{dayNum}</span>
-              </div>
-              <div className="life-day-events">
-                {cellEvents.map((event) => (
-                  <div className="life-day-event" key={event.id}>
-                    <span className="life-day-event-time">
-                      {event.all_day
-                        ? 'All day'
-                        : event.start_time
-                          ? getLocalTimeLabel(event.start_time, tz)
-                          : ''}
-                    </span>
-                    <span className="life-day-event-title">{event.title || '(Untitled)'}</span>
+                {!isExpanded && cellEvents.length > 0 && (
+                  <span className="life-day-dot-row">
+                    {cellEvents.slice(0, 3).map((e) => (
+                      <span key={e.id} className="life-day-dot" />
+                    ))}
+                  </span>
+                )}
+              </button>
+
+              {isExpanded ? (
+                <div className="life-day-timeline">
+                  {allDayEvents.length > 0 && (
+                    <div className="life-day-allday-strip">
+                      {allDayEvents.map((e) => (
+                        <span key={e.id} className="life-day-allday-badge">
+                          {e.title || '(Untitled)'}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <div className="life-day-timeline-body">
+                    {Array.from({ length: DAY_END_HOUR - DAY_START_HOUR }, (_, i) => {
+                      const h = DAY_START_HOUR + i
+                      const label = h === 12 ? '12 PM' : h < 12 ? `${h} AM` : `${h - 12} PM`
+                      return (
+                        <div key={h} className="life-tl-row">
+                          <span className="life-tl-label">{label}</span>
+                          <span className="life-tl-line" />
+                        </div>
+                      )
+                    })}
+
+                    {timedEvents.map((event) => {
+                      const startMin = getMinutesFromMidnight(event.start_time!, tz)
+                      const endMin = event.end_time
+                        ? getMinutesFromMidnight(event.end_time, tz)
+                        : startMin + 60
+                      const top = eventTopPct(startMin)
+                      const height = eventHeightPct(startMin, endMin)
+                      return (
+                        <div
+                          key={event.id}
+                          className="life-tl-event"
+                          style={{ top: `${top}%`, height: `${height}%` }}
+                        >
+                          <span className="life-tl-event-time">
+                            {getLocalTimeLabel(event.start_time!, tz)}
+                          </span>
+                          <span className="life-tl-event-title">{event.title || '(Untitled)'}</span>
+                        </div>
+                      )
+                    })}
+
+                    {nowTop !== null && (
+                      <div className="life-tl-now" style={{ top: `${nowTop}%` }}>
+                        <span className="life-tl-now-dot" />
+                        <span className="life-tl-now-line" />
+                      </div>
+                    )}
                   </div>
-                ))}
-                {isEmpty ? <span className="life-day-empty">—</span> : null}
-              </div>
-              {cellTasks.length ? (
-                <div className="life-day-tasks">
-                  {cellTasks.map((task) => (
-                    <span className="life-day-task" key={task.id}>
-                      <span className={`pri-dot pri-${task.priority}`} />
-                      {task.title}
-                    </span>
-                  ))}
+
+                  {cellTasks.length > 0 && (
+                    <div className="life-day-tasks life-day-tasks-expanded">
+                      {cellTasks.map((task) => (
+                        <span className="life-day-task" key={task.id}>
+                          <span className={`pri-dot pri-${task.priority}`} />
+                          {task.title}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  {isEmpty && (
+                    <span className="life-day-empty life-day-empty-tl">Nothing scheduled</span>
+                  )}
                 </div>
-              ) : null}
+              ) : (
+                <>
+                  <div className="life-day-events">
+                    {cellEvents.map((event) => (
+                      <div className="life-day-event" key={event.id}>
+                        <span className="life-day-event-time">
+                          {event.all_day
+                            ? 'All day'
+                            : event.start_time
+                              ? getLocalTimeLabel(event.start_time, tz)
+                              : ''}
+                        </span>
+                        <span className="life-day-event-title">{event.title || '(Untitled)'}</span>
+                      </div>
+                    ))}
+                    {isEmpty ? <span className="life-day-empty">—</span> : null}
+                  </div>
+                  {cellTasks.length ? (
+                    <div className="life-day-tasks">
+                      {cellTasks.map((task) => (
+                        <span className="life-day-task" key={task.id}>
+                          <span className={`pri-dot pri-${task.priority}`} />
+                          {task.title}
+                        </span>
+                      ))}
+                    </div>
+                  ) : null}
+                </>
+              )}
             </div>
           )
         })}
