@@ -79,6 +79,28 @@ export function LifeHeader() {
             </Link>
           ))}
         </nav>
+      </div>
+
+      {/* Secondary row: the active group's view sub-tabs (e.g. Week / Month)
+          sit on the left, with search pushed to the right end of the same line. */}
+      <div className="life-header-sub">
+        {activeGroup.leaves.length > 1 ? (
+          <nav className="life-subnav" aria-label={`${activeGroup.label} views`}>
+            {activeGroup.leaves.map((leaf) => (
+              <Link
+                key={leaf.href}
+                href={leaf.href}
+                className={`life-subnav-link${isLeafActive(leaf.href, pathname) ? ' active' : ''}${
+                  leaf.phoneHidden ? ' phone-hidden' : ''
+                }`}
+              >
+                {leaf.label}
+              </Link>
+            ))}
+          </nav>
+        ) : (
+          <span />
+        )}
         <form className="life-search" role="search" onSubmit={onSearch}>
           <span className="life-search-icon" aria-hidden>
             ⌕
@@ -93,22 +115,6 @@ export function LifeHeader() {
           />
         </form>
       </div>
-
-      {activeGroup.leaves.length > 1 ? (
-        <nav className="life-subnav" aria-label={`${activeGroup.label} views`}>
-          {activeGroup.leaves.map((leaf) => (
-            <Link
-              key={leaf.href}
-              href={leaf.href}
-              className={`life-subnav-link${isLeafActive(leaf.href, pathname) ? ' active' : ''}${
-                leaf.phoneHidden ? ' phone-hidden' : ''
-              }`}
-            >
-              {leaf.label}
-            </Link>
-          ))}
-        </nav>
-      ) : null}
     </header>
   )
 }

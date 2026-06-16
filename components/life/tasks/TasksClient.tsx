@@ -385,11 +385,28 @@ export function TasksClient({
                     const projectLabel = task.project_slug
                       ? getProjectLabel(task.project_slug) || task.project_slug
                       : null
+
+                    // Clicking a card opens the same inline editor as the list
+                    // view; the card is replaced in place so the board stays put.
+                    if (editId === task.id) {
+                      return (
+                        <div className="life-kanban-card life-kanban-card-editing" key={task.id}>
+                          <EditForm
+                            task={task}
+                            onSave={(fields) => saveEdit(task.id, fields)}
+                            onCancel={() => setEditId(null)}
+                            onDelete={() => deleteTask(task.id)}
+                          />
+                        </div>
+                      )
+                    }
+
                     return (
                       <div
                         className={`life-kanban-card${dragId === task.id ? ' is-dragging' : ''}`}
                         key={task.id}
                         draggable
+                        onClick={() => { setEditId(task.id); setAddOpen(false) }}
                         onDragStart={(e) => { e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', task.id); setDragId(task.id) }}
                         onDragEnd={() => { setDragId(null); setDragOverCol(null) }}
                       >
@@ -404,7 +421,7 @@ export function TasksClient({
                           <button
                             type="button"
                             className="life-kanban-delete"
-                            onClick={() => deleteTask(task.id)}
+                            onClick={(e) => { e.stopPropagation(); deleteTask(task.id) }}
                             aria-label="Delete task"
                           >
                             ×

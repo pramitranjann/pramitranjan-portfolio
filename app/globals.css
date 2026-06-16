@@ -845,7 +845,7 @@ body.carousel-reengaging main {
 .life-shell button, .life-shell input, .life-shell textarea, .life-shell select { font: inherit; }
 .life-shell ul { list-style: none; margin: 0; padding: 0; }
 
-.life-app-shell { width: 100%; max-width: 1520px; margin: 0 auto; padding: 28px 48px 64px; }
+.life-app-shell { width: 100%; max-width: 1680px; margin: 0 auto; padding: 28px 48px 64px; }
 
 /* ── Header ─────────────────────────────────────────────────────────────── */
 .life-header { display: flex; flex-direction: column; gap: 14px; padding-bottom: 14px; margin-bottom: 28px; border-bottom: 1px solid var(--life-hairline); }
@@ -865,7 +865,8 @@ body.carousel-reengaging main {
 .life-shell .life-search-input::placeholder { color: var(--life-label); }
 
 /* Secondary sub-nav (per active group) */
-.life-subnav { display: flex; align-items: center; gap: 2px; }
+.life-header-sub { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.life-subnav { display: flex; align-items: center; gap: 2px; min-width: 0; }
 .life-shell .life-subnav-link { font-family: var(--font-mono); font-size: 13px; color: var(--life-label); padding: 6px 12px; border: 1px solid transparent; transition: color 0.15s ease, border-color 0.15s ease; }
 .life-shell .life-subnav-link:hover { color: var(--life-text); }
 .life-shell .life-subnav-link.active { color: var(--life-accent); border-color: var(--life-accent-line); background: var(--life-accent-soft); }
@@ -1010,6 +1011,9 @@ body.carousel-reengaging main {
 .life-shell .life-kanban-card:active { cursor: grabbing; }
 .life-shell .life-kanban-card.is-dragging { opacity: 0.4; }
 .life-shell .life-kanban-col.is-dragover { background: var(--life-accent-soft); box-shadow: inset 0 0 0 1px var(--life-accent-line); }
+.life-shell .life-kanban-card-editing { padding: 0; cursor: default; border-color: var(--life-muted); }
+.life-shell .life-kanban-card-editing:hover { border-color: var(--life-muted); }
+.life-shell .life-kanban-card-editing .life-task-edit { padding: 12px; border-top: 0; }
 .life-shell .life-kanban-card-title { font-size: 14px; line-height: 1.35; margin-bottom: 10px; }
 .life-shell .life-kanban-card-meta { display: flex; align-items: center; gap: 8px; }
 .life-shell .life-kanban-empty { padding: 12px; color: var(--life-label); font-size: 13px; }
@@ -1154,6 +1158,21 @@ body.carousel-reengaging main {
 @media (max-width: 560px) {
   .life-header { flex-direction: column; align-items: flex-start; }
   .life-nav { width: 100%; overflow-x: auto; }
+}
+
+/* Wide monitors — let the app fill the screen instead of sitting in a centred
+   column. The shell grows fluidly (keeping a comfortable side margin), and the
+   Today page rebalances: the side rail becomes a proportional second column
+   whose cards lay out two-up, while the prose-heavy morning brief stays full
+   width for readability. */
+@media (min-width: 1600px) {
+  .life-app-shell { max-width: min(2100px, 94vw); padding: 32px 64px 72px; }
+  .life-shell .life-today { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 32px; }
+  .life-shell .life-side { grid-template-columns: 1fr 1fr; gap: 18px; align-content: start; }
+  .life-shell .life-side > .life-card:first-child { grid-column: 1 / -1; }
+}
+@media (min-width: 2100px) {
+  .life-shell .life-side { grid-template-columns: repeat(3, 1fr); }
 }
 
 /* ── Functional extras — wiring prototype markup to real app behaviour ───── */
@@ -1432,16 +1451,20 @@ body.carousel-reengaging main {
   .life-shell .life-nav .nav-link.phone-hidden,
   .life-shell .life-subnav-link.phone-hidden { display: none; }
 
-  /* Header top row: brand left, nav center, search icon right — all on one line. */
+  /* Header top row: brand left, primary nav right — on one line. */
   .life-shell .life-header-top { width: 100%; gap: 8px; }
   /* Collapse search to icon-only on phone; tap to expand */
   .life-shell .life-search { width: 36px; padding: 0 10px; overflow: hidden; border-color: transparent; background: transparent; }
   .life-shell .life-search:focus-within { width: 100%; border-color: var(--life-muted); background: var(--life-muted-bg); }
   .life-shell .life-search-input { height: 36px; font-size: 16px; opacity: 0; transition: opacity 0.15s; }
   .life-shell .life-search:focus-within .life-search-input { opacity: 1; }
+  /* Search now lives on the sub row beside the view tabs; keep them on one
+     line with the tabs taking the slack and the search icon pinned right. */
+  .life-shell .life-header-sub { width: 100%; gap: 8px; }
   /* Sub-nav scrolls horizontally like the primary nav. */
   .life-shell .life-subnav {
-    width: 100%;
+    flex: 1;
+    min-width: 0;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
