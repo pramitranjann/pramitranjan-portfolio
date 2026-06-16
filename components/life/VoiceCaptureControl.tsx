@@ -111,6 +111,22 @@ export function VoiceCaptureControl({
     }
   }
 
+  // Calls both stop() and abort(): some iOS Safari builds honor only one, and
+  // a session that isn't fully torn down keeps the mic (and the iOS orange
+  // privacy indicator) alive.
+  function hardStopRecognition(r: SpeechRecognitionLike) {
+    try {
+      r.stop()
+    } catch {
+      /* ignore */
+    }
+    try {
+      if (typeof r.abort === 'function') r.abort()
+    } catch {
+      /* ignore */
+    }
+  }
+
   function forceStopRecognition() {
     const r = recognitionRef.current
     if (!r) return
@@ -120,24 +136,19 @@ export function VoiceCaptureControl({
       window.clearTimeout(forceCleanupTimerRef.current)
     }
 
+    // Fallback: if neither onend nor onerror fires (a known iOS Safari bug),
+    // hard-stop the SAME object again before discarding it. Nulling the ref
+    // without re-stopping would orphan a still-live native session, which is
+    // what leaves the orange mic indicator stuck on / flickering back.
     forceCleanupTimerRef.current = window.setTimeout(() => {
       forceCleanupTimerRef.current = null
+      hardStopRecognition(r)
       setListening(false)
       destroyRecognition(r)
       stoppingRef.current = false
-    }, 1200)
+    }, 1000)
 
-    try {
-      if (typeof r.abort === 'function') {
-        r.abort()
-      } else {
-        r.stop()
-      }
-    } catch {
-      setListening(false)
-      destroyRecognition(r)
-      stoppingRef.current = false
-    }
+    hardStopRecognition(r)
   }
 
   useEffect(() => {
@@ -182,13 +193,25 @@ export function VoiceCaptureControl({
       return
     }
 
+    // If a previous session is somehow still alive, kill it before starting a
+    // new one — prevents two overlapping native mic sessions (orphan → stuck
+    // orange indicator).
+    if (recognitionRef.current) {
+      hardStopRecognition(recognitionRef.current)
+      destroyRecognition(recognitionRef.current)
+    }
+
     const existing = document.getElementById(textareaId) as HTMLTextAreaElement | null
     finalRef.current = existing?.value.trim() || ''
     interimRef.current = ''
     stoppingRef.current = false
 
     const recognition = new Ctor()
-    recognition.continuous = false
+    // continuous = true keeps ONE session open for the whole hold. With
+    // continuous = false, iOS Safari ends the session on the first pause and
+    // then silently auto-restarts it — that restart is why the mic indicator
+    // came back even though our UI showed idle. We stop explicitly on release.
+    recognition.continuous = true
     recognition.interimResults = true
     recognition.lang = 'en-US'
     recognition.onresult = (event) => {

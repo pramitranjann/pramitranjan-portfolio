@@ -959,6 +959,13 @@ body.carousel-reengaging main {
 .life-shell .life-row-meta { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--life-label); }
 .life-shell .life-row-meta .dot-sep { width: 2px; height: 2px; border-radius: 50%; background: var(--life-label); }
 .life-shell .life-row-aside { font-family: var(--font-mono); font-size: 11px; color: var(--life-label); white-space: nowrap; }
+
+/* Captured-today entries: full multi-line content, top-aligned with timestamp */
+.life-shell .life-entry-row { align-items: start; }
+.life-shell .life-entry-text { font-size: 14px; line-height: 1.45; white-space: pre-wrap; overflow-wrap: anywhere; }
+.life-shell .entry-source { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; }
+.life-shell .entry-source-voice { color: var(--life-accent); }
+.life-shell .life-entry-row .life-row-aside { padding-top: 2px; }
 .life-shell .life-empty { padding: 16px; color: var(--life-label); font-size: 13px; }
 .life-shell .life-card-foot { padding: 11px 16px; border-top: 1px solid var(--life-hairline); }
 .life-shell .life-card-foot a, .life-shell .life-card-foot button { color: var(--life-muted); font-size: 13px; background: none; border: 0; cursor: pointer; padding: 0; transition: color 0.15s; }

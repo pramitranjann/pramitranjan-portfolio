@@ -1,4 +1,5 @@
 import { Suspense } from 'react'
+import { after } from 'next/server'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
@@ -10,16 +11,19 @@ import { isAdminSession } from '@/lib/admin-auth'
 import { getHabitsForDate } from '@/lib/life/habits'
 import { getProjectLabel } from '@/lib/life/projects'
 import { getOwnerSettings } from '@/lib/life/settings'
+import { generateMorningBrief } from '@/lib/life/synthesis'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
 import { getTasks } from '@/lib/life/tasks'
 import {
   getCurrentLocalClock,
   getCurrentLocalDate,
   getLocalTimeLabel,
+  isMorningBriefWindow,
   localDateTimeToUtc,
 } from '@/lib/life/time'
 import type {
   CalendarEventRecord,
+  EntryRecord,
   HabitWithStatus,
   ReportRecord,
   TaskRecord,
@@ -65,8 +69,8 @@ async function TodayCards({
 }) {
   const supabase = getSupabaseAdmin()
 
-  // All four data sources run in parallel — nothing sequential.
-  const [eventsResult, reportsResult, taskRows, habits] = await Promise.all([
+  // All data sources run in parallel — nothing sequential.
+  const [eventsResult, reportsResult, entriesResult, taskRows, habits] = await Promise.all([
     supabase
       .from('calendar_events')
       .select('*')
@@ -79,11 +83,18 @@ async function TodayCards({
       .eq('user_id', OWNER_ID)
       .eq('local_date', localDate)
       .order('created_at', { ascending: false }),
+    supabase
+      .from('entries')
+      .select('*')
+      .eq('user_id', OWNER_ID)
+      .eq('local_date', localDate)
+      .order('created_at', { ascending: false }),
     getTasks({ status: 'active' }),
     getHabitsForDate(localDate).catch(() => [] as HabitWithStatus[]),
   ])
 
   const events = (eventsResult.data || []) as CalendarEventRecord[]
+  const entries = (entriesResult.data || []) as EntryRecord[]
   const activeTasks = taskRows as TaskRecord[]
   const morningReport =
     ((reportsResult.data || []) as ReportRecord[]).find((r) => r.type === 'morning') || null
@@ -157,6 +168,38 @@ async function TodayCards({
         <div className="life-card-foot">
           <Link href="/life/tasks">View all tasks →</Link>
         </div>
+      </div>
+
+      <div className="life-card">
+        <div className="life-card-head">
+          <h2>Captured today</h2>
+          <span className="count-pill">{entries.length}</span>
+        </div>
+        {entries.length === 0 ? (
+          <div className="life-empty">Nothing captured yet.</div>
+        ) : (
+          <ul className="life-rows">
+            {entries.map((entry) => {
+              const projectLabel = entry.project_slug
+                ? getProjectLabel(entry.project_slug) || entry.project_slug
+                : null
+              return (
+                <li className="life-row life-entry-row" key={entry.id}>
+                  <div className="life-row-body">
+                    <span className="life-entry-text">{entry.content}</span>
+                    <span className="life-row-meta">
+                      <span className={`entry-source entry-source-${entry.source}`}>
+                        {entry.source === 'voice' ? '🎤 Voice' : '✎ Text'}
+                      </span>
+                      {projectLabel ? <span>· {projectLabel}</span> : null}
+                    </span>
+                  </div>
+                  <span className="life-row-aside">{getLocalTimeLabel(entry.created_at, timezone)}</span>
+                </li>
+              )
+            })}
+          </ul>
+        )}
       </div>
 
       <div className="life-card">
@@ -257,6 +300,23 @@ export default async function LifeTodayPage({
   const localDate = getCurrentLocalDate(timezone)
   const hour = getCurrentLocalClock(timezone).hour
   const eyebrowDate = shortDate(localDate, timezone)
+
+  // The morning brief has no cron of its own (Vercel Hobby allows one cron,
+  // already used by the nightly EOD job). Instead, when the app is opened
+  // during the morning window we generate it in the background AFTER the
+  // response is sent — `after()` is backed by Vercel's waitUntil, so it never
+  // delays the page render. generateMorningBrief self-gates (it bails if a
+  // brief already exists or the task threshold isn't met), so loading Today
+  // repeatedly in the morning is a cheap no-op once the brief has run.
+  if (isMorningBriefWindow(timezone)) {
+    after(async () => {
+      try {
+        await generateMorningBrief({ localDate })
+      } catch (error) {
+        console.error('Background morning brief generation failed', error)
+      }
+    })
+  }
 
   const textareaId = 'life-entry-textarea'
   const sourceInputId = 'life-entry-source'
