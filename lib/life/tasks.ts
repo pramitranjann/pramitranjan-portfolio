@@ -169,6 +169,33 @@ export async function createManualTask(input: {
   return data as TaskRecord
 }
 
+export async function updateTask(taskId: string, fields: {
+  title?: string
+  details?: string | null
+  projectSlug?: string | null
+  priority?: string | null
+  dueLocalDate?: string | null
+}) {
+  const supabase = getSupabaseAdmin()
+  const update: Record<string, unknown> = { updated_at: new Date().toISOString() }
+  if (fields.title !== undefined) update.title = fields.title
+  if ('details' in fields) update.details = fields.details ?? null
+  if ('projectSlug' in fields) update.project_slug = fields.projectSlug ?? null
+  if (fields.priority !== undefined) update.priority = fields.priority
+  if ('dueLocalDate' in fields) update.due_local_date = fields.dueLocalDate ?? null
+
+  const { data, error } = await supabase
+    .from('tasks')
+    .update(update)
+    .eq('user_id', OWNER_ID)
+    .eq('id', taskId)
+    .select('*')
+    .single()
+
+  if (error) throw error
+  return data as TaskRecord
+}
+
 export async function updateTaskStatus(taskId: string, status: TaskStatus) {
   const supabase = getSupabaseAdmin()
   const completedAt = status === 'done' || status === 'dismissed' ? new Date().toISOString() : null

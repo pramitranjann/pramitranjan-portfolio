@@ -5,8 +5,7 @@ import { useDeferredValue, useEffect, useState } from "react";
 import { fetchJson } from '@/lib/life/client'
 import { getProjectLabel } from '@/lib/life/projects'
 import { getDisplayDate, getLocalTimeLabel } from '@/lib/life/time'
-import type { CalendarEventRecord, DayHistory, EntryRecord, ReportRecord } from '@/lib/life/types'
-import { MarkdownCard } from '@/components/life/MarkdownCard'
+import type { DayHistory, EntryRecord } from '@/lib/life/types'
 
 interface HistoryPayload {
   timezone: string;
@@ -14,8 +13,8 @@ interface HistoryPayload {
   days: DayHistory[];
   detail: {
     entries: EntryRecord[];
-    reports: ReportRecord[];
-    events: CalendarEventRecord[];
+    reports: unknown[];
+    events: unknown[];
   };
 }
 
@@ -26,8 +25,6 @@ export function HistoryClient() {
   const [timezone, setTimezone] = useState("UTC");
   const [days, setDays] = useState<DayHistory[]>([]);
   const [entries, setEntries] = useState<EntryRecord[]>([]);
-  const [reports, setReports] = useState<ReportRecord[]>([]);
-  const [events, setEvents] = useState<CalendarEventRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -38,23 +35,15 @@ export function HistoryClient() {
       setLoading(true);
       try {
         const params = new URLSearchParams();
-        if (deferredQuery.trim()) {
-          params.set("q", deferredQuery.trim());
-        }
-        if (selectedDate) {
-          params.set("date", selectedDate);
-        }
+        if (deferredQuery.trim()) params.set("q", deferredQuery.trim());
+        if (selectedDate) params.set("date", selectedDate);
 
         const payload = await fetchJson<HistoryPayload>(`/api/life/history?${params.toString()}`);
-        if (cancelled) {
-          return;
-        }
+        if (cancelled) return;
 
         setTimezone(payload.timezone);
         setDays(payload.days);
         setEntries(payload.detail.entries);
-        setReports(payload.detail.reports);
-        setEvents(payload.detail.events);
 
         if (!selectedDate && payload.days[0]) {
           setSelectedDate(payload.days[0].localDate);
@@ -62,56 +51,46 @@ export function HistoryClient() {
           setSelectedDate(payload.selectedDate);
         }
       } catch (loadError) {
-        if (!cancelled) {
-          setError(loadError instanceof Error ? loadError.message : "Failed to load history.");
-        }
+        if (!cancelled) setError(loadError instanceof Error ? loadError.message : "Failed to load entries.");
       } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
+        if (!cancelled) setLoading(false);
       }
     }
 
     load();
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [deferredQuery, selectedDate]);
 
   return (
     <div className="history-grid">
       <section className="panel-card">
         <div className="section-head">
-          <h1>History</h1>
+          <h1>Entries</h1>
         </div>
         <label className="field compact-field">
-          <span>Search entries</span>
+          <span>Search</span>
           <input
             className="text-input"
             type="search"
             value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search fragments..."
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search entries…"
           />
         </label>
 
-        {loading ? <p className="muted-text">Loading history...</p> : null}
+        {loading ? <p className="muted-text">Loading…</p> : null}
         {error ? <p className="error-text">{error}</p> : null}
         <ul className="history-list">
           {days.map((day) => (
             <li key={day.localDate}>
               <button
-                className={`history-row ${selectedDate === day.localDate ? "is-selected" : ""}`}
+                className={`history-row${selectedDate === day.localDate ? " is-selected" : ""}`}
                 onClick={() => setSelectedDate(day.localDate)}
                 type="button"
               >
                 <div>
                   <strong>{getDisplayDate(day.localDate, timezone)}</strong>
                   <p className="muted-text">{day.entryCount} entries</p>
-                </div>
-                <div className="badge-row">
-                  {day.hasEod ? <span className="badge">EOD</span> : null}
-                  {day.hasMorning ? <span className="badge secondary">AM</span> : null}
                 </div>
               </button>
             </li>
@@ -127,52 +106,26 @@ export function HistoryClient() {
         ) : null}
 
         <div className="detail-stack">
-          <div>
-            <h3>Calendar</h3>
-            {events.length === 0 ? <p className="muted-text">No synced events.</p> : null}
-            <ul className="timeline-list">
-              {events.map((event) => (
-                <li className="timeline-item" key={event.id}>
-                  <strong>{event.title || "(Untitled event)"}</strong>
-                  <p className="muted-text">
-                    {event.all_day
-                      ? "All day"
-                      : `${event.start_time ? getLocalTimeLabel(event.start_time, timezone) : "Unknown"} to ${event.end_time ? getLocalTimeLabel(event.end_time, timezone) : "Unknown"}`}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h3>Entries</h3>
-            {entries.length === 0 ? <p className="muted-text">No entries.</p> : null}
+          {entries.length === 0 ? (
+            <p className="muted-text">No entries for this day.</p>
+          ) : (
             <ul className="timeline-list">
               {entries.map((entry) => (
                 <li className="timeline-item" key={entry.id}>
                   <div className="timeline-meta">
                     <span>{getLocalTimeLabel(entry.created_at, timezone)}</span>
-                    <span>{entry.source}</span>
+                    <span style={{ color: entry.source === 'voice' ? 'var(--life-accent)' : 'var(--life-label)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                      {entry.source === 'voice' ? 'Voice' : 'Text'}
+                    </span>
                   </div>
-                  {entry.project_slug ? <span className="badge secondary">{getProjectLabel(entry.project_slug) || entry.project_slug}</span> : null}
+                  {entry.project_slug ? (
+                    <span className="badge secondary">{getProjectLabel(entry.project_slug) || entry.project_slug}</span>
+                  ) : null}
                   <p>{entry.content}</p>
                 </li>
               ))}
             </ul>
-          </div>
-
-          <div>
-            <h3>Reports</h3>
-            {reports.length === 0 ? <p className="muted-text">No reports.</p> : null}
-            <div className="report-stack">
-              {reports.map((report) => (
-                <article className="subtle-card" key={report.id}>
-                  <p className="eyebrow">{report.type === "eod" ? "End of day" : "Morning brief"}</p>
-                  <MarkdownCard content={report.content} />
-                </article>
-              ))}
-            </div>
-          </div>
+          )}
         </div>
       </section>
     </div>

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { isAuthenticatedLifeRequest, unauthorizedJson } from '@/lib/life/auth'
-import { updateTaskStatus } from '@/lib/life/tasks'
+import { updateTask, updateTaskStatus } from '@/lib/life/tasks'
 import type { TaskStatus } from '@/lib/life/types'
 
 function getSafeRedirectTo(value: string | null | undefined) {
@@ -56,6 +56,39 @@ export async function POST(
       return NextResponse.redirect(url, { status: 303 })
     }
 
+    return NextResponse.json({ error: error instanceof Error ? error.message : 'Task update failed.' }, { status: 500 })
+  }
+}
+
+export async function PATCH(
+  request: NextRequest,
+  context: { params: Promise<unknown> },
+) {
+  if (!isAuthenticatedLifeRequest(request)) {
+    return unauthorizedJson()
+  }
+
+  const { taskId } = (await context.params) as { taskId: string }
+
+  try {
+    const body = (await request.json().catch(() => null)) as {
+      title?: string
+      details?: string | null
+      projectSlug?: string | null
+      priority?: string | null
+      dueLocalDate?: string | null
+    } | null
+
+    const task = await updateTask(taskId, {
+      title: body?.title,
+      details: body?.details,
+      projectSlug: body?.projectSlug,
+      priority: body?.priority,
+      dueLocalDate: body?.dueLocalDate,
+    })
+
+    return NextResponse.json({ task })
+  } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : 'Task update failed.' }, { status: 500 })
   }
 }

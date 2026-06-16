@@ -33,7 +33,7 @@ const LIFE_NAV_GROUPS: Array<{ label: string; leaves: NavLeaf[] }> = [
     label: 'Library',
     leaves: [
       { href: '/life/report', label: 'Reports' },
-      { href: '/life/history', label: 'History', phoneHidden: true },
+      { href: '/life/history', label: 'Entries', phoneHidden: true },
     ],
   },
 ]
