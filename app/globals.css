@@ -856,16 +856,21 @@ body.carousel-reengaging main {
 .life-header-top { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
 .life-shell .brand { font-family: var(--font-mono); font-size: 14px; line-height: 1.3; letter-spacing: 0.14em; color: var(--life-accent); white-space: nowrap; }
 .life-nav { display: flex; align-items: center; gap: 4px; }
+.life-bottom-nav { display: none; }
+.life-bottom-nav-groups { display: contents; }
+.life-bottom-subnav { display: none; }
 .life-nav .nav-link { font-family: var(--font-mono); font-size: 14px; letter-spacing: 0; color: var(--life-muted); padding: 7px 14px; border-radius: 0; transition: color 0.15s ease, background 0.15s ease; }
 .life-nav .nav-link::before { display: none; }
 .life-nav .nav-link:hover { color: var(--life-text); background: var(--life-panel); }
 .life-nav .nav-link.active { color: var(--life-text); background: var(--life-panel-2); box-shadow: inset 0 -2px 0 var(--life-accent); }
 
 /* Header search */
-.life-shell .life-search { display: flex; align-items: center; gap: 6px; min-width: 0; width: 200px; padding: 0 10px; border: 1px solid var(--life-border); background: var(--life-muted-bg); transition: border-color 0.15s ease, width 0.2s ease; }
-.life-shell .life-search:focus-within { border-color: var(--life-muted); width: 260px; }
-.life-shell .life-search-icon { color: var(--life-label); font-size: 15px; line-height: 1; flex-shrink: 0; }
+.life-shell .life-search { display: flex; align-items: center; gap: 6px; min-width: 0; width: 122px; padding: 0 10px; border: 1px solid var(--life-border); background: var(--life-muted-bg); transition: border-color 0.15s ease, width 0.2s ease; }
+.life-shell .life-search:focus-within { border-color: var(--life-muted); width: 176px; }
+.life-shell .life-search-button { appearance: none; border: 0; background: transparent; color: var(--life-label); font-size: 15px; line-height: 1; flex-shrink: 0; padding: 0; cursor: pointer; }
+.life-shell .life-search-button:hover { color: var(--life-text); }
 .life-shell .life-search-input { flex: 1; min-width: 0; height: 34px; border: 0; background: transparent; color: var(--life-text); font-size: 13px; outline: none; }
+.life-shell .life-search-input::-webkit-search-cancel-button { display: none; }
 .life-shell .life-search-input::placeholder { color: var(--life-label); }
 
 /* Secondary sub-nav (per active group) */
@@ -937,8 +942,10 @@ body.carousel-reengaging main {
 .life-shell .time-chip { display: inline-flex; align-items: center; justify-content: center; min-width: 52px; height: 24px; padding: 0 8px; background: var(--life-muted-bg); border: 1px solid var(--life-hairline); color: var(--life-muted); font-family: var(--font-mono); font-size: 12px; font-variant-numeric: tabular-nums; }
 
 /* ── Today ──────────────────────────────────────────────────────────────── */
-.life-shell .life-today { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 24px; align-items: start; }
-.life-shell .life-capture { display: grid; gap: 0; }
+.life-shell .life-today { display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 24px; align-items: stretch; }
+.life-shell .life-today > .life-capture,
+.life-shell .life-today > .life-side { align-self: stretch; height: 100%; }
+.life-shell .life-capture { display: flex; flex-direction: column; align-content: start; min-height: 100%; height: 100%; }
 .life-shell .life-greeting { font-family: var(--life-display); font-size: clamp(32px, 4vw, 44px); font-weight: var(--life-display-weight); line-height: 1.04; letter-spacing: -0.01em; margin: 14px 0 10px; }
 .life-shell .life-greeting-sub { color: var(--life-muted); font-size: 15px; line-height: 1.55; margin: 0 0 22px; max-width: 46ch; }
 
@@ -961,7 +968,10 @@ body.carousel-reengaging main {
 .life-shell .life-quick-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--life-label); margin-right: 4px; }
 .life-shell .life-quick-chip { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border: 1px dashed var(--life-border); background: transparent; color: var(--life-muted); cursor: pointer; font-size: 13px; transition: color 0.15s, border-color 0.15s; }
 .life-shell .life-quick-chip:hover { color: var(--life-text); border-color: var(--life-muted); }
-.life-shell .life-capture-stream { margin-top: 24px; }
+.life-shell .life-capture-stream { margin-top: 24px; display: flex; flex: 1; min-height: 0; }
+.life-shell .life-capture-stream > .life-card { width: 100%; flex: 1; display: flex; flex-direction: column; min-height: 100%; }
+.life-shell .life-capture-stream > .life-card .life-capture-feed,
+.life-shell .life-capture-stream > .life-card .life-empty { flex: 1; }
 .life-shell .life-capture-feed { display: grid; }
 .life-shell .life-capture-item { display: grid; grid-template-columns: 54px minmax(0, 1fr); gap: 12px; padding: 13px 16px; border-top: 1px solid var(--life-hairline); }
 .life-shell .life-capture-item:first-child { border-top: 0; }
@@ -972,7 +982,10 @@ body.carousel-reengaging main {
 .life-shell .life-capture-text { margin: 0; font-size: 13px; line-height: 1.55; color: #cfccc6; white-space: pre-wrap; overflow-wrap: anywhere; }
 
 /* sidebar */
-.life-shell .life-side { display: grid; gap: 16px; }
+.life-shell .life-side { display: grid; gap: 16px; grid-template-rows: auto auto minmax(0, 1fr); min-height: 100%; height: 100%; }
+.life-shell .life-side > .life-card:last-child { display: flex; flex-direction: column; min-height: 100%; }
+.life-shell .life-side > .life-card:last-child .life-rows,
+.life-shell .life-side > .life-card:last-child .life-empty { flex: 1; }
 .life-shell .life-brief-body { padding: 14px 16px 16px; }
 .life-shell .life-brief-body p { margin: 0; color: var(--life-muted); font-size: 14px; line-height: 1.6; }
 .life-shell .life-brief-body .accent-line { border-left: 2px solid var(--life-accent); padding-left: 12px; margin-top: 12px; color: var(--life-text); font-size: 13px; }
@@ -1056,6 +1069,9 @@ body.carousel-reengaging main {
 .life-shell .life-week-shell { display: grid; gap: 18px; }
 .life-shell .life-week-toolbar { display: flex; align-items: center; gap: 10px; flex-wrap: nowrap; }
 .life-shell .life-week-range { font-family: var(--life-display); font-size: 20px; font-weight: var(--life-display-weight); letter-spacing: -0.01em; white-space: nowrap; margin-right: 4px; }
+.life-shell .life-week-desktop,
+.life-shell .life-week-hour-rail,
+.life-shell .life-week-day-col { --life-week-timeline-height: clamp(420px, calc(100dvh - 368px), 840px); }
 .life-shell .life-week-desktop { border: 1px solid var(--life-border); background: var(--life-panel); }
 .life-shell .life-week-desktop-head { display: grid; grid-template-columns: 64px repeat(7, minmax(0, 1fr)); border-bottom: 1px solid var(--life-border); }
 .life-shell .life-week-corner { border-right: 1px solid var(--life-hairline); }
@@ -1068,11 +1084,11 @@ body.carousel-reengaging main {
 .life-shell .life-week-allday-label { display: flex; align-items: center; justify-content: flex-end; padding: 0 8px; border-right: 1px solid var(--life-hairline); font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--life-label); }
 .life-shell .life-week-allday-cell { border-left: 1px solid var(--life-hairline); padding: 4px; display: flex; flex-direction: column; gap: 3px; background: var(--life-panel); min-height: 34px; }
 .life-shell .life-week-allday-cell.is-today { background: rgba(255, 49, 32, 0.08); }
-.life-shell .life-week-allday-badge { display: inline-block; padding: 3px 6px; background: var(--life-muted-bg); border-left: 2px solid var(--life-accent); color: var(--life-text); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.life-shell .life-week-allday-badge { display: inline-block; width: 100%; padding: 3px 6px; border: 0; background: var(--life-muted-bg); border-left: 2px solid var(--life-accent); color: var(--life-text); font-size: 11px; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
 .life-shell .life-week-timeline { display: grid; grid-template-columns: 64px repeat(7, minmax(0, 1fr)); }
-.life-shell .life-week-hour-rail { position: relative; height: 840px; border-right: 1px solid var(--life-hairline); }
+.life-shell .life-week-hour-rail { position: relative; height: var(--life-week-timeline-height); border-right: 1px solid var(--life-hairline); }
 .life-shell .life-week-hour-label { position: absolute; right: 8px; transform: translateY(-50%); font-family: var(--font-mono); font-size: 10px; color: var(--life-label); font-variant-numeric: tabular-nums; }
-.life-shell .life-week-day-col { position: relative; height: 840px; border-left: 1px solid var(--life-hairline); background:
+.life-shell .life-week-day-col { position: relative; height: var(--life-week-timeline-height); border-left: 1px solid var(--life-hairline); background:
     repeating-linear-gradient(
       to bottom,
       transparent 0,
@@ -1090,7 +1106,7 @@ body.carousel-reengaging main {
       var(--life-hairline) calc(100% / 15)
     ); }
 .life-shell .life-week-hour-line { display: none; }
-.life-shell .life-week-event-card { position: absolute; left: 3px; right: 3px; min-height: 30px; background: rgba(255, 49, 32, 0.12); border-left: 2px solid var(--life-accent); padding: 4px 6px; overflow: hidden; }
+.life-shell .life-week-event-card { position: absolute; min-height: 0; border: 0; background: rgba(255, 49, 32, 0.12); border-left: 2px solid var(--life-accent); padding: 4px 6px; overflow: hidden; text-align: left; cursor: pointer; }
 .life-shell .life-week-event-time { font-family: var(--font-mono); font-size: 9px; color: rgba(245, 242, 237, 0.75); }
 .life-shell .life-week-event-title { font-size: 12px; line-height: 1.25; color: var(--life-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .life-shell .life-week-now-line { position: absolute; left: 0; right: 0; height: 0; border-top: 1.5px solid var(--life-accent); z-index: 3; }
@@ -1101,6 +1117,7 @@ body.carousel-reengaging main {
 .life-shell .life-day-today { background: var(--life-accent-soft); box-shadow: inset 0 2px 0 var(--life-accent); }
 .life-shell .life-day-past { opacity: 0.5; }
 .life-shell .life-day-head { display: flex; align-items: baseline; gap: 6px; }
+.life-shell .life-day-cell-toggle { display: flex; flex: 1; flex-direction: column; align-items: stretch; gap: 10px; width: 100%; border: 0; background: transparent; color: inherit; text-align: left; padding: 0; cursor: pointer; }
 .life-shell .life-day-weekday { font-family: var(--font-mono); font-size: 10px; color: var(--life-label); letter-spacing: 0.1em; text-transform: uppercase; }
 .life-shell .life-day-date { font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
 .life-shell .life-day-today .life-day-date { color: var(--life-accent); }
@@ -1124,8 +1141,9 @@ body.carousel-reengaging main {
 
 /* Timeline */
 .life-shell .life-day-timeline { display: flex; flex-direction: column; gap: 0; }
+.life-shell .life-day-scroll-window { height: calc(52px * 6); overflow-y: auto; overscroll-behavior: contain; border-top: 1px solid var(--life-hairline); border-bottom: 1px solid var(--life-hairline); }
 .life-shell .life-day-allday-strip { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 0 12px; border-bottom: 1px solid var(--life-hairline); margin-bottom: 0; }
-.life-shell .life-day-allday-badge { font-size: 12px; padding: 3px 8px; background: var(--life-accent-soft); border: 1px solid var(--life-accent-line); color: var(--life-text); }
+.life-shell .life-day-allday-badge { font-size: 12px; padding: 3px 8px; background: var(--life-accent-soft); border: 1px solid var(--life-accent-line); color: var(--life-text); cursor: pointer; }
 .life-shell .life-day-timeline-body { position: relative; }
 .life-shell .life-tl-row { display: flex; align-items: flex-start; height: 52px; width: 100%; padding: 0; margin: 0; border: 0; background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; -webkit-appearance: none; appearance: none; transition: background 0.12s ease; }
 .life-shell .life-tl-row:hover { background: var(--life-accent-soft); }
@@ -1133,9 +1151,10 @@ body.carousel-reengaging main {
 .life-shell .life-tl-draft-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .life-shell .life-tl-draft-row .text-input { width: auto; flex: 0 1 auto; min-height: 32px; }
 .life-shell .life-tl-draft-row .primary-button, .life-shell .life-tl-draft-row .secondary-button { min-height: 32px; }
+.life-shell .life-event-delete { margin-left: auto; color: var(--life-danger); }
 .life-shell .life-tl-label { font-family: var(--font-mono); font-size: 10px; color: var(--life-label); letter-spacing: 0.06em; width: 44px; flex-shrink: 0; padding-top: 0; line-height: 1; margin-top: -5px; }
 .life-shell .life-tl-line { flex: 1; height: 1px; background: var(--life-hairline); margin-top: 0; }
-.life-shell .life-tl-event { position: absolute; left: 44px; right: 0; padding: 4px 8px; background: var(--life-muted-bg); border-left: 2px solid var(--life-accent); overflow: hidden; display: flex; flex-direction: column; gap: 2px; box-sizing: border-box; min-height: 22px; z-index: 1; }
+.life-shell .life-tl-event { position: absolute; padding: 4px 8px; border: 0; background: var(--life-muted-bg); border-left: 2px solid var(--life-accent); overflow: hidden; display: flex; flex-direction: column; gap: 2px; box-sizing: border-box; min-height: 0; z-index: 1; text-align: left; cursor: pointer; }
 .life-shell .life-tl-event-time { font-family: var(--font-mono); font-size: 10px; color: var(--life-muted); line-height: 1; }
 .life-shell .life-tl-event-title { font-size: 12px; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .life-shell .life-tl-now { position: absolute; left: 40px; right: 0; display: flex; align-items: center; gap: 0; z-index: 2; pointer-events: none; }
@@ -1174,6 +1193,110 @@ body.carousel-reengaging main {
 .life-shell .life-search-results { display: grid; gap: 16px; }
 
 @media (max-width: 699px) {
+  .life-app-shell { padding-bottom: calc(92px + env(safe-area-inset-bottom)); }
+  .life-shell:has(.life-bottom-subnav) .life-app-shell {
+    padding-bottom: calc(152px + env(safe-area-inset-bottom));
+  }
+  .life-header { position: relative; }
+  .life-header-top { width: 100%; gap: 12px; justify-content: space-between; }
+  .life-header-top .life-nav { display: none; }
+  .life-bottom-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+    display: grid;
+    background: var(--life-bg);
+    border-top: 1px solid var(--life-hairline);
+    padding: 8px 14px calc(8px + env(safe-area-inset-bottom));
+    gap: 8px;
+  }
+  .life-bottom-subnav {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    gap: 6px;
+    order: -1;
+  }
+  .life-shell .life-bottom-subnav-link {
+    min-height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px;
+    border: 1px solid var(--life-border);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.1;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--life-label);
+    background: var(--life-muted-bg);
+    text-align: center;
+  }
+  .life-shell .life-bottom-subnav-link.active {
+    color: var(--life-accent);
+    border-color: var(--life-accent-line);
+    background: var(--life-accent-soft);
+  }
+  .life-bottom-nav-groups {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .life-shell .life-bottom-nav-link {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px;
+    border: 1px solid transparent;
+    appearance: none;
+    font-family: var(--font-mono);
+    font-size: 11px !important;
+    line-height: 1.1;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--life-label);
+    background: transparent;
+    cursor: pointer;
+  }
+  .life-shell .life-bottom-nav-link.active {
+    color: var(--life-accent);
+    border-color: var(--life-accent-line);
+    background: var(--life-accent-soft);
+  }
+  .life-shell .life-header-sub {
+    align-items: center;
+  }
+  .life-shell .life-section-label { display: none; }
+  .life-shell .life-header-section { display: none; }
+  .life-shell .life-search {
+    width: 40px;
+    min-width: 40px;
+    padding: 0 11px;
+    overflow: hidden;
+    border-color: transparent;
+    background: transparent;
+  }
+  .life-shell .life-search:focus-within {
+    width: min(180px, 42vw);
+    border-color: var(--life-muted);
+    background: var(--life-muted-bg);
+  }
+  .life-shell .life-search-input {
+    height: 36px;
+    font-size: 16px;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .life-shell .life-search:focus-within .life-search-input,
+  .life-shell .life-search-input:not(:placeholder-shown) {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 560px) {
   .life-shell .life-month-cell { min-height: 64px; gap: 4px; padding: 5px; }
   .life-shell .life-month-date { font-size: 12px; }
   .life-shell .life-month-task-count { font-size: 9px; }
@@ -1190,7 +1313,7 @@ body.carousel-reengaging main {
 .life-shell .life-reports-row-date { font-family: var(--font-mono); font-size: 13px; white-space: nowrap; }
 .life-shell .life-reports-row.is-selected .life-reports-row-date { color: var(--life-accent); }
 .life-shell .life-reports-row-type { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--life-label); }
-.life-shell .life-reports-reader { max-width: 80ch; display: grid; gap: 22px; }
+.life-shell .life-reports-reader { width: 100%; max-width: none; display: grid; gap: 22px; }
 .life-shell .life-reports-reader-head .eyebrow { margin-bottom: 12px; }
 .life-shell .life-reports-reader-head h1 { font-family: var(--life-display); font-size: clamp(28px, 4vw, 40px); font-weight: var(--life-display-weight); letter-spacing: -0.02em; margin: 0; line-height: 1.08; text-wrap: balance; }
 .life-shell .life-reports-placeholder { color: var(--life-muted); }
@@ -1221,17 +1344,20 @@ body.carousel-reengaging main {
 @media (max-width: 980px) {
   .life-app-shell { padding: 20px 18px 48px; }
   .life-shell .life-today { grid-template-columns: 1fr; }
+  .life-shell .life-today > .life-capture,
+  .life-shell .life-today > .life-side { height: auto; }
+  .life-shell .life-side { grid-template-rows: none; min-height: 0; }
+  .life-shell .life-side > .life-card:last-child { min-height: 0; }
   .life-shell .life-kanban { grid-template-columns: 1fr; }
   .life-shell .life-week-grid { grid-template-columns: 1fr; }
-  .life-shell .life-day-cell { border-left: 0; border-top: 1px solid var(--life-hairline); min-height: 0; flex-direction: row; align-items: flex-start; }
+  .life-shell .life-day-cell { border-left: 0; border-top: 1px solid var(--life-hairline); min-height: 0; }
   .life-shell .life-day-cell:first-child { border-top: 0; }
-  .life-shell .life-day-head { width: 64px; flex-direction: column; }
+  .life-shell .life-day-head { width: auto; flex-direction: row; }
   .life-shell .life-reports-shell { grid-template-columns: 1fr; }
   .life-shell .life-reports-sidebar { grid-auto-flow: column; grid-auto-columns: minmax(144px, 1fr); overflow-x: auto; padding-bottom: 4px; }
 }
 @media (max-width: 560px) {
   .life-header { flex-direction: column; align-items: flex-start; }
-  .life-nav { width: 100%; overflow-x: auto; }
   .life-shell .life-report-metrics { grid-template-columns: 1fr; }
   .life-shell .life-report-metric { border-left: 0; border-top: 1px solid var(--life-hairline); }
   .life-shell .life-report-metric:first-child { border-top: 0; }
@@ -1245,8 +1371,8 @@ body.carousel-reengaging main {
    width for readability. */
 @media (min-width: 1600px) {
   .life-app-shell { max-width: min(2100px, 94vw); padding: 32px 64px 72px; }
-  .life-shell .life-today { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 32px; }
-  .life-shell .life-side { grid-template-columns: 1fr 1fr; gap: 18px; align-content: start; }
+  .life-shell .life-today { grid-template-columns: minmax(0, 1.05fr) minmax(420px, 0.95fr); gap: 32px; }
+  .life-shell .life-side { grid-template-columns: 1fr 1fr; grid-template-rows: auto minmax(0, 1fr); gap: 18px; align-content: start; }
   .life-shell .life-side > .life-card:first-child { grid-column: 1 / -1; }
 }
 @media (min-width: 2100px) {
@@ -1288,6 +1414,26 @@ body.carousel-reengaging main {
 /* History (desktop/tablet only) hidden on phone */
 @media (max-width: 699px) {
   .life-shell .phone-hidden { display: none; }
+}
+
+@media (min-width: 700px) {
+  .life-shell:has(.life-week-shell) .life-app-shell {
+    padding-bottom: 24px;
+  }
+
+  .life-shell:has(.life-week-shell) .life-week-shell {
+    gap: 14px;
+  }
+
+  .life-shell:has(.life-week-shell) .life-page-head {
+    margin-bottom: 14px;
+  }
+
+  .life-shell:has(.life-week-shell) .life-week-desktop,
+  .life-shell:has(.life-week-shell) .life-week-hour-rail,
+  .life-shell:has(.life-week-shell) .life-week-day-col {
+    --life-week-timeline-height: clamp(380px, calc(100dvh - 430px), 840px);
+  }
 }
 
 /* ── History (desktop/tablet only — not part of the redesign prototype, ─────
@@ -1497,69 +1643,25 @@ body.carousel-reengaging main {
 @media (max-width: 699px) {
   /* ── Safe areas + tighter gutters ──────────────────────────────────────── */
   .life-shell .life-app-shell {
-    padding: 16px 16px calc(28px + env(safe-area-inset-bottom));
+    padding: 16px 16px calc(92px + env(safe-area-inset-bottom));
+  }
+  .life-shell:has(.life-bottom-subnav) .life-app-shell {
+    padding-bottom: calc(152px + env(safe-area-inset-bottom));
   }
 
-  /* ── Sticky, blurred top bar with real 44px tap targets ────────────────── */
+  /* ── Keep the brand row visible and simple on phone ────────────────────── */
   .life-shell .life-header {
-    position: sticky;
-    top: 0;
-    z-index: 30;
-    flex-direction: column;
-    align-items: flex-start;
+    position: relative;
+    top: auto;
+    z-index: auto;
     gap: 12px;
-    /* margin pulls the header flush with the shell edges; the -top value must
-       cancel the shell's padding so the header touches the very top of the
-       viewport. env(safe-area-inset-top) is 0 on non-notch devices and ~50px
-       on Face ID iPhones, so the negative margin swallows both. */
-    margin: calc(-16px - env(safe-area-inset-top)) -16px 16px;
-    padding: calc(12px + env(safe-area-inset-top)) 16px 12px;
-    background: rgba(10, 10, 10, 0.85);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--life-hairline);
+    margin: 0 0 16px;
+    padding: 0 0 12px;
+    background: transparent;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
-  .life-shell .life-nav {
-    width: 100%;
-    gap: 2px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-  .life-shell .life-nav::-webkit-scrollbar { display: none; }
-  .life-shell .life-nav .nav-link {
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-    padding: 0 14px;
-    font-size: 15px;
-    white-space: nowrap;
-  }
-  /* History is flagged phone-hidden in LifeHeader — keep it off the phone bar. */
-  .life-shell .life-nav .nav-link.phone-hidden,
-  .life-shell .life-subnav-link.phone-hidden { display: none; }
-
-  /* Header top row: brand left, primary nav right — on one line. */
-  .life-shell .life-header-top { width: 100%; gap: 8px; }
-  /* Collapse search to icon-only on phone; tap to expand */
-  .life-shell .life-search { width: 36px; padding: 0 10px; overflow: hidden; border-color: transparent; background: transparent; }
-  .life-shell .life-search:focus-within { width: 100%; border-color: var(--life-muted); background: var(--life-muted-bg); }
-  .life-shell .life-search-input { height: 36px; font-size: 16px; opacity: 0; transition: opacity 0.15s; }
-  .life-shell .life-search:focus-within .life-search-input { opacity: 1; }
-  /* Search now lives on the sub row beside the view tabs; keep them on one
-     line with the tabs taking the slack and the search icon pinned right. */
   .life-shell .life-header-sub { width: 100%; gap: 8px; }
-  .life-shell .life-header-section { flex: 1; min-width: 0; }
-  /* Sub-nav scrolls horizontally like the primary nav. */
-  .life-shell .life-subnav {
-    flex: 1;
-    min-width: 0;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-  .life-shell .life-subnav::-webkit-scrollbar { display: none; }
-  .life-shell .life-subnav-link { min-height: 40px; display: inline-flex; align-items: center; white-space: nowrap; font-size: 14px; }
 
   /* ── Minimum 44px hit targets on every control ─────────────────────────── */
   .life-shell .life-btn { min-height: 46px; padding: 0 18px; }
@@ -1580,8 +1682,29 @@ body.carousel-reengaging main {
   .life-shell .life-history-entry-head { align-items: flex-start; flex-direction: column; gap: 6px; }
 
   /* ── Cards: edge-to-edge feel, comfortable row height ──────────────────── */
-  .life-shell .life-row { padding: 14px 16px; }
-  .life-shell .life-row-title { font-size: 15px; }
+  .life-shell .life-row {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    row-gap: 4px;
+    padding: 14px 16px;
+  }
+  .life-shell .life-row-title {
+    font-size: 14px;
+    line-height: 1.4;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+  .life-shell .life-row-meta {
+    flex-wrap: wrap;
+    font-size: 11px;
+    gap: 6px;
+  }
+  .life-shell .life-row-aside {
+    grid-column: 2;
+    justify-self: start;
+    font-size: 10px;
+  }
 
   /* ── Reports: comfortable reading measure ──────────────────────────────── */
   .life-shell .life-reports-reader { max-width: none; }

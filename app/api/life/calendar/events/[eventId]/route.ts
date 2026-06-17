@@ -1,0 +1,98 @@
+import { NextRequest, NextResponse } from 'next/server'
+
+import { isAuthenticatedLifeRequest, unauthorizedJson } from '@/lib/life/auth'
+import { deleteCalendarEvent, syncCalendarEvents, updateCalendarEvent } from '@/lib/life/calendar'
+import { OWNER_ID } from '@/lib/life/constants'
+import { getSupabaseAdmin } from '@/lib/life/supabase'
+
+function normalizeLocalDate(value: string | null | undefined) {
+  return value && /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : null
+}
+
+async function getStoredEvent(eventId: string) {
+  const supabase = getSupabaseAdmin()
+  const { data, error } = await supabase
+    .from('calendar_events')
+    .select('id, local_date')
+    .eq('user_id', OWNER_ID)
+    .eq('id', eventId)
+    .maybeSingle<{ id: string; local_date: string }>()
+
+  if (error) throw error
+  return data
+}
+
+export async function PATCH(
+  request: NextRequest,
+  context: { params: Promise<{ eventId: string }> },
+) {
+  if (!isAuthenticatedLifeRequest(request)) {
+    return unauthorizedJson()
+  }
+
+  const { eventId } = await context.params
+
+  try {
+    const stored = await getStoredEvent(eventId)
+    if (!stored) {
+      return NextResponse.json({ error: 'Event not found.' }, { status: 404 })
+    }
+
+    const body = (await request.json().catch(() => null)) as {
+      title?: string
+      localDate?: string
+      startTime?: string | null
+      endTime?: string | null
+      allDay?: boolean
+    } | null
+
+    const localDate = normalizeLocalDate(body?.localDate) || stored.local_date
+    const title = body?.title?.trim() || ''
+    if (!title) {
+      return NextResponse.json({ error: 'Event title is required.' }, { status: 400 })
+    }
+
+    const event = await updateCalendarEvent(eventId, {
+      title,
+      localDate,
+      startTime: body?.startTime || null,
+      endTime: body?.endTime || null,
+      allDay: Boolean(body?.allDay),
+    })
+
+    const syncStart = stored.local_date < localDate ? stored.local_date : localDate
+    const syncEnd = stored.local_date > localDate ? stored.local_date : localDate
+    await syncCalendarEvents(syncStart, syncEnd, { force: true })
+
+    return NextResponse.json({ event })
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Event update failed.'
+    return NextResponse.json({ error: message }, { status: 500 })
+  }
+}
+
+export async function DELETE(
+  _request: NextRequest,
+  context: { params: Promise<{ eventId: string }> },
+) {
+  if (!isAuthenticatedLifeRequest(_request)) {
+    return unauthorizedJson()
+  }
+
+  const { eventId } = await context.params
+
+  try {
+    const stored = await getStoredEvent(eventId)
+    if (!stored) {
+      return NextResponse.json({ error: 'Event not found.' }, { status: 404 })
+    }
+
+    await deleteCalendarEvent(eventId)
+    await syncCalendarEvents(stored.local_date, stored.local_date, { force: true })
+
+    return NextResponse.json({ ok: true })
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Event deletion failed.'
+    return NextResponse.json({ error: message }, { status: 500 })
+  }
+}

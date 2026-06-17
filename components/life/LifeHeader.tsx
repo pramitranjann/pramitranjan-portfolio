@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 interface NavLeaf {
   href: string
@@ -50,16 +50,34 @@ export function LifeHeader() {
   const pathname = usePathname()
   const router = useRouter()
   const [query, setQuery] = useState('')
+  const [mobileOpenGroup, setMobileOpenGroup] = useState<string | null>(null)
+  const searchInputRef = useRef<HTMLInputElement | null>(null)
 
   const activeGroup =
     LIFE_NAV_GROUPS.find((group) => group.leaves.some((leaf) => isLeafActive(leaf.href, pathname))) ||
     LIFE_NAV_GROUPS[0]
+  const activeGroupVisibleLeaves = activeGroup.leaves.filter((leaf) => !leaf.phoneHidden)
+
+  useEffect(() => {
+    setMobileOpenGroup(null)
+  }, [pathname])
 
   function onSearch(event: React.FormEvent) {
     event.preventDefault()
     const q = query.trim()
-    if (!q) return
+    if (!q) {
+      searchInputRef.current?.focus()
+      return
+    }
     router.push(`/life/search?q=${encodeURIComponent(q)}`)
+  }
+
+  function onMobileGroupPress(label: string, href: string) {
+    if (label === activeGroup.label) {
+      setMobileOpenGroup((current) => (current === label ? null : label))
+      return
+    }
+    router.push(href)
   }
 
   return (
@@ -80,6 +98,35 @@ export function LifeHeader() {
           ))}
         </nav>
       </div>
+
+      <nav className="life-bottom-nav" aria-label="Life mobile">
+        <div className="life-bottom-nav-groups">
+          {LIFE_NAV_GROUPS.map((group) => (
+            <button
+              key={group.label}
+              type="button"
+              className={`life-bottom-nav-link${group === activeGroup ? ' active' : ''}`}
+              aria-expanded={group.label === activeGroup.label && mobileOpenGroup === group.label}
+              onClick={() => onMobileGroupPress(group.label, group.leaves[0].href)}
+            >
+              {group.label}
+            </button>
+          ))}
+        </div>
+        {mobileOpenGroup === activeGroup.label && activeGroupVisibleLeaves.length > 1 ? (
+          <nav className="life-bottom-subnav" aria-label={`${activeGroup.label} views`}>
+            {activeGroupVisibleLeaves.map((leaf) => (
+              <Link
+                key={leaf.href}
+                href={leaf.href}
+                className={`life-bottom-subnav-link${isLeafActive(leaf.href, pathname) ? ' active' : ''}`}
+              >
+                {leaf.label}
+              </Link>
+            ))}
+          </nav>
+        ) : null}
+      </nav>
 
       {/* Secondary row: the active group's view sub-tabs (e.g. Week / Month)
           sit on the left, with search pushed to the right end of the same line. */}
@@ -105,13 +152,14 @@ export function LifeHeader() {
           )}
         </div>
         <form className="life-search" role="search" onSubmit={onSearch}>
-          <span className="life-search-icon" aria-hidden>
+          <button type="submit" className="life-search-button" aria-label="Search life">
             ⌕
-          </span>
+          </button>
           <input
+            ref={searchInputRef}
             type="search"
             className="life-search-input"
-            placeholder="Search tasks, entries, reports…"
+            placeholder="Search"
             aria-label="Search life"
             value={query}
             onChange={(event) => setQuery(event.target.value)}

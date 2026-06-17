@@ -113,6 +113,87 @@ export async function createCalendarEvent(input: {
   return response.data
 }
 
+async function findCalendarIdForEvent(eventId: string) {
+  const calendar = getCalendarClient()
+  const calendarIds = await getCalendarIdsToSync(calendar)
+
+  for (const calendarId of calendarIds) {
+    try {
+      await calendar.events.get({ calendarId, eventId })
+      return { calendar, calendarId }
+    } catch {
+      continue
+    }
+  }
+
+  throw new Error('Calendar event not found.')
+}
+
+export async function updateCalendarEvent(
+  eventId: string,
+  input: {
+    title: string
+    localDate: string
+    startTime?: string | null
+    endTime?: string | null
+    allDay?: boolean
+  },
+) {
+  const settings = await getOwnerSettings()
+  const timeZone = settings.timezone
+  const title = input.title?.trim()
+  if (!title) {
+    throw new Error('Event title is required.')
+  }
+
+  const { calendar, calendarId } = await findCalendarIdForEvent(eventId)
+
+  let requestBody: {
+    summary: string
+    start: { date?: string; dateTime?: string; timeZone?: string }
+    end: { date?: string; dateTime?: string; timeZone?: string }
+  }
+
+  if (input.allDay || !input.startTime) {
+    requestBody = {
+      summary: title,
+      start: { date: input.localDate },
+      end: { date: addDays(input.localDate, 1) },
+    }
+  } else {
+    const [startHour, startMinute] = input.startTime.split(':').map(Number)
+    const start = localDateTimeToUtc(input.localDate, timeZone, startHour, startMinute, 0)
+    let end: Date
+    if (input.endTime) {
+      const [endHour, endMinute] = input.endTime.split(':').map(Number)
+      end = localDateTimeToUtc(input.localDate, timeZone, endHour, endMinute, 0)
+      if (end.getTime() <= start.getTime()) {
+        end = new Date(start.getTime() + 60 * 60 * 1000)
+      }
+    } else {
+      end = new Date(start.getTime() + 60 * 60 * 1000)
+    }
+    requestBody = {
+      summary: title,
+      start: { dateTime: start.toISOString(), timeZone },
+      end: { dateTime: end.toISOString(), timeZone },
+    }
+  }
+
+  const response = await calendar.events.update({
+    calendarId,
+    eventId,
+    requestBody,
+  })
+
+  return response.data
+}
+
+export async function deleteCalendarEvent(eventId: string) {
+  const { calendar, calendarId } = await findCalendarIdForEvent(eventId)
+  await calendar.events.delete({ calendarId, eventId })
+}
+
 // In-memory throttle so that rapid navigations between Life pages don't each
 // pay the full Google Calendar round-trip + Supabase delete/upsert. The cron
 // and explicit user actions pass `{ force: true }` to bypass.
@@ -185,7 +266,7 @@ export async function syncCalendarEvents(
         : getLocalDateString(new Date(startTime || event.created || Date.now()), timeZone);
 
       const mappedEvent = {
-        id: (event.iCalUID || event.id) as string,
+        id: (event.id || event.iCalUID) as string,
         user_id: OWNER_ID,
         title: event.summary || "(Untitled event)",
         start_time: isAllDay && startDate
