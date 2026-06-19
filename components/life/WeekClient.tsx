@@ -1,5 +1,6 @@
 'use client'
 
+import type { CSSProperties } from 'react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { useViewportMode } from '@/hooks/useViewportMode'
@@ -13,14 +14,20 @@ import {
 } from '@/lib/life/time'
 import type { CalendarEventRecord, TaskRecord } from '@/lib/life/types'
 
-const DAY_START_HOUR = 7
-const DAY_END_HOUR = 22
-const DAY_TOTAL_MINUTES = (DAY_END_HOUR - DAY_START_HOUR) * 60
+const DESKTOP_DAY_START_HOUR = 0
+const DESKTOP_DAY_END_HOUR = 24
+const DESKTOP_HOUR_HEIGHT = 56
+const DESKTOP_DAY_TOTAL_MINUTES =
+  (DESKTOP_DAY_END_HOUR - DESKTOP_DAY_START_HOUR) * 60
+const PHONE_DAY_START_HOUR = 0
+const PHONE_DAY_END_HOUR = 24
 const PHONE_VISIBLE_HOURS = 6
-const PHONE_ROW_HEIGHT = 52
+const PHONE_ROW_HEIGHT = 64
+const PHONE_RAIL_WIDTH = 48
 const WEEKDAY_NAMES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+const WEEKDAY_LONG_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
-interface WeekResponse {
+export interface WeekResponse {
   start: string
   end: string
   timezone: string
@@ -50,17 +57,22 @@ function getMinutesFromMidnight(utcString: string, tz: string): number {
 }
 
 function eventTopPct(startMin: number): number {
-  return Math.max(0, ((startMin - DAY_START_HOUR * 60) / DAY_TOTAL_MINUTES) * 100)
+  return Math.max(
+    0,
+    ((startMin - DESKTOP_DAY_START_HOUR * 60) / DESKTOP_DAY_TOTAL_MINUTES) * 100,
+  )
 }
 
 function eventHeightPct(startMin: number, endMin: number): number {
-  const clampedStart = Math.max(startMin, DAY_START_HOUR * 60)
-  const clampedEnd = Math.min(endMin, DAY_END_HOUR * 60)
-  return Math.max(2, ((clampedEnd - clampedStart) / DAY_TOTAL_MINUTES) * 100)
+  const clampedStart = Math.max(startMin, DESKTOP_DAY_START_HOUR * 60)
+  const clampedEnd = Math.min(endMin, DESKTOP_DAY_END_HOUR * 60)
+  return Math.max(2, ((clampedEnd - clampedStart) / DESKTOP_DAY_TOTAL_MINUTES) * 100)
 }
 
 function formatHourLabel(hour: number) {
-  return hour === 12 ? '12 PM' : hour < 12 ? `${hour} AM` : `${hour - 12} PM`
+  if (hour === 0 || hour === 24) return '12 AM'
+  if (hour === 12) return '12 PM'
+  return hour < 12 ? `${hour} AM` : `${hour - 12} PM`
 }
 
 function range(start: string, days: number): string[] {
@@ -100,7 +112,7 @@ function formatRange(start: string, end: string, timeZone: string) {
 }
 
 function getEventEndMin(event: CalendarEventRecord, timeZone: string) {
-  if (!event.start_time) return DAY_START_HOUR * 60
+  if (!event.start_time) return DESKTOP_DAY_START_HOUR * 60
   const startMin = getMinutesFromMidnight(event.start_time, timeZone)
   if (!event.end_time) return startMin + 60
   const endMin = getMinutesFromMidnight(event.end_time, timeZone)
@@ -166,8 +178,8 @@ function computeOverlapLayout(events: CalendarEventRecord[], timeZone: string): 
 
 function clampPhoneWindowStart(hour: number) {
   return Math.min(
-    Math.max(hour, DAY_START_HOUR),
-    DAY_END_HOUR - PHONE_VISIBLE_HOURS,
+    Math.max(hour, PHONE_DAY_START_HOUR),
+    PHONE_DAY_END_HOUR - PHONE_VISIBLE_HOURS,
   )
 }
 
@@ -195,22 +207,44 @@ function toTimeInputValue(event: CalendarEventRecord, timeZone: string, kind: 's
   return `${String(parts.hour).padStart(2, '0')}:${String(parts.minute).padStart(2, '0')}`
 }
 
+function fullDateLabel(localDate: string, timeZone: string) {
+  const date = localDateTimeToUtc(localDate, timeZone, 12, 0)
+  return new Intl.DateTimeFormat('en-GB', {
+    timeZone,
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+  }).format(date)
+}
+
+function browserLocalDateString(date: Date) {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
 export function WeekClient({
   initialStart,
   today,
   timezone,
+  initialData = null,
 }: {
   initialStart: string
   today: string
   timezone: string
+  initialData?: WeekResponse | null
 }) {
   const viewport = useViewportMode()
   const [weekStart, setWeekStart] = useState(initialStart)
-  const [data, setData] = useState<WeekResponse | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [data, setData] = useState<WeekResponse | null>(initialData)
+  const [loading, setLoading] = useState(!initialData)
   const [error, setError] = useState<string | null>(null)
-  const [expandedDate, setExpandedDate] = useState<string | null>(null)
+  const [selectedDate, setSelectedDate] = useState(
+    initialStart === getWeekStart(today) ? today : initialStart,
+  )
   const [nowMinutes, setNowMinutes] = useState<number | null>(null)
+  const [browserToday, setBrowserToday] = useState(today)
   const [refreshKey, setRefreshKey] = useState(0)
   const [draft, setDraft] = useState<DraftState | null>(null)
   const [draftTitle, setDraftTitle] = useState('')
@@ -218,23 +252,33 @@ export function WeekClient({
   const [draftEnd, setDraftEnd] = useState('')
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
-  const todayRef = useRef<HTMLDivElement | null>(null)
-  const didInitialScrollRef = useRef(false)
   const phoneWindowRefs = useRef<Record<string, HTMLDivElement | null>>({})
+  const desktopScrollRef = useRef<HTMLDivElement | null>(null)
 
   const weekEnd = useMemo(() => addDays(weekStart, 6), [weekStart])
   const dayList = useMemo(() => range(weekStart, 7), [weekStart])
-  const currentWeekStart = useMemo(() => getWeekStart(today), [today])
+  const currentWeekStart = useMemo(
+    () => getWeekStart(browserToday || today),
+    [browserToday, today],
+  )
   const tz = data?.timezone || timezone
 
-  const weekHeading = useMemo(() => {
-    if (weekStart === currentWeekStart) return 'This week'
-    if (weekStart === addDays(currentWeekStart, -7)) return 'Last week'
-    if (weekStart === addDays(currentWeekStart, 7)) return 'Next week'
-    return `Week ${isoWeek(weekStart)}`
-  }, [weekStart, currentWeekStart])
-
   const isCurrentWeek = weekStart === currentWeekStart
+  const liveToday = browserToday || today
+  const desktopTimelineHeight = `${(DESKTOP_DAY_END_HOUR - DESKTOP_DAY_START_HOUR) * DESKTOP_HOUR_HEIGHT}px`
+  const desktopWeekCols = '56px repeat(7, minmax(0, 1fr))'
+  const desktopHours = useMemo(
+    () =>
+      Array.from({ length: DESKTOP_DAY_END_HOUR - DESKTOP_DAY_START_HOUR + 1 }, (_, index) => {
+        const hour = DESKTOP_DAY_START_HOUR + index
+        return {
+          hour,
+          top: `${(hour - DESKTOP_DAY_START_HOUR) * DESKTOP_HOUR_HEIGHT}px`,
+          label: formatHourLabel(hour),
+        }
+      }),
+    [],
+  )
 
   useEffect(() => {
     let cancelled = false
@@ -256,29 +300,23 @@ export function WeekClient({
   }, [weekStart, weekEnd, refreshKey])
 
   useEffect(() => {
-    didInitialScrollRef.current = false
-    setExpandedDate(null)
+    setSelectedDate((current) => {
+      if (current >= weekStart && current <= weekEnd) return current
+      return liveToday >= weekStart && liveToday <= weekEnd ? liveToday : weekStart
+    })
     setDraft(null)
-  }, [weekStart])
+  }, [liveToday, weekEnd, weekStart])
 
   useEffect(() => {
     function tick() {
-      const parts = getTimeParts(new Date(), tz)
-      setNowMinutes(parts.hour * 60 + parts.minute)
+      const now = new Date()
+      setNowMinutes(now.getHours() * 60 + now.getMinutes())
+      setBrowserToday(browserLocalDateString(now))
     }
     tick()
     const id = window.setInterval(tick, 60_000)
     return () => window.clearInterval(id)
-  }, [tz])
-
-  useEffect(() => {
-    if (viewport !== 'phone') return
-    if (didInitialScrollRef.current) return
-    if (!isCurrentWeek) return
-    if (!data) return
-    didInitialScrollRef.current = true
-    todayRef.current?.scrollIntoView({ block: 'start', behavior: 'auto' })
-  }, [data, isCurrentWeek, viewport])
+  }, [])
 
   const eventsByDate = useMemo(() => {
     const map = new Map<string, CalendarEventRecord[]>()
@@ -286,17 +324,6 @@ export function WeekClient({
       const list = map.get(event.local_date) || []
       list.push(event)
       map.set(event.local_date, list)
-    }
-    return map
-  }, [data])
-
-  const tasksByDueDate = useMemo(() => {
-    const map = new Map<string, TaskRecord[]>()
-    for (const task of data?.tasks || []) {
-      if (!task.due_local_date) continue
-      const list = map.get(task.due_local_date) || []
-      list.push(task)
-      map.set(task.due_local_date, list)
     }
     return map
   }, [data])
@@ -309,10 +336,10 @@ export function WeekClient({
     return map
   }, [dayList, eventsByDate, tz])
 
-  const hourRows = useMemo(
+  const phoneHourRows = useMemo(
     () =>
-      Array.from({ length: DAY_END_HOUR - DAY_START_HOUR }, (_, index) => {
-        const hour = DAY_START_HOUR + index
+      Array.from({ length: PHONE_DAY_END_HOUR - PHONE_DAY_START_HOUR + 1 }, (_, index) => {
+        const hour = PHONE_DAY_START_HOUR + index
         return {
           hour,
           label: formatHourLabel(hour),
@@ -322,19 +349,25 @@ export function WeekClient({
   )
 
   useEffect(() => {
-    if (viewport !== 'phone' || !expandedDate) return
-    const container = phoneWindowRefs.current[expandedDate]
+    if (viewport !== 'phone' || !selectedDate) return
+    const container = phoneWindowRefs.current[selectedDate]
     if (!container) return
 
-    const visibleEvents = positionedEventsByDate.get(expandedDate) || []
+    const visibleEvents = positionedEventsByDate.get(selectedDate) || []
     const preferredHour = getPreferredPhoneWindowHour({
-      date: expandedDate,
+      date: selectedDate,
       events: visibleEvents,
-      today,
+      today: liveToday,
       nowMinutes,
     })
-    container.scrollTop = (preferredHour - DAY_START_HOUR) * PHONE_ROW_HEIGHT
-  }, [expandedDate, nowMinutes, positionedEventsByDate, today, viewport])
+    container.scrollTop = (preferredHour - PHONE_DAY_START_HOUR) * PHONE_ROW_HEIGHT
+  }, [liveToday, nowMinutes, positionedEventsByDate, selectedDate, viewport])
+
+  useEffect(() => {
+    if (viewport === 'phone') return
+    if (!desktopScrollRef.current) return
+    desktopScrollRef.current.scrollTop = 0
+  }, [viewport, weekStart])
 
   function resetDraft() {
     setDraft(null)
@@ -358,7 +391,9 @@ export function WeekClient({
   }
 
   function openEditDraft(event: CalendarEventRecord) {
-    const hour = event.start_time ? getTimeParts(new Date(event.start_time), tz).hour : DAY_START_HOUR
+    const hour = event.start_time
+      ? getTimeParts(new Date(event.start_time), tz).hour
+      : DESKTOP_DAY_START_HOUR
     setDraft({
       mode: 'edit',
       eventId: event.id,
@@ -370,6 +405,32 @@ export function WeekClient({
     setDraftStart(event.all_day ? '' : toTimeInputValue(event, tz, 'start'))
     setDraftEnd(event.all_day ? '' : toTimeInputValue(event, tz, 'end'))
     setSaveError(null)
+  }
+
+  function openCreateDraftFromPoint(date: string, clientY: number, rect: DOMRect) {
+    const ratio = Math.min(Math.max((clientY - rect.top) / rect.height, 0), 0.999)
+    const minutes = DESKTOP_DAY_START_HOUR * 60 + ratio * DESKTOP_DAY_TOTAL_MINUTES
+    openCreateDraft(
+      date,
+      Math.max(
+        DESKTOP_DAY_START_HOUR,
+        Math.min(DESKTOP_DAY_END_HOUR - 1, Math.floor(minutes / 60)),
+      ),
+    )
+  }
+
+  function toggleDraftAllDay() {
+    if (!draft) return
+    const nextAllDay = !draft.allDay
+    setDraft((current) => (current ? { ...current, allDay: nextAllDay } : null))
+    if (nextAllDay) {
+      setDraftStart('')
+      setDraftEnd('')
+      return
+    }
+    const baseHour = draft.hour
+    setDraftStart(`${String(baseHour).padStart(2, '0')}:00`)
+    setDraftEnd(`${String(Math.min(baseHour + 1, 23)).padStart(2, '0')}:00`)
   }
 
   async function saveDraft() {
@@ -438,12 +499,18 @@ export function WeekClient({
     }
   }
 
+  const desktopScrollStyle = {
+    maxHeight: 'calc(100vh - 200px)',
+    overflow: 'auto',
+    padding: '10px 0',
+  } satisfies CSSProperties
+
   const desktopWeek = (
     <div className="life-week-desktop">
       <div className="life-week-desktop-head">
         <div className="life-week-corner" />
         {dayList.map((date, index) => {
-          const isToday = date === today
+          const isToday = date === liveToday
           const { day } = dayMonth(date, tz)
           return (
             <div key={date} className={`life-week-col-head${isToday ? ' is-today' : ''}`}>
@@ -455,13 +522,13 @@ export function WeekClient({
       </div>
 
       <div className="life-week-allday-row">
-        <div className="life-week-allday-label">All-day</div>
+        <div className="life-week-allday-label">all-day</div>
         {dayList.map((date) => {
           const allDayEvents = (eventsByDate.get(date) || []).filter((event) => event.all_day)
           return (
             <div
               key={`${date}-all-day`}
-              className={`life-week-allday-cell${date === today ? ' is-today' : ''}`}
+              className={`life-week-allday-cell${date === liveToday ? ' is-today' : ''}`}
             >
               {allDayEvents.map((event) => (
                 <button
@@ -478,79 +545,106 @@ export function WeekClient({
         })}
       </div>
 
-      <div className="life-week-timeline">
-        <div className="life-week-hour-rail">
-          {hourRows.map((row, index) => (
+      <div className="life-week-desktop-scroll" ref={desktopScrollRef} style={desktopScrollStyle}>
+        <div className="life-week-scroll-grid" style={{ gridTemplateColumns: desktopWeekCols }}>
+          <div className="life-week-hour-rail" style={{ height: desktopTimelineHeight }}>
+            {desktopHours.map((row) => (
             <span
               key={row.hour}
               className="life-week-hour-label"
-              style={{ top: `${(index / hourRows.length) * 100}%` }}
+              style={{ top: row.top }}
             >
               {row.label}
             </span>
           ))}
+          </div>
+
+          {dayList.map((date) => {
+            const isToday = date === liveToday
+            const positioned = positionedEventsByDate.get(date) || []
+            const nowTop =
+              isToday && nowMinutes !== null
+                ? `${(Math.min(DESKTOP_DAY_END_HOUR, Math.max(DESKTOP_DAY_START_HOUR, nowMinutes / 60)) - DESKTOP_DAY_START_HOUR) * DESKTOP_HOUR_HEIGHT}px`
+                : null
+
+            return (
+              <div
+                key={`${date}-timeline`}
+                className={`life-week-day-col${isToday ? ' is-today' : ''}`}
+                style={{ height: desktopTimelineHeight }}
+                onDoubleClick={(event) =>
+                  openCreateDraftFromPoint(date, event.clientY, event.currentTarget.getBoundingClientRect())
+                }
+              >
+                {positioned.map((item) => {
+                  const top = eventTopPct(item.startMin)
+                  const height = eventHeightPct(item.startMin, item.endMin)
+                  const left =
+                    item.colCount > 1
+                      ? `calc(${item.colIndex} * (100% / ${item.colCount}) + 3px)`
+                      : '3px'
+                  const width =
+                    item.colCount > 1
+                      ? `calc((100% / ${item.colCount}) - 6px)`
+                      : 'calc(100% - 6px)'
+
+                  return (
+                    <button
+                      key={item.event.id}
+                      type="button"
+                      className="life-week-event-card"
+                      style={{ top: `${top}%`, height: `${height}%`, left, width }}
+                      onClick={() => openEditDraft(item.event)}
+                    >
+                      <div className="life-week-event-time">
+                        {item.event.start_time
+                          ? getLocalTimeLabel(item.event.start_time, tz)
+                          : 'All day'}
+                      </div>
+                      <div className="life-week-event-title">{item.event.title || '(Untitled)'}</div>
+                    </button>
+                  )
+                })}
+
+                {nowTop !== null ? (
+                  <div className="life-week-now-line" style={{ top: nowTop }}>
+                    <span className="life-week-now-dot" />
+                  </div>
+                ) : null}
+              </div>
+            )
+          })}
         </div>
-
-        {dayList.map((date) => {
-          const isToday = date === today
-          const positioned = positionedEventsByDate.get(date) || []
-          const nowTop = isToday && nowMinutes !== null ? eventTopPct(nowMinutes) : null
-
-          return (
-            <div key={`${date}-timeline`} className={`life-week-day-col${isToday ? ' is-today' : ''}`}>
-              {positioned.map((item) => {
-                const top = eventTopPct(item.startMin)
-                const height = eventHeightPct(item.startMin, item.endMin)
-                const left =
-                  item.colCount > 1
-                    ? `calc(${item.colIndex} * (100% / ${item.colCount}) + 3px)`
-                    : '3px'
-                const width =
-                  item.colCount > 1
-                    ? `calc((100% / ${item.colCount}) - 6px)`
-                    : 'calc(100% - 6px)'
-
-                return (
-                  <button
-                    key={item.event.id}
-                    type="button"
-                    className="life-week-event-card"
-                    style={{ top: `${top}%`, height: `${height}%`, left, width }}
-                    onClick={() => openEditDraft(item.event)}
-                  >
-                    <div className="life-week-event-time">
-                      {item.event.start_time ? getLocalTimeLabel(item.event.start_time, tz) : 'All day'}
-                    </div>
-                    <div className="life-week-event-title">{item.event.title || '(Untitled)'}</div>
-                  </button>
-                )
-              })}
-
-              {nowTop !== null ? (
-                <div className="life-week-now-line" style={{ top: `${nowTop}%` }}>
-                  <span className="life-week-now-dot" />
-                </div>
-              ) : null}
-            </div>
-          )
-        })}
       </div>
     </div>
   )
 
-  return (
-    <div className="life-week-shell">
-      <div className="life-page-head">
-        <div>
-          <p className="eyebrow">Week {isoWeek(weekStart)}</p>
-          <h1>{weekHeading}</h1>
+  const phoneEvents = eventsByDate.get(selectedDate) || []
+  const phoneAllDayEvents = phoneEvents.filter((event) => event.all_day)
+  const phonePositionedEvents = positionedEventsByDate.get(selectedDate) || []
+  const phoneDateIndex = dayList.indexOf(selectedDate)
+  const phoneIsToday = selectedDate === liveToday
+  const phoneNowVisible = phoneIsToday && nowMinutes !== null
+  const phoneEventCount = phoneEvents.length
+  const phoneMeta = `${fullDateLabel(selectedDate, tz).replace(/^...\s/, '').toUpperCase()} · ${
+    phoneEventCount === 0 ? 'NO EVENTS' : `${phoneEventCount} ${phoneEventCount === 1 ? 'EVENT' : 'EVENTS'}`
+  }`
+
+  const phoneWeek = (
+    <div className="life-week-phone">
+      <div className="life-week-phone-topbar">
+        <div className="life-week-phone-range">
+          <span className="eyebrow">Week {isoWeek(weekStart)}</span>
+          <strong>{formatRange(weekStart, weekEnd, tz)}</strong>
         </div>
-        <div className="life-week-toolbar">
-          <span className="life-week-range">{formatRange(weekStart, weekEnd, tz)}</span>
+        <div className="life-week-phone-actions">
           <button
             type="button"
             className="life-icon-btn"
-            onClick={() => setWeekStart((current) => addDays(current, -7))}
+            onClick={() => {
+              setWeekStart((current) => addDays(current, -7))
+              setSelectedDate((current) => addDays(current, -7))
+            }}
             aria-label="Previous week"
           >
             ←
@@ -558,15 +652,21 @@ export function WeekClient({
           <button
             type="button"
             className="life-btn ghost"
-            onClick={() => setWeekStart(getWeekStart(today))}
-            disabled={isCurrentWeek}
+            onClick={() => {
+              setWeekStart(getWeekStart(liveToday))
+              setSelectedDate(liveToday)
+            }}
+            disabled={isCurrentWeek && selectedDate === liveToday}
           >
             Today
           </button>
           <button
             type="button"
             className="life-icon-btn"
-            onClick={() => setWeekStart((current) => addDays(current, 7))}
+            onClick={() => {
+              setWeekStart((current) => addDays(current, 7))
+              setSelectedDate((current) => addDays(current, 7))
+            }}
             aria-label="Next week"
           >
             →
@@ -574,297 +674,251 @@ export function WeekClient({
         </div>
       </div>
 
-      {error ? <p className="error-text">{error}</p> : null}
-      {loading && !data ? <p className="muted-text">Loading week…</p> : null}
+      <div className="life-week-phone-strip" role="tablist" aria-label="Week days">
+        {dayList.map((date, index) => {
+          const isToday = date === liveToday
+          const isSelected = date === selectedDate
+          const { day } = dayMonth(date, tz)
 
-      {viewport === 'phone' ? (
-        <div className="life-week-grid">
-          {dayList.map((date, index) => {
-            const isToday = date === today
-            const isPast = date < today
-            const isExpanded = expandedDate === date
-            const dayNum = date.slice(8).replace(/^0/, '')
-            const cellEvents = eventsByDate.get(date) || []
-            const cellTasks = tasksByDueDate.get(date) || []
-            const positioned = positionedEventsByDate.get(date) || []
-            const allDayEvents = cellEvents.filter((event) => event.all_day)
-            const isEmpty = cellEvents.length === 0 && cellTasks.length === 0
-            const nowTop = isToday && nowMinutes !== null ? eventTopPct(nowMinutes) : null
+          return (
+            <button
+              key={date}
+              type="button"
+              role="tab"
+              aria-selected={isSelected}
+              className={`life-week-phone-day${isSelected ? ' is-selected' : ''}${isToday ? ' is-today' : ''}`}
+              onClick={() => setSelectedDate(date)}
+            >
+              <span className="life-week-phone-letter">{WEEKDAY_NAMES[index % 7].slice(0, 1)}</span>
+              <span className="life-week-phone-number">{day}</span>
+            </button>
+          )
+        })}
+      </div>
+
+      <div className="life-week-phone-head">
+        <div className="life-week-phone-head-copy">
+          <h2>{WEEKDAY_LONG_NAMES[Math.max(phoneDateIndex, 0)]}</h2>
+          <p>{phoneMeta}</p>
+        </div>
+      </div>
+
+      {phoneAllDayEvents.length > 0 ? (
+        <div className="life-week-phone-allday">
+          {phoneAllDayEvents.map((event) => (
+            <button
+              key={event.id}
+              type="button"
+              className="life-week-phone-allday-badge"
+              onClick={() => openEditDraft(event)}
+            >
+              {event.title || '(Untitled)'}
+            </button>
+          ))}
+        </div>
+      ) : null}
+
+      <div
+        className="life-week-phone-scroll"
+        ref={(node) => {
+          phoneWindowRefs.current[selectedDate] = node
+        }}
+      >
+        <div className="life-week-phone-track">
+          {phoneHourRows.map((row, index) => (
+            <button
+              type="button"
+              key={`${selectedDate}-${row.hour}`}
+              className="life-week-phone-row"
+              style={{ top: `${index * PHONE_ROW_HEIGHT}px` }}
+              onClick={() => openCreateDraft(selectedDate, Math.min(row.hour, 23))}
+              aria-label={`Add event at ${row.label}`}
+            >
+              <span className="life-week-phone-row-label">{row.label}</span>
+              <span className="life-week-phone-row-line" />
+            </button>
+          ))}
+
+          {phonePositionedEvents.map((item) => {
+            const top = ((item.startMin - PHONE_DAY_START_HOUR * 60) / 60) * PHONE_ROW_HEIGHT
+            const height =
+              Math.max(
+                Math.min(item.endMin, PHONE_DAY_END_HOUR * 60) -
+                  Math.max(item.startMin, PHONE_DAY_START_HOUR * 60),
+                30,
+              ) /
+                60 *
+                PHONE_ROW_HEIGHT -
+              2
+            const left =
+              item.colCount > 1
+                ? `calc(${PHONE_RAIL_WIDTH}px + ${item.colIndex} * ((100% - ${PHONE_RAIL_WIDTH}px) / ${item.colCount}))`
+                : `${PHONE_RAIL_WIDTH}px`
+            const width =
+              item.colCount > 1
+                ? `calc(((100% - ${PHONE_RAIL_WIDTH}px) / ${item.colCount}) - 6px)`
+                : `calc(100% - ${PHONE_RAIL_WIDTH}px)`
 
             return (
-              <div
-                key={date}
-                ref={isToday ? todayRef : undefined}
-                className={[
-                  'life-day-cell',
-                  isToday ? 'life-day-today' : '',
-                  isPast ? 'life-day-past' : '',
-                  isExpanded ? 'life-day-expanded' : '',
-                ]
-                  .filter(Boolean)
-                  .join(' ')}
+              <button
+                key={item.event.id}
+                type="button"
+                className="life-week-phone-event"
+                style={{ top: `${top}px`, height: `${height}px`, left, width }}
+                onClick={() => openEditDraft(item.event)}
               >
-                {isExpanded ? (
-                  <>
-                    <button
-                      type="button"
-                      className="life-day-head life-day-head-btn"
-                      onClick={() => setExpandedDate(null)}
-                      aria-expanded
-                      aria-label={`${WEEKDAY_NAMES[index % 7]} ${dayNum} — collapse`}
-                    >
-                      <span className="life-day-weekday">{WEEKDAY_NAMES[index % 7]}</span>
-                      <span className="life-day-date">{dayNum}</span>
-                    </button>
-
-                    <div className="life-day-timeline">
-                      {allDayEvents.length > 0 ? (
-                        <div className="life-day-allday-strip">
-                          {allDayEvents.map((event) => (
-                            <button
-                              key={event.id}
-                              type="button"
-                              className="life-day-allday-badge"
-                              onClick={() => openEditDraft(event)}
-                            >
-                              {event.title || '(Untitled)'}
-                            </button>
-                          ))}
-                        </div>
-                      ) : null}
-
-                      <div
-                        className="life-day-scroll-window"
-                        ref={(node) => {
-                          phoneWindowRefs.current[date] = node
-                        }}
-                      >
-                        <div className="life-day-timeline-body">
-                          {hourRows.map((row) => (
-                            <button
-                              type="button"
-                              key={`${date}-${row.hour}`}
-                              className="life-tl-row"
-                              onClick={() => openCreateDraft(date, row.hour)}
-                              aria-label={`Add event at ${row.label}`}
-                            >
-                              <span className="life-tl-label">{row.label}</span>
-                              <span className="life-tl-line" />
-                            </button>
-                          ))}
-
-                          {positioned.map((item) => {
-                            const top = eventTopPct(item.startMin)
-                            const height = eventHeightPct(item.startMin, item.endMin)
-                            const left =
-                              item.colCount > 1
-                                ? `calc(44px + ${item.colIndex} * ((100% - 44px) / ${item.colCount}))`
-                                : '44px'
-                            const width =
-                              item.colCount > 1
-                                ? `calc(((100% - 44px) / ${item.colCount}) - 4px)`
-                                : 'calc(100% - 44px)'
-
-                            return (
-                              <button
-                                key={item.event.id}
-                                type="button"
-                                className="life-tl-event"
-                                style={{ top: `${top}%`, height: `${height}%`, left, width }}
-                                onClick={() => openEditDraft(item.event)}
-                              >
-                                <span className="life-tl-event-time">
-                                  {item.event.start_time
-                                    ? getLocalTimeLabel(item.event.start_time, tz)
-                                    : 'All day'}
-                                </span>
-                                <span className="life-tl-event-title">
-                                  {item.event.title || '(Untitled)'}
-                                </span>
-                              </button>
-                            )
-                          })}
-
-                          {nowTop !== null ? (
-                            <div className="life-tl-now" style={{ top: `${nowTop}%` }}>
-                              <span className="life-tl-now-dot" />
-                              <span className="life-tl-now-line" />
-                            </div>
-                          ) : null}
-
-                          {draft && draft.date === date ? (
-                            <div
-                              className="life-tl-draft"
-                              style={{ top: `${eventTopPct(draft.hour * 60)}%` }}
-                            >
-                              <input
-                                autoFocus
-                                type="text"
-                                className="text-input"
-                                placeholder={draft.mode === 'edit' ? 'Edit event…' : 'New event…'}
-                                value={draftTitle}
-                                onChange={(event) => setDraftTitle(event.target.value)}
-                                onKeyDown={(event) => {
-                                  if (event.key === 'Enter') saveDraft()
-                                  if (event.key === 'Escape') resetDraft()
-                                }}
-                              />
-                              {!draft.allDay ? (
-                                <div className="life-tl-draft-row">
-                                  <input
-                                    type="time"
-                                    className="text-input"
-                                    value={draftStart}
-                                    aria-label="Start time"
-                                    onChange={(event) => setDraftStart(event.target.value)}
-                                  />
-                                  <input
-                                    type="time"
-                                    className="text-input"
-                                    value={draftEnd}
-                                    aria-label="End time"
-                                    onChange={(event) => setDraftEnd(event.target.value)}
-                                  />
-                                  <button
-                                    type="button"
-                                    className="primary-button"
-                                    onClick={saveDraft}
-                                    disabled={saving}
-                                  >
-                                    {saving
-                                      ? 'Saving…'
-                                      : draft.mode === 'edit'
-                                        ? 'Save'
-                                        : 'Add'}
-                                  </button>
-                                  <button
-                                    type="button"
-                                    className="secondary-button"
-                                    onClick={resetDraft}
-                                    disabled={saving}
-                                  >
-                                    Cancel
-                                  </button>
-                                  {draft.mode === 'edit' && draft.eventId ? (
-                                    <button
-                                      type="button"
-                                      className="secondary-button life-event-delete"
-                                      onClick={deleteDraftEvent}
-                                      disabled={saving}
-                                    >
-                                      Delete
-                                    </button>
-                                  ) : null}
-                                </div>
-                              ) : (
-                                <div className="life-tl-draft-row">
-                                  <button
-                                    type="button"
-                                    className="primary-button"
-                                    onClick={saveDraft}
-                                    disabled={saving}
-                                  >
-                                    {saving ? 'Saving…' : 'Save'}
-                                  </button>
-                                  <button
-                                    type="button"
-                                    className="secondary-button"
-                                    onClick={resetDraft}
-                                    disabled={saving}
-                                  >
-                                    Cancel
-                                  </button>
-                                  {draft.mode === 'edit' && draft.eventId ? (
-                                    <button
-                                      type="button"
-                                      className="secondary-button life-event-delete"
-                                      onClick={deleteDraftEvent}
-                                      disabled={saving}
-                                    >
-                                      Delete
-                                    </button>
-                                  ) : null}
-                                </div>
-                              )}
-                              {saveError ? <span className="error-text">{saveError}</span> : null}
-                            </div>
-                          ) : null}
-                        </div>
-                      </div>
-
-                      {cellTasks.length > 0 ? (
-                        <div className="life-day-tasks life-day-tasks-expanded">
-                          {cellTasks.map((task) => (
-                            <span className="life-day-task" key={task.id}>
-                              <span className={`pri-dot pri-${task.priority}`} />
-                              {task.title}
-                            </span>
-                          ))}
-                        </div>
-                      ) : null}
-
-                      {isEmpty ? (
-                        <span className="life-day-empty life-day-empty-tl">Nothing scheduled</span>
-                      ) : null}
-                    </div>
-                  </>
-                ) : (
-                  <button
-                    type="button"
-                    className="life-day-cell-toggle"
-                    onClick={() => setExpandedDate(date)}
-                    aria-expanded={false}
-                    aria-label={`${WEEKDAY_NAMES[index % 7]} ${dayNum} — expand`}
-                  >
-                    <div className="life-day-head">
-                      <span className="life-day-weekday">{WEEKDAY_NAMES[index % 7]}</span>
-                      <span className="life-day-date">{dayNum}</span>
-                      {cellEvents.length > 0 ? (
-                        <span className="life-day-dot-row">
-                          {cellEvents.slice(0, 3).map((event) => (
-                            <span key={event.id} className="life-day-dot" />
-                          ))}
-                        </span>
-                      ) : null}
-                    </div>
-
-                    <div className="life-day-events">
-                      {cellEvents.slice(0, 3).map((event) => (
-                        <div className="life-day-event" key={event.id}>
-                          <span className="life-day-event-time">
-                            {event.all_day
-                              ? 'All day'
-                              : event.start_time
-                                ? getLocalTimeLabel(event.start_time, tz)
-                                : ''}
-                          </span>
-                          <span className="life-day-event-title">
-                            {event.title || '(Untitled)'}
-                          </span>
-                        </div>
-                      ))}
-                      {isEmpty ? <span className="life-day-empty">—</span> : null}
-                    </div>
-
-                    {cellTasks.length > 0 ? (
-                      <div className="life-day-tasks">
-                        {cellTasks.slice(0, 3).map((task) => (
-                          <span className="life-day-task" key={task.id}>
-                            <span className={`pri-dot pri-${task.priority}`} />
-                            {task.title}
-                          </span>
-                        ))}
-                      </div>
-                    ) : null}
-                  </button>
-                )}
-              </div>
+                <span className="life-week-phone-event-time">
+                  {item.event.start_time ? getLocalTimeLabel(item.event.start_time, tz) : 'All day'}
+                </span>
+                <span className="life-week-phone-event-title">
+                  {item.event.title || '(Untitled)'}
+                </span>
+              </button>
             )
           })}
+
+          {phoneNowVisible ? (
+            <div
+              className="life-week-phone-now"
+              style={{ top: `${(nowMinutes! / 60) * PHONE_ROW_HEIGHT}px` }}
+            >
+              <span className="life-week-phone-now-pill">
+                {String(Math.floor(nowMinutes! / 60)).padStart(2, '0')}:
+                {String(nowMinutes! % 60).padStart(2, '0')}
+              </span>
+              <span className="life-week-phone-now-line" />
+            </div>
+          ) : null}
         </div>
-      ) : (
-        desktopWeek
-      )}
+      </div>
     </div>
+  )
+
+  return (
+    <>
+      <div className="life-week-shell">
+        <div className="life-page-head">
+          <div>
+            <p className="eyebrow">Week {isoWeek(weekStart)}</p>
+            <h1>{formatRange(weekStart, weekEnd, tz)}</h1>
+          </div>
+          <div className="life-week-toolbar">
+            <button
+              type="button"
+              className="life-icon-btn"
+              onClick={() => setWeekStart((current) => addDays(current, -7))}
+              aria-label="Previous week"
+            >
+              ←
+            </button>
+            <button
+              type="button"
+              className="life-btn ghost"
+              onClick={() => setWeekStart(getWeekStart(today))}
+              disabled={isCurrentWeek}
+            >
+              Today
+            </button>
+            <button
+              type="button"
+              className="life-icon-btn"
+              onClick={() => setWeekStart((current) => addDays(current, 7))}
+              aria-label="Next week"
+            >
+              →
+            </button>
+          </div>
+        </div>
+
+        {error ? <p className="error-text">{error}</p> : null}
+        {viewport === 'phone' ? (
+          phoneWeek
+        ) : (
+          desktopWeek
+        )}
+      </div>
+
+      {draft ? (
+        <div className={`life-week-composer-overlay${viewport === 'phone' ? ' is-phone' : ''}`}>
+          <div className="life-week-composer-backdrop" onClick={resetDraft} />
+          <aside className={`life-week-composer-panel${viewport === 'phone' ? ' is-phone' : ''}`}>
+            <div className="life-week-composer-head">
+              <h2>{draft.mode === 'edit' ? 'Edit event' : 'New event'}</h2>
+              <div className="life-week-composer-actions">
+                <button type="button" className="life-btn ghost" onClick={resetDraft}>
+                  Cancel
+                </button>
+                <button type="button" className="life-btn primary" onClick={saveDraft} disabled={saving}>
+                  {saving ? 'Saving…' : 'Save'}
+                </button>
+              </div>
+            </div>
+
+            <div className="life-week-composer-body">
+              <label className="life-week-composer-field">
+                <span className="life-week-composer-label">Title</span>
+                <input
+                  autoFocus
+                  type="text"
+                  className="text-input"
+                  value={draftTitle}
+                  placeholder="Untitled event"
+                  onChange={(event) => setDraftTitle(event.target.value)}
+                />
+              </label>
+
+              <div className="life-week-composer-field">
+                <span className="life-week-composer-label">Date</span>
+                <div className="life-week-composer-static">{fullDateLabel(draft.date, tz)}</div>
+              </div>
+
+              <div className="life-week-composer-toggle">
+                <span>All-day</span>
+                <button
+                  type="button"
+                  className={`life-week-toggle${draft.allDay ? ' is-active' : ''}`}
+                  onClick={toggleDraftAllDay}
+                  aria-pressed={draft.allDay}
+                >
+                  <span className="life-week-toggle-thumb" />
+                </button>
+              </div>
+
+              {!draft.allDay ? (
+                <div className="life-week-composer-time-row">
+                  <label className="life-week-composer-field">
+                    <span className="life-week-composer-label">Start</span>
+                    <input
+                      type="time"
+                      className="text-input"
+                      value={draftStart}
+                      onChange={(event) => setDraftStart(event.target.value)}
+                    />
+                  </label>
+
+                  <label className="life-week-composer-field">
+                    <span className="life-week-composer-label">End</span>
+                    <input
+                      type="time"
+                      className="text-input"
+                      value={draftEnd}
+                      onChange={(event) => setDraftEnd(event.target.value)}
+                    />
+                  </label>
+                </div>
+              ) : null}
+
+              {saveError ? <span className="error-text">{saveError}</span> : null}
+
+              {draft.mode === 'edit' && draft.eventId ? (
+                <button type="button" className="life-week-composer-delete" onClick={deleteDraftEvent} disabled={saving}>
+                  Delete event
+                </button>
+              ) : null}
+            </div>
+          </aside>
+        </div>
+      ) : null}
+    </>
   )
 }

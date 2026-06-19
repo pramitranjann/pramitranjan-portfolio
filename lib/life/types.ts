@@ -42,11 +42,17 @@ export interface CalendarEventRecord {
   id: string;
   user_id: string;
   title: string | null;
+  calendar_id: string | null;
+  calendar_name: string | null;
+  location: string | null;
+  notes: string | null;
+  html_link: string | null;
   start_time: string | null;
   end_time: string | null;
   all_day: boolean;
   source: string;
   local_date: string;
+  updated_at: string;
   synced_at: string;
 }
 

@@ -9,7 +9,7 @@ import { getCurrentLocalDate } from '@/lib/life/time'
 export default async function LifeTasksPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>
+  searchParams: Promise<{ error?: string; project?: string }>
 }) {
   if (!(await isAdminSession())) {
     redirect('/life/login?next=/life/tasks')
@@ -17,9 +17,18 @@ export default async function LifeTasksPage({
 
   const params = await searchParams
   const error = params.error || null
+  const initialProjectSlug = params.project || null
   const settings = await getOwnerSettings()
   const today = getCurrentLocalDate(settings.timezone)
   const tasks = (await getTasks({ status: 'all' })).filter((task) => task.status !== 'dismissed')
 
-  return <TasksClient tasks={tasks} today={today} error={error} />
+  return (
+    <TasksClient
+      tasks={tasks}
+      today={today}
+      timezone={settings.timezone}
+      error={error}
+      initialProjectSlug={initialProjectSlug}
+    />
+  )
 }

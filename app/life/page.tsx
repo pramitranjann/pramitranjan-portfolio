@@ -1,4 +1,3 @@
-import { Suspense } from 'react'
 import { after } from 'next/server'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
@@ -77,7 +76,7 @@ async function CapturedTodayCard({
   const entries = (entriesResult.data || []) as EntryRecord[]
 
   return (
-    <div className="life-card">
+    <div className="life-card life-captured-card">
       <div className="life-card-head">
         <h2>Captured today</h2>
         <Link href="/life/history" className="life-card-action">
@@ -150,7 +149,7 @@ async function TodaySideCards({
 
   return (
     <>
-      <div className="life-card">
+      <div className="life-card life-morning-brief-card">
         <div className="life-card-head">
           <h2>Morning brief</h2>
           {briefTime ? <span className="eyebrow">{briefTime}</span> : null}
@@ -164,7 +163,7 @@ async function TodaySideCards({
         </div>
       </div>
 
-      <div className="life-card">
+      <div className="life-card life-today-tasks-card">
         <div className="life-card-head">
           <h2>Today&rsquo;s tasks</h2>
           <span className="count-pill">{todayTasks.length}</span>
@@ -215,7 +214,7 @@ async function TodaySideCards({
         </div>
       </div>
 
-      <div className="life-card">
+      <div className="life-card life-today-schedule-card">
         <div className="life-card-head">
           <h2>Schedule</h2>
           <span className="count-pill">{events.length}</span>
@@ -240,36 +239,6 @@ async function TodaySideCards({
         )}
       </div>
     </>
-  )
-}
-
-function CardsSkeleton() {
-  return (
-    <>
-      {[1, 2, 3].map((i) => (
-        <div key={i} className="life-card life-card-skeleton">
-          <div className="life-card-head">
-            <div className="skeleton-line skeleton-title" />
-          </div>
-          <div className="skeleton-line" />
-          <div className="skeleton-line skeleton-short" />
-          <div className="skeleton-line" />
-        </div>
-      ))}
-    </>
-  )
-}
-
-function CapturedCardSkeleton() {
-  return (
-    <div className="life-card life-card-skeleton">
-      <div className="life-card-head">
-        <div className="skeleton-line skeleton-title" />
-      </div>
-      <div className="skeleton-line" />
-      <div className="skeleton-line" />
-      <div className="skeleton-line skeleton-short" />
-    </div>
   )
 }
 
@@ -318,7 +287,11 @@ export default async function LifeTodayPage({
     <div className="life-today">
       {/* Left column: no DB dependencies — paints immediately */}
       <section className="life-capture">
-        <p className="eyebrow">
+        <form action="/life/search" method="get" className="life-today-search" role="search">
+          <span aria-hidden="true">⌕</span>
+          <input name="q" type="search" placeholder="Search…" aria-label="Search life" />
+        </form>
+        <p className="eyebrow life-today-eyebrow">
           Today · <b>{eyebrowDate}</b>
         </p>
         <h1 className="life-greeting">{greetingForHour(hour)}, Pramit.</h1>
@@ -363,17 +336,12 @@ export default async function LifeTodayPage({
         <QuickAdd redirectTo="/life" localDate={localDate} textareaId={textareaId} />
 
         <section className="life-capture-stream">
-          <Suspense fallback={<CapturedCardSkeleton />}>
-            <CapturedTodayCard localDate={localDate} timezone={timezone} />
-          </Suspense>
+          <CapturedTodayCard localDate={localDate} timezone={timezone} />
         </section>
       </section>
 
-      {/* Right column: streams in while the left column is already interactive */}
       <aside className="life-side">
-        <Suspense fallback={<CardsSkeleton />}>
-          <TodaySideCards localDate={localDate} timezone={timezone} />
-        </Suspense>
+        <TodaySideCards localDate={localDate} timezone={timezone} />
       </aside>
     </div>
   )

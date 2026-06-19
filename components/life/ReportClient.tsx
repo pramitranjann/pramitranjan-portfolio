@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react'
 
+import { useViewportMode } from '@/hooks/useViewportMode'
 import { fetchJson } from '@/lib/life/client'
-import { getEntryPresentation } from '@/lib/life/entries'
 import { parseReportSections, sectionKey } from '@/lib/life/markdown-sections'
 import { localDateTimeToUtc } from '@/lib/life/time'
 import type {
@@ -34,9 +34,10 @@ type ReportDetailState = ReportDetailResponse['context'] & {
   report: ReportRecord
 }
 
-interface Metric {
-  value: string
-  label: string
+interface ReportClientProps {
+  initialList?: ReportsListResponse
+  initialSelectedId?: string | null
+  initialDetail?: ReportDetailState | null
 }
 
 interface StructuredSection {
@@ -50,7 +51,12 @@ const TYPE_LABEL: Record<string, string> = {
   weekly: 'Week ahead',
 }
 
-const FOCUS_EVENT_RE = /\b(build|deep work|focus|maker|design|research|writing|ship|code)\b/i
+const TYPE_SHORT: Record<string, string> = {
+  eod: 'Evening',
+  morning: 'Morning',
+  weekly: 'Weekly',
+}
+
 const TITLE_SECTION_KEYS = [
   'what-happened',
   'what-happened-today',
@@ -59,11 +65,13 @@ const TITLE_SECTION_KEYS = [
   'one-thing-worth-sitting-with',
   'tension',
 ]
+
 const PULL_QUOTE_KEYS = new Set([
   'one-thing',
   'one-intention',
   'one-thing-worth-sitting-with',
 ])
+
 const FALLBACK_SECTION_LABELS = [
   'What happened today',
   'What happened',
@@ -151,6 +159,18 @@ function firstSentence(value: string) {
   return sentences[0] || ''
 }
 
+function trimOuterQuotes(value: string) {
+  let next = value.trim()
+  while (
+    (next.startsWith('"') && next.endsWith('"')) ||
+    (next.startsWith("'") && next.endsWith("'")) ||
+    (next.startsWith('“') && next.endsWith('”'))
+  ) {
+    next = next.slice(1, -1).trim()
+  }
+  return next.replace(/^["“”'\s]+/, '').replace(/["“”'\s]+$/, '').trim()
+}
+
 function getReportTitle(report: ReportRecord) {
   const sections = getStructuredSections(report.content)
   for (const key of TITLE_SECTION_KEYS) {
@@ -170,74 +190,6 @@ function getReportTitle(report: ReportRecord) {
   return TYPE_LABEL[report.type] || 'Report'
 }
 
-function getMinutesBetween(start: string | null, end: string | null) {
-  if (!start || !end) return 0
-  const startMs = new Date(start).getTime()
-  const endMs = new Date(end).getTime()
-  if (!Number.isFinite(startMs) || !Number.isFinite(endMs) || endMs <= startMs) return 0
-  return Math.round((endMs - startMs) / 60000)
-}
-
-function formatMinutes(totalMinutes: number) {
-  if (totalMinutes <= 0) return '0m'
-  const hours = Math.floor(totalMinutes / 60)
-  const minutes = totalMinutes % 60
-  if (hours === 0) return `${minutes}m`
-  if (minutes === 0) return `${hours}h`
-  return `${hours}h${minutes}m`
-}
-
-function getFocusMinutes(events: CalendarEventRecord[]) {
-  return events.reduce((total, event) => {
-    if (event.all_day || !FOCUS_EVENT_RE.test(event.title || '')) return total
-    return total + getMinutesBetween(event.start_time, event.end_time)
-  }, 0)
-}
-
-function buildMetrics(detail: ReportDetailState): Metric[] {
-  const dueToday = detail.openTasks.filter(
-    (task) => task.due_local_date === detail.report.local_date,
-  ).length
-  const openLoops = detail.openTasks.filter(
-    (task) => task.due_local_date && task.due_local_date <= detail.report.local_date,
-  ).length
-  const focusMinutes = getFocusMinutes(detail.events)
-
-  if (detail.report.type === 'morning') {
-    return [
-      { value: String(dueToday), label: 'Due today' },
-      {
-        value: focusMinutes > 0 ? formatMinutes(focusMinutes) : String(detail.events.length),
-        label: focusMinutes > 0 ? 'Focus blocks' : 'Calendar blocks',
-      },
-      {
-        value: String(openLoops || detail.entries.length),
-        label: openLoops > 0 ? 'Open loops' : 'Captures',
-      },
-    ]
-  }
-
-  if (detail.report.type === 'weekly') {
-    return [
-      { value: String(detail.openTasks.length), label: 'Open tasks' },
-      { value: String(detail.events.length), label: 'Calendar blocks' },
-      { value: String(detail.entries.length), label: 'Captures' },
-    ]
-  }
-
-  return [
-    { value: String(detail.completedTasks.length), label: 'Tasks done' },
-    {
-      value: focusMinutes > 0 ? formatMinutes(focusMinutes) : String(detail.events.length),
-      label: focusMinutes > 0 ? 'Deep work' : 'Calendar blocks',
-    },
-    {
-      value: String(openLoops || detail.entries.length),
-      label: openLoops > 0 ? 'Open loops' : 'Captures',
-    },
-  ]
-}
-
 function getPullQuote(detail: ReportDetailState) {
   const sections = getStructuredSections(detail.report.content)
   const section = sections.find((candidate) => PULL_QUOTE_KEYS.has(sectionKey(candidate.label)))
@@ -250,14 +202,14 @@ function getPullQuote(detail: ReportDetailState) {
   if (sentences.length >= 2) {
     return {
       label: section.label,
-      lead: sentences.slice(0, -1).join(' ').trim(),
-      accent: sentences.at(-1)?.trim() || '',
+      lead: trimOuterQuotes(sentences.slice(0, -1).join(' ').trim()),
+      accent: trimOuterQuotes(sentences.at(-1)?.trim() || ''),
     }
   }
 
   return {
     label: section.label,
-    lead: clean,
+    lead: trimOuterQuotes(clean),
     accent: '',
   }
 }
@@ -275,32 +227,34 @@ function getBodySections(detail: ReportDetailState) {
     }))
 }
 
-function getLinkedEntries(entries: EntryRecord[]) {
-  return entries
-    .slice(-4)
-    .reverse()
-    .map((entry) => {
-      const presentation = getEntryPresentation(entry)
-      return {
-        id: entry.id,
-        content: entry.content,
-        typeLabel: presentation.kind,
-        typeColor: presentation.color,
-      }
-    })
+function getReportMetrics(detail: ReportDetailState) {
+  return [
+    { label: 'Captures', value: detail.entries.length },
+    { label: 'Events', value: detail.events.length },
+    { label: 'Tasks', value: detail.openTasks.length + detail.completedTasks.length },
+  ]
 }
 
-export function ReportClient() {
-  const [reports, setReports] = useState<ReportRecord[]>([])
-  const [selectedId, setSelectedId] = useState<string | null>(null)
-  const [detailCache, setDetailCache] = useState<Record<string, ReportDetailState>>({})
-  const [timezone, setTimezone] = useState('UTC')
-  const [loading, setLoading] = useState(true)
+export function ReportClient({
+  initialList,
+  initialSelectedId = null,
+  initialDetail = null,
+}: ReportClientProps) {
+  const viewport = useViewportMode()
+  const [reports, setReports] = useState<ReportRecord[]>(initialList?.reports || [])
+  const [selectedId, setSelectedId] = useState<string | null>(initialSelectedId)
+  const [detailCache, setDetailCache] = useState<Record<string, ReportDetailState>>(
+    initialDetail ? { [initialDetail.report.id]: initialDetail } : {},
+  )
+  const [timezone, setTimezone] = useState(initialList?.timezone || 'UTC')
+  const [loading, setLoading] = useState(!initialList)
   const [detailLoading, setDetailLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [detailError, setDetailError] = useState<string | null>(null)
 
   useEffect(() => {
+    if (initialList) return
+
     let cancelled = false
 
     fetchJson<ReportsListResponse>('/api/life/reports?all=true')
@@ -330,7 +284,7 @@ export function ReportClient() {
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [initialList])
 
   useEffect(() => {
     if (!selectedId || detailCache[selectedId]) return
@@ -378,10 +332,6 @@ export function ReportClient() {
     () => (selectedDetail ? getReportTitle(selectedDetail.report) : ''),
     [selectedDetail],
   )
-  const metrics = useMemo(
-    () => (selectedDetail ? buildMetrics(selectedDetail) : []),
-    [selectedDetail],
-  )
   const pullQuote = useMemo(
     () => (selectedDetail ? getPullQuote(selectedDetail) : null),
     [selectedDetail],
@@ -390,94 +340,179 @@ export function ReportClient() {
     () => (selectedDetail ? getBodySections(selectedDetail) : []),
     [selectedDetail],
   )
+  const reportMetrics = useMemo(
+    () => (selectedDetail ? getReportMetrics(selectedDetail) : []),
+    [selectedDetail],
+  )
   const linkedEntries = useMemo(
-    () => (selectedDetail ? getLinkedEntries(selectedDetail.entries) : []),
+    () => selectedDetail?.entries.slice(0, 3) || [],
     [selectedDetail],
   )
 
   const isEmpty = !loading && reports.length === 0
+
+  if (viewport === 'phone') {
+    return (
+      <div>
+        <div style={{ padding: '18px 16px 0' }}>
+          <div className="life-page-head">
+            <div>
+              <p className="eyebrow">Library</p>
+              <h1>Briefs &amp; reflections</h1>
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gap: 6, marginBottom: 20 }}>
+            {loading
+              ? Array.from({ length: 3 }, (_, index) => (
+                  <div
+                    key={`loading-${index}`}
+                    className="life-reports-row life-reports-row-skeleton"
+                    style={{ minHeight: 42, height: 42 }}
+                  />
+                ))
+              : reports.map((report) => (
+                  <button
+                    key={report.id}
+                    type="button"
+                    className={`life-reports-row${selectedId === report.id ? ' is-selected' : ''}`}
+                    onClick={() => setSelectedId(report.id)}
+                    style={{ minHeight: 42, height: 42, padding: '0 14px' }}
+                  >
+                    <span className="life-reports-row-date">{shortDay(report.local_date, timezone)}</span>
+                    <span className="life-reports-row-type">
+                      {TYPE_SHORT[report.type] || report.type}
+                    </span>
+                  </button>
+                ))}
+          </div>
+
+          {error ? <p className="error-text">{error}</p> : null}
+          {detailError ? <p className="error-text">{detailError}</p> : null}
+          {isEmpty ? <p className="muted-text">No reports yet.</p> : null}
+          {!loading && !selectedReport && !isEmpty ? <p className="muted-text">No report selected.</p> : null}
+          {detailLoading && !selectedDetail ? <p className="muted-text">Loading report…</p> : null}
+
+          {selectedDetail ? (
+            <div style={{ display: 'grid', gap: 18, paddingBottom: 32 }}>
+              <div>
+                <p className="eyebrow" style={{ marginBottom: 10 }}>
+                  {TYPE_LABEL[selectedDetail.report.type] || selectedDetail.report.type} ·{' '}
+                  <b>{shortDay(selectedDetail.report.local_date, timezone)}</b>
+                </p>
+                <h1 style={{ fontSize: 22, fontWeight: 500, letterSpacing: '-.02em', margin: 0, lineHeight: 1.15 }}>
+                  {reportTitle}
+                </h1>
+              </div>
+
+              {pullQuote ? (
+                <div style={{ padding: '4px 0 16px', borderBottom: '1px solid var(--life-hairline)' }}>
+                  <p style={{ fontSize: 18, fontWeight: 600, lineHeight: 1.4, margin: 0 }}>
+                    &quot;{pullQuote.lead}
+                    {pullQuote.accent ? (
+                      <>
+                        {' '}
+                        <span style={{ color: 'var(--life-accent)' }}>{pullQuote.accent}</span>
+                      </>
+                    ) : null}
+                    &quot;
+                  </p>
+                </div>
+              ) : null}
+
+              <div style={{ display: 'grid', gap: 16 }}>
+                {bodySections.map((section) => (
+                  <div
+                    key={`${section.key}-${section.label}`}
+                    style={
+                      section.key === 'tension'
+                        ? { padding: '0 0 16px', borderLeft: '2px solid var(--life-accent)', paddingLeft: 14 }
+                        : { padding: '0 0 16px', borderBottom: '1px solid var(--life-hairline)' }
+                    }
+                  >
+                    <h3 className="eyebrow" style={{ margin: '0 0 8px' }}>
+                      {section.label}
+                    </h3>
+                    {section.paragraphs.map((paragraph, index) => (
+                      <p
+                        key={`${section.key}-${index}`}
+                        style={{ margin: 0, color: 'var(--life-muted)', lineHeight: 1.65, fontSize: 14 }}
+                      >
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div>
       <div className="life-page-head">
         <div>
           <p className="eyebrow">Reports</p>
-          <h1>Briefs &amp; reflections</h1>
+          <h1>Briefs</h1>
         </div>
+        <div className="life-page-stat">{reports.length}</div>
       </div>
 
       <div className="life-reports-shell">
-        <ul className="life-reports-sidebar">
-          {reports.map((report) => (
-            <li key={report.id}>
-              <button
-                type="button"
-                className={`life-reports-row ${selectedId === report.id ? 'is-selected' : ''}`}
-                onClick={() => setSelectedId(report.id)}
-              >
-                <span className="life-reports-row-date">{shortDay(report.local_date, timezone)}</span>
-                <span className="life-reports-row-type">
-                  {TYPE_LABEL[report.type]?.replace(' brief', '').replace(' ahead', '') || report.type}
-                </span>
-              </button>
-            </li>
-          ))}
-          {reports.length === 0 ? (
-            <>
-              <li>
-                <div className="life-reports-row life-reports-row-empty">
-                  <span className="life-reports-row-date">No reports yet</span>
-                  <span className="life-reports-row-type">Empty</span>
-                </div>
-              </li>
-              <li>
-                <div className="life-reports-row life-reports-row-empty">
-                  <span className="life-reports-row-date">Morning brief</span>
-                  <span className="life-reports-row-type">Soon</span>
-                </div>
-              </li>
-              <li>
-                <div className="life-reports-row life-reports-row-empty">
-                  <span className="life-reports-row-date">Evening brief</span>
-                  <span className="life-reports-row-type">Soon</span>
-                </div>
-              </li>
-            </>
-          ) : null}
-        </ul>
+        <aside className="life-report-rail">
+          <div className="life-report-rail-head">
+            <p className="eyebrow">
+              <span className="life-report-desktop-label">Recent reports</span>
+              <span className="life-report-phone-label">Reports</span>
+            </p>
+            <span className="count-pill">{reports.length}</span>
+          </div>
 
-        <article className="life-reports-reader">
-          {loading ? <div className="life-reports-placeholder">Loading…</div> : null}
+          <div className="life-reports-sidebar">
+            {loading
+              ? Array.from({ length: 3 }, (_, index) => (
+                  <div
+                    key={`loading-${index}`}
+                    className="life-reports-row life-reports-row-skeleton"
+                  />
+                ))
+              : reports.map((report) => (
+                  <button
+                    key={report.id}
+                    type="button"
+                    className={`life-reports-row${selectedId === report.id ? ' is-selected' : ''}`}
+                    onClick={() => setSelectedId(report.id)}
+                  >
+                    <span className="life-reports-row-date">{shortDay(report.local_date, timezone)}</span>
+                    <span className="life-reports-row-type">
+                      {TYPE_SHORT[report.type] || report.type}
+                    </span>
+                  </button>
+                ))}
+
+            {!loading && reports.length === 0 ? (
+              <div className="life-reports-row life-reports-row-empty">
+                <span className="life-reports-row-date">No reports yet</span>
+                <span className="life-reports-row-type">Empty</span>
+              </div>
+            ) : null}
+          </div>
+        </aside>
+
+        <section className="life-reports-reader">
           {error ? <p className="error-text">{error}</p> : null}
-          {isEmpty ? (
-            <div className="life-reports-empty">
-              <header className="life-reports-reader-head">
-                <p className="eyebrow">Reports</p>
-                <h1>No reports yet</h1>
-              </header>
-              <section className="life-report-section">
-                <p className="eyebrow">What shows up here</p>
-                <p className="muted-text">
-                  Morning briefs, evening reflections, and week-ahead summaries will land here as
-                  you use Life.
-                </p>
-              </section>
-              <section className="life-report-section life-report-section-accent">
-                <p className="eyebrow">How to populate it</p>
-                <p className="muted-text">
-                  Capture entries, keep tasks current, and run through a full day or week. The
-                  generated briefs will use those signals.
-                </p>
-              </section>
-            </div>
-          ) : null}
-          {!loading && !selectedReport && !isEmpty ? (
-            <p className="muted-text">No report selected.</p>
-          ) : null}
           {detailError ? <p className="error-text">{detailError}</p> : null}
-          {detailLoading && !selectedDetail ? (
-            <div className="life-reports-placeholder">Loading report…</div>
+          {isEmpty ? <p className="life-reports-placeholder">No reports yet.</p> : null}
+          {!loading && !selectedReport && !isEmpty ? (
+            <p className="life-reports-placeholder">No report selected.</p>
           ) : null}
+          {detailLoading && !selectedDetail ? (
+            <p className="life-reports-placeholder">Loading report…</p>
+          ) : null}
+
           {selectedDetail ? (
             <>
               <header className="life-reports-reader-head">
@@ -488,23 +523,27 @@ export function ReportClient() {
                 <h1>{reportTitle}</h1>
               </header>
 
-              <div className="life-report-metrics">
-                {metrics.map((metric) => (
-                  <div className="life-report-metric" key={metric.label}>
+              <section className="life-report-metrics">
+                {reportMetrics.map((metric) => (
+                  <div key={metric.label} className="life-report-metric">
                     <div className="life-report-metric-value">{metric.value}</div>
                     <div className="life-report-metric-label">{metric.label}</div>
                   </div>
                 ))}
-              </div>
+              </section>
 
               {pullQuote ? (
                 <section className="life-report-pullquote">
                   <p className="eyebrow">{pullQuote.label}</p>
                   <p className="life-report-pullquote-text">
-                    {pullQuote.lead}{' '}
+                    &quot;{pullQuote.lead}
                     {pullQuote.accent ? (
-                      <span className="life-report-pullquote-mark">{pullQuote.accent}</span>
+                      <>
+                        {' '}
+                        <span className="life-report-pullquote-mark">{pullQuote.accent}</span>
+                      </>
                     ) : null}
+                    &quot;
                   </p>
                 </section>
               ) : null}
@@ -512,10 +551,8 @@ export function ReportClient() {
               <div className="life-report-sections">
                 {bodySections.map((section) => (
                   <section
-                    className={`life-report-section ${
-                      section.key === 'tension' ? 'life-report-section-accent' : ''
-                    }`}
                     key={`${section.key}-${section.label}`}
+                    className={`life-report-section${section.key === 'tension' ? ' life-report-section-accent' : ''}`}
                   >
                     <h3>{section.label}</h3>
                     <div className="life-report-section-body">
@@ -532,12 +569,12 @@ export function ReportClient() {
                   <h3>From your captures</h3>
                   <div className="life-report-linked-list">
                     {linkedEntries.map((entry) => (
-                      <div className="life-report-linked-item" key={entry.id}>
+                      <div key={entry.id} className="life-report-linked-item">
                         <span
                           className="life-report-linked-label"
-                          style={{ color: entry.typeColor }}
+                          style={{ color: entry.source === 'voice' ? 'var(--life-accent)' : 'var(--life-label)' }}
                         >
-                          {entry.typeLabel}
+                          {entry.source === 'voice' ? 'Voice' : 'Text'}
                         </span>
                         <p className="life-report-linked-text">{entry.content}</p>
                       </div>
@@ -547,7 +584,7 @@ export function ReportClient() {
               ) : null}
             </>
           ) : null}
-        </article>
+        </section>
       </div>
     </div>
   )

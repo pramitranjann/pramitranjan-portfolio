@@ -365,16 +365,12 @@ export function VoiceCaptureControl({
   }, [countdownActive, textareaId])
 
   const label = !mounted
-    ? 'Voice capture'
+    ? 'Hold to capture'
     : !supported
       ? 'Voice unavailable'
-      : isHoldMode
-        ? listening
-          ? 'Listening…'
-          : 'Hold to speak'
-        : listening
-          ? 'Listening…'
-          : 'Capture'
+      : listening
+        ? 'Listening…'
+        : 'Hold to capture'
 
   return (
     <>

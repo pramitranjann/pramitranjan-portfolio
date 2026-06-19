@@ -1,12 +1,12 @@
 "use client";
 
-import { useDeferredValue, useEffect, useState } from "react";
+import { useDeferredValue, useEffect, useRef, useState } from "react";
 
+import { useViewportMode } from '@/hooks/useViewportMode'
 import { getEntryPresentation } from '@/lib/life/entries'
 import { fetchJson } from '@/lib/life/client'
-import { getProjectLabel } from '@/lib/life/projects'
-import { getDisplayDate, getLocalTimeLabel } from '@/lib/life/time'
-import type { DayHistory, EntryRecord } from '@/lib/life/types'
+import { getLocalTimeLabel, localDateTimeToUtc } from '@/lib/life/time'
+import type { DayHistory, EntryRecord, ReportRecord } from '@/lib/life/types'
 
 interface HistoryPayload {
   timezone: string;
@@ -14,26 +14,65 @@ interface HistoryPayload {
   days: DayHistory[];
   detail: {
     entries: EntryRecord[];
-    reports: unknown[];
-    events: unknown[];
+    reports: ReportRecord[];
   };
 }
 
-export function HistoryClient() {
-  const [query, setQuery] = useState("");
+interface HistoryClientProps {
+  initialPayload?: HistoryPayload
+  initialQuery?: string
+}
+
+function phoneDayLabel(localDate: string, timeZone: string) {
+  const date = localDateTimeToUtc(localDate, timeZone, 12, 0)
+  return new Intl.DateTimeFormat('en-GB', {
+    timeZone,
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+  }).format(date)
+}
+
+function desktopDayLabel(localDate: string, timeZone: string) {
+  const date = localDateTimeToUtc(localDate, timeZone, 12, 0)
+  return new Intl.DateTimeFormat('en-GB', {
+    timeZone,
+    day: 'numeric',
+    month: 'short',
+  }).format(date)
+}
+
+export function HistoryClient({
+  initialPayload,
+  initialQuery = '',
+}: HistoryClientProps = {}) {
+  const viewport = useViewportMode()
+  const [query, setQuery] = useState(initialQuery);
   const deferredQuery = useDeferredValue(query);
-  const [selectedDate, setSelectedDate] = useState("");
-  const [timezone, setTimezone] = useState("UTC");
-  const [days, setDays] = useState<DayHistory[]>([]);
-  const [entries, setEntries] = useState<EntryRecord[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [selectedDate, setSelectedDate] = useState(initialPayload?.selectedDate || "");
+  const [timezone, setTimezone] = useState(initialPayload?.timezone || "UTC");
+  const [days, setDays] = useState<DayHistory[]>(initialPayload?.days || []);
+  const [entries, setEntries] = useState<EntryRecord[]>(initialPayload?.detail.entries || []);
+  const [loading, setLoading] = useState(!initialPayload);
   const [error, setError] = useState<string | null>(null);
+  const skippedInitialFetch = useRef(false)
 
   useEffect(() => {
+    if (
+      !skippedInitialFetch.current &&
+      initialPayload &&
+      deferredQuery.trim() === initialQuery.trim() &&
+      selectedDate === initialPayload.selectedDate
+    ) {
+      skippedInitialFetch.current = true
+      return
+    }
+
     let cancelled = false;
 
     async function load() {
       setLoading(true);
+      setError(null);
       try {
         const params = new URLSearchParams();
         if (deferredQuery.trim()) params.set("q", deferredQuery.trim());
@@ -45,7 +84,6 @@ export function HistoryClient() {
         setTimezone(payload.timezone);
         setDays(payload.days);
         setEntries(payload.detail.entries);
-
         if (!selectedDate && payload.days[0]) {
           setSelectedDate(payload.days[0].localDate);
         } else if (selectedDate && payload.selectedDate !== selectedDate) {
@@ -60,7 +98,82 @@ export function HistoryClient() {
 
     load();
     return () => { cancelled = true; };
-  }, [deferredQuery, selectedDate]);
+  }, [deferredQuery, initialPayload, initialQuery, selectedDate]);
+
+  if (viewport === 'phone') {
+    return (
+      <div>
+        <div style={{ padding: '18px 16px 0' }}>
+          <div className="life-page-head">
+            <div>
+              <p className="eyebrow">Entries</p>
+              <h1>Everything you captured</h1>
+            </div>
+          </div>
+        </div>
+
+        {error ? <p className="error-text" style={{ padding: '0 16px' }}>{error}</p> : null}
+
+        <div style={{ display: 'grid', gap: 6, padding: '0 16px 12px' }}>
+          {days.map((day) => (
+            <button
+              key={day.localDate}
+              type="button"
+              className={`life-reports-row${selectedDate === day.localDate ? ' is-selected' : ''}`}
+              onClick={() => setSelectedDate(day.localDate)}
+            >
+              <span className="life-reports-row-date">{phoneDayLabel(day.localDate, timezone)}</span>
+              <span className="life-reports-row-type">{day.entryCount} {day.entryCount === 1 ? 'entry' : 'entries'}</span>
+            </button>
+          ))}
+        </div>
+
+        <div style={{ display: 'grid', gap: 0, padding: '0 16px 32px' }}>
+          {loading && entries.length === 0 ? (
+            <p className="muted-text">Loading…</p>
+          ) : null}
+
+          {!loading && selectedDate && entries.length === 0 ? (
+            <p className="muted-text">No entries for this day.</p>
+          ) : null}
+
+          {entries.map((entry) => {
+            const presentation = getEntryPresentation(entry)
+            return (
+              <div
+                key={entry.id}
+                style={{
+                  padding: '14px 0',
+                  borderBottom: '1px solid var(--life-hairline)',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 5 }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--life-label)' }}>
+                    {getLocalTimeLabel(entry.created_at, timezone)}
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: 10,
+                      letterSpacing: '.1em',
+                      textTransform: 'uppercase',
+                      color: presentation.color,
+                    }}
+                  >
+                    {presentation.kind}
+                  </span>
+                  {entry.project_slug ? <span className="life-tag">{entry.project_slug}</span> : null}
+                </div>
+                <p style={{ margin: 0, fontSize: 13, lineHeight: 1.6, color: 'var(--life-muted)' }}>
+                  {entry.content}
+                </p>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="life-history-shell">
@@ -69,76 +182,107 @@ export function HistoryClient() {
           <p className="eyebrow">Entries</p>
           <h1>Everything you captured</h1>
         </div>
-        <span className="life-row-aside">{days.reduce((sum, day) => sum + day.entryCount, 0)} total</span>
+        <div className="life-page-stat">{days.length}</div>
       </div>
+
+      {error ? <p className="error-text">{error}</p> : null}
 
       <div className="life-history-grid">
         <aside className="life-card life-history-sidebar">
           <div className="life-card-head">
-            <h2>Days</h2>
+            <h2>Entries</h2>
             <span className="count-pill">{days.length}</span>
           </div>
-          <label className="field compact-field life-history-search">
-            <span>Search</span>
-            <input
-              className="text-input"
-              type="search"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search entries…"
-            />
-          </label>
 
-          {loading ? <p className="muted-text">Loading…</p> : null}
-          {error ? <p className="error-text">{error}</p> : null}
-          <ul className="life-history-days">
+          <div className="life-history-search">
+            <label className="field">
+              <span>Search</span>
+              <input
+                className="text-input"
+                type="search"
+                value={query}
+                placeholder="Search entries"
+                onChange={(event) => setQuery(event.target.value)}
+              />
+            </label>
+          </div>
+
+          {loading && days.length === 0 ? (
+            <div className="life-history-loading">
+              <p className="muted-text">Loading…</p>
+            </div>
+          ) : null}
+
+          <div className="life-history-days">
             {days.map((day) => (
-              <li key={day.localDate}>
-                <button
-                  className={`life-history-day${selectedDate === day.localDate ? " is-selected" : ""}`}
-                  onClick={() => setSelectedDate(day.localDate)}
-                  type="button"
-                >
-                  <div>
-                    <strong>{getDisplayDate(day.localDate, timezone)}</strong>
-                    <p className="muted-text">{day.entryCount} entries</p>
-                  </div>
-                </button>
-              </li>
+              <button
+                key={day.localDate}
+                type="button"
+                className={`life-history-day${selectedDate === day.localDate ? ' is-selected' : ''}`}
+                onClick={() => setSelectedDate(day.localDate)}
+              >
+                <strong>{desktopDayLabel(day.localDate, timezone)}</strong>
+                <span className="muted-text">
+                  {day.entryCount} {day.entryCount === 1 ? 'entry' : 'entries'}
+                </span>
+              </button>
             ))}
-          </ul>
+          </div>
         </aside>
 
         <section className="life-card life-history-detail">
           <div className="life-card-head">
-            <h2>{selectedDate ? getDisplayDate(selectedDate, timezone) : 'Select a day'}</h2>
-            {selectedDate ? <span className="count-pill">{entries.length}</span> : null}
+            <div>
+              <p className="eyebrow">Selected day</p>
+              <h2>{selectedDate ? desktopDayLabel(selectedDate, timezone) : 'No date selected'}</h2>
+            </div>
           </div>
 
           <div className="life-history-detail-body">
-            {entries.length === 0 ? (
-              <p className="muted-text">No entries for this day.</p>
-            ) : (
-              <ul className="life-history-list">
-                {entries.map((entry) => {
-                  const presentation = getEntryPresentation(entry)
-                  return (
-                    <li className="life-history-entry" key={entry.id}>
-                      <div className="life-history-entry-head">
-                        <span className="life-capture-time">{getLocalTimeLabel(entry.created_at, timezone)}</span>
-                        <span className="life-entry-kind" style={{ color: presentation.color }}>
-                          {presentation.kind}
-                        </span>
-                      </div>
-                      {entry.project_slug ? (
-                        <span className="life-tag">{getProjectLabel(entry.project_slug) || entry.project_slug}</span>
-                      ) : null}
-                      <p className="life-capture-text">{entry.content}</p>
-                    </li>
-                  )
-                })}
-              </ul>
-            )}
+            <div className="life-history-list">
+              {loading && entries.length === 0 ? (
+                <p className="muted-text">Loading…</p>
+              ) : null}
+
+              {!loading && selectedDate && entries.length === 0 ? (
+                <p className="muted-text">No entries for this day.</p>
+              ) : null}
+
+              {entries.map((entry) => {
+                const presentation = getEntryPresentation(entry)
+                return (
+                  <article key={entry.id} className="life-history-entry">
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, paddingTop: 1 }}>
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: 12,
+                          color: 'var(--life-muted)',
+                          fontVariantNumeric: 'tabular-nums',
+                        }}
+                      >
+                        {getLocalTimeLabel(entry.created_at, timezone)}
+                      </span>
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: 9,
+                          letterSpacing: '.1em',
+                          textTransform: 'uppercase',
+                          color: presentation.color,
+                        }}
+                      >
+                        {presentation.kind}
+                      </span>
+                    </div>
+                    <div style={{ minWidth: 0 }}>
+                      {entry.project_slug ? <span className="life-tag" style={{ marginBottom: 8 }}>{entry.project_slug}</span> : null}
+                      <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: '#e6e3dd' }}>{entry.content}</p>
+                    </div>
+                  </article>
+                )
+              })}
+            </div>
           </div>
         </section>
       </div>

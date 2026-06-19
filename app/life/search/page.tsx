@@ -92,7 +92,7 @@ export default async function LifeSearchPage({
           <p className="eyebrow">Search</p>
           <h1>{hasQuery ? `“${rawQuery}”` : 'Search everything'}</h1>
         </div>
-        {hasQuery ? <span className="life-week-range">{totalResults} results</span> : null}
+        {hasQuery ? <span className="life-page-stat">{totalResults} results</span> : null}
       </div>
 
       <form action="/life/search" method="get" className="life-search-page-form">

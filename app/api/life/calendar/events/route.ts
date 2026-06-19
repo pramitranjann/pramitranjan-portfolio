@@ -9,6 +9,11 @@ function getSafeRedirectTo(value: string | null | undefined) {
   return value?.startsWith('/life') ? value : '/life'
 }
 
+function normalizeOptionalText(value: string | null | undefined) {
+  const trimmed = value?.trim()
+  return trimmed ? trimmed : null
+}
+
 export async function POST(request: NextRequest) {
   if (!isAuthenticatedLifeRequest(request)) {
     return unauthorizedJson()
@@ -27,6 +32,9 @@ export async function POST(request: NextRequest) {
     let startTime: string | null = null
     let endTime: string | null = null
     let allDay = false
+    let calendarId: string | null = null
+    let location: string | null = null
+    let notes: string | null = null
 
     if (isJsonRequest) {
       const body = (await request.json().catch(() => null)) as {
@@ -35,6 +43,9 @@ export async function POST(request: NextRequest) {
         startTime?: string | null
         endTime?: string | null
         allDay?: boolean
+        calendarId?: string | null
+        location?: string | null
+        notes?: string | null
         redirectTo?: string | null
       } | null
       title = body?.title?.trim() || ''
@@ -42,6 +53,9 @@ export async function POST(request: NextRequest) {
       startTime = body?.startTime || null
       endTime = body?.endTime || null
       allDay = Boolean(body?.allDay)
+      calendarId = normalizeOptionalText(body?.calendarId)
+      location = normalizeOptionalText(body?.location)
+      notes = normalizeOptionalText(body?.notes)
       redirectTo = getSafeRedirectTo(body?.redirectTo)
     } else {
       const formData = await request.formData().catch(() => null)
@@ -52,6 +66,9 @@ export async function POST(request: NextRequest) {
       startTime = read('startTime') || null
       endTime = read('endTime') || null
       allDay = formData?.get('allDay') === 'on' || formData?.get('allDay') === 'true'
+      calendarId = normalizeOptionalText(read('calendarId'))
+      location = normalizeOptionalText(read('location'))
+      notes = normalizeOptionalText(read('notes'))
       redirectTo = getSafeRedirectTo(read('redirectTo') || null)
     }
 
@@ -64,7 +81,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Event title is required.' }, { status: 400 })
     }
 
-    const event = await createCalendarEvent({ title, localDate, startTime, endTime, allDay })
+    const event = await createCalendarEvent({
+      title,
+      localDate,
+      startTime,
+      endTime,
+      allDay,
+      calendarId,
+      location,
+      notes,
+    })
 
     try {
       await syncCalendarEvents(localDate, undefined, { force: true })

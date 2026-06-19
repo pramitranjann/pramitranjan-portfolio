@@ -23,11 +23,9 @@ export async function GET(request: NextRequest) {
 
   // The visible month grid spans up to ~6 weeks; sync that whole window so dots
   // reflect Google Calendar without per-day round-trips.
-  try {
-    await syncCalendarEvents(start, end)
-  } catch (error) {
+  void syncCalendarEvents(start, end).catch((error) => {
     console.error('Month calendar sync failed', error)
-  }
+  })
 
   const supabase = getSupabaseAdmin()
   const [eventsResult, tasks] = await Promise.all([

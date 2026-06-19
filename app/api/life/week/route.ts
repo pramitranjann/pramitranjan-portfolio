@@ -21,11 +21,9 @@ export async function GET(request: NextRequest) {
 
   const settings = await getOwnerSettings()
 
-  try {
-    await syncCalendarEvents(start, end)
-  } catch (error) {
+  void syncCalendarEvents(start, end).catch((error) => {
     console.error('Week calendar sync failed', error)
-  }
+  })
 
   const supabase = getSupabaseAdmin()
   const [eventsResult, tasks] = await Promise.all([

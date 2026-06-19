@@ -7,6 +7,13 @@ import { getSupabaseAdmin } from '@/lib/life/supabase'
 import { addDays, getCurrentLocalDate, getLocalDateString, getLocalDayRange, localDateTimeToUtc } from '@/lib/life/time'
 import type { CalendarEventRecord } from '@/lib/life/types'
 
+interface LifeCalendarSource {
+  id: string
+  name: string
+  primary: boolean
+  selected: boolean
+}
+
 function getCalendarClient() {
   const { googleClientId, googleClientSecret, googleRefreshToken } = getLifeServerEnv()
   const oauth2Client = new google.auth.OAuth2(googleClientId, googleClientSecret);
@@ -27,61 +34,80 @@ function getConfiguredCalendarIds() {
     .filter(Boolean)
 }
 
+async function getCalendarSources(calendar: ReturnType<typeof google.calendar>): Promise<LifeCalendarSource[]> {
+  const response = await calendar.calendarList.list({
+    showDeleted: false,
+    showHidden: false,
+  })
+  const items = response.data.items || []
+  const configuredCalendarIds = getConfiguredCalendarIds()
+
+  if (configuredCalendarIds.length > 0) {
+    const byId = new Map(items.filter((item) => item.id).map((item) => [item.id as string, item]))
+    return configuredCalendarIds.map((calendarId) => {
+      const item = byId.get(calendarId)
+      return {
+        id: calendarId,
+        name: item?.summaryOverride || item?.summary || calendarId,
+        primary: Boolean(item?.primary),
+        selected: item?.selected !== false,
+      }
+    })
+  }
+
+  const sources = items
+    .filter((item) => item.id && (item.primary || item.selected))
+    .map((item) => ({
+      id: item.id as string,
+      name: item.summaryOverride || item.summary || (item.id as string),
+      primary: Boolean(item.primary),
+      selected: Boolean(item.selected || item.primary),
+    }))
+
+  if (sources.length > 0) {
+    return sources
+  }
+
+  return [{ id: 'primary', name: 'Primary', primary: true, selected: true }]
+}
+
 async function getCalendarIdsToSync(calendar: ReturnType<typeof google.calendar>) {
   const configuredCalendarIds = getConfiguredCalendarIds()
   if (configuredCalendarIds.length > 0) {
     return configuredCalendarIds
   }
 
-  const response = await calendar.calendarList.list({
-    showDeleted: false,
-    showHidden: false,
-  })
-
-  const calendarIds = new Set<string>()
-  for (const item of response.data.items || []) {
-    if (!item.id) {
-      continue
-    }
-
-    if (item.primary || item.selected) {
-      calendarIds.add(item.id)
-    }
-  }
-
-  if (calendarIds.size === 0) {
-    calendarIds.add('primary')
-  }
-
-  return Array.from(calendarIds)
+  return (await getCalendarSources(calendar)).map((calendar) => calendar.id)
 }
 
-export async function createCalendarEvent(input: {
-  title: string
-  localDate: string
-  startTime?: string | null
-  endTime?: string | null
-  allDay?: boolean
-}) {
-  const settings = await getOwnerSettings()
-  const timeZone = settings.timezone
-  const calendar = getCalendarClient()
-  const title = input.title?.trim()
-  if (!title) {
-    throw new Error('Event title is required.')
-  }
-
-  const targetCalendarId = getConfiguredCalendarIds()[0] || 'primary'
+function buildEventRequestBody(
+  input: {
+    title: string
+    localDate: string
+    startTime?: string | null
+    endTime?: string | null
+    allDay?: boolean
+    location?: string | null
+    notes?: string | null
+  },
+  timeZone: string,
+) {
+  const location = input.location?.trim() || undefined
+  const description = input.notes?.trim() || undefined
 
   let requestBody: {
     summary: string
+    location?: string
+    description?: string
     start: { date?: string; dateTime?: string; timeZone?: string }
     end: { date?: string; dateTime?: string; timeZone?: string }
   }
 
   if (input.allDay || !input.startTime) {
     requestBody = {
-      summary: title,
+      summary: input.title,
+      location,
+      description,
       start: { date: input.localDate },
       end: { date: addDays(input.localDate, 1) },
     }
@@ -99,11 +125,42 @@ export async function createCalendarEvent(input: {
       end = new Date(start.getTime() + 60 * 60 * 1000)
     }
     requestBody = {
-      summary: title,
+      summary: input.title,
+      location,
+      description,
       start: { dateTime: start.toISOString(), timeZone },
       end: { dateTime: end.toISOString(), timeZone },
     }
   }
+
+  return requestBody
+}
+
+export async function listLifeCalendars() {
+  const calendar = getCalendarClient()
+  return getCalendarSources(calendar)
+}
+
+export async function createCalendarEvent(input: {
+  title: string
+  localDate: string
+  startTime?: string | null
+  endTime?: string | null
+  allDay?: boolean
+  calendarId?: string | null
+  location?: string | null
+  notes?: string | null
+}) {
+  const settings = await getOwnerSettings()
+  const timeZone = settings.timezone
+  const calendar = getCalendarClient()
+  const title = input.title?.trim()
+  if (!title) {
+    throw new Error('Event title is required.')
+  }
+
+  const targetCalendarId = input.calendarId?.trim() || getConfiguredCalendarIds()[0] || 'primary'
+  const requestBody = buildEventRequestBody({ ...input, title }, timeZone)
 
   const response = await calendar.events.insert({
     calendarId: targetCalendarId,
@@ -113,8 +170,18 @@ export async function createCalendarEvent(input: {
   return response.data
 }
 
-async function findCalendarIdForEvent(eventId: string) {
+async function findCalendarIdForEvent(eventId: string, preferredCalendarId?: string | null) {
   const calendar = getCalendarClient()
+
+  if (preferredCalendarId) {
+    try {
+      await calendar.events.get({ calendarId: preferredCalendarId, eventId })
+      return { calendar, calendarId: preferredCalendarId }
+    } catch {
+      // Fall through to the broader scan.
+    }
+  }
+
   const calendarIds = await getCalendarIdsToSync(calendar)
 
   for (const calendarId of calendarIds) {
@@ -137,7 +204,11 @@ export async function updateCalendarEvent(
     startTime?: string | null
     endTime?: string | null
     allDay?: boolean
+    calendarId?: string | null
+    location?: string | null
+    notes?: string | null
   },
+  currentCalendarId?: string | null,
 ) {
   const settings = await getOwnerSettings()
   const timeZone = settings.timezone
@@ -146,52 +217,32 @@ export async function updateCalendarEvent(
     throw new Error('Event title is required.')
   }
 
-  const { calendar, calendarId } = await findCalendarIdForEvent(eventId)
+  const { calendar, calendarId: foundCalendarId } = await findCalendarIdForEvent(eventId, currentCalendarId)
+  let targetCalendarId = input.calendarId?.trim() || foundCalendarId
+  let targetEventId = eventId
 
-  let requestBody: {
-    summary: string
-    start: { date?: string; dateTime?: string; timeZone?: string }
-    end: { date?: string; dateTime?: string; timeZone?: string }
+  if (targetCalendarId !== foundCalendarId) {
+    const moved = await calendar.events.move({
+      calendarId: foundCalendarId,
+      eventId,
+      destination: targetCalendarId,
+    })
+    targetEventId = moved.data.id || eventId
   }
-
-  if (input.allDay || !input.startTime) {
-    requestBody = {
-      summary: title,
-      start: { date: input.localDate },
-      end: { date: addDays(input.localDate, 1) },
-    }
-  } else {
-    const [startHour, startMinute] = input.startTime.split(':').map(Number)
-    const start = localDateTimeToUtc(input.localDate, timeZone, startHour, startMinute, 0)
-    let end: Date
-    if (input.endTime) {
-      const [endHour, endMinute] = input.endTime.split(':').map(Number)
-      end = localDateTimeToUtc(input.localDate, timeZone, endHour, endMinute, 0)
-      if (end.getTime() <= start.getTime()) {
-        end = new Date(start.getTime() + 60 * 60 * 1000)
-      }
-    } else {
-      end = new Date(start.getTime() + 60 * 60 * 1000)
-    }
-    requestBody = {
-      summary: title,
-      start: { dateTime: start.toISOString(), timeZone },
-      end: { dateTime: end.toISOString(), timeZone },
-    }
-  }
+  const requestBody = buildEventRequestBody({ ...input, title }, timeZone)
 
   const response = await calendar.events.update({
-    calendarId,
-    eventId,
+    calendarId: targetCalendarId,
+    eventId: targetEventId,
     requestBody,
   })
 
   return response.data
 }
 
-export async function deleteCalendarEvent(eventId: string) {
-  const { calendar, calendarId } = await findCalendarIdForEvent(eventId)
-  await calendar.events.delete({ calendarId, eventId })
+export async function deleteCalendarEvent(eventId: string, calendarId?: string | null) {
+  const { calendar, calendarId: resolvedCalendarId } = await findCalendarIdForEvent(eventId, calendarId)
+  await calendar.events.delete({ calendarId: resolvedCalendarId, eventId })
 }
 
 // In-memory throttle so that rapid navigations between Life pages don't each
@@ -234,7 +285,9 @@ export async function syncCalendarEvents(
   const windowEnd = addDays(baseEnd, 7);
   const timeMin = getLocalDayRange(windowStart, timeZone).start.toISOString();
   const timeMax = getLocalDayRange(windowEnd, timeZone).end.toISOString();
-  const calendarIds = await getCalendarIdsToSync(calendar)
+  const calendars = await getCalendarSources(calendar)
+  const calendarIds = calendars.map((calendarSource) => calendarSource.id)
+  const calendarNames = new Map(calendars.map((calendarSource) => [calendarSource.id, calendarSource.name]))
 
   const responses = await Promise.all(
     calendarIds.map((calendarId) =>
@@ -250,7 +303,7 @@ export async function syncCalendarEvents(
   )
 
   const eventMap = new Map<string, CalendarEventRecord>()
-  for (const { items } of responses) {
+  for (const { calendarId, items } of responses) {
     for (const event of items) {
       if (!event.id && !event.iCalUID) {
         continue
@@ -269,6 +322,11 @@ export async function syncCalendarEvents(
         id: (event.id || event.iCalUID) as string,
         user_id: OWNER_ID,
         title: event.summary || "(Untitled event)",
+        calendar_id: calendarId,
+        calendar_name: calendarNames.get(calendarId) || calendarId,
+        location: event.location || null,
+        notes: event.description || null,
+        html_link: event.htmlLink || null,
         start_time: isAllDay && startDate
           ? localDateTimeToUtc(startDate, timeZone, 0, 0, 0).toISOString()
           : startTime || null,
@@ -278,6 +336,7 @@ export async function syncCalendarEvents(
         all_day: isAllDay,
         source: "google",
         local_date: localDate,
+        updated_at: event.updated || new Date().toISOString(),
         synced_at: new Date().toISOString(),
       } satisfies CalendarEventRecord;
 

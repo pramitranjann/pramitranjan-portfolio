@@ -9,14 +9,19 @@ function normalizeLocalDate(value: string | null | undefined) {
   return value && /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : null
 }
 
+function normalizeOptionalText(value: string | null | undefined) {
+  const trimmed = value?.trim()
+  return trimmed ? trimmed : null
+}
+
 async function getStoredEvent(eventId: string) {
   const supabase = getSupabaseAdmin()
   const { data, error } = await supabase
     .from('calendar_events')
-    .select('id, local_date')
+    .select('id, local_date, calendar_id')
     .eq('user_id', OWNER_ID)
     .eq('id', eventId)
-    .maybeSingle<{ id: string; local_date: string }>()
+    .maybeSingle<{ id: string; local_date: string; calendar_id: string | null }>()
 
   if (error) throw error
   return data
@@ -44,6 +49,9 @@ export async function PATCH(
       startTime?: string | null
       endTime?: string | null
       allDay?: boolean
+      calendarId?: string | null
+      location?: string | null
+      notes?: string | null
     } | null
 
     const localDate = normalizeLocalDate(body?.localDate) || stored.local_date
@@ -58,7 +66,10 @@ export async function PATCH(
       startTime: body?.startTime || null,
       endTime: body?.endTime || null,
       allDay: Boolean(body?.allDay),
-    })
+      calendarId: normalizeOptionalText(body?.calendarId),
+      location: normalizeOptionalText(body?.location),
+      notes: normalizeOptionalText(body?.notes),
+    }, stored.calendar_id)
 
     const syncStart = stored.local_date < localDate ? stored.local_date : localDate
     const syncEnd = stored.local_date > localDate ? stored.local_date : localDate
@@ -87,7 +98,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Event not found.' }, { status: 404 })
     }
 
-    await deleteCalendarEvent(eventId)
+    await deleteCalendarEvent(eventId, stored.calendar_id)
     await syncCalendarEvents(stored.local_date, stored.local_date, { force: true })
 
     return NextResponse.json({ ok: true })
