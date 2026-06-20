@@ -23,6 +23,11 @@ export function getLifeServerEnv() {
     get cronSecret() {
       return requireEnv('CRON_SECRET')
     },
+    // Optional: dedicated bearer token for native companion apps.
+    // Returns null when unset so auth simply skips it.
+    get mobileToken(): string | null {
+      return process.env.LIFE_MOBILE_TOKEN ?? null
+    },
     ownerEmail: process.env.OWNER_EMAIL || 'pramit@pramitranjan.com',
     ownerTimezone: process.env.OWNER_TIMEZONE || 'UTC',
     get googleClientId() {
