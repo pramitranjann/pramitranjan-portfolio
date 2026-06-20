@@ -1566,6 +1566,13 @@ body.carousel-reengaging main {
 .life-shell .life-history-list { display: grid; gap: 12px; }
 .life-shell .life-history-entry { display: grid; gap: 8px; padding: 12px; border: 1px solid var(--life-hairline); background: var(--life-muted-bg); }
 .life-shell .life-history-entry-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.life-shell .life-entry-delete { appearance: none; border: 0; background: none; color: var(--life-label); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; padding: 0; transition: color 0.15s, opacity 0.15s; }
+.life-shell .life-entry-delete:hover { color: var(--life-danger); }
+.life-shell .life-entry-delete:disabled { cursor: default; opacity: 0.45; }
+.life-shell .life-history-entry .life-entry-delete { opacity: 0; }
+.life-shell .life-history-entry:hover .life-entry-delete,
+.life-shell .life-history-entry:focus-within .life-entry-delete,
+.life-shell .life-entry-delete.is-loading { opacity: 1; }
 .life-shell .life-history-report-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .life-shell .badge-row { display: inline-flex; gap: 6px; }
 .life-shell .badge { display: inline-flex; align-items: center; height: 20px; padding: 0 7px; border: 1px solid var(--life-accent-line); background: var(--life-accent-soft); color: var(--life-accent); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; }
@@ -3036,6 +3043,10 @@ body.carousel-reengaging main {
     border: 0;
     border-bottom: 1px solid var(--life-hairline);
     background: transparent;
+  }
+
+  .life-shell .life-history-entry .life-entry-delete {
+    opacity: 1;
   }
 
   .life-shell .life-week-shell:has(.life-month-grid) {

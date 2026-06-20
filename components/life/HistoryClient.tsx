@@ -55,6 +55,8 @@ export function HistoryClient({
   const [entries, setEntries] = useState<EntryRecord[]>(initialPayload?.detail.entries || []);
   const [loading, setLoading] = useState(!initialPayload);
   const [error, setError] = useState<string | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [deletingEntryId, setDeletingEntryId] = useState<string | null>(null);
   const skippedInitialFetch = useRef(false)
 
   useEffect(() => {
@@ -100,6 +102,58 @@ export function HistoryClient({
     return () => { cancelled = true; };
   }, [deferredQuery, initialPayload, initialQuery, selectedDate]);
 
+  async function deleteEntry(entry: EntryRecord) {
+    if (deletingEntryId) return
+
+    const confirmed = window.confirm('Delete this entry? This cannot be undone.')
+    if (!confirmed) return
+
+    setDeleteError(null)
+    setDeletingEntryId(entry.id)
+
+    try {
+      await fetchJson<{ ok: true }>(`/api/life/entries/${entry.id}`, {
+        method: 'DELETE',
+      })
+
+      const nextEntries = entries.filter((candidate) => candidate.id !== entry.id)
+      const nextDays = days.flatMap((day) => {
+        if (day.localDate !== entry.local_date) return [day]
+        if (day.entryCount <= 1) return []
+        return [{ ...day, entryCount: day.entryCount - 1 }]
+      })
+
+      setEntries(nextEntries)
+      setDays(nextDays)
+
+      if (selectedDate && !nextDays.some((day) => day.localDate === selectedDate)) {
+        setSelectedDate(nextDays[0]?.localDate || '')
+      }
+    } catch (deleteRequestError) {
+      setDeleteError(
+        deleteRequestError instanceof Error ? deleteRequestError.message : 'Failed to delete entry.',
+      )
+    } finally {
+      setDeletingEntryId(null)
+    }
+  }
+
+  function renderDeleteButton(entry: EntryRecord) {
+    const isDeleting = deletingEntryId === entry.id
+
+    return (
+      <button
+        type="button"
+        className={`life-entry-delete${isDeleting ? ' is-loading' : ''}`}
+        onClick={() => { void deleteEntry(entry) }}
+        disabled={Boolean(deletingEntryId)}
+        aria-label={`Delete entry from ${getLocalTimeLabel(entry.created_at, timezone)}`}
+      >
+        {isDeleting ? 'Deleting…' : 'Delete'}
+      </button>
+    )
+  }
+
   if (viewport === 'phone') {
     return (
       <div>
@@ -113,6 +167,7 @@ export function HistoryClient({
         </div>
 
         {error ? <p className="error-text" style={{ padding: '0 16px' }}>{error}</p> : null}
+        {deleteError ? <p className="error-text" style={{ padding: '0 16px' }}>{deleteError}</p> : null}
 
         <div style={{ display: 'grid', gap: 6, padding: '0 16px 12px' }}>
           {days.map((day) => (
@@ -140,34 +195,34 @@ export function HistoryClient({
           {entries.map((entry) => {
             const presentation = getEntryPresentation(entry)
             return (
-              <div
+              <article
                 key={entry.id}
-                style={{
-                  padding: '14px 0',
-                  borderBottom: '1px solid var(--life-hairline)',
-                }}
+                className="life-history-entry"
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 5 }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--life-label)' }}>
-                    {getLocalTimeLabel(entry.created_at, timezone)}
-                  </span>
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: 10,
-                      letterSpacing: '.1em',
-                      textTransform: 'uppercase',
-                      color: presentation.color,
-                    }}
-                  >
-                    {presentation.kind}
-                  </span>
-                  {entry.project_slug ? <span className="life-tag">{entry.project_slug}</span> : null}
+                <div className="life-history-entry-head">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--life-label)' }}>
+                      {getLocalTimeLabel(entry.created_at, timezone)}
+                    </span>
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: 10,
+                        letterSpacing: '.1em',
+                        textTransform: 'uppercase',
+                        color: presentation.color,
+                      }}
+                    >
+                      {presentation.kind}
+                    </span>
+                    {entry.project_slug ? <span className="life-tag">{entry.project_slug}</span> : null}
+                  </div>
+                  {renderDeleteButton(entry)}
                 </div>
                 <p style={{ margin: 0, fontSize: 13, lineHeight: 1.6, color: 'var(--life-muted)' }}>
                   {entry.content}
                 </p>
-              </div>
+              </article>
             )
           })}
         </div>
@@ -186,6 +241,7 @@ export function HistoryClient({
       </div>
 
       {error ? <p className="error-text">{error}</p> : null}
+      {deleteError ? <p className="error-text">{deleteError}</p> : null}
 
       <div className="life-history-grid">
         <aside className="life-card life-history-sidebar">
@@ -275,8 +331,13 @@ export function HistoryClient({
                         {presentation.kind}
                       </span>
                     </div>
-                    <div style={{ minWidth: 0 }}>
-                      {entry.project_slug ? <span className="life-tag" style={{ marginBottom: 8 }}>{entry.project_slug}</span> : null}
+                    <div style={{ minWidth: 0, display: 'grid', gap: 8 }}>
+                      <div className="life-history-entry-head">
+                        <div>
+                          {entry.project_slug ? <span className="life-tag">{entry.project_slug}</span> : null}
+                        </div>
+                        {renderDeleteButton(entry)}
+                      </div>
                       <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: '#e6e3dd' }}>{entry.content}</p>
                     </div>
                   </article>
