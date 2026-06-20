@@ -285,64 +285,68 @@ export default async function LifeTodayPage({
 
   return (
     <div className="life-today">
-      {/* Left column: no DB dependencies — paints immediately */}
-      <section className="life-capture">
-        <form action="/life/search" method="get" className="life-today-search" role="search">
-          <span aria-hidden="true">⌕</span>
-          <input name="q" type="search" placeholder="Search…" aria-label="Search life" />
-        </form>
-        <p className="eyebrow life-today-eyebrow">
-          Today · <b>{eyebrowDate}</b>
-        </p>
-        <h1 className="life-greeting">{greetingForHour(hour)}, Pramit.</h1>
-        <p className="life-greeting-sub">
-          What&apos;s on your mind? Speak it or type it. I&apos;ll sort the tasks, notes, and
-          events out for you.
-        </p>
+      <form action="/life/search" method="get" className="life-today-search" role="search">
+        <span aria-hidden="true">⌕</span>
+        <input name="q" type="search" placeholder="Search…" aria-label="Search life" />
+      </form>
+      <p className="eyebrow life-today-eyebrow">
+        Today · <b>{eyebrowDate}</b>
+      </p>
+      <h1 className="life-greeting">{greetingForHour(hour)}, Pramit.</h1>
 
-        <form action="/api/life/entries" method="post">
-          <input id={sourceInputId} name="source" type="hidden" defaultValue="text" />
-          <div className="life-composer-outer">
-            <div className="life-composer">
-              <textarea
-                className="life-composer-input"
-                id={textareaId}
-                name="content"
-                placeholder="Brain-dump anything — book flights, crit went well, gym at 4…"
-              />
-              <div className="life-composer-bar">
-                <VoiceCaptureControl
-                  sourceInputId={sourceInputId}
-                  textareaId={textareaId}
-                  liveTranscriptId="life-live-transcript"
+      <div className="life-today-grid">
+        {/* Left column: no DB dependencies — paints immediately */}
+        <section className="life-capture">
+          <p className="life-greeting-sub">
+            What&apos;s on your mind? Speak it or type it. I&apos;ll sort the tasks, notes, and
+            events out for you.
+          </p>
+
+          <form action="/api/life/entries" method="post">
+            <input id={sourceInputId} name="source" type="hidden" defaultValue="text" />
+            <div className="life-composer-outer">
+              <div className="life-composer">
+                <textarea
+                  className="life-composer-input"
+                  id={textareaId}
+                  name="content"
+                  placeholder="Brain-dump anything — book flights, crit went well, gym at 4…"
                 />
-                <span className="spacer" />
-                <button className="life-btn ghost life-clear" type="reset">
-                  Clear
-                </button>
-                <button className="life-btn primary life-save" type="submit">
-                  Save entry
-                </button>
+                <div className="life-composer-bar">
+                  <VoiceCaptureControl
+                    sourceInputId={sourceInputId}
+                    textareaId={textareaId}
+                    liveTranscriptId="life-live-transcript"
+                  />
+                  <span className="spacer" />
+                  <button className="life-btn ghost life-clear" type="reset">
+                    Clear
+                  </button>
+                  <button className="life-btn primary life-save" type="submit">
+                    Save entry
+                  </button>
+                </div>
               </div>
+              <button className="life-save-below" type="submit">
+                Save entry
+              </button>
             </div>
-            <button className="life-save-below" type="submit">
-              Save entry
-            </button>
-          </div>
-        </form>
-        <div id="life-live-transcript" className="life-live-transcript" aria-live="polite" />
-        {formError ? <p className="error-text">{formError}</p> : null}
+          </form>
+          <div id="life-live-transcript" className="life-live-transcript" aria-live="polite" />
+          {formError ? <p className="error-text">{formError}</p> : null}
 
-        <QuickAdd redirectTo="/life" localDate={localDate} textareaId={textareaId} />
+          <QuickAdd redirectTo="/life" localDate={localDate} textareaId={textareaId} />
 
-        <section className="life-capture-stream">
-          <CapturedTodayCard localDate={localDate} timezone={timezone} />
+          <section className="life-capture-stream">
+            <CapturedTodayCard localDate={localDate} timezone={timezone} />
+          </section>
+
         </section>
-      </section>
 
-      <aside className="life-side">
-        <TodaySideCards localDate={localDate} timezone={timezone} />
-      </aside>
+        <aside className="life-side">
+          <TodaySideCards localDate={localDate} timezone={timezone} />
+        </aside>
+      </div>
     </div>
   )
 }

@@ -89,3 +89,41 @@ export interface TaskCandidate {
   priority: TaskPriority;
   dueLocalDate: string | null;
 }
+
+export interface LifeSearchTaskHit {
+  id: string;
+  href: string;
+  title: string;
+  status: TaskStatus;
+  priority: TaskPriority;
+  projectLabel: string;
+  dueLabel: string | null;
+}
+
+export interface LifeSearchEntryHit {
+  id: string;
+  href: string;
+  content: string;
+  kind: string;
+  kindColor: string;
+  projectLabel: string | null;
+  dayLabel: string;
+  timeLabel: string;
+}
+
+export interface LifeSearchEventHit {
+  id: string;
+  href: string;
+  title: string;
+  timeLabel: string;
+  dayLabel: string;
+}
+
+export interface LifeSearchResults {
+  query: string;
+  hasQuery: boolean;
+  totalResults: number;
+  tasks: LifeSearchTaskHit[];
+  entries: LifeSearchEntryHit[];
+  events: LifeSearchEventHit[];
+}

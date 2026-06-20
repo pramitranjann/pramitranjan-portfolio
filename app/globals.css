@@ -942,9 +942,10 @@ body.carousel-reengaging main {
 .life-shell .time-chip { display: inline-flex; align-items: center; justify-content: center; min-width: 52px; height: 24px; padding: 0 8px; background: var(--life-muted-bg); border: 1px solid var(--life-hairline); color: var(--life-muted); font-family: var(--font-mono); font-size: 12px; font-variant-numeric: tabular-nums; }
 
 /* ── Today ──────────────────────────────────────────────────────────────── */
-.life-shell .life-today { display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 24px; align-items: stretch; min-height: 100%; height: 100%; }
-.life-shell .life-today > .life-capture,
-.life-shell .life-today > .life-side { align-self: stretch; height: 100%; }
+.life-shell .life-today { display: block; min-height: 100%; height: 100%; }
+.life-shell .life-today-grid { display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 24px; align-items: stretch; min-height: 0; }
+.life-shell .life-today-grid > .life-capture,
+.life-shell .life-today-grid > .life-side { align-self: stretch; height: 100%; }
 .life-shell .life-capture { display: flex; flex-direction: column; align-content: start; min-height: 100%; height: 100%; }
 .life-shell .life-greeting { font-family: var(--life-display); font-size: clamp(32px, 4vw, 44px); font-weight: var(--life-display-weight); line-height: 1.04; letter-spacing: -0.01em; margin: 14px 0 10px; }
 .life-shell .life-greeting-sub { color: var(--life-muted); font-size: 15px; line-height: 1.55; margin: 0 0 22px; max-width: 46ch; }
@@ -2502,7 +2503,7 @@ body.carousel-reengaging main {
 
   .life-shell .brand {
     margin-right: 6px;
-    color: var(--life-text);
+    color: var(--life-accent);
     font-size: 16px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -2513,6 +2514,7 @@ body.carousel-reengaging main {
     align-items: center;
     gap: 2px;
     flex-wrap: wrap;
+    margin-left: auto;
   }
 
   .life-nav .nav-link {
@@ -2527,8 +2529,24 @@ body.carousel-reengaging main {
   }
 
   .life-header-phone-search,
-  .life-header-sub,
   .life-bottom-nav {
+    display: none;
+  }
+
+  .life-header-sub {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: -4px;
+  }
+
+  .life-header-section {
+    margin-left: auto;
+    justify-content: flex-end;
+    gap: 0;
+  }
+
+  .life-shell .life-section-label {
     display: none;
   }
 
@@ -2568,17 +2586,17 @@ body.carousel-reengaging main {
     color: var(--life-label);
   }
 
-  .life-shell .life-today {
+  .life-shell .life-today-grid {
     grid-template-columns: minmax(0, 1fr) 340px;
     gap: 28px;
   }
 
-  .life-shell .life-side {
+  .life-shell .life-today-grid .life-side {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
   }
 
-  .life-shell .life-capture > .life-today-eyebrow {
+  .life-shell .life-today > .life-today-eyebrow {
     width: 382px;
     max-width: 100%;
     margin: -40px 0 14px;
@@ -2587,8 +2605,11 @@ body.carousel-reengaging main {
     letter-spacing: 0.16em;
   }
 
-  .life-shell .life-capture > .life-greeting {
-    margin: -15px 0 10px;
+  .life-shell .life-today > .life-greeting {
+    display: inline-block;
+    max-width: 100%;
+    margin: 0 0 20px;
+    padding-right: 0;
   }
 
   .life-shell .life-greeting-sub {
@@ -2746,7 +2767,7 @@ body.carousel-reengaging main {
   }
 
   .life-shell .brand {
-    color: var(--life-text);
+    color: var(--life-accent);
     font-size: 13px;
     letter-spacing: 0.08em;
   }
@@ -2799,7 +2820,8 @@ body.carousel-reengaging main {
     font-size: 26px;
   }
 
-  .life-shell .life-today {
+  .life-shell .life-today,
+  .life-shell .life-today-grid {
     display: block;
   }
 
@@ -3322,6 +3344,7 @@ body.carousel-reengaging main {
     gap: 12px;
     width: 100%;
     padding: max(62px, calc(12px + env(safe-area-inset-top))) 16px 12px;
+    position: relative;
   }
 
   .life-shell .life-desktop-nav {
@@ -3429,5 +3452,214 @@ body.carousel-reengaging main {
 
   .life-shell .life-kanban {
     grid-template-columns: 1fr !important;
+  }
+}
+
+.life-shell .life-login-shell {
+  display: flex;
+  min-height: 100%;
+}
+
+.life-shell .life-login-card {
+  width: min(100%, 420px);
+  margin: auto 0;
+  padding: 24px;
+  border: 1px solid var(--life-border);
+  background: var(--life-panel);
+  display: grid;
+  gap: 14px;
+}
+
+.life-shell .life-login-title {
+  margin: 0;
+  font-family: var(--life-display);
+  font-size: 42px;
+  font-weight: var(--life-display-weight);
+  letter-spacing: -0.02em;
+}
+
+.life-shell .life-login-form {
+  display: grid;
+  gap: 16px;
+  width: min(100%, 300px);
+}
+
+.life-shell .life-inline-search-control,
+.life-shell .life-inline-search {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .life-shell {
+    --life-phone-safe-top: max(62px, calc(12px + env(safe-area-inset-top)));
+    --life-phone-safe-bottom: max(34px, env(safe-area-inset-bottom));
+    --life-phone-nav-row: 56px;
+    --life-phone-subnav-row: 42px;
+  }
+
+  .life-shell .life-app-shell {
+    padding-bottom: calc(var(--life-phone-nav-row) + var(--life-phone-safe-bottom));
+  }
+
+  .life-shell:has(.life-bottom-subnav) .life-app-shell {
+    padding-bottom: calc(
+      var(--life-phone-nav-row) + var(--life-phone-subnav-row) + var(--life-phone-safe-bottom)
+    );
+  }
+
+  .life-shell .content-shell {
+    padding-bottom: 0;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+  }
+
+  .life-shell .life-bottom-nav {
+    padding: 8px 14px var(--life-phone-safe-bottom);
+  }
+
+  .life-shell .life-week-composer-panel.is-phone {
+    width: 100vw;
+    min-height: 100dvh;
+    height: 100dvh;
+    max-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    padding: 0 0 env(safe-area-inset-bottom);
+    overflow: hidden;
+  }
+
+  .life-shell .life-week-composer-panel.is-phone .life-week-composer-head {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--life-bg);
+    padding: var(--life-phone-safe-top) 18px 14px;
+  }
+
+  .life-shell .life-week-composer-panel.is-phone .life-week-composer-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 18px 18px calc(24px + env(safe-area-inset-bottom));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  .life-shell .life-search-shell {
+    gap: 16px;
+  }
+
+  .life-shell .life-search-page-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .life-shell .life-search-page-form .text-input {
+    min-width: 0;
+  }
+
+  .life-shell .life-search-page-form .primary-button {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .life-shell .life-inline-search-control {
+    display: inline-flex;
+    margin-left: auto;
+    position: relative;
+    flex: 0 0 auto;
+  }
+
+  .life-shell .life-inline-search-control.is-open {
+    flex: 0 1 214px;
+    width: min(214px, 54vw);
+    min-width: 0;
+  }
+
+  .life-shell .life-inline-search {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    align-items: center;
+    width: 100%;
+  }
+
+  .life-shell .life-inline-search-form {
+    min-width: 0;
+    height: 32px;
+    display: flex;
+    align-items: center;
+  }
+
+  .life-shell .life-inline-search-form .text-input {
+    height: 32px;
+    min-height: 32px;
+    box-sizing: border-box;
+    padding: 0 9px;
+    font-size: 13px;
+    line-height: 1;
+    appearance: none;
+  }
+
+  .life-shell .life-inline-search-toggle,
+  .life-shell .life-inline-search-dismiss {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    flex: 0 0 32px;
+    font-size: 17px;
+  }
+
+  .life-shell .life-inline-search-results {
+    display: grid;
+    gap: 12px;
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: min(350px, calc(100vw - 32px));
+    max-height: min(52vh, 420px);
+    overflow-y: auto;
+    padding: 12px;
+    border: 1px solid var(--life-hairline);
+    background: var(--life-bg);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+    z-index: 30;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .life-shell .life-inline-search-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .life-shell .life-login-shell {
+    align-items: flex-start;
+    min-height: 100%;
+    padding: 18px 16px 0;
+  }
+
+  .life-shell .life-login-card {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    gap: 18px;
+  }
+
+  .life-shell .life-login-title {
+    font-size: 30px;
+  }
+
+  .life-shell .life-login-form {
+    width: 100%;
+  }
+
+  .life-shell .life-login-form .text-input,
+  .life-shell .life-login-form .primary-button {
+    min-height: 44px;
   }
 }
