@@ -15,7 +15,15 @@ export function isAuthenticatedLifeRequest(request: NextRequest) {
     return false
   }
 
-  return constantTimeEqual(authHeader.slice('Bearer '.length), getLifeServerEnv().cronSecret)
+  const presented = authHeader.slice('Bearer '.length)
+  const env = getLifeServerEnv()
+  if (constantTimeEqual(presented, env.cronSecret)) {
+    return true
+  }
+  if (env.mobileToken && constantTimeEqual(presented, env.mobileToken)) {
+    return true
+  }
+  return false
 }
 
 export function unauthorizedJson() {
