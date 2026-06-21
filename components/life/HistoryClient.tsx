@@ -138,13 +138,13 @@ export function HistoryClient({
     }
   }
 
-  function renderDeleteButton(entry: EntryRecord) {
+  function renderDeleteButton(entry: EntryRecord, variant: 'default' | 'mobile' = 'default') {
     const isDeleting = deletingEntryId === entry.id
 
     return (
       <button
         type="button"
-        className={`life-entry-delete${isDeleting ? ' is-loading' : ''}`}
+        className={`life-entry-delete${variant === 'mobile' ? ' life-entry-delete-mobile' : ''}${isDeleting ? ' is-loading' : ''}`}
         onClick={() => { void deleteEntry(entry) }}
         disabled={Boolean(deletingEntryId)}
         aria-label={`Delete entry from ${getLocalTimeLabel(entry.created_at, timezone)}`}
@@ -217,11 +217,13 @@ export function HistoryClient({
                     </span>
                     {entry.project_slug ? <span className="life-tag">{entry.project_slug}</span> : null}
                   </div>
-                  {renderDeleteButton(entry)}
                 </div>
                 <p style={{ margin: 0, fontSize: 13, lineHeight: 1.6, color: 'var(--life-muted)' }}>
                   {entry.content}
                 </p>
+                <div className="life-history-entry-actions">
+                  {renderDeleteButton(entry, 'mobile')}
+                </div>
               </article>
             )
           })}

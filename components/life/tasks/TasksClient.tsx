@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { useViewportMode } from '@/hooks/useViewportMode'
 import { fetchJson } from '@/lib/life/client'
-import { getProjectLabel } from '@/lib/life/projects'
+import { LIFE_PROJECTS, getProjectLabel } from '@/lib/life/projects'
 import { localDateTimeToUtc } from '@/lib/life/time'
 import type { TaskPriority, TaskRecord, TaskStatus } from '@/lib/life/types'
 
@@ -13,6 +13,14 @@ type TaskView = 'List' | 'Board'
 type TaskFilter = 'All' | 'Today'
 type ColumnKey = 'open' | 'in_progress' | 'done'
 type DesktopGroup = 'status' | 'project' | 'due'
+
+type TaskEditFields = {
+  title: string
+  details: string | null
+  project_slug: string | null
+  priority: TaskPriority
+  due_local_date: string | null
+}
 
 const STORAGE_KEY = 'life.tasksView'
 const DEFAULT_VIEW: TaskView = 'List'
@@ -23,6 +31,7 @@ const COLUMNS: Array<{ key: ColumnKey; label: string; mark: string }> = [
   { key: 'done', label: 'Done', mark: 'var(--life-green)' },
 ]
 
+const PRI_OPTIONS: TaskPriority[] = ['high', 'medium', 'low']
 const PRI_LABEL: Record<TaskPriority, string> = {
   high: 'High',
   medium: 'Med',
@@ -62,6 +71,138 @@ function taskComparator(a: TaskRecord, b: TaskRecord, today: string) {
   return a.title.localeCompare(b.title)
 }
 
+function EditForm({
+  task,
+  onSave,
+  onCancel,
+  onDelete,
+}: {
+  task: TaskRecord
+  onSave: (fields: TaskEditFields) => Promise<void>
+  onCancel: () => void
+  onDelete: () => Promise<void>
+}) {
+  const [title, setTitle] = useState(task.title)
+  const [details, setDetails] = useState(task.details || '')
+  const [projectSlug, setProjectSlug] = useState(task.project_slug || '')
+  const [priority, setPriority] = useState<TaskPriority>(task.priority)
+  const [dueLocalDate, setDueLocalDate] = useState(task.due_local_date || '')
+  const [saving, setSaving] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const titleRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    titleRef.current?.focus()
+    titleRef.current?.select()
+  }, [])
+
+  async function handleSave() {
+    if (!title.trim()) {
+      setError('Title required.')
+      return
+    }
+
+    setSaving(true)
+    setError(null)
+
+    try {
+      await onSave({
+        title: title.trim(),
+        details: details.trim() || null,
+        project_slug: projectSlug || null,
+        priority,
+        due_local_date: dueLocalDate || null,
+      })
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Save failed.')
+      setSaving(false)
+    }
+  }
+
+  async function handleDelete() {
+    setDeleting(true)
+
+    try {
+      await onDelete()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Delete failed.')
+      setDeleting(false)
+    }
+  }
+
+  return (
+    <div className="life-task-edit" onClick={(event) => event.stopPropagation()}>
+      <input
+        ref={titleRef}
+        type="text"
+        className="text-input life-task-edit-title"
+        value={title}
+        onChange={(event) => setTitle(event.target.value)}
+        placeholder="Task title"
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') {
+            event.preventDefault()
+            void handleSave()
+          }
+          if (event.key === 'Escape') {
+            event.preventDefault()
+            onCancel()
+          }
+        }}
+      />
+      <textarea
+        className="text-input life-task-edit-details"
+        value={details}
+        onChange={(event) => setDetails(event.target.value)}
+        placeholder="Add details, notes, links…"
+        rows={2}
+      />
+      <div className="life-task-edit-row">
+        <select className="text-input" value={projectSlug} onChange={(event) => setProjectSlug(event.target.value)}>
+          <option value="">Unassigned</option>
+          {LIFE_PROJECTS.map((project) => (
+            <option key={project.slug} value={project.slug}>
+              {project.name}
+            </option>
+          ))}
+        </select>
+        <select className="text-input" value={priority} onChange={(event) => setPriority(event.target.value as TaskPriority)}>
+          {PRI_OPTIONS.map((option) => (
+            <option key={option} value={option}>
+              {PRI_LABEL[option]}
+            </option>
+          ))}
+        </select>
+        <input
+          type="date"
+          className="text-input"
+          value={dueLocalDate}
+          onChange={(event) => setDueLocalDate(event.target.value)}
+        />
+      </div>
+      {error ? <span className="error-text">{error}</span> : null}
+      <div className="life-task-edit-actions">
+        <button type="button" className="primary-button" onClick={() => void handleSave()} disabled={saving}>
+          {saving ? 'Saving…' : 'Save'}
+        </button>
+        <button type="button" className="secondary-button" onClick={onCancel} disabled={saving}>
+          Cancel
+        </button>
+        <button
+          type="button"
+          className="life-task-delete-btn"
+          onClick={() => void handleDelete()}
+          disabled={deleting}
+          aria-label="Delete task"
+        >
+          {deleting ? '…' : 'Delete'}
+        </button>
+      </div>
+    </div>
+  )
+}
+
 export function TasksClient({
   tasks,
   today,
@@ -83,6 +224,10 @@ export function TasksClient({
   const [groupBy, setGroupBy] = useState<DesktopGroup>('status')
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({})
   const [newTitle, setNewTitle] = useState('')
+  const [editId, setEditId] = useState<string | null>(null)
+  const [dragId, setDragId] = useState<string | null>(null)
+  const [dragOverCol, setDragOverCol] = useState<ColumnKey | null>(null)
+  const [taskActionError, setTaskActionError] = useState<string | null>(null)
 
   useEffect(() => {
     setView(readStoredView())
@@ -91,6 +236,12 @@ export function TasksClient({
   useEffect(() => {
     setItems(tasks)
   }, [tasks])
+
+  useEffect(() => {
+    if (editId && !items.some((task) => task.id === editId)) {
+      setEditId(null)
+    }
+  }, [editId, items])
 
   function handleViewChange(next: TaskView) {
     setView(next)
@@ -101,9 +252,11 @@ export function TasksClient({
     }
   }
 
-  async function updateTask(taskId: string, status: TaskStatus) {
+  async function updateTaskStatus(taskId: string, status: TaskStatus, errorMessage = 'Task update failed.') {
     const previous = items
     setItems((current) => current.map((task) => (task.id === taskId ? { ...task, status } : task)))
+    setTaskActionError(null)
+
     try {
       await fetchJson(`/api/life/tasks/${taskId}`, {
         method: 'POST',
@@ -112,7 +265,38 @@ export function TasksClient({
       router.refresh()
     } catch {
       setItems(previous)
+      setTaskActionError(errorMessage)
     }
+  }
+
+  async function saveEdit(taskId: string, fields: TaskEditFields) {
+    await fetchJson(`/api/life/tasks/${taskId}`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        title: fields.title,
+        details: fields.details,
+        projectSlug: fields.project_slug,
+        priority: fields.priority,
+        dueLocalDate: fields.due_local_date,
+      }),
+    })
+
+    setItems((current) => current.map((task) => (task.id === taskId ? { ...task, ...fields } : task)))
+    setEditId(null)
+    setTaskActionError(null)
+    router.refresh()
+  }
+
+  async function deleteTask(taskId: string) {
+    await fetchJson(`/api/life/tasks/${taskId}`, {
+      method: 'POST',
+      body: JSON.stringify({ status: 'dismissed' }),
+    })
+
+    setItems((current) => current.filter((task) => task.id !== taskId))
+    setEditId(null)
+    setTaskActionError(null)
+    router.refresh()
   }
 
   async function createTask() {
@@ -121,6 +305,7 @@ export function TasksClient({
 
     const previousTitle = newTitle
     setNewTitle('')
+    setTaskActionError(null)
 
     try {
       await fetchJson('/api/life/tasks', {
@@ -134,7 +319,22 @@ export function TasksClient({
       router.refresh()
     } catch {
       setNewTitle(previousTitle)
+      setTaskActionError('Task creation failed.')
     }
+  }
+
+  async function moveTask(taskId: string, status: ColumnKey) {
+    const task = items.find((entry) => entry.id === taskId)
+    if (!task || task.status === status) return
+    await updateTaskStatus(taskId, status, 'Failed to move task.')
+  }
+
+  function handleDrop(column: ColumnKey) {
+    const taskId = dragId
+    setDragId(null)
+    setDragOverCol(null)
+    if (!taskId) return
+    void moveTask(taskId, column)
   }
 
   const scopedItems = useMemo(() => {
@@ -221,6 +421,107 @@ export function TasksClient({
   const rowProjectDisplay = groupBy === 'project' ? 'none' : undefined
   const rowDueDisplay = groupBy === 'due' ? 'none' : undefined
 
+  function renderBoard() {
+    return (
+      <div className="life-kanban">
+        {boardCols.map((column) => (
+          <div
+            className={`life-kanban-col${dragOverCol === column.key ? ' is-dragover' : ''}`}
+            key={column.key}
+            onDragOver={(event) => {
+              event.preventDefault()
+              if (dragOverCol !== column.key) {
+                setDragOverCol(column.key)
+              }
+            }}
+            onDragLeave={(event) => {
+              const nextTarget = event.relatedTarget
+              if (!(nextTarget instanceof Node) || !event.currentTarget.contains(nextTarget)) {
+                setDragOverCol((current) => (current === column.key ? null : current))
+              }
+            }}
+            onDrop={(event) => {
+              event.preventDefault()
+              handleDrop(column.key)
+            }}
+          >
+            <div className="life-kanban-col-head">
+              <span className="col-mark" style={{ background: column.mark }} />
+              <h3>{column.label}</h3>
+              <span className="count-pill">{column.count}</span>
+            </div>
+            <div className="life-kanban-list">
+              {column.items.map((task) => {
+                const project = task.project_slug ? getProjectLabel(task.project_slug) || task.project_slug : 'General'
+
+                if (editId === task.id) {
+                  return (
+                    <div className="life-kanban-card life-kanban-card-editing" key={task.id}>
+                      <EditForm
+                        task={task}
+                        onSave={(fields) => saveEdit(task.id, fields)}
+                        onCancel={() => setEditId(null)}
+                        onDelete={() => deleteTask(task.id)}
+                      />
+                    </div>
+                  )
+                }
+
+                return (
+                  <div
+                    className={`life-kanban-card${dragId === task.id ? ' is-dragging' : ''}`}
+                    key={task.id}
+                    draggable
+                    onClick={() => setEditId(task.id)}
+                    onDragStart={(event) => {
+                      event.dataTransfer.effectAllowed = 'move'
+                      event.dataTransfer.setData('text/plain', task.id)
+                      setDragId(task.id)
+                    }}
+                    onDragEnd={() => {
+                      setDragId(null)
+                      setDragOverCol(null)
+                    }}
+                  >
+                    <div className="life-kanban-card-title">{task.title}</div>
+                    {task.details ? <p className="life-task-details">{task.details}</p> : null}
+                    <div className="life-kanban-card-meta">
+                      <span className="life-tag">{project}</span>
+                      <span
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: 5,
+                          fontSize: 12,
+                          color: 'var(--life-label)',
+                        }}
+                      >
+                        <span className={`pri-dot pri-${task.priority}`} />
+                        {PRI_LABEL[task.priority]}
+                      </span>
+                      <button
+                        type="button"
+                        className="life-kanban-delete"
+                        onClick={(event) => {
+                          event.stopPropagation()
+                          void deleteTask(task.id)
+                        }}
+                        aria-label="Delete task"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  </div>
+                )
+              })}
+              {column.empty ? <div className="life-kanban-empty">Nothing here.</div> : null}
+            </div>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
   if (isPhone) {
     return (
       <div style={{ padding: '18px 16px 0' }}>
@@ -271,6 +572,7 @@ export function TasksClient({
         </div>
 
         {error ? <p className="error-text">{error}</p> : null}
+        {taskActionError ? <p className="error-text">{taskActionError}</p> : null}
 
         {view === 'List' ? (
           <div className="life-list">
@@ -279,12 +581,33 @@ export function TasksClient({
               const project = task.project_slug ? getProjectLabel(task.project_slug) || task.project_slug : 'General'
               const due = task.due_local_date === today ? 'Today' : task.due_local_date ? shortDay(task.due_local_date, timezone) : ''
 
+              if (editId === task.id) {
+                return (
+                  <div className="life-task-row life-task-row-editing" key={task.id}>
+                    <EditForm
+                      task={task}
+                      onSave={(fields) => saveEdit(task.id, fields)}
+                      onCancel={() => setEditId(null)}
+                      onDelete={() => deleteTask(task.id)}
+                    />
+                  </div>
+                )
+              }
+
               return (
-                <div className="life-task-row" key={task.id}>
+                <div
+                  className="life-task-row"
+                  key={task.id}
+                  onClick={() => setEditId(task.id)}
+                  style={{ cursor: 'pointer' }}
+                >
                   <button
                     type="button"
                     className={`life-check${isDone ? ' is-done' : ''}`}
-                    onClick={() => updateTask(task.id, isDone ? 'open' : 'done')}
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      void updateTaskStatus(task.id, isDone ? 'open' : 'done')
+                    }}
                     style={{ borderRadius: 0 }}
                     aria-label={isDone ? 'Reopen task' : 'Mark task done'}
                   >
@@ -304,43 +627,7 @@ export function TasksClient({
             {scopedItems.length === 0 ? <div className="life-empty">Nothing here.</div> : null}
           </div>
         ) : (
-          <div className="life-kanban">
-            {boardCols.map((column) => (
-              <div className="life-kanban-col" key={column.key}>
-                <div className="life-kanban-col-head">
-                  <span className="col-mark" style={{ background: column.mark }} />
-                  <h3>{column.label}</h3>
-                  <span className="count-pill">{column.count}</span>
-                </div>
-                <div className="life-kanban-list">
-                  {column.items.map((task) => {
-                    const project = task.project_slug ? getProjectLabel(task.project_slug) || task.project_slug : 'General'
-                    return (
-                      <div className="life-kanban-card" key={task.id}>
-                        <div className="life-kanban-card-title">{task.title}</div>
-                        <div className="life-kanban-card-meta">
-                          <span className="life-tag">{project}</span>
-                          <span
-                            style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: 5,
-                              fontSize: 12,
-                              color: 'var(--life-label)',
-                            }}
-                          >
-                            <span className={`pri-dot pri-${task.priority}`} />
-                            {PRI_LABEL[task.priority]}
-                          </span>
-                        </div>
-                      </div>
-                    )
-                  })}
-                  {column.empty ? <div className="life-kanban-empty">Nothing here.</div> : null}
-                </div>
-              </div>
-            ))}
-          </div>
+          renderBoard()
         )}
       </div>
     )
@@ -421,6 +708,7 @@ export function TasksClient({
       </div>
 
       {error ? <p className="error-text">{error}</p> : null}
+      {taskActionError ? <p className="error-text">{taskActionError}</p> : null}
 
       {view === 'List' ? (
         <div className="life-list">
@@ -488,44 +776,62 @@ export function TasksClient({
 
                       return (
                         <div className="life-task-row-wrap" key={task.id}>
-                          <div className="life-task-row life-task-row-grid">
-                            <button
-                              type="button"
-                              className={`life-check${isDone ? ' is-done' : ''}`}
-                              onClick={() => updateTask(task.id, isDone ? 'open' : 'done')}
-                              aria-label={isDone ? 'Reopen task' : 'Mark task done'}
-                            >
-                              ✓
-                            </button>
-                            <div className="life-task-main-copy">
-                              <div className={`life-task-title${isDone ? ' is-done' : ''}`}>{task.title}</div>
-                              {task.details ? <div className="life-task-details">{task.details}</div> : null}
-                              <div className="life-task-inline-meta">
-                                <span className="life-tag">{project}</span>
-                                <span className="life-task-grid-priority">
-                                  <span className={`pri-dot pri-${task.priority}`} /> {PRI_LABEL[task.priority]}
-                                </span>
-                                {due ? (
-                                  <span className={`life-row-aside${task.due_local_date === today ? ' life-row-aside-today' : ''}`}>
-                                    {due}
-                                  </span>
-                                ) : null}
-                              </div>
+                          {editId === task.id ? (
+                            <div className="life-task-row life-task-row-editing">
+                              <EditForm
+                                task={task}
+                                onSave={(fields) => saveEdit(task.id, fields)}
+                                onCancel={() => setEditId(null)}
+                                onDelete={() => deleteTask(task.id)}
+                              />
                             </div>
-                            <span className="life-task-grid-cell life-task-grid-project" style={{ display: rowProjectDisplay }}>
-                              <span className="life-tag">{project}</span>
-                            </span>
-                            <span className="life-task-grid-cell life-task-grid-priority">
-                              <span className={`pri-dot pri-${task.priority}`} style={{ marginRight: 6 }} />
-                              {PRI_LABEL[task.priority]}
-                            </span>
-                            <span
-                              className={`life-row-aside${task.due_local_date === today ? ' life-row-aside-today' : ''}`}
-                              style={{ display: rowDueDisplay, textAlign: 'right' }}
+                          ) : (
+                            <div
+                              className="life-task-row life-task-row-grid"
+                              onClick={() => setEditId(task.id)}
+                              style={{ cursor: 'pointer' }}
                             >
-                              {due}
-                            </span>
-                          </div>
+                              <button
+                                type="button"
+                                className={`life-check${isDone ? ' is-done' : ''}`}
+                                onClick={(event) => {
+                                  event.stopPropagation()
+                                  void updateTaskStatus(task.id, isDone ? 'open' : 'done')
+                                }}
+                                aria-label={isDone ? 'Reopen task' : 'Mark task done'}
+                              >
+                                ✓
+                              </button>
+                              <div className="life-task-main-copy">
+                                <div className={`life-task-title${isDone ? ' is-done' : ''}`}>{task.title}</div>
+                                {task.details ? <div className="life-task-details">{task.details}</div> : null}
+                                <div className="life-task-inline-meta">
+                                  <span className="life-tag">{project}</span>
+                                  <span className="life-task-grid-priority">
+                                    <span className={`pri-dot pri-${task.priority}`} /> {PRI_LABEL[task.priority]}
+                                  </span>
+                                  {due ? (
+                                    <span className={`life-row-aside${task.due_local_date === today ? ' life-row-aside-today' : ''}`}>
+                                      {due}
+                                    </span>
+                                  ) : null}
+                                </div>
+                              </div>
+                              <span className="life-task-grid-cell life-task-grid-project" style={{ display: rowProjectDisplay }}>
+                                <span className="life-tag">{project}</span>
+                              </span>
+                              <span className="life-task-grid-cell life-task-grid-priority">
+                                <span className={`pri-dot pri-${task.priority}`} style={{ marginRight: 6 }} />
+                                {PRI_LABEL[task.priority]}
+                              </span>
+                              <span
+                                className={`life-row-aside${task.due_local_date === today ? ' life-row-aside-today' : ''}`}
+                                style={{ display: rowDueDisplay, textAlign: 'right' }}
+                              >
+                                {due}
+                              </span>
+                            </div>
+                          )}
                         </div>
                       )
                     })}
@@ -538,43 +844,7 @@ export function TasksClient({
           {groupedItems.length === 0 ? <div className="life-empty">Nothing here.</div> : null}
         </div>
       ) : (
-        <div className="life-kanban">
-          {boardCols.map((column) => (
-            <div className="life-kanban-col" key={column.key}>
-              <div className="life-kanban-col-head">
-                <span className="col-mark" style={{ background: column.mark }} />
-                <h3>{column.label}</h3>
-                <span className="count-pill">{column.count}</span>
-              </div>
-              <div className="life-kanban-list">
-                {column.items.map((task) => {
-                  const project = task.project_slug ? getProjectLabel(task.project_slug) || task.project_slug : 'General'
-                  return (
-                    <div className="life-kanban-card" key={task.id}>
-                      <div className="life-kanban-card-title">{task.title}</div>
-                      <div className="life-kanban-card-meta">
-                        <span className="life-tag">{project}</span>
-                        <span
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: 5,
-                            fontSize: 12,
-                            color: 'var(--life-label)',
-                          }}
-                        >
-                          <span className={`pri-dot pri-${task.priority}`} />
-                          {PRI_LABEL[task.priority]}
-                        </span>
-                      </div>
-                    </div>
-                  )
-                })}
-                {column.empty ? <div className="life-kanban-empty">Nothing here.</div> : null}
-              </div>
-            </div>
-          ))}
-        </div>
+        renderBoard()
       )}
     </div>
   )
