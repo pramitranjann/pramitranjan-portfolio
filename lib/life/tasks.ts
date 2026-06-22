@@ -137,6 +137,7 @@ export async function createManualTask(input: {
   projectSlug?: string | null
   dueLocalDate?: string | null
   priority?: string | null
+  status?: TaskStatus | null
 }) {
   const title = input.title.trim()
   if (!title) {
@@ -145,6 +146,7 @@ export async function createManualTask(input: {
 
   const settings = await getOwnerSettings()
   const supabase = getSupabaseAdmin()
+  const status: TaskStatus = input.status === 'in_progress' || input.status === 'done' ? input.status : 'open'
   const { data, error } = await supabase
     .from('tasks')
     .insert({
@@ -154,6 +156,8 @@ export async function createManualTask(input: {
       project_slug: normalizeProjectSlug(input.projectSlug) || detectProjectSlug(title),
       due_local_date: normalizeDueLocalDate(input.dueLocalDate),
       priority: normalizePriority(input.priority),
+      status,
+      completed_at: status === 'done' ? new Date().toISOString() : null,
       source_type: 'manual',
       source_local_date: getCurrentLocalDate(settings.timezone),
       auto_generated: false,

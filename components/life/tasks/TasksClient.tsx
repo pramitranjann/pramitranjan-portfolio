@@ -156,6 +156,7 @@ export function TasksClient({
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({})
   const [newTitle, setNewTitle] = useState('')
   const [adding, setAdding] = useState(false)
+  const [composerCol, setComposerCol] = useState<ColumnKey | null>(null)
   const [editId, setEditId] = useState<string | null>(null)
   const [dragId, setDragId] = useState<string | null>(null)
   const [dragOverCol, setDragOverCol] = useState<ColumnKey | null>(null)
@@ -182,6 +183,12 @@ export function TasksClient({
     } catch {
       // Ignore private browsing storage failures.
     }
+  }
+
+  // Board adds inline in the "To do" column; List uses the top composer.
+  function handleNewTask() {
+    if (view === 'Board') setComposerCol((current) => (current ? null : 'open'))
+    else setAdding((value) => !value)
   }
 
   async function updateTaskStatus(taskId: string, status: TaskStatus, errorMessage = 'Task update failed.') {
@@ -269,7 +276,7 @@ export function TasksClient({
     }
   }
 
-  async function createTaskFromComposer(draft: TaskDraft) {
+  async function createTaskFromComposer(draft: TaskDraft, status: TaskStatus = 'open') {
     await fetchJson('/api/life/tasks', {
       method: 'POST',
       body: JSON.stringify({
@@ -278,6 +285,7 @@ export function TasksClient({
         projectSlug: draft.projectSlug,
         priority: draft.priority,
         dueLocalDate: draft.dueLocalDate,
+        status,
         calendar: draft.calendar,
       }),
     })
@@ -423,8 +431,28 @@ export function TasksClient({
               <span className="col-mark" style={{ background: column.mark }} />
               <h3>{column.label}</h3>
               <span className="count-pill">{column.count}</span>
+              <button
+                type="button"
+                className="life-kanban-col-add"
+                aria-label={`Add task to ${column.label}`}
+                onClick={() => setComposerCol((current) => (current === column.key ? null : column.key))}
+              >
+                +
+              </button>
             </div>
             <div className="life-kanban-list">
+              {composerCol === column.key ? (
+                <div className="life-kanban-card life-kanban-card-editing">
+                  <NewTaskComposer
+                    today={today}
+                    timezone={timezone}
+                    onCreate={(draft) => createTaskFromComposer(draft, column.key)}
+                    onClose={() => setComposerCol(null)}
+                    defaultProjectSlug={initialProjectSlug || ''}
+                    defaultDue={filter === 'Today' ? today : ''}
+                  />
+                </div>
+              ) : null}
               {column.items.map((task) => {
                 const project = task.project_slug ? getProjectLabel(task.project_slug) || task.project_slug : 'General'
 
@@ -511,18 +539,18 @@ export function TasksClient({
           <button
             type="button"
             className="life-btn primary"
-            onClick={() => setAdding((value) => !value)}
-            aria-expanded={adding}
+            onClick={handleNewTask}
+            aria-expanded={adding || composerCol !== null}
           >
             + New task
           </button>
         </div>
 
-        {adding ? (
+        {adding && view === 'List' ? (
           <NewTaskComposer
             today={today}
             timezone={timezone}
-            onCreate={createTaskFromComposer}
+            onCreate={(draft) => createTaskFromComposer(draft, 'open')}
             onClose={() => setAdding(false)}
             defaultProjectSlug={initialProjectSlug || ''}
             defaultDue={filter === 'Today' ? today : ''}
@@ -640,18 +668,18 @@ export function TasksClient({
         <button
           type="button"
           className="life-btn primary"
-          onClick={() => setAdding((value) => !value)}
-          aria-expanded={adding}
+          onClick={handleNewTask}
+          aria-expanded={adding || composerCol !== null}
         >
           + New task
         </button>
       </div>
 
-      {adding ? (
+      {adding && view === 'List' ? (
         <NewTaskComposer
           today={today}
           timezone={timezone}
-          onCreate={createTaskFromComposer}
+          onCreate={(draft) => createTaskFromComposer(draft, 'open')}
           onClose={() => setAdding(false)}
           defaultProjectSlug={initialProjectSlug || ''}
           defaultDue={filter === 'Today' ? today : ''}

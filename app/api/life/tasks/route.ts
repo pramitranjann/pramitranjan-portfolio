@@ -78,6 +78,7 @@ export async function POST(request: NextRequest) {
       projectSlug?: string | null
       dueLocalDate?: string | null
       priority?: string | null
+      status?: TaskStatus | null
       redirectTo?: string | null
       calendar?: TaskCalendarIntent | null
     } | null = null
@@ -104,6 +105,7 @@ export async function POST(request: NextRequest) {
       projectSlug: payload?.projectSlug || null,
       dueLocalDate: payload?.dueLocalDate || null,
       priority: payload?.priority || null,
+      status: payload?.status || null,
     })
 
     if (!isJsonRequest) {

@@ -1052,6 +1052,8 @@ body.carousel-reengaging main {
 .life-shell .life-kanban-delete { background: none; border: 0; color: var(--life-label); cursor: pointer; font-size: 16px; line-height: 1; padding: 0 2px; margin-left: auto; opacity: 0; transition: opacity 0.15s, color 0.15s; }
 .life-shell .life-kanban-card:hover .life-kanban-delete { opacity: 1; }
 .life-shell .life-kanban-delete:hover { color: var(--life-danger); }
+.life-shell .life-kanban-col-add { width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--life-border); background: transparent; color: var(--life-muted); font-size: 14px; line-height: 1; cursor: pointer; flex-shrink: 0; transition: border-color 0.14s, color 0.14s; }
+.life-shell .life-kanban-col-add:hover { border-color: var(--life-accent-line); color: var(--life-accent); }
 
 /* ── Task inline edit ───────────────────────────────────────────────────── */
 .life-shell .life-task-details { margin: 2px 0 0; font-size: 12px; color: var(--life-label); line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
