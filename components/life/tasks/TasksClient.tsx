@@ -203,6 +203,128 @@ function EditForm({
   )
 }
 
+function NewTaskComposer({
+  onCreate,
+  onClose,
+  defaultProjectSlug,
+  defaultDue,
+}: {
+  onCreate: (fields: TaskEditFields) => Promise<void>
+  onClose: () => void
+  defaultProjectSlug: string
+  defaultDue: string
+}) {
+  const [title, setTitle] = useState('')
+  const [details, setDetails] = useState('')
+  const [projectSlug, setProjectSlug] = useState(defaultProjectSlug)
+  const [priority, setPriority] = useState<TaskPriority>('medium')
+  const [dueLocalDate, setDueLocalDate] = useState(defaultDue)
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const titleRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    titleRef.current?.focus()
+  }, [])
+
+  async function handleSave() {
+    if (!title.trim()) {
+      setError('Title required.')
+      return
+    }
+
+    setSaving(true)
+    setError(null)
+
+    try {
+      await onCreate({
+        title: title.trim(),
+        details: details.trim() || null,
+        project_slug: projectSlug || null,
+        priority,
+        due_local_date: dueLocalDate || null,
+      })
+      onClose()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Task creation failed.')
+      setSaving(false)
+    }
+  }
+
+  return (
+    <div className="life-task-edit life-task-compose">
+      <input
+        ref={titleRef}
+        type="text"
+        className="text-input life-task-edit-title"
+        value={title}
+        placeholder="What needs doing?"
+        onChange={(event) => setTitle(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') {
+            event.preventDefault()
+            void handleSave()
+          }
+          if (event.key === 'Escape') {
+            event.preventDefault()
+            onClose()
+          }
+        }}
+      />
+      <textarea
+        className="text-input life-task-edit-details"
+        value={details}
+        placeholder="Add details, notes, links… (optional)"
+        rows={2}
+        onChange={(event) => setDetails(event.target.value)}
+      />
+      <div className="life-task-edit-row">
+        <select
+          className="text-input"
+          value={projectSlug}
+          onChange={(event) => setProjectSlug(event.target.value)}
+          aria-label="Project"
+        >
+          <option value="">Unassigned</option>
+          {LIFE_PROJECTS.map((project) => (
+            <option key={project.slug} value={project.slug}>
+              {project.name}
+            </option>
+          ))}
+        </select>
+        <select
+          className="text-input"
+          value={priority}
+          onChange={(event) => setPriority(event.target.value as TaskPriority)}
+          aria-label="Priority"
+        >
+          {PRI_OPTIONS.map((option) => (
+            <option key={option} value={option}>
+              {PRI_LABEL[option]}
+            </option>
+          ))}
+        </select>
+        <input
+          type="date"
+          className="text-input"
+          value={dueLocalDate}
+          onChange={(event) => setDueLocalDate(event.target.value)}
+          aria-label="Due date"
+        />
+      </div>
+      {error ? <span className="error-text">{error}</span> : null}
+      <div className="life-task-edit-actions">
+        <button type="button" className="primary-button" onClick={() => void handleSave()} disabled={saving}>
+          {saving ? 'Adding…' : 'Add task'}
+        </button>
+        <button type="button" className="secondary-button" onClick={onClose} disabled={saving}>
+          Cancel
+        </button>
+      </div>
+    </div>
+  )
+}
+
 export function TasksClient({
   tasks,
   today,
@@ -224,6 +346,7 @@ export function TasksClient({
   const [groupBy, setGroupBy] = useState<DesktopGroup>('status')
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({})
   const [newTitle, setNewTitle] = useState('')
+  const [adding, setAdding] = useState(false)
   const [editId, setEditId] = useState<string | null>(null)
   const [dragId, setDragId] = useState<string | null>(null)
   const [dragOverCol, setDragOverCol] = useState<ColumnKey | null>(null)
@@ -321,6 +444,22 @@ export function TasksClient({
       setNewTitle(previousTitle)
       setTaskActionError('Task creation failed.')
     }
+  }
+
+  async function createTaskFromComposer(fields: TaskEditFields) {
+    await fetchJson('/api/life/tasks', {
+      method: 'POST',
+      body: JSON.stringify({
+        title: fields.title,
+        details: fields.details,
+        projectSlug: fields.project_slug,
+        priority: fields.priority,
+        dueLocalDate: fields.due_local_date,
+      }),
+    })
+
+    setTaskActionError(null)
+    router.refresh()
   }
 
   async function moveTask(taskId: string, status: ColumnKey) {
@@ -530,10 +669,24 @@ export function TasksClient({
             <p className="eyebrow">Tasks</p>
             <h1>{title}</h1>
           </div>
-          <button type="button" className="life-btn primary" onClick={() => router.push('/life')}>
+          <button
+            type="button"
+            className="life-btn primary"
+            onClick={() => setAdding((value) => !value)}
+            aria-expanded={adding}
+          >
             + New task
           </button>
         </div>
+
+        {adding ? (
+          <NewTaskComposer
+            onCreate={createTaskFromComposer}
+            onClose={() => setAdding(false)}
+            defaultProjectSlug={initialProjectSlug || ''}
+            defaultDue={filter === 'Today' ? today : ''}
+          />
+        ) : null}
 
         <div className="life-tasks-toolbar" style={{ paddingBottom: 10 }}>
           <div className="life-tasks-filters">
@@ -640,10 +793,24 @@ export function TasksClient({
           <p className="eyebrow">Tasks</p>
           <h1>{title}</h1>
         </div>
-        <button type="button" className="life-btn primary" onClick={() => router.push('/life')}>
+        <button
+          type="button"
+          className="life-btn primary"
+          onClick={() => setAdding((value) => !value)}
+          aria-expanded={adding}
+        >
           + New task
         </button>
       </div>
+
+      {adding ? (
+        <NewTaskComposer
+          onCreate={createTaskFromComposer}
+          onClose={() => setAdding(false)}
+          defaultProjectSlug={initialProjectSlug || ''}
+          defaultDue={filter === 'Today' ? today : ''}
+        />
+      ) : null}
 
       <div className="life-tasks-toolbar">
         <div className="life-tasks-filters">
