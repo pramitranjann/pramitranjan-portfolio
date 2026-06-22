@@ -5,6 +5,7 @@ import { useDeferredValue, useEffect, useRef, useState } from "react";
 import { useViewportMode } from '@/hooks/useViewportMode'
 import { getEntryPresentation } from '@/lib/life/entries'
 import { fetchJson } from '@/lib/life/client'
+import { LIFE_PROJECTS } from '@/lib/life/projects'
 import { getLocalTimeLabel, localDateTimeToUtc } from '@/lib/life/time'
 import type { DayHistory, EntryRecord, ReportRecord } from '@/lib/life/types'
 
@@ -57,6 +58,11 @@ export function HistoryClient({
   const [error, setError] = useState<string | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [deletingEntryId, setDeletingEntryId] = useState<string | null>(null);
+  const [editingEntryId, setEditingEntryId] = useState<string | null>(null);
+  const [editContent, setEditContent] = useState('');
+  const [editProject, setEditProject] = useState('');
+  const [savingEdit, setSavingEdit] = useState(false);
+  const [editError, setEditError] = useState<string | null>(null);
   const skippedInitialFetch = useRef(false)
 
   useEffect(() => {
@@ -136,6 +142,105 @@ export function HistoryClient({
     } finally {
       setDeletingEntryId(null)
     }
+  }
+
+  function startEdit(entry: EntryRecord) {
+    setEditingEntryId(entry.id)
+    setEditContent(entry.content)
+    setEditProject(entry.project_slug || '')
+    setEditError(null)
+  }
+
+  function cancelEdit() {
+    setEditingEntryId(null)
+    setEditError(null)
+  }
+
+  async function saveEdit(entry: EntryRecord) {
+    const content = editContent.trim()
+    if (!content) {
+      setEditError('Content is required.')
+      return
+    }
+
+    setSavingEdit(true)
+    setEditError(null)
+
+    try {
+      const { entry: updated } = await fetchJson<{ entry: EntryRecord }>(`/api/life/entries/${entry.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ content, projectSlug: editProject || null }),
+      })
+
+      setEntries((current) => current.map((candidate) => (candidate.id === entry.id ? updated : candidate)))
+      setEditingEntryId(null)
+    } catch (saveRequestError) {
+      setEditError(saveRequestError instanceof Error ? saveRequestError.message : 'Failed to save entry.')
+    } finally {
+      setSavingEdit(false)
+    }
+  }
+
+  function renderEntryEditor(entry: EntryRecord) {
+    return (
+      <div className="life-entry-edit">
+        <textarea
+          className="text-input life-entry-edit-text"
+          value={editContent}
+          autoFocus
+          rows={3}
+          onChange={(event) => setEditContent(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === 'Escape') {
+              event.preventDefault()
+              cancelEdit()
+            }
+            if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
+              event.preventDefault()
+              void saveEdit(entry)
+            }
+          }}
+        />
+        <div className="life-entry-edit-row">
+          <select
+            className="text-input"
+            value={editProject}
+            onChange={(event) => setEditProject(event.target.value)}
+            aria-label="Project"
+          >
+            <option value="">Unassigned</option>
+            {LIFE_PROJECTS.map((project) => (
+              <option key={project.slug} value={project.slug}>
+                {project.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        {editError ? <span className="error-text">{editError}</span> : null}
+        <div className="life-entry-edit-actions">
+          <button type="button" className="primary-button" onClick={() => void saveEdit(entry)} disabled={savingEdit}>
+            {savingEdit ? 'Saving…' : 'Save'}
+          </button>
+          <button type="button" className="secondary-button" onClick={cancelEdit} disabled={savingEdit}>
+            Cancel
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  function renderEditButton(entry: EntryRecord, variant: 'default' | 'mobile' = 'default') {
+    return (
+      <button
+        type="button"
+        className={`life-entry-edit-btn${variant === 'mobile' ? ' life-entry-edit-btn-mobile' : ''}`}
+        onClick={() => startEdit(entry)}
+        disabled={Boolean(deletingEntryId)}
+        aria-label={`Edit entry from ${getLocalTimeLabel(entry.created_at, timezone)}`}
+      >
+        Edit
+      </button>
+    )
   }
 
   function renderDeleteButton(entry: EntryRecord, variant: 'default' | 'mobile' = 'default') {
@@ -218,12 +323,19 @@ export function HistoryClient({
                     {entry.project_slug ? <span className="life-tag">{entry.project_slug}</span> : null}
                   </div>
                 </div>
-                <p style={{ margin: 0, fontSize: 13, lineHeight: 1.6, color: 'var(--life-muted)' }}>
-                  {entry.content}
-                </p>
-                <div className="life-history-entry-actions">
-                  {renderDeleteButton(entry, 'mobile')}
-                </div>
+                {editingEntryId === entry.id ? (
+                  renderEntryEditor(entry)
+                ) : (
+                  <>
+                    <p style={{ margin: 0, fontSize: 13, lineHeight: 1.6, color: 'var(--life-muted)' }}>
+                      {entry.content}
+                    </p>
+                    <div className="life-history-entry-actions">
+                      {renderEditButton(entry, 'mobile')}
+                      {renderDeleteButton(entry, 'mobile')}
+                    </div>
+                  </>
+                )}
               </article>
             )
           })}
@@ -338,9 +450,18 @@ export function HistoryClient({
                         <div>
                           {entry.project_slug ? <span className="life-tag">{entry.project_slug}</span> : null}
                         </div>
-                        {renderDeleteButton(entry)}
+                        {editingEntryId === entry.id ? null : (
+                          <div className="life-history-entry-head-actions">
+                            {renderEditButton(entry)}
+                            {renderDeleteButton(entry)}
+                          </div>
+                        )}
                       </div>
-                      <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: '#e6e3dd' }}>{entry.content}</p>
+                      {editingEntryId === entry.id ? (
+                        renderEntryEditor(entry)
+                      ) : (
+                        <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: '#e6e3dd' }}>{entry.content}</p>
+                      )}
                     </div>
                   </article>
                 )

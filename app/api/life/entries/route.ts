@@ -2,9 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { OWNER_ID } from '@/lib/life/constants'
 import { isAuthenticatedLifeRequest, unauthorizedJson } from '@/lib/life/auth'
+import { inferEntryKind } from '@/lib/life/entries'
 import { detectProjectSlug, normalizeProjectSlug } from '@/lib/life/projects'
 import { getOwnerSettings } from '@/lib/life/settings'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
+import { createManualTask } from '@/lib/life/tasks'
 import { getCurrentLocalDate } from '@/lib/life/time'
 import type { EntrySource } from '@/lib/life/types'
 
@@ -85,6 +87,20 @@ export async function POST(request: NextRequest) {
       return NextResponse.redirect(new URL(`/life?error=${encodeURIComponent(error.message)}`, request.url), { status: 303 });
     }
     return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  // When a captured entry reads like a task, mirror it into the task list so it
+  // becomes something actionable. Until now the "Task" label was purely cosmetic
+  // and nothing was ever created. Best-effort: never let this fail the capture.
+  if (inferEntryKind(content) === "Task") {
+    try {
+      await createManualTask({
+        title: content,
+        projectSlug: projectSlug || detectProjectSlug(content),
+      });
+    } catch (taskError) {
+      console.error("Failed to create task from entry", taskError);
+    }
   }
 
   if (!isJsonRequest) {

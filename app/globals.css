@@ -1612,9 +1612,36 @@ body.carousel-reengaging main {
 .life-shell .life-quick-wrap { margin-top: 16px; display: grid; gap: 12px; }
 .life-shell .life-quick-wrap .life-quick { margin-top: 0; }
 .life-shell .life-quick-chip.is-open { color: var(--life-accent); border-style: solid; border-color: var(--life-accent-line); background: var(--life-accent-soft); }
-.life-shell .life-quick-form { display: grid; gap: 10px; padding: 14px; border: 1px solid var(--life-border); background: var(--life-panel); }
-.life-shell .life-quick-form-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.life-shell .life-quick-form { display: grid; gap: 12px; padding: 16px; border: 1px solid var(--life-border); background: var(--life-panel); }
+.life-shell .life-quick-form-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
 .life-shell .life-quick-form-row .text-input { width: auto; flex: 0 1 auto; min-width: 120px; }
+.life-shell .life-quick-field { display: grid; gap: 5px; flex: 1 1 140px; min-width: 120px; }
+.life-shell .life-quick-field .text-input { width: 100%; }
+.life-shell .life-quick-field-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--life-label); }
+.life-shell .life-quick-form-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.life-shell .life-quick-saved { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--life-green); }
+@media (max-width: 640px) {
+  .life-shell .life-quick-form-row { flex-direction: column; align-items: stretch; }
+  .life-shell .life-quick-field { width: 100%; }
+}
+
+/* ── Entry edit (History) ────────────────────────────────────────────────── */
+.life-shell .life-entry-edit { display: grid; gap: 8px; padding-top: 6px; }
+.life-shell .life-entry-edit-text { width: 100%; resize: vertical; min-height: 64px; font-size: 14px; line-height: 1.5; }
+.life-shell .life-entry-edit-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.life-shell .life-entry-edit-row .text-input { width: auto; flex: 0 1 auto; min-width: 140px; }
+.life-shell .life-entry-edit-actions { display: flex; align-items: center; gap: 8px; }
+.life-shell .life-history-entry-head-actions { display: inline-flex; align-items: center; gap: 14px; }
+.life-shell .life-entry-edit-btn { appearance: none; border: 0; background: none; color: var(--life-label); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; padding: 0; transition: color 0.15s, opacity 0.15s; }
+.life-shell .life-entry-edit-btn:hover { color: var(--life-accent); }
+.life-shell .life-entry-edit-btn:disabled { cursor: default; opacity: 0.45; }
+.life-shell .life-history-entry .life-entry-edit-btn { opacity: 0; }
+.life-shell .life-history-entry:hover .life-entry-edit-btn,
+.life-shell .life-history-entry:focus-within .life-entry-edit-btn { opacity: 1; }
+.life-shell .life-entry-edit-btn-mobile { width: 100%; min-height: 40px; border: 1px solid var(--life-border); background: var(--life-panel-2); color: var(--life-text); font-size: 11px; letter-spacing: 0.12em; text-align: center; padding: 0 12px; opacity: 1; }
+
+/* ── New task composer (Tasks) ──────────────────────────────────────────── */
+.life-shell .life-task-compose { border: 1px solid var(--life-border); background: var(--life-panel); margin-bottom: 16px; }
 
 /* ── 2026 handoff overrides ──────────────────────────────────────────────── */
 .life-shell::-webkit-scrollbar,
