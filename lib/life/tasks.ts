@@ -175,6 +175,7 @@ export async function updateTask(taskId: string, fields: {
   projectSlug?: string | null
   priority?: string | null
   dueLocalDate?: string | null
+  calendarEventId?: string | null
 }) {
   const supabase = getSupabaseAdmin()
   const update: Record<string, unknown> = { updated_at: new Date().toISOString() }
@@ -183,6 +184,7 @@ export async function updateTask(taskId: string, fields: {
   if ('projectSlug' in fields) update.project_slug = fields.projectSlug ?? null
   if (fields.priority !== undefined) update.priority = fields.priority
   if ('dueLocalDate' in fields) update.due_local_date = fields.dueLocalDate ?? null
+  if ('calendarEventId' in fields) update.calendar_event_id = fields.calendarEventId ?? null
 
   const { data, error } = await supabase
     .from('tasks')

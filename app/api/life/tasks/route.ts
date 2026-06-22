@@ -1,8 +1,47 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { isAuthenticatedLifeRequest, unauthorizedJson } from '@/lib/life/auth'
-import { createManualTask, getTasks } from '@/lib/life/tasks'
-import type { TaskStatus } from '@/lib/life/types'
+import { createCalendarEventForTask } from '@/lib/life/calendar'
+import { getOwnerSettings } from '@/lib/life/settings'
+import { createManualTask, getTasks, updateTask } from '@/lib/life/tasks'
+import { getCurrentLocalDate } from '@/lib/life/time'
+import type { TaskCalendarIntent, TaskRecord, TaskStatus } from '@/lib/life/types'
+
+/**
+ * Apply a calendar intent to a freshly created or edited task: push a new
+ * Google event, link an existing one, or unlink. Best-effort — a calendar
+ * failure must not lose the task itself, so the caller catches.
+ */
+export async function applyCalendarIntent(
+  task: TaskRecord,
+  intent: TaskCalendarIntent | null | undefined,
+): Promise<TaskRecord> {
+  if (!intent || intent.mode === 'none') return task
+
+  if (intent.mode === 'event') {
+    const settings = await getOwnerSettings()
+    const localDate = task.due_local_date || getCurrentLocalDate(settings.timezone)
+    const eventId = await createCalendarEventForTask({
+      title: task.title,
+      localDate,
+      startTime: intent.startTime ?? null,
+      endTime: intent.endTime ?? null,
+      notes: task.details,
+    })
+    if (eventId) return updateTask(task.id, { calendarEventId: eventId })
+    return task
+  }
+
+  if (intent.mode === 'link' && intent.eventId) {
+    return updateTask(task.id, { calendarEventId: intent.eventId })
+  }
+
+  if (intent.mode === 'unlink') {
+    return updateTask(task.id, { calendarEventId: null })
+  }
+
+  return task
+}
 
 function getSafeRedirectTo(value: string | null | undefined) {
   return value?.startsWith('/life') ? value : '/life/tasks'
@@ -40,6 +79,7 @@ export async function POST(request: NextRequest) {
       dueLocalDate?: string | null
       priority?: string | null
       redirectTo?: string | null
+      calendar?: TaskCalendarIntent | null
     } | null = null
 
     if (isJsonRequest) {
@@ -58,7 +98,7 @@ export async function POST(request: NextRequest) {
 
     redirectTo = getSafeRedirectTo(payload?.redirectTo)
 
-    const task = await createManualTask({
+    let task = await createManualTask({
       title: payload?.title || '',
       details: payload?.details || null,
       projectSlug: payload?.projectSlug || null,
@@ -68,6 +108,12 @@ export async function POST(request: NextRequest) {
 
     if (!isJsonRequest) {
       return NextResponse.redirect(new URL(redirectTo, request.url), { status: 303 })
+    }
+
+    try {
+      task = await applyCalendarIntent(task, payload?.calendar)
+    } catch (calendarError) {
+      console.error('Applying calendar intent to new task failed', calendarError)
     }
 
     return NextResponse.json({ task })

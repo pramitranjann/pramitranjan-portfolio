@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { isAuthenticatedLifeRequest, unauthorizedJson } from '@/lib/life/auth'
+import { applyCalendarIntent } from '@/app/api/life/tasks/route'
 import { updateTask, updateTaskStatus } from '@/lib/life/tasks'
-import type { TaskStatus } from '@/lib/life/types'
+import type { TaskCalendarIntent, TaskStatus } from '@/lib/life/types'
 
 function getSafeRedirectTo(value: string | null | undefined) {
   return value?.startsWith('/life') ? value : '/life/tasks'
@@ -77,15 +78,22 @@ export async function PATCH(
       projectSlug?: string | null
       priority?: string | null
       dueLocalDate?: string | null
+      calendar?: TaskCalendarIntent | null
     } | null
 
-    const task = await updateTask(taskId, {
+    let task = await updateTask(taskId, {
       title: body?.title,
       details: body?.details,
       projectSlug: body?.projectSlug,
       priority: body?.priority,
       dueLocalDate: body?.dueLocalDate,
     })
+
+    try {
+      task = await applyCalendarIntent(task, body?.calendar)
+    } catch (calendarError) {
+      console.error('Applying calendar intent on task edit failed', calendarError)
+    }
 
     return NextResponse.json({ task })
   } catch (error) {

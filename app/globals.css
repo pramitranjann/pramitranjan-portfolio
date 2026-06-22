@@ -1640,8 +1640,86 @@ body.carousel-reengaging main {
 .life-shell .life-history-entry:focus-within .life-entry-edit-btn { opacity: 1; }
 .life-shell .life-entry-edit-btn-mobile { width: 100%; min-height: 40px; border: 1px solid var(--life-border); background: var(--life-panel-2); color: var(--life-text); font-size: 11px; letter-spacing: 0.12em; text-align: center; padding: 0 12px; opacity: 1; }
 
-/* ── New task composer (Tasks) ──────────────────────────────────────────── */
-.life-shell .life-task-compose { border: 1px solid var(--life-border); background: var(--life-panel); margin-bottom: 16px; }
+/* ── Task composer / form (create + edit) ───────────────────────────────── */
+.life-shell .life-task-compose { position: relative; display: grid; gap: 0; width: 100%; min-width: 0; padding: 14px; border: 1px solid var(--life-border); background: var(--life-panel); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4); margin-bottom: 16px; }
+.life-shell .life-kanban-card-editing .life-task-compose,
+.life-shell .life-task-row-editing .life-task-compose { margin-bottom: 0; box-shadow: none; border: 0; }
+.life-shell .life-compose-title { width: 100%; min-width: 0; background: transparent; border: 0; outline: none; color: var(--life-text); font-family: var(--font-mono); font-weight: 500; font-size: 16px; line-height: 1.45; padding: 2px 0 9px; caret-color: var(--life-accent); }
+.life-shell .life-compose-title::placeholder { color: var(--life-label); }
+.life-shell .life-compose-desc { width: 100%; min-width: 0; background: transparent; border: 0; outline: none; color: var(--life-muted); font-family: var(--font-mono); font-size: 13.5px; line-height: 1.65; padding: 2px 0 12px; resize: none; min-height: 40px; overflow: hidden; caret-color: var(--life-accent); }
+.life-shell .life-compose-desc::placeholder { color: var(--life-label); }
+.life-shell .life-compose-div { height: 1px; background: var(--life-hairline); margin: 0 -14px 12px; }
+.life-shell .life-compose-foot { display: flex; align-items: center; gap: 10px; margin-top: 13px; flex-wrap: wrap; }
+.life-shell .life-compose-hint { margin-left: auto; font-size: 11px; color: #4a4a4a; }
+
+.life-shell .life-pills { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.life-shell .life-pill-wrap { position: relative; }
+.life-shell .life-pill { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 11px; border: 1px solid var(--life-border); background: var(--life-muted-bg); color: var(--life-muted); font-family: var(--font-mono); font-size: 12px; cursor: pointer; white-space: nowrap; transition: border-color 0.14s, color 0.14s; }
+.life-shell .life-pill:hover { border-color: var(--life-muted); color: var(--life-text); }
+.life-shell .life-pill .ic { color: var(--life-label); }
+.life-shell .life-pill.set { color: var(--life-text); }
+.life-shell .life-pill.set.proj-plain { border-color: #3a3a3a; }
+.life-shell .life-pill.set.due-today { border-color: var(--life-accent-line); background: var(--life-accent-soft); color: var(--life-accent); }
+.life-shell .life-pill.set.cal-event { border-color: rgba(120, 140, 255, 0.4); background: rgba(120, 140, 255, 0.08); color: #9aa6ff; }
+.life-shell .life-pill.set.cal-link { border-color: rgba(91, 208, 122, 0.4); background: rgba(91, 208, 122, 0.08); color: #7fd899; }
+.life-shell .life-pill .pdot { width: 7px; height: 7px; border-radius: 50%; background: #3a3a3a; }
+.life-shell .life-pill .pdot.high { background: var(--life-accent); }
+.life-shell .life-pill .pdot.med { background: var(--life-amber); }
+
+.life-shell .life-pill-menu { position: absolute; top: 32px; left: 0; z-index: 30; min-width: 180px; background: var(--life-panel-2); border: 1px solid var(--life-border); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); padding: 5px; }
+.life-shell .life-pill-menu-item { display: flex; align-items: center; gap: 9px; width: 100%; padding: 8px 9px; background: none; border: 0; text-align: left; font-family: var(--font-mono); font-size: 13px; color: var(--life-muted); cursor: pointer; transition: background 0.1s, color 0.1s; }
+.life-shell .life-pill-menu-item:hover { background: var(--life-panel); color: var(--life-text); }
+.life-shell .life-pill-menu-item .ev-time { margin-left: auto; font-size: 11px; color: var(--life-label); }
+.life-shell .life-pill-menu .swatch { width: 8px; height: 8px; border-radius: 50%; background: #3a3a3a; flex-shrink: 0; }
+.life-shell .life-pill-menu .swatch.sq { border-radius: 0; }
+.life-shell .life-pill-menu .swatch.high { background: var(--life-accent); }
+.life-shell .life-pill-menu .swatch.med { background: var(--life-amber); }
+.life-shell .life-pill-menu .swatch.low { background: #3a3a3a; }
+.life-shell .life-pill-menu .swatch.cal { background: #9aa6ff; }
+.life-shell .life-pill-menu-sep { height: 1px; background: var(--life-hairline); margin: 4px 0; }
+.life-shell .life-pill-menu-title { padding: 7px 9px 4px; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--life-label); }
+.life-shell .life-pill-menu-scroll { max-height: 200px; overflow-y: auto; }
+.life-shell .life-pill-menu-empty { padding: 8px 9px; font-size: 12px; color: var(--life-label); }
+
+.life-shell .life-event-panel { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 11px; padding: 11px 12px; border: 1px solid var(--life-hairline); background: var(--life-muted-bg); }
+.life-shell .life-event-panel .ep-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--life-label); }
+.life-shell .life-event-panel .ep-t { font-size: 12px; color: var(--life-muted); }
+.life-shell .life-event-panel .ep-linked { font-size: 13px; color: #7fd899; }
+.life-shell .life-event-panel input[type="time"] { background: var(--life-panel); border: 1px solid var(--life-border); color: var(--life-text); font-family: var(--font-mono); font-size: 12px; padding: 6px 8px; outline: none; }
+.life-shell .life-event-panel input[type="time"]:focus { border-color: var(--life-accent-line); }
+.life-shell .life-ep-date { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 11px; border: 1px solid var(--life-border); background: var(--life-panel); color: var(--life-muted); font-family: var(--font-mono); font-size: 12px; cursor: pointer; white-space: nowrap; transition: border-color 0.14s, color 0.14s; }
+.life-shell .life-ep-date:hover { border-color: var(--life-accent-line); color: var(--life-text); }
+.life-shell .life-event-panel .ep-x { margin-left: auto; background: none; border: 0; color: var(--life-label); font-size: 13px; cursor: pointer; }
+.life-shell .life-event-panel .ep-x:hover { color: var(--life-danger); }
+
+.life-shell .life-ev-chip { display: inline-flex; align-items: center; gap: 5px; height: 20px; padding: 0 7px; font-size: 11px; border: 1px solid rgba(120, 140, 255, 0.3); background: rgba(120, 140, 255, 0.07); color: #9aa6ff; font-family: var(--font-mono); white-space: nowrap; }
+
+/* ── No-scroll board: fixed-height columns, internal scroll (no scrollbar) ── */
+.life-shell .life-tasks-shell.is-board { height: 100%; display: flex; flex-direction: column; gap: 16px; min-height: 0; overflow: hidden; }
+.life-shell .life-tasks-shell.is-board .life-page-head { margin-bottom: 0; }
+.life-shell .life-tasks-shell.is-board .life-kanban { flex: 1; min-height: 0; align-items: stretch; }
+.life-shell .life-tasks-shell.is-board .life-kanban-col { height: 100%; min-height: 0; }
+.life-shell .life-tasks-shell.is-board .life-kanban-list { overflow-y: auto; min-height: 0; scrollbar-width: none; }
+.life-shell .life-tasks-shell.is-board .life-kanban-list::-webkit-scrollbar { display: none; }
+
+/* Life-styled calendar popover (portaled to <body>, so no --life-* vars). */
+.life-cal-backdrop { position: fixed; inset: 0; z-index: 59; }
+.life-cal { position: fixed; z-index: 60; width: 248px; background: #141414; border: 1px solid #232323; box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55); padding: 12px; font-family: "DM Mono", ui-monospace, monospace; color: #f5f2ed; }
+.life-cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.life-cal-mon { font-size: 13px; font-weight: 500; color: #f5f2ed; }
+.life-cal-nav { display: flex; gap: 4px; }
+.life-cal-nav button { width: 24px; height: 24px; border: 1px solid #232323; background: transparent; color: #a4a4a4; font-family: inherit; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+.life-cal-nav button:hover { border-color: rgba(255, 49, 32, 0.35); color: #ff3120; }
+.life-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.life-cal-dow { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: #6f6f6f; text-align: center; padding: 4px 0 6px; }
+.life-cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 12.5px; color: #a4a4a4; cursor: pointer; border: 1px solid transparent; background: none; font-family: inherit; padding: 0; }
+.life-cal-day:hover { border-color: #232323; background: #111111; color: #f5f2ed; }
+.life-cal-day.out { color: #3a3a3a; cursor: default; }
+.life-cal-day.today { color: #ff3120; }
+.life-cal-day.sel { background: #ff3120; border-color: #ff3120; color: #0a0a0a; }
+.life-cal-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 9px; border-top: 1px solid #1c1c1c; }
+.life-cal-foot button { background: none; border: 0; color: #6f6f6f; font-family: inherit; font-size: 11.5px; cursor: pointer; padding: 3px 4px; }
+.life-cal-foot button:hover { color: #ff3120; }
 
 /* ── 2026 handoff overrides ──────────────────────────────────────────────── */
 .life-shell::-webkit-scrollbar,

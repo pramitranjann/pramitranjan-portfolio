@@ -245,6 +245,81 @@ export async function deleteCalendarEvent(eventId: string, calendarId?: string |
   await calendar.events.delete({ calendarId: resolvedCalendarId, eventId })
 }
 
+/**
+ * Create a real Google Calendar event for a task and mirror it into Supabase.
+ * Returns the Google event id (used as tasks.calendar_event_id).
+ */
+export async function createCalendarEventForTask(input: {
+  title: string
+  localDate: string
+  startTime?: string | null
+  endTime?: string | null
+  notes?: string | null
+  calendarId?: string | null
+}) {
+  const event = await createCalendarEvent({
+    title: input.title,
+    localDate: input.localDate,
+    startTime: input.startTime ?? null,
+    endTime: input.endTime ?? null,
+    allDay: !input.startTime,
+    calendarId: input.calendarId ?? null,
+    notes: input.notes ?? null,
+  })
+
+  // Pull the new event into Supabase so it shows up immediately (the event may
+  // be outside the default "around today" sync window, so sync its own date).
+  try {
+    await syncCalendarEvents(input.localDate, undefined, { force: true })
+  } catch (error) {
+    console.error('Calendar sync after task-event creation failed', error)
+  }
+
+  return (event.id as string | null) || null
+}
+
+/** Upcoming events (next `days`), for the "link existing event" picker. */
+export async function listUpcomingCalendarEvents(days = 21): Promise<CalendarEventRecord[]> {
+  const settings = await getOwnerSettings()
+  const timeZone = settings.timezone
+  const start = getCurrentLocalDate(timeZone)
+  const end = addDays(start, days)
+
+  try {
+    await syncCalendarEvents(start, end)
+  } catch (error) {
+    console.error('Calendar sync for event picker failed', error)
+  }
+
+  const supabase = getSupabaseAdmin()
+  const { data, error } = await supabase
+    .from('calendar_events')
+    .select('*')
+    .eq('user_id', OWNER_ID)
+    .gte('local_date', start)
+    .lte('local_date', end)
+    .order('start_time', { ascending: true })
+
+  if (error) throw error
+  return (data || []) as CalendarEventRecord[]
+}
+
+/** Look up specific events by id (for rendering linked tasks). */
+export async function getCalendarEventsByIds(ids: string[]): Promise<CalendarEventRecord[]> {
+  const unique = Array.from(new Set(ids.filter(Boolean)))
+  if (unique.length === 0) return []
+
+  const supabase = getSupabaseAdmin()
+  const { data, error } = await supabase
+    .from('calendar_events')
+    .select('*')
+    .eq('user_id', OWNER_ID)
+    .in('id', unique)
+
+  if (error) throw error
+  return (data || []) as CalendarEventRecord[]
+}
+
 // In-memory throttle so that rapid navigations between Life pages don't each
 // pay the full Google Calendar round-trip + Supabase delete/upsert. The cron
 // and explicit user actions pass `{ force: true }` to bypass.

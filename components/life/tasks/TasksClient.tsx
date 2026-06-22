@@ -1,26 +1,20 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
+import { LifeCalendar } from '@/components/life/tasks/LifeCalendar'
+import { TaskForm } from '@/components/life/tasks/TaskForm'
 import { useViewportMode } from '@/hooks/useViewportMode'
 import { fetchJson } from '@/lib/life/client'
-import { LIFE_PROJECTS, getProjectLabel } from '@/lib/life/projects'
+import { getProjectLabel } from '@/lib/life/projects'
 import { localDateTimeToUtc } from '@/lib/life/time'
-import type { TaskPriority, TaskRecord, TaskStatus } from '@/lib/life/types'
+import type { TaskDraft, TaskLinkedEvent, TaskPriority, TaskRecord, TaskStatus } from '@/lib/life/types'
 
 type TaskView = 'List' | 'Board'
 type TaskFilter = 'All' | 'Today'
 type ColumnKey = 'open' | 'in_progress' | 'done'
 type DesktopGroup = 'status' | 'project' | 'due'
-
-type TaskEditFields = {
-  title: string
-  details: string | null
-  project_slug: string | null
-  priority: TaskPriority
-  due_local_date: string | null
-}
 
 const STORAGE_KEY = 'life.tasksView'
 const DEFAULT_VIEW: TaskView = 'List'
@@ -31,7 +25,6 @@ const COLUMNS: Array<{ key: ColumnKey; label: string; mark: string }> = [
   { key: 'done', label: 'Done', mark: 'var(--life-green)' },
 ]
 
-const PRI_OPTIONS: TaskPriority[] = ['high', 'medium', 'low']
 const PRI_LABEL: Record<TaskPriority, string> = {
   high: 'High',
   medium: 'Med',
@@ -73,255 +66,69 @@ function taskComparator(a: TaskRecord, b: TaskRecord, today: string) {
 
 function EditForm({
   task,
+  today,
+  timezone,
+  linkedEventLabel,
   onSave,
   onCancel,
   onDelete,
 }: {
   task: TaskRecord
-  onSave: (fields: TaskEditFields) => Promise<void>
+  today: string
+  timezone: string
+  linkedEventLabel?: string | null
+  onSave: (draft: TaskDraft) => Promise<void>
   onCancel: () => void
   onDelete: () => Promise<void>
 }) {
-  const [title, setTitle] = useState(task.title)
-  const [details, setDetails] = useState(task.details || '')
-  const [projectSlug, setProjectSlug] = useState(task.project_slug || '')
-  const [priority, setPriority] = useState<TaskPriority>(task.priority)
-  const [dueLocalDate, setDueLocalDate] = useState(task.due_local_date || '')
-  const [saving, setSaving] = useState(false)
-  const [deleting, setDeleting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const titleRef = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    titleRef.current?.focus()
-    titleRef.current?.select()
-  }, [])
-
-  async function handleSave() {
-    if (!title.trim()) {
-      setError('Title required.')
-      return
-    }
-
-    setSaving(true)
-    setError(null)
-
-    try {
-      await onSave({
-        title: title.trim(),
-        details: details.trim() || null,
-        project_slug: projectSlug || null,
-        priority,
-        due_local_date: dueLocalDate || null,
-      })
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Save failed.')
-      setSaving(false)
-    }
-  }
-
-  async function handleDelete() {
-    setDeleting(true)
-
-    try {
-      await onDelete()
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Delete failed.')
-      setDeleting(false)
-    }
-  }
-
   return (
-    <div className="life-task-edit" onClick={(event) => event.stopPropagation()}>
-      <input
-        ref={titleRef}
-        type="text"
-        className="text-input life-task-edit-title"
-        value={title}
-        onChange={(event) => setTitle(event.target.value)}
-        placeholder="Task title"
-        onKeyDown={(event) => {
-          if (event.key === 'Enter') {
-            event.preventDefault()
-            void handleSave()
-          }
-          if (event.key === 'Escape') {
-            event.preventDefault()
-            onCancel()
-          }
-        }}
-      />
-      <textarea
-        className="text-input life-task-edit-details"
-        value={details}
-        onChange={(event) => setDetails(event.target.value)}
-        placeholder="Add details, notes, links…"
-        rows={2}
-      />
-      <div className="life-task-edit-row">
-        <select className="text-input" value={projectSlug} onChange={(event) => setProjectSlug(event.target.value)}>
-          <option value="">Unassigned</option>
-          {LIFE_PROJECTS.map((project) => (
-            <option key={project.slug} value={project.slug}>
-              {project.name}
-            </option>
-          ))}
-        </select>
-        <select className="text-input" value={priority} onChange={(event) => setPriority(event.target.value as TaskPriority)}>
-          {PRI_OPTIONS.map((option) => (
-            <option key={option} value={option}>
-              {PRI_LABEL[option]}
-            </option>
-          ))}
-        </select>
-        <input
-          type="date"
-          className="text-input"
-          value={dueLocalDate}
-          onChange={(event) => setDueLocalDate(event.target.value)}
-        />
-      </div>
-      {error ? <span className="error-text">{error}</span> : null}
-      <div className="life-task-edit-actions">
-        <button type="button" className="primary-button" onClick={() => void handleSave()} disabled={saving}>
-          {saving ? 'Saving…' : 'Save'}
-        </button>
-        <button type="button" className="secondary-button" onClick={onCancel} disabled={saving}>
-          Cancel
-        </button>
-        <button
-          type="button"
-          className="life-task-delete-btn"
-          onClick={() => void handleDelete()}
-          disabled={deleting}
-          aria-label="Delete task"
-        >
-          {deleting ? '…' : 'Delete'}
-        </button>
-      </div>
-    </div>
+    <TaskForm
+      mode="edit"
+      today={today}
+      timezone={timezone}
+      initial={{
+        title: task.title,
+        details: task.details,
+        projectSlug: task.project_slug,
+        priority: task.priority,
+        dueLocalDate: task.due_local_date,
+        calendarEventId: task.calendar_event_id,
+      }}
+      linkedEventLabel={linkedEventLabel}
+      onSubmit={onSave}
+      onCancel={onCancel}
+      onDelete={onDelete}
+      LifeCalendarComponent={LifeCalendar}
+    />
   )
 }
 
 function NewTaskComposer({
-  onCreate,
-  onClose,
+  today,
+  timezone,
   defaultProjectSlug,
   defaultDue,
+  onCreate,
+  onClose,
 }: {
-  onCreate: (fields: TaskEditFields) => Promise<void>
-  onClose: () => void
+  today: string
+  timezone: string
   defaultProjectSlug: string
   defaultDue: string
+  onCreate: (draft: TaskDraft) => Promise<void>
+  onClose: () => void
 }) {
-  const [title, setTitle] = useState('')
-  const [details, setDetails] = useState('')
-  const [projectSlug, setProjectSlug] = useState(defaultProjectSlug)
-  const [priority, setPriority] = useState<TaskPriority>('medium')
-  const [dueLocalDate, setDueLocalDate] = useState(defaultDue)
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const titleRef = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    titleRef.current?.focus()
-  }, [])
-
-  async function handleSave() {
-    if (!title.trim()) {
-      setError('Title required.')
-      return
-    }
-
-    setSaving(true)
-    setError(null)
-
-    try {
-      await onCreate({
-        title: title.trim(),
-        details: details.trim() || null,
-        project_slug: projectSlug || null,
-        priority,
-        due_local_date: dueLocalDate || null,
-      })
-      onClose()
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Task creation failed.')
-      setSaving(false)
-    }
-  }
-
   return (
-    <div className="life-task-edit life-task-compose">
-      <input
-        ref={titleRef}
-        type="text"
-        className="text-input life-task-edit-title"
-        value={title}
-        placeholder="What needs doing?"
-        onChange={(event) => setTitle(event.target.value)}
-        onKeyDown={(event) => {
-          if (event.key === 'Enter') {
-            event.preventDefault()
-            void handleSave()
-          }
-          if (event.key === 'Escape') {
-            event.preventDefault()
-            onClose()
-          }
-        }}
-      />
-      <textarea
-        className="text-input life-task-edit-details"
-        value={details}
-        placeholder="Add details, notes, links… (optional)"
-        rows={2}
-        onChange={(event) => setDetails(event.target.value)}
-      />
-      <div className="life-task-edit-row">
-        <select
-          className="text-input"
-          value={projectSlug}
-          onChange={(event) => setProjectSlug(event.target.value)}
-          aria-label="Project"
-        >
-          <option value="">Unassigned</option>
-          {LIFE_PROJECTS.map((project) => (
-            <option key={project.slug} value={project.slug}>
-              {project.name}
-            </option>
-          ))}
-        </select>
-        <select
-          className="text-input"
-          value={priority}
-          onChange={(event) => setPriority(event.target.value as TaskPriority)}
-          aria-label="Priority"
-        >
-          {PRI_OPTIONS.map((option) => (
-            <option key={option} value={option}>
-              {PRI_LABEL[option]}
-            </option>
-          ))}
-        </select>
-        <input
-          type="date"
-          className="text-input"
-          value={dueLocalDate}
-          onChange={(event) => setDueLocalDate(event.target.value)}
-          aria-label="Due date"
-        />
-      </div>
-      {error ? <span className="error-text">{error}</span> : null}
-      <div className="life-task-edit-actions">
-        <button type="button" className="primary-button" onClick={() => void handleSave()} disabled={saving}>
-          {saving ? 'Adding…' : 'Add task'}
-        </button>
-        <button type="button" className="secondary-button" onClick={onClose} disabled={saving}>
-          Cancel
-        </button>
-      </div>
-    </div>
+    <TaskForm
+      mode="create"
+      today={today}
+      timezone={timezone}
+      initial={{ projectSlug: defaultProjectSlug || null, dueLocalDate: defaultDue || null }}
+      onSubmit={onCreate}
+      onCancel={onClose}
+      resetOnSubmit
+      LifeCalendarComponent={LifeCalendar}
+    />
   )
 }
 
@@ -331,12 +138,14 @@ export function TasksClient({
   timezone,
   error,
   initialProjectSlug = null,
+  linkedEvents = {},
 }: {
   tasks: TaskRecord[]
   today: string
   timezone: string
   error: string | null
   initialProjectSlug?: string | null
+  linkedEvents?: Record<string, TaskLinkedEvent>
 }) {
   const router = useRouter()
   const viewport = useViewportMode()
@@ -392,19 +201,33 @@ export function TasksClient({
     }
   }
 
-  async function saveEdit(taskId: string, fields: TaskEditFields) {
+  async function saveEdit(taskId: string, draft: TaskDraft) {
     await fetchJson(`/api/life/tasks/${taskId}`, {
       method: 'PATCH',
       body: JSON.stringify({
-        title: fields.title,
-        details: fields.details,
-        projectSlug: fields.project_slug,
-        priority: fields.priority,
-        dueLocalDate: fields.due_local_date,
+        title: draft.title,
+        details: draft.details,
+        projectSlug: draft.projectSlug,
+        priority: draft.priority,
+        dueLocalDate: draft.dueLocalDate,
+        calendar: draft.calendar,
       }),
     })
 
-    setItems((current) => current.map((task) => (task.id === taskId ? { ...task, ...fields } : task)))
+    setItems((current) =>
+      current.map((task) =>
+        task.id === taskId
+          ? {
+              ...task,
+              title: draft.title,
+              details: draft.details,
+              project_slug: draft.projectSlug,
+              priority: draft.priority,
+              due_local_date: draft.dueLocalDate,
+            }
+          : task,
+      ),
+    )
     setEditId(null)
     setTaskActionError(null)
     router.refresh()
@@ -446,20 +269,32 @@ export function TasksClient({
     }
   }
 
-  async function createTaskFromComposer(fields: TaskEditFields) {
+  async function createTaskFromComposer(draft: TaskDraft) {
     await fetchJson('/api/life/tasks', {
       method: 'POST',
       body: JSON.stringify({
-        title: fields.title,
-        details: fields.details,
-        projectSlug: fields.project_slug,
-        priority: fields.priority,
-        dueLocalDate: fields.due_local_date,
+        title: draft.title,
+        details: draft.details,
+        projectSlug: draft.projectSlug,
+        priority: draft.priority,
+        dueLocalDate: draft.dueLocalDate,
+        calendar: draft.calendar,
       }),
     })
 
     setTaskActionError(null)
     router.refresh()
+  }
+
+  function eventChipFor(task: TaskRecord) {
+    if (!task.calendar_event_id) return null
+    const event = linkedEvents[task.calendar_event_id]
+    const label = event
+      ? event.allDay || !event.startTime
+        ? '📅 Event'
+        : `📅 ${new Date(event.startTime).toLocaleTimeString('en-GB', { timeZone: timezone, hour: '2-digit', minute: '2-digit' })}`
+      : '🔗 Linked'
+    return <span className="life-ev-chip">{label}</span>
   }
 
   async function moveTask(taskId: string, status: ColumnKey) {
@@ -598,7 +433,10 @@ export function TasksClient({
                     <div className="life-kanban-card life-kanban-card-editing" key={task.id}>
                       <EditForm
                         task={task}
-                        onSave={(fields) => saveEdit(task.id, fields)}
+                        today={today}
+                        timezone={timezone}
+                        linkedEventLabel={task.calendar_event_id ? linkedEvents[task.calendar_event_id]?.title : null}
+                        onSave={(draft) => saveEdit(task.id, draft)}
                         onCancel={() => setEditId(null)}
                         onDelete={() => deleteTask(task.id)}
                       />
@@ -638,6 +476,7 @@ export function TasksClient({
                         <span className={`pri-dot pri-${task.priority}`} />
                         {PRI_LABEL[task.priority]}
                       </span>
+                      {eventChipFor(task)}
                       <button
                         type="button"
                         className="life-kanban-delete"
@@ -681,6 +520,8 @@ export function TasksClient({
 
         {adding ? (
           <NewTaskComposer
+            today={today}
+            timezone={timezone}
             onCreate={createTaskFromComposer}
             onClose={() => setAdding(false)}
             defaultProjectSlug={initialProjectSlug || ''}
@@ -739,7 +580,10 @@ export function TasksClient({
                   <div className="life-task-row life-task-row-editing" key={task.id}>
                     <EditForm
                       task={task}
-                      onSave={(fields) => saveEdit(task.id, fields)}
+                      today={today}
+                      timezone={timezone}
+                      linkedEventLabel={task.calendar_event_id ? linkedEvents[task.calendar_event_id]?.title : null}
+                      onSave={(draft) => saveEdit(task.id, draft)}
                       onCancel={() => setEditId(null)}
                       onDelete={() => deleteTask(task.id)}
                     />
@@ -787,7 +631,7 @@ export function TasksClient({
   }
 
   return (
-    <div className="life-tasks-shell">
+    <div className={`life-tasks-shell${view === 'Board' ? ' is-board' : ''}`}>
       <div className="life-page-head">
         <div>
           <p className="eyebrow">Tasks</p>
@@ -805,6 +649,8 @@ export function TasksClient({
 
       {adding ? (
         <NewTaskComposer
+          today={today}
+          timezone={timezone}
           onCreate={createTaskFromComposer}
           onClose={() => setAdding(false)}
           defaultProjectSlug={initialProjectSlug || ''}
@@ -947,7 +793,10 @@ export function TasksClient({
                             <div className="life-task-row life-task-row-editing">
                               <EditForm
                                 task={task}
-                                onSave={(fields) => saveEdit(task.id, fields)}
+                                today={today}
+                                timezone={timezone}
+                                linkedEventLabel={task.calendar_event_id ? linkedEvents[task.calendar_event_id]?.title : null}
+                                onSave={(draft) => saveEdit(task.id, draft)}
                                 onCancel={() => setEditId(null)}
                                 onDelete={() => deleteTask(task.id)}
                               />
@@ -982,6 +831,7 @@ export function TasksClient({
                                       {due}
                                     </span>
                                   ) : null}
+                                  {eventChipFor(task)}
                                 </div>
                               </div>
                               <span className="life-task-grid-cell life-task-grid-project" style={{ display: rowProjectDisplay }}>

@@ -1,12 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 import { isAuthenticatedLifeRequest, unauthorizedJson } from '@/lib/life/auth'
-import { createCalendarEvent, syncCalendarEvents } from '@/lib/life/calendar'
+import { createCalendarEvent, listUpcomingCalendarEvents, syncCalendarEvents } from '@/lib/life/calendar'
 import { getOwnerSettings } from '@/lib/life/settings'
 import { getCurrentLocalDate } from '@/lib/life/time'
 
 function getSafeRedirectTo(value: string | null | undefined) {
   return value?.startsWith('/life') ? value : '/life'
+}
+
+// Upcoming events for the "link existing event" picker on a task.
+export async function GET(request: NextRequest) {
+  if (!isAuthenticatedLifeRequest(request)) {
+    return unauthorizedJson()
+  }
+
+  try {
+    const daysParam = Number(request.nextUrl.searchParams.get('days'))
+    const days = Number.isFinite(daysParam) && daysParam > 0 ? Math.min(daysParam, 60) : 21
+    const events = await listUpcomingCalendarEvents(days)
+    return NextResponse.json({ events })
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : 'Failed to load events.' },
+      { status: 500 },
+    )
+  }
 }
 
 function normalizeOptionalText(value: string | null | undefined) {

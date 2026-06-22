@@ -77,9 +77,36 @@ export interface TaskRecord {
   source_report_id: string | null;
   auto_generated: boolean;
   fingerprint: string | null;
+  calendar_event_id: string | null;
   created_at: string;
   updated_at: string;
   completed_at: string | null;
+}
+
+/** A linked calendar event, denormalised for rendering on a task card. */
+export interface TaskLinkedEvent {
+  id: string;
+  title: string;
+  startTime: string | null;
+  allDay: boolean;
+  htmlLink: string | null;
+}
+
+/** How a task create/edit should affect the calendar. */
+export type TaskCalendarIntent =
+  | { mode: "none" }
+  | { mode: "event"; startTime?: string | null; endTime?: string | null }
+  | { mode: "link"; eventId: string }
+  | { mode: "unlink" };
+
+/** The shape the shared TaskForm emits on submit. */
+export interface TaskDraft {
+  title: string;
+  details: string | null;
+  projectSlug: string | null;
+  priority: TaskPriority;
+  dueLocalDate: string | null;
+  calendar: TaskCalendarIntent;
 }
 
 export interface TaskCandidate {
