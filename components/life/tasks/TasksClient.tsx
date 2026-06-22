@@ -7,12 +7,59 @@ import { LifeCalendar } from '@/components/life/tasks/LifeCalendar'
 import { TaskForm } from '@/components/life/tasks/TaskForm'
 import { useViewportMode } from '@/hooks/useViewportMode'
 import { fetchJson } from '@/lib/life/client'
-import { getProjectLabel } from '@/lib/life/projects'
+import { LIFE_PROJECTS, getProjectLabel } from '@/lib/life/projects'
 import { localDateTimeToUtc } from '@/lib/life/time'
 import type { TaskDraft, TaskLinkedEvent, TaskPriority, TaskRecord, TaskStatus } from '@/lib/life/types'
 
 type TaskView = 'List' | 'Board'
-type TaskFilter = 'All' | 'Today'
+type TaskFilter = 'All' | 'Today' | 'Upcoming'
+
+// Deterministic project tints so each project reads as a colored chip.
+const PROJECT_TINTS = [
+  { c: '#e9b765', b: 'rgba(245,166,35,0.3)', bg: 'rgba(245,166,35,0.08)' },
+  { c: '#7fd899', b: 'rgba(91,208,122,0.3)', bg: 'rgba(91,208,122,0.08)' },
+  { c: '#9aa6ff', b: 'rgba(120,140,255,0.3)', bg: 'rgba(120,140,255,0.08)' },
+  { c: '#e58fb8', b: 'rgba(229,143,184,0.3)', bg: 'rgba(229,143,184,0.08)' },
+  { c: '#6fcfd6', b: 'rgba(111,207,214,0.3)', bg: 'rgba(111,207,214,0.08)' },
+  { c: '#c79bff', b: 'rgba(199,155,255,0.3)', bg: 'rgba(199,155,255,0.08)' },
+]
+
+function projectTintStyle(slug: string | null) {
+  if (!slug) return undefined
+  const index = LIFE_PROJECTS.findIndex((project) => project.slug === slug)
+  const tint = PROJECT_TINTS[(index >= 0 ? index : slug.length) % PROJECT_TINTS.length]
+  return { color: tint.c, borderColor: tint.b, background: tint.bg }
+}
+
+function diffDays(dueLocalDate: string, today: string) {
+  const [ay, am, ad] = dueLocalDate.split('-').map(Number)
+  const [by, bm, bd] = today.split('-').map(Number)
+  return Math.round((Date.UTC(ay, am - 1, ad) - Date.UTC(by, bm - 1, bd)) / 86400000)
+}
+
+function boardDueLabel(dueLocalDate: string | null, today: string, timeZone: string) {
+  if (!dueLocalDate) return null
+  const diff = diffDays(dueLocalDate, today)
+  let text: string
+  let tone: 'overdue' | 'today' | 'soon' | 'normal'
+  if (diff < 0) {
+    text = `${-diff}d late`
+    tone = 'overdue'
+  } else if (diff === 0) {
+    text = 'Today'
+    tone = 'today'
+  } else if (diff === 1) {
+    text = 'Tomorrow'
+    tone = 'soon'
+  } else if (diff <= 6) {
+    text = localDateTimeToUtc(dueLocalDate, timeZone, 12, 0).toLocaleDateString('en-GB', { timeZone, weekday: 'short' })
+    tone = 'soon'
+  } else {
+    text = shortDay(dueLocalDate, timeZone)
+    tone = 'normal'
+  }
+  return { text, tone }
+}
 type ColumnKey = 'open' | 'in_progress' | 'done'
 type DesktopGroup = 'status' | 'project' | 'due'
 
@@ -326,18 +373,25 @@ export function TasksClient({
     }
     if (filter === 'Today') {
       next = next.filter((task) => task.due_local_date === today)
+    } else if (filter === 'Upcoming') {
+      next = next.filter((task) => task.due_local_date != null && task.due_local_date > today)
     }
     return next.sort((left, right) => taskComparator(left, right, today))
   }, [filter, initialProjectSlug, items, today])
 
-  const allCount = initialProjectSlug
-    ? items.filter((task) => (task.project_slug || '') === initialProjectSlug).length
-    : items.length
-  const todayCount = initialProjectSlug
-    ? items.filter(
-        (task) => (task.project_slug || '') === initialProjectSlug && task.due_local_date === today,
-      ).length
-    : items.filter((task) => task.due_local_date === today).length
+  const projectScoped = useMemo(
+    () => (initialProjectSlug ? items.filter((task) => (task.project_slug || '') === initialProjectSlug) : items),
+    [initialProjectSlug, items],
+  )
+  const allCount = projectScoped.length
+  const todayCount = projectScoped.filter((task) => task.due_local_date === today).length
+  const upcomingCount = projectScoped.filter((task) => task.due_local_date != null && task.due_local_date > today).length
+
+  // Header summary: due today / still open / overdue.
+  const activeItems = projectScoped.filter((task) => task.status !== 'done')
+  const dueTodayCount = activeItems.filter((task) => task.due_local_date === today).length
+  const openCount = activeItems.length
+  const overdueCount = activeItems.filter((task) => task.due_local_date != null && task.due_local_date < today).length
 
   const title = initialProjectSlug
     ? getProjectLabel(initialProjectSlug) || initialProjectSlug
@@ -472,9 +526,11 @@ export function TasksClient({
                   )
                 }
 
+                const isDone = task.status === 'done'
+                const cardDue = boardDueLabel(task.due_local_date, today, timezone)
                 return (
                   <div
-                    className={`life-kanban-card${dragId === task.id ? ' is-dragging' : ''}`}
+                    className={`life-kanban-card pri-edge-${task.priority}${isDone ? ' is-done' : ''}${dragId === task.id ? ' is-dragging' : ''}`}
                     key={task.id}
                     draggable
                     onClick={() => setEditId(task.id)}
@@ -491,20 +547,13 @@ export function TasksClient({
                     <div className="life-kanban-card-title">{task.title}</div>
                     {task.details ? <p className="life-task-details">{task.details}</p> : null}
                     <div className="life-kanban-card-meta">
-                      <span className="life-tag">{project}</span>
-                      <span
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: 5,
-                          fontSize: 12,
-                          color: 'var(--life-label)',
-                        }}
-                      >
+                      <span className="life-tag" style={projectTintStyle(task.project_slug)}>{project}</span>
+                      <span className="life-kanban-pri">
                         <span className={`pri-dot pri-${task.priority}`} />
                         {PRI_LABEL[task.priority]}
                       </span>
                       {eventChipFor(task)}
+                      {cardDue ? <span className={`life-due-chip due-${cardDue.tone}`}>{cardDue.text}</span> : null}
                       <button
                         type="button"
                         className="life-kanban-delete"
@@ -535,6 +584,11 @@ export function TasksClient({
           <div>
             <p className="eyebrow">Tasks</p>
             <h1>{title}</h1>
+            {allCount > 0 ? (
+              <p className="life-tasks-stat">
+                <b>{dueTodayCount} due today</b> · {openCount} open · {overdueCount} overdue
+              </p>
+            ) : null}
           </div>
           <button
             type="button"
@@ -572,6 +626,13 @@ export function TasksClient({
               onClick={() => setFilter('Today')}
             >
               Today <span className="chip-count">{todayCount}</span>
+            </button>
+            <button
+              type="button"
+              className={`filter-chip${filter === 'Upcoming' ? ' is-active' : ''}`}
+              onClick={() => setFilter('Upcoming')}
+            >
+              Upcoming <span className="chip-count">{upcomingCount}</span>
             </button>
           </div>
 
@@ -664,6 +725,11 @@ export function TasksClient({
         <div>
           <p className="eyebrow">Tasks</p>
           <h1>{title}</h1>
+          {allCount > 0 ? (
+            <p className="life-tasks-stat">
+              <b>{dueTodayCount} due today</b> · {openCount} open · {overdueCount} overdue
+            </p>
+          ) : null}
         </div>
         <button
           type="button"
@@ -701,6 +767,13 @@ export function TasksClient({
             onClick={() => setFilter('Today')}
           >
             Today <span className="chip-count">{todayCount}</span>
+          </button>
+          <button
+            type="button"
+            className={`filter-chip${filter === 'Upcoming' ? ' is-active' : ''}`}
+            onClick={() => setFilter('Upcoming')}
+          >
+            Upcoming <span className="chip-count">{upcomingCount}</span>
           </button>
         </div>
 
