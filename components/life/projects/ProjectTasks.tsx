@@ -38,7 +38,8 @@ export function ProjectTasks({
   const [items, setItems] = useState<TaskRecord[]>(tasks)
   const [composer, setComposer] = useState<string | null>(null)
   const [editId, setEditId] = useState<string | null>(null)
-  const [moveMenu, setMoveMenu] = useState<string | null>(null)
+  const [dragId, setDragId] = useState<string | null>(null)
+  const [dragOverGroup, setDragOverGroup] = useState<string | null>(null)
   const [addingMilestone, setAddingMilestone] = useState(false)
   const [milestoneName, setMilestoneName] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -124,7 +125,8 @@ export function ProjectTasks({
   }
 
   async function moveTask(taskId: string, milestoneId: string | null) {
-    setMoveMenu(null)
+    const task = items.find((entry) => entry.id === taskId)
+    if (!task || (task.milestone_id || null) === milestoneId) return
     setItems((current) => current.map((entry) => (entry.id === taskId ? { ...entry, milestone_id: milestoneId } : entry)))
     try {
       await fetchJson(`/api/life/tasks/${taskId}`, { method: 'PATCH', body: JSON.stringify({ milestoneId }) })
@@ -133,6 +135,15 @@ export function ProjectTasks({
       setError('Failed to move task.')
       router.refresh()
     }
+  }
+
+  // Drop a dragged task onto a phase section (or the backlog).
+  function handleDropOnGroup(groupKey: string, isBacklog: boolean) {
+    const taskId = dragId
+    setDragId(null)
+    setDragOverGroup(null)
+    if (!taskId) return
+    void moveTask(taskId, isBacklog ? null : groupKey)
   }
 
   async function createMilestone() {
@@ -199,7 +210,25 @@ export function ProjectTasks({
         const pct = progressPct(groupDone, group.items.length)
         const groupDue = relativeDueLabel(group.targetDate, today)
         return (
-          <section className="life-milestone" key={group.key}>
+          <section
+            className={`life-milestone${dragOverGroup === group.key ? ' is-dragover' : ''}`}
+            key={group.key}
+            onDragOver={(event) => {
+              if (!dragId) return
+              event.preventDefault()
+              if (dragOverGroup !== group.key) setDragOverGroup(group.key)
+            }}
+            onDragLeave={(event) => {
+              const next = event.relatedTarget
+              if (!(next instanceof Node) || !event.currentTarget.contains(next)) {
+                setDragOverGroup((current) => (current === group.key ? null : current))
+              }
+            }}
+            onDrop={(event) => {
+              event.preventDefault()
+              handleDropOnGroup(group.key, group.isBacklog)
+            }}
+          >
             <div className="life-milestone-head">
               <span className="life-milestone-name">{group.name}</span>
               {groupDue ? <span className={`life-due-chip due-${groupDue.tone}`}>{groupDue.text}</span> : null}
@@ -282,9 +311,19 @@ export function ProjectTasks({
 
                 return (
                   <div
-                    className={`life-list-row pri-edge-${task.priority}${isDone ? ' is-done' : ''}`}
+                    className={`life-list-row is-draggable pri-edge-${task.priority}${isDone ? ' is-done' : ''}${dragId === task.id ? ' is-dragging' : ''}`}
                     key={task.id}
+                    draggable
                     onClick={() => setEditId(task.id)}
+                    onDragStart={(event) => {
+                      event.dataTransfer.effectAllowed = 'move'
+                      event.dataTransfer.setData('text/plain', task.id)
+                      setDragId(task.id)
+                    }}
+                    onDragEnd={() => {
+                      setDragId(null)
+                      setDragOverGroup(null)
+                    }}
                   >
                     <button
                       type="button"
@@ -308,34 +347,6 @@ export function ProjectTasks({
                       </span>
                       {linked ? <span className="life-ev-chip">📅</span> : null}
                       {taskDue ? <span className={`life-due-chip${isDone ? '' : ` due-${taskDue.tone}`}`}>{taskDue.text}</span> : null}
-                      <div className="life-move-wrap" onClick={(event) => event.stopPropagation()}>
-                        <button
-                          type="button"
-                          className="life-move-btn"
-                          aria-label="Move to phase"
-                          onClick={() => setMoveMenu((current) => (current === task.id ? null : task.id))}
-                        >
-                          ⇄
-                        </button>
-                        {moveMenu === task.id ? (
-                          <div className="life-pill-menu open life-move-menu">
-                            {milestones.map((milestone) => (
-                              <button
-                                key={milestone.id}
-                                type="button"
-                                className="life-pill-menu-item"
-                                onClick={() => void moveTask(task.id, milestone.id)}
-                              >
-                                {milestone.name}
-                              </button>
-                            ))}
-                            <div className="life-pill-menu-sep" />
-                            <button type="button" className="life-pill-menu-item" onClick={() => void moveTask(task.id, null)}>
-                              Backlog
-                            </button>
-                          </div>
-                        ) : null}
-                      </div>
                       <button
                         type="button"
                         className="life-kanban-delete"

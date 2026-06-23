@@ -51,6 +51,12 @@ export function ProjectWorkspace({
   const [error, setError] = useState<string | null>(null)
   const dateBtnRef = useRef<HTMLButtonElement>(null)
 
+  // Inline name / summary editing.
+  const [name, setName] = useState(project.name)
+  const [summary, setSummary] = useState(project.summary || '')
+  const [editName, setEditName] = useState(false)
+  const [editSummary, setEditSummary] = useState(false)
+
   const open = tasks.filter((task) => task.status !== 'done')
   const done = tasks.filter((task) => task.status === 'done')
   const overdue = open.filter((task) => task.due_local_date != null && task.due_local_date < today)
@@ -90,6 +96,22 @@ export function ProjectWorkspace({
     void patchProject({ targetDate: next })
   }
 
+  function saveName() {
+    setEditName(false)
+    const trimmed = name.trim()
+    if (!trimmed || trimmed === project.name) {
+      setName(project.name)
+      return
+    }
+    void patchProject({ name: trimmed })
+  }
+
+  function saveSummary() {
+    setEditSummary(false)
+    if (summary.trim() === (project.summary || '')) return
+    void patchProject({ summary: summary.trim() || null })
+  }
+
   return (
     <div className="life-project-workspace">
       <div className="life-project-back">
@@ -103,8 +125,50 @@ export function ProjectWorkspace({
           <p className="eyebrow">
             <span className="life-project-dot" style={{ background: project.color || 'var(--life-label)' }} /> Project
           </p>
-          <h1>{project.name}</h1>
-          {project.summary ? <p className="life-project-summary-line">{project.summary}</p> : null}
+          {editName ? (
+            <input
+              className="life-project-name-input"
+              autoFocus
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              onBlur={saveName}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  event.preventDefault()
+                  saveName()
+                }
+                if (event.key === 'Escape') {
+                  setName(project.name)
+                  setEditName(false)
+                }
+              }}
+            />
+          ) : (
+            <h1 className="life-project-name-edit" onClick={() => setEditName(true)} title="Click to rename">
+              {name}
+            </h1>
+          )}
+          {editSummary ? (
+            <textarea
+              className="life-project-summary-input"
+              autoFocus
+              rows={2}
+              value={summary}
+              placeholder="Add a summary…"
+              onChange={(event) => setSummary(event.target.value)}
+              onBlur={saveSummary}
+              onKeyDown={(event) => {
+                if (event.key === 'Escape') {
+                  setSummary(project.summary || '')
+                  setEditSummary(false)
+                }
+              }}
+            />
+          ) : (
+            <p className="life-project-summary-line life-project-summary-edit" onClick={() => setEditSummary(true)} title="Click to edit">
+              {summary || <span className="life-project-summary-empty">Add a summary…</span>}
+            </p>
+          )}
           <p className="life-tasks-stat">
             <b>{open.length} open</b>
             {overdue.length > 0 ? <> · {overdue.length} overdue</> : null} · {done.length} done
