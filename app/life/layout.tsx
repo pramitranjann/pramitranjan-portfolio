@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from 'next'
 
 import { LifeHeader } from '@/components/life/LifeHeader'
+import { LifeProjectsProvider } from '@/components/life/LifeProjectsProvider'
+import { listProjectsClient } from '@/lib/life/projects-db'
+import type { LifeProjectClient } from '@/lib/life/types'
 
 export const metadata: Metadata = {
   title: 'Life',
@@ -35,13 +38,24 @@ export const viewport: Viewport = {
   userScalable: false,
 }
 
-export default function LifeLayout({ children }: { children: React.ReactNode }) {
+export default async function LifeLayout({ children }: { children: React.ReactNode }) {
+  // Loaded once and shared with every client component via context so project
+  // pickers/labels reflect the live DB list (falls back to the seed list).
+  let projects: LifeProjectClient[] = []
+  try {
+    projects = await listProjectsClient()
+  } catch (error) {
+    console.error('Failed to load projects for layout context', error)
+  }
+
   return (
     <div className="life-shell">
-      <div className="life-app-shell">
-        <LifeHeader />
-        <main className="content-shell">{children}</main>
-      </div>
+      <LifeProjectsProvider projects={projects}>
+        <div className="life-app-shell">
+          <LifeHeader />
+          <main className="content-shell">{children}</main>
+        </div>
+      </LifeProjectsProvider>
     </div>
   )
 }

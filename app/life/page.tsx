@@ -8,7 +8,7 @@ import { VoiceCaptureControl } from '@/components/life/VoiceCaptureControl'
 import { OWNER_ID } from '@/lib/life/constants'
 import { getEntryPresentation } from '@/lib/life/entries'
 import { isAdminSession } from '@/lib/admin-auth'
-import { getProjectLabel } from '@/lib/life/projects'
+import { getProjectMap } from '@/lib/life/projects-db'
 import { getOwnerSettings } from '@/lib/life/settings'
 import { generateMorningBrief } from '@/lib/life/synthesis'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
@@ -74,6 +74,7 @@ async function CapturedTodayCard({
     .order('created_at', { ascending: false })
 
   const entries = (entriesResult.data || []) as EntryRecord[]
+  const projectMap = await getProjectMap()
 
   return (
     <div className="life-card life-captured-card">
@@ -90,7 +91,7 @@ async function CapturedTodayCard({
           {entries.map((entry) => {
             const presentation = getEntryPresentation(entry)
             const projectLabel = entry.project_slug
-              ? getProjectLabel(entry.project_slug) || entry.project_slug
+              ? projectMap.get(entry.project_slug)?.name || entry.project_slug
               : null
             return (
               <li className="life-capture-item" key={entry.id}>
@@ -141,6 +142,7 @@ async function TodaySideCards({
 
   const events = (eventsResult.data || []) as CalendarEventRecord[]
   const activeTasks = taskRows as TaskRecord[]
+  const projectMap = await getProjectMap()
   const morningReport =
     ((reportsResult.data || []) as ReportRecord[]).find((r) => r.type === 'morning') || null
   const briefTime = morningReport ? getLocalTimeLabel(morningReport.created_at, timezone) : null
@@ -175,7 +177,7 @@ async function TodaySideCards({
             {todayTasks.map((task) => {
               const isDone = task.status === 'done'
               const projectLabel = task.project_slug
-                ? getProjectLabel(task.project_slug) || task.project_slug
+                ? projectMap.get(task.project_slug)?.name || task.project_slug
                 : 'General'
               const dueLabel =
                 task.due_local_date === localDate

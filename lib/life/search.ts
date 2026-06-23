@@ -2,7 +2,7 @@ import 'server-only'
 
 import { OWNER_ID } from '@/lib/life/constants'
 import { getEntryPresentation } from '@/lib/life/entries'
-import { getProjectLabel } from '@/lib/life/projects'
+import { getProjectMap } from '@/lib/life/projects-db'
 import { getOwnerSettings } from '@/lib/life/settings'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
 import { getLocalTimeLabel, localDateTimeToUtc } from '@/lib/life/time'
@@ -48,6 +48,7 @@ export async function searchLife(rawQuery: string): Promise<LifeSearchResults> {
   const settings = await getOwnerSettings()
   const timeZone = settings.timezone
   const supabase = getSupabaseAdmin()
+  const projectMap = await getProjectMap()
   const like = `%${term}%`
 
   const [taskRes, entryRes, eventRes] = await Promise.all([
@@ -89,7 +90,7 @@ export async function searchLife(rawQuery: string): Promise<LifeSearchResults> {
     status: task.status,
     priority: task.priority,
     projectLabel: task.project_slug
-      ? getProjectLabel(task.project_slug) || task.project_slug
+      ? projectMap.get(task.project_slug)?.name || task.project_slug
       : 'General',
     dueLabel: task.due_local_date ? shortDay(task.due_local_date, timeZone) : null,
   }))
@@ -103,7 +104,7 @@ export async function searchLife(rawQuery: string): Promise<LifeSearchResults> {
       kind: presentation.kind,
       kindColor: presentation.color,
       projectLabel: entry.project_slug
-        ? getProjectLabel(entry.project_slug) || entry.project_slug
+        ? projectMap.get(entry.project_slug)?.name || entry.project_slug
         : null,
       dayLabel: shortDay(entry.local_date, timeZone),
       timeLabel: getLocalTimeLabel(entry.created_at, timeZone),

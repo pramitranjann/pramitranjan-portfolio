@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react'
 
+import { useLifeProjects } from '@/components/life/LifeProjectsProvider'
 import { fetchJson } from '@/lib/life/client'
-import { LIFE_PROJECTS, getProjectLabel } from '@/lib/life/projects'
 import type { CalendarEventRecord, TaskDraft, TaskPriority } from '@/lib/life/types'
 
 type CalMode = 'none' | 'event' | 'link'
@@ -79,6 +79,7 @@ export function TaskForm({
   // Injected to avoid bundling the portal calendar when not needed.
   LifeCalendarComponent: typeof import('./LifeCalendar').LifeCalendar
 }) {
+  const { projects, labelFor } = useLifeProjects()
   const [title, setTitle] = useState(initial?.title || '')
   const [details, setDetails] = useState(initial?.details || '')
   const [projectSlug, setProjectSlug] = useState(initial?.projectSlug || '')
@@ -197,7 +198,7 @@ export function TaskForm({
     }
   }
 
-  const projectName = projectSlug ? getProjectLabel(projectSlug) || projectSlug : ''
+  const projectName = projectSlug ? labelFor(projectSlug) : ''
   const dueText = due ? dueLabel(due, today) : ''
   const calText = calMode === 'event' ? 'Event' : calMode === 'link' ? `🔗 ${linkLabel.length > 16 ? `${linkLabel.slice(0, 15)}…` : linkLabel}` : 'Calendar'
 
@@ -234,9 +235,9 @@ export function TaskForm({
           </button>
           {openMenu === 'project' ? (
             <div className="life-pill-menu open">
-              {LIFE_PROJECTS.map((project) => (
+              {projects.map((project) => (
                 <button key={project.slug} type="button" className="life-pill-menu-item" onClick={() => { setProjectSlug(project.slug); setOpenMenu(null) }}>
-                  <span className="swatch sq" />{project.name}
+                  <span className="swatch sq" style={{ background: project.color || undefined }} />{project.name}
                 </button>
               ))}
               <div className="life-pill-menu-sep" />

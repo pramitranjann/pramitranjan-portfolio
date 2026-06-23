@@ -1,6 +1,7 @@
 import { TASK_EXTRACTION_SYSTEM_PROMPT, OWNER_ID } from '@/lib/life/constants'
 import { callClaude } from '@/lib/life/claude'
 import { detectProjectSlug, LIFE_PROJECTS, normalizeProjectSlug } from '@/lib/life/projects'
+import { detectProjectSlugDb, normalizeProjectSlugDb } from '@/lib/life/projects-db'
 import { getOwnerSettings } from '@/lib/life/settings'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
 import { addDays, getCurrentLocalDate, getWeekStart } from '@/lib/life/time'
@@ -138,6 +139,7 @@ export async function createManualTask(input: {
   dueLocalDate?: string | null
   priority?: string | null
   status?: TaskStatus | null
+  milestoneId?: string | null
 }) {
   const title = input.title.trim()
   if (!title) {
@@ -147,13 +149,21 @@ export async function createManualTask(input: {
   const settings = await getOwnerSettings()
   const supabase = getSupabaseAdmin()
   const status: TaskStatus = input.status === 'in_progress' || input.status === 'done' ? input.status : 'open'
+
+  // Trust an explicit, known project slug; only auto-detect when none was given.
+  let projectSlug = await normalizeProjectSlugDb(input.projectSlug)
+  if (!projectSlug && !input.projectSlug) {
+    projectSlug = await detectProjectSlugDb(title)
+  }
+
   const { data, error } = await supabase
     .from('tasks')
     .insert({
       user_id: OWNER_ID,
       title,
       details: input.details?.trim() || null,
-      project_slug: normalizeProjectSlug(input.projectSlug) || detectProjectSlug(title),
+      project_slug: projectSlug,
+      milestone_id: input.milestoneId || null,
       due_local_date: normalizeDueLocalDate(input.dueLocalDate),
       priority: normalizePriority(input.priority),
       status,
@@ -180,6 +190,7 @@ export async function updateTask(taskId: string, fields: {
   priority?: string | null
   dueLocalDate?: string | null
   calendarEventId?: string | null
+  milestoneId?: string | null
 }) {
   const supabase = getSupabaseAdmin()
   const update: Record<string, unknown> = { updated_at: new Date().toISOString() }
@@ -189,6 +200,7 @@ export async function updateTask(taskId: string, fields: {
   if (fields.priority !== undefined) update.priority = fields.priority
   if ('dueLocalDate' in fields) update.due_local_date = fields.dueLocalDate ?? null
   if ('calendarEventId' in fields) update.calendar_event_id = fields.calendarEventId ?? null
+  if ('milestoneId' in fields) update.milestone_id = fields.milestoneId ?? null
 
   const { data, error } = await supabase
     .from('tasks')

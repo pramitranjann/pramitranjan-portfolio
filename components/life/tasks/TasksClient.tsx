@@ -7,29 +7,12 @@ import { LifeCalendar } from '@/components/life/tasks/LifeCalendar'
 import { TaskForm } from '@/components/life/tasks/TaskForm'
 import { useViewportMode } from '@/hooks/useViewportMode'
 import { fetchJson } from '@/lib/life/client'
-import { LIFE_PROJECTS, getProjectLabel } from '@/lib/life/projects'
+import { useLifeProjects } from '@/components/life/LifeProjectsProvider'
 import { localDateTimeToUtc } from '@/lib/life/time'
 import type { TaskDraft, TaskLinkedEvent, TaskPriority, TaskRecord, TaskStatus } from '@/lib/life/types'
 
 type TaskView = 'List' | 'Board'
 type TaskFilter = 'All' | 'Today' | 'Upcoming'
-
-// Deterministic project tints so each project reads as a colored chip.
-const PROJECT_TINTS = [
-  { c: '#e9b765', b: 'rgba(245,166,35,0.3)', bg: 'rgba(245,166,35,0.08)' },
-  { c: '#7fd899', b: 'rgba(91,208,122,0.3)', bg: 'rgba(91,208,122,0.08)' },
-  { c: '#9aa6ff', b: 'rgba(120,140,255,0.3)', bg: 'rgba(120,140,255,0.08)' },
-  { c: '#e58fb8', b: 'rgba(229,143,184,0.3)', bg: 'rgba(229,143,184,0.08)' },
-  { c: '#6fcfd6', b: 'rgba(111,207,214,0.3)', bg: 'rgba(111,207,214,0.08)' },
-  { c: '#c79bff', b: 'rgba(199,155,255,0.3)', bg: 'rgba(199,155,255,0.08)' },
-]
-
-function projectTintStyle(slug: string | null) {
-  if (!slug) return undefined
-  const index = LIFE_PROJECTS.findIndex((project) => project.slug === slug)
-  const tint = PROJECT_TINTS[(index >= 0 ? index : slug.length) % PROJECT_TINTS.length]
-  return { color: tint.c, borderColor: tint.b, background: tint.bg }
-}
 
 function diffDays(dueLocalDate: string, today: string) {
   const [ay, am, ad] = dueLocalDate.split('-').map(Number)
@@ -204,6 +187,7 @@ export function TasksClient({
   linkedEvents?: Record<string, TaskLinkedEvent>
 }) {
   const router = useRouter()
+  const { labelFor, tintFor } = useLifeProjects()
   const viewport = useViewportMode()
   const [view, setView] = useState<TaskView>(DEFAULT_VIEW)
   const [filter, setFilter] = useState<TaskFilter>('All')
@@ -403,7 +387,7 @@ export function TasksClient({
   const overdueCount = activeItems.filter((task) => task.due_local_date != null && task.due_local_date < today).length
 
   const title = initialProjectSlug
-    ? getProjectLabel(initialProjectSlug) || initialProjectSlug
+    ? labelFor(initialProjectSlug)
     : 'Everything on the list'
 
   const boardCols = COLUMNS.map((column) => {
@@ -455,7 +439,7 @@ export function TasksClient({
       return Array.from(order.keys())
         .map((slug) => ({
           key: `project-${slug}`,
-          label: slug === 'general' ? 'General' : getProjectLabel(slug) || slug,
+          label: slug === 'general' ? 'General' : labelFor(slug) || slug,
           mark: 'var(--life-label)',
           items: scopedItems.filter((task) => (task.project_slug || 'general') === slug),
         }))
@@ -535,7 +519,7 @@ export function TasksClient({
                 </div>
               ) : null}
               {column.items.map((task) => {
-                const project = task.project_slug ? getProjectLabel(task.project_slug) || task.project_slug : 'General'
+                const project = task.project_slug ? labelFor(task.project_slug) : 'General'
 
                 if (editId === task.id) {
                   return (
@@ -574,7 +558,7 @@ export function TasksClient({
                     <div className="life-kanban-card-title">{task.title}</div>
                     {task.details ? <p className="life-task-details">{task.details}</p> : null}
                     <div className="life-kanban-card-meta">
-                      <span className="life-tag" style={projectTintStyle(task.project_slug)}>{project}</span>
+                      <span className="life-tag" style={tintFor(task.project_slug)}>{project}</span>
                       <span className="life-kanban-pri">
                         <span className={`pri-dot pri-${task.priority}`} />
                         {PRI_LABEL[task.priority]}
@@ -688,7 +672,7 @@ export function TasksClient({
           <div className="life-list">
             {scopedItems.map((task) => {
               const isDone = task.status === 'done'
-              const project = task.project_slug ? getProjectLabel(task.project_slug) || task.project_slug : 'General'
+              const project = task.project_slug ? labelFor(task.project_slug) : 'General'
               const due = task.due_local_date === today ? 'Today' : task.due_local_date ? shortDay(task.due_local_date, timezone) : ''
 
               if (editId === task.id) {
@@ -895,7 +879,7 @@ export function TasksClient({
                     {group.items.map((task) => {
                       const isDone = task.status === 'done'
                       const project = task.project_slug
-                        ? getProjectLabel(task.project_slug) || task.project_slug
+                        ? labelFor(task.project_slug)
                         : 'General'
                       const cardDue = boardDueLabel(task.due_local_date, today, timezone)
 
@@ -939,7 +923,7 @@ export function TasksClient({
                           </div>
                           <div className="life-list-row-meta">
                             {showRowProject ? (
-                              <span className="life-tag" style={projectTintStyle(task.project_slug)}>
+                              <span className="life-tag" style={tintFor(task.project_slug)}>
                                 {project}
                               </span>
                             ) : null}

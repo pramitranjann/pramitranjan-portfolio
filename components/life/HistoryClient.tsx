@@ -3,9 +3,9 @@
 import { useDeferredValue, useEffect, useRef, useState } from "react";
 
 import { useViewportMode } from '@/hooks/useViewportMode'
+import { useLifeProjects } from '@/components/life/LifeProjectsProvider'
 import { getEntryPresentation } from '@/lib/life/entries'
 import { fetchJson } from '@/lib/life/client'
-import { LIFE_PROJECTS } from '@/lib/life/projects'
 import { getLocalTimeLabel, localDateTimeToUtc } from '@/lib/life/time'
 import type { DayHistory, EntryRecord, ReportRecord } from '@/lib/life/types'
 
@@ -48,6 +48,7 @@ export function HistoryClient({
   initialQuery = '',
 }: HistoryClientProps = {}) {
   const viewport = useViewportMode()
+  const { projects } = useLifeProjects()
   const [query, setQuery] = useState(initialQuery);
   const deferredQuery = useDeferredValue(query);
   const [selectedDate, setSelectedDate] = useState(initialPayload?.selectedDate || "");
@@ -209,7 +210,7 @@ export function HistoryClient({
             aria-label="Project"
           >
             <option value="">Unassigned</option>
-            {LIFE_PROJECTS.map((project) => (
+            {projects.map((project) => (
               <option key={project.slug} value={project.slug}>
                 {project.name}
               </option>

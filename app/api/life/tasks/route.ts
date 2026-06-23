@@ -81,6 +81,7 @@ export async function POST(request: NextRequest) {
       status?: TaskStatus | null
       redirectTo?: string | null
       calendar?: TaskCalendarIntent | null
+      milestoneId?: string | null
     } | null = null
 
     if (isJsonRequest) {
@@ -106,6 +107,7 @@ export async function POST(request: NextRequest) {
       dueLocalDate: payload?.dueLocalDate || null,
       priority: payload?.priority || null,
       status: payload?.status || null,
+      milestoneId: payload?.milestoneId || null,
     })
 
     if (!isJsonRequest) {

@@ -3894,3 +3894,122 @@ body.carousel-reengaging main {
     min-height: 44px;
   }
 }
+
+/* ════════ Projects — overview + workspace ════════════════════════════════ */
+.life-shell .life-projects-shell { display: grid; gap: 18px; }
+
+/* Shared progress bar + health dot + status badges */
+.life-shell .life-progress-track { flex: 1; height: 4px; background: var(--life-hairline); overflow: hidden; }
+.life-shell .life-progress-fill { height: 100%; background: var(--life-green); transition: width 0.3s ease; }
+.life-shell .life-progress-label { font-family: var(--font-mono); font-size: 11px; color: var(--life-label); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.life-shell .life-health-dot { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; }
+.life-shell .life-health-dot.health-red { background: var(--life-danger); }
+.life-shell .life-health-dot.health-amber { background: var(--life-amber); }
+.life-shell .life-health-dot.health-green { background: var(--life-green); }
+.life-shell .life-health-dot.health-grey { background: var(--life-label); }
+.life-shell .life-project-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; }
+
+/* New-project composer */
+.life-shell .life-project-create { border: 1px solid var(--life-border); background: var(--life-panel); padding: 14px; display: grid; gap: 8px; }
+.life-shell .life-project-create-foot { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
+.life-shell .life-swatches { display: flex; gap: 6px; margin-right: auto; }
+.life-shell .life-swatch { width: 20px; height: 20px; border: 1px solid var(--life-border); cursor: pointer; padding: 0; transition: transform 0.12s; }
+.life-shell .life-swatch.is-active { box-shadow: 0 0 0 2px var(--life-bg), 0 0 0 3px currentColor; }
+
+/* Overview cards */
+.life-shell .life-project-card { position: relative; padding: 0; }
+.life-shell .life-project-card-link { display: flex; flex-direction: column; gap: 10px; padding: 16px; text-decoration: none; color: inherit; }
+.life-shell .life-project-card .life-card-head { display: flex; align-items: center; gap: 8px; padding: 0; border: 0; }
+.life-shell .life-project-card .life-card-head h2 { margin: 0; font-size: 15px; flex: 1; }
+.life-shell .life-project-card:hover { border-color: #3a3a3a; box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3); }
+.life-shell .life-project-summary { margin: 0; padding: 0; color: var(--life-label); font-size: 12px; line-height: 1.5; }
+.life-shell .life-project-progress { display: flex; align-items: center; gap: 10px; }
+.life-shell .life-project-card-foot { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 11px; color: var(--life-label); }
+.life-shell .life-project-stat.is-overdue { color: var(--life-danger); }
+.life-shell .life-project-badge { padding: 1px 6px; border: 1px solid var(--life-border); color: var(--life-muted); text-transform: uppercase; letter-spacing: 0.08em; font-size: 10px; }
+.life-shell .life-project-delete { position: absolute; top: 10px; right: 10px; width: 22px; height: 22px; border: 0; background: none; color: var(--life-label); font-size: 18px; line-height: 1; cursor: pointer; opacity: 0; transition: opacity 0.15s, color 0.15s; }
+.life-shell .life-project-card:hover .life-project-delete { opacity: 1; }
+.life-shell .life-project-delete:hover { color: var(--life-danger); }
+
+/* Workspace header */
+.life-shell .life-project-workspace { display: grid; gap: 16px; }
+.life-shell .life-project-back { margin-bottom: -6px; }
+.life-shell .life-back-link { font-family: var(--font-mono); font-size: 12px; color: var(--life-muted); text-decoration: none; }
+.life-shell .life-back-link:hover { color: var(--life-text); }
+.life-shell .life-project-head { align-items: flex-start; }
+.life-shell .life-project-head .eyebrow { display: inline-flex; align-items: center; gap: 6px; }
+.life-shell .life-project-summary-line { margin: 8px 0 0; color: var(--life-muted); font-size: 13px; line-height: 1.5; max-width: 60ch; }
+.life-shell .life-project-head-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+.life-shell .life-project-progress-bar { display: flex; align-items: center; gap: 12px; }
+.life-shell .life-next-action { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border: 1px solid var(--life-border); border-left: 2px solid var(--life-accent); background: var(--life-panel); }
+.life-shell .life-next-action-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--life-label); }
+.life-shell .life-next-action-title { font-size: 14px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Workspace tabs */
+.life-shell .life-project-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--life-hairline); }
+.life-shell .life-project-tab { display: inline-flex; align-items: center; gap: 7px; padding: 9px 14px; border: 0; border-bottom: 2px solid transparent; background: none; color: var(--life-muted); font-family: var(--font-mono); font-size: 13px; cursor: pointer; margin-bottom: -1px; transition: color 0.14s, border-color 0.14s; }
+.life-shell .life-project-tab:hover { color: var(--life-text); }
+.life-shell .life-project-tab.is-active { color: var(--life-text); border-bottom-color: var(--life-accent); }
+.life-shell .life-project-tab .chip-count { font-family: var(--font-mono); font-size: 11px; color: var(--life-label); }
+.life-shell .life-project-tab-body { display: block; }
+
+/* Workspace tasks / milestones */
+.life-shell .life-project-tasks { display: grid; gap: 20px; }
+.life-shell .life-project-tasks-toolbar { display: flex; align-items: center; gap: 10px; }
+.life-shell .life-milestone-add, .life-shell .life-event-add { display: flex; align-items: center; gap: 8px; flex: 1; flex-wrap: wrap; }
+.life-shell .life-milestone-add .life-list-add-input, .life-shell .life-event-add .life-list-add-input { flex: 1; min-width: 160px; border: 1px solid var(--life-border); background: var(--life-panel); padding: 8px 12px; }
+.life-shell .life-milestone { display: grid; gap: 8px; }
+.life-shell .life-milestone-head { display: flex; align-items: center; gap: 10px; padding: 0 2px; }
+.life-shell .life-milestone-name { font-size: 13px; font-weight: 600; }
+.life-shell .life-milestone-count { font-family: var(--font-mono); font-size: 11px; color: var(--life-label); font-variant-numeric: tabular-nums; }
+.life-shell .life-milestone-bar { flex: 1; max-width: 160px; display: flex; }
+.life-shell .life-milestone-add-btn, .life-shell .life-milestone-delete { width: 22px; height: 22px; border: 1px solid var(--life-border); background: transparent; color: var(--life-muted); font-size: 14px; line-height: 1; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: border-color 0.14s, color 0.14s; }
+.life-shell .life-milestone-add-btn:hover { border-color: var(--life-accent-line); color: var(--life-accent); }
+.life-shell .life-milestone-delete { border: 0; }
+.life-shell .life-milestone-delete:hover { color: var(--life-danger); }
+.life-shell .life-milestone-composer { border: 1px solid var(--life-border); background: var(--life-panel); }
+.life-shell .life-milestone-list { border: 1px solid var(--life-border); background: var(--life-panel); }
+
+/* Move-to-phase control on a task row */
+.life-shell .life-move-wrap { position: relative; display: inline-flex; }
+.life-shell .life-move-btn { background: none; border: 0; color: var(--life-label); font-size: 14px; cursor: pointer; padding: 0 2px; transition: color 0.14s; }
+.life-shell .life-move-btn:hover { color: var(--life-accent); }
+.life-shell .life-move-menu { right: 0; left: auto; top: 26px; }
+
+/* Workspace events */
+.life-shell .life-project-events { display: grid; gap: 12px; }
+.life-shell .life-event-date, .life-shell .life-event-time { width: auto; flex: 0 0 auto; }
+.life-shell .life-event-row { display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 12px; padding: 12px 16px; border-top: 1px solid var(--life-hairline); }
+.life-shell .life-event-row:first-child { border-top: 0; }
+.life-shell .life-event-mark { width: 7px; height: 7px; border-radius: 50%; background: #9aa6ff; flex: 0 0 auto; }
+.life-shell .life-event-body { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.life-shell .life-event-title { font-size: 14px; }
+.life-shell .life-event-loc { font-size: 11px; color: var(--life-label); }
+
+/* Workspace references */
+.life-shell .life-project-refs { display: grid; gap: 14px; }
+.life-shell .life-ref-composer { display: grid; gap: 10px; }
+.life-shell .life-ref-fields { display: flex; align-items: flex-start; gap: 8px; flex-wrap: wrap; }
+.life-shell .life-ref-fields .text-input { flex: 1; min-width: 160px; }
+.life-shell .life-ref-note-input { resize: vertical; min-height: 44px; }
+.life-shell .life-ref-file { padding: 7px 10px; }
+.life-shell .life-refs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; align-items: start; }
+.life-shell .life-ref-card { position: relative; border: 1px solid var(--life-border); background: var(--life-panel); padding: 12px; display: flex; flex-direction: column; gap: 8px; min-height: 64px; }
+.life-shell .life-ref-card.life-ref-image { padding: 0; overflow: hidden; }
+.life-shell .life-ref-delete { position: absolute; top: 6px; right: 6px; z-index: 2; width: 20px; height: 20px; border: 0; background: rgba(10, 10, 10, 0.6); color: var(--life-muted); font-size: 15px; line-height: 1; cursor: pointer; opacity: 0; transition: opacity 0.15s, color 0.15s; }
+.life-shell .life-ref-card:hover .life-ref-delete { opacity: 1; }
+.life-shell .life-ref-delete:hover { color: var(--life-danger); }
+.life-shell .life-ref-image-wrap { display: block; }
+.life-shell .life-ref-image { display: block; width: 100%; height: 150px; object-fit: cover; }
+.life-shell .life-ref-caption { padding: 8px 12px; font-size: 12px; color: var(--life-muted); }
+.life-shell .life-ref-link { display: flex; flex-direction: column; gap: 4px; text-decoration: none; color: inherit; }
+.life-shell .life-ref-host { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--life-label); }
+.life-shell .life-ref-title { font-size: 13px; line-height: 1.4; color: var(--life-text); overflow-wrap: anywhere; }
+.life-shell .life-ref-link:hover .life-ref-title { color: var(--life-accent); }
+.life-shell .life-ref-note { display: flex; flex-direction: column; gap: 4px; }
+.life-shell .life-ref-note p { margin: 0; font-size: 13px; line-height: 1.55; color: var(--life-muted); white-space: pre-wrap; overflow-wrap: anywhere; }
+
+@media (max-width: 720px) {
+  .life-shell .life-project-head-controls { justify-content: flex-start; }
+  .life-shell .life-refs-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+}

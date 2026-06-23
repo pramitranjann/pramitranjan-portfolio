@@ -3,8 +3,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
+import { useLifeProjects } from '@/components/life/LifeProjectsProvider'
 import { fetchJson } from '@/lib/life/client'
-import { LIFE_PROJECTS } from '@/lib/life/projects'
 
 type QuickKind = 'Task' | 'Event'
 
@@ -18,6 +18,7 @@ export function QuickAdd({
   textareaId: string
 }) {
   const router = useRouter()
+  const { projects } = useLifeProjects()
   const [open, setOpen] = useState<QuickKind | null>(null)
   const [savingTask, setSavingTask] = useState(false)
   const [taskError, setTaskError] = useState<string | null>(null)
@@ -109,7 +110,7 @@ export function QuickAdd({
               <span className="life-quick-field-label">Project</span>
               <select className="text-input" defaultValue="" name="projectSlug">
                 <option value="">Unassigned</option>
-                {LIFE_PROJECTS.map((project) => (
+                {projects.map((project) => (
                   <option key={project.slug} value={project.slug}>
                     {project.name}
                   </option>

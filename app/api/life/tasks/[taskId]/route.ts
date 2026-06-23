@@ -79,6 +79,7 @@ export async function PATCH(
       priority?: string | null
       dueLocalDate?: string | null
       calendar?: TaskCalendarIntent | null
+      milestoneId?: string | null
     } | null
 
     let task = await updateTask(taskId, {
@@ -87,6 +88,7 @@ export async function PATCH(
       projectSlug: body?.projectSlug,
       priority: body?.priority,
       dueLocalDate: body?.dueLocalDate,
+      ...(body && 'milestoneId' in body ? { milestoneId: body.milestoneId } : {}),
     })
 
     try {

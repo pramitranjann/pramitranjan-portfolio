@@ -78,6 +78,7 @@ export interface TaskRecord {
   auto_generated: boolean;
   fingerprint: string | null;
   calendar_event_id: string | null;
+  milestone_id: string | null;
   created_at: string;
   updated_at: string;
   completed_at: string | null;
@@ -153,4 +154,54 @@ export interface LifeSearchResults {
   tasks: LifeSearchTaskHit[];
   entries: LifeSearchEntryHit[];
   events: LifeSearchEventHit[];
+}
+
+export type ProjectStatus = "active" | "on_hold" | "done";
+
+/** A project row, now stored in the database and editable from the UI. */
+export interface ProjectRecord {
+  slug: string;
+  name: string;
+  summary: string | null;
+  color: string | null;
+  aliases: string[];
+  status: ProjectStatus;
+  target_date: string | null;
+  archived: boolean;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+/** A named stage within a project, used to roll tasks up into phases. */
+export interface ProjectMilestoneRecord {
+  id: string;
+  user_id: string;
+  project_slug: string;
+  name: string;
+  target_date: string | null;
+  sort_order: number;
+  created_at: string;
+}
+
+export type ProjectRefKind = "link" | "note" | "image";
+
+/** A pinned reference (link, note, or uploaded image) on a project. */
+export interface ProjectRefRecord {
+  id: string;
+  user_id: string;
+  project_slug: string;
+  kind: ProjectRefKind;
+  title: string | null;
+  url: string | null;
+  body: string | null;
+  storage_path: string | null;
+  created_at: string;
+}
+
+/** The minimal project shape shared with client components via context. */
+export interface LifeProjectClient {
+  slug: string;
+  name: string;
+  color: string | null;
 }
