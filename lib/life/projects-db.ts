@@ -1,11 +1,17 @@
 import 'server-only'
 
 import { cache } from 'react'
+import { revalidateTag, unstable_cache } from 'next/cache'
 
 import { LIFE_PROJECTS } from '@/lib/life/projects'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
 import { OWNER_ID } from '@/lib/life/constants'
 import type { LifeProjectClient, ProjectRecord, ProjectStatus } from '@/lib/life/types'
+
+// Cache tag for the projects list. Every project mutation calls
+// revalidateTag(PROJECTS_TAG) so the cross-request cache below is dropped the
+// instant the data actually changes.
+const PROJECTS_TAG = 'life-projects'
 
 function slugify(value: string) {
   return value
@@ -34,31 +40,56 @@ function seedProjects(): ProjectRecord[] {
 }
 
 /**
- * All active projects, ordered. Cached per request. Falls back to the static
- * seed list so the UI keeps working even if the migration hasn't run yet.
+ * Cross-request cache: reads ALL projects (archived included), ordered. Throws
+ * on a DB error so failures are never cached; returns [] for an empty table so
+ * the caller can fall back to the seed list. Shared by every projects helper,
+ * so the table is read at most once per cache window regardless of how many
+ * call sites (layout, project map, pickers) ask for it on a single page.
  */
-export const listProjects = cache(async function listProjects(
-  options: { includeArchived?: boolean } = {},
-): Promise<ProjectRecord[]> {
-  try {
+const readAllProjects = unstable_cache(
+  async (): Promise<ProjectRecord[]> => {
     const supabase = getSupabaseAdmin()
-    let query = supabase.from('projects').select('*').order('sort_order', { ascending: true }).order('created_at', { ascending: true })
-    if (!options.includeArchived) {
-      query = query.eq('archived', false)
-    }
-    const { data, error } = await query
+    const { data, error } = await supabase
+      .from('projects')
+      .select('*')
+      .order('sort_order', { ascending: true })
+      .order('created_at', { ascending: true })
     if (error) throw error
-    if (!data || data.length === 0) return seedProjects()
-    return data as ProjectRecord[]
+    return (data as ProjectRecord[] | null) ?? []
+  },
+  ['life-projects-all'],
+  { tags: [PROJECTS_TAG], revalidate: 3600 },
+)
+
+/**
+ * All projects, with the seed-list fallback. Per-request memoised on top of the
+ * cross-request cache. Falls back to the static seed list so the UI keeps
+ * working even if the migration hasn't run yet or the DB is unreachable.
+ */
+const getAllProjects = cache(async function getAllProjects(): Promise<ProjectRecord[]> {
+  try {
+    const rows = await readAllProjects()
+    return rows.length ? rows : seedProjects()
   } catch (error) {
     console.error('listProjects failed, falling back to seed list', error)
     return seedProjects()
   }
 })
 
+/**
+ * All active projects, ordered. Filters the shared cached list in memory rather
+ * than issuing its own query.
+ */
+export const listProjects = cache(async function listProjects(
+  options: { includeArchived?: boolean } = {},
+): Promise<ProjectRecord[]> {
+  const all = await getAllProjects()
+  return options.includeArchived ? all : all.filter((project) => !project.archived)
+})
+
 /** A slug→project map for fast label/colour lookups in server components. */
 export const getProjectMap = cache(async function getProjectMap() {
-  const projects = await listProjects({ includeArchived: true })
+  const projects = await getAllProjects()
   return new Map(projects.map((project) => [project.slug, project]))
 })
 
@@ -139,6 +170,7 @@ export async function createProject(input: {
     .single()
 
   if (error) throw error
+  revalidateTag(PROJECTS_TAG, { expire: 0 })
   return data as ProjectRecord
 }
 
@@ -166,6 +198,7 @@ export async function updateProject(
 
   const { data, error } = await supabase.from('projects').update(update).eq('slug', slug).select('*').single()
   if (error) throw error
+  revalidateTag(PROJECTS_TAG, { expire: 0 })
   return data as ProjectRecord
 }
 
@@ -177,4 +210,5 @@ export async function deleteProject(slug: string): Promise<void> {
   const supabase = getSupabaseAdmin()
   const { error } = await supabase.from('projects').delete().eq('slug', slug)
   if (error) throw error
+  revalidateTag(PROJECTS_TAG, { expire: 0 })
 }
