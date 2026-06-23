@@ -61,7 +61,16 @@ function boardDueLabel(dueLocalDate: string | null, today: string, timeZone: str
   return { text, tone }
 }
 type ColumnKey = 'open' | 'in_progress' | 'done'
-type DesktopGroup = 'status' | 'project' | 'due'
+type DesktopGroup = 'smart' | 'project' | 'status'
+
+type TaskGroup = {
+  key: string
+  label: string
+  mark: string
+  items: TaskRecord[]
+  defaultCollapsed?: boolean
+  dim?: boolean
+}
 
 const STORAGE_KEY = 'life.tasksView'
 const DEFAULT_VIEW: TaskView = 'List'
@@ -199,7 +208,7 @@ export function TasksClient({
   const [view, setView] = useState<TaskView>(DEFAULT_VIEW)
   const [filter, setFilter] = useState<TaskFilter>('All')
   const [items, setItems] = useState<TaskRecord[]>(tasks)
-  const [groupBy, setGroupBy] = useState<DesktopGroup>('status')
+  const [groupBy, setGroupBy] = useState<DesktopGroup>('smart')
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({})
   const [newTitle, setNewTitle] = useState('')
   const [adding, setAdding] = useState(false)
@@ -407,19 +416,35 @@ export function TasksClient({
     }
   })
 
-  const groupedItems = useMemo(() => {
+  const groupedItems = useMemo<TaskGroup[]>(() => {
     if (viewport === 'phone') return []
 
-    if (groupBy === 'status') {
+    // Smart: time-sectioned by due date, with Done pulled out at the end.
+    if (groupBy === 'smart') {
+      const overdue: TaskRecord[] = []
+      const todayItems: TaskRecord[] = []
+      const upcoming: TaskRecord[] = []
+      const someday: TaskRecord[] = []
+      const done: TaskRecord[] = []
+      for (const task of scopedItems) {
+        if (task.status === 'done') {
+          done.push(task)
+        } else if (!task.due_local_date) {
+          someday.push(task)
+        } else if (task.due_local_date < today) {
+          overdue.push(task)
+        } else if (task.due_local_date === today) {
+          todayItems.push(task)
+        } else {
+          upcoming.push(task)
+        }
+      }
       return [
-        { key: 'status-open', label: 'To do', mark: 'var(--life-label)', items: scopedItems.filter((task) => task.status === 'open') },
-        {
-          key: 'status-progress',
-          label: 'In progress',
-          mark: 'var(--life-amber)',
-          items: scopedItems.filter((task) => task.status === 'in_progress'),
-        },
-        { key: 'status-done', label: 'Done', mark: 'var(--life-green)', items: scopedItems.filter((task) => task.status === 'done') },
+        { key: 'smart-overdue', label: 'Overdue', mark: 'var(--life-danger)', items: overdue },
+        { key: 'smart-today', label: 'Today', mark: 'var(--life-accent)', items: todayItems },
+        { key: 'smart-upcoming', label: 'Upcoming', mark: 'var(--life-amber)', items: upcoming },
+        { key: 'smart-someday', label: 'Someday', mark: 'var(--life-label)', items: someday },
+        { key: 'smart-done', label: 'Done', mark: 'var(--life-green)', items: done, defaultCollapsed: true, dim: true },
       ].filter((group) => group.items.length > 0)
     }
 
@@ -437,25 +462,27 @@ export function TasksClient({
         .filter((group) => group.items.length > 0)
     }
 
-    const dueLabels = Array.from(new Set(scopedItems.map((task) => task.due_local_date || 'none')))
-    return dueLabels
-      .map((due) => ({
-        key: `due-${due}`,
-        label:
-          due === 'none'
-            ? 'No due date'
-            : due === today
-              ? 'Today'
-              : shortDay(due, timezone),
-        mark: due === today ? 'var(--life-accent)' : 'var(--life-label)',
-        items: scopedItems.filter((task) => (task.due_local_date || 'none') === due),
-      }))
-      .filter((group) => group.items.length > 0)
-  }, [groupBy, scopedItems, timezone, today, viewport])
+    return [
+      { key: 'status-open', label: 'To do', mark: 'var(--life-label)', items: scopedItems.filter((task) => task.status === 'open') },
+      {
+        key: 'status-progress',
+        label: 'In progress',
+        mark: 'var(--life-amber)',
+        items: scopedItems.filter((task) => task.status === 'in_progress'),
+      },
+      {
+        key: 'status-done',
+        label: 'Done',
+        mark: 'var(--life-green)',
+        items: scopedItems.filter((task) => task.status === 'done'),
+        defaultCollapsed: true,
+        dim: true,
+      },
+    ].filter((group) => group.items.length > 0)
+  }, [groupBy, scopedItems, today, viewport])
 
   const isPhone = viewport === 'phone'
-  const rowProjectDisplay = groupBy === 'project' ? 'none' : undefined
-  const rowDueDisplay = groupBy === 'due' ? 'none' : undefined
+  const showRowProject = groupBy !== 'project'
 
   function renderBoard() {
     return (
@@ -782,10 +809,10 @@ export function TasksClient({
           <div className="segmented">
             <button
               type="button"
-              className={`segmented-item${groupBy === 'status' ? ' is-active' : ''}`}
-              onClick={() => setGroupBy('status')}
+              className={`segmented-item${groupBy === 'smart' ? ' is-active' : ''}`}
+              onClick={() => setGroupBy('smart')}
             >
-              Status
+              Smart
             </button>
             <button
               type="button"
@@ -796,10 +823,10 @@ export function TasksClient({
             </button>
             <button
               type="button"
-              className={`segmented-item${groupBy === 'due' ? ' is-active' : ''}`}
-              onClick={() => setGroupBy('due')}
+              className={`segmented-item${groupBy === 'status' ? ' is-active' : ''}`}
+              onClick={() => setGroupBy('status')}
             >
-              Due
+              Status
             </button>
           </div>
           <div className="segmented">
@@ -842,20 +869,8 @@ export function TasksClient({
             />
           </div>
 
-          <div className="life-list-head">
-            <span />
-            <span className="life-list-head-label">Task</span>
-            <span className="life-list-head-label life-list-head-project" style={{ display: rowProjectDisplay }}>
-              Project
-            </span>
-            <span className="life-list-head-label life-list-head-priority">Priority</span>
-            <span className="life-list-head-label life-list-head-due" style={{ display: rowDueDisplay }}>
-              Due
-            </span>
-          </div>
-
           {groupedItems.map((group) => {
-            const open = !collapsed[group.key]
+            const open = !(collapsed[group.key] ?? group.defaultCollapsed ?? false)
             return (
               <div key={group.key}>
                 <button
@@ -864,7 +879,7 @@ export function TasksClient({
                   onClick={() =>
                     setCollapsed((current) => ({
                       ...current,
-                      [group.key]: !open,
+                      [group.key]: open,
                     }))
                   }
                 >
@@ -872,84 +887,67 @@ export function TasksClient({
                   <span className="life-task-group-mark" style={{ background: group.mark }} />
                   <span className="life-task-group-label">{group.label}</span>
                   <span className="life-task-group-count">{group.items.length}</span>
+                  <span className="life-task-group-rule" />
                 </button>
 
                 {open ? (
-                  <div className="life-task-group-body">
+                  <div className={`life-task-group-body${group.dim ? ' is-dim' : ''}`}>
                     {group.items.map((task) => {
                       const isDone = task.status === 'done'
                       const project = task.project_slug
                         ? getProjectLabel(task.project_slug) || task.project_slug
                         : 'General'
-                      const due =
-                        task.due_local_date === today
-                          ? 'Today'
-                          : task.due_local_date
-                            ? shortDay(task.due_local_date, timezone)
-                            : ''
+                      const cardDue = boardDueLabel(task.due_local_date, today, timezone)
+
+                      if (editId === task.id) {
+                        return (
+                          <div className="life-task-row life-task-row-editing" key={task.id}>
+                            <EditForm
+                              task={task}
+                              today={today}
+                              timezone={timezone}
+                              linkedEventLabel={task.calendar_event_id ? linkedEvents[task.calendar_event_id]?.title : null}
+                              onSave={(draft) => saveEdit(task.id, draft)}
+                              onCancel={() => setEditId(null)}
+                              onDelete={() => deleteTask(task.id)}
+                            />
+                          </div>
+                        )
+                      }
 
                       return (
-                        <div className="life-task-row-wrap" key={task.id}>
-                          {editId === task.id ? (
-                            <div className="life-task-row life-task-row-editing">
-                              <EditForm
-                                task={task}
-                                today={today}
-                                timezone={timezone}
-                                linkedEventLabel={task.calendar_event_id ? linkedEvents[task.calendar_event_id]?.title : null}
-                                onSave={(draft) => saveEdit(task.id, draft)}
-                                onCancel={() => setEditId(null)}
-                                onDelete={() => deleteTask(task.id)}
-                              />
-                            </div>
-                          ) : (
-                            <div
-                              className="life-task-row life-task-row-grid"
-                              onClick={() => setEditId(task.id)}
-                              style={{ cursor: 'pointer' }}
-                            >
-                              <button
-                                type="button"
-                                className={`life-check${isDone ? ' is-done' : ''}`}
-                                onClick={(event) => {
-                                  event.stopPropagation()
-                                  void updateTaskStatus(task.id, isDone ? 'open' : 'done')
-                                }}
-                                aria-label={isDone ? 'Reopen task' : 'Mark task done'}
-                              >
-                                ✓
-                              </button>
-                              <div className="life-task-main-copy">
-                                <div className={`life-task-title${isDone ? ' is-done' : ''}`}>{task.title}</div>
-                                {task.details ? <div className="life-task-details">{task.details}</div> : null}
-                                <div className="life-task-inline-meta">
-                                  <span className="life-tag">{project}</span>
-                                  <span className="life-task-grid-priority">
-                                    <span className={`pri-dot pri-${task.priority}`} /> {PRI_LABEL[task.priority]}
-                                  </span>
-                                  {due ? (
-                                    <span className={`life-row-aside${task.due_local_date === today ? ' life-row-aside-today' : ''}`}>
-                                      {due}
-                                    </span>
-                                  ) : null}
-                                  {eventChipFor(task)}
-                                </div>
-                              </div>
-                              <span className="life-task-grid-cell life-task-grid-project" style={{ display: rowProjectDisplay }}>
-                                <span className="life-tag">{project}</span>
+                        <div
+                          className={`life-list-row pri-edge-${task.priority}${isDone ? ' is-done' : ''}`}
+                          key={task.id}
+                          onClick={() => setEditId(task.id)}
+                        >
+                          <button
+                            type="button"
+                            className={`life-check${isDone ? ' is-done' : ''}`}
+                            onClick={(event) => {
+                              event.stopPropagation()
+                              void updateTaskStatus(task.id, isDone ? 'open' : 'done')
+                            }}
+                            style={{ borderRadius: 0 }}
+                            aria-label={isDone ? 'Reopen task' : 'Mark task done'}
+                          >
+                            ✓
+                          </button>
+                          <div className="life-list-row-body">
+                            <div className={`life-task-title${isDone ? ' is-done' : ''}`}>{task.title}</div>
+                            {task.details ? <div className="life-task-details">{task.details}</div> : null}
+                          </div>
+                          <div className="life-list-row-meta">
+                            {showRowProject ? (
+                              <span className="life-tag" style={projectTintStyle(task.project_slug)}>
+                                {project}
                               </span>
-                              <span className="life-task-grid-cell life-task-grid-priority">
-                                <span className={`pri-dot pri-${task.priority}`} style={{ marginRight: 6 }} />
-                                {PRI_LABEL[task.priority]}
-                              </span>
-                              <span
-                                className={`life-row-aside${task.due_local_date === today ? ' life-row-aside-today' : ''}`}
-                                style={{ display: rowDueDisplay, textAlign: 'right' }}
-                              >
-                                {due}
-                              </span>
-                            </div>
-                          )}
+                            ) : null}
+                            {eventChipFor(task)}
+                            {cardDue ? (
+                              <span className={`life-due-chip${isDone ? '' : ` due-${cardDue.tone}`}`}>{cardDue.text}</span>
+                            ) : null}
+                          </div>
                         </div>
                       )
                     })}
