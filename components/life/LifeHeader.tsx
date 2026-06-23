@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { LifeInlineSearch } from '@/components/life/LifeInlineSearch'
 
@@ -36,11 +36,7 @@ const LIFE_NAV_GROUPS: Array<{ label: string; leaves: NavLeaf[] }> = [
   },
 ]
 
-const LIFE_DESKTOP_NAV = LIFE_NAV_GROUPS.flatMap((group) => group.leaves)
-
 function isLeafActive(href: string, pathname: string) {
-  // The index route ('/life') must match exactly — every other Life route also
-  // begins with '/life/', so a prefix test would light Today up everywhere.
   return href === '/life'
     ? pathname === '/life'
     : pathname === href || pathname.startsWith(`${href}/`)
@@ -49,8 +45,10 @@ function isLeafActive(href: string, pathname: string) {
 export function LifeHeader() {
   const pathname = usePathname()
   const router = useRouter()
+  const [openMenu, setOpenMenu] = useState<string | null>(null)
   const [mobileOpenGroup, setMobileOpenGroup] = useState<string | null>(null)
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
+  const navRef = useRef<HTMLElement>(null)
 
   const activeGroup =
     LIFE_NAV_GROUPS.find((group) => group.leaves.some((leaf) => isLeafActive(leaf.href, pathname))) ||
@@ -59,7 +57,23 @@ export function LifeHeader() {
   useEffect(() => {
     setMobileOpenGroup(null)
     setMobileSearchOpen(false)
+    setOpenMenu(null)
   }, [pathname])
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') setOpenMenu(null)
+    }
+    function onDown(e: MouseEvent) {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) setOpenMenu(null)
+    }
+    document.addEventListener('keydown', onKey)
+    document.addEventListener('mousedown', onDown)
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.removeEventListener('mousedown', onDown)
+    }
+  }, [])
 
   function onMobileGroupPress(label: string, href: string) {
     setMobileSearchOpen(false)
@@ -76,17 +90,47 @@ export function LifeHeader() {
         <Link className="brand" href="/life">
           LIFE_
         </Link>
-        <nav className="life-nav life-desktop-nav" aria-label="Life">
-          {LIFE_DESKTOP_NAV.map((leaf) => (
-            <Link
-              key={leaf.href}
-              href={leaf.href}
-              className={`nav-link${isLeafActive(leaf.href, pathname) ? ' active' : ''}`}
-            >
-              {leaf.label}
-            </Link>
-          ))}
+
+        <nav
+          ref={navRef}
+          className="life-nav-bar life-desktop-nav"
+          aria-label="Life"
+        >
+          {LIFE_NAV_GROUPS.map((group) => {
+            const isGroupActive = group.leaves.some((leaf) => isLeafActive(leaf.href, pathname))
+            const isOpen = openMenu === group.label
+            return (
+              <div key={group.label} className="life-nav-bar-item">
+                <button
+                  type="button"
+                  className={[
+                    'life-nav-bar-trigger',
+                    isOpen ? 'open' : '',
+                    isGroupActive ? 'group-active' : '',
+                  ].filter(Boolean).join(' ')}
+                  onClick={() => setOpenMenu(isOpen ? null : group.label)}
+                  onMouseEnter={() => { if (openMenu) setOpenMenu(group.label) }}
+                >
+                  {group.label}
+                </button>
+                {isOpen && (
+                  <div className="life-nav-bar-menu">
+                    {group.leaves.map((leaf) => (
+                      <Link
+                        key={leaf.href}
+                        href={leaf.href}
+                        className={`life-nav-bar-link${isLeafActive(leaf.href, pathname) ? ' active' : ''}`}
+                      >
+                        {leaf.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )
+          })}
         </nav>
+
         <LifeInlineSearch
           isOpen={mobileSearchOpen}
           onOpen={() => {
