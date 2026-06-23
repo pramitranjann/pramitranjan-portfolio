@@ -365,9 +365,22 @@ export function WeekClient({
 
   useEffect(() => {
     if (viewport === 'phone') return
-    if (!desktopScrollRef.current) return
-    desktopScrollRef.current.scrollTop = 0
-  }, [viewport, weekStart])
+    const container = desktopScrollRef.current
+    if (!container) return
+    // When the visible week contains today, line the scroll up with the current
+    // time (with a little lead above so it isn't jammed against the top edge);
+    // otherwise rest at the start of the day. Read the clock directly rather
+    // than from nowMinutes so this doesn't re-scroll on every minute tick.
+    if (liveToday >= weekStart && liveToday <= weekEnd) {
+      const now = new Date()
+      const nowHour = now.getHours() + now.getMinutes() / 60
+      const leadHours = 1.5
+      const target = (nowHour - DESKTOP_DAY_START_HOUR - leadHours) * DESKTOP_HOUR_HEIGHT
+      container.scrollTop = Math.max(0, target)
+    } else {
+      container.scrollTop = 0
+    }
+  }, [viewport, weekStart, weekEnd, liveToday])
 
   function resetDraft() {
     setDraft(null)
