@@ -31,14 +31,18 @@ export function tintStyleFromHex(hex: string | null | undefined): CSSProperties 
 
 interface LifeProjectsContextValue {
   projects: LifeProjectClient[]
+  topLevelProjects: LifeProjectClient[]
   labelFor: (slug: string | null | undefined) => string
   tintFor: (slug: string | null | undefined) => CSSProperties | undefined
   colorFor: (slug: string | null | undefined) => string
+  projectFor: (slug: string | null | undefined) => LifeProjectClient | null
+  childrenOf: (slug: string | null | undefined) => LifeProjectClient[]
 }
 
 function buildValue(projects: LifeProjectClient[]): LifeProjectsContextValue {
   const map = new Map(projects.map((project) => [project.slug, project]))
   const indexBySlug = new Map(projects.map((project, index) => [project.slug, index]))
+  const topLevelProjects = projects.filter((project) => !project.parent_slug)
 
   const colorFor = (slug: string | null | undefined) => {
     if (!slug) return '#6f6f6f'
@@ -50,9 +54,12 @@ function buildValue(projects: LifeProjectClient[]): LifeProjectsContextValue {
 
   return {
     projects,
+    topLevelProjects,
     colorFor,
     labelFor: (slug) => (slug ? map.get(slug)?.name || slug : ''),
     tintFor: (slug) => (slug ? tintStyleFromHex(colorFor(slug)) : undefined),
+    projectFor: (slug) => (slug ? map.get(slug) || null : null),
+    childrenOf: (slug) => projects.filter((project) => project.parent_slug === (slug || null)),
   }
 }
 

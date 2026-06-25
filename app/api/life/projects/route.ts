@@ -28,6 +28,7 @@ export async function POST(request: NextRequest) {
       summary?: string | null
       color?: string | null
       aliases?: string[]
+      parentSlug?: string | null
     } | null
 
     if (!body?.name?.trim()) {
@@ -39,6 +40,7 @@ export async function POST(request: NextRequest) {
       summary: body.summary ?? null,
       color: body.color ?? null,
       aliases: body.aliases,
+      parentSlug: body.parentSlug ?? null,
     })
 
     return NextResponse.json({ project })

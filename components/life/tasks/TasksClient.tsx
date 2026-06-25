@@ -187,7 +187,7 @@ export function TasksClient({
   linkedEvents?: Record<string, TaskLinkedEvent>
 }) {
   const router = useRouter()
-  const { labelFor, tintFor } = useLifeProjects()
+  const { colorFor, labelFor, tintFor } = useLifeProjects()
   const viewport = useViewportMode()
   const [view, setView] = useState<TaskView>(DEFAULT_VIEW)
   const [filter, setFilter] = useState<TaskFilter>('All')
@@ -541,9 +541,10 @@ export function TasksClient({
                 const cardDue = boardDueLabel(task.due_local_date, today, timezone)
                 return (
                   <div
-                    className={`life-kanban-card pri-edge-${task.priority}${isDone ? ' is-done' : ''}${dragId === task.id ? ' is-dragging' : ''}`}
+                    className={`life-kanban-card${isDone ? ' is-done' : ''}${dragId === task.id ? ' is-dragging' : ''}`}
                     key={task.id}
                     draggable
+                    style={{ borderLeftColor: colorFor(task.project_slug) }}
                     onClick={() => setEditId(task.id)}
                     onDragStart={(event) => {
                       event.dataTransfer.effectAllowed = 'move'
@@ -559,7 +560,7 @@ export function TasksClient({
                     {task.details ? <p className="life-task-details">{task.details}</p> : null}
                     <div className="life-kanban-card-meta">
                       <span className="life-tag" style={tintFor(task.project_slug)}>{project}</span>
-                      <span className="life-kanban-pri">
+                      <span className={`life-kanban-pri pri-chip-${task.priority}`}>
                         <span className={`pri-dot pri-${task.priority}`} />
                         {PRI_LABEL[task.priority]}
                       </span>

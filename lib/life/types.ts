@@ -164,6 +164,7 @@ export interface ProjectRecord {
   name: string;
   summary: string | null;
   color: string | null;
+  parent_slug: string | null;
   aliases: string[];
   status: ProjectStatus;
   target_date: string | null;
@@ -199,9 +200,21 @@ export interface ProjectRefRecord {
   created_at: string;
 }
 
+export interface ProjectPageRecord {
+  id: string;
+  user_id: string;
+  project_slug: string;
+  title: string;
+  body: string;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
 /** The minimal project shape shared with client components via context. */
 export interface LifeProjectClient {
   slug: string;
   name: string;
   color: string | null;
+  parent_slug: string | null;
 }

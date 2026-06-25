@@ -2,6 +2,7 @@
 
 import type { CSSProperties } from 'react'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 
 import { useViewportMode } from '@/hooks/useViewportMode'
 import { fetchJson } from '@/lib/life/client'
@@ -807,6 +808,93 @@ export function WeekClient({
     </div>
   )
 
+  const composerOverlay = draft ? (
+    <div className={`life-week-composer-overlay${viewport === 'phone' ? ' is-phone' : ''}`}>
+      <div className="life-week-composer-backdrop" onClick={resetDraft} />
+      <aside className={`life-week-composer-panel${viewport === 'phone' ? ' is-phone' : ''}`}>
+        <div className="life-week-composer-head">
+          <h2>{draft.mode === 'edit' ? 'Edit event' : 'New event'}</h2>
+          <div className="life-week-composer-actions">
+            <button type="button" className="life-btn ghost" onClick={resetDraft}>
+              Cancel
+            </button>
+            <button type="button" className="life-btn primary" onClick={saveDraft} disabled={saving}>
+              {saving ? 'Saving…' : 'Save'}
+            </button>
+          </div>
+        </div>
+
+        <div className="life-week-composer-body">
+          <label className="life-week-composer-field">
+            <span className="life-week-composer-label">Title</span>
+            <input
+              autoFocus
+              type="text"
+              className="text-input"
+              value={draftTitle}
+              placeholder="Untitled event"
+              onChange={(event) => setDraftTitle(event.target.value)}
+            />
+          </label>
+
+          <div className="life-week-composer-field">
+            <span className="life-week-composer-label">Date</span>
+            <div className="life-week-composer-static">{fullDateLabel(draft.date, tz)}</div>
+          </div>
+
+          <div className="life-week-composer-toggle">
+            <span>All-day</span>
+            <button
+              type="button"
+              className={`life-week-toggle${draft.allDay ? ' is-active' : ''}`}
+              onClick={toggleDraftAllDay}
+              aria-pressed={draft.allDay}
+            >
+              <span className="life-week-toggle-thumb" />
+            </button>
+          </div>
+
+          {!draft.allDay ? (
+            <div className="life-week-composer-time-row">
+              <label className="life-week-composer-field">
+                <span className="life-week-composer-label">Start</span>
+                <input
+                  type="time"
+                  className="text-input"
+                  value={draftStart}
+                  onChange={(event) => setDraftStart(event.target.value)}
+                />
+              </label>
+
+              <label className="life-week-composer-field">
+                <span className="life-week-composer-label">End</span>
+                <input
+                  type="time"
+                  className="text-input"
+                  value={draftEnd}
+                  onChange={(event) => setDraftEnd(event.target.value)}
+                />
+              </label>
+            </div>
+          ) : null}
+
+          {saveError ? <span className="error-text">{saveError}</span> : null}
+
+          {draft.mode === 'edit' && draft.eventId ? (
+            <button type="button" className="life-week-composer-delete" onClick={deleteDraftEvent} disabled={saving}>
+              Delete event
+            </button>
+          ) : null}
+        </div>
+      </aside>
+    </div>
+  ) : null
+
+  const portalTarget =
+    typeof document !== 'undefined'
+      ? document.querySelector('.life-shell') ?? document.body
+      : null
+
   return (
     <>
       <div className="life-week-shell">
@@ -851,87 +939,7 @@ export function WeekClient({
         )}
       </div>
 
-      {draft ? (
-        <div className={`life-week-composer-overlay${viewport === 'phone' ? ' is-phone' : ''}`}>
-          <div className="life-week-composer-backdrop" onClick={resetDraft} />
-          <aside className={`life-week-composer-panel${viewport === 'phone' ? ' is-phone' : ''}`}>
-            <div className="life-week-composer-head">
-              <h2>{draft.mode === 'edit' ? 'Edit event' : 'New event'}</h2>
-              <div className="life-week-composer-actions">
-                <button type="button" className="life-btn ghost" onClick={resetDraft}>
-                  Cancel
-                </button>
-                <button type="button" className="life-btn primary" onClick={saveDraft} disabled={saving}>
-                  {saving ? 'Saving…' : 'Save'}
-                </button>
-              </div>
-            </div>
-
-            <div className="life-week-composer-body">
-              <label className="life-week-composer-field">
-                <span className="life-week-composer-label">Title</span>
-                <input
-                  autoFocus
-                  type="text"
-                  className="text-input"
-                  value={draftTitle}
-                  placeholder="Untitled event"
-                  onChange={(event) => setDraftTitle(event.target.value)}
-                />
-              </label>
-
-              <div className="life-week-composer-field">
-                <span className="life-week-composer-label">Date</span>
-                <div className="life-week-composer-static">{fullDateLabel(draft.date, tz)}</div>
-              </div>
-
-              <div className="life-week-composer-toggle">
-                <span>All-day</span>
-                <button
-                  type="button"
-                  className={`life-week-toggle${draft.allDay ? ' is-active' : ''}`}
-                  onClick={toggleDraftAllDay}
-                  aria-pressed={draft.allDay}
-                >
-                  <span className="life-week-toggle-thumb" />
-                </button>
-              </div>
-
-              {!draft.allDay ? (
-                <div className="life-week-composer-time-row">
-                  <label className="life-week-composer-field">
-                    <span className="life-week-composer-label">Start</span>
-                    <input
-                      type="time"
-                      className="text-input"
-                      value={draftStart}
-                      onChange={(event) => setDraftStart(event.target.value)}
-                    />
-                  </label>
-
-                  <label className="life-week-composer-field">
-                    <span className="life-week-composer-label">End</span>
-                    <input
-                      type="time"
-                      className="text-input"
-                      value={draftEnd}
-                      onChange={(event) => setDraftEnd(event.target.value)}
-                    />
-                  </label>
-                </div>
-              ) : null}
-
-              {saveError ? <span className="error-text">{saveError}</span> : null}
-
-              {draft.mode === 'edit' && draft.eventId ? (
-                <button type="button" className="life-week-composer-delete" onClick={deleteDraftEvent} disabled={saving}>
-                  Delete event
-                </button>
-              ) : null}
-            </div>
-          </aside>
-        </div>
-      ) : null}
+      {composerOverlay && portalTarget ? createPortal(composerOverlay, portalTarget) : null}
     </>
   )
 }

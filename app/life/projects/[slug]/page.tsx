@@ -5,8 +5,9 @@ import { isAdminSession } from '@/lib/admin-auth'
 import { getCalendarEventsByIds } from '@/lib/life/calendar'
 import { listMilestones } from '@/lib/life/milestones'
 import { getProjectEvents } from '@/lib/life/project-events'
+import { listProjectPages } from '@/lib/life/project-pages'
 import { listRefs } from '@/lib/life/project-refs'
-import { getProjectBySlugDb } from '@/lib/life/projects-db'
+import { getProjectBySlugDb, listProjects } from '@/lib/life/projects-db'
 import { getOwnerSettings } from '@/lib/life/settings'
 import { getTasks } from '@/lib/life/tasks'
 import { getCurrentLocalDate } from '@/lib/life/time'
@@ -26,11 +27,15 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   const settings = await getOwnerSettings()
   const today = getCurrentLocalDate(settings.timezone)
 
-  const [tasks, milestones, refs] = await Promise.all([
+  const [tasks, milestones, refs, pages, allProjects] = await Promise.all([
     getTasks({ status: 'all', projectSlug: slug }).then((rows) => rows.filter((task) => task.status !== 'dismissed')),
     listMilestones(slug),
     listRefs(slug),
+    listProjectPages(slug),
+    listProjects(),
   ])
+  const parentProject = project.parent_slug ? allProjects.find((candidate) => candidate.slug === project.parent_slug) || null : null
+  const subprojects = allProjects.filter((candidate) => candidate.parent_slug === project.slug)
 
   // Events tied to this project = explicitly mapped events + events linked from
   // the project's own tasks.
@@ -62,6 +67,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       tasks={tasks}
       milestones={milestones}
       refs={refs}
+      pages={pages}
+      parentProject={parentProject}
+      subprojects={subprojects}
       events={events}
       linkedEvents={linkedEvents}
       today={today}

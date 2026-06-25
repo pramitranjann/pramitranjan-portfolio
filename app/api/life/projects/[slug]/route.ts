@@ -25,6 +25,7 @@ export async function PATCH(request: NextRequest, context: { params: Promise<unk
       status?: string
       targetDate?: string | null
       archived?: boolean
+      parentSlug?: string | null
     } | null
 
     const project = await updateProject(slug, {
@@ -35,6 +36,7 @@ export async function PATCH(request: NextRequest, context: { params: Promise<unk
       status: normalizeStatus(body?.status),
       targetDate: body && 'targetDate' in body ? body.targetDate : undefined,
       archived: body?.archived,
+      ...(body && 'parentSlug' in body ? { parentSlug: body.parentSlug } : {}),
     })
 
     return NextResponse.json({ project })

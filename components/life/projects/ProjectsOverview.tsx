@@ -13,6 +13,8 @@ export interface ProjectOverviewItem {
   name: string
   summary: string | null
   color: string | null
+  parentSlug: string | null
+  parentName: string | null
   status: ProjectStatus
   targetDate: string | null
   open: number
@@ -23,12 +25,21 @@ export interface ProjectOverviewItem {
 
 const SWATCHES = ['#e9b765', '#7fd899', '#9aa6ff', '#e58fb8', '#6fcfd6', '#c79bff', '#ff6c61']
 
-export function ProjectsOverview({ items, today }: { items: ProjectOverviewItem[]; today: string }) {
+export function ProjectsOverview({
+  items,
+  today,
+  parentOptions,
+}: {
+  items: ProjectOverviewItem[]
+  today: string
+  parentOptions: Array<{ slug: string; name: string }>
+}) {
   const router = useRouter()
   const [adding, setAdding] = useState(false)
   const [name, setName] = useState('')
   const [summary, setSummary] = useState('')
   const [color, setColor] = useState(SWATCHES[0])
+  const [parentSlug, setParentSlug] = useState('')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -42,11 +53,12 @@ export function ProjectsOverview({ items, today }: { items: ProjectOverviewItem[
     try {
       await fetchJson('/api/life/projects', {
         method: 'POST',
-        body: JSON.stringify({ name: trimmed, summary: summary.trim() || null, color }),
+        body: JSON.stringify({ name: trimmed, summary: summary.trim() || null, color, parentSlug: parentSlug || null }),
       })
       setName('')
       setSummary('')
       setColor(SWATCHES[0])
+      setParentSlug('')
       setAdding(false)
       router.refresh()
     } catch (err) {
@@ -68,11 +80,11 @@ export function ProjectsOverview({ items, today }: { items: ProjectOverviewItem[
 
   return (
     <div className="life-projects-shell">
-      <div className="life-page-head">
+      <div className="life-page-head life-projects-head">
         <div>
           <p className="eyebrow">Projects</p>
           <h1>By project</h1>
-          <p className="life-tasks-stat">
+          <p className="life-tasks-stat life-projects-stat">
             <b>{items.length} projects</b> · {totalOpen} open
           </p>
         </div>
@@ -104,6 +116,14 @@ export function ProjectsOverview({ items, today }: { items: ProjectOverviewItem[
             rows={2}
             onChange={(event) => setSummary(event.target.value)}
           />
+          <select className="text-input" value={parentSlug} onChange={(event) => setParentSlug(event.target.value)}>
+            <option value="">Top-level project</option>
+            {parentOptions.map((project) => (
+              <option key={project.slug} value={project.slug}>
+                Sub-project of {project.name}
+              </option>
+            ))}
+          </select>
           <div className="life-project-create-foot">
             <div className="life-swatches">
               {SWATCHES.map((swatch) => (
@@ -137,12 +157,20 @@ export function ProjectsOverview({ items, today }: { items: ProjectOverviewItem[
           return (
             <div key={item.slug} className="life-card life-project-card">
               <Link href={`/life/projects/${item.slug}`} className="life-project-card-link">
-                <div className="life-card-head">
-                  <span className="life-project-dot" style={{ background: item.color || 'var(--life-label)' }} />
-                  <h2>{item.name}</h2>
-                  <span className={`life-health-dot health-${tone}`} aria-label={`Health: ${tone}`} />
+                <div className="life-project-card-top">
+                  <div className="life-card-head">
+                    <span className="life-project-dot" style={{ background: item.color || 'var(--life-label)' }} />
+                    <h2>{item.name}</h2>
+                    <span className={`life-health-dot health-${tone}`} aria-label={`Health: ${tone}`} />
+                  </div>
+                  <div className="life-project-card-meta">
+                    {item.parentName ? <span className="life-project-parent-chip">Sub-project of {item.parentName}</span> : null}
+                    {item.status !== 'active' ? <span className="life-project-badge">{STATUS_LABEL[item.status]}</span> : null}
+                    {due ? <span className={`life-due-chip due-${due.tone}`}>{due.text}</span> : null}
+                  </div>
                 </div>
                 {item.summary ? <p className="life-project-summary">{item.summary}</p> : null}
+                {item.parentName ? <p className="life-project-parent">Sub-project of {item.parentName}</p> : null}
                 <div className="life-project-progress">
                   <div className="life-progress-track">
                     <div className="life-progress-fill" style={{ width: `${pct}%` }} />
@@ -151,9 +179,8 @@ export function ProjectsOverview({ items, today }: { items: ProjectOverviewItem[
                 </div>
                 <div className="life-project-card-foot">
                   <span className="life-project-stat">{item.open} open</span>
+                  <span className="life-project-stat">{item.done} done</span>
                   {item.overdue > 0 ? <span className="life-project-stat is-overdue">{item.overdue} overdue</span> : null}
-                  {item.status !== 'active' ? <span className="life-project-badge">{STATUS_LABEL[item.status]}</span> : null}
-                  {due ? <span className={`life-due-chip due-${due.tone}`}>{due.text}</span> : null}
                 </div>
               </Link>
               <button

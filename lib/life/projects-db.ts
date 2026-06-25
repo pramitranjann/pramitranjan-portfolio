@@ -29,6 +29,7 @@ function seedProjects(): ProjectRecord[] {
     name: project.name,
     summary: project.summary,
     color: null,
+    parent_slug: null,
     aliases: project.aliases,
     status: 'active' as const,
     target_date: null,
@@ -106,7 +107,12 @@ export async function getProjectLabelAsync(slug: string | null | undefined): Pro
 /** The trimmed-down list handed to client components through context. */
 export async function listProjectsClient(): Promise<LifeProjectClient[]> {
   const projects = await listProjects()
-  return projects.map((project) => ({ slug: project.slug, name: project.name, color: project.color }))
+  return projects.map((project) => ({
+    slug: project.slug,
+    name: project.name,
+    color: project.color,
+    parent_slug: project.parent_slug,
+  }))
 }
 
 /** Resolve a free-text/slug value to a known project slug (or null). */
@@ -137,6 +143,7 @@ export async function createProject(input: {
   summary?: string | null
   color?: string | null
   aliases?: string[]
+  parentSlug?: string | null
 }): Promise<ProjectRecord> {
   const name = input.name.trim()
   if (!name) throw new Error('Project name is required.')
@@ -147,6 +154,10 @@ export async function createProject(input: {
   const base = slugify(name) || 'project'
   const existing = await listProjects({ includeArchived: true })
   const taken = new Set(existing.map((project) => project.slug))
+  const parentSlug = input.parentSlug?.trim().toLowerCase() || null
+  if (parentSlug && !taken.has(parentSlug)) {
+    throw new Error('Parent project not found.')
+  }
   let slug = base
   let suffix = 2
   while (taken.has(slug)) {
@@ -162,6 +173,7 @@ export async function createProject(input: {
       name,
       summary: input.summary?.trim() || null,
       color: input.color || null,
+      parent_slug: parentSlug,
       aliases: input.aliases?.map((alias) => alias.trim().toLowerCase()).filter(Boolean) || [],
       sort_order: sortOrder,
       user_id: OWNER_ID,
@@ -184,9 +196,11 @@ export async function updateProject(
     status?: ProjectStatus
     targetDate?: string | null
     archived?: boolean
+    parentSlug?: string | null
   },
 ): Promise<ProjectRecord> {
   const supabase = getSupabaseAdmin()
+  const existing = await listProjects({ includeArchived: true })
   const update: Record<string, unknown> = { updated_at: new Date().toISOString() }
   if (patch.name !== undefined) update.name = patch.name.trim()
   if (patch.summary !== undefined) update.summary = patch.summary?.trim() || null
@@ -195,6 +209,16 @@ export async function updateProject(
   if (patch.status !== undefined) update.status = patch.status
   if (patch.targetDate !== undefined) update.target_date = patch.targetDate || null
   if (patch.archived !== undefined) update.archived = patch.archived
+  if ('parentSlug' in patch) {
+    const parentSlug = patch.parentSlug?.trim().toLowerCase() || null
+    if (parentSlug === slug) {
+      throw new Error('A project cannot be its own parent.')
+    }
+    if (parentSlug && !existing.some((project) => project.slug === parentSlug)) {
+      throw new Error('Parent project not found.')
+    }
+    update.parent_slug = parentSlug
+  }
 
   const { data, error } = await supabase.from('projects').update(update).eq('slug', slug).select('*').single()
   if (error) throw error

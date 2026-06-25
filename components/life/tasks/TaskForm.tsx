@@ -7,7 +7,7 @@ import { fetchJson } from '@/lib/life/client'
 import type { CalendarEventRecord, TaskDraft, TaskPriority } from '@/lib/life/types'
 
 type CalMode = 'none' | 'event' | 'link'
-type MenuKey = 'project' | 'priority' | 'due' | 'cal'
+type MenuKey = 'project' | 'subproject' | 'priority' | 'due' | 'cal'
 
 const PRI_LABEL: Record<TaskPriority, string> = { high: 'High', medium: 'Med', low: 'Low' }
 const PRI_OPTIONS: TaskPriority[] = ['high', 'medium', 'low']
@@ -79,10 +79,14 @@ export function TaskForm({
   // Injected to avoid bundling the portal calendar when not needed.
   LifeCalendarComponent: typeof import('./LifeCalendar').LifeCalendar
 }) {
-  const { projects, labelFor } = useLifeProjects()
+  const { childrenOf, labelFor, projectFor, topLevelProjects } = useLifeProjects()
+  const initialProject = projectFor(initial?.projectSlug || null)
+  const initialParentProjectSlug = initialProject?.parent_slug || initialProject?.slug || ''
+  const initialSubprojectSlug = initialProject?.parent_slug ? initialProject.slug : ''
   const [title, setTitle] = useState(initial?.title || '')
   const [details, setDetails] = useState(initial?.details || '')
-  const [projectSlug, setProjectSlug] = useState(initial?.projectSlug || '')
+  const [parentProjectSlug, setParentProjectSlug] = useState(initialParentProjectSlug)
+  const [subprojectSlug, setSubprojectSlug] = useState(initialSubprojectSlug)
   const [priority, setPriority] = useState<TaskPriority>(initial?.priority || 'medium')
   const [due, setDue] = useState(initial?.dueLocalDate || '')
   const [calMode, setCalMode] = useState<CalMode>(initial?.calendarEventId ? 'link' : 'none')
@@ -124,6 +128,14 @@ export function TaskForm({
     document.addEventListener('mousedown', onDown)
     return () => document.removeEventListener('mousedown', onDown)
   }, [])
+
+  useEffect(() => {
+    if (!subprojectSlug) return
+    const project = projectFor(subprojectSlug)
+    if (!project || project.parent_slug !== parentProjectSlug) {
+      setSubprojectSlug('')
+    }
+  }, [parentProjectSlug, projectFor, subprojectSlug])
 
   function toggleMenu(key: MenuKey) {
     setOpenMenu((current) => (current === key ? null : key))
@@ -174,7 +186,7 @@ export function TaskForm({
       await onSubmit({
         title: title.trim(),
         details: details.trim() || null,
-        projectSlug: projectSlug || null,
+        projectSlug: subprojectSlug || parentProjectSlug || null,
         priority,
         dueLocalDate: due || null,
         calendar,
@@ -198,7 +210,9 @@ export function TaskForm({
     }
   }
 
-  const projectName = projectSlug ? labelFor(projectSlug) : ''
+  const projectName = parentProjectSlug ? labelFor(parentProjectSlug) : ''
+  const subprojectName = subprojectSlug ? labelFor(subprojectSlug) : ''
+  const subprojects = parentProjectSlug ? childrenOf(parentProjectSlug) : []
   const dueText = due ? dueLabel(due, today) : ''
   const calText = calMode === 'event' ? 'Event' : calMode === 'link' ? `🔗 ${linkLabel.length > 16 ? `${linkLabel.slice(0, 15)}…` : linkLabel}` : 'Calendar'
 
@@ -229,22 +243,71 @@ export function TaskForm({
       <div className="life-pills">
         {/* Project */}
         <div className="life-pill-wrap">
-          <button type="button" className={`life-pill${projectSlug ? ' set proj-plain' : ''}`} onClick={() => toggleMenu('project')}>
-            {!projectSlug ? <span className="ic">#</span> : null}
+          <button type="button" className={`life-pill${parentProjectSlug ? ' set proj-plain' : ''}`} onClick={() => toggleMenu('project')}>
+            {!parentProjectSlug ? <span className="ic">#</span> : null}
             <span className="lbl">{projectName || 'Project'}</span>
           </button>
           {openMenu === 'project' ? (
             <div className="life-pill-menu open">
-              {projects.map((project) => (
-                <button key={project.slug} type="button" className="life-pill-menu-item" onClick={() => { setProjectSlug(project.slug); setOpenMenu(null) }}>
+              {topLevelProjects.map((project) => (
+                <button
+                  key={project.slug}
+                  type="button"
+                  className="life-pill-menu-item"
+                  onClick={() => {
+                    setParentProjectSlug(project.slug)
+                    setSubprojectSlug('')
+                    setOpenMenu(null)
+                  }}
+                >
                   <span className="swatch sq" style={{ background: project.color || undefined }} />{project.name}
                 </button>
               ))}
               <div className="life-pill-menu-sep" />
-              <button type="button" className="life-pill-menu-item" onClick={() => { setProjectSlug(''); setOpenMenu(null) }}>Unassigned</button>
+              <button
+                type="button"
+                className="life-pill-menu-item"
+                onClick={() => {
+                  setParentProjectSlug('')
+                  setSubprojectSlug('')
+                  setOpenMenu(null)
+                }}
+              >
+                Unassigned
+              </button>
             </div>
           ) : null}
         </div>
+
+        {subprojects.length > 0 ? (
+          <div className="life-pill-wrap">
+            <button type="button" className={`life-pill${subprojectSlug ? ' set proj-plain' : ''}`} onClick={() => toggleMenu('subproject')}>
+              {!subprojectSlug ? <span className="ic">↳</span> : null}
+              <span className="lbl">{subprojectName || 'Sub-project'}</span>
+            </button>
+            {openMenu === 'subproject' ? (
+              <div className="life-pill-menu open life-pill-menu-subproject">
+                <button type="button" className="life-pill-menu-item" onClick={() => { setSubprojectSlug(''); setOpenMenu(null) }}>
+                  Parent project only
+                </button>
+                <div className="life-pill-menu-sep" />
+                {subprojects.map((project) => (
+                  <button
+                    key={project.slug}
+                    type="button"
+                    className="life-pill-menu-item"
+                    onClick={() => {
+                      setSubprojectSlug(project.slug)
+                      setOpenMenu(null)
+                    }}
+                  >
+                    <span className="swatch sq" style={{ background: project.color || undefined }} />{project.name}
+                  </button>
+                ))}
+              </div>
+            ) : null}
+          </div>
+        ) : null}
 
         {/* Priority */}
         <div className="life-pill-wrap">

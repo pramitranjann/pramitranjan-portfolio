@@ -9,6 +9,7 @@ import { fetchJson } from '@/lib/life/client'
 import type {
   CalendarEventRecord,
   ProjectMilestoneRecord,
+  ProjectPageRecord,
   ProjectRecord,
   ProjectRefRecord,
   ProjectStatus,
@@ -16,11 +17,12 @@ import type {
   TaskRecord,
 } from '@/lib/life/types'
 import { ProjectEvents } from './ProjectEvents'
+import { ProjectPages } from './ProjectPages'
 import { ProjectRefs } from './ProjectRefs'
 import { ProjectTasks } from './ProjectTasks'
 import { healthTone, progressPct, relativeDueLabel, STATUS_LABEL, STATUS_OPTIONS } from './shared'
 
-type Tab = 'tasks' | 'events' | 'refs'
+type Tab = 'tasks' | 'events' | 'refs' | 'pages'
 
 const PRIORITY_RANK: Record<string, number> = { high: 0, medium: 1, low: 2 }
 
@@ -29,6 +31,9 @@ export function ProjectWorkspace({
   tasks,
   milestones,
   refs,
+  pages,
+  parentProject,
+  subprojects,
   events,
   linkedEvents,
   today,
@@ -38,6 +43,9 @@ export function ProjectWorkspace({
   tasks: TaskRecord[]
   milestones: ProjectMilestoneRecord[]
   refs: ProjectRefRecord[]
+  pages: ProjectPageRecord[]
+  parentProject: ProjectRecord | null
+  subprojects: ProjectRecord[]
   events: CalendarEventRecord[]
   linkedEvents: Record<string, TaskLinkedEvent>
   today: string
@@ -118,6 +126,11 @@ export function ProjectWorkspace({
         <Link href="/life/projects" className="life-back-link">
           ← Projects
         </Link>
+        {parentProject ? (
+          <Link href={`/life/projects/${parentProject.slug}`} className="life-back-link">
+            ← {parentProject.name}
+          </Link>
+        ) : null}
       </div>
 
       <div className="life-page-head life-project-head">
@@ -226,6 +239,23 @@ export function ProjectWorkspace({
         </div>
       ) : null}
 
+      {subprojects.length > 0 ? (
+        <div className="life-project-children">
+          <div className="life-project-children-head">
+            <span className="eyebrow">Sub-projects</span>
+            <span className="life-project-children-count">{subprojects.length}</span>
+          </div>
+          <div className="life-project-children-grid">
+            {subprojects.map((child) => (
+              <Link key={child.slug} href={`/life/projects/${child.slug}`} className="life-project-child-card">
+                <span className="life-project-dot" style={{ background: child.color || 'var(--life-label)' }} />
+                <span className="life-project-child-name">{child.name}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      ) : null}
+
       {error ? <p className="error-text">{error}</p> : null}
 
       <div className="life-project-tabs">
@@ -237,6 +267,9 @@ export function ProjectWorkspace({
         </button>
         <button type="button" className={`life-project-tab${tab === 'refs' ? ' is-active' : ''}`} onClick={() => setTab('refs')}>
           References <span className="chip-count">{refs.length}</span>
+        </button>
+        <button type="button" className={`life-project-tab${tab === 'pages' ? ' is-active' : ''}`} onClick={() => setTab('pages')}>
+          Pages <span className="chip-count">{pages.length}</span>
         </button>
       </div>
 
@@ -255,6 +288,7 @@ export function ProjectWorkspace({
           <ProjectEvents projectSlug={project.slug} events={events} today={today} timezone={timezone} />
         ) : null}
         {tab === 'refs' ? <ProjectRefs projectSlug={project.slug} refs={refs} /> : null}
+        {tab === 'pages' ? <ProjectPages projectSlug={project.slug} pages={pages} /> : null}
       </div>
     </div>
   )
