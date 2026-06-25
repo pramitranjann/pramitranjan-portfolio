@@ -25,6 +25,7 @@ import { healthTone, progressPct, relativeDueLabel, STATUS_LABEL, STATUS_OPTIONS
 type Tab = 'tasks' | 'events' | 'refs' | 'pages'
 
 const PRIORITY_RANK: Record<string, number> = { high: 0, medium: 1, low: 2 }
+const PROJECT_SWATCHES = ['#e9b765', '#7fd899', '#9aa6ff', '#e58fb8', '#6fcfd6', '#c79bff', '#ff6c61']
 
 export function ProjectWorkspace({
   project,
@@ -64,6 +65,11 @@ export function ProjectWorkspace({
   const [summary, setSummary] = useState(project.summary || '')
   const [editName, setEditName] = useState(false)
   const [editSummary, setEditSummary] = useState(false)
+  const [addingSubproject, setAddingSubproject] = useState(false)
+  const [subprojectName, setSubprojectName] = useState('')
+  const [subprojectSummary, setSubprojectSummary] = useState('')
+  const [subprojectColor, setSubprojectColor] = useState(project.color || PROJECT_SWATCHES[0])
+  const [savingSubproject, setSavingSubproject] = useState(false)
 
   const open = tasks.filter((task) => task.status !== 'done')
   const done = tasks.filter((task) => task.status === 'done')
@@ -118,6 +124,34 @@ export function ProjectWorkspace({
     setEditSummary(false)
     if (summary.trim() === (project.summary || '')) return
     void patchProject({ summary: summary.trim() || null })
+  }
+
+  async function createSubproject() {
+    const trimmed = subprojectName.trim()
+    if (!trimmed || savingSubproject) return
+    setSavingSubproject(true)
+    setError(null)
+    try {
+      const payload = await fetchJson<{ project: ProjectRecord }>('/api/life/projects', {
+        method: 'POST',
+        body: JSON.stringify({
+          name: trimmed,
+          summary: subprojectSummary.trim() || null,
+          color: subprojectColor,
+          parentSlug: project.slug,
+        }),
+      })
+      setAddingSubproject(false)
+      setSubprojectName('')
+      setSubprojectSummary('')
+      setSubprojectColor(project.color || PROJECT_SWATCHES[0])
+      router.push(`/life/projects/${payload.project.slug}`)
+      router.refresh()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to create sub-project.')
+    } finally {
+      setSavingSubproject(false)
+    }
   }
 
   return (
@@ -239,12 +273,72 @@ export function ProjectWorkspace({
         </div>
       ) : null}
 
-      {subprojects.length > 0 ? (
-        <div className="life-project-children">
-          <div className="life-project-children-head">
+      <div className="life-project-children">
+        <div className="life-project-children-head">
+          <div className="life-project-children-heading">
             <span className="eyebrow">Sub-projects</span>
             <span className="life-project-children-count">{subprojects.length}</span>
           </div>
+          <button
+            type="button"
+            className="life-btn ghost life-project-child-add"
+            onClick={() => {
+              setAddingSubproject((value) => !value)
+              setSubprojectName('')
+              setSubprojectSummary('')
+              setSubprojectColor(project.color || PROJECT_SWATCHES[0])
+            }}
+          >
+            {addingSubproject ? 'Cancel' : '+ Sub-project'}
+          </button>
+        </div>
+
+        {addingSubproject ? (
+          <div className="life-project-create life-project-child-create">
+            <input
+              className="life-compose-title"
+              autoFocus
+              value={subprojectName}
+              placeholder={`New project inside ${project.name}…`}
+              onChange={(event) => setSubprojectName(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  event.preventDefault()
+                  void createSubproject()
+                }
+                if (event.key === 'Escape') {
+                  setAddingSubproject(false)
+                }
+              }}
+            />
+            <textarea
+              className="life-compose-desc"
+              value={subprojectSummary}
+              placeholder="What does this sub-project hold?"
+              rows={2}
+              onChange={(event) => setSubprojectSummary(event.target.value)}
+            />
+            <div className="life-project-create-foot">
+              <div className="life-swatches">
+                {PROJECT_SWATCHES.map((swatch) => (
+                  <button
+                    key={swatch}
+                    type="button"
+                    className={`life-swatch${subprojectColor === swatch ? ' is-active' : ''}`}
+                    style={{ background: swatch }}
+                    aria-label={`Use ${swatch}`}
+                    onClick={() => setSubprojectColor(swatch)}
+                  />
+                ))}
+              </div>
+              <button type="button" className="life-btn primary" disabled={savingSubproject || !subprojectName.trim()} onClick={() => void createSubproject()}>
+                {savingSubproject ? 'Creating…' : 'Create sub-project'}
+              </button>
+            </div>
+          </div>
+        ) : null}
+
+        {subprojects.length > 0 ? (
           <div className="life-project-children-grid">
             {subprojects.map((child) => (
               <Link key={child.slug} href={`/life/projects/${child.slug}`} className="life-project-child-card">
@@ -253,8 +347,10 @@ export function ProjectWorkspace({
               </Link>
             ))}
           </div>
-        </div>
-      ) : null}
+        ) : (
+          <div className="life-empty">No sub-projects yet.</div>
+        )}
+      </div>
 
       {error ? <p className="error-text">{error}</p> : null}
 

@@ -3584,12 +3584,15 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
 .life-shell .life-next-action-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--life-label); }
 .life-shell .life-next-action-title { font-size: 14px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .life-shell .life-project-children { display: grid; gap: 10px; }
-.life-shell .life-project-children-head { display: flex; align-items: center; gap: 8px; }
+.life-shell .life-project-children-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.life-shell .life-project-children-heading { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .life-shell .life-project-children-count { font-family: var(--font-mono); font-size: 11px; color: var(--life-label); }
 .life-shell .life-project-children-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
 .life-shell .life-project-child-card { display: flex; align-items: center; gap: 8px; min-height: 42px; padding: 0 12px; border: 1px solid var(--life-border); background: var(--life-panel); color: var(--life-text); text-decoration: none; }
 .life-shell .life-project-child-card:hover { border-color: #3a3a3a; }
 .life-shell .life-project-child-name { font-size: 13px; }
+.life-shell .life-project-child-add { min-height: 36px; }
+.life-shell .life-project-child-create { border-style: dashed; }
 
 /* Workspace tabs */
 .life-shell .life-project-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--life-hairline); }
@@ -3779,6 +3782,20 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
     color: var(--life-muted);
   }
   .life-shell .life-project-head-controls { justify-content: flex-start; }
+  .life-shell .life-project-children-head {
+    align-items: stretch;
+  }
+  .life-shell .life-project-child-add {
+    width: 100%;
+    min-height: 44px;
+    justify-content: center;
+  }
+  .life-shell .life-project-children-grid {
+    grid-template-columns: 1fr;
+  }
+  .life-shell .life-project-child-card {
+    min-height: 46px;
+  }
   .life-shell .life-project-pages { grid-template-columns: 1fr; }
   .life-shell .life-refs-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
 }
