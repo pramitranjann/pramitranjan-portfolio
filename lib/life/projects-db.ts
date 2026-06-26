@@ -231,6 +231,14 @@ export async function updateProject(
  */
 export async function deleteProject(slug: string): Promise<void> {
   const supabase = getSupabaseAdmin()
+  const [entriesResult, tasksResult] = await Promise.all([
+    supabase.from('entries').update({ project_slug: null }).eq('user_id', OWNER_ID).eq('project_slug', slug),
+    supabase.from('tasks').update({ project_slug: null }).eq('user_id', OWNER_ID).eq('project_slug', slug),
+  ])
+
+  if (entriesResult.error) throw entriesResult.error
+  if (tasksResult.error) throw tasksResult.error
+
   const { error } = await supabase.from('projects').delete().eq('slug', slug)
   if (error) throw error
   revalidateTag(PROJECTS_TAG, { expire: 0 })

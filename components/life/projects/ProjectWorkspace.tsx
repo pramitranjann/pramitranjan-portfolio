@@ -70,6 +70,7 @@ export function ProjectWorkspace({
   const [subprojectSummary, setSubprojectSummary] = useState('')
   const [subprojectColor, setSubprojectColor] = useState(project.color || PROJECT_SWATCHES[0])
   const [savingSubproject, setSavingSubproject] = useState(false)
+  const [deletingSlug, setDeletingSlug] = useState<string | null>(null)
 
   const open = tasks.filter((task) => task.status !== 'done')
   const done = tasks.filter((task) => task.status === 'done')
@@ -151,6 +152,26 @@ export function ProjectWorkspace({
       setError(err instanceof Error ? err.message : 'Failed to create sub-project.')
     } finally {
       setSavingSubproject(false)
+    }
+  }
+
+  async function deleteProjectBySlug(slug: string, name: string, redirectTo?: string) {
+    if (deletingSlug) return
+    const confirmed = window.confirm(`Delete "${name}"? Its tasks and entries will keep their history but lose the project label.`)
+    if (!confirmed) return
+
+    setDeletingSlug(slug)
+    setError(null)
+    try {
+      await fetchJson(`/api/life/projects/${slug}`, { method: 'DELETE' })
+      if (redirectTo) {
+        router.push(redirectTo)
+      }
+      router.refresh()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete project.')
+    } finally {
+      setDeletingSlug(null)
     }
   }
 
@@ -238,6 +259,14 @@ export function ProjectWorkspace({
           <button ref={dateBtnRef} type="button" className="life-pill" onClick={() => setCalOpen((value) => !value)}>
             <span className="ic">◷</span>
             <span className="lbl">{due ? due.text : 'Deadline'}</span>
+          </button>
+          <button
+            type="button"
+            className="life-entry-delete-mobile life-project-delete-action"
+            disabled={deletingSlug === project.slug}
+            onClick={() => void deleteProjectBySlug(project.slug, project.name, parentProject ? `/life/projects/${parentProject.slug}` : '/life/projects')}
+          >
+            {deletingSlug === project.slug ? 'Deleting project…' : parentProject ? 'Delete sub-project' : 'Delete project'}
           </button>
         </div>
       </div>
@@ -341,10 +370,20 @@ export function ProjectWorkspace({
         {subprojects.length > 0 ? (
           <div className="life-project-children-grid">
             {subprojects.map((child) => (
-              <Link key={child.slug} href={`/life/projects/${child.slug}`} className="life-project-child-card">
-                <span className="life-project-dot" style={{ background: child.color || 'var(--life-label)' }} />
-                <span className="life-project-child-name">{child.name}</span>
-              </Link>
+              <div key={child.slug} className="life-project-child-card">
+                <Link href={`/life/projects/${child.slug}`} className="life-project-child-link">
+                  <span className="life-project-dot" style={{ background: child.color || 'var(--life-label)' }} />
+                  <span className="life-project-child-name">{child.name}</span>
+                </Link>
+                <button
+                  type="button"
+                  className="life-entry-delete-mobile life-project-child-delete"
+                  disabled={deletingSlug === child.slug}
+                  onClick={() => void deleteProjectBySlug(child.slug, child.name)}
+                >
+                  {deletingSlug === child.slug ? 'Deleting…' : 'Delete'}
+                </button>
+              </div>
             ))}
           </div>
         ) : (
