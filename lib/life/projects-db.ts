@@ -176,7 +176,6 @@ export async function createProject(input: {
       parent_slug: parentSlug,
       aliases: input.aliases?.map((alias) => alias.trim().toLowerCase()).filter(Boolean) || [],
       sort_order: sortOrder,
-      user_id: OWNER_ID,
     })
     .select('*')
     .single()
