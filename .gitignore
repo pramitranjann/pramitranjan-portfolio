@@ -42,3 +42,6 @@ next-env.d.ts
 
 # Brainstorming visual companion
 .superpowers/
+
+# ESP32 firmware local secrets (Wi-Fi creds + device token)
+hardware/**/config.h

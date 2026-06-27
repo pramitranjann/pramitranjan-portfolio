@@ -3,10 +3,11 @@ import { redirect } from 'next/navigation'
 import { TasksClient } from '@/components/life/tasks/TasksClient'
 import { isAdminSession } from '@/lib/admin-auth'
 import { getCalendarEventsByIds } from '@/lib/life/calendar'
+import { derivePrintInfo, getPrintJobs } from '@/lib/life/print-jobs'
 import { getOwnerSettings } from '@/lib/life/settings'
 import { getTasks } from '@/lib/life/tasks'
 import { getCurrentLocalDate } from '@/lib/life/time'
-import type { TaskLinkedEvent } from '@/lib/life/types'
+import type { TaskLinkedEvent, TaskPrintInfo } from '@/lib/life/types'
 
 export default async function LifeTasksPage({
   searchParams,
@@ -23,6 +24,18 @@ export default async function LifeTasksPage({
   const settings = await getOwnerSettings()
   const today = getCurrentLocalDate(settings.timezone)
   const tasks = (await getTasks({ status: 'all' })).filter((task) => task.status !== 'dismissed')
+
+  // Print jobs drive the per-task print badges and the Print Management section.
+  // Best-effort: if the print_jobs table isn't migrated yet, the tasks page must
+  // still render, so a failure degrades to "no print data".
+  let printJobs: Awaited<ReturnType<typeof getPrintJobs>> = []
+  let printInfo: Record<string, TaskPrintInfo> = {}
+  try {
+    printJobs = await getPrintJobs()
+    printInfo = Object.fromEntries(derivePrintInfo(printJobs))
+  } catch (printError) {
+    console.error('Failed to load print jobs', printError)
+  }
 
   // Denormalise any linked calendar events so cards can show their time/title.
   const linkedEvents: Record<string, TaskLinkedEvent> = {}
@@ -52,6 +65,8 @@ export default async function LifeTasksPage({
       error={error}
       initialProjectSlug={initialProjectSlug}
       linkedEvents={linkedEvents}
+      printJobs={printJobs}
+      printInfo={printInfo}
     />
   )
 }

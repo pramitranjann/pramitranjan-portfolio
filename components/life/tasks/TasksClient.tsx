@@ -4,14 +4,62 @@ import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { LifeCalendar } from '@/components/life/tasks/LifeCalendar'
+import { PrintManagement } from '@/components/life/tasks/PrintManagement'
 import { TaskForm } from '@/components/life/tasks/TaskForm'
 import { useViewportMode } from '@/hooks/useViewportMode'
 import { fetchJson } from '@/lib/life/client'
 import { useLifeProjects } from '@/components/life/LifeProjectsProvider'
 import { localDateTimeToUtc } from '@/lib/life/time'
-import type { TaskDraft, TaskLinkedEvent, TaskPriority, TaskRecord, TaskStatus } from '@/lib/life/types'
+import type {
+  PrintJobRecord,
+  TaskDraft,
+  TaskLinkedEvent,
+  TaskPriority,
+  TaskPrintInfo,
+  TaskRecord,
+  TaskStatus,
+} from '@/lib/life/types'
 
-type TaskView = 'List' | 'Board'
+type TaskView = 'List' | 'Board' | 'Print'
+
+const PRINT_ROW_LABEL: Record<string, string> = {
+  pending: 'Queued',
+  leased: 'Printing…',
+  printed: 'Printed',
+}
+
+/** The per-row "Print task" control — the manual print action in the core flow.
+ * Shows current state; offers a print/retry button only when actionable. */
+function PrintControl({
+  info,
+  busy,
+  onQueue,
+}: {
+  info: TaskPrintInfo | undefined
+  busy: boolean
+  onQueue: () => void
+}) {
+  const state = info?.state ?? 'none'
+
+  if (state === 'none' || state === 'failed') {
+    return (
+      <button
+        type="button"
+        className={`life-print-inline${state === 'failed' ? ' is-failed' : ''}`}
+        disabled={busy}
+        title={state === 'failed' ? 'Print failed — queue again' : 'Print to desk'}
+        onClick={(event) => {
+          event.stopPropagation()
+          onQueue()
+        }}
+      >
+        {state === 'failed' ? '⟳ Print' : '🖨 Print'}
+      </button>
+    )
+  }
+
+  return <span className={`life-print-badge state-${state}`}>{PRINT_ROW_LABEL[state]}</span>
+}
 type TaskFilter = 'All' | 'Today' | 'Upcoming'
 
 function diffDays(dueLocalDate: string, today: string) {
@@ -132,6 +180,7 @@ function EditForm({
         priority: task.priority,
         dueLocalDate: task.due_local_date,
         calendarEventId: task.calendar_event_id,
+        deskEligible: task.desk_eligible,
       }}
       linkedEventLabel={linkedEventLabel}
       onSubmit={onSave}
@@ -178,6 +227,8 @@ export function TasksClient({
   error,
   initialProjectSlug = null,
   linkedEvents = {},
+  printJobs = [],
+  printInfo = {},
 }: {
   tasks: TaskRecord[]
   today: string
@@ -185,6 +236,8 @@ export function TasksClient({
   error: string | null
   initialProjectSlug?: string | null
   linkedEvents?: Record<string, TaskLinkedEvent>
+  printJobs?: PrintJobRecord[]
+  printInfo?: Record<string, TaskPrintInfo>
 }) {
   const router = useRouter()
   const { colorFor, labelFor, tintFor } = useLifeProjects()
@@ -201,6 +254,8 @@ export function TasksClient({
   const [dragId, setDragId] = useState<string | null>(null)
   const [dragOverCol, setDragOverCol] = useState<ColumnKey | null>(null)
   const [taskActionError, setTaskActionError] = useState<string | null>(null)
+  const [printBusyId, setPrintBusyId] = useState<string | null>(null)
+  const [printNote, setPrintNote] = useState<string | null>(null)
 
   useEffect(() => {
     setView(readStoredView())
@@ -258,6 +313,7 @@ export function TasksClient({
         priority: draft.priority,
         dueLocalDate: draft.dueLocalDate,
         calendar: draft.calendar,
+        deskEligible: draft.deskEligible === true,
       }),
     })
 
@@ -271,6 +327,7 @@ export function TasksClient({
               project_slug: draft.projectSlug,
               priority: draft.priority,
               due_local_date: draft.dueLocalDate,
+              desk_eligible: draft.deskEligible === true,
             }
           : task,
       ),
@@ -327,11 +384,77 @@ export function TasksClient({
         dueLocalDate: draft.dueLocalDate,
         status,
         calendar: draft.calendar,
+        deskEligible: draft.deskEligible === true,
       }),
     })
 
     setTaskActionError(null)
     router.refresh()
+  }
+
+  async function queuePrint(taskId: string) {
+    setPrintBusyId(taskId)
+    setPrintNote(null)
+    try {
+      const result = await fetchJson<{ duplicate?: boolean }>('/api/life/print-jobs', {
+        method: 'POST',
+        body: JSON.stringify({ taskId }),
+      })
+      setPrintNote(result?.duplicate ? 'Already queued — showing existing job.' : 'Queued for the desk printer.')
+      router.refresh()
+    } catch {
+      setPrintNote('Could not queue print job.')
+    } finally {
+      setPrintBusyId(null)
+    }
+  }
+
+  async function queuePrintMany(taskIds: string[]) {
+    setPrintNote(null)
+    let queued = 0
+    let duplicates = 0
+    for (const taskId of taskIds) {
+      try {
+        const result = await fetchJson<{ duplicate?: boolean }>('/api/life/print-jobs', {
+          method: 'POST',
+          body: JSON.stringify({ taskId }),
+        })
+        if (result?.duplicate) duplicates += 1
+        else queued += 1
+      } catch {
+        // Continue queueing the rest; a silent loss is worse than a partial batch.
+      }
+    }
+    setPrintNote(`Queued ${queued} task${queued === 1 ? '' : 's'}${duplicates ? `, ${duplicates} already queued` : ''}.`)
+    router.refresh()
+  }
+
+  async function reprintTask(taskId: string) {
+    setPrintNote(null)
+    try {
+      await fetchJson('/api/life/print-jobs', {
+        method: 'POST',
+        body: JSON.stringify({ taskId, reprint: true }),
+      })
+      setPrintNote('New reprint job created.')
+      router.refresh()
+    } catch {
+      setPrintNote('Could not create reprint.')
+    }
+  }
+
+  async function retryPrintJob(jobId: string) {
+    setPrintNote(null)
+    try {
+      await fetchJson(`/api/life/print-jobs/${jobId}`, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'retry' }),
+      })
+      setPrintNote('Job requeued.')
+      router.refresh()
+    } catch {
+      setPrintNote('Could not retry job.')
+    }
   }
 
   function eventChipFor(task: TaskRecord) {
@@ -566,6 +689,11 @@ export function TasksClient({
                       </span>
                       {eventChipFor(task)}
                       {cardDue ? <span className={`life-due-chip due-${cardDue.tone}`}>{cardDue.text}</span> : null}
+                      <PrintControl
+                        info={printInfo[task.id]}
+                        busy={printBusyId === task.id}
+                        onQueue={() => queuePrint(task.id)}
+                      />
                       <button
                         type="button"
                         className="life-kanban-delete"
@@ -663,13 +791,32 @@ export function TasksClient({
             >
               Board
             </button>
+            <button
+              type="button"
+              className={`segmented-item${view === 'Print' ? ' is-active' : ''}`}
+              onClick={() => handleViewChange('Print')}
+            >
+              Print
+            </button>
           </div>
         </div>
 
         {error ? <p className="error-text">{error}</p> : null}
         {taskActionError ? <p className="error-text">{taskActionError}</p> : null}
+        {printNote ? <p className="life-print-note">{printNote}</p> : null}
 
-        {view === 'List' ? (
+        {view === 'Print' ? (
+          <PrintManagement
+            tasks={items}
+            printJobs={printJobs}
+            printInfo={printInfo}
+            timezone={timezone}
+            labelFor={(slug) => (slug ? labelFor(slug) : 'General')}
+            onQueueMany={queuePrintMany}
+            onReprint={reprintTask}
+            onRetry={retryPrintJob}
+          />
+        ) : view === 'List' ? (
           <div className="life-list">
             {scopedItems.map((task) => {
               const isDone = task.status === 'done'
@@ -717,6 +864,7 @@ export function TasksClient({
                   <div className="life-task-meta">
                     <span className="life-tag">{project}</span>
                     <span className="life-row-aside">{due}</span>
+                    <PrintControl info={printInfo[task.id]} busy={printBusyId === task.id} onQueue={() => queuePrint(task.id)} />
                   </div>
                 </div>
               )
@@ -829,14 +977,33 @@ export function TasksClient({
             >
               Board
             </button>
+            <button
+              type="button"
+              className={`segmented-item${view === 'Print' ? ' is-active' : ''}`}
+              onClick={() => handleViewChange('Print')}
+            >
+              Print
+            </button>
           </div>
         </div>
       </div>
 
       {error ? <p className="error-text">{error}</p> : null}
       {taskActionError ? <p className="error-text">{taskActionError}</p> : null}
+      {printNote ? <p className="life-print-note">{printNote}</p> : null}
 
-      {view === 'List' ? (
+      {view === 'Print' ? (
+        <PrintManagement
+          tasks={items}
+          printJobs={printJobs}
+          printInfo={printInfo}
+          timezone={timezone}
+          labelFor={(slug) => (slug ? labelFor(slug) : 'General')}
+          onQueueMany={queuePrintMany}
+          onReprint={reprintTask}
+          onRetry={retryPrintJob}
+        />
+      ) : view === 'List' ? (
         <div className="life-list">
           <div className="life-list-add">
             <span className="life-list-add-icon">+</span>
@@ -932,6 +1099,11 @@ export function TasksClient({
                             {cardDue ? (
                               <span className={`life-due-chip${isDone ? '' : ` due-${cardDue.tone}`}`}>{cardDue.text}</span>
                             ) : null}
+                            <PrintControl
+                              info={printInfo[task.id]}
+                              busy={printBusyId === task.id}
+                              onQueue={() => queuePrint(task.id)}
+                            />
                           </div>
                         </div>
                       )

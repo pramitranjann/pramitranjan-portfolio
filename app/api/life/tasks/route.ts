@@ -82,6 +82,7 @@ export async function POST(request: NextRequest) {
       redirectTo?: string | null
       calendar?: TaskCalendarIntent | null
       milestoneId?: string | null
+      deskEligible?: boolean | null
     } | null = null
 
     if (isJsonRequest) {
@@ -108,6 +109,7 @@ export async function POST(request: NextRequest) {
       priority: payload?.priority || null,
       status: payload?.status || null,
       milestoneId: payload?.milestoneId || null,
+      deskEligible: payload?.deskEligible === true,
     })
 
     if (!isJsonRequest) {

@@ -2,6 +2,7 @@ import { TASK_EXTRACTION_SYSTEM_PROMPT, OWNER_ID } from '@/lib/life/constants'
 import { callClaude } from '@/lib/life/claude'
 import { detectProjectSlug, LIFE_PROJECTS, normalizeProjectSlug } from '@/lib/life/projects'
 import { detectProjectSlugDb, normalizeProjectSlugDb } from '@/lib/life/projects-db'
+import { createPrintJob } from '@/lib/life/print-jobs'
 import { getOwnerSettings } from '@/lib/life/settings'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
 import { addDays, getCurrentLocalDate, getWeekStart } from '@/lib/life/time'
@@ -132,6 +133,19 @@ export async function getTasks(options?: {
   return data || []
 }
 
+export async function getTaskById(taskId: string): Promise<TaskRecord | null> {
+  const supabase = getSupabaseAdmin()
+  const { data, error } = await supabase
+    .from('tasks')
+    .select('*')
+    .eq('user_id', OWNER_ID)
+    .eq('id', taskId)
+    .maybeSingle()
+
+  if (error) throw error
+  return (data as TaskRecord | null) ?? null
+}
+
 export async function createManualTask(input: {
   title: string
   details?: string | null
@@ -140,6 +154,7 @@ export async function createManualTask(input: {
   priority?: string | null
   status?: TaskStatus | null
   milestoneId?: string | null
+  deskEligible?: boolean | null
 }) {
   const title = input.title.trim()
   if (!title) {
@@ -172,6 +187,7 @@ export async function createManualTask(input: {
       source_local_date: getCurrentLocalDate(settings.timezone),
       auto_generated: false,
       fingerprint: null,
+      desk_eligible: input.deskEligible === true,
     })
     .select('*')
     .single()
@@ -180,7 +196,20 @@ export async function createManualTask(input: {
     throw error
   }
 
-  return data as TaskRecord
+  const task = data as TaskRecord
+
+  // V2 auto-queue: if this task is flagged for the desk, queue a receipt now,
+  // inline (no cron). Best-effort, like the voice→task mirror — a print-queue
+  // failure must never fail the task creation itself.
+  if (task.desk_eligible) {
+    try {
+      await createPrintJob({ task })
+    } catch (printError) {
+      console.error('Auto-queue desk print failed', printError)
+    }
+  }
+
+  return task
 }
 
 export async function updateTask(taskId: string, fields: {
@@ -191,6 +220,7 @@ export async function updateTask(taskId: string, fields: {
   dueLocalDate?: string | null
   calendarEventId?: string | null
   milestoneId?: string | null
+  deskEligible?: boolean
 }) {
   const supabase = getSupabaseAdmin()
   const update: Record<string, unknown> = { updated_at: new Date().toISOString() }
@@ -201,6 +231,7 @@ export async function updateTask(taskId: string, fields: {
   if ('dueLocalDate' in fields) update.due_local_date = fields.dueLocalDate ?? null
   if ('calendarEventId' in fields) update.calendar_event_id = fields.calendarEventId ?? null
   if ('milestoneId' in fields) update.milestone_id = fields.milestoneId ?? null
+  if ('deskEligible' in fields) update.desk_eligible = fields.deskEligible === true
 
   const { data, error } = await supabase
     .from('tasks')

@@ -79,6 +79,7 @@ export interface TaskRecord {
   fingerprint: string | null;
   calendar_event_id: string | null;
   milestone_id: string | null;
+  desk_eligible: boolean;
   created_at: string;
   updated_at: string;
   completed_at: string | null;
@@ -108,6 +109,8 @@ export interface TaskDraft {
   priority: TaskPriority;
   dueLocalDate: string | null;
   calendar: TaskCalendarIntent;
+  /** Create-only: auto-queue a desk receipt when the task is created. */
+  deskEligible?: boolean;
 }
 
 export interface TaskCandidate {
@@ -154,6 +157,41 @@ export interface LifeSearchResults {
   tasks: LifeSearchTaskHit[];
   entries: LifeSearchEntryHit[];
   events: LifeSearchEventHit[];
+}
+
+export type PrintJobStatus = "pending" | "leased" | "printed" | "failed";
+
+/** A queued desk-printer receipt. The brain (PR Life) fills this; the ESP32
+ * only leases, prints, and reports back. */
+export interface PrintJobRecord {
+  id: string;
+  user_id: string;
+  task_id: string | null;
+  device_id: string;
+  task_title: string;
+  receipt_payload: string;
+  status: PrintJobStatus;
+  attempts: number;
+  last_error: string | null;
+  created_at: string;
+  leased_at: string | null;
+  lease_expires_at: string | null;
+  printed_at: string | null;
+}
+
+/** Per-task print state, derived from the latest job for that task. Drives the
+ * badges in Print Management. "none" = never queued (distinct from failed). */
+export type TaskPrintState = "none" | "pending" | "leased" | "printed" | "failed";
+
+export interface TaskPrintInfo {
+  state: TaskPrintState;
+  jobId: string | null;
+  printedAt: string | null;
+  lastError: string | null;
+  attempts: number;
+  /** True when a successful receipt exists, even if the latest job later failed
+   * or the task was completed — so "already printed" stays visible. */
+  hasPrinted: boolean;
 }
 
 export type ProjectStatus = "active" | "on_hold" | "done";

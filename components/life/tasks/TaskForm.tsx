@@ -70,6 +70,7 @@ export function TaskForm({
     priority?: TaskPriority
     dueLocalDate?: string | null
     calendarEventId?: string | null
+    deskEligible?: boolean
   }
   linkedEventLabel?: string | null
   onSubmit: (draft: TaskDraft) => Promise<void>
@@ -89,6 +90,7 @@ export function TaskForm({
   const [subprojectSlug, setSubprojectSlug] = useState(initialSubprojectSlug)
   const [priority, setPriority] = useState<TaskPriority>(initial?.priority || 'medium')
   const [due, setDue] = useState(initial?.dueLocalDate || '')
+  const [deskEligible, setDeskEligible] = useState(initial?.deskEligible ?? false)
   const [calMode, setCalMode] = useState<CalMode>(initial?.calendarEventId ? 'link' : 'none')
   const [linkEventId, setLinkEventId] = useState(initial?.calendarEventId || '')
   const [linkLabel, setLinkLabel] = useState(linkedEventLabel || 'Event')
@@ -164,6 +166,7 @@ export function TaskForm({
     setDue('')
     setCalMode('none')
     setLinkEventId('')
+    setDeskEligible(false)
     if (descRef.current) descRef.current.style.height = 'auto'
     titleRef.current?.focus()
   }
@@ -190,6 +193,7 @@ export function TaskForm({
         priority,
         dueLocalDate: due || null,
         calendar,
+        deskEligible,
       })
       if (resetOnSubmit) resetFields()
     } catch (err) {
@@ -374,6 +378,20 @@ export function TaskForm({
               </div>
             </div>
           ) : null}
+        </div>
+
+        {/* Print to desk — sets desk_eligible. On create, the task auto-queues
+            a receipt; on edit, turning it on queues one now (see PATCH route). */}
+        <div className="life-pill-wrap">
+          <button
+            type="button"
+            className={`life-pill${deskEligible ? ' set' : ''}`}
+            onClick={() => setDeskEligible((value) => !value)}
+            title="Queue a desk receipt for this task"
+          >
+            <span className="ic">🖨</span>
+            <span className="lbl">{deskEligible ? 'Desk print on' : 'Print to desk'}</span>
+          </button>
         </div>
       </div>
 

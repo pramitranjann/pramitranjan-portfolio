@@ -3806,3 +3806,63 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
   .life-shell .life-project-pages { grid-template-columns: 1fr; }
   .life-shell .life-refs-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
 }
+
+/* ---- Desk printer: per-row control, state badges, Print Management ---- */
+.life-shell .life-print-inline {
+  display: inline-flex; align-items: center; gap: 4px;
+  height: 20px; padding: 0 8px; border: 1px solid var(--life-hairline);
+  background: var(--life-muted-bg); color: var(--life-muted);
+  font-size: 11px; font-weight: 500; cursor: pointer; white-space: nowrap;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.life-shell .life-print-inline:hover { color: var(--life-text); border-color: var(--life-muted); }
+.life-shell .life-print-inline:disabled { opacity: 0.5; cursor: default; }
+.life-shell .life-print-inline.is-failed { color: var(--life-danger); border-color: var(--life-danger); }
+
+.life-shell .life-print-badge {
+  display: inline-flex; align-items: center; height: 20px; padding: 0 8px;
+  border: 1px solid var(--life-hairline); background: var(--life-muted-bg);
+  font-size: 11px; font-weight: 500; white-space: nowrap;
+}
+.life-shell .life-print-badge.state-pending { color: var(--life-amber); border-color: var(--life-amber); }
+.life-shell .life-print-badge.state-leased { color: var(--life-accent); border-color: var(--life-accent); }
+.life-shell .life-print-badge.state-printed { color: var(--life-green); border-color: var(--life-green); }
+.life-shell .life-print-badge.state-failed { color: var(--life-danger); border-color: var(--life-danger); }
+
+.life-shell .life-print-note { margin: 8px 0 0; font-size: 13px; color: var(--life-muted); }
+
+.life-shell .life-print-section { display: flex; flex-direction: column; gap: 22px; margin-top: 14px; }
+.life-shell .life-print-filterbar { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+.life-shell .life-print-select {
+  height: 30px; padding: 0 10px; border: 1px solid var(--life-border);
+  background: var(--life-panel-2); color: var(--life-text); font-size: 13px;
+}
+.life-shell .life-print-check-label {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--life-muted); cursor: pointer;
+}
+
+.life-shell .life-print-bucket { display: flex; flex-direction: column; gap: 8px; }
+.life-shell .life-print-bucket-head { display: flex; align-items: center; gap: 10px; }
+.life-shell .life-print-bucket-head h3 { margin: 0; font-size: 14px; font-weight: 600; color: var(--life-text); }
+.life-shell .life-print-count {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px;
+  padding: 0 6px; border: 1px solid var(--life-hairline); background: var(--life-muted-bg);
+  color: var(--life-muted); font-size: 11px; font-variant-numeric: tabular-nums;
+}
+.life-shell .life-print-bucket-actions { display: flex; gap: 8px; margin-left: auto; }
+
+.life-shell .life-print-rows { display: flex; flex-direction: column; }
+.life-shell .life-print-row {
+  display: flex; align-items: center; gap: 10px; padding: 9px 4px;
+  border-bottom: 1px solid var(--life-hairline);
+}
+.life-shell .life-print-row:last-child { border-bottom: 0; }
+.life-shell .life-print-row-title { flex: 1; min-width: 0; font-size: 14px; color: var(--life-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.life-shell .life-print-row-title.is-done { color: var(--life-muted); text-decoration: line-through; }
+.life-shell .life-print-row-meta { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.life-shell .life-print-code { font-family: var(--font-mono); font-size: 11px; color: var(--life-label); letter-spacing: 0.04em; }
+.life-shell .life-print-when { font-size: 12px; color: var(--life-label); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.life-shell .life-print-error {
+  font-size: 12px; color: var(--life-danger); max-width: 220px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
