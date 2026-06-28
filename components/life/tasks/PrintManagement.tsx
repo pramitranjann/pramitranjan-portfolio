@@ -54,8 +54,8 @@ export function PrintManagement({
   printInfo: Record<string, TaskPrintInfo>
   timezone: string
   labelFor: (slug: string | null) => string
-  onQueueMany: (taskIds: string[]) => Promise<void>
-  onReprint: (taskId: string) => Promise<void>
+  onQueueMany: (taskIds: string[]) => Promise<boolean>
+  onReprint: (taskId: string) => Promise<boolean>
   onRetry: (jobId: string) => Promise<void>
 }) {
   const now = Date.now()
@@ -109,8 +109,8 @@ export function PrintManagement({
     if (!ids.length || busy) return
     setBusy(true)
     try {
-      await onQueueMany(ids)
-      setSelected(new Set())
+      const queued = await onQueueMany(ids)
+      if (queued) setSelected(new Set())
     } finally {
       setBusy(false)
     }
@@ -118,7 +118,6 @@ export function PrintManagement({
 
   async function reprint(taskId: string) {
     if (busy) return
-    if (!window.confirm('Reprint this receipt? This creates a new print job and may print a duplicate.')) return
     setBusy(true)
     try {
       await onReprint(taskId)

@@ -9,6 +9,7 @@ import { TaskForm } from '@/components/life/tasks/TaskForm'
 import { useViewportMode } from '@/hooks/useViewportMode'
 import { fetchJson } from '@/lib/life/client'
 import { useLifeProjects } from '@/components/life/LifeProjectsProvider'
+import type { ReceiptLayout } from '@/lib/life/receipt'
 import { localDateTimeToUtc } from '@/lib/life/time'
 import type {
   PrintJobRecord,
@@ -28,16 +29,56 @@ const PRINT_ROW_LABEL: Record<string, string> = {
   printed: 'Printed',
 }
 
+const PRINT_LAYOUT_CHOICES: Array<{
+  value: ReceiptLayout
+  label: string
+  eyebrow: string
+  description: string
+}> = [
+  {
+    value: 'compact',
+    label: 'Compact',
+    eyebrow: 'Fast ticket',
+    description: 'Minimal receipt with title, checkbox, and one short meta line.',
+  },
+  {
+    value: 'standard',
+    label: 'Standard',
+    eyebrow: 'Balanced',
+    description: 'Timestamped receipt with area and due date. Adds top feed so the cutter does not clip it.',
+  },
+  {
+    value: 'focus',
+    label: 'Focus',
+    eyebrow: 'Deep work',
+    description: 'Extra spacing plus task details. Adds top feed so the cutter does not clip it.',
+  },
+]
+
+const PRINT_LAYOUT_LABEL: Record<ReceiptLayout, string> = {
+  compact: 'Compact',
+  standard: 'Standard',
+  focus: 'Focus',
+}
+
+type PrintLayoutRequest = {
+  heading: string
+  detail: string
+  resolve: (layout: ReceiptLayout | null) => void
+}
+
 /** The per-row "Print task" control — the manual print action in the core flow.
  * Shows current state; offers a print/retry button only when actionable. */
 function PrintControl({
   info,
   busy,
   onQueue,
+  onReprint,
 }: {
   info: TaskPrintInfo | undefined
   busy: boolean
   onQueue: () => void
+  onReprint: () => void
 }) {
   const state = info?.state ?? 'none'
 
@@ -54,6 +95,23 @@ function PrintControl({
         }}
       >
         {state === 'failed' ? '⟳ Print' : '🖨 Print'}
+      </button>
+    )
+  }
+
+  if (state === 'printed') {
+    return (
+      <button
+        type="button"
+        className="life-print-inline is-printed"
+        disabled={busy}
+        title="Reprint to desk"
+        onClick={(event) => {
+          event.stopPropagation()
+          onReprint()
+        }}
+      >
+        ⟳ Reprint
       </button>
     )
   }
@@ -256,6 +314,7 @@ export function TasksClient({
   const [taskActionError, setTaskActionError] = useState<string | null>(null)
   const [printBusyId, setPrintBusyId] = useState<string | null>(null)
   const [printNote, setPrintNote] = useState<string | null>(null)
+  const [printLayoutRequest, setPrintLayoutRequest] = useState<PrintLayoutRequest | null>(null)
 
   useEffect(() => {
     setView(readStoredView())
@@ -392,24 +451,57 @@ export function TasksClient({
     router.refresh()
   }
 
+  function taskForId(taskId: string) {
+    return items.find((task) => task.id === taskId) ?? tasks.find((task) => task.id === taskId) ?? null
+  }
+
+  function requestPrintLayout(heading: string, detail: string) {
+    if (printLayoutRequest) return Promise.resolve<ReceiptLayout | null>(null)
+    return new Promise<ReceiptLayout | null>((resolve) => {
+      setPrintLayoutRequest({ heading, detail, resolve })
+    })
+  }
+
+  function closePrintLayoutRequest(layout: ReceiptLayout | null) {
+    if (!printLayoutRequest) return
+    printLayoutRequest.resolve(layout)
+    setPrintLayoutRequest(null)
+  }
+
   async function queuePrint(taskId: string) {
+    const task = taskForId(taskId)
+    const layout = await requestPrintLayout(
+      'Choose print layout',
+      task ? `Queue "${task.title}" to the desk printer.` : 'Queue this task to the desk printer.',
+    )
+    if (!layout) return false
     setPrintBusyId(taskId)
     setPrintNote(null)
     try {
       const result = await fetchJson<{ duplicate?: boolean }>('/api/life/print-jobs', {
         method: 'POST',
-        body: JSON.stringify({ taskId }),
+        body: JSON.stringify({ taskId, layout }),
       })
-      setPrintNote(result?.duplicate ? 'Already queued — showing existing job.' : 'Queued for the desk printer.')
+      setPrintNote(
+        result?.duplicate
+          ? `Already queued — showing existing ${PRINT_LAYOUT_LABEL[layout]} job.`
+          : `Queued ${PRINT_LAYOUT_LABEL[layout]} receipt for the desk printer.`,
+      )
       router.refresh()
     } catch {
       setPrintNote('Could not queue print job.')
     } finally {
       setPrintBusyId(null)
     }
+    return true
   }
 
   async function queuePrintMany(taskIds: string[]) {
+    const layout = await requestPrintLayout(
+      'Choose print layout',
+      `Queue ${taskIds.length} selected task${taskIds.length === 1 ? '' : 's'} to the desk printer with one shared layout.`,
+    )
+    if (!layout) return false
     setPrintNote(null)
     let queued = 0
     let duplicates = 0
@@ -417,7 +509,7 @@ export function TasksClient({
       try {
         const result = await fetchJson<{ duplicate?: boolean }>('/api/life/print-jobs', {
           method: 'POST',
-          body: JSON.stringify({ taskId }),
+          body: JSON.stringify({ taskId, layout }),
         })
         if (result?.duplicate) duplicates += 1
         else queued += 1
@@ -425,22 +517,39 @@ export function TasksClient({
         // Continue queueing the rest; a silent loss is worse than a partial batch.
       }
     }
-    setPrintNote(`Queued ${queued} task${queued === 1 ? '' : 's'}${duplicates ? `, ${duplicates} already queued` : ''}.`)
+    setPrintNote(
+      `Queued ${queued} task${queued === 1 ? '' : 's'} as ${PRINT_LAYOUT_LABEL[layout]}${
+        duplicates ? `, ${duplicates} already queued` : ''
+      }.`,
+    )
     router.refresh()
+    return true
   }
 
   async function reprintTask(taskId: string) {
+    const task = taskForId(taskId)
+    const layout = await requestPrintLayout(
+      'Choose reprint layout',
+      task
+        ? `Reprint "${task.title}". This creates a new job and may produce a duplicate paper copy.`
+        : 'Create a duplicate print job with the chosen layout.',
+    )
+    if (!layout) return false
+    setPrintBusyId(taskId)
     setPrintNote(null)
     try {
       await fetchJson('/api/life/print-jobs', {
         method: 'POST',
-        body: JSON.stringify({ taskId, reprint: true }),
+        body: JSON.stringify({ taskId, reprint: true, layout }),
       })
-      setPrintNote('New reprint job created.')
+      setPrintNote(`New ${PRINT_LAYOUT_LABEL[layout]} reprint job created.`)
       router.refresh()
     } catch {
       setPrintNote('Could not create reprint.')
+    } finally {
+      setPrintBusyId(null)
     }
+    return true
   }
 
   async function retryPrintJob(jobId: string) {
@@ -590,6 +699,43 @@ export function TasksClient({
 
   const isPhone = viewport === 'phone'
   const showRowProject = groupBy !== 'project'
+  const printLayoutDialog = printLayoutRequest ? (
+    <div className="life-print-layout-overlay" role="presentation">
+      <div className="life-print-layout-backdrop" onClick={() => closePrintLayoutRequest(null)} />
+      <aside
+        className={`life-print-layout-panel${isPhone ? ' is-phone' : ''}`}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="life-print-layout-title"
+      >
+        <div className="life-print-layout-head">
+          <div>
+            <p className="eyebrow">Desk Printer</p>
+            <h2 id="life-print-layout-title">{printLayoutRequest.heading}</h2>
+            <p className="life-print-layout-copy">{printLayoutRequest.detail}</p>
+          </div>
+          <button type="button" className="life-btn ghost" onClick={() => closePrintLayoutRequest(null)}>
+            Cancel
+          </button>
+        </div>
+
+        <div className="life-print-layout-grid">
+          {PRINT_LAYOUT_CHOICES.map((choice) => (
+            <button
+              key={choice.value}
+              type="button"
+              className="life-print-layout-card"
+              onClick={() => closePrintLayoutRequest(choice.value)}
+            >
+              <span className="life-print-layout-card-eyebrow">{choice.eyebrow}</span>
+              <span className="life-print-layout-card-title">{choice.label}</span>
+              <span className="life-print-layout-card-body">{choice.description}</span>
+            </button>
+          ))}
+        </div>
+      </aside>
+    </div>
+  ) : null
 
   function renderBoard() {
     return (
@@ -693,6 +839,7 @@ export function TasksClient({
                         info={printInfo[task.id]}
                         busy={printBusyId === task.id}
                         onQueue={() => queuePrint(task.id)}
+                        onReprint={() => reprintTask(task.id)}
                       />
                       <button
                         type="button"
@@ -719,6 +866,7 @@ export function TasksClient({
 
   if (isPhone) {
     return (
+      <>
       <div style={{ padding: '18px 16px 0' }}>
         <div className="life-page-head">
           <div>
@@ -864,7 +1012,7 @@ export function TasksClient({
                   <div className="life-task-meta">
                     <span className="life-tag">{project}</span>
                     <span className="life-row-aside">{due}</span>
-                    <PrintControl info={printInfo[task.id]} busy={printBusyId === task.id} onQueue={() => queuePrint(task.id)} />
+                    <PrintControl info={printInfo[task.id]} busy={printBusyId === task.id} onQueue={() => queuePrint(task.id)} onReprint={() => reprintTask(task.id)} />
                   </div>
                 </div>
               )
@@ -876,10 +1024,13 @@ export function TasksClient({
           renderBoard()
         )}
       </div>
+      {printLayoutDialog}
+      </>
     )
   }
 
   return (
+    <>
     <div className={`life-tasks-shell${view === 'Board' ? ' is-board' : ''}`}>
       <div className="life-page-head">
         <div>
@@ -1103,6 +1254,7 @@ export function TasksClient({
                               info={printInfo[task.id]}
                               busy={printBusyId === task.id}
                               onQueue={() => queuePrint(task.id)}
+                              onReprint={() => reprintTask(task.id)}
                             />
                           </div>
                         </div>
@@ -1120,5 +1272,7 @@ export function TasksClient({
         renderBoard()
       )}
     </div>
+    {printLayoutDialog}
+    </>
   )
 }

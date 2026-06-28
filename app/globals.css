@@ -3818,6 +3818,7 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
 .life-shell .life-print-inline:hover { color: var(--life-text); border-color: var(--life-muted); }
 .life-shell .life-print-inline:disabled { opacity: 0.5; cursor: default; }
 .life-shell .life-print-inline.is-failed { color: var(--life-danger); border-color: var(--life-danger); }
+.life-shell .life-print-inline.is-printed { color: var(--life-green); border-color: var(--life-green); }
 
 .life-shell .life-print-badge {
   display: inline-flex; align-items: center; height: 20px; padding: 0 8px;
@@ -3830,6 +3831,108 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
 .life-shell .life-print-badge.state-failed { color: var(--life-danger); border-color: var(--life-danger); }
 
 .life-shell .life-print-note { margin: 8px 0 0; font-size: 13px; color: var(--life-muted); }
+
+.life-shell .life-print-layout-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 320;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.life-shell .life-print-layout-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.56);
+}
+
+.life-shell .life-print-layout-panel {
+  position: relative;
+  width: min(640px, calc(100vw - 48px));
+  padding: 22px;
+  border: 1px solid var(--life-border);
+  background: var(--life-bg);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.4);
+  display: grid;
+  gap: 18px;
+}
+
+.life-shell .life-print-layout-panel.is-phone {
+  width: 100%;
+  max-width: 100%;
+  max-height: calc(100dvh - 20px);
+  overflow: auto;
+}
+
+.life-shell .life-print-layout-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.life-shell .life-print-layout-head h2 {
+  margin: 6px 0 0;
+  font-family: var(--life-display);
+  font-size: 24px;
+  font-weight: var(--life-display-weight);
+}
+
+.life-shell .life-print-layout-copy {
+  margin: 8px 0 0;
+  max-width: 48ch;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--life-muted);
+}
+
+.life-shell .life-print-layout-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.life-shell .life-print-layout-card {
+  min-height: 168px;
+  padding: 16px;
+  border: 1px solid var(--life-border);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0));
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  text-align: left;
+  color: var(--life-text);
+  cursor: pointer;
+  transition: border-color 0.18s ease, transform 0.18s ease, background 0.18s ease;
+}
+
+.life-shell .life-print-layout-card:hover {
+  border-color: var(--life-text);
+  background: rgba(255, 255, 255, 0.04);
+  transform: translateY(-1px);
+}
+
+.life-shell .life-print-layout-card-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--life-label);
+}
+
+.life-shell .life-print-layout-card-title {
+  font-family: var(--life-display);
+  font-size: 22px;
+  font-weight: var(--life-display-weight);
+}
+
+.life-shell .life-print-layout-card-body {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--life-muted);
+}
 
 .life-shell .life-print-section { display: flex; flex-direction: column; gap: 22px; margin-top: 14px; }
 .life-shell .life-print-filterbar { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
@@ -3865,4 +3968,28 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
 .life-shell .life-print-error {
   font-size: 12px; color: var(--life-danger); max-width: 220px;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+@media (max-width: 699px) {
+  .life-shell .life-print-layout-overlay {
+    padding: 10px;
+    align-items: stretch;
+  }
+
+  .life-shell .life-print-layout-panel {
+    width: 100%;
+    padding: 18px;
+  }
+
+  .life-shell .life-print-layout-head {
+    flex-direction: column;
+  }
+
+  .life-shell .life-print-layout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .life-shell .life-print-layout-card {
+    min-height: 0;
+  }
 }

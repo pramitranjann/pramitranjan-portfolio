@@ -1,111 +1,170 @@
 /*
- * PR LIFE — Print worker firmware
- * ===============================
- * The desk ESP32 is an OUTBOUND-ONLY client. It never accepts inbound
- * connections and never decides what to print. It just:
+ * PR LIFE — Print worker firmware (BLE edition)
+ * ==============================================
+ * Printer: "BlueTooth Printer", BLE, service 18F0, write char 2AF1.
+ * Connection: scans by name/MAC, connects using discovered device object.
  *
- *   1. Connects to 2.4 GHz Wi-Fi.
- *   2. Every 5–10s, POSTs /api/life/printer/claim with the device token.
- *   3. If a job is leased, prints the supplied receipt payload over
- *      Bluetooth Classic SPP (raw ESC/POS).
- *   4. POSTs /api/life/printer/complete with success or a failure reason.
- *   5. Recovers from Wi-Fi / Bluetooth / API / printer / power failures.
+ * Flow:
+ *   1. Connect to Wi-Fi.
+ *   2. Scan and connect to the BLE printer (persists connection between jobs).
+ *   3. Every POLL_INTERVAL_MS: POST /api/life/printer/claim.
+ *   4. If a job is leased, write the payload over BLE in 20-byte chunks.
+ *   5. POST /api/life/printer/complete with success or failure.
+ *   6. Recover from Wi-Fi / BLE / API / printer / power failures.
  *
- * PR Life is the brain; this device holds only the device token and prints
- * compact, ready-made receipts. A dropped lease is auto-reclaimed server-side,
- * so a crash here never loses a job (a rare duplicate is acceptable).
- *
- * Dependencies (Library Manager): "ArduinoJson" (v7+).
+ * Dependencies: ArduinoJson v7+.
  * Board: ESP32 Dev Module. Core 3.x. Copy config.example.h -> config.h first.
- *
- * NOTE: TLS uses setInsecure() for simplicity (no cert pinning). Fine for a
- * personal device on your own network; pin the root CA later if desired.
  */
 
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
-#include "BluetoothSerial.h"
+#include <BLEDevice.h>
+#include <BLEScan.h>
+#include <BLEClient.h>
+#include <BLEAdvertisedDevice.h>
+#include <BLERemoteService.h>
+#include <BLERemoteCharacteristic.h>
 #include "config.h"
 
-BluetoothSerial SerialBT;
-uint8_t PRINTER_MAC[6] = PRINTER_MAC_BYTES;
+#define PRINTER_SVC_UUID  "000018f0-0000-1000-8000-00805f9b34fb"
+#define PRINTER_CHAR_UUID "00002af1-0000-1000-8000-00805f9b34fb"
+#define BLE_SCAN_SECONDS  15
+#define CHUNK_SIZE        20
+#define CHUNK_DELAY_MS    30
 
-unsigned long lastPoll = 0;
+static BLEAdvertisedDevice *printerDevice = nullptr;
+static BLEClient           *bleClient     = nullptr;
+static BLERemoteCharacteristic *writeChar = nullptr;
+static unsigned long lastPoll = 0;
+
+// ---- BLE scanner -----------------------------------------------------------
+class ScanCallback : public BLEAdvertisedDeviceCallbacks {
+  void onResult(BLEAdvertisedDevice dev) {
+    String name = dev.haveName() ? dev.getName().c_str() : "";
+    String mac  = dev.getAddress().toString().c_str();
+    if (name == PRINTER_BLE_NAME || mac == PRINTER_BLE_MAC) {
+      Serial.printf("[BLE] Found printer: %s (%s)\n", name.c_str(), mac.c_str());
+      printerDevice = new BLEAdvertisedDevice(dev);
+      BLEDevice::getScan()->stop();
+    }
+  }
+};
+
+// ---- BLE connection --------------------------------------------------------
+bool bleScan() {
+  if (printerDevice) { delete printerDevice; printerDevice = nullptr; }
+  Serial.printf("[BLE] Scanning up to %ds for printer...\n", BLE_SCAN_SECONDS);
+
+  BLEScan *scan = BLEDevice::getScan();
+  scan->setAdvertisedDeviceCallbacks(new ScanCallback(), true);
+  scan->setActiveScan(true);
+  scan->setInterval(100);
+  scan->setWindow(99);
+  scan->start(BLE_SCAN_SECONDS, false);
+
+  if (!printerDevice) {
+    Serial.println("[BLE] Printer not found in scan window.");
+    return false;
+  }
+  return true;
+}
+
+bool bleConnect() {
+  if (!printerDevice && !bleScan()) return false;
+
+  if (bleClient) { delete bleClient; bleClient = nullptr; writeChar = nullptr; }
+  bleClient = BLEDevice::createClient();
+
+  Serial.printf("[BLE] Connecting to %s...\n",
+                printerDevice->getAddress().toString().c_str());
+  if (!bleClient->connect(printerDevice)) {
+    Serial.println("[BLE] connect() failed.");
+    return false;
+  }
+
+  BLERemoteService *svc = bleClient->getService(PRINTER_SVC_UUID);
+  if (!svc) {
+    Serial.println("[BLE] Service 18F0 not found.");
+    bleClient->disconnect();
+    return false;
+  }
+  writeChar = svc->getCharacteristic(PRINTER_CHAR_UUID);
+  if (!writeChar) {
+    Serial.println("[BLE] Characteristic 2AF1 not found.");
+    bleClient->disconnect();
+    return false;
+  }
+
+  Serial.println("[BLE] Printer connected and ready.");
+  return true;
+}
+
+bool ensurePrinter() {
+  if (bleClient && bleClient->isConnected() && writeChar) return true;
+  Serial.println("[BLE] Not connected; reconnecting...");
+  // Re-scan so we get a fresh device object with the correct address type.
+  printerDevice = nullptr;
+  return bleConnect();
+}
+
+// ---- BLE write (chunked) ---------------------------------------------------
+bool bleWrite(const uint8_t *data, size_t len) {
+  if (!writeChar) return false;
+  size_t offset = 0;
+  while (offset < len) {
+    size_t chunk = min(len - offset, (size_t)CHUNK_SIZE);
+    writeChar->writeValue((uint8_t *)(data + offset), chunk, false);
+    offset += chunk;
+    delay(CHUNK_DELAY_MS);
+  }
+  return true;
+}
+
+bool printPayload(const String &payload) {
+  if (!ensurePrinter()) return false;
+  const uint8_t init[] = { 0x1B, 0x40 };
+  bleWrite(init, sizeof(init));
+  bleWrite((const uint8_t *)payload.c_str(), payload.length());
+  const uint8_t nl[] = { '\n' };
+  bleWrite(nl, 1);
+  const uint8_t feed[] = { 0x1B, 0x64, 0x04 };
+  bleWrite(feed, sizeof(feed));
+  const uint8_t cut[] = { 0x1D, 0x56, 0x42, 0x00 };
+  bleWrite(cut, sizeof(cut));
+  return true;
+}
 
 // ---- Wi-Fi -----------------------------------------------------------------
 void ensureWifi() {
   if (WiFi.status() == WL_CONNECTED) return;
-
   Serial.printf("[WiFi] Connecting to %s ...\n", WIFI_SSID);
   WiFi.mode(WIFI_STA);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-
   unsigned long start = millis();
   while (WiFi.status() != WL_CONNECTED && millis() - start < 20000) {
     delay(250);
     Serial.print('.');
   }
   Serial.println();
-
-  if (WiFi.status() == WL_CONNECTED) {
+  if (WiFi.status() == WL_CONNECTED)
     Serial.printf("[WiFi] Connected. IP %s\n", WiFi.localIP().toString().c_str());
-  } else {
+  else
     Serial.println("[WiFi] FAILED — will retry next loop.");
-  }
-}
-
-// ---- Bluetooth printer -----------------------------------------------------
-bool ensurePrinter() {
-  if (SerialBT.connected()) return true;
-
-  Serial.println("[BT] Connecting to printer...");
-  SerialBT.setPin(PRINTER_PIN, strlen(PRINTER_PIN));
-  if (!SerialBT.connect(PRINTER_MAC)) {
-    Serial.println("[BT] connect() failed.");
-    return false;
-  }
-  for (int i = 0; i < 20 && !SerialBT.connected(); i++) delay(100);
-  if (SerialBT.connected()) {
-    Serial.println("[BT] Printer connected.");
-    return true;
-  }
-  Serial.println("[BT] Link did not come up.");
-  return false;
-}
-
-// Stream the receipt payload as raw ESC/POS. Returns true if bytes were sent.
-bool printPayload(const String &payload) {
-  if (!SerialBT.connected()) return false;
-
-  const uint8_t init[] = { 0x1B, 0x40 };  // ESC @
-  SerialBT.write(init, sizeof(init));
-  SerialBT.print(payload);
-  SerialBT.print("\n");
-  SerialBT.flush();
-
-  const uint8_t feed[] = { 0x1B, 0x64, 0x04 };       // feed 4 lines
-  SerialBT.write(feed, sizeof(feed));
-  const uint8_t cut[] = { 0x1D, 0x56, 0x42, 0x00 };  // partial cut
-  SerialBT.write(cut, sizeof(cut));
-  SerialBT.flush();
-  return true;
 }
 
 // ---- API -------------------------------------------------------------------
-// Returns the HTTP body, or "" on transport failure. Sets outCode.
 String apiPost(const String &path, const String &body, int &outCode) {
+  Serial.printf("[API] Free heap: %d bytes\n", ESP.getFreeHeap());
   WiFiClientSecure client;
-  client.setInsecure();           // no cert pinning (see header note)
+  client.setInsecure();
   client.setTimeout(12000);
-
   HTTPClient http;
+  http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);
   String url = String(API_BASE) + path;
-  if (!http.begin(client, url)) {
-    outCode = -1;
-    return "";
-  }
+  Serial.printf("[API] POST %s\n", url.c_str());
+  if (!http.begin(client, url)) { outCode = -1; Serial.println("[API] http.begin() failed"); return ""; }
   http.addHeader("Content-Type", "application/json");
   http.addHeader("Authorization", String("Bearer ") + DEVICE_TOKEN);
   outCode = http.POST((uint8_t *)body.c_str(), body.length());
@@ -116,71 +175,70 @@ String apiPost(const String &path, const String &body, int &outCode) {
 
 void reportResult(const String &jobId, bool success, const String &errorMsg) {
   StaticJsonDocument<256> doc;
-  doc["jobId"] = jobId;
+  doc["jobId"]    = jobId;
   doc["deviceId"] = DEVICE_ID;
-  doc["success"] = success;
+  doc["success"]  = success;
   if (!success) doc["error"] = errorMsg;
   String body;
   serializeJson(doc, body);
-
   int code = 0;
   apiPost("/api/life/printer/complete", body, code);
   Serial.printf("[API] complete (success=%d) -> HTTP %d\n", success, code);
 }
 
-// Poll for one job, print it, and report the outcome.
+// Temporarily drop the BLE connection so TLS has enough heap.
+void bleDisconnect() {
+  if (bleClient && bleClient->isConnected()) {
+    bleClient->disconnect();
+    delay(200);
+  }
+}
+
 void pollOnce() {
   ensureWifi();
   if (WiFi.status() != WL_CONNECTED) return;
+
+  // Free BLE heap before TLS handshake.
+  bleDisconnect();
 
   String body = String("{\"deviceId\":\"") + DEVICE_ID + "\"}";
   int code = 0;
   String resp = apiPost("/api/life/printer/claim", body, code);
 
   if (code != 200) {
-    Serial.printf("[API] claim -> HTTP %d (will retry)\n", code);
+    Serial.printf("[API] claim -> HTTP %d\n", code);
     return;
   }
 
   StaticJsonDocument<2048> doc;
-  DeserializationError err = deserializeJson(doc, resp);
-  if (err) {
-    Serial.printf("[API] claim JSON parse error: %s\n", err.c_str());
-    return;
-  }
+  if (deserializeJson(doc, resp)) return;
+  if (doc["job"].isNull()) return;  // idle
 
-  if (doc["job"].isNull()) {
-    // Idle — nothing to print. (Quietly; this is the common case.)
-    return;
-  }
-
-  String jobId = doc["job"]["id"].as<String>();
+  String jobId   = doc["job"]["id"].as<String>();
   String payload = doc["job"]["payload"].as<String>();
   Serial.printf("[JOB] Leased %s (%d bytes)\n", jobId.c_str(), payload.length());
 
-  if (!ensurePrinter()) {
-    reportResult(jobId, false, "Bluetooth printer not reachable");
-    return;
-  }
-
+  // Reconnect BLE to print.
   if (printPayload(payload)) {
-    Serial.println("[JOB] Printed; reporting success.");
+    Serial.println("[JOB] Printed OK.");
+    bleDisconnect();  // free heap before reporting
     reportResult(jobId, true, "");
   } else {
-    Serial.println("[JOB] Print write failed; reporting failure.");
-    reportResult(jobId, false, "Failed to write to printer");
+    Serial.println("[JOB] Print failed.");
+    bleDisconnect();
+    reportResult(jobId, false, "BLE write failed");
   }
 }
 
+// ---- setup / loop ----------------------------------------------------------
 void setup() {
   Serial.begin(115200);
   delay(800);
   Serial.println();
-  Serial.println("==== PR LIFE print worker ====");
-  WiFi.mode(WIFI_STA);
-  // Master mode for Bluetooth Classic so we initiate the printer connection.
-  SerialBT.begin("PR-Life-Bridge", true);
+  Serial.println("==== PR LIFE print worker (BLE) ====");
+  BLEDevice::init("PR-Life-Bridge");
   ensureWifi();
+  bleConnect();  // best-effort; will retry on first job if needed
 }
 
 void loop() {
@@ -188,5 +246,5 @@ void loop() {
     lastPoll = millis();
     pollOnce();
   }
-  delay(50);  // keep the loop responsive without busy-waiting
+  delay(50);
 }

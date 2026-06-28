@@ -1,6 +1,6 @@
 import { OWNER_ID } from '@/lib/life/constants'
-import { getProjectLabelAsync } from '@/lib/life/projects-db'
-import { buildReceiptPayload } from '@/lib/life/receipt'
+import { getProjectBySlugDb } from '@/lib/life/projects-db'
+import { buildReceiptPayload, type ReceiptLayout } from '@/lib/life/receipt'
 import { getOwnerSettings } from '@/lib/life/settings'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
 import type { PrintJobRecord, TaskPrintInfo, TaskRecord } from '@/lib/life/types'
@@ -37,6 +37,7 @@ async function getActiveJobForTask(taskId: string): Promise<PrintJobRecord | nul
 export async function createPrintJob(input: {
   task: Pick<TaskRecord, 'id' | 'title' | 'status' | 'due_local_date' | 'details' | 'project_slug'>
   deviceId?: string
+  layout?: ReceiptLayout
   /** Skip the active-job guard to force a brand-new job (explicit reprint). */
   allowDuplicate?: boolean
 }): Promise<{ job: PrintJobRecord; duplicate: boolean }> {
@@ -49,11 +50,17 @@ export async function createPrintJob(input: {
   }
 
   const settings = await getOwnerSettings()
-  const projectName = task.project_slug ? await getProjectLabelAsync(task.project_slug) : null
+  const project = task.project_slug ? await getProjectBySlugDb(task.project_slug) : null
+  const projectName = project?.name ?? null
+  const parentProjectName = project?.parent_slug
+    ? (await getProjectBySlugDb(project.parent_slug))?.name ?? null
+    : null
   const receipt = buildReceiptPayload({
     task,
     projectName,
+    parentProjectName,
     timeZone: settings.timezone,
+    layout: input.layout,
   })
 
   const supabase = getSupabaseAdmin()

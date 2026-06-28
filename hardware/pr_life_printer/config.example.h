@@ -3,7 +3,7 @@
  *
  * Copy this file to `config.h` (same folder) and fill in real values.
  * `config.h` is gitignored so your Wi-Fi password and device token never get
- * committed. Keep the structure identical so provisioning can be automated later.
+ * committed.
  */
 #pragma once
 
@@ -12,19 +12,17 @@
 #define WIFI_PASSWORD  "your-wifi-password"
 
 // ---- PR Life API -----------------------------------------------------------
-// No trailing slash. Use your deployed HTTPS origin.
-#define API_BASE       "https://your-app.vercel.app"
-// The dedicated device token (PRINTER_DEVICE_TOKEN in Vercel). The ONLY
-// credential this device holds.
+#define API_BASE       "https://www.pramitranjan.com"  // no trailing slash; use www to avoid redirect
 #define DEVICE_TOKEN   "paste-the-PRINTER_DEVICE_TOKEN-here"
-// Logical printer id this device claims jobs for. Must match what PR Life
-// queues against (default "desk").
-#define DEVICE_ID      "desk"
+#define DEVICE_ID      "desk"  // must match what PR Life queues against
 
-// ---- Printer (Bluetooth Classic SPP) ---------------------------------------
-// MAC most-significant byte first: 5A:4A:6A:78:45:0F
-#define PRINTER_MAC_BYTES { 0x5A, 0x4A, 0x6A, 0x78, 0x45, 0x0F }
-#define PRINTER_PIN    "1234"
+// ---- Printer (BLE) ---------------------------------------------------------
+// Advertised name of the printer (from BLE scan). Used as primary identifier.
+#define PRINTER_BLE_NAME "BlueTooth Printer"
+// MAC fallback (lowercase). Confirmed: 5a:4a:6a:78:4d:0f
+#define PRINTER_BLE_MAC  "5a:4a:6a:78:4d:0f"
+// BLE service and write characteristic — do not change.
+// Service 18F0 / char 2AF1 confirmed working via ESC/POS compat test.
 
 // ---- Polling ---------------------------------------------------------------
-#define POLL_INTERVAL_MS  7000   // 5000–10000 per the design (5–10s)
+#define POLL_INTERVAL_MS  7000

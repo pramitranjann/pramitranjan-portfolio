@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { isAuthenticatedLifeRequest, unauthorizedJson } from '@/lib/life/auth'
 import { createPrintJob, getPrintJobs } from '@/lib/life/print-jobs'
+import type { ReceiptLayout } from '@/lib/life/receipt'
 import { getTaskById } from '@/lib/life/tasks'
+
+const VALID_LAYOUTS = new Set<ReceiptLayout>(['compact', 'standard', 'focus'])
 
 export async function GET(request: NextRequest) {
   if (!isAuthenticatedLifeRequest(request)) {
@@ -35,11 +38,15 @@ export async function POST(request: NextRequest) {
     const body = (await request.json().catch(() => null)) as {
       taskId?: string
       reprint?: boolean
+      layout?: ReceiptLayout
     } | null
 
     const taskId = body?.taskId?.trim()
     if (!taskId) {
       return NextResponse.json({ error: 'taskId is required.' }, { status: 400 })
+    }
+    if (body?.layout && !VALID_LAYOUTS.has(body.layout)) {
+      return NextResponse.json({ error: 'Invalid print layout.' }, { status: 400 })
     }
 
     const task = await getTaskById(taskId)
@@ -49,6 +56,7 @@ export async function POST(request: NextRequest) {
 
     const { job, duplicate } = await createPrintJob({
       task,
+      layout: body?.layout,
       allowDuplicate: body?.reprint === true,
     })
 
