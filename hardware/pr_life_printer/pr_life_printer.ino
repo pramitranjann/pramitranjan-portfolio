@@ -33,6 +33,10 @@
 #define BLE_SCAN_SECONDS  15
 #define CHUNK_SIZE        20
 #define CHUNK_DELAY_MS    30
+#define INIT_DELAY_MS     120
+#define TRAILER_DELAY_MS  250
+#define MIN_FLUSH_MS      1200
+#define FLUSH_PER_CHUNK_MS 45
 
 static BLEAdvertisedDevice *printerDevice = nullptr;
 static BLEClient           *bleClient     = nullptr;
@@ -122,17 +126,52 @@ bool bleWrite(const uint8_t *data, size_t len) {
   return true;
 }
 
+String payloadPreview(const String &payload) {
+  String preview;
+  preview.reserve(min((size_t)160, payload.length() * 2));
+
+  for (size_t i = 0; i < payload.length() && preview.length() < 160; i++) {
+    char c = payload[i];
+    if (c == '\n') preview += "\\n";
+    else if (c == '\r') preview += "\\r";
+    else preview += c;
+  }
+
+  if (payload.length() > 160) preview += "...";
+  return preview;
+}
+
+void waitForPrinterFlush(size_t payloadLen) {
+  size_t chunkCount = (payloadLen + CHUNK_SIZE - 1) / CHUNK_SIZE;
+  unsigned long flushMs = max((unsigned long)MIN_FLUSH_MS,
+                              (unsigned long)(chunkCount * FLUSH_PER_CHUNK_MS));
+  Serial.printf("[BLE] Waiting %lums for printer flush.\n", flushMs);
+  delay(flushMs);
+}
+
 bool printPayload(const String &payload) {
   if (!ensurePrinter()) return false;
+  if (!payload.length()) {
+    Serial.println("[JOB] Refusing to print empty payload.");
+    return false;
+  }
+  Serial.printf("[JOB] Payload preview: %s\n", payloadPreview(payload).c_str());
+
   const uint8_t init[] = { 0x1B, 0x40 };
   bleWrite(init, sizeof(init));
+  delay(INIT_DELAY_MS);
+
   bleWrite((const uint8_t *)payload.c_str(), payload.length());
-  const uint8_t nl[] = { '\n' };
-  bleWrite(nl, 1);
+  const uint8_t nl[] = { '\n', '\n' };
+  bleWrite(nl, sizeof(nl));
+  delay(TRAILER_DELAY_MS);
+
   const uint8_t feed[] = { 0x1B, 0x64, 0x04 };
   bleWrite(feed, sizeof(feed));
   const uint8_t cut[] = { 0x1D, 0x56, 0x42, 0x00 };
   bleWrite(cut, sizeof(cut));
+
+  waitForPrinterFlush(payload.length() + sizeof(nl) + sizeof(feed) + sizeof(cut));
   return true;
 }
 
@@ -168,6 +207,9 @@ String apiPost(const String &path, const String &body, int &outCode) {
   http.addHeader("Content-Type", "application/json");
   http.addHeader("Authorization", String("Bearer ") + DEVICE_TOKEN);
   outCode = http.POST((uint8_t *)body.c_str(), body.length());
+  if (outCode <= 0) {
+    Serial.printf("[API] POST failed: %s\n", HTTPClient::errorToString(outCode).c_str());
+  }
   String resp = (outCode > 0) ? http.getString() : "";
   http.end();
   return resp;
@@ -181,9 +223,17 @@ void reportResult(const String &jobId, bool success, const String &errorMsg) {
   if (!success) doc["error"] = errorMsg;
   String body;
   serializeJson(doc, body);
-  int code = 0;
-  apiPost("/api/life/printer/complete", body, code);
-  Serial.printf("[API] complete (success=%d) -> HTTP %d\n", success, code);
+
+  const int maxAttempts = 3;
+  for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+    ensureWifi();
+    int code = 0;
+    apiPost("/api/life/printer/complete", body, code);
+    Serial.printf("[API] complete (success=%d) attempt %d/%d -> HTTP %d\n",
+                  success, attempt, maxAttempts, code);
+    if (code == 200) return;
+    delay(800 * attempt);
+  }
 }
 
 // Temporarily drop the BLE connection so TLS has enough heap.
@@ -211,8 +261,15 @@ void pollOnce() {
   }
 
   StaticJsonDocument<2048> doc;
-  if (deserializeJson(doc, resp)) return;
-  if (doc["job"].isNull()) return;  // idle
+  auto parseError = deserializeJson(doc, resp);
+  if (parseError) {
+    Serial.printf("[API] claim JSON parse failed: %s\n", parseError.c_str());
+    return;
+  }
+  if (doc["job"].isNull()) {
+    Serial.println("[JOB] No pending job.");
+    return;  // idle
+  }
 
   String jobId   = doc["job"]["id"].as<String>();
   String payload = doc["job"]["payload"].as<String>();

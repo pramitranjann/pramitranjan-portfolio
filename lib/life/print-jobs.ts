@@ -134,7 +134,7 @@ export function derivePrintInfo(jobs: PrintJobRecord[]): Map<string, TaskPrintIn
 /** Atomically lease one pending job for a device (see claim_print_job SQL). */
 export async function claimPrintJob(
   deviceId: string,
-  leaseSeconds = 90,
+  leaseSeconds = 180,
 ): Promise<PrintJobRecord | null> {
   const supabase = getSupabaseAdmin()
   const { data, error } = await supabase.rpc('claim_print_job', {
