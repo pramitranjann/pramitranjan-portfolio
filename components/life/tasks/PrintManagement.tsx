@@ -13,6 +13,7 @@ const PRINT_STATE_LABEL: Record<string, string> = {
   printed: 'Printed',
   failed: 'Failed',
 }
+const ATTENTION_WINDOW_MS = 5 * 60 * 1000
 
 function whenLabel(iso: string | null, timeZone: string) {
   if (!iso) return ''
@@ -43,12 +44,20 @@ function isManualCancel(job: PrintJobRecord) {
   return job.last_error === 'Cancelled by user.'
 }
 
+function isCancelledInfo(info: TaskPrintInfo | undefined) {
+  return info?.state === 'failed' && info.lastError === 'Cancelled by user.'
+}
+
 function latestTimestamp(job: PrintJobRecord) {
   return (
     job.printed_at ||
     job.leased_at ||
     job.created_at
   )
+}
+
+function isAttentionFresh(job: PrintJobRecord, now: number) {
+  return now - new Date(latestTimestamp(job)).getTime() <= ATTENTION_WINDOW_MS
 }
 
 export function PrintManagement({
@@ -60,6 +69,7 @@ export function PrintManagement({
   onQueueMany,
   onReprint,
   onCancel,
+  onDelete,
   onRetry,
 }: {
   tasks: TaskRecord[]
@@ -70,6 +80,7 @@ export function PrintManagement({
   onQueueMany: (taskIds: string[]) => Promise<boolean>
   onReprint: (taskId: string) => Promise<boolean>
   onCancel: (jobId: string) => Promise<void>
+  onDelete: (jobId: string) => Promise<void>
   onRetry: (jobId: string) => Promise<void>
 }) {
   const now = Date.now()
@@ -94,15 +105,23 @@ export function PrintManagement({
   // Needs Printing: never-queued tasks with no successful receipt. Failed jobs
   // live in Needs Attention; queued/leased live in Queue.
   const needsPrinting = useMemo(
-    () => tasks.filter((task) => !printInfo[task.id] && matchesFilters(task)),
+    () =>
+      tasks.filter((task) => {
+        if (!matchesFilters(task)) return false
+        const info = printInfo[task.id]
+        if (!info) return true
+        return isCancelledInfo(info) && !info.hasPrinted
+      }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [tasks, printInfo, projectFilter, showDone],
   )
 
   const queueJobs = printJobs.filter((job) => job.status === 'pending' || (job.status === 'leased' && !isLeaseStale(job, now)))
   const printedJobs = printJobs.filter((job) => job.status === 'printed')
-  const attentionJobs = printJobs.filter((job) => job.status === 'failed' || isLeaseStale(job, now))
-  const latestBoardError = printJobs.find((job) => job.status === 'failed' && !isManualCancel(job) && job.last_error)
+  const attentionJobs = printJobs.filter(
+    (job) => (((job.status === 'failed' && !isManualCancel(job)) || isLeaseStale(job, now)) && isAttentionFresh(job, now)),
+  )
+  const latestBoardError = attentionJobs.find((job) => job.status === 'failed' && !isManualCancel(job) && job.last_error)
   const latestLease = printJobs.find((job) => job.leased_at)
   const printerState = queueJobs.some((job) => job.status === 'leased')
     ? 'printing'
@@ -164,6 +183,16 @@ export function PrintManagement({
     setBusy(true)
     try {
       await onCancel(jobId)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  async function remove(jobId: string) {
+    if (busy) return
+    setBusy(true)
+    try {
+      await onDelete(jobId)
     } finally {
       setBusy(false)
     }
@@ -300,20 +329,17 @@ export function PrintManagement({
                     </span>
                     {stale ? <span className="life-print-error">No completion came back from the ESP board before the lease expired.</span> : null}
                     {job.last_error && !stale ? <span className="life-print-error">{job.last_error}</span> : null}
-                    {isManualCancel(job) ? (
-                      <button type="button" className="life-btn ghost" disabled={busy} onClick={() => retry(job.id)}>
-                        Queue again
-                      </button>
-                    ) : (
-                      <button type="button" className="life-btn ghost" disabled={busy} onClick={() => retry(job.id)}>
-                        Retry
-                      </button>
-                    )}
+                    <button type="button" className="life-btn ghost" disabled={busy} onClick={() => retry(job.id)}>
+                      Retry
+                    </button>
                     {stale ? (
                       <button type="button" className="life-btn ghost" disabled={busy} onClick={() => cancel(job.id)}>
                         Cancel
                       </button>
                     ) : null}
+                    <button type="button" className="life-btn ghost" disabled={busy} onClick={() => remove(job.id)}>
+                      Delete
+                    </button>
                   </span>
                 </div>
               )

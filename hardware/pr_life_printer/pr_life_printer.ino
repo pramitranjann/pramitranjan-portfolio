@@ -35,8 +35,8 @@
 #define CHUNK_DELAY_MS    30
 #define INIT_DELAY_MS     120
 #define TRAILER_DELAY_MS  250
-#define MIN_FLUSH_MS      1200
-#define FLUSH_PER_CHUNK_MS 45
+#define MIN_FLUSH_MS      4000
+#define FLUSH_PER_CHUNK_MS 90
 
 static BLEAdvertisedDevice *printerDevice = nullptr;
 static BLEClient           *bleClient     = nullptr;
@@ -101,6 +101,8 @@ bool bleConnect() {
     return false;
   }
 
+  Serial.printf("[BLE] Characteristic props: write=%d writeNoResp=%d\n",
+                writeChar->canWrite(), writeChar->canWriteNoResponse());
   Serial.println("[BLE] Printer connected and ready.");
   return true;
 }
@@ -116,10 +118,20 @@ bool ensurePrinter() {
 // ---- BLE write (chunked) ---------------------------------------------------
 bool bleWrite(const uint8_t *data, size_t len) {
   if (!writeChar) return false;
+  bool useResponse = writeChar->canWrite();
+  if (!useResponse && !writeChar->canWriteNoResponse()) {
+    Serial.println("[BLE] Characteristic does not support writes.");
+    return false;
+  }
   size_t offset = 0;
   while (offset < len) {
     size_t chunk = min(len - offset, (size_t)CHUNK_SIZE);
-    writeChar->writeValue((uint8_t *)(data + offset), chunk, false);
+    bool ok = writeChar->writeValue((uint8_t *)(data + offset), chunk, useResponse);
+    if (!ok) {
+      Serial.printf("[BLE] Chunk write failed at offset %u len %u (response=%d)\n",
+                    (unsigned)offset, (unsigned)chunk, useResponse);
+      return false;
+    }
     offset += chunk;
     delay(CHUNK_DELAY_MS);
   }
@@ -141,6 +153,26 @@ String payloadPreview(const String &payload) {
   return preview;
 }
 
+String sanitizePayload(const String &payload) {
+  String clean;
+  clean.reserve(payload.length());
+
+  for (size_t i = 0; i < payload.length(); i++) {
+    unsigned char c = static_cast<unsigned char>(payload[i]);
+    if (c == '\n' || c == '\r' || c == '\t') {
+      clean += static_cast<char>(c);
+      continue;
+    }
+    if (c >= 32 && c <= 126) {
+      clean += static_cast<char>(c);
+      continue;
+    }
+    clean += '?';
+  }
+
+  return clean;
+}
+
 void waitForPrinterFlush(size_t payloadLen) {
   size_t chunkCount = (payloadLen + CHUNK_SIZE - 1) / CHUNK_SIZE;
   unsigned long flushMs = max((unsigned long)MIN_FLUSH_MS,
@@ -155,23 +187,28 @@ bool printPayload(const String &payload) {
     Serial.println("[JOB] Refusing to print empty payload.");
     return false;
   }
-  Serial.printf("[JOB] Payload preview: %s\n", payloadPreview(payload).c_str());
+  String cleanPayload = sanitizePayload(payload);
+  Serial.printf("[JOB] Payload preview: %s\n", payloadPreview(cleanPayload).c_str());
 
   const uint8_t init[] = { 0x1B, 0x40 };
-  bleWrite(init, sizeof(init));
+  if (!bleWrite(init, sizeof(init))) return false;
   delay(INIT_DELAY_MS);
 
-  bleWrite((const uint8_t *)payload.c_str(), payload.length());
+  const char *sentinel = "PR LIFE PRINT START\n";
+  if (!bleWrite((const uint8_t *)sentinel, strlen(sentinel))) return false;
+  delay(120);
+
+  if (!bleWrite((const uint8_t *)cleanPayload.c_str(), cleanPayload.length())) return false;
   const uint8_t nl[] = { '\n', '\n' };
-  bleWrite(nl, sizeof(nl));
+  if (!bleWrite(nl, sizeof(nl))) return false;
   delay(TRAILER_DELAY_MS);
 
   const uint8_t feed[] = { 0x1B, 0x64, 0x04 };
-  bleWrite(feed, sizeof(feed));
+  if (!bleWrite(feed, sizeof(feed))) return false;
   const uint8_t cut[] = { 0x1D, 0x56, 0x42, 0x00 };
-  bleWrite(cut, sizeof(cut));
+  if (!bleWrite(cut, sizeof(cut))) return false;
 
-  waitForPrinterFlush(payload.length() + sizeof(nl) + sizeof(feed) + sizeof(cut));
+  waitForPrinterFlush(strlen(sentinel) + cleanPayload.length() + sizeof(nl) + sizeof(feed) + sizeof(cut));
   return true;
 }
 

@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 import { isAuthenticatedLifeRequest, unauthorizedJson } from '@/lib/life/auth'
-import { cancelPrintJob, retryPrintJob } from '@/lib/life/print-jobs'
+import { cancelPrintJob, deletePrintJob, retryPrintJob } from '@/lib/life/print-jobs'
 
-/** Retry a failed job, or cancel a queued/leased one. */
+/** Retry, cancel, or remove a print job. */
 export async function POST(
   request: NextRequest,
   context: { params: Promise<unknown> },
@@ -25,6 +25,11 @@ export async function POST(
 
     if (action === 'cancel') {
       const job = await cancelPrintJob(jobId)
+      return NextResponse.json({ job })
+    }
+
+    if (action === 'delete') {
+      const job = await deletePrintJob(jobId)
       return NextResponse.json({ job })
     }
 

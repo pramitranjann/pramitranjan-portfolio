@@ -222,3 +222,36 @@ export async function cancelPrintJob(jobId: string): Promise<PrintJobRecord> {
   if (error) throw error
   return data as PrintJobRecord
 }
+
+/** Remove a failed job, or an expired leased job that is only lingering for review. */
+export async function deletePrintJob(jobId: string): Promise<PrintJobRecord> {
+  const supabase = getSupabaseAdmin()
+  const { data, error } = await supabase
+    .from('print_jobs')
+    .select('*')
+    .eq('user_id', OWNER_ID)
+    .eq('id', jobId)
+    .maybeSingle()
+
+  if (error) throw error
+  if (!data) throw new Error('Print job not found.')
+
+  const job = data as PrintJobRecord
+  const leaseExpired =
+    job.status === 'leased' &&
+    job.lease_expires_at != null &&
+    new Date(job.lease_expires_at).getTime() < Date.now()
+
+  if (job.status !== 'failed' && !leaseExpired) {
+    throw new Error('Only failed or expired print jobs can be deleted.')
+  }
+
+  const { error: deleteError } = await supabase
+    .from('print_jobs')
+    .delete()
+    .eq('user_id', OWNER_ID)
+    .eq('id', jobId)
+
+  if (deleteError) throw deleteError
+  return job
+}

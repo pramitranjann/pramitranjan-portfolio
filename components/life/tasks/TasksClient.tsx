@@ -589,6 +589,20 @@ export function TasksClient({
     }
   }
 
+  async function deletePrintJob(jobId: string) {
+    setPrintNote(null)
+    try {
+      await fetchJson(`/api/life/print-jobs/${jobId}`, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'delete' }),
+      })
+      setPrintNote('Print job removed.')
+      router.refresh()
+    } catch {
+      setPrintNote('Could not remove print job.')
+    }
+  }
+
   function eventChipFor(task: TaskRecord) {
     if (!task.calendar_event_id) return null
     const event = linkedEvents[task.calendar_event_id]
@@ -986,6 +1000,7 @@ export function TasksClient({
             onQueueMany={queuePrintMany}
             onReprint={reprintTask}
             onCancel={cancelQueuedPrintJob}
+            onDelete={deletePrintJob}
             onRetry={retryPrintJob}
           />
         ) : view === 'List' ? (
@@ -1177,6 +1192,7 @@ export function TasksClient({
           onQueueMany={queuePrintMany}
           onReprint={reprintTask}
           onCancel={cancelQueuedPrintJob}
+          onDelete={deletePrintJob}
           onRetry={retryPrintJob}
         />
       ) : view === 'List' ? (

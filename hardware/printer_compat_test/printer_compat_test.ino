@@ -24,6 +24,9 @@ const int NUM_CANDIDATES = 3;
 
 #define CHUNK_SIZE  20
 #define CHUNK_DELAY 30
+#define INIT_DELAY_MS 120
+#define TRAILER_DELAY_MS 250
+#define FLUSH_DELAY_MS 4000
 
 static BLEAdvertisedDevice *targetDevice = nullptr;
 static BLEClient *client = nullptr;
@@ -45,28 +48,46 @@ class ScanCallback : public BLEAdvertisedDeviceCallbacks {
 };
 
 // ---- BLE write helpers -----------------------------------------------------
-void bleWrite(const uint8_t *data, size_t len) {
+bool bleWrite(const uint8_t *data, size_t len) {
+  if (!writeChar) return false;
+  bool useResponse = writeChar->canWrite();
+  if (!useResponse && !writeChar->canWriteNoResponse()) {
+    Serial.println("[BLE] Characteristic does not support writes.");
+    return false;
+  }
+
   size_t offset = 0;
   while (offset < len) {
     size_t chunk = min(len - offset, (size_t)CHUNK_SIZE);
-    writeChar->writeValue((uint8_t *)(data + offset), chunk, false);
+    bool ok = writeChar->writeValue((uint8_t *)(data + offset), chunk, useResponse);
+    if (!ok) {
+      Serial.printf("[BLE] Chunk write failed at offset %u len %u (response=%d)\n",
+                    (unsigned)offset, (unsigned)chunk, useResponse);
+      return false;
+    }
     offset += chunk;
     delay(CHUNK_DELAY);
   }
+  return true;
 }
 
-void bleWriteStr(const char *str) {
-  bleWrite((const uint8_t *)str, strlen(str));
+bool bleWriteStr(const char *str) {
+  return bleWrite((const uint8_t *)str, strlen(str));
 }
 
-void printTestReceipt() {
+bool printTestReceipt() {
   const uint8_t init[] = { 0x1B, 0x40 };
-  bleWrite(init, sizeof(init));
-  bleWriteStr("PR LIFE - Printer connected.\n");
+  if (!bleWrite(init, sizeof(init))) return false;
+  delay(INIT_DELAY_MS);
+  if (!bleWriteStr("PR LIFE - Printer connected.\n")) return false;
+  delay(TRAILER_DELAY_MS);
   const uint8_t feed[] = { 0x1B, 0x64, 0x04 };
-  bleWrite(feed, sizeof(feed));
+  if (!bleWrite(feed, sizeof(feed))) return false;
   const uint8_t cut[] = { 0x1D, 0x56, 0x42, 0x00 };
-  bleWrite(cut, sizeof(cut));
+  if (!bleWrite(cut, sizeof(cut))) return false;
+  Serial.printf("[BLE] Waiting %dms for printer flush.\n", FLUSH_DELAY_MS);
+  delay(FLUSH_DELAY_MS);
+  return true;
 }
 
 // ---- Connect using the scanned device object (preserves address type) ------
@@ -90,10 +111,14 @@ bool connectAndPrint() {
 
     Serial.printf("[BLE] Using %s / %s\n", CANDIDATES[i][0], CANDIDATES[i][1]);
     writeChar = ch;
+    Serial.printf("[BLE] Characteristic props: write=%d writeNoResp=%d\n",
+                  writeChar->canWrite(), writeChar->canWriteNoResponse());
 
     Serial.println("[TX] Sending ESC/POS test receipt...");
-    printTestReceipt();
-    delay(500);
+    if (!printTestReceipt()) {
+      Serial.println("[TX] Test write failed.");
+      continue;
+    }
 
     Serial.println();
     Serial.println(">>> RESULT: Connected and bytes written.");
@@ -140,7 +165,9 @@ void loop() {
     char c = Serial.read();
     if (c == 'r' && client && client->isConnected()) {
       Serial.println("[TX] Reprinting...");
-      printTestReceipt();
+      if (!printTestReceipt()) {
+        Serial.println("[TX] Reprint failed.");
+      }
     }
   }
   delay(50);
