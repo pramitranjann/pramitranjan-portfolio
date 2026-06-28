@@ -380,17 +380,17 @@ export function TaskForm({
           ) : null}
         </div>
 
-        {/* Print to desk — sets desk_eligible. On create, the task auto-queues
-            a receipt; on edit, turning it on queues one now (see PATCH route). */}
+        {/* Marks a task as something you may want at the desk printer later.
+            Actual printing only happens from the explicit Print/Reprint actions. */}
         <div className="life-pill-wrap">
           <button
             type="button"
             className={`life-pill${deskEligible ? ' set' : ''}`}
             onClick={() => setDeskEligible((value) => !value)}
-            title="Queue a desk receipt for this task"
+            title="Mark this task for desk printing later"
           >
             <span className="ic">🖨</span>
-            <span className="lbl">{deskEligible ? 'Desk print on' : 'Print to desk'}</span>
+            <span className="lbl">{deskEligible ? 'Desk-ready' : 'Mark for desk'}</span>
           </button>
         </div>
       </div>

@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { isAuthenticatedLifeRequest, unauthorizedJson } from '@/lib/life/auth'
 import { applyCalendarIntent } from '@/app/api/life/tasks/route'
-import { createPrintJob } from '@/lib/life/print-jobs'
-import { getTaskById, updateTask, updateTaskStatus } from '@/lib/life/tasks'
+import { updateTask, updateTaskStatus } from '@/lib/life/tasks'
 import type { TaskCalendarIntent, TaskStatus } from '@/lib/life/types'
 
 function getSafeRedirectTo(value: string | null | undefined) {
@@ -84,10 +83,7 @@ export async function PATCH(
       deskEligible?: boolean | null
     } | null
 
-    // Capture the prior desk_eligible only when this edit touches the flag, so
-    // we can detect an off->on transition without an extra read otherwise.
     const togglingDesk = Boolean(body && 'deskEligible' in body)
-    const previous = togglingDesk ? await getTaskById(taskId) : null
 
     let task = await updateTask(taskId, {
       title: body?.title,
@@ -103,17 +99,6 @@ export async function PATCH(
       task = await applyCalendarIntent(task, body?.calendar)
     } catch (calendarError) {
       console.error('Applying calendar intent on task edit failed', calendarError)
-    }
-
-    // Edit-time desk toggle: turning it ON (was OFF) queues a receipt now,
-    // mirroring create-time auto-queue. Only on the transition, so editing other
-    // fields on an already-flagged task never reprints. Best-effort + dedupe.
-    if (togglingDesk && body?.deskEligible === true && previous && !previous.desk_eligible) {
-      try {
-        await createPrintJob({ task })
-      } catch (printError) {
-        console.error('Edit-time desk auto-queue failed', printError)
-      }
     }
 
     return NextResponse.json({ task })

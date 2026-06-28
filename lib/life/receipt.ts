@@ -10,9 +10,9 @@ export type ReceiptLayout = 'compact' | 'standard' | 'focus'
 
 const DIVIDER_HEAVY = '='.repeat(RECEIPT_WIDTH)
 const DIVIDER_LIGHT = '-'.repeat(RECEIPT_WIDTH)
-// Standard and focus need leading blank lines so the printer cutter doesn't
-// clip the top of the receipt before the paper feeds past it.
-const LEADING_LINES = 44
+// Standard and focus need a small top margin so the cutter doesn't trim the
+// first line, but 44 blank lines produced multiple inches of dead space.
+const LEADING_LINES = 6
 
 function centerLine(text: string, width = RECEIPT_WIDTH) {
   const trimmed = text.slice(0, width)

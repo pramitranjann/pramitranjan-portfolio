@@ -2,7 +2,6 @@ import { TASK_EXTRACTION_SYSTEM_PROMPT, OWNER_ID } from '@/lib/life/constants'
 import { callClaude } from '@/lib/life/claude'
 import { detectProjectSlug, LIFE_PROJECTS, normalizeProjectSlug } from '@/lib/life/projects'
 import { detectProjectSlugDb, normalizeProjectSlugDb } from '@/lib/life/projects-db'
-import { createPrintJob } from '@/lib/life/print-jobs'
 import { getOwnerSettings } from '@/lib/life/settings'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
 import { addDays, getCurrentLocalDate, getWeekStart } from '@/lib/life/time'
@@ -197,17 +196,6 @@ export async function createManualTask(input: {
   }
 
   const task = data as TaskRecord
-
-  // V2 auto-queue: if this task is flagged for the desk, queue a receipt now,
-  // inline (no cron). Best-effort, like the voice→task mirror — a print-queue
-  // failure must never fail the task creation itself.
-  if (task.desk_eligible) {
-    try {
-      await createPrintJob({ task })
-    } catch (printError) {
-      console.error('Auto-queue desk print failed', printError)
-    }
-  }
 
   return task
 }
