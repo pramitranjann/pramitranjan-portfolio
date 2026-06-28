@@ -3832,6 +3832,58 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
 
 .life-shell .life-print-note { margin: 8px 0 0; font-size: 13px; color: var(--life-muted); }
 
+.life-shell .life-print-status {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--life-hairline);
+  background: var(--life-muted-bg);
+}
+
+.life-shell .life-print-status-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.life-shell .life-print-status-head h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--life-text);
+}
+
+.life-shell .life-print-status-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.life-shell .life-print-status-card {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.life-shell .life-print-status-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--life-label);
+}
+
+.life-shell .life-print-status-value {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--life-text);
+}
+
+.life-shell .life-print-status-value.is-error {
+  color: var(--life-danger);
+}
+
 .life-shell .life-print-layout-overlay {
   position: fixed;
   inset: 0;
@@ -3971,6 +4023,10 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
 }
 
 @media (max-width: 699px) {
+  .life-shell .life-print-status-grid {
+    grid-template-columns: 1fr;
+  }
+
   .life-shell .life-print-layout-overlay {
     padding: 10px;
     align-items: stretch;

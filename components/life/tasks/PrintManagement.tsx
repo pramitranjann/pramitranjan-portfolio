@@ -39,6 +39,18 @@ function isLeaseStale(job: PrintJobRecord, now: number) {
   return job.status === 'leased' && job.lease_expires_at != null && new Date(job.lease_expires_at).getTime() < now
 }
 
+function isManualCancel(job: PrintJobRecord) {
+  return job.last_error === 'Cancelled by user.'
+}
+
+function latestTimestamp(job: PrintJobRecord) {
+  return (
+    job.printed_at ||
+    job.leased_at ||
+    job.created_at
+  )
+}
+
 export function PrintManagement({
   tasks,
   printJobs,
@@ -47,6 +59,7 @@ export function PrintManagement({
   labelFor,
   onQueueMany,
   onReprint,
+  onCancel,
   onRetry,
 }: {
   tasks: TaskRecord[]
@@ -56,6 +69,7 @@ export function PrintManagement({
   labelFor: (slug: string | null) => string
   onQueueMany: (taskIds: string[]) => Promise<boolean>
   onReprint: (taskId: string) => Promise<boolean>
+  onCancel: (jobId: string) => Promise<void>
   onRetry: (jobId: string) => Promise<void>
 }) {
   const now = Date.now()
@@ -88,6 +102,15 @@ export function PrintManagement({
   const queueJobs = printJobs.filter((job) => job.status === 'pending' || (job.status === 'leased' && !isLeaseStale(job, now)))
   const printedJobs = printJobs.filter((job) => job.status === 'printed')
   const attentionJobs = printJobs.filter((job) => job.status === 'failed' || isLeaseStale(job, now))
+  const latestBoardError = printJobs.find((job) => job.status === 'failed' && !isManualCancel(job) && job.last_error)
+  const latestLease = printJobs.find((job) => job.leased_at)
+  const printerState = queueJobs.some((job) => job.status === 'leased')
+    ? 'printing'
+    : attentionJobs.some((job) => isLeaseStale(job, now) || (job.status === 'failed' && !isManualCancel(job)))
+      ? 'error'
+      : queueJobs.length > 0
+        ? 'queued'
+        : 'idle'
 
   function toggle(taskId: string) {
     setSelected((current) => {
@@ -136,10 +159,43 @@ export function PrintManagement({
     }
   }
 
+  async function cancel(jobId: string) {
+    if (busy) return
+    setBusy(true)
+    try {
+      await onCancel(jobId)
+    } finally {
+      setBusy(false)
+    }
+  }
+
   const selectedCount = needsPrinting.filter((task) => selected.has(task.id)).length
 
   return (
     <div className="life-print-section">
+      <section className="life-print-status">
+        <div className="life-print-status-head">
+          <h3>Printer Status</h3>
+          <span className={`life-print-badge state-${printerState === 'error' ? 'failed' : printerState === 'printing' ? 'leased' : printerState === 'queued' ? 'pending' : 'printed'}`}>
+            {printerState === 'printing' ? 'Printing now' : printerState === 'error' ? 'Needs attention' : printerState === 'queued' ? 'Jobs queued' : 'Idle'}
+          </span>
+        </div>
+        <div className="life-print-status-grid">
+          <div className="life-print-status-card">
+            <span className="life-print-status-label">Latest board activity</span>
+            <span className="life-print-status-value">
+              {latestLease ? whenLabel(latestTimestamp(latestLease), timezone) : 'No lease activity yet'}
+            </span>
+          </div>
+          <div className="life-print-status-card">
+            <span className="life-print-status-label">Latest ESP error</span>
+            <span className={`life-print-status-value${latestBoardError ? ' is-error' : ''}`}>
+              {latestBoardError?.last_error || 'No device errors reported'}
+            </span>
+          </div>
+        </div>
+      </section>
+
       <div className="life-print-filterbar">
         <select
           className="life-print-select"
@@ -213,6 +269,9 @@ export function PrintManagement({
                 <span className="life-print-row-meta">
                   <span className={`life-print-badge state-${job.status}`}>{PRINT_STATE_LABEL[job.status]}</span>
                   <span className="life-print-when">{whenLabel(job.created_at, timezone)}</span>
+                  <button type="button" className="life-btn ghost" disabled={busy} onClick={() => cancel(job.id)}>
+                    Cancel
+                  </button>
                 </span>
               </div>
             ))}
@@ -236,11 +295,25 @@ export function PrintManagement({
                 <div className="life-print-row" key={job.id}>
                   <span className="life-print-row-title">{job.task_title}</span>
                   <span className="life-print-row-meta">
-                    <span className="life-print-badge state-failed">{stale ? 'Stuck' : 'Failed'}</span>
+                    <span className="life-print-badge state-failed">
+                      {stale ? 'Stuck' : isManualCancel(job) ? 'Cancelled' : 'Failed'}
+                    </span>
+                    {stale ? <span className="life-print-error">No completion came back from the ESP board before the lease expired.</span> : null}
                     {job.last_error && !stale ? <span className="life-print-error">{job.last_error}</span> : null}
-                    <button type="button" className="life-btn ghost" disabled={busy} onClick={() => retry(job.id)}>
-                      Retry
-                    </button>
+                    {isManualCancel(job) ? (
+                      <button type="button" className="life-btn ghost" disabled={busy} onClick={() => retry(job.id)}>
+                        Queue again
+                      </button>
+                    ) : (
+                      <button type="button" className="life-btn ghost" disabled={busy} onClick={() => retry(job.id)}>
+                        Retry
+                      </button>
+                    )}
+                    {stale ? (
+                      <button type="button" className="life-btn ghost" disabled={busy} onClick={() => cancel(job.id)}>
+                        Cancel
+                      </button>
+                    ) : null}
                   </span>
                 </div>
               )

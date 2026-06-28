@@ -201,3 +201,24 @@ export async function retryPrintJob(jobId: string): Promise<PrintJobRecord> {
   if (error) throw error
   return data as PrintJobRecord
 }
+
+/** Manually stop a queued or currently leased job so it no longer blocks reprint. */
+export async function cancelPrintJob(jobId: string): Promise<PrintJobRecord> {
+  const supabase = getSupabaseAdmin()
+  const { data, error } = await supabase
+    .from('print_jobs')
+    .update({
+      status: 'failed',
+      last_error: 'Cancelled by user.',
+      lease_expires_at: null,
+      leased_at: null,
+    })
+    .eq('user_id', OWNER_ID)
+    .eq('id', jobId)
+    .in('status', ['pending', 'leased'])
+    .select('*')
+    .single()
+
+  if (error) throw error
+  return data as PrintJobRecord
+}

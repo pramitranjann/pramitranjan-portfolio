@@ -330,6 +330,15 @@ export function TasksClient({
     }
   }, [editId, items])
 
+  useEffect(() => {
+    const hasActivePrintJobs = printJobs.some((job) => job.status === 'pending' || job.status === 'leased')
+    if (view !== 'Print' && !hasActivePrintJobs) return
+    const interval = window.setInterval(() => {
+      router.refresh()
+    }, 5000)
+    return () => window.clearInterval(interval)
+  }, [printJobs, router, view])
+
   function handleViewChange(next: TaskView) {
     setView(next)
     try {
@@ -563,6 +572,20 @@ export function TasksClient({
       router.refresh()
     } catch {
       setPrintNote('Could not retry job.')
+    }
+  }
+
+  async function cancelQueuedPrintJob(jobId: string) {
+    setPrintNote(null)
+    try {
+      await fetchJson(`/api/life/print-jobs/${jobId}`, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'cancel' }),
+      })
+      setPrintNote('Print job cancelled.')
+      router.refresh()
+    } catch {
+      setPrintNote('Could not cancel print job.')
     }
   }
 
@@ -962,6 +985,7 @@ export function TasksClient({
             labelFor={(slug) => (slug ? labelFor(slug) : 'General')}
             onQueueMany={queuePrintMany}
             onReprint={reprintTask}
+            onCancel={cancelQueuedPrintJob}
             onRetry={retryPrintJob}
           />
         ) : view === 'List' ? (
@@ -1152,6 +1176,7 @@ export function TasksClient({
           labelFor={(slug) => (slug ? labelFor(slug) : 'General')}
           onQueueMany={queuePrintMany}
           onReprint={reprintTask}
+          onCancel={cancelQueuedPrintJob}
           onRetry={retryPrintJob}
         />
       ) : view === 'List' ? (
