@@ -1,6 +1,6 @@
+import { marked } from 'marked'
 import { Resend } from 'resend'
 
-import { renderMarkdownToHtml } from '@/lib/life/markdown'
 import { getLifeServerEnv } from '@/lib/life/env'
 
 export async function sendReportEmail(subject: string, markdown: string) {
@@ -14,7 +14,7 @@ export async function sendReportEmail(subject: string, markdown: string) {
       subject,
       html: `
         <main style="font-family: Georgia, serif; max-width: 680px; margin: 0 auto; padding: 24px; color: #1d2838;">
-          ${await renderMarkdownToHtml(markdown)}
+          ${marked.parse(markdown, { breaks: true, gfm: true })}
         </main>
       `,
     })

@@ -1,12 +1,12 @@
 "use client";
 
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
+import { marked } from 'marked'
 
 export function MarkdownCard({ content }: { content: string }) {
   return (
-    <div className="markdown-body">
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
-    </div>
+    <div
+      className="markdown-body"
+      dangerouslySetInnerHTML={{ __html: marked.parse(content, { breaks: true, gfm: true }) }}
+    />
   );
 }
