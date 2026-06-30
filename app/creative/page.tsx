@@ -57,7 +57,6 @@ export default async function CreativePage() {
     <CreativePageClient
       cities={cities}
       mixedMediaProjects={content.caseStudies.filter((item) => item.section === 'mixed-media')}
-      brandingProjects={content.caseStudies.filter((item) => item.section === 'branding')}
       cardStyle={content.design.photographyCards}
       hoverPreviewSettings={content.design.hoverPreviews}
     />

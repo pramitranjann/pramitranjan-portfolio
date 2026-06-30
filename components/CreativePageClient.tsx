@@ -24,20 +24,17 @@ function SectionHeader({ label, count }: { label: string; count: string }) {
 export function CreativePageClient({
   cities,
   mixedMediaProjects,
-  brandingProjects,
   cardStyle,
   hoverPreviewSettings,
 }: {
   cities: PhotographyCity[]
   mixedMediaProjects: CaseStudyContent[]
-  brandingProjects: CaseStudyContent[]
   cardStyle: PhotographyCardStyleSettings
   hoverPreviewSettings: HoverPreviewSettings
 }) {
   const eyebrowRef = useRef<HTMLDivElement>(null)
   const photoGridRef = useRef<HTMLDivElement>(null)
   const mixedGridRef = useRef<HTMLDivElement>(null)
-  const brandingGridRef = useRef<HTMLDivElement>(null)
   const motion = useMotionSettings()
   const copy = useSiteCopy().creativePage
 
@@ -60,7 +57,7 @@ export function CreativePageClient({
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const grids = [photoGridRef.current, mixedGridRef.current, brandingGridRef.current].filter((grid): grid is HTMLDivElement => grid !== null)
+    const grids = [photoGridRef.current, mixedGridRef.current].filter((grid): grid is HTMLDivElement => grid !== null)
 
     if (reduced) {
       const contexts = grids.map((grid) => gsap.context(() => {
@@ -147,30 +144,6 @@ export function CreativePageClient({
                 cardStyle={cardStyle}
                 hoverPreviewSettings={hoverPreviewSettings}
                 priorityImage={index < 3}
-              />
-            ))}
-          </div>
-        </section>
-
-        <section className="creative-section" style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter)' }}>
-          <SectionHeader label={copy.brandingLabel} count={copy.brandingCount} />
-          <div ref={brandingGridRef} className="grid grid-cols-2" style={{ gap: 'var(--layout-card-gap)' }}>
-            {brandingProjects.map((project, index) => (
-              <CreativeListingCard
-                key={project.slug}
-                title={project.title}
-                desc={project.oneliner}
-                tag={project.type}
-                href={`/creative/branding/${project.slug}`}
-                cover={project.heroImage}
-                previewImages={getCaseStudyPreviewImages(project)}
-                imagePosition={project.cardImagePosition ?? 'center'}
-                imageScale={project.cardImageScale}
-                hoverImagePosition={project.cardHoverImagePosition}
-                hoverImageScale={project.cardHoverImageScale}
-                cardStyle={cardStyle}
-                hoverPreviewSettings={hoverPreviewSettings}
-                priorityImage={index < 2}
               />
             ))}
           </div>

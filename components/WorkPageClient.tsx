@@ -95,7 +95,7 @@ export function WorkPageClient({
           </GsapReveal>
         </section>
 
-        <section className="work-grid-section" style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter)' }}>
+        <section className="work-grid-section work-grid-phone-contain" style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter)' }}>
           <div ref={gridRef} className="grid grid-cols-2 md:grid-cols-4" style={{ gap: 'var(--layout-card-gap)' }}>
             {projects.map((project, index) => (
               <ProjectCard
