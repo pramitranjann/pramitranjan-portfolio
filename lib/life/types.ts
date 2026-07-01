@@ -195,6 +195,7 @@ export interface TaskPrintInfo {
 }
 
 export type ProjectStatus = "active" | "on_hold" | "done";
+export type ProjectKind = "general" | "ux";
 
 /** A project row, now stored in the database and editable from the UI. */
 export interface ProjectRecord {
@@ -203,6 +204,7 @@ export interface ProjectRecord {
   summary: string | null;
   color: string | null;
   parent_slug: string | null;
+  project_kind: ProjectKind;
   aliases: string[];
   status: ProjectStatus;
   target_date: string | null;
@@ -255,4 +257,26 @@ export interface LifeProjectClient {
   name: string;
   color: string | null;
   parent_slug: string | null;
+  project_kind: ProjectKind;
+}
+
+export type StudioItemKind = "image" | "link" | "moodboard" | "critique" | "note";
+
+export interface StudioItemRecord {
+  id: string;
+  user_id: string;
+  kind: StudioItemKind;
+  title: string;
+  body: string | null;
+  url: string | null;
+  storage_path: string | null;
+  width: number | null;
+  height: number | null;
+  x: number | null;
+  y: number | null;
+  tags: string[];
+  project_slug: string | null;
+  board_id: string | null;
+  created_at: string;
+  updated_at: string;
 }

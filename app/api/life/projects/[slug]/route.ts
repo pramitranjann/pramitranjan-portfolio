@@ -2,10 +2,15 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { isAuthenticatedLifeRequest, unauthorizedJson } from '@/lib/life/auth'
 import { deleteProject, updateProject } from '@/lib/life/projects-db'
-import type { ProjectStatus } from '@/lib/life/types'
+import type { ProjectKind, ProjectStatus } from '@/lib/life/types'
 
 function normalizeStatus(value: string | null | undefined): ProjectStatus | undefined {
   if (value === 'active' || value === 'on_hold' || value === 'done') return value
+  return undefined
+}
+
+function normalizeProjectKind(value: string | null | undefined): ProjectKind | undefined {
+  if (value === 'general' || value === 'ux') return value
   return undefined
 }
 
@@ -26,6 +31,7 @@ export async function PATCH(request: NextRequest, context: { params: Promise<unk
       targetDate?: string | null
       archived?: boolean
       parentSlug?: string | null
+      projectKind?: string
     } | null
 
     const project = await updateProject(slug, {
@@ -37,6 +43,7 @@ export async function PATCH(request: NextRequest, context: { params: Promise<unk
       targetDate: body && 'targetDate' in body ? body.targetDate : undefined,
       archived: body?.archived,
       ...(body && 'parentSlug' in body ? { parentSlug: body.parentSlug } : {}),
+      ...(body && 'projectKind' in body ? { projectKind: normalizeProjectKind(body.projectKind) } : {}),
     })
 
     return NextResponse.json({ project })

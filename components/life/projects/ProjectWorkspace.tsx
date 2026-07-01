@@ -20,6 +20,7 @@ import { ProjectEvents } from './ProjectEvents'
 import { ProjectPages } from './ProjectPages'
 import { ProjectRefs } from './ProjectRefs'
 import { ProjectTasks } from './ProjectTasks'
+import { ProjectUxTemplates } from './ProjectUxTemplates'
 import { healthTone, progressPct, relativeDueLabel, STATUS_LABEL, STATUS_OPTIONS } from './shared'
 
 type Tab = 'tasks' | 'events' | 'refs' | 'pages'
@@ -39,6 +40,7 @@ export function ProjectWorkspace({
   linkedEvents,
   today,
   timezone,
+  uxTemplates,
 }: {
   project: ProjectRecord
   tasks: TaskRecord[]
@@ -51,10 +53,13 @@ export function ProjectWorkspace({
   linkedEvents: Record<string, TaskLinkedEvent>
   today: string
   timezone: string
+  uxTemplates: Array<{ key: string; name: string; phase: string; summary: string; color: string }>
 }) {
   const router = useRouter()
-  const [tab, setTab] = useState<Tab>('tasks')
+  const defaultTab: Tab = project.project_kind === 'ux' && pages.length > 0 && tasks.length === 0 ? 'pages' : 'tasks'
+  const [tab, setTab] = useState<Tab>(defaultTab)
   const [status, setStatus] = useState<ProjectStatus>(project.status)
+  const [projectKind, setProjectKind] = useState(project.project_kind)
   const [targetDate, setTargetDate] = useState<string | null>(project.target_date)
   const [calOpen, setCalOpen] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -103,6 +108,11 @@ export function ProjectWorkspace({
   function changeStatus(next: ProjectStatus) {
     setStatus(next)
     void patchProject({ status: next })
+  }
+
+  function changeProjectKind(next: typeof project.project_kind) {
+    setProjectKind(next)
+    void patchProject({ projectKind: next })
   }
 
   function changeTargetDate(next: string | null) {
@@ -191,7 +201,7 @@ export function ProjectWorkspace({
       <div className="life-page-head life-project-head">
         <div>
           <p className="eyebrow">
-            <span className="life-project-dot" style={{ background: project.color || 'var(--life-label)' }} /> Project
+            <span className="life-project-dot" style={{ background: project.color || 'var(--life-label)' }} /> {projectKind === 'ux' ? 'UX project' : 'Project'}
           </p>
           {editName ? (
             <input
@@ -244,6 +254,18 @@ export function ProjectWorkspace({
         </div>
         <div className="life-project-head-controls">
           <span className={`life-health-dot health-${tone}`} aria-label={`Health: ${tone}`} />
+          <div className="segmented">
+            {(['general', 'ux'] as const).map((option) => (
+              <button
+                key={option}
+                type="button"
+                className={`segmented-item${projectKind === option ? ' is-active' : ''}`}
+                onClick={() => changeProjectKind(option)}
+              >
+                {option === 'ux' ? 'UX' : 'General'}
+              </button>
+            ))}
+          </div>
           <div className="segmented">
             {STATUS_OPTIONS.map((option) => (
               <button
@@ -305,22 +327,28 @@ export function ProjectWorkspace({
       <div className="life-project-children">
         <div className="life-project-children-head">
           <div className="life-project-children-heading">
-            <span className="eyebrow">Sub-projects</span>
+            <span className="eyebrow">{projectKind === 'ux' && !parentProject ? 'Sections' : 'Sub-projects'}</span>
             <span className="life-project-children-count">{subprojects.length}</span>
           </div>
-          <button
-            type="button"
-            className="life-btn ghost life-project-child-add"
-            onClick={() => {
-              setAddingSubproject((value) => !value)
-              setSubprojectName('')
-              setSubprojectSummary('')
-              setSubprojectColor(project.color || PROJECT_SWATCHES[0])
-            }}
-          >
-            {addingSubproject ? 'Cancel' : '+ Sub-project'}
-          </button>
+          <div className="life-project-children-actions">
+            <button
+              type="button"
+              className="life-btn ghost life-project-child-add"
+              onClick={() => {
+                setAddingSubproject((value) => !value)
+                setSubprojectName('')
+                setSubprojectSummary('')
+                setSubprojectColor(project.color || PROJECT_SWATCHES[0])
+              }}
+            >
+              {addingSubproject ? 'Cancel' : projectKind === 'ux' && !parentProject ? '+ Section' : '+ Sub-project'}
+            </button>
+          </div>
         </div>
+
+        {projectKind === 'ux' && !parentProject ? (
+          <ProjectUxTemplates projectSlug={project.slug} subprojects={subprojects} templates={uxTemplates} />
+        ) : null}
 
         {addingSubproject ? (
           <div className="life-project-create life-project-child-create">
@@ -328,7 +356,7 @@ export function ProjectWorkspace({
               className="life-compose-title"
               autoFocus
               value={subprojectName}
-              placeholder={`New project inside ${project.name}…`}
+              placeholder={projectKind === 'ux' && !parentProject ? `New section inside ${project.name}…` : `New project inside ${project.name}…`}
               onChange={(event) => setSubprojectName(event.target.value)}
               onKeyDown={(event) => {
                 if (event.key === 'Enter') {
@@ -343,7 +371,7 @@ export function ProjectWorkspace({
             <textarea
               className="life-compose-desc"
               value={subprojectSummary}
-              placeholder="What does this sub-project hold?"
+              placeholder={projectKind === 'ux' && !parentProject ? 'What does this section hold?' : 'What does this sub-project hold?'}
               rows={2}
               onChange={(event) => setSubprojectSummary(event.target.value)}
             />
@@ -361,7 +389,7 @@ export function ProjectWorkspace({
                 ))}
               </div>
               <button type="button" className="life-btn primary" disabled={savingSubproject || !subprojectName.trim()} onClick={() => void createSubproject()}>
-                {savingSubproject ? 'Creating…' : 'Create sub-project'}
+                {savingSubproject ? 'Creating…' : projectKind === 'ux' && !parentProject ? 'Create section' : 'Create sub-project'}
               </button>
             </div>
           </div>
@@ -377,17 +405,18 @@ export function ProjectWorkspace({
                 </Link>
                 <button
                   type="button"
-                  className="life-entry-delete-mobile life-project-child-delete"
+                  className="life-project-child-delete"
                   disabled={deletingSlug === child.slug}
+                  aria-label={`Delete ${child.name}`}
                   onClick={() => void deleteProjectBySlug(child.slug, child.name)}
                 >
-                  {deletingSlug === child.slug ? 'Deleting…' : 'Delete'}
+                  {deletingSlug === child.slug ? '…' : '×'}
                 </button>
               </div>
             ))}
           </div>
         ) : (
-          <div className="life-empty">No sub-projects yet.</div>
+          <div className="life-empty">{projectKind === 'ux' && !parentProject ? 'No sections yet.' : 'No sub-projects yet.'}</div>
         )}
       </div>
 

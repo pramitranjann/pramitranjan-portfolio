@@ -18,7 +18,9 @@ export default async function LifeProjectsPage() {
     getTasks({ status: 'all' }).then((rows) => rows.filter((task) => task.status !== 'dismissed')),
   ])
 
-  const items: ProjectOverviewItem[] = projects.map((project) => {
+  const topLevelProjects = projects.filter((project) => !project.parent_slug)
+
+  const items: ProjectOverviewItem[] = topLevelProjects.map((project) => {
     const scoped = tasks.filter((task) => task.project_slug === project.slug)
     const open = scoped.filter((task) => task.status !== 'done')
     const done = scoped.filter((task) => task.status === 'done')
@@ -31,6 +33,7 @@ export default async function LifeProjectsPage() {
       color: project.color,
       parentSlug: project.parent_slug,
       parentName: parent?.name || null,
+      projectKind: project.project_kind,
       status: project.status,
       targetDate: project.target_date,
       open: open.length,
@@ -40,9 +43,5 @@ export default async function LifeProjectsPage() {
     }
   })
 
-  const parentOptions = projects
-    .filter((project) => !project.parent_slug)
-    .map((project) => ({ slug: project.slug, name: project.name }))
-
-  return <ProjectsOverview items={items} today={today} parentOptions={parentOptions} />
+  return <ProjectsOverview items={items} today={today} />
 }

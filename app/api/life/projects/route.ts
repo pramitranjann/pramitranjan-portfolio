@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { isAuthenticatedLifeRequest, unauthorizedJson } from '@/lib/life/auth'
 import { createProject, listProjects } from '@/lib/life/projects-db'
+import type { ProjectKind } from '@/lib/life/types'
+
+function normalizeProjectKind(value: string | null | undefined): ProjectKind {
+  return value === 'ux' ? 'ux' : 'general'
+}
 
 export async function GET(request: NextRequest) {
   if (!isAuthenticatedLifeRequest(request)) {
@@ -29,6 +34,7 @@ export async function POST(request: NextRequest) {
       color?: string | null
       aliases?: string[]
       parentSlug?: string | null
+      projectKind?: string
     } | null
 
     if (!body?.name?.trim()) {
@@ -41,6 +47,7 @@ export async function POST(request: NextRequest) {
       color: body.color ?? null,
       aliases: body.aliases,
       parentSlug: body.parentSlug ?? null,
+      projectKind: normalizeProjectKind(body.projectKind),
     })
 
     return NextResponse.json({ project })

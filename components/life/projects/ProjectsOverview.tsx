@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 import { fetchJson } from '@/lib/life/client'
-import type { ProjectStatus } from '@/lib/life/types'
+import type { ProjectKind, ProjectStatus } from '@/lib/life/types'
 import { healthTone, progressPct, relativeDueLabel, STATUS_LABEL } from './shared'
 
 export interface ProjectOverviewItem {
@@ -15,6 +15,7 @@ export interface ProjectOverviewItem {
   color: string | null
   parentSlug: string | null
   parentName: string | null
+  projectKind: ProjectKind
   status: ProjectStatus
   targetDate: string | null
   open: number
@@ -28,18 +29,16 @@ const SWATCHES = ['#e9b765', '#7fd899', '#9aa6ff', '#e58fb8', '#6fcfd6', '#c79bf
 export function ProjectsOverview({
   items,
   today,
-  parentOptions,
 }: {
   items: ProjectOverviewItem[]
   today: string
-  parentOptions: Array<{ slug: string; name: string }>
 }) {
   const router = useRouter()
   const [adding, setAdding] = useState(false)
   const [name, setName] = useState('')
   const [summary, setSummary] = useState('')
   const [color, setColor] = useState(SWATCHES[0])
-  const [parentSlug, setParentSlug] = useState('')
+  const [projectKind, setProjectKind] = useState<ProjectKind>('general')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -53,12 +52,12 @@ export function ProjectsOverview({
     try {
       await fetchJson('/api/life/projects', {
         method: 'POST',
-        body: JSON.stringify({ name: trimmed, summary: summary.trim() || null, color, parentSlug: parentSlug || null }),
+        body: JSON.stringify({ name: trimmed, summary: summary.trim() || null, color, parentSlug: null, projectKind }),
       })
       setName('')
       setSummary('')
       setColor(SWATCHES[0])
-      setParentSlug('')
+      setProjectKind('general')
       setAdding(false)
       router.refresh()
     } catch (err) {
@@ -116,13 +115,9 @@ export function ProjectsOverview({
             rows={2}
             onChange={(event) => setSummary(event.target.value)}
           />
-          <select className="text-input" value={parentSlug} onChange={(event) => setParentSlug(event.target.value)}>
-            <option value="">Top-level project</option>
-            {parentOptions.map((project) => (
-              <option key={project.slug} value={project.slug}>
-                Sub-project of {project.name}
-              </option>
-            ))}
+          <select className="text-input" value={projectKind} onChange={(event) => setProjectKind(event.target.value as ProjectKind)}>
+            <option value="general">General project</option>
+            <option value="ux">UX class / design sprint</option>
           </select>
           <div className="life-project-create-foot">
             <div className="life-swatches">
@@ -165,6 +160,7 @@ export function ProjectsOverview({
                   </div>
                   <div className="life-project-card-meta">
                     {item.parentName ? <span className="life-project-parent-chip">Sub-project of {item.parentName}</span> : null}
+                    {item.projectKind === 'ux' ? <span className="life-project-kind-chip">UX</span> : null}
                     {item.status !== 'active' ? <span className="life-project-badge">{STATUS_LABEL[item.status]}</span> : null}
                     {due ? <span className={`life-due-chip due-${due.tone}`}>{due.text}</span> : null}
                   </div>

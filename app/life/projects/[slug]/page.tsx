@@ -11,6 +11,7 @@ import { getProjectBySlugDb, listProjects } from '@/lib/life/projects-db'
 import { getOwnerSettings } from '@/lib/life/settings'
 import { getTasks } from '@/lib/life/tasks'
 import { getCurrentLocalDate } from '@/lib/life/time'
+import { UX_TEMPLATE_SECTIONS } from '@/lib/life/ux-templates'
 import type { TaskLinkedEvent } from '@/lib/life/types'
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -74,6 +75,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       linkedEvents={linkedEvents}
       today={today}
       timezone={settings.timezone}
+      uxTemplates={UX_TEMPLATE_SECTIONS.map(({ key, name, phase, summary, color }) => ({ key, name, phase, summary, color }))}
     />
   )
 }

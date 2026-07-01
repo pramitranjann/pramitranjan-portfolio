@@ -6,7 +6,7 @@ import { revalidateTag, unstable_cache } from 'next/cache'
 import { LIFE_PROJECTS } from '@/lib/life/projects'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
 import { OWNER_ID } from '@/lib/life/constants'
-import type { LifeProjectClient, ProjectRecord, ProjectStatus } from '@/lib/life/types'
+import type { LifeProjectClient, ProjectKind, ProjectRecord, ProjectStatus } from '@/lib/life/types'
 
 // Cache tag for the projects list. Every project mutation calls
 // revalidateTag(PROJECTS_TAG) so the cross-request cache below is dropped the
@@ -30,6 +30,7 @@ function seedProjects(): ProjectRecord[] {
     summary: project.summary,
     color: null,
     parent_slug: null,
+    project_kind: 'general' as const,
     aliases: project.aliases,
     status: 'active' as const,
     target_date: null,
@@ -112,6 +113,7 @@ export async function listProjectsClient(): Promise<LifeProjectClient[]> {
     name: project.name,
     color: project.color,
     parent_slug: project.parent_slug,
+    project_kind: project.project_kind,
   }))
 }
 
@@ -144,6 +146,7 @@ export async function createProject(input: {
   color?: string | null
   aliases?: string[]
   parentSlug?: string | null
+  projectKind?: ProjectKind
 }): Promise<ProjectRecord> {
   const name = input.name.trim()
   if (!name) throw new Error('Project name is required.')
@@ -174,6 +177,7 @@ export async function createProject(input: {
       summary: input.summary?.trim() || null,
       color: input.color || null,
       parent_slug: parentSlug,
+      project_kind: input.projectKind || 'general',
       aliases: input.aliases?.map((alias) => alias.trim().toLowerCase()).filter(Boolean) || [],
       sort_order: sortOrder,
     })
@@ -196,6 +200,7 @@ export async function updateProject(
     targetDate?: string | null
     archived?: boolean
     parentSlug?: string | null
+    projectKind?: ProjectKind
   },
 ): Promise<ProjectRecord> {
   const supabase = getSupabaseAdmin()
@@ -208,6 +213,7 @@ export async function updateProject(
   if (patch.status !== undefined) update.status = patch.status
   if (patch.targetDate !== undefined) update.target_date = patch.targetDate || null
   if (patch.archived !== undefined) update.archived = patch.archived
+  if (patch.projectKind !== undefined) update.project_kind = patch.projectKind
   if ('parentSlug' in patch) {
     const parentSlug = patch.parentSlug?.trim().toLowerCase() || null
     if (parentSlug === slug) {

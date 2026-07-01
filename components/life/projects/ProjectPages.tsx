@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-import { MarkdownCard } from '@/components/life/MarkdownCard'
 import { fetchJson } from '@/lib/life/client'
 import type { ProjectPageRecord } from '@/lib/life/types'
 
@@ -91,7 +90,7 @@ export function ProjectPages({ projectSlug, pages }: { projectSlug: string; page
       <div className="life-project-pages-sidebar">
         <div className="life-project-pages-head">
           <span className="eyebrow">Pages</span>
-          <button type="button" className="life-btn primary" disabled={creating} onClick={() => void createPage()}>
+          <button type="button" className="life-btn primary life-project-page-action" disabled={creating} onClick={() => void createPage()}>
             {creating ? 'Adding…' : '+ Page'}
           </button>
         </div>
@@ -117,10 +116,10 @@ export function ProjectPages({ projectSlug, pages }: { projectSlug: string; page
         {selectedPage ? (
           <>
             <div className="life-project-page-toolbar">
-              <button type="button" className="life-btn primary" disabled={saving} onClick={() => void savePage()}>
+              <button type="button" className="life-btn primary life-project-page-action" disabled={saving} onClick={() => void savePage()}>
                 {saving ? 'Saving…' : 'Save page'}
               </button>
-              <button type="button" className="life-btn ghost" onClick={() => void deletePage()}>
+              <button type="button" className="life-btn ghost life-project-page-action-secondary" onClick={() => void deletePage()}>
                 Delete
               </button>
             </div>
@@ -137,10 +136,6 @@ export function ProjectPages({ projectSlug, pages }: { projectSlug: string; page
               rows={16}
               onChange={(event) => setBody(event.target.value)}
             />
-            <div className="life-project-page-preview">
-              <div className="life-project-page-preview-head">Preview</div>
-              <MarkdownCard content={body || '*Nothing yet.*'} />
-            </div>
           </>
         ) : (
           <div className="life-empty">Select a page or create a new one.</div>
