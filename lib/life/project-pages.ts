@@ -18,6 +18,28 @@ export async function listProjectPages(projectSlug: string): Promise<ProjectPage
   return (data as ProjectPageRecord[] | null) ?? []
 }
 
+export async function listProjectPagesByProjects(
+  projectSlugs: string[],
+): Promise<Record<string, ProjectPageRecord[]>> {
+  const result: Record<string, ProjectPageRecord[]> = {}
+  if (projectSlugs.length === 0) return result
+
+  const supabase = getSupabaseAdmin()
+  const { data, error } = await supabase
+    .from('project_pages')
+    .select('*')
+    .in('project_slug', projectSlugs)
+    .eq('user_id', OWNER_ID)
+    .order('sort_order', { ascending: true })
+    .order('updated_at', { ascending: false })
+
+  if (error) throw error
+  for (const page of (data as ProjectPageRecord[] | null) ?? []) {
+    ;(result[page.project_slug] ??= []).push(page)
+  }
+  return result
+}
+
 export async function createProjectPage(input: {
   projectSlug: string
   title?: string | null

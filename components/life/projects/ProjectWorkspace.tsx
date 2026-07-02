@@ -1,8 +1,8 @@
 'use client'
 
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import { LifeCalendar } from '@/components/life/tasks/LifeCalendar'
 import { fetchJson } from '@/lib/life/client'
@@ -28,12 +28,22 @@ type Tab = 'tasks' | 'events' | 'refs' | 'pages'
 const PRIORITY_RANK: Record<string, number> = { high: 0, medium: 1, low: 2 }
 const PROJECT_SWATCHES = ['#e9b765', '#7fd899', '#9aa6ff', '#e58fb8', '#6fcfd6', '#c79bff', '#ff6c61']
 
+function compareProjects(a: ProjectRecord, b: ProjectRecord) {
+  return a.sort_order - b.sort_order || a.name.localeCompare(b.name)
+}
+
+function comparePages(a: ProjectPageRecord, b: ProjectPageRecord) {
+  return a.sort_order - b.sort_order || a.title.localeCompare(b.title)
+}
+
 export function ProjectWorkspace({
   project,
   tasks,
   milestones,
   refs,
   pages,
+  allProjects,
+  treePagesByProject,
   parentProject,
   subprojects,
   events,
@@ -47,6 +57,8 @@ export function ProjectWorkspace({
   milestones: ProjectMilestoneRecord[]
   refs: ProjectRefRecord[]
   pages: ProjectPageRecord[]
+  allProjects: ProjectRecord[]
+  treePagesByProject: Record<string, ProjectPageRecord[]>
   parentProject: ProjectRecord | null
   subprojects: ProjectRecord[]
   events: CalendarEventRecord[]
@@ -56,14 +68,43 @@ export function ProjectWorkspace({
   uxTemplates: Array<{ key: string; name: string; phase: string; summary: string; color: string }>
 }) {
   const router = useRouter()
-  const defaultTab: Tab = project.project_kind === 'ux' && pages.length > 0 && tasks.length === 0 ? 'pages' : 'tasks'
+  const searchParams = useSearchParams()
+  const activePageId = searchParams.get('page')
+  const defaultTab: Tab = activePageId || (project.project_kind === 'ux' && pages.length > 0 && tasks.length === 0) ? 'pages' : 'tasks'
   const [tab, setTab] = useState<Tab>(defaultTab)
+  const [treeOpen, setTreeOpen] = useState(true)
   const [status, setStatus] = useState<ProjectStatus>(project.status)
   const [projectKind, setProjectKind] = useState(project.project_kind)
   const [targetDate, setTargetDate] = useState<string | null>(project.target_date)
   const [calOpen, setCalOpen] = useState(false)
+  const [statusOpen, setStatusOpen] = useState(false)
+  const [kindOpen, setKindOpen] = useState(false)
+  const [overflowOpen, setOverflowOpen] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const dateBtnRef = useRef<HTMLButtonElement>(null)
+  const propsRef = useRef<HTMLDivElement>(null)
+
+  // Close the property menus on outside click or Escape.
+  useEffect(() => {
+    if (!statusOpen && !kindOpen && !overflowOpen) return
+    function close() {
+      setStatusOpen(false)
+      setKindOpen(false)
+      setOverflowOpen(false)
+    }
+    function onPointerDown(event: MouseEvent) {
+      if (!propsRef.current?.contains(event.target as Node)) close()
+    }
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') close()
+    }
+    document.addEventListener('mousedown', onPointerDown)
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('mousedown', onPointerDown)
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [statusOpen, kindOpen, overflowOpen])
 
   // Inline name / summary editing.
   const [name, setName] = useState(project.name)
@@ -83,6 +124,20 @@ export function ProjectWorkspace({
   const pct = progressPct(done.length, tasks.length)
   const tone = healthTone({ status, open: open.length, overdue: overdue.length, total: tasks.length })
   const due = relativeDueLabel(targetDate, today)
+  const activeTreeRoot = parentProject || project
+  const projectTreeLabel = activeTreeRoot.project_kind === 'ux' ? 'Sections' : 'Sub-projects'
+  const rootProjects = useMemo(
+    () => allProjects.filter((candidate) => !candidate.parent_slug && !candidate.archived).sort(compareProjects),
+    [allProjects],
+  )
+  const treeSections = useMemo(
+    () => allProjects.filter((candidate) => candidate.parent_slug === activeTreeRoot.slug && !candidate.archived).sort(compareProjects),
+    [activeTreeRoot.slug, allProjects],
+  )
+
+  function pagesFor(projectSlug: string) {
+    return [...(treePagesByProject[projectSlug] || [])].sort(comparePages)
+  }
 
   // The single most pressing open task: priority first, then soonest due.
   const nextAction = useMemo(() => {
@@ -95,30 +150,35 @@ export function ProjectWorkspace({
     })[0]
   }, [open])
 
-  async function patchProject(patch: Record<string, unknown>) {
+  async function patchProject(patch: Record<string, unknown>, rollback?: () => void) {
     setError(null)
     try {
       await fetchJson(`/api/life/projects/${project.slug}`, { method: 'PATCH', body: JSON.stringify(patch) })
-      router.refresh()
     } catch (err) {
+      rollback?.()
       setError(err instanceof Error ? err.message : 'Update failed.')
     }
   }
 
   function changeStatus(next: ProjectStatus) {
+    const previous = status
     setStatus(next)
-    void patchProject({ status: next })
+    setStatusOpen(false)
+    void patchProject({ status: next }, () => setStatus(previous))
   }
 
   function changeProjectKind(next: typeof project.project_kind) {
+    const previous = projectKind
     setProjectKind(next)
-    void patchProject({ projectKind: next })
+    setKindOpen(false)
+    void patchProject({ projectKind: next }, () => setProjectKind(previous))
   }
 
   function changeTargetDate(next: string | null) {
+    const previous = targetDate
     setTargetDate(next)
     setCalOpen(false)
-    void patchProject({ targetDate: next })
+    void patchProject({ targetDate: next }, () => setTargetDate(previous))
   }
 
   function saveName() {
@@ -128,13 +188,18 @@ export function ProjectWorkspace({
       setName(project.name)
       return
     }
-    void patchProject({ name: trimmed })
+    const previous = name
+    setName(trimmed)
+    void patchProject({ name: trimmed }, () => setName(previous))
   }
 
   function saveSummary() {
     setEditSummary(false)
-    if (summary.trim() === (project.summary || '')) return
-    void patchProject({ summary: summary.trim() || null })
+    const trimmed = summary.trim()
+    if (trimmed === (project.summary || '')) return
+    const previous = summary
+    setSummary(trimmed)
+    void patchProject({ summary: trimmed || null }, () => setSummary(previous))
   }
 
   async function createSubproject() {
@@ -186,7 +251,97 @@ export function ProjectWorkspace({
   }
 
   return (
-    <div className="life-project-workspace">
+    <div className={`life-project-shell-with-tree${treeOpen ? '' : ' is-tree-collapsed'}`}>
+      <aside className="life-project-tree" aria-label="Project tree">
+        <div className="life-project-tree-head">
+          <Link href="/life/projects" className="life-project-tree-title">
+            Projects
+          </Link>
+          <button type="button" className="life-project-tree-toggle" onClick={() => setTreeOpen((value) => !value)}>
+            {treeOpen ? 'Hide' : 'Show'}
+          </button>
+        </div>
+
+        {treeOpen ? (
+          <div className="life-project-tree-body">
+            <Link href="/life/projects" className="life-project-tree-index">
+              All projects
+            </Link>
+            <div className="life-project-tree-roots">
+              {rootProjects.map((root) => {
+                const isActiveRoot = root.slug === activeTreeRoot.slug
+                const rootPages = pagesFor(root.slug)
+                return (
+                  <div key={root.slug} className={`life-project-tree-root${isActiveRoot ? ' is-open' : ''}`}>
+                    <Link
+                      href={`/life/projects/${root.slug}`}
+                      className={`life-project-tree-project${project.slug === root.slug ? ' is-active' : ''}${isActiveRoot ? ' is-in-tree' : ''}`}
+                    >
+                      <span className="life-project-dot" style={{ background: root.color || 'var(--life-label)' }} />
+                      <span>{root.name}</span>
+                    </Link>
+
+                    {isActiveRoot ? (
+                      <div className="life-project-tree-branch">
+                        {rootPages.length > 0 ? (
+                          <div className="life-project-tree-pages">
+                            {rootPages.map((page) => (
+                              <Link
+                                key={page.id}
+                                href={`/life/projects/${root.slug}?page=${page.id}`}
+                                className={`life-project-tree-page${project.slug === root.slug && activePageId === page.id ? ' is-active' : ''}`}
+                                onClick={() => setTab('pages')}
+                              >
+                                {page.title}
+                              </Link>
+                            ))}
+                          </div>
+                        ) : null}
+
+                        {treeSections.length > 0 ? (
+                          <div className="life-project-tree-section-group">
+                            <span className="life-project-tree-section-label">{projectTreeLabel}</span>
+                            {treeSections.map((section) => {
+                              const sectionPages = pagesFor(section.slug)
+                              return (
+                                <div key={section.slug} className="life-project-tree-section">
+                                  <Link
+                                    href={`/life/projects/${section.slug}`}
+                                    className={`life-project-tree-project is-child${project.slug === section.slug ? ' is-active' : ''}`}
+                                  >
+                                    <span className="life-project-dot" style={{ background: section.color || root.color || 'var(--life-label)' }} />
+                                    <span>{section.name}</span>
+                                  </Link>
+                                  {sectionPages.length > 0 ? (
+                                    <div className="life-project-tree-pages">
+                                      {sectionPages.map((page) => (
+                                        <Link
+                                          key={page.id}
+                                          href={`/life/projects/${section.slug}?page=${page.id}`}
+                                          className={`life-project-tree-page${project.slug === section.slug && activePageId === page.id ? ' is-active' : ''}`}
+                                          onClick={() => setTab('pages')}
+                                        >
+                                          {page.title}
+                                        </Link>
+                                      ))}
+                                    </div>
+                                  ) : null}
+                                </div>
+                              )
+                            })}
+                          </div>
+                        ) : null}
+                      </div>
+                    ) : null}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        ) : null}
+      </aside>
+
+      <div className="life-project-workspace">
       <div className="life-project-back">
         <Link href="/life/projects" className="life-back-link">
           ← Projects
@@ -199,7 +354,7 @@ export function ProjectWorkspace({
       </div>
 
       <div className="life-page-head life-project-head">
-        <div>
+        <div className="life-project-head-copy">
           <p className="eyebrow">
             <span className="life-project-dot" style={{ background: project.color || 'var(--life-label)' }} /> {projectKind === 'ux' ? 'UX project' : 'Project'}
           </p>
@@ -243,53 +398,96 @@ export function ProjectWorkspace({
               }}
             />
           ) : (
-            <p className="life-project-summary-line life-project-summary-edit" onClick={() => setEditSummary(true)} title="Click to edit">
+          <p className="life-project-summary-line life-project-summary-edit" onClick={() => setEditSummary(true)} title="Click to edit">
               {summary || <span className="life-project-summary-empty">Add a summary…</span>}
             </p>
           )}
-          <p className="life-tasks-stat">
-            <b>{open.length} open</b>
-            {overdue.length > 0 ? <> · {overdue.length} overdue</> : null} · {done.length} done
-          </p>
-        </div>
-        <div className="life-project-head-controls">
-          <span className={`life-health-dot health-${tone}`} aria-label={`Health: ${tone}`} />
-          <div className="segmented">
-            {(['general', 'ux'] as const).map((option) => (
-              <button
-                key={option}
-                type="button"
-                className={`segmented-item${projectKind === option ? ' is-active' : ''}`}
-                onClick={() => changeProjectKind(option)}
-              >
-                {option === 'ux' ? 'UX' : 'General'}
+          <div className="life-project-properties" ref={propsRef}>
+            <span className={`life-health-dot health-${tone}`} aria-label={`Health: ${tone}`} />
+            <span className="life-project-property-wrap">
+              <button type="button" className="life-project-property" onClick={() => { setStatusOpen((value) => !value); setKindOpen(false); setOverflowOpen(false); setCalOpen(false) }}>
+                {STATUS_LABEL[status]}
               </button>
-            ))}
-          </div>
-          <div className="segmented">
-            {STATUS_OPTIONS.map((option) => (
-              <button
-                key={option}
-                type="button"
-                className={`segmented-item${status === option ? ' is-active' : ''}`}
-                onClick={() => changeStatus(option)}
-              >
-                {STATUS_LABEL[option]}
+              {statusOpen ? (
+                <div className="life-project-property-menu">
+                  {STATUS_OPTIONS.map((option) => (
+                    <button key={option} type="button" className={status === option ? 'is-active' : ''} onClick={() => changeStatus(option)}>
+                      {STATUS_LABEL[option]}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+            </span>
+            <span className="life-project-property-sep">·</span>
+            <span className="life-project-property-wrap">
+              <button type="button" className="life-project-property" onClick={() => { setKindOpen((value) => !value); setStatusOpen(false); setOverflowOpen(false); setCalOpen(false) }}>
+                {projectKind === 'ux' ? 'UX' : 'General'}
               </button>
-            ))}
+              {kindOpen ? (
+                <div className="life-project-property-menu">
+                  {(['general', 'ux'] as const).map((option) => (
+                    <button key={option} type="button" className={projectKind === option ? 'is-active' : ''} onClick={() => changeProjectKind(option)}>
+                      {option === 'ux' ? 'UX' : 'General'}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+            </span>
+            <span className="life-project-property-sep">·</span>
+            <button ref={dateBtnRef} type="button" className="life-project-property" onClick={() => { setCalOpen((value) => !value); setStatusOpen(false); setKindOpen(false); setOverflowOpen(false) }}>
+              {due ? `Due ${due.text}` : 'No deadline'}
+            </button>
+            <span className="life-project-property-sep">·</span>
+            <span className="life-project-property-text">{open.length} open</span>
+            {overdue.length > 0 ? (
+              <>
+                <span className="life-project-property-sep">·</span>
+                <span className="life-project-property-text is-overdue">{overdue.length} overdue</span>
+              </>
+            ) : null}
+            <span className="life-project-property-sep">·</span>
+            <span className="life-project-property-text">{done.length} done</span>
+            <span className="life-project-property-wrap">
+              <button type="button" className="life-project-overflow" aria-label="Project actions" onClick={() => { setOverflowOpen((value) => !value); setStatusOpen(false); setKindOpen(false); setCalOpen(false) }}>
+                …
+              </button>
+              {overflowOpen ? (
+                <div className="life-project-property-menu align-right">
+                  <button
+                    type="button"
+                    className="is-danger"
+                    disabled={deletingSlug === project.slug}
+                    onClick={() => void deleteProjectBySlug(project.slug, project.name, parentProject ? `/life/projects/${parentProject.slug}` : '/life/projects')}
+                  >
+                    {deletingSlug === project.slug ? 'Deleting…' : parentProject ? 'Delete sub-project' : 'Delete project'}
+                  </button>
+                </div>
+              ) : null}
+            </span>
           </div>
-          <button ref={dateBtnRef} type="button" className="life-pill" onClick={() => setCalOpen((value) => !value)}>
-            <span className="ic">◷</span>
-            <span className="lbl">{due ? due.text : 'Deadline'}</span>
-          </button>
-          <button
-            type="button"
-            className="life-entry-delete-mobile life-project-delete-action"
-            disabled={deletingSlug === project.slug}
-            onClick={() => void deleteProjectBySlug(project.slug, project.name, parentProject ? `/life/projects/${parentProject.slug}` : '/life/projects')}
-          >
-            {deletingSlug === project.slug ? 'Deleting project…' : parentProject ? 'Delete sub-project' : 'Delete project'}
-          </button>
+
+          <div className="life-project-quiet-status">
+            <div className="life-project-progress-bar">
+              <div className="life-progress-track">
+                <div className="life-progress-fill" style={{ width: `${pct}%` }} />
+              </div>
+              <span className="life-progress-label">
+                {done.length}/{tasks.length} done · {pct}%
+              </span>
+            </div>
+            {nextAction ? (
+              <div className="life-next-action">
+                <span className="life-next-action-label">Next</span>
+                <span className={`pri-dot pri-${nextAction.priority}`} />
+                <span className="life-next-action-title">{nextAction.title}</span>
+                {nextAction.due_local_date ? (
+                  <span className={`life-due-chip due-${nextAction.due_local_date < today ? 'overdue' : nextAction.due_local_date === today ? 'today' : 'soon'}`}>
+                    {relativeDueLabel(nextAction.due_local_date, today)?.text}
+                  </span>
+                ) : null}
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
 
@@ -300,28 +498,6 @@ export function ProjectWorkspace({
           onClose={() => setCalOpen(false)}
           anchorRect={dateBtnRef.current?.getBoundingClientRect() ?? null}
         />
-      ) : null}
-
-      <div className="life-project-progress-bar">
-        <div className="life-progress-track">
-          <div className="life-progress-fill" style={{ width: `${pct}%` }} />
-        </div>
-        <span className="life-progress-label">
-          {done.length}/{tasks.length} done · {pct}%
-        </span>
-      </div>
-
-      {nextAction ? (
-        <div className="life-next-action">
-          <span className="life-next-action-label">Next action</span>
-          <span className={`pri-dot pri-${nextAction.priority}`} />
-          <span className="life-next-action-title">{nextAction.title}</span>
-          {nextAction.due_local_date ? (
-            <span className={`life-due-chip due-${nextAction.due_local_date < today ? 'overdue' : nextAction.due_local_date === today ? 'today' : 'soon'}`}>
-              {relativeDueLabel(nextAction.due_local_date, today)?.text}
-            </span>
-          ) : null}
-        </div>
       ) : null}
 
       <div className="life-project-children">
@@ -437,7 +613,7 @@ export function ProjectWorkspace({
         </button>
       </div>
 
-      <div className="life-project-tab-body">
+      <div key={tab} className="life-project-tab-body">
         {tab === 'tasks' ? (
           <ProjectTasks
             projectSlug={project.slug}
@@ -454,6 +630,7 @@ export function ProjectWorkspace({
         {tab === 'refs' ? <ProjectRefs projectSlug={project.slug} refs={refs} /> : null}
         {tab === 'pages' ? <ProjectPages projectSlug={project.slug} pages={pages} /> : null}
       </div>
+    </div>
     </div>
   )
 }

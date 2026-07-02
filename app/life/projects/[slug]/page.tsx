@@ -5,7 +5,7 @@ import { isAdminSession } from '@/lib/admin-auth'
 import { getCalendarEventsByIds } from '@/lib/life/calendar'
 import { listMilestones } from '@/lib/life/milestones'
 import { getProjectEvents } from '@/lib/life/project-events'
-import { listProjectPages } from '@/lib/life/project-pages'
+import { listProjectPages, listProjectPagesByProjects } from '@/lib/life/project-pages'
 import { listRefs } from '@/lib/life/project-refs'
 import { getProjectBySlugDb, listProjects } from '@/lib/life/projects-db'
 import { getOwnerSettings } from '@/lib/life/settings'
@@ -37,6 +37,17 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   ])
   const parentProject = project.parent_slug ? allProjects.find((candidate) => candidate.slug === project.parent_slug) || null : null
   const subprojects = allProjects.filter((candidate) => candidate.parent_slug === project.slug)
+  const treeRootProject = parentProject || project
+  const treeProjectSlugs = Array.from(
+    new Set([
+      treeRootProject.slug,
+      ...allProjects.filter((candidate) => candidate.parent_slug === treeRootProject.slug).map((candidate) => candidate.slug),
+    ]),
+  )
+  // Batch-load pages for the rest of the visible tree in a single query, then
+  // reuse the already-fetched pages for the current project.
+  const fetchedTreePages = await listProjectPagesByProjects(treeProjectSlugs.filter((treeSlug) => treeSlug !== slug))
+  const treePagesByProject: Record<string, typeof pages> = { ...fetchedTreePages, [slug]: pages }
 
   // Events tied to this project = explicitly mapped events + events linked from
   // the project's own tasks.
@@ -69,6 +80,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       milestones={milestones}
       refs={refs}
       pages={pages}
+      allProjects={allProjects}
+      treePagesByProject={treePagesByProject}
       parentProject={parentProject}
       subprojects={subprojects}
       events={events}
