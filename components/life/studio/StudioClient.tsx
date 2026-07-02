@@ -3,7 +3,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { InputHTMLAttributes } from 'react'
 import Link from 'next/link'
+import { AnimatePresence } from 'motion/react'
 
+import { PhotoLightbox } from '@/components/PhotoLightbox'
 import { fetchJson } from '@/lib/life/client'
 import type { LifeProjectClient, StudioItemKind, StudioItemRecord } from '@/lib/life/types'
 
@@ -64,11 +66,22 @@ export function StudioClient({
   const [dragActive, setDragActive] = useState(false)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [selectedImageId, setSelectedImageId] = useState<string | null>(null)
+  const [lightboxDirection, setLightboxDirection] = useState(1)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const folderInputRef = useRef<HTMLInputElement>(null)
 
   const projectBySlug = useMemo(() => new Map(projects.map((project) => [project.slug, project])), [projects])
   const visibleItems = filter === 'all' ? items : items.filter((item) => item.kind === filter)
+  const visibleImages = useMemo(
+    () => visibleItems.filter((item): item is StudioItemRecord & { url: string } => item.kind === 'image' && typeof item.url === 'string' && item.url.length > 0),
+    [visibleItems],
+  )
+  const selectedImageIndex = useMemo(
+    () => (selectedImageId ? visibleImages.findIndex((item) => item.id === selectedImageId) : -1),
+    [selectedImageId, visibleImages],
+  )
+  const selectedImage = selectedImageIndex >= 0 ? visibleImages[selectedImageIndex] : null
   const counts = useMemo(() => {
     return items.reduce<Record<string, number>>((acc, item) => {
       acc[item.kind] = (acc[item.kind] || 0) + 1
@@ -134,9 +147,31 @@ export function StudioClient({
     try {
       await fetchJson(`/api/life/studio/${id}`, { method: 'DELETE' })
       setItems((current) => current.filter((item) => item.id !== id))
+      setSelectedImageId((current) => (current === id ? null : current))
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to delete item.')
     }
+  }
+
+  function openImageLightbox(id: string) {
+    setLightboxDirection(1)
+    setSelectedImageId(id)
+  }
+
+  function closeImageLightbox() {
+    setSelectedImageId(null)
+  }
+
+  function showPrevImage() {
+    if (selectedImageIndex <= 0) return
+    setLightboxDirection(-1)
+    setSelectedImageId(visibleImages[selectedImageIndex - 1]?.id ?? null)
+  }
+
+  function showNextImage() {
+    if (selectedImageIndex < 0 || selectedImageIndex >= visibleImages.length - 1) return
+    setLightboxDirection(1)
+    setSelectedImageId(visibleImages[selectedImageIndex + 1]?.id ?? null)
   }
 
   useEffect(() => {
@@ -225,10 +260,10 @@ export function StudioClient({
                     x
                   </button>
                   {item.kind === 'image' && item.url ? (
-                    <a href={item.url} target="_blank" rel="noreferrer" className="life-studio-image-link">
+                    <button type="button" className="life-studio-image-link" onClick={() => openImageLightbox(item.id)} aria-label={item.title || 'Open image'}>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={item.url} alt={item.title || 'Studio image'} className="life-studio-image" />
-                    </a>
+                    </button>
                   ) : null}
                   {item.kind === 'link' && item.url ? (
                     <a href={item.url} target="_blank" rel="noreferrer" className="life-studio-link-tile">
@@ -236,15 +271,17 @@ export function StudioClient({
                       <strong>{item.title || item.url}</strong>
                     </a>
                   ) : null}
-                  <div className="life-studio-tile-meta">
-                    <strong>{item.title}</strong>
-                    {project ? <Link href={`/life/projects/${project.slug}`}>{project.name}</Link> : null}
-                    {item.tags.length > 0 ? (
-                      <div className="life-studio-tags">
-                        {item.tags.map((tag) => <span key={tag}>{tag}</span>)}
-                      </div>
-                    ) : null}
-                  </div>
+                  {item.kind === 'image' ? null : (
+                    <div className="life-studio-tile-meta">
+                      <strong>{item.title}</strong>
+                      {project ? <Link href={`/life/projects/${project.slug}`}>{project.name}</Link> : null}
+                      {item.tags.length > 0 ? (
+                        <div className="life-studio-tags">
+                          {item.tags.map((tag) => <span key={tag}>{tag}</span>)}
+                        </div>
+                      ) : null}
+                    </div>
+                  )}
                 </article>
               )
             })}
@@ -259,6 +296,32 @@ export function StudioClient({
 
       {saving ? <p className="life-studio-status">Saving...</p> : null}
       {error ? <p className="error-text">{error}</p> : null}
+
+      <AnimatePresence>
+        {selectedImage ? (
+          <PhotoLightbox
+            src={selectedImage.url}
+            alt={selectedImage.title || 'Studio image'}
+            index={selectedImageIndex}
+            total={visibleImages.length}
+            direction={lightboxDirection}
+            details={{
+              title: selectedImage.title || undefined,
+              meta:
+                [
+                  selectedImage.project_slug ? projectBySlug.get(selectedImage.project_slug)?.name ?? null : null,
+                  selectedImage.tags.length > 0 ? selectedImage.tags.join(' · ') : null,
+                ]
+                  .filter(Boolean)
+                  .join('  ·  ') || undefined,
+              caption: selectedImage.body || undefined,
+            }}
+            onClose={closeImageLightbox}
+            onPrev={showPrevImage}
+            onNext={showNextImage}
+          />
+        ) : null}
+      </AnimatePresence>
 
       {composeOpen ? (
         <div className="life-studio-compose-backdrop" onClick={() => setComposeOpen(false)}>

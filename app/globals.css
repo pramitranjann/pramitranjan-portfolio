@@ -3697,10 +3697,10 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
 .life-shell .life-project-page-action:disabled { opacity: 0.45; }
 .life-shell .life-project-page-action-secondary { min-height: 40px; padding: 0 12px; border: 1px solid transparent; background: transparent; color: var(--life-muted); font-family: var(--font-mono); font-size: 13px; letter-spacing: 0; }
 .life-shell .life-project-page-action-secondary:hover { color: var(--life-text); background: var(--life-accent-soft); border-color: var(--life-accent-line); }
-.life-shell .life-project-page-title { width: 100%; border: 0; border-bottom: 1px solid var(--life-border); background: transparent; color: var(--life-text); font-family: var(--life-display); font-size: 30px; outline: none; padding: 0 0 6px; }
+.life-shell .life-project-page-title { width: 100%; border: 0; border-bottom: 1px solid var(--life-border); background: transparent; color: var(--life-text); font-family: var(--life-display); font-size: 30px; outline: none; padding: 0 0 10px; }
 .life-shell .life-project-page-title:focus { border-bottom-color: var(--life-accent-line); }
-.life-shell .life-project-page-body { width: 100%; min-height: 320px; border: 1px solid var(--life-border); background: var(--life-panel); color: var(--life-muted); font-family: var(--font-mono); font-size: 13px; line-height: 1.6; padding: 12px 14px; resize: vertical; outline: none; }
-.life-shell .life-project-page-body:focus { border-color: var(--life-accent-line); }
+.life-shell .life-project-page-body { width: 100%; min-height: 420px; border: 1px solid var(--life-border); background: #111111; color: #d4d0ca; font-size: 15px; line-height: 1.85; padding: 22px 24px; resize: vertical; outline: none; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02); }
+.life-shell .life-project-page-body:focus { border-color: var(--life-accent-line); background: #131313; }
 .life-shell .life-ref-composer { display: grid; gap: 10px; }
 .life-shell .life-ref-fields { display: flex; align-items: flex-start; gap: 8px; flex-wrap: wrap; }
 .life-shell .life-ref-fields .text-input { flex: 1; min-width: 160px; }
@@ -3742,7 +3742,7 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
 .life-shell .life-studio-tile-delete { position: absolute; top: 8px; right: 8px; z-index: 2; width: 30px; height: 30px; border: 1px solid rgba(255, 255, 255, 0.14); background: rgba(10, 10, 10, 0.72); color: var(--life-muted); cursor: pointer; opacity: 0; transition-property: opacity, color, border-color, transform; transition-duration: 0.14s; }
 .life-shell .life-studio-tile:hover .life-studio-tile-delete { opacity: 1; }
 .life-shell .life-studio-tile-delete:hover { color: var(--life-danger); border-color: var(--life-danger); transform: scale(0.96); }
-.life-shell .life-studio-image-link { display: block; background: #070707; }
+.life-shell .life-studio-image-link { display: block; width: 100%; padding: 0; border: 0; background: #070707; cursor: zoom-in; }
 .life-shell .life-studio-image { display: block; width: 100%; height: auto; max-height: 420px; object-fit: cover; outline: 1px solid rgba(255, 255, 255, 0.1); outline-offset: -1px; }
 .life-shell .life-studio-link-tile { display: grid; gap: 10px; min-height: 150px; padding: 14px; color: inherit; text-decoration: none; border-top: 2px solid #6fcfd6; }
 .life-shell .life-studio-link-tile span { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--life-label); overflow-wrap: anywhere; }
