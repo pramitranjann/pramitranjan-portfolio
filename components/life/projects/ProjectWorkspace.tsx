@@ -423,17 +423,17 @@ export function ProjectWorkspace({
       {error ? <p className="error-text">{error}</p> : null}
 
       <div className="life-project-tabs">
+        <button type="button" className={`life-project-tab${tab === 'pages' ? ' is-active' : ''}`} onClick={() => setTab('pages')}>
+          Pages <span className="chip-count">{pages.length}</span>
+        </button>
         <button type="button" className={`life-project-tab${tab === 'tasks' ? ' is-active' : ''}`} onClick={() => setTab('tasks')}>
           Tasks <span className="chip-count">{tasks.length}</span>
-        </button>
-        <button type="button" className={`life-project-tab${tab === 'events' ? ' is-active' : ''}`} onClick={() => setTab('events')}>
-          Events <span className="chip-count">{events.length}</span>
         </button>
         <button type="button" className={`life-project-tab${tab === 'refs' ? ' is-active' : ''}`} onClick={() => setTab('refs')}>
           References <span className="chip-count">{refs.length}</span>
         </button>
-        <button type="button" className={`life-project-tab${tab === 'pages' ? ' is-active' : ''}`} onClick={() => setTab('pages')}>
-          Pages <span className="chip-count">{pages.length}</span>
+        <button type="button" className={`life-project-tab${tab === 'events' ? ' is-active' : ''}`} onClick={() => setTab('events')}>
+          Events <span className="chip-count">{events.length}</span>
         </button>
       </div>
 
