@@ -35,8 +35,8 @@ export async function generateMetadata(): Promise<Metadata> {
 function CVButton({ label }: { label: string }) {
   return (
     <a
-      href="/pramit-ranjan-cv-2026.pdf"
-      download="pramit-ranjan-cv-2026.pdf"
+      href="/pramit-ranjan-resume-2026.pdf"
+      download="pramit-ranjan-resume-2026.pdf"
       className="font-mono inline-block"
       style={{
         fontSize: 'var(--text-meta)',

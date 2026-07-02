@@ -25,8 +25,8 @@ const tapActions = [
     tone: 'priority',
   },
   {
-    label: 'VIEW CV',
-    href: '/pramit-ranjan-cv-2026.pdf',
+    label: 'VIEW RESUME',
+    href: '/pramit-ranjan-resume-2026.pdf',
     external: true,
     tone: 'secondary',
   },
