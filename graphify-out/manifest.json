@@ -1,0 +1,2897 @@
+{
+  ".claude/settings.local.json": {
+    "mtime": 1783138353.798667,
+    "ast_hash": "b606b682bcb417bc54f97df9d053a43b",
+    "semantic_hash": ""
+  },
+  "app/about/page.tsx": {
+    "mtime": 1782964239.1923182,
+    "ast_hash": "2662848882fd0fd974a50c7933736331",
+    "semantic_hash": "2662848882fd0fd974a50c7933736331"
+  },
+  "app/api/admin/content/route.ts": {
+    "mtime": 1781412948.1095786,
+    "ast_hash": "6bf8fb77cad18ce06ebd89cfc11447ff",
+    "semantic_hash": "6bf8fb77cad18ce06ebd89cfc11447ff"
+  },
+  "app/api/admin/file-picker/route.ts": {
+    "mtime": 1781412948.1109545,
+    "ast_hash": "430bfded3a1025ab47424406cfbd02ec",
+    "semantic_hash": "430bfded3a1025ab47424406cfbd02ec"
+  },
+  "app/api/admin/login/route.ts": {
+    "mtime": 1781426282.9470212,
+    "ast_hash": "c8297b75a99a07f4c9055a09233f8b91",
+    "semantic_hash": "c8297b75a99a07f4c9055a09233f8b91"
+  },
+  "app/api/admin/logout/route.ts": {
+    "mtime": 1781412948.1184497,
+    "ast_hash": "601ca541187d8e46286c21af704b8723",
+    "semantic_hash": "601ca541187d8e46286c21af704b8723"
+  },
+  "app/api/life/calendar/calendars/route.ts": {
+    "mtime": 1781766172.8436549,
+    "ast_hash": "da6004f19beef9c8b571be3895b618c2",
+    "semantic_hash": "da6004f19beef9c8b571be3895b618c2"
+  },
+  "app/api/life/calendar/events/[eventId]/route.ts": {
+    "mtime": 1781766161.932118,
+    "ast_hash": "52f3ec20c2eea62cdb3cec41cdffe147",
+    "semantic_hash": "52f3ec20c2eea62cdb3cec41cdffe147"
+  },
+  "app/api/life/calendar/events/route.ts": {
+    "mtime": 1782137191.857427,
+    "ast_hash": "60756180742aec44e7f11f26008fe990",
+    "semantic_hash": "60756180742aec44e7f11f26008fe990"
+  },
+  "app/api/life/calendar/route.ts": {
+    "mtime": 1781430689.0851452,
+    "ast_hash": "0c2205330e3e21d57293463db7e0610f",
+    "semantic_hash": "0c2205330e3e21d57293463db7e0610f"
+  },
+  "app/api/life/calendar/sync/route.ts": {
+    "mtime": 1781532072.5344946,
+    "ast_hash": "f481d77f32e961c91e176cca72ad8cc2",
+    "semantic_hash": "f481d77f32e961c91e176cca72ad8cc2"
+  },
+  "app/api/life/cron/daily/route.ts": {
+    "mtime": 1781532063.9567637,
+    "ast_hash": "a734d859374d535a08506a2da79525dd",
+    "semantic_hash": "a734d859374d535a08506a2da79525dd"
+  },
+  "app/api/life/entries/[entryId]/route.ts": {
+    "mtime": 1782137191.8080943,
+    "ast_hash": "24af56c287f99673c22c3401ca136865",
+    "semantic_hash": "24af56c287f99673c22c3401ca136865"
+  },
+  "app/api/life/entries/route.ts": {
+    "mtime": 1782137191.8091402,
+    "ast_hash": "57821c2ef40d8858bf25b9e3519b1a25",
+    "semantic_hash": "57821c2ef40d8858bf25b9e3519b1a25"
+  },
+  "app/api/life/history/route.ts": {
+    "mtime": 1781417158.9448028,
+    "ast_hash": "f3e5375ef0a86f2769014c99ef25af70",
+    "semantic_hash": "f3e5375ef0a86f2769014c99ef25af70"
+  },
+  "app/api/life/month/route.ts": {
+    "mtime": 1781859547.5541074,
+    "ast_hash": "0b625e6702a16573e89c0d47af8755d8",
+    "semantic_hash": "0b625e6702a16573e89c0d47af8755d8"
+  },
+  "app/api/life/print-jobs/[jobId]/route.ts": {
+    "mtime": 1782658687.4166493,
+    "ast_hash": "6bb49aa1525f387831c00650d24d35db",
+    "semantic_hash": "6bb49aa1525f387831c00650d24d35db"
+  },
+  "app/api/life/print-jobs/route.ts": {
+    "mtime": 1782652210.8237164,
+    "ast_hash": "4531f0a707fb5bbdb9b7b5777c5e2ed1",
+    "semantic_hash": "4531f0a707fb5bbdb9b7b5777c5e2ed1"
+  },
+  "app/api/life/printer/claim/route.ts": {
+    "mtime": 1782538014.2080896,
+    "ast_hash": "b6c9e9c4add0d11c05d82d1adb80c6d5",
+    "semantic_hash": "b6c9e9c4add0d11c05d82d1adb80c6d5"
+  },
+  "app/api/life/printer/complete/route.ts": {
+    "mtime": 1782538025.414312,
+    "ast_hash": "489f9d79c463e3ad087009b475032302",
+    "semantic_hash": "489f9d79c463e3ad087009b475032302"
+  },
+  "app/api/life/projects/[slug]/events/route.ts": {
+    "mtime": 1782193400.7830772,
+    "ast_hash": "12b4a8b3363dfaac4226c5cc989f86c8",
+    "semantic_hash": "12b4a8b3363dfaac4226c5cc989f86c8"
+  },
+  "app/api/life/projects/[slug]/milestones/[milestoneId]/route.ts": {
+    "mtime": 1782193400.784373,
+    "ast_hash": "ca9d53746af51b0460520ab85ad1549e",
+    "semantic_hash": "ca9d53746af51b0460520ab85ad1549e"
+  },
+  "app/api/life/projects/[slug]/milestones/route.ts": {
+    "mtime": 1782193400.7851028,
+    "ast_hash": "0408da906ef8d2873ccecf27bff3e782",
+    "semantic_hash": "0408da906ef8d2873ccecf27bff3e782"
+  },
+  "app/api/life/projects/[slug]/pages/[pageId]/route.ts": {
+    "mtime": 1782377540.6396883,
+    "ast_hash": "36ce3479b2ebd9e92925a203a91d7ef2",
+    "semantic_hash": "36ce3479b2ebd9e92925a203a91d7ef2"
+  },
+  "app/api/life/projects/[slug]/pages/route.ts": {
+    "mtime": 1782377530.1611285,
+    "ast_hash": "d0acfcd7b9c914f3a381133a741bd0c7",
+    "semantic_hash": "d0acfcd7b9c914f3a381133a741bd0c7"
+  },
+  "app/api/life/projects/[slug]/refs/[refId]/route.ts": {
+    "mtime": 1782193400.7861993,
+    "ast_hash": "c28adcc3fbad80e4129d780e3082405a",
+    "semantic_hash": "c28adcc3fbad80e4129d780e3082405a"
+  },
+  "app/api/life/projects/[slug]/refs/route.ts": {
+    "mtime": 1782193400.7872453,
+    "ast_hash": "aae87da9573ee27c7251bb7a2975d992",
+    "semantic_hash": "aae87da9573ee27c7251bb7a2975d992"
+  },
+  "app/api/life/projects/[slug]/route.ts": {
+    "mtime": 1782886661.8505418,
+    "ast_hash": "d3bbf96014b9014609bf8e9a1d3689ac",
+    "semantic_hash": "d3bbf96014b9014609bf8e9a1d3689ac"
+  },
+  "app/api/life/projects/[slug]/ux-templates/route.ts": {
+    "mtime": 1782886706.365197,
+    "ast_hash": "9d574310ba310dc12455ef2002e43609",
+    "semantic_hash": "9d574310ba310dc12455ef2002e43609"
+  },
+  "app/api/life/projects/route.ts": {
+    "mtime": 1782886661.6361437,
+    "ast_hash": "caed2daccbf786572665ac8cf7a18cf0",
+    "semantic_hash": "caed2daccbf786572665ac8cf7a18cf0"
+  },
+  "app/api/life/reports/route.ts": {
+    "mtime": 1781632888.7102218,
+    "ast_hash": "eafcfa1105bd3dc086de3cfa94c36825",
+    "semantic_hash": "eafcfa1105bd3dc086de3cfa94c36825"
+  },
+  "app/api/life/search/route.ts": {
+    "mtime": 1782057482.1154923,
+    "ast_hash": "cfec34923d91c2bfb523eb042f5a34e1",
+    "semantic_hash": "cfec34923d91c2bfb523eb042f5a34e1"
+  },
+  "app/api/life/studio/[itemId]/route.ts": {
+    "mtime": 1783155642.3394787,
+    "ast_hash": "384a40e5cb996043124d5d8f3f1854a0",
+    "semantic_hash": ""
+  },
+  "app/api/life/studio/route.ts": {
+    "mtime": 1782895296.5747256,
+    "ast_hash": "a730022ee9aaa0cff93dd4b97d0cc6af",
+    "semantic_hash": "a730022ee9aaa0cff93dd4b97d0cc6af"
+  },
+  "app/api/life/studio/upload/route.ts": {
+    "mtime": 1782889957.219996,
+    "ast_hash": "2451c7e0d7ab8057ddab671446d475b5",
+    "semantic_hash": "2451c7e0d7ab8057ddab671446d475b5"
+  },
+  "app/api/life/synthesis/eod/route.ts": {
+    "mtime": 1781417159.171575,
+    "ast_hash": "34a80311b82accf70ad18cfb22fd38bb",
+    "semantic_hash": "34a80311b82accf70ad18cfb22fd38bb"
+  },
+  "app/api/life/synthesis/morning/route.ts": {
+    "mtime": 1781417159.400354,
+    "ast_hash": "fda088a60d653afac6b81b6b9d544057",
+    "semantic_hash": "fda088a60d653afac6b81b6b9d544057"
+  },
+  "app/api/life/synthesis/weekly/route.ts": {
+    "mtime": 1781445547.242039,
+    "ast_hash": "6c548edc02dd79cb2c7c323cd72fe742",
+    "semantic_hash": "6c548edc02dd79cb2c7c323cd72fe742"
+  },
+  "app/api/life/tasks/[taskId]/route.ts": {
+    "mtime": 1782653061.2560184,
+    "ast_hash": "49a362183020dae1862cf2b6a00a0baf",
+    "semantic_hash": "49a362183020dae1862cf2b6a00a0baf"
+  },
+  "app/api/life/tasks/route.ts": {
+    "mtime": 1782569080.1154633,
+    "ast_hash": "356b7c75088c479196424d03b2aa7d08",
+    "semantic_hash": "356b7c75088c479196424d03b2aa7d08"
+  },
+  "app/api/life/week/route.ts": {
+    "mtime": 1781859541.6139567,
+    "ast_hash": "2b14f30275f64086d3150068ac011a01",
+    "semantic_hash": "2b14f30275f64086d3150068ac011a01"
+  },
+  "app/api/spotify/media/route.ts": {
+    "mtime": 1780474037.1311991,
+    "ast_hash": "8cba44a7f428b23c0f0d3992944e1cfe",
+    "semantic_hash": "8cba44a7f428b23c0f0d3992944e1cfe"
+  },
+  "app/api/spotify/route.ts": {
+    "mtime": 1780474026.926726,
+    "ast_hash": "a37d20b3539c0263b3dad329ae4cc62f",
+    "semantic_hash": "a37d20b3539c0263b3dad329ae4cc62f"
+  },
+  "app/creative/branding/[slug]/page.tsx": {
+    "mtime": 1781412948.1194308,
+    "ast_hash": "98897886da2127bca46feb548a597f8f",
+    "semantic_hash": "98897886da2127bca46feb548a597f8f"
+  },
+  "app/creative/branding/oracle/page.tsx": {
+    "mtime": 1774377199.4156046,
+    "ast_hash": "e3039a7700bd21ef90dfd11f7e251c5d",
+    "semantic_hash": "e3039a7700bd21ef90dfd11f7e251c5d"
+  },
+  "app/creative/branding/page.tsx": {
+    "mtime": 1781412948.1276186,
+    "ast_hash": "83ed5eab3604905c130f4d0acb55a9d2",
+    "semantic_hash": "83ed5eab3604905c130f4d0acb55a9d2"
+  },
+  "app/creative/branding/soho/page.tsx": {
+    "mtime": 1774377199.4159741,
+    "ast_hash": "9f1716d9918de50ce9bf0f631bc94894",
+    "semantic_hash": "9f1716d9918de50ce9bf0f631bc94894"
+  },
+  "app/creative/mixed-media/[slug]/page.tsx": {
+    "mtime": 1781412948.1379414,
+    "ast_hash": "77535688215ea0fa92ef849667469919",
+    "semantic_hash": "77535688215ea0fa92ef849667469919"
+  },
+  "app/creative/mixed-media/faces-of-power/page.tsx": {
+    "mtime": 1774377199.415101,
+    "ast_hash": "a609fffdf95ca55cd477dd9f8f866fa3",
+    "semantic_hash": "a609fffdf95ca55cd477dd9f8f866fa3"
+  },
+  "app/creative/mixed-media/page.tsx": {
+    "mtime": 1781412948.1392772,
+    "ast_hash": "26ff14e6502fdd60068b799e400f1b4a",
+    "semantic_hash": "26ff14e6502fdd60068b799e400f1b4a"
+  },
+  "app/creative/mixed-media/south-china-sea/page.tsx": {
+    "mtime": 1774377199.4154632,
+    "ast_hash": "e40e08f3fee683137b5080cc34771ee1",
+    "semantic_hash": "e40e08f3fee683137b5080cc34771ee1"
+  },
+  "app/creative/page.tsx": {
+    "mtime": 1782831701.1526632,
+    "ast_hash": "b93acb6fce38b620908a42eb4802248b",
+    "semantic_hash": "b93acb6fce38b620908a42eb4802248b"
+  },
+  "app/creative/photography/hcmc/page.tsx": {
+    "mtime": 1780502484.0827336,
+    "ast_hash": "fe9092083c696b95f6a4c79fc3a5a6cb",
+    "semantic_hash": "fe9092083c696b95f6a4c79fc3a5a6cb"
+  },
+  "app/creative/photography/kl/page.tsx": {
+    "mtime": 1780502482.8950408,
+    "ast_hash": "84735dfb51af7cb1aeeb1ddc7fcb7b20",
+    "semantic_hash": "84735dfb51af7cb1aeeb1ddc7fcb7b20"
+  },
+  "app/creative/photography/page.tsx": {
+    "mtime": 1781412948.1425471,
+    "ast_hash": "a1ede12bd5d426b4ce0a8ac110ed1178",
+    "semantic_hash": "a1ede12bd5d426b4ce0a8ac110ed1178"
+  },
+  "app/creative/photography/penang/page.tsx": {
+    "mtime": 1780502483.2085435,
+    "ast_hash": "04bfd84448adf0eff157616f69920e27",
+    "semantic_hash": "04bfd84448adf0eff157616f69920e27"
+  },
+  "app/creative/photography/singapore/page.tsx": {
+    "mtime": 1780502483.4500573,
+    "ast_hash": "5bb6b60364f858b6ac279e0548dd8ac4",
+    "semantic_hash": "5bb6b60364f858b6ac279e0548dd8ac4"
+  },
+  "app/dashboard/login/page.tsx": {
+    "mtime": 1781426815.2280297,
+    "ast_hash": "729918533ee5da51e986b5a7daff4075",
+    "semantic_hash": "729918533ee5da51e986b5a7daff4075"
+  },
+  "app/dashboard/page.tsx": {
+    "mtime": 1781426377.2977042,
+    "ast_hash": "3dbef5eeff4e2515e592eb15483cc3f0",
+    "semantic_hash": "3dbef5eeff4e2515e592eb15483cc3f0"
+  },
+  "app/icon.tsx": {
+    "mtime": 1774224842.3601167,
+    "ast_hash": "61c640a1412919db875854d3ab6518bb",
+    "semantic_hash": "61c640a1412919db875854d3ab6518bb"
+  },
+  "app/layout.tsx": {
+    "mtime": 1781532907.5754466,
+    "ast_hash": "959c8f43f6c964c0c3668313e724852e",
+    "semantic_hash": "959c8f43f6c964c0c3668313e724852e"
+  },
+  "app/life/apple-icon.tsx": {
+    "mtime": 1781533324.2494454,
+    "ast_hash": "56728fb16fbd12bca1e04100b498616b",
+    "semantic_hash": "56728fb16fbd12bca1e04100b498616b"
+  },
+  "app/life/history/loading.tsx": {
+    "mtime": 1781536874.1044838,
+    "ast_hash": "153730f8ee8de54e29210b26e824af5a",
+    "semantic_hash": "153730f8ee8de54e29210b26e824af5a"
+  },
+  "app/life/history/page.tsx": {
+    "mtime": 1781771241.5539067,
+    "ast_hash": "72d5c18981e59b6c6204a3ee316616fc",
+    "semantic_hash": "72d5c18981e59b6c6204a3ee316616fc"
+  },
+  "app/life/icon.tsx": {
+    "mtime": 1781533335.165183,
+    "ast_hash": "048c4c8eea657a1d7c584d173c41de9b",
+    "semantic_hash": "048c4c8eea657a1d7c584d173c41de9b"
+  },
+  "app/life/layout.tsx": {
+    "mtime": 1782193400.794391,
+    "ast_hash": "b35830c3f93114fad75c8cc3cec69847",
+    "semantic_hash": "b35830c3f93114fad75c8cc3cec69847"
+  },
+  "app/life/loading.tsx": {
+    "mtime": 1782057482.1167886,
+    "ast_hash": "cea2b8cd2dca806e06f7977e1480846d",
+    "semantic_hash": "cea2b8cd2dca806e06f7977e1480846d"
+  },
+  "app/life/login/page.tsx": {
+    "mtime": 1781436176.1559963,
+    "ast_hash": "d978747cd83b1023223548c79a6e459d",
+    "semantic_hash": "d978747cd83b1023223548c79a6e459d"
+  },
+  "app/life/month/page.tsx": {
+    "mtime": 1781606997.722978,
+    "ast_hash": "370a3d96417dc53e435e9fad06974321",
+    "semantic_hash": "370a3d96417dc53e435e9fad06974321"
+  },
+  "app/life/page.tsx": {
+    "mtime": 1782193400.795468,
+    "ast_hash": "9f6c2d25bce8a47fc91a6b63a37f945a",
+    "semantic_hash": "9f6c2d25bce8a47fc91a6b63a37f945a"
+  },
+  "app/life/projects/[slug]/page.tsx": {
+    "mtime": 1782995057.0071123,
+    "ast_hash": "fe97f18e120c2219eaa88e9f2911164d",
+    "semantic_hash": ""
+  },
+  "app/life/projects/page.tsx": {
+    "mtime": 1782915392.0268602,
+    "ast_hash": "b822e4df617000fcafb6ddfcaed37b2c",
+    "semantic_hash": "b822e4df617000fcafb6ddfcaed37b2c"
+  },
+  "app/life/report/loading.tsx": {
+    "mtime": 1781536865.602776,
+    "ast_hash": "91fe9368e0d4dc484eb2b44c50526c65",
+    "semantic_hash": "91fe9368e0d4dc484eb2b44c50526c65"
+  },
+  "app/life/report/page.tsx": {
+    "mtime": 1781788924.3579266,
+    "ast_hash": "918fd6fd189141317eceb84545a1f815",
+    "semantic_hash": "918fd6fd189141317eceb84545a1f815"
+  },
+  "app/life/review/loading.tsx": {
+    "mtime": 1781860030.4867733,
+    "ast_hash": "01849cd170ce319bd996c92f40d7c5ff",
+    "semantic_hash": "01849cd170ce319bd996c92f40d7c5ff"
+  },
+  "app/life/review/page.tsx": {
+    "mtime": 1781859533.5911086,
+    "ast_hash": "d950e573fd5501817850de8fa163a00f",
+    "semantic_hash": "d950e573fd5501817850de8fa163a00f"
+  },
+  "app/life/search/page.tsx": {
+    "mtime": 1782057482.1173244,
+    "ast_hash": "cdab5eb490d697d1ed7aae320294268a",
+    "semantic_hash": "cdab5eb490d697d1ed7aae320294268a"
+  },
+  "app/life/studio/page.tsx": {
+    "mtime": 1782886884.1497588,
+    "ast_hash": "614f6f05029beae61db727d67f3f1af0",
+    "semantic_hash": "614f6f05029beae61db727d67f3f1af0"
+  },
+  "app/life/tasks/loading.tsx": {
+    "mtime": 1781536841.0499346,
+    "ast_hash": "65637b9319cc757b744b316070b0ab47",
+    "semantic_hash": "65637b9319cc757b744b316070b0ab47"
+  },
+  "app/life/tasks/page.tsx": {
+    "mtime": 1782539086.5924718,
+    "ast_hash": "71f4c34a3693fa643560a179efd4f3be",
+    "semantic_hash": "71f4c34a3693fa643560a179efd4f3be"
+  },
+  "app/nfc/page.tsx": {
+    "mtime": 1780813184.5600579,
+    "ast_hash": "c67b250c2ca13f06fceffce71349d5ff",
+    "semantic_hash": "c67b250c2ca13f06fceffce71349d5ff"
+  },
+  "app/not-found.tsx": {
+    "mtime": 1780585635.7869992,
+    "ast_hash": "944255479e4960b4f1c8c1905cba2564",
+    "semantic_hash": "944255479e4960b4f1c8c1905cba2564"
+  },
+  "app/opengraph-image.tsx": {
+    "mtime": 1780926991.8626645,
+    "ast_hash": "0917aab279f7ecc5a17c523881504d5b",
+    "semantic_hash": "0917aab279f7ecc5a17c523881504d5b"
+  },
+  "app/page.tsx": {
+    "mtime": 1781412948.1518083,
+    "ast_hash": "de739f1fd092b7f0a137ffa5609884d3",
+    "semantic_hash": "de739f1fd092b7f0a137ffa5609884d3"
+  },
+  "app/play-test/page.tsx": {
+    "mtime": 1781412948.1555035,
+    "ast_hash": "9b67d142aaa352fa5f35ed4f2f0ef9a4",
+    "semantic_hash": "9b67d142aaa352fa5f35ed4f2f0ef9a4"
+  },
+  "app/play/[slug]/page.tsx": {
+    "mtime": 1781412948.1599507,
+    "ast_hash": "3f897d1aca8b97264c3ccf0f3cfbc114",
+    "semantic_hash": "3f897d1aca8b97264c3ccf0f3cfbc114"
+  },
+  "app/play/page.tsx": {
+    "mtime": 1781412948.16152,
+    "ast_hash": "34ac239bdc98e5b81f64639c49933ae7",
+    "semantic_hash": "34ac239bdc98e5b81f64639c49933ae7"
+  },
+  "app/qr/page.tsx": {
+    "mtime": 1780589322.4984324,
+    "ast_hash": "bd9dae196139f8119e7ed17732c75b8c",
+    "semantic_hash": "bd9dae196139f8119e7ed17732c75b8c"
+  },
+  "app/robots.ts": {
+    "mtime": 1781417083.5409288,
+    "ast_hash": "4d23881442313ac33c0d983d8eff490e",
+    "semantic_hash": "4d23881442313ac33c0d983d8eff490e"
+  },
+  "app/scad-scholarship/page.tsx": {
+    "mtime": 1776293541.3914948,
+    "ast_hash": "6ea3863cef8bfbf7a09228c36570669a",
+    "semantic_hash": "6ea3863cef8bfbf7a09228c36570669a"
+  },
+  "app/sitemap.ts": {
+    "mtime": 1781412948.163577,
+    "ast_hash": "a457f4aad868081a9d78e653bda49812",
+    "semantic_hash": "a457f4aad868081a9d78e653bda49812"
+  },
+  "app/tap/page.tsx": {
+    "mtime": 1782964244.7042086,
+    "ast_hash": "f0aef2084b23967af2b57e7696ebd8c3",
+    "semantic_hash": "f0aef2084b23967af2b57e7696ebd8c3"
+  },
+  "app/work/[slug]/page.tsx": {
+    "mtime": 1781412948.1679323,
+    "ast_hash": "c4227bb3067c704c21c4169b79061109",
+    "semantic_hash": "c4227bb3067c704c21c4169b79061109"
+  },
+  "app/work/accord/page.tsx": {
+    "mtime": 1774377199.4064445,
+    "ast_hash": "baeb734c7e53e51c4baecce7c1d4f76a",
+    "semantic_hash": "baeb734c7e53e51c4baecce7c1d4f76a"
+  },
+  "app/work/albers/page.tsx": {
+    "mtime": 1777260894.3923538,
+    "ast_hash": "fb69155c2473a2a988e559efd8b6dabd",
+    "semantic_hash": "fb69155c2473a2a988e559efd8b6dabd"
+  },
+  "app/work/atom/page.tsx": {
+    "mtime": 1774377199.4071414,
+    "ast_hash": "43d318156728f0ad60f9d5fea8f4a00f",
+    "semantic_hash": "43d318156728f0ad60f9d5fea8f4a00f"
+  },
+  "app/work/designathon-01/page.tsx": {
+    "mtime": 1774377199.4074388,
+    "ast_hash": "bd549fc73c007c0901aefffa3995a4c3",
+    "semantic_hash": "bd549fc73c007c0901aefffa3995a4c3"
+  },
+  "app/work/designathon-02/page.tsx": {
+    "mtime": 1774377199.4079351,
+    "ast_hash": "192362258b40d8945d20caf11873f292",
+    "semantic_hash": "192362258b40d8945d20caf11873f292"
+  },
+  "app/work/franklins/page.tsx": {
+    "mtime": 1774377199.408273,
+    "ast_hash": "19d6efafcf00a834a37188b4ca0307d7",
+    "semantic_hash": "19d6efafcf00a834a37188b4ca0307d7"
+  },
+  "app/work/helpoh/page.tsx": {
+    "mtime": 1774377199.4092948,
+    "ast_hash": "5b430976a3827842c10b7e9d9e05b13a",
+    "semantic_hash": "5b430976a3827842c10b7e9d9e05b13a"
+  },
+  "app/work/loomlearn/page.tsx": {
+    "mtime": 1774377199.4113934,
+    "ast_hash": "72bcac896e52dec620f93d261e83d810",
+    "semantic_hash": "72bcac896e52dec620f93d261e83d810"
+  },
+  "app/work/page.tsx": {
+    "mtime": 1781412948.175664,
+    "ast_hash": "4aaaacfeaf0ae5515ffc521376fa410c",
+    "semantic_hash": "4aaaacfeaf0ae5515ffc521376fa410c"
+  },
+  "app/work/purcast/page.tsx": {
+    "mtime": 1774377199.4149027,
+    "ast_hash": "e3ccd661c4a38d1ea508dd2d1a1cb20d",
+    "semantic_hash": "e3ccd661c4a38d1ea508dd2d1a1cb20d"
+  },
+  "app/work/wander/page.tsx": {
+    "mtime": 1777260902.9798074,
+    "ast_hash": "192ed58621387742ee9957e4ef3d57fe",
+    "semantic_hash": "192ed58621387742ee9957e4ef3d57fe"
+  },
+  "components/About.tsx": {
+    "mtime": 1775592302.6780558,
+    "ast_hash": "8157d5562a4377d7fae6ea92f5c057af",
+    "semantic_hash": "8157d5562a4377d7fae6ea92f5c057af"
+  },
+  "components/AnimatedEyebrow.tsx": {
+    "mtime": 1774375986.7010467,
+    "ast_hash": "825668253910d80909db69c07f1301ff",
+    "semantic_hash": "825668253910d80909db69c07f1301ff"
+  },
+  "components/CaseStudyLayout.tsx": {
+    "mtime": 1780502545.9560225,
+    "ast_hash": "341420b38a96f229f80aba734de4e0eb",
+    "semantic_hash": "341420b38a96f229f80aba734de4e0eb"
+  },
+  "components/Contact.tsx": {
+    "mtime": 1780589625.341154,
+    "ast_hash": "9333751198306878db976ffef85f333d",
+    "semantic_hash": "9333751198306878db976ffef85f333d"
+  },
+  "components/CreativeListingCard.tsx": {
+    "mtime": 1780590901.2668273,
+    "ast_hash": "5421ffbf1994c06368cfab1a918b2947",
+    "semantic_hash": "5421ffbf1994c06368cfab1a918b2947"
+  },
+  "components/CreativePageClient.tsx": {
+    "mtime": 1782831700.927859,
+    "ast_hash": "a4e477096691a20b68d2edf03aca1166",
+    "semantic_hash": "a4e477096691a20b68d2edf03aca1166"
+  },
+  "components/CreativeSectionIndexClient.tsx": {
+    "mtime": 1778010068.4473965,
+    "ast_hash": "afa71904d1c44786457eab1794ebe2d4",
+    "semantic_hash": "afa71904d1c44786457eab1794ebe2d4"
+  },
+  "components/FilmStrip.tsx": {
+    "mtime": 1774375852.0915124,
+    "ast_hash": "c913ec0889e59d7f7d5ef642b63791e2",
+    "semantic_hash": "c913ec0889e59d7f7d5ef642b63791e2"
+  },
+  "components/Footer.tsx": {
+    "mtime": 1782830755.3140397,
+    "ast_hash": "5f9ebd9c25758d7343242a7ac904a045",
+    "semantic_hash": "5f9ebd9c25758d7343242a7ac904a045"
+  },
+  "components/GameCaseStudyLayout.tsx": {
+    "mtime": 1778174596.969229,
+    "ast_hash": "210d331c3f72def1b53fb2ad35565025",
+    "semantic_hash": "210d331c3f72def1b53fb2ad35565025"
+  },
+  "components/GsapReveal.tsx": {
+    "mtime": 1774390723.4094982,
+    "ast_hash": "9242df3316c00697cab7c692c6926e60",
+    "semantic_hash": "9242df3316c00697cab7c692c6926e60"
+  },
+  "components/HeroCarousel.tsx": {
+    "mtime": 1775581776.117883,
+    "ast_hash": "f8cd48d4108526cf999aeca2fd394c15",
+    "semantic_hash": "f8cd48d4108526cf999aeca2fd394c15"
+  },
+  "components/HeroStage01.tsx": {
+    "mtime": 1774069541.4445612,
+    "ast_hash": "aba0026ddd55da32b4f69dd3f83db7a1",
+    "semantic_hash": "aba0026ddd55da32b4f69dd3f83db7a1"
+  },
+  "components/HeroStage02.tsx": {
+    "mtime": 1774069575.1100798,
+    "ast_hash": "d408bbfe606313d66dda7f1cbbfddf18",
+    "semantic_hash": "d408bbfe606313d66dda7f1cbbfddf18"
+  },
+  "components/HeroStage03.tsx": {
+    "mtime": 1774069605.1053512,
+    "ast_hash": "b3bca9c047fca11997e31bee08cfeeda",
+    "semantic_hash": "b3bca9c047fca11997e31bee08cfeeda"
+  },
+  "components/HoverImageCarousel.tsx": {
+    "mtime": 1780590901.0018754,
+    "ast_hash": "5dda8cf1d4231d5d3660ee0b3f55f243",
+    "semantic_hash": "5dda8cf1d4231d5d3660ee0b3f55f243"
+  },
+  "components/HoverPreviewSurface.tsx": {
+    "mtime": 1775595373.92995,
+    "ast_hash": "d1a9a0f5bd0adfa933f502441a57fc0f",
+    "semantic_hash": "d1a9a0f5bd0adfa933f502441a57fc0f"
+  },
+  "components/IntroAnimation.tsx": {
+    "mtime": 1774399239.5986953,
+    "ast_hash": "d3b7b6b85e669e62843f2a6622c0440d",
+    "semantic_hash": "d3b7b6b85e669e62843f2a6622c0440d"
+  },
+  "components/JsonLd.tsx": {
+    "mtime": 1781412948.1762292,
+    "ast_hash": "84aaca1e6e897f82dcbd04ab635e9d69",
+    "semantic_hash": "84aaca1e6e897f82dcbd04ab635e9d69"
+  },
+  "components/MoreWork.tsx": {
+    "mtime": 1774390736.545359,
+    "ast_hash": "91a315fdad063c805fae3e0d3261aa56",
+    "semantic_hash": "91a315fdad063c805fae3e0d3261aa56"
+  },
+  "components/MotionSettingsProvider.tsx": {
+    "mtime": 1774390688.0721633,
+    "ast_hash": "52a7faac73e222e71c7a271f2601bf1d",
+    "semantic_hash": "52a7faac73e222e71c7a271f2601bf1d"
+  },
+  "components/Nav.tsx": {
+    "mtime": 1777997227.3326712,
+    "ast_hash": "4d1fded7252a86547ada1d8b514361c5",
+    "semantic_hash": "4d1fded7252a86547ada1d8b514361c5"
+  },
+  "components/PageTransition.tsx": {
+    "mtime": 1774305023.4752038,
+    "ast_hash": "e87a85e841203dfd8d7f9ff1833e5003",
+    "semantic_hash": "e87a85e841203dfd8d7f9ff1833e5003"
+  },
+  "components/PhotoGalleryLayout.tsx": {
+    "mtime": 1780502448.1696858,
+    "ast_hash": "04624e3200343ef5675e3e03ede7992b",
+    "semantic_hash": "04624e3200343ef5675e3e03ede7992b"
+  },
+  "components/PhotoLightbox.tsx": {
+    "mtime": 1783154694.818033,
+    "ast_hash": "43fe768778c139f79affe0994e307989",
+    "semantic_hash": ""
+  },
+  "components/PhotographyIndexClient.tsx": {
+    "mtime": 1780590917.768631,
+    "ast_hash": "49afd25206a524a112b7dbc611391e87",
+    "semantic_hash": "49afd25206a524a112b7dbc611391e87"
+  },
+  "components/PhotographyStage.tsx": {
+    "mtime": 1778010067.1473238,
+    "ast_hash": "d0c67cdf591eaf3b5efdbda7de9c662d",
+    "semantic_hash": "d0c67cdf591eaf3b5efdbda7de9c662d"
+  },
+  "components/PlayPageClient.tsx": {
+    "mtime": 1778175381.8959513,
+    "ast_hash": "a89cbd23ca1257f215e52dfa2ab6a933",
+    "semantic_hash": "a89cbd23ca1257f215e52dfa2ab6a933"
+  },
+  "components/PlayPageLive.tsx": {
+    "mtime": 1778174909.5957086,
+    "ast_hash": "075fbece1fa264e477cc16c61d4f2ad5",
+    "semantic_hash": "075fbece1fa264e477cc16c61d4f2ad5"
+  },
+  "components/ProjectCard.tsx": {
+    "mtime": 1775605313.211196,
+    "ast_hash": "33156953774b4e9d999609769807437a",
+    "semantic_hash": "33156953774b4e9d999609769807437a"
+  },
+  "components/ProjectSpotifySection.tsx": {
+    "mtime": 1780502756.4203677,
+    "ast_hash": "7e9bf2bc02c9613d98fab6ba23f7505d",
+    "semantic_hash": "7e9bf2bc02c9613d98fab6ba23f7505d"
+  },
+  "components/QrCountdownClient.tsx": {
+    "mtime": 1780589322.2537549,
+    "ast_hash": "6bf1a932e44b3ac109985bbbe650f295",
+    "semantic_hash": "6bf1a932e44b3ac109985bbbe650f295"
+  },
+  "components/ReadingProgress.tsx": {
+    "mtime": 1775513749.3700867,
+    "ast_hash": "0a7a3a3861641f69966ec26efb7f2700",
+    "semantic_hash": "0a7a3a3861641f69966ec26efb7f2700"
+  },
+  "components/RuleLabel.tsx": {
+    "mtime": 1775513957.4602993,
+    "ast_hash": "82d6ded1f53cca4deca323fe83e631f4",
+    "semantic_hash": "82d6ded1f53cca4deca323fe83e631f4"
+  },
+  "components/SafeProjectSpotifySection.tsx": {
+    "mtime": 1780502439.3532484,
+    "ast_hash": "2a728e9283186f7eb7b18ccef5e091b9",
+    "semantic_hash": "2a728e9283186f7eb7b18ccef5e091b9"
+  },
+  "components/ScadPageClient.tsx": {
+    "mtime": 1776293823.125447,
+    "ast_hash": "e65f6a76e79cfcc0f7860b1be3700fe0",
+    "semantic_hash": "e65f6a76e79cfcc0f7860b1be3700fe0"
+  },
+  "components/ScrollToTopOnRouteChange.tsx": {
+    "mtime": 1780472036.6521804,
+    "ast_hash": "be25289492fe38d246781d34230ceabe",
+    "semantic_hash": "be25289492fe38d246781d34230ceabe"
+  },
+  "components/SelectedWork.tsx": {
+    "mtime": 1782866720.4039786,
+    "ast_hash": "b88340043bbff6e14c16e64c25ec9d76",
+    "semantic_hash": "b88340043bbff6e14c16e64c25ec9d76"
+  },
+  "components/SiteCopyProvider.tsx": {
+    "mtime": 1777997227.176799,
+    "ast_hash": "e589fd81185181ef150dc5801e494119",
+    "semantic_hash": "e589fd81185181ef150dc5801e494119"
+  },
+  "components/SoundRouteListener.tsx": {
+    "mtime": 1774207832.6111515,
+    "ast_hash": "9c85bf74dbc6d141e120ac9fcb51fbaa",
+    "semantic_hash": "9c85bf74dbc6d141e120ac9fcb51fbaa"
+  },
+  "components/SpotifyWidget.tsx": {
+    "mtime": 1780474320.9603071,
+    "ast_hash": "69f0e11d7cc694a9cfb6bde90bbee7fa",
+    "semantic_hash": "69f0e11d7cc694a9cfb6bde90bbee7fa"
+  },
+  "components/UnderConstructionPage.tsx": {
+    "mtime": 1777774420.236029,
+    "ast_hash": "bd7775e799f5a6559adce02a1c52154c",
+    "semantic_hash": "bd7775e799f5a6559adce02a1c52154c"
+  },
+  "components/WorkPageClient.tsx": {
+    "mtime": 1782831700.7100034,
+    "ast_hash": "94c826ae71851489fdef368006ba3344",
+    "semantic_hash": "94c826ae71851489fdef368006ba3344"
+  },
+  "components/admin/DashboardEditor.tsx": {
+    "mtime": 1781426815.7404108,
+    "ast_hash": "11e391e6ccc61d89dbcb3d579a68f304",
+    "semantic_hash": "11e391e6ccc61d89dbcb3d579a68f304"
+  },
+  "components/admin/DashboardLoginForm.tsx": {
+    "mtime": 1781426814.8137722,
+    "ast_hash": "8b4511b9cdacc8901c0abc75d7e0e643",
+    "semantic_hash": "8b4511b9cdacc8901c0abc75d7e0e643"
+  },
+  "components/life/HistoryClient.tsx": {
+    "mtime": 1782193400.7979732,
+    "ast_hash": "9071087f97fc47c785a98840256af7f8",
+    "semantic_hash": "9071087f97fc47c785a98840256af7f8"
+  },
+  "components/life/LifeHeader.tsx": {
+    "mtime": 1782886884.7378523,
+    "ast_hash": "e0a8ac168bfbcda260fed83f2adbf373",
+    "semantic_hash": "e0a8ac168bfbcda260fed83f2adbf373"
+  },
+  "components/life/LifeInlineSearch.tsx": {
+    "mtime": 1782057482.1177533,
+    "ast_hash": "d411bdedec6ab51a2ecea11619d3bf49",
+    "semantic_hash": "d411bdedec6ab51a2ecea11619d3bf49"
+  },
+  "components/life/LifeLoginForm.tsx": {
+    "mtime": 1781436176.4064245,
+    "ast_hash": "47135361ab91f0dfc740501738bec747",
+    "semantic_hash": "47135361ab91f0dfc740501738bec747"
+  },
+  "components/life/LifeProjectsProvider.tsx": {
+    "mtime": 1782377551.0558949,
+    "ast_hash": "24ac4ccd6006fac41db5be97e082fcc1",
+    "semantic_hash": "24ac4ccd6006fac41db5be97e082fcc1"
+  },
+  "components/life/MarkdownCard.tsx": {
+    "mtime": 1782990566.6245425,
+    "ast_hash": "8079236923730be54aacfac7050d8b7c",
+    "semantic_hash": ""
+  },
+  "components/life/MonthClient.tsx": {
+    "mtime": 1781844482.065611,
+    "ast_hash": "58023d9c0d571dcabea4e10aadacfa76",
+    "semantic_hash": "58023d9c0d571dcabea4e10aadacfa76"
+  },
+  "components/life/QuickAdd.tsx": {
+    "mtime": 1782193400.7997773,
+    "ast_hash": "b4a17a67ad1d1d882f140368c5c87dec",
+    "semantic_hash": "b4a17a67ad1d1d882f140368c5c87dec"
+  },
+  "components/life/ReportClient.tsx": {
+    "mtime": 1781844481.2582395,
+    "ast_hash": "af110c42feac617e17bd38d3c60f8ec6",
+    "semantic_hash": "af110c42feac617e17bd38d3c60f8ec6"
+  },
+  "components/life/VoiceCaptureControl.tsx": {
+    "mtime": 1781860017.5049546,
+    "ast_hash": "c9ab69487b973261750e10567ce17a0f",
+    "semantic_hash": "c9ab69487b973261750e10567ce17a0f"
+  },
+  "components/life/WeekClient.tsx": {
+    "mtime": 1782378575.1482472,
+    "ast_hash": "c5b6be379f97e3cc7df8f531a407306b",
+    "semantic_hash": "c5b6be379f97e3cc7df8f531a407306b"
+  },
+  "components/life/projects/ProjectEvents.tsx": {
+    "mtime": 1782193400.800578,
+    "ast_hash": "e500a845c5141a9c7facaa7907f3e161",
+    "semantic_hash": "e500a845c5141a9c7facaa7907f3e161"
+  },
+  "components/life/projects/ProjectPages.tsx": {
+    "mtime": 1782996111.6747015,
+    "ast_hash": "2ed047e5c7bd053a46cd3f6aa083f280",
+    "semantic_hash": ""
+  },
+  "components/life/projects/ProjectRefs.tsx": {
+    "mtime": 1782193400.8012292,
+    "ast_hash": "f606db94f14eccd9c307dfff6d08d260",
+    "semantic_hash": "f606db94f14eccd9c307dfff6d08d260"
+  },
+  "components/life/projects/ProjectTasks.tsx": {
+    "mtime": 1782194946.1762152,
+    "ast_hash": "44c65c542357c3deba86ea92bd26f024",
+    "semantic_hash": "44c65c542357c3deba86ea92bd26f024"
+  },
+  "components/life/projects/ProjectUxTemplates.tsx": {
+    "mtime": 1782916898.1443007,
+    "ast_hash": "fa7ca42309630d27ca0f44e65dc3c04c",
+    "semantic_hash": "fa7ca42309630d27ca0f44e65dc3c04c"
+  },
+  "components/life/projects/ProjectWorkspace.tsx": {
+    "mtime": 1782996104.026509,
+    "ast_hash": "4540da54dab8c44cb805f83bca955120",
+    "semantic_hash": ""
+  },
+  "components/life/projects/ProjectsOverview.tsx": {
+    "mtime": 1782915406.4217792,
+    "ast_hash": "9da49a361e03a37c26bf79d0ac55724a",
+    "semantic_hash": "9da49a361e03a37c26bf79d0ac55724a"
+  },
+  "components/life/projects/shared.ts": {
+    "mtime": 1782193400.8044617,
+    "ast_hash": "19ea01db4e77e2fac37e286310df7d69",
+    "semantic_hash": "19ea01db4e77e2fac37e286310df7d69"
+  },
+  "components/life/reports/ReportsSidebar.tsx": {
+    "mtime": 1781632250.1009786,
+    "ast_hash": "be38ce6725584155594c577faded2a6f",
+    "semantic_hash": "be38ce6725584155594c577faded2a6f"
+  },
+  "components/life/reports/SectionCard.tsx": {
+    "mtime": 1781445547.3595011,
+    "ast_hash": "fe305a6346230506519fb44812100276",
+    "semantic_hash": "fe305a6346230506519fb44812100276"
+  },
+  "components/life/studio/StudioClient.tsx": {
+    "mtime": 1783155727.370363,
+    "ast_hash": "c9f3b2933f84ed4ddaa1a706da4248f9",
+    "semantic_hash": ""
+  },
+  "components/life/tasks/LifeCalendar.tsx": {
+    "mtime": 1782137191.8735795,
+    "ast_hash": "195c134afc5f3832b3ef7057eba235a3",
+    "semantic_hash": "195c134afc5f3832b3ef7057eba235a3"
+  },
+  "components/life/tasks/PrintManagement.tsx": {
+    "mtime": 1782658708.0130322,
+    "ast_hash": "3743e362760084582f75db28472fe702",
+    "semantic_hash": "3743e362760084582f75db28472fe702"
+  },
+  "components/life/tasks/TaskForm.tsx": {
+    "mtime": 1782653061.466153,
+    "ast_hash": "80b71a4ac699d4aacc85e9bb7fe1070d",
+    "semantic_hash": "80b71a4ac699d4aacc85e9bb7fe1070d"
+  },
+  "components/life/tasks/TasksClient.tsx": {
+    "mtime": 1782658722.369634,
+    "ast_hash": "4665eef8a0c2b14a173bf42d78016ccd",
+    "semantic_hash": "4665eef8a0c2b14a173bf42d78016ccd"
+  },
+  "content/site-content.json": {
+    "mtime": 1782964397.2314308,
+    "ast_hash": "1c7f52a557b5934206ef17ddb935d870",
+    "semantic_hash": "1c7f52a557b5934206ef17ddb935d870"
+  },
+  "hardware/pr_life_printer/config.example.h": {
+    "mtime": 1782650641.5359397,
+    "ast_hash": "46a5bc2d972741019ac456540f5f2b85",
+    "semantic_hash": "46a5bc2d972741019ac456540f5f2b85"
+  },
+  "hooks/useViewportMode.ts": {
+    "mtime": 1781445547.3939016,
+    "ast_hash": "be8bf8ee000e1400a165af8bc78afdf5",
+    "semantic_hash": "be8bf8ee000e1400a165af8bc78afdf5"
+  },
+  "lib/admin-auth.ts": {
+    "mtime": 1781412948.1769898,
+    "ast_hash": "045549b28b4265e0f8c4f3c4b3256c53",
+    "semantic_hash": "045549b28b4265e0f8c4f3c4b3256c53"
+  },
+  "lib/case-study-media.ts": {
+    "mtime": 1774479064.8493273,
+    "ast_hash": "2a843337ad80ffad22e116c732e44641",
+    "semantic_hash": "2a843337ad80ffad22e116c732e44641"
+  },
+  "lib/case-study-templates.ts": {
+    "mtime": 1777304551.6650543,
+    "ast_hash": "1dc1d21f453e3cf755831ebaabb21783",
+    "semantic_hash": "1dc1d21f453e3cf755831ebaabb21783"
+  },
+  "lib/dashboard-storage.ts": {
+    "mtime": 1780586681.2206821,
+    "ast_hash": "3c44e4b86f0ea621b584c38401ab8ab9",
+    "semantic_hash": "3c44e4b86f0ea621b584c38401ab8ab9"
+  },
+  "lib/github-content.ts": {
+    "mtime": 1780586681.5636322,
+    "ast_hash": "f7b70d158c7eedc819e6b69a6f87be9f",
+    "semantic_hash": "f7b70d158c7eedc819e6b69a6f87be9f"
+  },
+  "lib/life/auth.ts": {
+    "mtime": 1782569919.7917557,
+    "ast_hash": "dc78967841c26289e5d69b47ec5855c8",
+    "semantic_hash": "dc78967841c26289e5d69b47ec5855c8"
+  },
+  "lib/life/calendar.ts": {
+    "mtime": 1782137191.880216,
+    "ast_hash": "f94dce15f1dcf98d14392c572f03fa6c",
+    "semantic_hash": "f94dce15f1dcf98d14392c572f03fa6c"
+  },
+  "lib/life/claude.ts": {
+    "mtime": 1781417155.6160946,
+    "ast_hash": "6daf811b334cf3f68a0f3e65ac382808",
+    "semantic_hash": "6daf811b334cf3f68a0f3e65ac382808"
+  },
+  "lib/life/client.ts": {
+    "mtime": 1781426377.9854546,
+    "ast_hash": "3b36e7b9033ba7878c256df4ccd0d216",
+    "semantic_hash": "3b36e7b9033ba7878c256df4ccd0d216"
+  },
+  "lib/life/constants.ts": {
+    "mtime": 1781527829.5050104,
+    "ast_hash": "8c0537e6145fd1a825e39d314a58abd6",
+    "semantic_hash": "8c0537e6145fd1a825e39d314a58abd6"
+  },
+  "lib/life/email.ts": {
+    "mtime": 1782721668.2948189,
+    "ast_hash": "750638e9786d97b395eb89b5481a3fd5",
+    "semantic_hash": "750638e9786d97b395eb89b5481a3fd5"
+  },
+  "lib/life/entries.ts": {
+    "mtime": 1781631077.361888,
+    "ast_hash": "c1f1e2c06602bd2a610bee5489d5ad68",
+    "semantic_hash": "c1f1e2c06602bd2a610bee5489d5ad68"
+  },
+  "lib/life/env.ts": {
+    "mtime": 1782569912.8745625,
+    "ast_hash": "6f106799918daae8a8936ed66d35136e",
+    "semantic_hash": "6f106799918daae8a8936ed66d35136e"
+  },
+  "lib/life/history.ts": {
+    "mtime": 1781417156.5166414,
+    "ast_hash": "bb24f18f539322cbb59b26cee491d542",
+    "semantic_hash": "bb24f18f539322cbb59b26cee491d542"
+  },
+  "lib/life/markdown-sections.ts": {
+    "mtime": 1781445547.4085536,
+    "ast_hash": "333e56b7c02e76f872aff936bd5ddf23",
+    "semantic_hash": "333e56b7c02e76f872aff936bd5ddf23"
+  },
+  "lib/life/milestones.ts": {
+    "mtime": 1782193400.8073604,
+    "ast_hash": "f6303bd8c729965425dc1da5e1cdacb2",
+    "semantic_hash": "f6303bd8c729965425dc1da5e1cdacb2"
+  },
+  "lib/life/print-jobs.ts": {
+    "mtime": 1782658677.1035967,
+    "ast_hash": "3ee5f3e513090696ada51907cae42521",
+    "semantic_hash": "3ee5f3e513090696ada51907cae42521"
+  },
+  "lib/life/project-events.ts": {
+    "mtime": 1782193400.808009,
+    "ast_hash": "a92d2e4bf46d573fdc18d29e3fd51c7b",
+    "semantic_hash": "a92d2e4bf46d573fdc18d29e3fd51c7b"
+  },
+  "lib/life/project-pages.ts": {
+    "mtime": 1782996090.266187,
+    "ast_hash": "ea90651558e82decb51a65e8e280eb1f",
+    "semantic_hash": ""
+  },
+  "lib/life/project-refs.ts": {
+    "mtime": 1782193400.8085825,
+    "ast_hash": "3ee5e511790eb8ede26e467c01220f61",
+    "semantic_hash": "3ee5e511790eb8ede26e467c01220f61"
+  },
+  "lib/life/projects-db.ts": {
+    "mtime": 1782886649.6260846,
+    "ast_hash": "a81ef4419c921517d59928428dfa96c5",
+    "semantic_hash": "a81ef4419c921517d59928428dfa96c5"
+  },
+  "lib/life/projects.ts": {
+    "mtime": 1781433379.4815483,
+    "ast_hash": "7427c77c8ad7e850dfa0d023a9b00f3f",
+    "semantic_hash": "7427c77c8ad7e850dfa0d023a9b00f3f"
+  },
+  "lib/life/receipt.ts": {
+    "mtime": 1782652878.7606668,
+    "ast_hash": "22ea7eab83b31577c9e54aa1c6212f99",
+    "semantic_hash": "22ea7eab83b31577c9e54aa1c6212f99"
+  },
+  "lib/life/report-context.ts": {
+    "mtime": 1781527829.5053842,
+    "ast_hash": "832725f7a388dadab1e59b65a1cbacb1",
+    "semantic_hash": "832725f7a388dadab1e59b65a1cbacb1"
+  },
+  "lib/life/search.ts": {
+    "mtime": 1782193400.8100908,
+    "ast_hash": "400b49a4530464da6b581641a75e1b37",
+    "semantic_hash": "400b49a4530464da6b581641a75e1b37"
+  },
+  "lib/life/settings.ts": {
+    "mtime": 1782214618.3466516,
+    "ast_hash": "599fb9fd631eda02d5a2712f751a5c8a",
+    "semantic_hash": "599fb9fd631eda02d5a2712f751a5c8a"
+  },
+  "lib/life/studio.ts": {
+    "mtime": 1782889936.056379,
+    "ast_hash": "db897f86dfa71e997d7b389c5c10cd50",
+    "semantic_hash": "db897f86dfa71e997d7b389c5c10cd50"
+  },
+  "lib/life/supabase.ts": {
+    "mtime": 1781536345.1455119,
+    "ast_hash": "610654f21e96c090740d8f9058a25af2",
+    "semantic_hash": "610654f21e96c090740d8f9058a25af2"
+  },
+  "lib/life/synthesis.ts": {
+    "mtime": 1781532133.623879,
+    "ast_hash": "51e001bfba22bc407afd0706215d3056",
+    "semantic_hash": "51e001bfba22bc407afd0706215d3056"
+  },
+  "lib/life/tasks.ts": {
+    "mtime": 1782653061.0452993,
+    "ast_hash": "6f1ebd2b26e870ddcb07fd100bf1c054",
+    "semantic_hash": "6f1ebd2b26e870ddcb07fd100bf1c054"
+  },
+  "lib/life/time.ts": {
+    "mtime": 1781432685.0023477,
+    "ast_hash": "aadc39267acf729860f6ec6702520c55",
+    "semantic_hash": "aadc39267acf729860f6ec6702520c55"
+  },
+  "lib/life/types.ts": {
+    "mtime": 1782889911.6398387,
+    "ast_hash": "2814cd18e8f5c05513997ad4d6155d23",
+    "semantic_hash": "2814cd18e8f5c05513997ad4d6155d23"
+  },
+  "lib/life/ux-templates.ts": {
+    "mtime": 1782990540.0099335,
+    "ast_hash": "9dd4ee50fe2684a28a7bc2120b44a1e0",
+    "semantic_hash": ""
+  },
+  "lib/preview-images.ts": {
+    "mtime": 1775598838.7724044,
+    "ast_hash": "00f58a8d44af34cc3844221a1ef375b3",
+    "semantic_hash": "00f58a8d44af34cc3844221a1ef375b3"
+  },
+  "lib/security.ts": {
+    "mtime": 1781412948.1783128,
+    "ast_hash": "eb7dafb661f94dfd6923a7de530f799f",
+    "semantic_hash": "eb7dafb661f94dfd6923a7de530f799f"
+  },
+  "lib/seo.ts": {
+    "mtime": 1781412948.181096,
+    "ast_hash": "b96e8ef105e08c45bc8c931fa9c9309d",
+    "semantic_hash": "b96e8ef105e08c45bc8c931fa9c9309d"
+  },
+  "lib/site-content-schema.ts": {
+    "mtime": 1781412948.1974032,
+    "ast_hash": "00d5ee6f48b6ad252d58f9b60d10b8b3",
+    "semantic_hash": "00d5ee6f48b6ad252d58f9b60d10b8b3"
+  },
+  "lib/site-content.ts": {
+    "mtime": 1781537763.733438,
+    "ast_hash": "2a4dbc3ea8f7ff2f0f0693c66683b9ea",
+    "semantic_hash": "2a4dbc3ea8f7ff2f0f0693c66683b9ea"
+  },
+  "lib/site-pages.ts": {
+    "mtime": 1777997227.1064165,
+    "ast_hash": "1f608da62e49a5a3f13a4791be35a023",
+    "semantic_hash": "1f608da62e49a5a3f13a4791be35a023"
+  },
+  "lib/sounds.ts": {
+    "mtime": 1780471707.748225,
+    "ast_hash": "8e236212d3b3a18a40387c72aac472f3",
+    "semantic_hash": "8e236212d3b3a18a40387c72aac472f3"
+  },
+  "lib/spotify-reference.ts": {
+    "mtime": 1780474272.8264534,
+    "ast_hash": "687fb249baf211d147bf2d1db4396a9b",
+    "semantic_hash": "687fb249baf211d147bf2d1db4396a9b"
+  },
+  "lib/spotify.ts": {
+    "mtime": 1780474017.4106522,
+    "ast_hash": "5554ec8669a840e8510607e2f493f4f3",
+    "semantic_hash": "5554ec8669a840e8510607e2f493f4f3"
+  },
+  "next.config.ts": {
+    "mtime": 1783154160.806504,
+    "ast_hash": "274ee6fe337ad80a5796ae82982d3735",
+    "semantic_hash": ""
+  },
+  "package.json": {
+    "mtime": 1782990490.700046,
+    "ast_hash": "1dcd4535920a318711082326bbcf1cbd",
+    "semantic_hash": ""
+  },
+  "postcss.config.mjs": {
+    "mtime": 1774060876.6426136,
+    "ast_hash": "239f3ebf717465dc636818a1a619398d",
+    "semantic_hash": "239f3ebf717465dc636818a1a619398d"
+  },
+  "scripts/process-images.mjs": {
+    "mtime": 1774317474.153028,
+    "ast_hash": "f29eed4b980c3097b602a107476e7ccc",
+    "semantic_hash": "f29eed4b980c3097b602a107476e7ccc"
+  },
+  "supabase/migrations/001_life_initial.sql": {
+    "mtime": 1781416964.8795907,
+    "ast_hash": "641c84e8b4f52b54207331479b104ade",
+    "semantic_hash": "641c84e8b4f52b54207331479b104ade"
+  },
+  "supabase/migrations/002_life_v2.sql": {
+    "mtime": 1781433399.899511,
+    "ast_hash": "15b627fe60cc823f5988aa3539eceb10",
+    "semantic_hash": "15b627fe60cc823f5988aa3539eceb10"
+  },
+  "supabase/migrations/003_habits.sql": {
+    "mtime": 1781503195.228722,
+    "ast_hash": "0735a94191ac9a6d940ea46fd1bc699f",
+    "semantic_hash": "0735a94191ac9a6d940ea46fd1bc699f"
+  },
+  "supabase/migrations/004_task_calendar_link.sql": {
+    "mtime": 1782137191.8844483,
+    "ast_hash": "8e159f7251914fc253d7cc6c8fef2a13",
+    "semantic_hash": "8e159f7251914fc253d7cc6c8fef2a13"
+  },
+  "supabase/migrations/005_projects.sql": {
+    "mtime": 1782193400.8123002,
+    "ast_hash": "a5b8b42d2872c57fb7bebda618c014b8",
+    "semantic_hash": "a5b8b42d2872c57fb7bebda618c014b8"
+  },
+  "supabase/migrations/006_project_hierarchy_and_pages.sql": {
+    "mtime": 1782377460.645175,
+    "ast_hash": "a1a07c91097e1cac61143e4cef4013a9",
+    "semantic_hash": "a1a07c91097e1cac61143e4cef4013a9"
+  },
+  "supabase/migrations/007_life_ux_studio.sql": {
+    "mtime": 1782889911.4091384,
+    "ast_hash": "88376adca4096c5a50594a8c6008774e",
+    "semantic_hash": "88376adca4096c5a50594a8c6008774e"
+  },
+  "supabase/migrations/007_print_jobs.sql": {
+    "mtime": 1782537818.3743844,
+    "ast_hash": "439cd84ccaa309d70812b1dd9339fb71",
+    "semantic_hash": "439cd84ccaa309d70812b1dd9339fb71"
+  },
+  "tsconfig.json": {
+    "mtime": 1774060876.6668396,
+    "ast_hash": "02fc19ad21338c2ab820a70136310db4",
+    "semantic_hash": "02fc19ad21338c2ab820a70136310db4"
+  },
+  "vercel.json": {
+    "mtime": 1782213892.684092,
+    "ast_hash": "09b8c231c4b3bebe46c61bc13f3424e1",
+    "semantic_hash": "09b8c231c4b3bebe46c61bc13f3424e1"
+  },
+  "AGENTS.md": {
+    "mtime": 1774060979.4390316,
+    "ast_hash": "9e09241799026ac05be315a2f0b50055",
+    "semantic_hash": "9e09241799026ac05be315a2f0b50055"
+  },
+  "CLAUDE.md": {
+    "mtime": 1782975838.3188121,
+    "ast_hash": "5840b7c62d00be83d6462c6e7fe61f16",
+    "semantic_hash": "5840b7c62d00be83d6462c6e7fe61f16"
+  },
+  "README.md": {
+    "mtime": 1774060876.6386209,
+    "ast_hash": "f15aaa42d5d299d091b1171097ea56ad",
+    "semantic_hash": "f15aaa42d5d299d091b1171097ea56ad"
+  },
+  "docs/claude-app-context.md": {
+    "mtime": 1774314165.2379668,
+    "ast_hash": "426f25afcb2fb0113e1e112a797112fb",
+    "semantic_hash": "426f25afcb2fb0113e1e112a797112fb"
+  },
+  "docs/life/ux-studio-plan.md": {
+    "mtime": 1782889827.5777423,
+    "ast_hash": "aa848f00ee0e6ef7a98badb6bd764b4e",
+    "semantic_hash": "aa848f00ee0e6ef7a98badb6bd764b4e"
+  },
+  "docs/life/ux-studio-spec.md": {
+    "mtime": 1782889827.2247407,
+    "ast_hash": "23fce6978176b6a69d856f96d0d938b9",
+    "semantic_hash": "23fce6978176b6a69d856f96d0d938b9"
+  },
+  "docs/superpowers/plans/2026-03-20-portfolio-homepage.md": {
+    "mtime": 1774060540.9369013,
+    "ast_hash": "15b98ab08e538e3f3457219701fb25f0",
+    "semantic_hash": "15b98ab08e538e3f3457219701fb25f0"
+  },
+  "docs/superpowers/plans/2026-03-21-micro-animations.md": {
+    "mtime": 1774148868.9854429,
+    "ast_hash": "08879a74176e5c7932f4d3f53ef56927",
+    "semantic_hash": "08879a74176e5c7932f4d3f53ef56927"
+  },
+  "docs/superpowers/plans/2026-03-22-interactive-sounds.md": {
+    "mtime": 1774207535.4849436,
+    "ast_hash": "ac4fe90d953d0ba993f3d981bf901e16",
+    "semantic_hash": "ac4fe90d953d0ba993f3d981bf901e16"
+  },
+  "docs/superpowers/plans/2026-03-22-intro-animation.md": {
+    "mtime": 1774228446.1019697,
+    "ast_hash": "9fb5589aafb87f7e21f0db8d933d86ce",
+    "semantic_hash": "9fb5589aafb87f7e21f0db8d933d86ce"
+  },
+  "docs/superpowers/plans/2026-03-22-personality-features.md": {
+    "mtime": 1774238220.1809454,
+    "ast_hash": "f9bdb7892e4c07a802b1ca622e78ef32",
+    "semantic_hash": "f9bdb7892e4c07a802b1ca622e78ef32"
+  },
+  "docs/superpowers/plans/2026-03-23-case-study-narrative.md": {
+    "mtime": 1774323514.555032,
+    "ast_hash": "2b86cb75a14c87e150f39ffc7e63a470",
+    "semantic_hash": "2b86cb75a14c87e150f39ffc7e63a470"
+  },
+  "docs/superpowers/plans/2026-03-23-gsap-animations.md": {
+    "mtime": 1774300714.4565067,
+    "ast_hash": "6d50ad9bf07172592e986974567c6f1d",
+    "semantic_hash": "6d50ad9bf07172592e986974567c6f1d"
+  },
+  "docs/superpowers/plans/2026-03-26-case-study-image-layout.md": {
+    "mtime": 1774557968.7055645,
+    "ast_hash": "685d17e09b6ab1642c9a852fc83eceef",
+    "semantic_hash": "685d17e09b6ab1642c9a852fc83eceef"
+  },
+  "docs/superpowers/plans/2026-06-14-life-redesign.md": {
+    "mtime": 1781441601.506745,
+    "ast_hash": "23bd875ddee8d7996dd447da3cddef12",
+    "semantic_hash": "23bd875ddee8d7996dd447da3cddef12"
+  },
+  "docs/superpowers/specs/2026-03-21-micro-animations-design.md": {
+    "mtime": 1774148586.3023627,
+    "ast_hash": "6e8e39ddd673819ba80981947bda9c79",
+    "semantic_hash": "6e8e39ddd673819ba80981947bda9c79"
+  },
+  "docs/superpowers/specs/2026-03-22-interactive-sounds-design.md": {
+    "mtime": 1774206369.2631338,
+    "ast_hash": "300cdfc0dda223d183cc163c50bdc2e7",
+    "semantic_hash": "300cdfc0dda223d183cc163c50bdc2e7"
+  },
+  "docs/superpowers/specs/2026-03-22-intro-animation-design.md": {
+    "mtime": 1774228084.2070296,
+    "ast_hash": "cb306926853929f9e8d2117a97691e2a",
+    "semantic_hash": "cb306926853929f9e8d2117a97691e2a"
+  },
+  "docs/superpowers/specs/2026-03-22-personality-features-design.md": {
+    "mtime": 1774238117.3538518,
+    "ast_hash": "339fdf6bfdc6d655979ea553d677c471",
+    "semantic_hash": "339fdf6bfdc6d655979ea553d677c471"
+  },
+  "docs/superpowers/specs/2026-03-23-case-study-narrative-design.md": {
+    "mtime": 1774322950.2059233,
+    "ast_hash": "46699130de410e5fab95e5c136816d6c",
+    "semantic_hash": "46699130de410e5fab95e5c136816d6c"
+  },
+  "docs/superpowers/specs/2026-03-23-gsap-animations-design.md": {
+    "mtime": 1774300162.1660972,
+    "ast_hash": "f7a01c1bb394f30f9fd531ec9825413f",
+    "semantic_hash": "f7a01c1bb394f30f9fd531ec9825413f"
+  },
+  "docs/superpowers/specs/2026-03-26-case-study-image-layout-design.md": {
+    "mtime": 1774556859.6077054,
+    "ast_hash": "7f56a663f5f695bbc3c8cb8a0a739ce3",
+    "semantic_hash": "7f56a663f5f695bbc3c8cb8a0a739ce3"
+  },
+  "docs/superpowers/specs/2026-04-15-scad-scholarship-page-design.md": {
+    "mtime": 1776291984.0578268,
+    "ast_hash": "5fbb3d4e105c95cf90c36d5ecedf6364",
+    "semantic_hash": "5fbb3d4e105c95cf90c36d5ecedf6364"
+  },
+  "docs/superpowers/specs/2026-06-14-life-redesign-design.md": {
+    "mtime": 1781440930.9313385,
+    "ast_hash": "8e3a108b63043c6616390753d17728bf",
+    "semantic_hash": "8e3a108b63043c6616390753d17728bf"
+  },
+  "hardware/SETUP.md": {
+    "mtime": 1782650793.0458183,
+    "ast_hash": "791e745ce3daaad4935572d6f2f10685",
+    "semantic_hash": "791e745ce3daaad4935572d6f2f10685"
+  },
+  "public/Portfolio html files/albers-portfolio-case-study.html": {
+    "mtime": 1775695412.349309,
+    "ast_hash": "815478b7958a5b752895c598f521266e",
+    "semantic_hash": "815478b7958a5b752895c598f521266e"
+  },
+  "public/Portfolio html files/atom-portfolio-case-study.html": {
+    "mtime": 1775695412.3518398,
+    "ast_hash": "76738a67ecc6c32e3a2b68160fd46640",
+    "semantic_hash": "76738a67ecc6c32e3a2b68160fd46640"
+  },
+  "public/Portfolio html files/faces-of-power-portfolio-case-study.html": {
+    "mtime": 1775695412.3569233,
+    "ast_hash": "c00397cf4bd2d47f5a451666954c6b76",
+    "semantic_hash": "c00397cf4bd2d47f5a451666954c6b76"
+  },
+  "public/Portfolio html files/franklins-portfolio-case-study.html": {
+    "mtime": 1775695412.3640766,
+    "ast_hash": "48ea6aaad2f6ba5a194677064c8422e4",
+    "semantic_hash": "48ea6aaad2f6ba5a194677064c8422e4"
+  },
+  "public/Portfolio html files/helpoh-portfolio-case-study.html": {
+    "mtime": 1775695412.3692026,
+    "ast_hash": "071aa00410bf24e150ef65e63f7ad53e",
+    "semantic_hash": "071aa00410bf24e150ef65e63f7ad53e"
+  },
+  "public/Portfolio html files/ho-chi-minh-photography-portfolio.html": {
+    "mtime": 1776181665.8826723,
+    "ast_hash": "74a477c5d816ef43ffb0373aabec6bf3",
+    "semantic_hash": "74a477c5d816ef43ffb0373aabec6bf3"
+  },
+  "public/Portfolio html files/kl-photography-portfolio.html": {
+    "mtime": 1776182933.706743,
+    "ast_hash": "a1f753055c3e4e3f50e6e0d73cd2e64e",
+    "semantic_hash": "a1f753055c3e4e3f50e6e0d73cd2e64e"
+  },
+  "public/Portfolio html files/loomlearn-portfolio-case-study.html": {
+    "mtime": 1775695412.3818746,
+    "ast_hash": "9a9918fa9ff990a7c6eb9eace0adb7e4",
+    "semantic_hash": "9a9918fa9ff990a7c6eb9eace0adb7e4"
+  },
+  "public/Portfolio html files/penang-photography-portfolio.html": {
+    "mtime": 1776269084.347019,
+    "ast_hash": "3e105c91700eec8e700231a67fafa096",
+    "semantic_hash": "3e105c91700eec8e700231a67fafa096"
+  },
+  "public/Portfolio html files/south-china-sea-portfolio-case-study.html": {
+    "mtime": 1775695412.4243798,
+    "ast_hash": "ef08143c09739ccffb48161a77a4a238",
+    "semantic_hash": "ef08143c09739ccffb48161a77a4a238"
+  },
+  "public/_flattened/ho-chi-minh-hq/hcmc-flattened.html": {
+    "mtime": 1776182157.2610197,
+    "ast_hash": "0810a1367cac4518ecf796ab71a73b99",
+    "semantic_hash": "0810a1367cac4518ecf796ab71a73b99"
+  },
+  "public/_flattened/kl-hq/kl-flattened.html": {
+    "mtime": 1776183665.402382,
+    "ast_hash": "bb9eef4a00caf5434ed2dda28feb0bf2",
+    "semantic_hash": "bb9eef4a00caf5434ed2dda28feb0bf2"
+  },
+  "public/_flattened/penang-hq/penang-flattened.html": {
+    "mtime": 1776269214.7081108,
+    "ast_hash": "0fff6c4ff63dc5ca4f4417a16f0c4cec",
+    "semantic_hash": "0fff6c4ff63dc5ca4f4417a16f0c4cec"
+  },
+  "public/linkedin-banner.html": {
+    "mtime": 1775834104.7417338,
+    "ast_hash": "643bcdd6ffca24e57dd19852489b8f25",
+    "semantic_hash": "643bcdd6ffca24e57dd19852489b8f25"
+  },
+  "public/pramit-ranjan-cv.html": {
+    "mtime": 1775782220.6351597,
+    "ast_hash": "1b0daa29fc1e6cdaa34c04d05a1dc114",
+    "semantic_hash": "1b0daa29fc1e6cdaa34c04d05a1dc114"
+  },
+  ".claude/launch.json": {
+    "mtime": 1783153781.5473719,
+    "ast_hash": "64f537f85d563f28b9c8624e78157f5c",
+    "semantic_hash": ""
+  },
+  ".claude/settings.json": {
+    "mtime": 1782988210.7748525,
+    "ast_hash": "e51077b6a7f1f67afc748f1a32a1557d",
+    "semantic_hash": ""
+  },
+  "lib/life/page-body.ts": {
+    "mtime": 1782990560.716675,
+    "ast_hash": "472938202b60917cc0f198106e04e51a",
+    "semantic_hash": ""
+  },
+  ".claude/CLAUDE.md": {
+    "mtime": 1782975838.3166382,
+    "ast_hash": "9b31786b637be3c13978bec4c2330752",
+    "semantic_hash": ""
+  },
+  ".claude/skills/graphify/SKILL.md": {
+    "mtime": 1782975838.3158295,
+    "ast_hash": "5bc28728a68fa52adb97f26b0ffa1324",
+    "semantic_hash": ""
+  },
+  ".claude/skills/graphify/references/add-watch.md": {
+    "mtime": 1782974312.8550289,
+    "ast_hash": "d59d027fe449f06aa03905a01184e779",
+    "semantic_hash": ""
+  },
+  ".claude/skills/graphify/references/exports.md": {
+    "mtime": 1782974312.855222,
+    "ast_hash": "9da2a2152e60a22f07f05fed5158f287",
+    "semantic_hash": ""
+  },
+  ".claude/skills/graphify/references/extraction-spec.md": {
+    "mtime": 1782974312.855391,
+    "ast_hash": "42fef56a01698118f7fd722acdadea34",
+    "semantic_hash": ""
+  },
+  ".claude/skills/graphify/references/github-and-merge.md": {
+    "mtime": 1782974312.8555205,
+    "ast_hash": "cde13df085e4c492aeb7ba298a996d0d",
+    "semantic_hash": ""
+  },
+  ".claude/skills/graphify/references/hooks.md": {
+    "mtime": 1782974312.855651,
+    "ast_hash": "3f545db6ce646650bb9de588f5512a27",
+    "semantic_hash": ""
+  },
+  ".claude/skills/graphify/references/query.md": {
+    "mtime": 1782974312.8558607,
+    "ast_hash": "9e5aadc2c57ab561bc56600fcfa70735",
+    "semantic_hash": ""
+  },
+  ".claude/skills/graphify/references/transcribe.md": {
+    "mtime": 1782974312.8560007,
+    "ast_hash": "67b6a5fa6c0974e18f60db9f8932fbd8",
+    "semantic_hash": ""
+  },
+  ".claude/skills/graphify/references/update.md": {
+    "mtime": 1782974312.8562112,
+    "ast_hash": "c698309979460d0f02ba616417844399",
+    "semantic_hash": ""
+  },
+  "docs/life/projects-notion-feel-plan.md": {
+    "mtime": 1782991852.618963,
+    "ast_hash": "e2382851af524a7a0425a19992b6d5fe",
+    "semantic_hash": ""
+  },
+  "docs/life/ux-template-visual-plan.md": {
+    "mtime": 1782989959.3296132,
+    "ast_hash": "f8a5a31263867b481eee1ef99142efcc",
+    "semantic_hash": ""
+  },
+  "docs/life/ux-template-visual-spec.md": {
+    "mtime": 1782989959.117397,
+    "ast_hash": "54c6af71b62cb0cf96c0bb438ef1d66f",
+    "semantic_hash": ""
+  },
+  "public/_flattened/albers-hq/albers-1.pdf": {
+    "mtime": 1775786634.9658792,
+    "ast_hash": "afabca060c86d41fda68925d530dfc1a",
+    "semantic_hash": ""
+  },
+  "public/_flattened/albers-hq/albers-2.pdf": {
+    "mtime": 1775786706.5628874,
+    "ast_hash": "8ba0ff92cc6d076b41ba9696fc6b381d",
+    "semantic_hash": ""
+  },
+  "public/_flattened/albers-hq/albers-3.pdf": {
+    "mtime": 1775786762.137971,
+    "ast_hash": "cd3ea74e8a5c32250ca76e9ef16ad8b0",
+    "semantic_hash": ""
+  },
+  "public/albers-portfolio-case-study.pdf": {
+    "mtime": 1775785782.114037,
+    "ast_hash": "0913b62d4e12d9c49c8b0746be4c8287",
+    "semantic_hash": ""
+  },
+  "public/portfolio pdfs/Pramit Ranjan Atom.pdf": {
+    "mtime": 1775693824.6201894,
+    "ast_hash": "959ba391c17096e0d93fcbcebd19e5fa",
+    "semantic_hash": ""
+  },
+  "public/portfolio pdfs/Pramit Ranjan Franklins.pdf": {
+    "mtime": 1775693824.631417,
+    "ast_hash": "a7299d756db3032abcae3e77dc48a312",
+    "semantic_hash": ""
+  },
+  "public/portfolio pdfs/albers-portfolio-case-study-flattened-hq.pdf": {
+    "mtime": 1775786830.5241582,
+    "ast_hash": "05cadfd82ef6d91af07bbe09ca477c9e",
+    "semantic_hash": ""
+  },
+  "public/portfolio pdfs/faces-of-power-portfolio-case-study-flattened-hq.pdf": {
+    "mtime": 1775693826.2432175,
+    "ast_hash": "9fd07a85503ec7645baf71b77ffdfc01",
+    "semantic_hash": ""
+  },
+  "public/portfolio pdfs/helpoh-portfolio-case-study-flattened-hq.pdf": {
+    "mtime": 1775689724.0719814,
+    "ast_hash": "0deaf25b56bd876ddefbed29107d6a67",
+    "semantic_hash": ""
+  },
+  "public/portfolio pdfs/ho-chi-minh-photography-portfolio-flattened-hq.pdf": {
+    "mtime": 1776182540.062866,
+    "ast_hash": "d5ffed0dbfa028898f52ed6ba285545d",
+    "semantic_hash": ""
+  },
+  "public/portfolio pdfs/kl-photography-portfolio-flattened-hq.pdf": {
+    "mtime": 1776183791.0258014,
+    "ast_hash": "f787f0b6ffe45fba15910ceb8105b055",
+    "semantic_hash": ""
+  },
+  "public/portfolio pdfs/loomlearn-portfolio-case-study-flattened-hq.pdf": {
+    "mtime": 1775694455.9826508,
+    "ast_hash": "981e39c097029a8e7fbef702670c5355",
+    "semantic_hash": ""
+  },
+  "public/portfolio pdfs/penang-photography-portfolio-flattened-hq.pdf": {
+    "mtime": 1776269232.9241755,
+    "ast_hash": "3e62f923bd159bd9d8a970316fbaff07",
+    "semantic_hash": ""
+  },
+  "public/portfolio pdfs/penang-photography-portfolio.pdf": {
+    "mtime": 1776269259.2703376,
+    "ast_hash": "3e62f923bd159bd9d8a970316fbaff07",
+    "semantic_hash": ""
+  },
+  "public/portfolio pdfs/south-china-sea-portfolio-case-study-flattened-hq.pdf": {
+    "mtime": 1775693826.1462235,
+    "ast_hash": "e291a880060676418d1fb4882f02b93d",
+    "semantic_hash": ""
+  },
+  "public/pramit-ranjan-cv-2026.pdf": {
+    "mtime": 1782987824.4791424,
+    "ast_hash": "36996de8add6bc81d8cba24118c79036",
+    "semantic_hash": ""
+  },
+  "public/pramit-ranjan-resume-2026.pdf": {
+    "mtime": 1782987862.389388,
+    "ast_hash": "1f1c2c4746bd3b70620a68dce4c7b828",
+    "semantic_hash": ""
+  },
+  "public/Play/bowl preview1.png": {
+    "mtime": 1778365109.642771,
+    "ast_hash": "d8022bb9cc680edcf9ea2a2da69a8767",
+    "semantic_hash": ""
+  },
+  "public/Play/sling preview1.png": {
+    "mtime": 1778365124.2919385,
+    "ast_hash": "4695c24e904ed785d54b644b6f548816",
+    "semantic_hash": ""
+  },
+  "public/_flattened/albers-hq/albers-1.png": {
+    "mtime": 1775786020.8857522,
+    "ast_hash": "d4f6c7f35229cbc8fd864757c2ad058b",
+    "semantic_hash": ""
+  },
+  "public/_flattened/albers-hq/albers-2.png": {
+    "mtime": 1775786025.0342882,
+    "ast_hash": "31221038a03c7648ed7a9d0460bf6b69",
+    "semantic_hash": ""
+  },
+  "public/_flattened/albers-hq/albers-3.png": {
+    "mtime": 1775786030.5665193,
+    "ast_hash": "d6c29fb883b4986c11b9ca557356c594",
+    "semantic_hash": ""
+  },
+  "public/_flattened/ho-chi-minh-hq/hcmc-1.jpg": {
+    "mtime": 1776182075.8441558,
+    "ast_hash": "cc4737db5461e840987abf38a7614c1c",
+    "semantic_hash": ""
+  },
+  "public/_flattened/ho-chi-minh-hq/hcmc-2.jpg": {
+    "mtime": 1776182080.610001,
+    "ast_hash": "5edf5b7baff0778beedc39c8d336a37e",
+    "semantic_hash": ""
+  },
+  "public/_flattened/ho-chi-minh-hq/hcmc-3.jpg": {
+    "mtime": 1776182084.495869,
+    "ast_hash": "2643e447b289ff2ea6c534e936e953fa",
+    "semantic_hash": ""
+  },
+  "public/_flattened/ho-chi-minh-hq/hcmc-4.jpg": {
+    "mtime": 1776182088.8935335,
+    "ast_hash": "c7ff2ce2553990dbcd809ab2e442db82",
+    "semantic_hash": ""
+  },
+  "public/_flattened/ho-chi-minh-hq/hcmc-5.jpg": {
+    "mtime": 1776182090.8077219,
+    "ast_hash": "c30b9e07825ffd0d408f681e747fa4d6",
+    "semantic_hash": ""
+  },
+  "public/_flattened/kl-hq/kl-01.jpg": {
+    "mtime": 1776183608.5822093,
+    "ast_hash": "961ff98fed19d303f0177b2d7da50a54",
+    "semantic_hash": ""
+  },
+  "public/_flattened/kl-hq/kl-02.jpg": {
+    "mtime": 1776183611.5658002,
+    "ast_hash": "297b78befa12ae31bc595d0046211d24",
+    "semantic_hash": ""
+  },
+  "public/_flattened/kl-hq/kl-03.jpg": {
+    "mtime": 1776183615.054915,
+    "ast_hash": "99cbf16213ebdf8c8fd5cfdf334496cc",
+    "semantic_hash": ""
+  },
+  "public/_flattened/kl-hq/kl-04.jpg": {
+    "mtime": 1776183618.2538955,
+    "ast_hash": "0fc1cb5825eead4ab1493608cc32b1ed",
+    "semantic_hash": ""
+  },
+  "public/_flattened/kl-hq/kl-05.jpg": {
+    "mtime": 1776183619.7920911,
+    "ast_hash": "3b16009ceb74bab1e28f917b66042475",
+    "semantic_hash": ""
+  },
+  "public/_flattened/kl-hq/kl-06.jpg": {
+    "mtime": 1776183621.9281554,
+    "ast_hash": "3882b986c09beacb822869e38cf8ddca",
+    "semantic_hash": ""
+  },
+  "public/_flattened/kl-hq/kl-07.jpg": {
+    "mtime": 1776183623.7274315,
+    "ast_hash": "c5b8f9762c33b871be7a496b6b8d4599",
+    "semantic_hash": ""
+  },
+  "public/_flattened/kl-hq/kl-08.jpg": {
+    "mtime": 1776183625.4684281,
+    "ast_hash": "996bc9436a6e97c8bc96268ad8c5dee9",
+    "semantic_hash": ""
+  },
+  "public/_flattened/kl-hq/kl-09.jpg": {
+    "mtime": 1776183627.3117018,
+    "ast_hash": "010e242381b3f5a88e8bfeed77e7dfc1",
+    "semantic_hash": ""
+  },
+  "public/_flattened/kl-hq/kl-10.jpg": {
+    "mtime": 1776183629.0209227,
+    "ast_hash": "8bcc377cb4f1509000a3851436495a8c",
+    "semantic_hash": ""
+  },
+  "public/_flattened/kl-hq/kl-11.jpg": {
+    "mtime": 1776183630.5202959,
+    "ast_hash": "6c66fc96346c75d3d29887a8a7bc85d4",
+    "semantic_hash": ""
+  },
+  "public/_flattened/kl-hq/kl-12.jpg": {
+    "mtime": 1776183631.8618753,
+    "ast_hash": "a5a61f86c3d81653250979f59a868f3f",
+    "semantic_hash": ""
+  },
+  "public/_flattened/kl-hq/kl-13.jpg": {
+    "mtime": 1776183633.3852563,
+    "ast_hash": "3b944a12084e6f26fbc69680d4d94f9b",
+    "semantic_hash": ""
+  },
+  "public/_flattened/kl-hq/kl-14.jpg": {
+    "mtime": 1776183635.0976992,
+    "ast_hash": "0900bc0258d409e39e3e362e0d523e88",
+    "semantic_hash": ""
+  },
+  "public/_flattened/kl-hq/kl-15.jpg": {
+    "mtime": 1776183636.9825575,
+    "ast_hash": "531845e57441ac8ce6787cae9fc3be57",
+    "semantic_hash": ""
+  },
+  "public/_flattened/kl-hq/kl-16.jpg": {
+    "mtime": 1776183639.287887,
+    "ast_hash": "d627864b943898f02a66d85657bf6207",
+    "semantic_hash": ""
+  },
+  "public/_flattened/kl-hq/kl-17.jpg": {
+    "mtime": 1776183641.0252852,
+    "ast_hash": "f9864deb7de2949dad88a9944c65c181",
+    "semantic_hash": ""
+  },
+  "public/_flattened/penang-hq/penang-01.jpg": {
+    "mtime": 1776269188.9630654,
+    "ast_hash": "b545702b0d855316eed1ab1f406df624",
+    "semantic_hash": ""
+  },
+  "public/_flattened/penang-hq/penang-02.jpg": {
+    "mtime": 1776269191.4812596,
+    "ast_hash": "38e2fa25f7269b0122874a0d446cabe2",
+    "semantic_hash": ""
+  },
+  "public/_flattened/penang-hq/penang-03.jpg": {
+    "mtime": 1776269193.243838,
+    "ast_hash": "548b8052c6d97a0690611d90190b8181",
+    "semantic_hash": ""
+  },
+  "public/_flattened/penang-hq/penang-04.jpg": {
+    "mtime": 1776269195.2003245,
+    "ast_hash": "d2aa3c588891a23ab6109954c814bd4d",
+    "semantic_hash": ""
+  },
+  "public/_flattened/penang-hq/penang-05.jpg": {
+    "mtime": 1776269197.043912,
+    "ast_hash": "74c2eb1eb6e03c709636314d5313331e",
+    "semantic_hash": ""
+  },
+  "public/_flattened/penang-hq/penang-06.jpg": {
+    "mtime": 1776269198.7591627,
+    "ast_hash": "6ddcefc847d6e7872ed3cd4be16d9671",
+    "semantic_hash": ""
+  },
+  "public/_flattened/penang-hq/penang-07.jpg": {
+    "mtime": 1776269200.401303,
+    "ast_hash": "c26ae76f4d4fab5001d9bdd90c528d7f",
+    "semantic_hash": ""
+  },
+  "public/_flattened/penang-hq/penang-08.jpg": {
+    "mtime": 1776269200.931152,
+    "ast_hash": "69431b8e85f85fe6d705039b98a39f08",
+    "semantic_hash": ""
+  },
+  "public/_flattened/penang-hq/penang-09.jpg": {
+    "mtime": 1776269203.2252395,
+    "ast_hash": "ca443c5638441184321e358bb3e601e4",
+    "semantic_hash": ""
+  },
+  "public/_flattened/penang-hq/penang-10.jpg": {
+    "mtime": 1776269204.3741877,
+    "ast_hash": "2e4cfcd688d40d0d1dc62a483cf3bb2c",
+    "semantic_hash": ""
+  },
+  "public/_linkedin-banner@2x.png": {
+    "mtime": 1775804050.61315,
+    "ast_hash": "4ee3c62bf1af05009809b9d0761d7b69",
+    "semantic_hash": ""
+  },
+  "public/creative/branding/soho/cover.png": {
+    "mtime": 1774221902.9985163,
+    "ast_hash": "5e88acc7993f1550ba1ada5336653507",
+    "semantic_hash": ""
+  },
+  "public/creative/branding/soho/hero.png": {
+    "mtime": 1774221902.0791466,
+    "ast_hash": "3fc35a10a4dc2c3819cdb6eacfcecd66",
+    "semantic_hash": ""
+  },
+  "public/creative/branding/soho/research.png": {
+    "mtime": 1774221902.5924063,
+    "ast_hash": "c91edc889c0ac94d5d62e8c280943f1d",
+    "semantic_hash": ""
+  },
+  "public/creative/branding/soho/solution-1.png": {
+    "mtime": 1774221902.796513,
+    "ast_hash": "78b592f2cf6f04c92ce66a4c9daee9bf",
+    "semantic_hash": ""
+  },
+  "public/creative/branding/soho/solution-hero.png": {
+    "mtime": 1774221902.2827282,
+    "ast_hash": "f956064d0ee3f81bc6ae1a0264a5a5ad",
+    "semantic_hash": ""
+  },
+  "public/creative/mixed-media/faces-of-power/hero.png": {
+    "mtime": 1774221905.986392,
+    "ast_hash": "34148b22a77c63bc2542155951688a6e",
+    "semantic_hash": ""
+  },
+  "public/creative/mixed-media/faces-of-power/ideation-1.png": {
+    "mtime": 1774221906.5380666,
+    "ast_hash": "83944a160bcd82324eaac51f82d581a5",
+    "semantic_hash": ""
+  },
+  "public/creative/mixed-media/faces-of-power/ideation-2.png": {
+    "mtime": 1774221907.101016,
+    "ast_hash": "070a9a5b26a8a319c6364f9cd917f873",
+    "semantic_hash": ""
+  },
+  "public/creative/mixed-media/faces-of-power/research.png": {
+    "mtime": 1774221906.8041463,
+    "ast_hash": "ae05441419c90b41a835f6129583cb97",
+    "semantic_hash": ""
+  },
+  "public/creative/mixed-media/faces-of-power/solution-1.png": {
+    "mtime": 1774221907.306268,
+    "ast_hash": "0a025958ebce33cc7fb1e3393d48f27c",
+    "semantic_hash": ""
+  },
+  "public/creative/mixed-media/faces-of-power/solution-2.png": {
+    "mtime": 1774221907.532127,
+    "ast_hash": "3902ec286a890d5fd59817bb86409dcf",
+    "semantic_hash": ""
+  },
+  "public/creative/mixed-media/faces-of-power/solution-hero.png": {
+    "mtime": 1774221906.2513685,
+    "ast_hash": "b2213d71581ef8e781b903d2df7cd54d",
+    "semantic_hash": ""
+  },
+  "public/creative/mixed-media/south-china-sea/hero.png": {
+    "mtime": 1774221903.6091232,
+    "ast_hash": "1dbb73ed5ac0cd26159d25ba10832720",
+    "semantic_hash": ""
+  },
+  "public/creative/mixed-media/south-china-sea/ideation-1.png": {
+    "mtime": 1774221904.452678,
+    "ast_hash": "ffeebf762e3bf54fd7b4d3c4e395f21b",
+    "semantic_hash": ""
+  },
+  "public/creative/mixed-media/south-china-sea/ideation-2.png": {
+    "mtime": 1774221904.925917,
+    "ast_hash": "d33ceec53d01ded951bb4f20eb603658",
+    "semantic_hash": ""
+  },
+  "public/creative/mixed-media/south-china-sea/research.png": {
+    "mtime": 1774221904.6866326,
+    "ast_hash": "056e849b333e1534f94d17256b95de1f",
+    "semantic_hash": ""
+  },
+  "public/creative/mixed-media/south-china-sea/solution-1.png": {
+    "mtime": 1774221905.0996242,
+    "ast_hash": "ab7e99c9c903df494f9fb15f8b42e385",
+    "semantic_hash": ""
+  },
+  "public/creative/mixed-media/south-china-sea/solution-2.png": {
+    "mtime": 1774221905.3404105,
+    "ast_hash": "732894259c5b06e9ebad78e6b222af85",
+    "semantic_hash": ""
+  },
+  "public/creative/mixed-media/south-china-sea/solution-hero.png": {
+    "mtime": 1774221904.2078106,
+    "ast_hash": "91e39324d16d31f564b89cb43b4e9974",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/hcmc/01.jpg": {
+    "mtime": 1774221737.5952053,
+    "ast_hash": "238104ef952f6023dba56e4198ddd3a4",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/hcmc/02.jpg": {
+    "mtime": 1774221738.0437362,
+    "ast_hash": "ccd76c2cce94926795768064ace8b6d1",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/hcmc/03.jpg": {
+    "mtime": 1774221737.9352508,
+    "ast_hash": "9257a0c7101a2d36f1aa4265d8dc9aa0",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/hcmc/04.jpg": {
+    "mtime": 1774221739.4369352,
+    "ast_hash": "403d280dfe83043fb062ab15c863e911",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/hcmc/05.jpg": {
+    "mtime": 1774221738.9375129,
+    "ast_hash": "8e813b9697c08aeade6e4728e40684d9",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/hcmc/06.jpg": {
+    "mtime": 1774221738.4663448,
+    "ast_hash": "2431d440dfb4a051bee7273aa1252953",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/hcmc/07.jpg": {
+    "mtime": 1774221738.584701,
+    "ast_hash": "0001035df14f3cb6676d367ae2991a9d",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/hcmc/08.jpg": {
+    "mtime": 1774221739.7527647,
+    "ast_hash": "fb182d96a83ae097503e336d83b90130",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/hcmc/09.jpg": {
+    "mtime": 1774221739.6414347,
+    "ast_hash": "36beb51d7574539a45f57bbda833ed68",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/hcmc/10.jpg": {
+    "mtime": 1774221739.2516766,
+    "ast_hash": "5933b201070a9e63cd91a98f736bb730",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/hcmc/11.jpg": {
+    "mtime": 1774221739.0464277,
+    "ast_hash": "e993650be2f2f85e23bc2cd6a0718a61",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/hcmc/12.jpg": {
+    "mtime": 1774221738.3542378,
+    "ast_hash": "93e118ba6501bab712c9fe3c0aa54daf",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/hcmc/13.jpg": {
+    "mtime": 1774221738.6890762,
+    "ast_hash": "9d6eb6a635e0a06bed156c4392f8a412",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/hcmc/14.jpg": {
+    "mtime": 1774221737.386299,
+    "ast_hash": "c22e6c0be2e1547fb51a10411279615c",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/hcmc/15.jpg": {
+    "mtime": 1774221737.5022085,
+    "ast_hash": "83a4cb08377f7d1084d4bc01f27b8d83",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/hcmc/16.jpg": {
+    "mtime": 1774221738.2454057,
+    "ast_hash": "75230ff841bfcabe8a9e6804780a83bd",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/hcmc/17.jpg": {
+    "mtime": 1774221737.6958103,
+    "ast_hash": "7ddc39f41bc0ab05659fd289434e9985",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/01.jpg": {
+    "mtime": 1774221716.9731472,
+    "ast_hash": "1645f43ac7f7a27b514ee78414d9434d",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/02.jpg": {
+    "mtime": 1774221718.4332857,
+    "ast_hash": "66ce192c000bd0ada2a313835cf335fa",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/03.jpg": {
+    "mtime": 1774221718.1640728,
+    "ast_hash": "5ccee1a726af0fd2ad699b7b09d71743",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/04.jpg": {
+    "mtime": 1774221720.52528,
+    "ast_hash": "c1b9bbd67b3db066d65e939394126161",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/05.jpg": {
+    "mtime": 1774221719.8574746,
+    "ast_hash": "d124a268ec45dd4c4e83bddeab182728",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/06.jpg": {
+    "mtime": 1774221719.0634413,
+    "ast_hash": "3a18f4f704ac5eb02c223f1044efd646",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/07.jpg": {
+    "mtime": 1774221719.286329,
+    "ast_hash": "0b26121bb2e516158be6e6d5ea016e50",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/08.jpg": {
+    "mtime": 1774221721.5570347,
+    "ast_hash": "e797be3e706b3950fc4e4e7a1cbe8650",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/09.jpg": {
+    "mtime": 1774221721.3363032,
+    "ast_hash": "595acaf6ece47eec406aafed4cbe8c2f",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/10.jpg": {
+    "mtime": 1774221720.2755437,
+    "ast_hash": "0ac46540f23affe757efd490a2ec2b7c",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/11.jpg": {
+    "mtime": 1774221720.0702734,
+    "ast_hash": "756f5da63348c831c1fe838cab29f199",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/12.jpg": {
+    "mtime": 1774221718.8712156,
+    "ast_hash": "960fb42a14781ef4aadd39144f8b521a",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/13.jpg": {
+    "mtime": 1774221719.5336685,
+    "ast_hash": "e69bcad5c42668e3210a27e200143450",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/14.jpg": {
+    "mtime": 1774221715.6818886,
+    "ast_hash": "39c4d2453132a9669405e6de0f999089",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/15.jpg": {
+    "mtime": 1774221716.7236326,
+    "ast_hash": "475b1773674b285311df61350646caec",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/16.jpg": {
+    "mtime": 1774221718.6691763,
+    "ast_hash": "4f77e5527c663a27bedffcaa2032771b",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/17.jpg": {
+    "mtime": 1774221717.9375985,
+    "ast_hash": "8af507528fa7ab00ea5ecbbc09b595b2",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/18.jpg": {
+    "mtime": 1774221724.0553343,
+    "ast_hash": "95f3ff6b2b493a8103de29e159007ccd",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/19.jpg": {
+    "mtime": 1774221725.1992235,
+    "ast_hash": "8f7ce6581a5944432fa59b3ed6f8ee60",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/20.jpg": {
+    "mtime": 1774221722.0060353,
+    "ast_hash": "d119a5472004c3a6688f3d009fb3ce9b",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/21.jpg": {
+    "mtime": 1774221720.8774228,
+    "ast_hash": "bf8e456dbd0b9e44f792d9e507f92a0d",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/22.jpg": {
+    "mtime": 1774221722.4018319,
+    "ast_hash": "c4213de03c2035abd986439ef91f9045",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/23.jpg": {
+    "mtime": 1774221722.6633277,
+    "ast_hash": "f73e76ba80f5ed2f7e49cbfe5cf7a57b",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/24.jpg": {
+    "mtime": 1774221724.3117778,
+    "ast_hash": "155df27be73adb91a6ab3c815b0a74b4",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/25.jpg": {
+    "mtime": 1774221724.97656,
+    "ast_hash": "b755ea6c8b1bd0658143c1206734117e",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/26.jpg": {
+    "mtime": 1774221723.5911708,
+    "ast_hash": "a0f84e5bfc71865d748ae0faa99b3bf6",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/27.jpg": {
+    "mtime": 1774221723.313921,
+    "ast_hash": "6eeff03fffe869311645e7fd35b1473b",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/28.jpg": {
+    "mtime": 1774221715.9641898,
+    "ast_hash": "95533f5b21830f76dde5f3552a3c7017",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/29.jpg": {
+    "mtime": 1774221716.3368082,
+    "ast_hash": "e4a5b603b6acac27cfedffe7aef4c4ad",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/30.jpg": {
+    "mtime": 1774221724.5447538,
+    "ast_hash": "2ce4f1beb56caf303ea784440ee3a668",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/31.jpg": {
+    "mtime": 1774221724.7519498,
+    "ast_hash": "61c3278e0ca5bd8c68219747c7f459b1",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/32.jpg": {
+    "mtime": 1774221723.819966,
+    "ast_hash": "e83e40d6392b4277877b546a1f61d9b0",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/33.jpg": {
+    "mtime": 1774221723.0695565,
+    "ast_hash": "09867fb1be0ce698d51e1c64a0ea3912",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/34.jpg": {
+    "mtime": 1774221721.7718306,
+    "ast_hash": "153da7709e54b259098743dd81f1813d",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/35.jpg": {
+    "mtime": 1774221721.1034427,
+    "ast_hash": "57ac578f73d4ec6e8eb1d71b2862dab5",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/36.jpg": {
+    "mtime": 1774221722.1468883,
+    "ast_hash": "b3074ac9b960e2dc2e93d9435d080075",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/37.jpg": {
+    "mtime": 1774221722.8015602,
+    "ast_hash": "39dbd17f78b21f7743a4863a5d9b0963",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/38.jpg": {
+    "mtime": 1774221720.6665697,
+    "ast_hash": "878c93d5d9153b5ecc0267a624597a97",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/39.jpg": {
+    "mtime": 1774221719.651792,
+    "ast_hash": "fa5a2939bfec51de025a390177b54010",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/40.jpg": {
+    "mtime": 1774221726.1653516,
+    "ast_hash": "a640e7edbf3cfccafeae983da34c0264",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/41.jpg": {
+    "mtime": 1774221725.8472667,
+    "ast_hash": "abbe5e751f79915b6b2493d476ee42c4",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/42.jpg": {
+    "mtime": 1774221725.3052406,
+    "ast_hash": "bc9f3be733140dbe508f39b4cb7e94dd",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/43.jpg": {
+    "mtime": 1774221725.6460867,
+    "ast_hash": "cec6ae1d16937e025636bd351b38e6ee",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/44.jpg": {
+    "mtime": 1774221726.6243198,
+    "ast_hash": "a8a2c86d1f8dadda57dadf4c4541d24e",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/45.jpg": {
+    "mtime": 1774221726.7350502,
+    "ast_hash": "858dee5b4111f3957fc5993820248741",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/46.jpg": {
+    "mtime": 1774221727.4266443,
+    "ast_hash": "d12b063b28c801dee0f7e9925a2db203",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/47.jpg": {
+    "mtime": 1774221727.0825012,
+    "ast_hash": "0c69533900106088b3b338374cf20d94",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/48.jpg": {
+    "mtime": 1774221712.354726,
+    "ast_hash": "342d4edf0805f02517dc74bb610fed61",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/49.jpg": {
+    "mtime": 1774221712.5392318,
+    "ast_hash": "49fcf19c350a0816626693b7fb6b8a24",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/50.jpg": {
+    "mtime": 1774221726.510552,
+    "ast_hash": "a02c476a97dd66cb613c6a27761670a4",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/51.jpg": {
+    "mtime": 1774221726.853686,
+    "ast_hash": "f5d1b8e5baa5cfaee135a429a3229068",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/52.jpg": {
+    "mtime": 1774221727.3103564,
+    "ast_hash": "e263fe1e5a268f95845607066fbcc47f",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/53.jpg": {
+    "mtime": 1774221727.194555,
+    "ast_hash": "a40427be48b042615d2c25979fb6ab82",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/54.jpg": {
+    "mtime": 1774221726.2739985,
+    "ast_hash": "eec1067710fe483729a90a2f173db18e",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/55.jpg": {
+    "mtime": 1774221725.746283,
+    "ast_hash": "91a6516c80ab62f10745d59cc5a783ac",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/56.jpg": {
+    "mtime": 1774221725.424496,
+    "ast_hash": "4294c41d41ad73e2008f75eabd47dac0",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/57.jpg": {
+    "mtime": 1774221725.5376923,
+    "ast_hash": "7ef080161ecd8c2d30ab37e5e5c7623d",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/58.jpg": {
+    "mtime": 1774221714.2350721,
+    "ast_hash": "389fa64d1eca76b9ae65e532bc4f8409",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/59.jpg": {
+    "mtime": 1774221713.1075864,
+    "ast_hash": "aec0304967dfc5a370e66ae21cf74d5e",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/60.jpg": {
+    "mtime": 1774221712.1251302,
+    "ast_hash": "86eccb140bbade79bba0a55454ba348d",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/61.jpg": {
+    "mtime": 1774221712.7226875,
+    "ast_hash": "594de30c10f4457b8bbe2691e61c4033",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/62.jpg": {
+    "mtime": 1774221711.6989,
+    "ast_hash": "e8a50caef870608ae0d668bef022bed0",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/63.jpg": {
+    "mtime": 1774221710.7045228,
+    "ast_hash": "e4cac744c35aa34828408958263ae6fc",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/64.jpg": {
+    "mtime": 1774221713.8111973,
+    "ast_hash": "6fa0dd2f1aa5d5fd0e7a65ec6c95d621",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/65.jpg": {
+    "mtime": 1774221713.5838516,
+    "ast_hash": "cffe5e68c48e97d8c6013189195c30a7",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/66.jpg": {
+    "mtime": 1774221714.4597769,
+    "ast_hash": "7848d432ccc5d31308b91465a17f01e9",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/67.jpg": {
+    "mtime": 1774221715.0523872,
+    "ast_hash": "a278074adb4ffd2732cbfa1a748015ab",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/68.jpg": {
+    "mtime": 1774221726.0578387,
+    "ast_hash": "92547a5686c07e3d44c3568d2acc3c6b",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/69.jpg": {
+    "mtime": 1774221725.9494197,
+    "ast_hash": "24e420f32082de11fc91b51d4af809da",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/70.jpg": {
+    "mtime": 1774221714.0172884,
+    "ast_hash": "5fbec72af5b7f04c6592724d43bea63c",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/71.jpg": {
+    "mtime": 1774221713.3125296,
+    "ast_hash": "ff4ee2d053474fc7a78c40fd5df5d5a4",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/72.jpg": {
+    "mtime": 1774221714.651277,
+    "ast_hash": "fc39434917111239765d99ecbbd89b36",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/73.jpg": {
+    "mtime": 1774221714.8753202,
+    "ast_hash": "c7c5c11c7e5edbf49d7c5e9781bdd9a0",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/74.jpg": {
+    "mtime": 1774221711.9084792,
+    "ast_hash": "02ae71444daf8f4d30db52d21a418366",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/75.jpg": {
+    "mtime": 1774221712.9198687,
+    "ast_hash": "c34c8f0314354f8d6f6632d9a33ea58f",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/76.jpg": {
+    "mtime": 1774221711.4344926,
+    "ast_hash": "f588a1b566d7923d0940d56a77d44538",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/77.jpg": {
+    "mtime": 1774221710.8945138,
+    "ast_hash": "51e00c97e7ddafc7359474da601b04e6",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/78.jpg": {
+    "mtime": 1774221726.394322,
+    "ast_hash": "910870e2a8c1373c7791c4b967063cfa",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/kl/79.jpg": {
+    "mtime": 1774221726.971893,
+    "ast_hash": "9efccfbb9fbd851f123b567d12d0981b",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/01.jpg": {
+    "mtime": 1774221728.8845398,
+    "ast_hash": "a2a84e7df132a28d980dc9133491eb46",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/02.jpg": {
+    "mtime": 1774221729.710011,
+    "ast_hash": "e537daa2603a70312b54b25face186ca",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/03.jpg": {
+    "mtime": 1774221729.471353,
+    "ast_hash": "8f8db55eb680c75d1793a02c7e741d9c",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/04.jpg": {
+    "mtime": 1774221731.8796446,
+    "ast_hash": "0896c0cee6a27e5dd7882b456f4543ea",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/05.jpg": {
+    "mtime": 1774221731.104556,
+    "ast_hash": "7d89ed3c8e3790bad75c9f1afefe6ec7",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/06.jpg": {
+    "mtime": 1774221730.43632,
+    "ast_hash": "4c89241b193760663d4be4d2d1f2fe97",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/07.jpg": {
+    "mtime": 1774221730.6609135,
+    "ast_hash": "08cf3ff12ab2aff2f7a37a0e60617046",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/08.jpg": {
+    "mtime": 1774221732.9480796,
+    "ast_hash": "fa118dcd30dab591204b9873d45fa024",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/09.jpg": {
+    "mtime": 1774221732.6979253,
+    "ast_hash": "31f383c26b6db12fe9722b9aff1efc7d",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/10.jpg": {
+    "mtime": 1774221731.6536381,
+    "ast_hash": "4c1249074bd7da823c04605cc59e9df1",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/11.jpg": {
+    "mtime": 1774221731.3693068,
+    "ast_hash": "ebbfc97d74ac6a4eaba543537595a71d",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/12.jpg": {
+    "mtime": 1774221730.1900017,
+    "ast_hash": "7937e1a91ccb2bf68811aa8cdd4a6043",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/13.jpg": {
+    "mtime": 1774221730.883639,
+    "ast_hash": "cc326cd96589baedb339b462fd29f72f",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/14.jpg": {
+    "mtime": 1774221727.7469378,
+    "ast_hash": "a9ab4c638c2f1b413510eba66134b018",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/15.jpg": {
+    "mtime": 1774221728.650737,
+    "ast_hash": "9f5dab290797026e554213e703abce8f",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/16.jpg": {
+    "mtime": 1774221729.9318354,
+    "ast_hash": "61b5ab273113c46ed5deaaf3770c7879",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/17.jpg": {
+    "mtime": 1776186585.7572708,
+    "ast_hash": "43dec4a0fe92058889c77e40e83e83d7",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/18.jpg": {
+    "mtime": 1776186552.6200857,
+    "ast_hash": "e4a59c9433e731243d7cfeab60b157dd",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/19.jpg": {
+    "mtime": 1776186519.1448774,
+    "ast_hash": "1e4bbfd2ff497aba17e96c651ab10b1a",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/20.jpg": {
+    "mtime": 1776186050.7160628,
+    "ast_hash": "0948d082c3dab5efab667fa6f7cd7d14",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/21.jpg": {
+    "mtime": 1776186484.4714057,
+    "ast_hash": "3732281307e4989be858fe3232c45966",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/22.jpg": {
+    "mtime": 1776186003.7353933,
+    "ast_hash": "f95983f5f6dbb43fee38c96ba0a66bd8",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/23.jpg": {
+    "mtime": 1776185949.7690818,
+    "ast_hash": "e925eb2d6b87ca81add621a1bf61c5db",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/24.jpg": {
+    "mtime": 1776185862.3701856,
+    "ast_hash": "34843bb6d7d16008cfdbc9961df7101a",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/25.jpg": {
+    "mtime": 1776186453.4631572,
+    "ast_hash": "11353b1a5a1ba4a33de88782ff72c75a",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/26.jpg": {
+    "mtime": 1776185800.0276477,
+    "ast_hash": "fd747fbc34304722c584b2c0b88997f6",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/27.jpg": {
+    "mtime": 1776186408.224786,
+    "ast_hash": "30c77bb5bd14abc22c05facc615032a0",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/28.jpg": {
+    "mtime": 1776186383.546117,
+    "ast_hash": "fb3b926717969f4c0796035e1f70f5d5",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/29.jpg": {
+    "mtime": 1776185712.3163955,
+    "ast_hash": "abbd392ebee007147ebbd29ba5e6c433",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/30.jpg": {
+    "mtime": 1776186340.7434564,
+    "ast_hash": "40c9c84d14c40d9e0df514a742ec4c04",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/31.jpg": {
+    "mtime": 1776186292.6232445,
+    "ast_hash": "b5fa16edc832c2c11658d009406f459a",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/32.jpg": {
+    "mtime": 1776186254.977732,
+    "ast_hash": "74cb5ad405379b874b63c1f491c1e15e",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/33.jpg": {
+    "mtime": 1776185632.0179503,
+    "ast_hash": "8352b46ed21ba64f012bc50dc5a7a69c",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/34.jpg": {
+    "mtime": 1776186201.364617,
+    "ast_hash": "dee00e620cbaf389925669896e2e9d33",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/35.jpg": {
+    "mtime": 1776185563.3210835,
+    "ast_hash": "2a89053065da23835adf336634cd978f",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/penang/36.jpg": {
+    "mtime": 1776185439.654107,
+    "ast_hash": "60426198bebee3cee94de93d7a07ab4f",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/singapore/01.jpg": {
+    "mtime": 1774221739.9870338,
+    "ast_hash": "14d139f339e5a0987c63abaddbaa95ee",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/singapore/02.jpg": {
+    "mtime": 1774221740.4711125,
+    "ast_hash": "1492e9620ef3d6e01e39b31786c2683a",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/singapore/03.jpg": {
+    "mtime": 1774221740.2185304,
+    "ast_hash": "fef2bf078cbb3a42cba4e5574882c6fd",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/singapore/04.jpg": {
+    "mtime": 1774221741.4281387,
+    "ast_hash": "adfce6de423664d45c83f7e87f50b1d1",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/singapore/05.jpg": {
+    "mtime": 1774221741.1826093,
+    "ast_hash": "89e1d678f026445e0177723adae2b1ca",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/singapore/06.jpg": {
+    "mtime": 1774221740.70215,
+    "ast_hash": "b093c5898468eb64ae4c5e1d27205160",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/singapore/07.jpg": {
+    "mtime": 1774221740.9454522,
+    "ast_hash": "507a742db026fbd549db8b6dda516c0f",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/singapore/08.jpg": {
+    "mtime": 1774221741.8964708,
+    "ast_hash": "f82b5cb5eb33e6584f6f30d2b7f261a3",
+    "semantic_hash": ""
+  },
+  "public/creative/photography/singapore/09.jpg": {
+    "mtime": 1774221741.6621153,
+    "ast_hash": "9492f0f80ffb046a96f0ee6c255bdc51",
+    "semantic_hash": ""
+  },
+  "public/linkedin-banner.png": {
+    "mtime": 1775804162.0261676,
+    "ast_hash": "07a98a98b25fc166f252092ab1770436",
+    "semantic_hash": ""
+  },
+  "public/placeholders/case-study-media-block.svg": {
+    "mtime": 1774549728.447963,
+    "ast_hash": "5a47b3b788b7c4d8fd19728cf8fbdb31",
+    "semantic_hash": ""
+  },
+  "public/qr/pramitranjan-com-qr.png": {
+    "mtime": 1780586021.1390595,
+    "ast_hash": "53fa6b68e514b1081585ecfa07545650",
+    "semantic_hash": ""
+  },
+  "public/work/Order HomePage.png": {
+    "mtime": 1772671245.6664548,
+    "ast_hash": "fe7e7a210b083d3f6091cf69f32b074b",
+    "semantic_hash": ""
+  },
+  "public/work/Wander/Frame 43.png": {
+    "mtime": 1776558740.4007845,
+    "ast_hash": "26c051db3b5469f348340f58cf5a30ca",
+    "semantic_hash": ""
+  },
+  "public/work/Wander/Frame 44.png": {
+    "mtime": 1776559578.2160027,
+    "ast_hash": "1fd5fae59ae6525aa24576b8e4696e35",
+    "semantic_hash": ""
+  },
+  "public/work/Wander/Frame 45.png": {
+    "mtime": 1776559568.914761,
+    "ast_hash": "1b0f3d6c835b313d5ca28d106ca0b809",
+    "semantic_hash": ""
+  },
+  "public/work/Wander/Frame 46 1.png": {
+    "mtime": 1777308018.2234197,
+    "ast_hash": "6e6186919841205b34d164622f2f932b",
+    "semantic_hash": ""
+  },
+  "public/work/Wander/Frame 46.png": {
+    "mtime": 1776592498.409731,
+    "ast_hash": "c3e13e700c96649629ddeb5426e51ee2",
+    "semantic_hash": ""
+  },
+  "public/work/Wander/Lock Screen mock up.png": {
+    "mtime": 1776564128.931675,
+    "ast_hash": "7c4808da7cd508421de0e464678f1e93",
+    "semantic_hash": ""
+  },
+  "public/work/Wander/Lock Screen.png": {
+    "mtime": 1776563861.5963051,
+    "ast_hash": "1b437da9fa0ff9cafe6394ab419da69b",
+    "semantic_hash": ""
+  },
+  "public/work/Wander/Mock up angle 1.png": {
+    "mtime": 1776561049.454181,
+    "ast_hash": "9dc43eac0d1c3f529390d7a1e7aed2e8",
+    "semantic_hash": ""
+  },
+  "public/work/Wander/Mock up angle 2.png": {
+    "mtime": 1776561089.412828,
+    "ast_hash": "23d3ac7c0938e2d3a9da07da32ee1c50",
+    "semantic_hash": ""
+  },
+  "public/work/Wander/Mockup-1.png": {
+    "mtime": 1776592622.737606,
+    "ast_hash": "df2524fbf5e6f7ac302d0626e891da96",
+    "semantic_hash": ""
+  },
+  "public/work/Wander/Mockup-123.png": {
+    "mtime": 1777308329.206436,
+    "ast_hash": "fee2674a8dd845c765c37e70d22a5dd2",
+    "semantic_hash": ""
+  },
+  "public/work/Wander/Mockup.png": {
+    "mtime": 1776592542.5391338,
+    "ast_hash": "45cc2342ac1140b6acf46e0f5fb03a52",
+    "semantic_hash": ""
+  },
+  "public/work/Wander/cover image.png": {
+    "mtime": 1777261111.4894502,
+    "ast_hash": "53a3c1152bac00a1af429fc4e508037c",
+    "semantic_hash": ""
+  },
+  "public/work/Wander/cover.png": {
+    "mtime": 1777301923.8601284,
+    "ast_hash": "215bb39252982758b892d19c0cbc3f8d",
+    "semantic_hash": ""
+  },
+  "public/work/Wander/image 30.png": {
+    "mtime": 1776566994.3609068,
+    "ast_hash": "25ca6adb4d7d9518a02b2882e4185899",
+    "semantic_hash": ""
+  },
+  "public/work/Wander/image 31.png": {
+    "mtime": 1776566994.385812,
+    "ast_hash": "530ede1a6fc302dc45d7afec560228dd",
+    "semantic_hash": ""
+  },
+  "public/work/Wander/image 32.png": {
+    "mtime": 1776566994.4115508,
+    "ast_hash": "f4be9cd5924e6e6c2521c6c2355a0730",
+    "semantic_hash": ""
+  },
+  "public/work/Wander/lock screen mock up 2.png": {
+    "mtime": 1776564188.4072125,
+    "ast_hash": "b2366ec0baf74a48e29e4ec08febbbcc",
+    "semantic_hash": ""
+  },
+  "public/work/Wander/mock up 1.png": {
+    "mtime": 1776559191.8314013,
+    "ast_hash": "6854c2c2bfb01d605e81c9d6bca8083e",
+    "semantic_hash": ""
+  },
+  "public/work/Wander/mock up 2.png": {
+    "mtime": 1776559217.346917,
+    "ast_hash": "778a9c04d6fdf1223478d0681d947916",
+    "semantic_hash": ""
+  },
+  "public/work/Wander/mock up 3.png": {
+    "mtime": 1776559247.573684,
+    "ast_hash": "a58a10cf9dcf327b82cd0d5ea37f8628",
+    "semantic_hash": ""
+  },
+  "public/work/albers/cover-hor.png": {
+    "mtime": 1774221894.5848718,
+    "ast_hash": "b028288b4b120692c5cd976d7d6ea182",
+    "semantic_hash": ""
+  },
+  "public/work/albers/cover.png": {
+    "mtime": 1774221896.2011297,
+    "ast_hash": "aca3e6df6cd5e4d203700fdcd562e484",
+    "semantic_hash": ""
+  },
+  "public/work/albers/img-1.png": {
+    "mtime": 1774221895.1432538,
+    "ast_hash": "190a4417763d97401e50d8653211cc1d",
+    "semantic_hash": ""
+  },
+  "public/work/albers/img-2.png": {
+    "mtime": 1774221894.9817767,
+    "ast_hash": "20196245706d7315cb020d03c1c77ba0",
+    "semantic_hash": ""
+  },
+  "public/work/albers/img-3.png": {
+    "mtime": 1774221894.803958,
+    "ast_hash": "90020368c9cbb5c5242f9585761d8ecc",
+    "semantic_hash": ""
+  },
+  "public/work/albers/img-4.png": {
+    "mtime": 1774221895.6143887,
+    "ast_hash": "4131b198d09b91ceb296be95763a535c",
+    "semantic_hash": ""
+  },
+  "public/work/albers/img-5.png": {
+    "mtime": 1774221895.3185153,
+    "ast_hash": "6c74a3b724e5711a87b43f7ef297f2b7",
+    "semantic_hash": ""
+  },
+  "public/work/albers/img-6.png": {
+    "mtime": 1774221895.8412087,
+    "ast_hash": "f510035b614ca24a6260f94aeec62672",
+    "semantic_hash": ""
+  },
+  "public/work/albers/img-7.png": {
+    "mtime": 1774221896.0237908,
+    "ast_hash": "761fcd2903b9ffde8c7956ec83eb2c78",
+    "semantic_hash": ""
+  },
+  "public/work/atom/Group 446.png": {
+    "mtime": 1775608752.497938,
+    "ast_hash": "587e1665e6ab0b8a0771762c303072fe",
+    "semantic_hash": ""
+  },
+  "public/work/atom/Group 447.png": {
+    "mtime": 1775608752.4976041,
+    "ast_hash": "b75b59e710ee55ad173a549c4b880a70",
+    "semantic_hash": ""
+  },
+  "public/work/atom/cover-hor.png": {
+    "mtime": 1774221896.4046261,
+    "ast_hash": "8424b1884258dfe6260f5a954eef74e1",
+    "semantic_hash": ""
+  },
+  "public/work/atom/cover.png": {
+    "mtime": 1774221898.6631687,
+    "ast_hash": "2bef7e4419e0fee4dc1d46c18192380e",
+    "semantic_hash": ""
+  },
+  "public/work/atom/hero-1-processed.png": {
+    "mtime": 1774317485.0526745,
+    "ast_hash": "82aa8de5ce4b3fa73a539b07fb532824",
+    "semantic_hash": ""
+  },
+  "public/work/atom/hero-1.png": {
+    "mtime": 1774221898.2023635,
+    "ast_hash": "4e7d62ba4740c14166a7fc584eb785b7",
+    "semantic_hash": ""
+  },
+  "public/work/atom/hero-2.png": {
+    "mtime": 1774221897.9725251,
+    "ast_hash": "33547a882b7c47668bf93f898e54cc37",
+    "semantic_hash": ""
+  },
+  "public/work/atom/ideation-1.png": {
+    "mtime": 1774221897.0601072,
+    "ast_hash": "3ff448a8fa3b9ceddd7fa1adde61122a",
+    "semantic_hash": ""
+  },
+  "public/work/atom/ideation-2.png": {
+    "mtime": 1774221897.7148058,
+    "ast_hash": "62e5c820e9ae96edc515270c5d8aabe2",
+    "semantic_hash": ""
+  },
+  "public/work/atom/research.png": {
+    "mtime": 1774221897.354736,
+    "ast_hash": "886ef94a78fdae3b70a3b3ccd3940897",
+    "semantic_hash": ""
+  },
+  "public/work/atom/solution-2.png": {
+    "mtime": 1774221898.4593048,
+    "ast_hash": "16a93f4216ea5d816e9de604d61d90dd",
+    "semantic_hash": ""
+  },
+  "public/work/atom/solution-hero.png": {
+    "mtime": 1774221896.7090716,
+    "ast_hash": "327d32615e82f8bcd8ad27ec3accc3aa",
+    "semantic_hash": ""
+  },
+  "public/work/franklins/202620_UXDG101-01_22643_Franklins_Assignment3.jpg": {
+    "mtime": 1774907119.0967577,
+    "ast_hash": "a242d103439a7eb5575d2f7cda84418e",
+    "semantic_hash": ""
+  },
+  "public/work/franklins/About Us.png": {
+    "mtime": 1772671386.601266,
+    "ast_hash": "9c736d8b3d9d07e83c078f11d0d3266b",
+    "semantic_hash": ""
+  },
+  "public/work/franklins/Home Page.png": {
+    "mtime": 1772670953.3943858,
+    "ast_hash": "18e2e77e7595f21c3eceb3b164787a53",
+    "semantic_hash": ""
+  },
+  "public/work/franklins/Menu.png": {
+    "mtime": 1772671342.4891715,
+    "ast_hash": "77d5e66a31698257557564631f3fff46",
+    "semantic_hash": ""
+  },
+  "public/work/franklins/cover-hor.png": {
+    "mtime": 1774221901.317963,
+    "ast_hash": "105b5a57f735df8aa21bd48a84412380",
+    "semantic_hash": ""
+  },
+  "public/work/franklins/cover.png": {
+    "mtime": 1774221901.4447365,
+    "ast_hash": "8aed1ec67dbe51f56dead319a96f5c7b",
+    "semantic_hash": ""
+  },
+  "public/work/franklins/franklins process 1.jpg": {
+    "mtime": 1774907444.0436475,
+    "ast_hash": "b4cd692da393aeff8e82e395b6bf428d",
+    "semantic_hash": ""
+  },
+  "public/work/franklins/franklins process 2.jpg": {
+    "mtime": 1774907467.0068734,
+    "ast_hash": "0b70e9b445e7edadc425dbb02c70707f",
+    "semantic_hash": ""
+  },
+  "public/work/franklins/franklins research 2.jpg": {
+    "mtime": 1774907169.6949644,
+    "ast_hash": "a242d103439a7eb5575d2f7cda84418e",
+    "semantic_hash": ""
+  },
+  "public/work/helpoh/Group 442.png": {
+    "mtime": 1775608649.1750867,
+    "ast_hash": "567aba7ebe4dec5d2c0bc7e39ab7ac47",
+    "semantic_hash": ""
+  },
+  "public/work/helpoh/Group 443.png": {
+    "mtime": 1775608649.1745632,
+    "ast_hash": "184afc733b589df596653b080baaa79e",
+    "semantic_hash": ""
+  },
+  "public/work/helpoh/cover-hor.png": {
+    "mtime": 1774221901.5692468,
+    "ast_hash": "0805496cf443af6533fa1f655c55af3b",
+    "semantic_hash": ""
+  },
+  "public/work/helpoh/cover.png": {
+    "mtime": 1774221901.9429052,
+    "ast_hash": "c463315c6ca8ae2070ab890e8473dbca",
+    "semantic_hash": ""
+  },
+  "public/work/helpoh/solution-1.png": {
+    "mtime": 1774221901.83012,
+    "ast_hash": "4983f6dd461203d9998352d9913d1621",
+    "semantic_hash": ""
+  },
+  "public/work/helpoh/solution-hero.png": {
+    "mtime": 1774221901.7048168,
+    "ast_hash": "e97ecac60c7cc34410d315072be838c3",
+    "semantic_hash": ""
+  },
+  "public/work/loomlearn/Group 444.png": {
+    "mtime": 1775608708.0954106,
+    "ast_hash": "dfad168edcff6bae351a444af7388f02",
+    "semantic_hash": ""
+  },
+  "public/work/loomlearn/Group 445.png": {
+    "mtime": 1775608708.0950167,
+    "ast_hash": "3ca374aacbb801918dc6f960c108872c",
+    "semantic_hash": ""
+  },
+  "public/work/loomlearn/cover-hor.png": {
+    "mtime": 1774221898.7987628,
+    "ast_hash": "3f2c69f5658fa8d91f12a729b9a1389f",
+    "semantic_hash": ""
+  },
+  "public/work/loomlearn/cover.png": {
+    "mtime": 1774221901.1890824,
+    "ast_hash": "631558feaf110f33c3e58f4f7f3d7758",
+    "semantic_hash": ""
+  },
+  "public/work/loomlearn/hero-1.png": {
+    "mtime": 1774221900.8229878,
+    "ast_hash": "58ad23fdf6fa73163af4e927a8f120fb",
+    "semantic_hash": ""
+  },
+  "public/work/loomlearn/hero-2.png": {
+    "mtime": 1774221899.7882369,
+    "ast_hash": "5edb53c3c46ce71892f334dae8d30750",
+    "semantic_hash": ""
+  },
+  "public/work/loomlearn/ideation-1.png": {
+    "mtime": 1774221899.1785955,
+    "ast_hash": "4993b11468e729762944dd561e91a87e",
+    "semantic_hash": ""
+  },
+  "public/work/loomlearn/ideation-2.png": {
+    "mtime": 1774221899.5325713,
+    "ast_hash": "ff94b69007507f7738dcdd09add33a66",
+    "semantic_hash": ""
+  },
+  "public/work/loomlearn/research.png": {
+    "mtime": 1774221899.3491735,
+    "ast_hash": "bc70c378cca84e978bcfa24bd3ce7fe0",
+    "semantic_hash": ""
+  },
+  "public/work/loomlearn/solution-1.png": {
+    "mtime": 1774221900.94999,
+    "ast_hash": "4574d0f31246a1008958256c4483e0de",
+    "semantic_hash": ""
+  },
+  "public/work/loomlearn/solution-2.png": {
+    "mtime": 1774221901.0739846,
+    "ast_hash": "389f88d7d06473efa5d9f5a42785d5ec",
+    "semantic_hash": ""
+  },
+  "public/work/loomlearn/solution-hero.png": {
+    "mtime": 1774221898.9903712,
+    "ast_hash": "cf1664da22d5d6b4e16daa4e003a79a5",
+    "semantic_hash": ""
+  },
+  "docs/life/studio-cosmos-feel-plan.md": {
+    "mtime": 1783155224.0473905,
+    "ast_hash": "82ee05c7c6a5fcca082240aa8487963c",
+    "semantic_hash": ""
+  }
+}

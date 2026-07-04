@@ -3830,15 +3830,21 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
 .life-shell .life-studio-drop-message { display: grid; gap: 8px; place-items: center; min-width: min(420px, 100%); min-height: 180px; border: 1px dashed var(--life-border); background: var(--life-muted-bg); }
 .life-shell .life-studio-drop-message span { font-family: var(--life-display); font-size: 28px; line-height: 1; color: var(--life-text); }
 .life-shell .life-studio-drop-message small { font-family: var(--font-mono); font-size: 12px; color: var(--life-label); }
-.life-shell .life-studio-masonry { width: 100%; column-width: 210px; column-gap: 14px; }
-.life-shell .life-studio-tile { position: relative; display: grid; gap: 0; margin: 0 0 14px; break-inside: avoid; overflow: hidden; border: 1px solid var(--life-border); background: var(--life-panel); box-shadow: 0 10px 26px rgba(0, 0, 0, 0.24); transition-property: transform, box-shadow, border-color; transition-duration: 0.16s; }
+.life-shell .life-studio-masonry { --studio-row: 220px; display: flex; flex-wrap: wrap; align-items: stretch; gap: 12px; width: 100%; }
+.life-shell .life-studio-masonry::after { content: ''; flex-grow: 1000000; }
+.life-shell .life-studio-tile { --ar: 1.2; position: relative; display: grid; gap: 0; height: var(--studio-row); flex-grow: calc(var(--ar) * 100); flex-basis: calc(var(--ar) * var(--studio-row)); min-width: 0; overflow: hidden; border: 1px solid var(--life-border); background: var(--life-panel); box-shadow: 0 10px 26px rgba(0, 0, 0, 0.24); transition: transform 0.16s, box-shadow 0.16s, border-color 0.16s; }
 .life-shell .life-studio-tile:hover { transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.18); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.34); }
 .life-shell .life-studio-tile-delete { position: absolute; top: 8px; right: 8px; z-index: 2; width: 30px; height: 30px; border: 1px solid rgba(255, 255, 255, 0.14); background: rgba(10, 10, 10, 0.72); color: var(--life-muted); cursor: pointer; opacity: 0; transition-property: opacity, color, border-color, transform; transition-duration: 0.14s; }
 .life-shell .life-studio-tile:hover .life-studio-tile-delete { opacity: 1; }
 .life-shell .life-studio-tile-delete:hover { color: var(--life-danger); border-color: var(--life-danger); transform: scale(0.96); }
-.life-shell .life-studio-image-link { display: block; width: 100%; padding: 0; border: 0; background: #070707; cursor: zoom-in; }
-.life-shell .life-studio-image { display: block; width: 100%; height: auto; max-height: 420px; object-fit: cover; outline: 1px solid rgba(255, 255, 255, 0.1); outline-offset: -1px; }
-.life-shell .life-studio-link-tile { display: grid; gap: 10px; min-height: 150px; padding: 14px; color: inherit; text-decoration: none; border-top: 2px solid #6fcfd6; }
+.life-shell .life-studio-image-link { display: block; width: 100%; height: 100%; padding: 0; border: 0; background: #070707; cursor: zoom-in; }
+.life-shell .life-studio-image { display: block; width: 100%; height: 100%; object-fit: cover; outline: 1px solid rgba(255, 255, 255, 0.1); outline-offset: -1px; }
+.life-shell .life-studio-tile.studio-link,
+.life-shell .life-studio-tile.studio-moodboard,
+.life-shell .life-studio-tile.studio-critique,
+.life-shell .life-studio-tile.studio-note { --ar: 1.4; }
+.life-shell .life-studio-tile.studio-link { grid-template-rows: 1fr auto; }
+.life-shell .life-studio-link-tile { display: grid; gap: 10px; min-height: 0; padding: 14px; color: inherit; text-decoration: none; border-top: 2px solid #6fcfd6; overflow: hidden; }
 .life-shell .life-studio-link-tile span { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--life-label); overflow-wrap: anywhere; }
 .life-shell .life-studio-link-tile strong { font-size: 15px; line-height: 1.3; color: var(--life-text); text-wrap: balance; }
 .life-shell .life-studio-tile-meta { display: grid; gap: 6px; padding: 10px 12px 12px; border-top: 1px solid var(--life-hairline); }
@@ -3847,6 +3853,36 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
 .life-shell .life-studio-tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .life-shell .life-studio-tags span { display: inline-flex; align-items: center; min-height: 20px; padding: 0 7px; border: 1px solid var(--life-hairline); background: var(--life-muted-bg); color: var(--life-label); font-family: var(--font-mono); font-size: 10px; }
 .life-shell .life-studio-status { margin: 0; color: var(--life-label); font-family: var(--font-mono); font-size: 12px; }
+.life-shell .life-studio-zoom { position: fixed; right: 84px; bottom: 22px; z-index: 40; display: flex; align-items: center; gap: 10px; padding: 9px 14px; border: 1px solid var(--life-border); background: var(--life-panel); box-shadow: 0 14px 34px rgba(0, 0, 0, 0.4); }
+.life-shell .life-studio-zoom input[type='range'] { width: 120px; accent-color: var(--life-accent); cursor: ew-resize; }
+.life-shell .life-studio-zoom span { min-width: 32px; text-align: right; font-family: var(--font-mono); font-size: 11px; color: var(--life-label); }
+.life-shell .life-studio-image-wrap { display: block; width: 100%; height: 100%; }
+.life-shell .life-studio-board-surface.is-canvas { overflow: hidden; height: clamp(520px, calc(100dvh - 270px), 1100px); border: 1px solid var(--life-border); background: var(--life-muted-bg); cursor: grab; touch-action: none; }
+.life-shell .life-studio-board-surface.is-canvas:active { cursor: grabbing; }
+.life-shell .life-studio-plane { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform-origin: 0 0; }
+.life-shell .life-studio-tile.is-canvas { position: absolute; height: auto; flex: none; width: calc(var(--ar, 1.2) * 240px); cursor: grab; }
+.life-shell .life-studio-tile.is-canvas .life-studio-image-link { height: auto; }
+.life-shell .life-studio-tile.is-canvas .life-studio-image-wrap { height: auto; }
+.life-shell .life-studio-tile.is-canvas .life-studio-image { height: auto; }
+.life-shell .life-studio-viewswitch { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 40; display: flex; border: 1px solid var(--life-border); background: var(--life-panel); box-shadow: 0 14px 34px rgba(0, 0, 0, 0.4); }
+.life-shell .life-studio-viewswitch button { min-height: 38px; padding: 0 18px; border: 0; background: transparent; color: var(--life-label); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: background 0.14s, color 0.14s; }
+.life-shell .life-studio-viewswitch button.is-active { background: var(--life-muted-bg); color: var(--life-text); }
+.life-shell .life-studio-detail { position: fixed; inset: 0; z-index: 90; display: grid; grid-template-rows: auto 1fr auto; gap: 10px; padding: 18px; background: rgba(5, 5, 5, 0.92); backdrop-filter: blur(10px); }
+.life-shell .life-studio-detail-head { display: grid; justify-items: center; gap: 4px; text-align: center; }
+.life-shell .life-studio-detail-head strong { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--life-text); }
+.life-shell .life-studio-detail-head span { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--life-label); }
+.life-shell .life-studio-detail-stage { display: grid; place-items: center; min-height: 0; }
+.life-shell .life-studio-detail-imgbox { position: relative; overflow: hidden; border: 1px solid var(--life-border); background: #070707; cursor: zoom-in; }
+.life-shell .life-studio-detail-imgbox.is-zoomed { cursor: grab; }
+.life-shell .life-studio-detail-imgbox img { display: block; max-width: calc(100vw - 120px); max-height: calc(100dvh - 190px); width: auto; height: auto; user-select: none; }
+.life-shell .life-studio-detail-zoomlayer { transform-origin: center; }
+.life-shell .life-studio-detail-foot { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.life-shell .life-studio-detail-foot button { min-height: 34px; padding: 0 14px; border: 1px solid var(--life-border); background: var(--life-panel); color: var(--life-muted); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: color 0.14s, border-color 0.14s; }
+.life-shell .life-studio-detail-foot button:hover:not(:disabled) { color: var(--life-text); border-color: rgba(255, 255, 255, 0.24); }
+.life-shell .life-studio-detail-foot button:disabled { opacity: 0.4; cursor: default; }
+.life-shell .life-studio-detail-foot button.is-danger:hover:not(:disabled) { color: var(--life-danger); border-color: var(--life-danger); }
+.life-shell .life-studio-detail-foot span { font-family: var(--font-mono); font-size: 11px; color: var(--life-label); }
+.life-shell .life-studio-detail-zoomtag { position: absolute; right: 18px; bottom: 18px; padding: 7px 12px; border: 1px solid var(--life-border); background: var(--life-panel); font-family: var(--font-mono); font-size: 11px; color: var(--life-label); }
 .life-shell .life-studio-compose-backdrop { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: 18px; background: rgba(0, 0, 0, 0.62); backdrop-filter: blur(8px); }
 .life-shell .life-studio-compose { display: grid; gap: 14px; width: min(560px, 100%); max-height: calc(100dvh - 36px); overflow: auto; padding: 14px; border: 1px solid var(--life-border); background: var(--life-panel); box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5); }
 .life-shell .life-studio-compose-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
@@ -4063,8 +4099,20 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
     min-height: 520px;
   }
   .life-shell .life-studio-masonry {
-    column-width: auto;
-    column-count: 1;
+    gap: 10px;
+  }
+  .life-shell .life-studio-zoom {
+    display: none;
+  }
+  .life-shell .life-studio-viewswitch {
+    bottom: 14px;
+  }
+  .life-shell .life-studio-detail {
+    padding: 12px;
+  }
+  .life-shell .life-studio-detail-imgbox img {
+    max-width: calc(100vw - 32px);
+    max-height: calc(100dvh - 190px);
   }
   .life-shell .life-studio-drop-message {
     min-height: 220px;

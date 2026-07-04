@@ -27,6 +27,9 @@ const contentSecurityPolicy = [
 ].join('; ')
 
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [new URL('https://jqklreasrzeulcsjewav.supabase.co/storage/v1/object/public/**')],
+  },
   turbopack: {
     root: projectRoot,
   },

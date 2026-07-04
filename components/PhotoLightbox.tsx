@@ -1,6 +1,6 @@
 'use client'
 import Image from 'next/image'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { motion, AnimatePresence, usePresenceData } from 'motion/react'
 import { playLightboxNav } from '@/lib/sounds'
 import type { PhotographyImageDetails } from '@/lib/site-content-schema'
@@ -26,6 +26,7 @@ function PhotoSlide({
   index,
   total,
   details,
+  onClose,
   onPrev,
   onNext,
 }: {
@@ -34,10 +35,12 @@ function PhotoSlide({
   index: number
   total: number
   details?: PhotographyImageDetails
+  onClose: () => void
   onPrev: () => void
   onNext: () => void
 }) {
   const direction = (usePresenceData() as number) ?? 1
+  const draggedRef = useRef(false)
 
   function handleDragEnd(
     _: MouseEvent | TouchEvent | PointerEvent,
@@ -67,7 +70,16 @@ function PhotoSlide({
       dragElastic={0.16}
       dragMomentum={false}
       dragDirectionLock
-      onDragEnd={handleDragEnd}
+      onDragStart={() => { draggedRef.current = true }}
+      onDragEnd={(event, info) => {
+        handleDragEnd(event, info)
+        setTimeout(() => { draggedRef.current = false }, 0)
+      }}
+      onClick={(event) => {
+        event.stopPropagation()
+        if (draggedRef.current) return
+        onClose()
+      }}
       style={{
         position: 'absolute',
         inset: 0,
@@ -97,6 +109,7 @@ function PhotoSlide({
       </div>
       {details && (details.title || details.meta || details.caption) ? (
         <div
+          onClick={(e) => e.stopPropagation()}
           style={{
             width: 'min(90vw, 560px)',
             padding: '12px 14px',
@@ -153,9 +166,8 @@ export function PhotoLightbox({ src, alt, index, total, direction, details, onCl
   return (
     <motion.div
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.25 }}
+      animate={{ opacity: 1, transition: { duration: 0.22, ease: 'easeOut' } }}
+      exit={{ opacity: 0, transition: { duration: 0.18, ease: 'easeIn' } }}
       onClick={onClose}
       style={{
         position: 'fixed',
@@ -167,12 +179,15 @@ export function PhotoLightbox({ src, alt, index, total, direction, details, onCl
         justifyContent: 'center',
       }}
     >
-      <div
-        onClick={(e) => e.stopPropagation()}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.97 }}
+        animate={{ opacity: 1, scale: 1, transition: { duration: 0.22, ease: 'easeOut' } }}
+        exit={{ opacity: 0, scale: 0.97, transition: { duration: 0.18, ease: 'easeIn' } }}
         style={{ position: 'relative', width: '100%', height: '100%' }}
       >
-        <AnimatePresence custom={direction} mode="popLayout">
-          <PhotoSlide key={index} src={src} alt={alt} index={index} total={total} details={details} onPrev={onPrev} onNext={onNext} />
+        {/* initial={false}: the slide animation is for prev/next only, not for opening */}
+        <AnimatePresence custom={direction} mode="popLayout" initial={false}>
+          <PhotoSlide key={index} src={src} alt={alt} index={index} total={total} details={details} onClose={onClose} onPrev={onPrev} onNext={onNext} />
         </AnimatePresence>
 
         {/* Prev */}
@@ -220,7 +235,7 @@ export function PhotoLightbox({ src, alt, index, total, direction, details, onCl
         >
           CLOSE ×
         </button>
-      </div>
+      </motion.div>
     </motion.div>
   )
 }
