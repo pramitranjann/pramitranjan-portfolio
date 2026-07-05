@@ -387,6 +387,16 @@ body.carousel-reengaging main {
   }
 }
 
+/* Footer link — quiet, brightens on hover */
+.footer-link {
+  color: var(--footer-text-color);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.footer-link:hover {
+  color: var(--nav-link-hover-color);
+}
+
 /* Nav link — red dot expands on hover */
 .nav-link {
   display: inline-flex;
@@ -3555,6 +3565,7 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
 
 /* New-project composer */
 .life-shell .life-project-create { border: 1px solid var(--life-border); background: var(--life-panel); padding: 14px; display: grid; gap: 8px; }
+.life-shell .life-people-create { margin-bottom: 16px; }
 .life-shell .life-project-create-foot { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
 .life-shell .life-swatches { display: flex; gap: 6px; margin-right: auto; }
 .life-shell .life-swatch { width: 20px; height: 20px; border: 1px solid var(--life-border); cursor: pointer; padding: 0; transition: transform 0.12s; }

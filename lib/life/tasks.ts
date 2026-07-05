@@ -153,6 +153,7 @@ export async function createManualTask(input: {
   priority?: string | null
   status?: TaskStatus | null
   milestoneId?: string | null
+  personId?: string | null
   deskEligible?: boolean | null
 }) {
   const title = input.title.trim()
@@ -187,6 +188,9 @@ export async function createManualTask(input: {
       auto_generated: false,
       fingerprint: null,
       desk_eligible: input.deskEligible === true,
+      // Only include person_id when a person is actually linked, so plain task
+      // creation keeps working before the 008 migration adds the column.
+      ...(input.personId ? { person_id: input.personId } : {}),
     })
     .select('*')
     .single()

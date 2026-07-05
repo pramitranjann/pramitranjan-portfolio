@@ -2,7 +2,7 @@
   "home": {
     "selectedWork": {
       "heading": "Research to resolution. ",
-      "body": "Four projects in UX — each one starting with a question worth asking",
+      "body": "Four projects in UX — each one starting with a question worth asking. One shipped.",
       "items": [
         {
           "title": "Franklin's",
@@ -19,8 +19,8 @@
           "title": "Albers",
           "oneliner": "Colour theory you can actually play with.",
           "tags": [
-            "UI",
-            "CODE"
+            "SHIPPED",
+            "MACOS"
           ],
           "href": "/work/albers",
           "cover": "/work/albers/cover-hor.png",
@@ -87,18 +87,18 @@
       ]
     },
     "about": {
-      "body": "UX design student at SCAD, figuring out what good design can actually do. I think like a designer but see like an artist. Still learning. Always curious.",
+      "body": "UX design student at SCAD, product intern at Swipey. I design in Figma and ship working software. Art came first — it still shapes everything.",
       "spotifyLabel": "LAST PLAYED_"
     }
   },
   "aboutPage": {
-    "heroBody": "UX design student at SCAD, figuring out what good design can actually do. I think like a designer but see like an artist. Still learning. Always curious.",
-    "whoIAm": "From KL, currently surviving Savannah. I picked up a camera before I picked up Figma. I think about design the same way I think about photography: Who, What, When and Where.",
+    "heroBody": "UX design student at SCAD, product intern at Swipey. I design in Figma and ship working software — a macOS app, this site, a system that runs my days. Art came first; it still shapes everything.",
+    "whoIAm": "From KL, currently surviving Savannah. I picked up a camera before I picked up Figma, and I still think in frames: who, what, when, where. At SCAD I study UX. Outside class I build what I design — a macOS app, this site, a system that runs my days.",
     "experience": [
       {
-        "org": "Swipey ",
-        "role": "PRODUCT INTERN ",
-        "date": "JUN 2026 - PRESENT ",
+        "org": "Swipey",
+        "role": "PRODUCT INTERN",
+        "date": "JUN 2026 - PRESENT",
         "desc": "Just getting started…"
       },
       {
@@ -131,7 +131,7 @@
         "org": "FLUXathon (48-Hour Design Challenge)",
         "role": "PARTICIPANT",
         "date": "2025",
-        "desc": "Designed a weather forecasting app for per ownners using Claude AI. Judged by Google."
+        "desc": "48-hour weather app for pet owners, built with Claude — judged by Google."
       },
       {
         "org": "FLUX Club",
@@ -164,7 +164,7 @@
       "FIGMA",
       "ADOBE CREATIVE SUITE",
       "CLAUDE CODE",
-      "VIBE CODING"
+      "SWIFTUI / NEXT.JS"
     ],
     "nowHeading": "RIGHT NOW_",
     "nowDescription": "A snapshot of what I'm into this month.",
@@ -217,8 +217,8 @@
         "title": "Albers",
         "oneliner": "Colour theory you can actually play with.",
         "tags": [
-          "UI",
-          "INTERACTION"
+          "SHIPPED",
+          "MACOS"
         ],
         "href": "/work/albers",
         "cover": "/work/albers/cover-hor.png",
@@ -664,23 +664,23 @@
         {
           "number": "01",
           "titleHtml": "<span style=\"color: #FF3120\">Pramit</span><br />Ranjan",
-          "body": "UX design student at SCAD. Figuring out what good design can actually do",
+          "body": "UX at SCAD. I design in Figma and ship the result.",
           "footerLabel": "SCROLL ↓"
         },
         {
           "number": "02",
-          "titleHtml": "From <span style=\"color: #FF3120\">Film</span><br />to <span style=\"color: #FF3120\">Figma.</span>",
-          "body": "A creative background shapes how I see problems. Photography, mixed media, and art — before Figma, before UX."
+          "titleHtml": "Make it real,<br />then make it <span style=\"color: #FF3120\">right.</span>",
+          "body": "Research finds the problem. Figma gives it shape. Code keeps it honest."
         },
         {
           "number": "03",
           "titleHtml": "Design that <span style=\"color: #FF3120\">solves.</span><br />Art that <span style=\"color: #FF3120\">questions.</span>",
-          "body": "UX work grounded in research and empathy. Creative work that pushes further.",
+          "body": "UX grounded in research. Creative work that pushes further.",
           "footerLabel": "SEE WORK ↓"
         }
       ],
       "aboutEyebrow": "ABOUT_",
-      "aboutTitleHtml": "Artist.<br />Designer.<br /><span style=\"color: #FF3120\">Human.</span>",
+      "aboutTitleHtml": "Designer.<br />Builder.<br /><span style=\"color: #FF3120\">Human.</span>",
       "aboutReadMoreLabel": "READ MORE →",
       "photographyEyebrow": "THE EYE CAME FIRST.",
       "photographyTitleHtml": "Before <span style=\"color: #FF3120\">Figma,</span><br />there was <span style=\"color: #FF3120\">film.</span>",
@@ -705,7 +705,7 @@
     },
     "aboutPage": {
       "heroEyebrow": "ABOUT_",
-      "heroTitleHtml": "Artist. Designer. <span style=\"color: #FF3120\">Human.</span>",
+      "heroTitleHtml": "Designer. Builder. <span style=\"color: #FF3120\">Human.</span>",
       "cvLabel": "DOWNLOAD RESUME",
       "scrollLabel": "SCROLL ↓",
       "whoIAmLabel": "WHO I AM_",
@@ -825,7 +825,7 @@
       "problemHeadline": "The warmth was real — it just wasn't reaching people before they arrived.",
       "problem": "Franklin's has a strong in-store experience. The brief: close the gap between what first-time visitors expected digitally and what they actually found when they walked in.",
       "roleHeadline": "Team lead on a five-person UXDG 101 project — from fieldwork to final prototype.",
-      "role": "Led and contributed across every stage: structuring the research approach, directing fieldwork, synthesising findings, defining the IA, and driving the high-fidelity Figma prototype.",
+      "role": "I led every stage: structured the research approach, directed fieldwork, ran synthesis and the card sort, defined the IA, and built the high-fidelity Figma prototype.",
       "researchHeadline": "Most friction started before anyone walked through the door.",
       "research": "Contextual inquiry at the café — barista and customer interviews, plus a SCAD student survey. The website was outdated, the service model unclear, and the in-store warmth had no digital equivalent.",
       "pullQuote": "Their warmth was real. It just wasn't reaching people before they arrived.",
@@ -920,13 +920,12 @@
       "section": "work",
       "title": "Albers",
       "oneliner": "What if 'interaction of color' was taken literally?",
-      "type": "UI DESIGN · 2026",
+      "type": "SHIPPED APP · 2026",
       "tags": [
         "SwiftUI",
         "AppKit",
         "Figma",
         "Claude Code",
-        "Vibe Coding",
         "macOS"
       ],
       "prev": {
@@ -944,20 +943,20 @@
         "/work/albers/img-5-processed.png"
       ],
       "problemHeadline": "I took 'interaction of color' literally — and built an app around it.",
-      "problem": "ALBERS is a macOS color theory tool named after Josef Albers. It isolates perceptual phenomena like simultaneous contrast and optical mixing, giving users real-time controls to manipulate each one directly.",
+      "problem": "Color theory is mostly taught with static swatches and slides — you read about simultaneous contrast instead of watching it happen. Albers, named after Josef, turns each perceptual phenomenon into an instrument: real-time controls you can push until the effect clicks. It shipped twice — native on macOS in SwiftUI, and as the web build embedded further down this page.",
       "roleHeadline": "Sole designer and developer — concept to shipped macOS app.",
-      "role": "Sole designer and developer — concept, UI in Figma, and implementation via vibe coding with Claude Code.",
+      "role": "Sole designer and developer — concept, UI in Figma, implemented in SwiftUI with Claude Code.",
       "researchHeadline": "The brief said 'interaction of colors.' As a UX major, that's a UI problem.",
       "research": "The assignment asked us to explore color harmonies. Most went editorial; I kept returning to the word 'interaction.' Albers's argument — that color has no fixed identity — felt like a UI problem as much as an art one.",
       "pullQuote": "When the brief said 'interaction of colors,' I took the word interaction literally.",
       "challengeHeadline": "A proof of concept became a product with a real identity.",
       "challenge": "The initial submission was lean: a working prototype. Spring break became the space to push it further — adding modes, tightening the interaction model, and developing a visual identity. The amber terminal HUD aesthetic emerged from an obsession with instrument interfaces — things that measure, not create.",
-      "processHeadline": "Vibe coding collapsed the gap between design intent and working code.",
-      "process": "Figma handled visual direction; iteration happened directly in the app using vibe coding. AI handled implementation while I focused on what the interaction should feel like — making the gap between design and build much smaller.",
+      "processHeadline": "Claude Code collapsed the gap between design intent and working code.",
+      "process": "Figma handled visual direction; iteration happened directly in the app with Claude Code. The AI handled implementation while I focused on what the interaction should feel like — making the gap between design and build much smaller.",
       "solutionHeadline": "Nine modes. One premise: color has no fixed identity.",
       "solution": "A nine-mode macOS application where each mode isolates one perceptual color phenomenon with real-time controls. The amber HUD frames the app as an instrument of observation, not a creative canvas. Built in SwiftUI with AppKit, targeting macOS 13+.",
       "outcomesHeadline": "Constraint as identity — when an interface commits fully, every decision becomes easier.",
-      "outcomes": "Vibe coding pushed me to be more precise about design intent upfront — the AI needs clarity to move in the right direction. The HUD aesthetic taught me that constraint as identity makes every decision easier. I'd like to eventually publish ALBERS as a genuine teaching tool on the Mac App Store.",
+      "outcomes": "Working with Claude Code pushed me to be more precise about design intent upfront — the AI needs clarity to move in the right direction. The HUD aesthetic taught me that constraint as identity makes every decision easier. I'd like to eventually publish ALBERS as a genuine teaching tool on the Mac App Store.",
       "mediaBlocks": [
         {
           "id": "albers-solution-3",
@@ -986,7 +985,7 @@
       "solutionEmbedAspectRatio": "4 / 3",
       "solutionEmbedWidth": "min(100%, 1325px)",
       "solutionEmbedCalloutLabel": "LIVE APP_",
-      "solutionEmbedCalloutBody": "This is the actual live app, not a mockup. You can interact with it here, then open it in a separate tab if you want the full browser context.",
+      "solutionEmbedCalloutBody": "This is the actual live app — the web port of the macOS build, not a mockup. Interact with it right here, or open it in its own tab.",
       "solutionEmbedCtaLabel": "OPEN LIVE APP",
       "solutionEmbedUrl": "https://albers-web.vercel.app",
       "solutionEmbedTitle": "ALBERS live app",
@@ -1019,14 +1018,14 @@
       "research": "Short survey to 15 respondents on walking habits and mid-walk phone behaviour, backed by secondary research — attention restoration theory (Kaplan, 1995) and Stanford's study on walking and creative cognition (Oppezzo & Schwartz, 2014). The finding that shaped everything: people already walk to decompress. The tools just get in the way.",
       "pullQuote": "Walking already works. We just need to protect it from the phone.",
       "challengeHeadline": "How do you build an app whose job is to get you off the app?",
-      "challenge": "\nWe identified two moments to serve — time with no destination, and a destination with no rush. Both shared the same need: a reset. Unifying them under one product made the concept legible in a single sentence.",
+      "challenge": "We identified two moments to serve — time with no destination, and a destination with no rush. Both shared the same need: a reset. Unifying them under one product made the concept legible in a single sentence.",
       "process": "Sourced visual direction on Cosmos, wireframed in Figma, then used AI to rapidly build out the prototype. Once the prototype was done, we moved into Figma to produce the final creatives and presentation assets.",
       "processHeadline": "\nCosmos to wireframe to prototype — without breaking the sprint.",
       "usabilityTesting": "\nOnce the walk starts, the app moves to the lock screen widget — prompt and distance only. No step counts. No streaks. No gamification. Every other walking app pulls you into the screen; Wander actively pushes you out of it.",
       "solutionHeadline": "\nTwo modes, one ritual — built and submitted in 48 hours.",
       "solution": "Figma prototype covering both modes, the prompt reveal, the active walk state with lock screen widget, and the end-of-walk screen — with stylised maps using Savannah's grid as the test environment.",
       "outcomesHeadline": "The hardest constraint was intentional disappearance.",
-      "outcomes": "\nBuilding something that works by getting out of the way runs against every instinct in product design. If I were to continue, I'd refine the screens further and sharpen the logic behind both modes — how the loop calculates and adjusts a route, and how the route character system actually works under the hood.",
+      "outcomes": "Building something that works by getting out of the way runs against every instinct in product design. If I were to continue, I'd refine the screens further and sharpen the logic behind both modes — how the loop calculates and adjusts a route, and how the route character system actually works under the hood.",
       "mediaBlocks": [
         {
           "id": "process-1777257091551-m8m6k7",
@@ -1969,20 +1968,20 @@
         }
       ],
       "problemHeadline": "Proximity is not the same as union.",
-      "problem": "Given the theme \"Union\", I turned to the city I had just moved to — Kuala Lumpur, where three distinct communities share one space without always sharing one story. The railway connects Chinatown, Kampung Baru, Brickfields. Every day, thousands of strangers share the same carriage and depart in different directions. The question wasn't whether these communities are united. It was whether proximity is the same thing as union.",
+      "problem": "Given the theme \"Union\", I turned to the city I had just moved to — Kuala Lumpur, where Chinatown, Kampung Baru, and Brickfields sit minutes apart on the MRT and generations apart in culture, religion, and daily rhythm. The question wasn't whether these communities are united. It was whether proximity is the same thing as union.",
       "role": "A-Level Photography submission at Garden International School, KL. Solo project — research, photography, textile experimentation, and final piece all self-directed.",
       "roleHeadline": "Sole artist — concept, photography, material fabrication, and installation.",
       "researchHeadline": "Research split across two threads — documentary photography and textile art — before they converged in the final piece.",
-      "research": "On the photography side: Michael Wolf's Tokyo Compression became the conceptual anchor early on. Strangers pressed together in a subway car, faces against glass, physically touching but completely disconnected — it reframed the entire project. Proximity as its own kind of loneliness. Henri Cartier-Bresson and Robert Doisneau shaped the approach to people — isolated individuals rather than crowds, quiet interactions over spectacle. Tony Ray-Jones pushed further: his notes insisted on getting involved, using humour, never taking boring pictures. That discipline carried into every shoot. Salgado, Gursky, Struth, and Bourke-White provided the wider frame — how traditional identities persist, adapt, or clash inside rapidly modernising cities. Jimmy Nelson, Alex Webb, and David Goldblatt showed communities where the people, not the location, are the subject.\n\nOn the textile side: Yinka Shonibare's use of African patterns on colonial silhouettes was the first real reference point — two cultural histories stitched into one object, neither erasing the other. Billie Zangewa's silk collages brought the personal in — hand-stitching as a way of connecting fragments of experience, each thread linking pieces the way relationships and histories link people. Grayson Perry's tapestries showed how a traditionally high-status medium could carry uncomfortable truths about community and class. The Quilts of Gee's Bend grounded all of it — quilts made from whatever fabric was available, patterns improvised rather than inherited, collective making as a form of survival and identity.\n\nHundertwasser's Five Skins tied both threads together: epidermis, clothing, house, community, environment — individuals and cities as nested, interdependent layers. His framework made visible what the project was really asking. Union creates isolation just as much as it creates connection. A person can feel alone inside a community. A community can feel invisible inside a city.",
+      "research": "Two threads. Photography: Michael Wolf's Tokyo Compression reframed the whole project — strangers pressed together in a subway car, physically touching, completely disconnected. Proximity as its own kind of loneliness. Cartier-Bresson, Doisneau, and Tony Ray-Jones shaped how I photographed people: isolated individuals over crowds, quiet interactions over spectacle, never boring pictures. Textiles: Yinka Shonibare's stitched cultural histories, Billie Zangewa's silk collages, the improvised Quilts of Gee's Bend. Hundertwasser's Five Skins tied both threads together — individuals and cities as nested, interdependent layers. Union creates isolation just as much as it creates connection.",
       "challengeHeadline": "How do you show a city's soul without flattening it into a postcard?",
       "pullQuote": "Every day, thousands of strangers share the same carriage and depart in different directions.",
-      "challenge": "Street photography alone couldn't carry the weight of three distinct communities and their histories. Chinatown, Kampung Baru, and Brickfields are minutes apart on the MRT but generations apart in culture, religion, architecture, and daily rhythm. A photograph of each would show difference. It wouldn't show the tension between separation and coexistence — the fact that these communities have lived alongside each other for over a century without fully merging.The project needed a second layer. Something that could hold patterns, textures, geography, and history all in one surface. Something where the act of making was itself a form of union — fragments brought together, stitched into something that holds but doesn't quite dissolve.The MRT map became that structure. Not because it was a neat metaphor, but because it was true — the rail network is the one system that physically connects every pocket of the city. It runs through all of them without belonging to any of them.",
+      "challenge": "Street photography could show difference. It couldn't show the tension between separation and coexistence — three communities that have lived side by side for over a century without fully merging. The project needed a second surface, something that could hold patterns, geography, and history at once. The MRT map became that structure: the one system that physically connects every pocket of the city without belonging to any of them.",
       "processHeadline": "Making the piece taught me as much as researching it.",
-      "process": "Photoshoots began in Chinatown — capturing the melting pot at street level. A Buddhist monk and a western backpacker sharing a corner, two entirely different journeys colliding in one place. The best images weren't the obvious ones. They were intersections, sidewalk breaks, a couple holding hands in a crowded market, shadows stretching across road markings. A second shoot attempted the MRT platforms with a long lens — it failed. People spotted the camera and moved away. The lens was too intimidating, the settings too slow to adjust on the fly. Switched to a shorter lens for every shoot after.\nKL Sentral came next — over 200,000 passengers daily, every race and background funnelled through the same concourse, moving in and out without acknowledgment. Shot from the hip, from low angles, looking up at the roof grid and the floor pattern simultaneously. The station's architecture did half the work — leading lines everywhere, light cutting through in strips, bodies in constant motion.\nKampung Baru and Brickfields were the most revealing shoots. Kampung Baru established in 1899, still standing with wooden houses, food stalls, and narrow streets — KLCC towers filling the background like a threat and a promise at once. Brickfields, Little India, where temples and gold shops and banana leaf restaurants sit two minutes from KL Sentral. Both communities defined by the contrast between what surrounds them and what they've chosen to preserve.\nA comparative shoot in Ho Chi Minh City — District 1, Saigon — ran parallel. The images were closer, more intimate, more human. They taught me exactly how near to get to a subject. They were too personal for KL's story, but without them the Kampung Baru and Brickfields work wouldn't have been as strong.\nBy this point the photography was doing one thing well — showing communities in isolation. What it couldn't do was show the system that connects them. That's where the textile work began.\nScreen printing the KL MRT map onto calico was the first attempt — the lines were too fine, they wouldn't burn through the screen properly. Moved to digital printing on calico. Sourced traditional patterns from all three communities online, supplemented with close-up photographs of my mother's Indian textiles — sarees, embroidered fabrics, things she uses for specific occasions. Cut them up. Stitched them together. The act of cutting patterns apart and joining them on a single surface started to feel like the project's real argument — not union as harmony, but union as proximity. Different things sharing the same cloth.\nLearning to stitch took time. French knots first — small, raised, each one requiring the thread to be wrapped around the needle a precise number of times before reinserting. Tying a knot is another term for a marriage. The stitch itself is a union. Chain stitch followed — looping, interlocking, continuous. It looks exactly like a train track. Both stitches were then worked over the MRT lines in the actual colours of each rail line, so the embroidery added real cartographic context rather than just decoration. The map was no longer a backdrop. It was becoming the argument.\nEmbroidery hoops placed over sections of the map push the fabric up slightly, creating an illusion of depth — a magnifying glass effect that pulls certain communities into focus while the rest recedes. Different sized hoops for different areas, placed where the densest cultural enclaves sit on the map. Hundertwasser's nested layers made physical.\nThe final question was how to bring the photography and the textile together without one illustrating the other. The strongest images from each community were printed onto calico and mounted inside the hoops — so the photography sat inside the textile, framed by it, part of the same fabric. The communities weren't illustrated by the map. They were embedded in it.",
+      "process": "Shoots in Chinatown, KL Sentral, Kampung Baru, and Brickfields — plus a parallel shoot in Ho Chi Minh City that taught me exactly how close to get. A long lens failed on the MRT platforms; people spotted it and moved away. Shorter lens from then on, shot from the hip. Screen printing failed too — the map's lines were too fine to burn through — so the MRT network was digitally printed on calico. Patterns from all three communities were cut apart and stitched onto one surface, some photographed from my mother's sarees. Then the stitching: French knots for every station — tying a knot is another name for a marriage. Chain stitch for the rail lines, worked in each line's real colour — it looks exactly like a train track. Embroidery hoops push sections of the map into relief, pulling the densest enclaves into focus. Hundertwasser's nested layers, made physical.",
       "solutionHeadline": "Three communities. One surface. ",
-      "solution": "A large-scale calico tapestry, A0 in size. The KL MRT network printed across the full sheet as the backbone — the one system that connects every community without belonging to any of them. The sheet itself was assembled in sections, printed in A3 and joined with seams ironed flat so nothing would pucker under the hoops. A thicker calico backing added structure — hidden, holding everything together from behind.\nCultural patterns from Chinatown, Kampung Baru, and Brickfields fill the space between the lines, each distinct, none dissolving into the others. The strongest photographs from each community are printed on calico and mounted inside embroidery hoops of different sizes — placed where the densest cultural enclaves sit on the map, each hoop a window into one world, sitting inside the same fabric as everything else.\nChain stitch traces the rail lines in each line's actual colour. French knots mark every station. Tying a knot is another name for a marriage. Everything is connected. Nothing is quite touching.",
+      "solution": "An A0 calico tapestry. The KL MRT network printed as the backbone; cultural patterns from Chinatown, Kampung Baru, and Brickfields filling the space between the lines — each distinct, none dissolving into the others. The strongest photographs from each community, printed on calico and mounted inside embroidery hoops where each enclave sits on the map. Everything is connected. Nothing is quite touching.",
       "outcomesHeadline": "A city on cloth.",
-      "outcomes": "The Lines in Between was submitted as a GCE A-Level Photography final piece at Garden International School, Kuala Lumpur, receiving an A*. What the project taught me was the difference between capturing a place like a tourist and capturing it like someone trying to understand it. I didn't want spectacle — I wanted the regularness of life, the day-to-day of a common man in a multicultural city. The roughness of the print quality on calico, which I initially saw as a flaw, started to feel honest. Not every union is clean. There are always tensions between communities with different ideologies and beliefs. The piece reflects that.\nWhat I'd push further: getting closer to individuals within each community, not just their environments. The street photography from KL and Ho Chi Minh City shot during this project lives in the photography series pages.",
+      "outcomes": "Submitted as my A-Level Photography final piece — awarded an A*. The rough print quality on calico, which I first read as a flaw, started to feel honest: not every union is clean. What I'd push further is getting closer to the individuals inside each community, not just their environments. The street photography from KL and Ho Chi Minh City lives on in the photography series pages.",
       "hidden": true
     },
     {

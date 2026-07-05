@@ -18,6 +18,7 @@ const LIFE_NAV_GROUPS: Array<{ label: string; leaves: NavLeaf[] }> = [
       { href: '/life', label: 'Today' },
       { href: '/life/tasks', label: 'Tasks' },
       { href: '/life/projects', label: 'Projects' },
+      { href: '/life/people', label: 'People' },
       { href: '/life/studio', label: 'Studio' },
     ],
   },

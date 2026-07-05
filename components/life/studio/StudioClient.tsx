@@ -591,22 +591,21 @@ export function StudioClient({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.18 }}
           >
-            <header className="life-studio-detail-head">
+            <header className="life-studio-detail-head" onClick={(e) => e.stopPropagation()}>
               <strong>{selectedImage.title || 'Untitled'}</strong>
               {detailMeta ? <span>{detailMeta}</span> : null}
               {selectedImage.body ? <span>{selectedImage.body}</span> : null}
             </header>
             <div
               className="life-studio-detail-stage"
-              onClick={(event) => {
-                if (event.target === event.currentTarget) closeImageDetail()
-              }}
+              onClick={closeImageDetail}
             >
               <motion.div
                 ref={imgboxRef}
                 className={`life-studio-detail-imgbox${detailZoom.scale > 1 ? ' is-zoomed' : ''}`}
                 layoutId={`studio-img-${selectedImage.id}`}
                 transition={SPRING}
+                onClick={(e) => { if (detailZoom.scale > 1) e.stopPropagation() }}
                 onDoubleClick={(event) => {
                   const rect = event.currentTarget.getBoundingClientRect()
                   const px = event.clientX - rect.left - rect.width / 2
@@ -649,7 +648,7 @@ export function StudioClient({
                 </div>
               </motion.div>
             </div>
-            <footer className="life-studio-detail-foot">
+            <footer className="life-studio-detail-foot" onClick={(e) => e.stopPropagation()}>
               <button type="button" disabled={selectedImageIndex <= 0} onClick={showPrevImage}>
                 Prev
               </button>
@@ -667,7 +666,7 @@ export function StudioClient({
               </button>
             </footer>
             {detailZoom.scale > 1.01 ? (
-              <span className="life-studio-detail-zoomtag">x{detailZoom.scale.toFixed(1)}</span>
+              <span className="life-studio-detail-zoomtag" onClick={(e) => e.stopPropagation()}>x{detailZoom.scale.toFixed(1)}</span>
             ) : null}
           </motion.div>
         ) : null}

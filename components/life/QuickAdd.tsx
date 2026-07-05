@@ -4,9 +4,10 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { useLifeProjects } from '@/components/life/LifeProjectsProvider'
+import { RELATIONSHIP_LABEL, RELATIONSHIP_OPTIONS } from '@/components/life/people/shared'
 import { fetchJson } from '@/lib/life/client'
 
-type QuickKind = 'Task' | 'Event'
+type QuickKind = 'Task' | 'Event' | 'Person'
 
 export function QuickAdd({
   redirectTo,
@@ -23,10 +24,15 @@ export function QuickAdd({
   const [savingTask, setSavingTask] = useState(false)
   const [taskError, setTaskError] = useState<string | null>(null)
   const [taskSaved, setTaskSaved] = useState(false)
+  const [savingPerson, setSavingPerson] = useState(false)
+  const [personError, setPersonError] = useState<string | null>(null)
+  const [personSaved, setPersonSaved] = useState(false)
 
   function toggle(kind: QuickKind) {
     setTaskError(null)
     setTaskSaved(false)
+    setPersonError(null)
+    setPersonSaved(false)
     setOpen((current) => (current === kind ? null : kind))
   }
 
@@ -67,6 +73,42 @@ export function QuickAdd({
     }
   }
 
+  async function handlePersonSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (savingPerson) return
+
+    const form = event.currentTarget
+    const data = new FormData(form)
+    const name = String(data.get('name') || '').trim()
+    if (!name) {
+      setPersonError('Person name is required.')
+      return
+    }
+
+    setSavingPerson(true)
+    setPersonError(null)
+    setPersonSaved(false)
+
+    try {
+      await fetchJson('/api/life/people', {
+        method: 'POST',
+        body: JSON.stringify({
+          name,
+          role: String(data.get('role') || '') || null,
+          relationship: String(data.get('relationship') || 'contact'),
+        }),
+      })
+
+      form.reset()
+      setPersonSaved(true)
+      router.refresh()
+    } catch (error) {
+      setPersonError(error instanceof Error ? error.message : 'Person creation failed.')
+    } finally {
+      setSavingPerson(false)
+    }
+  }
+
   function focusComposer() {
     setOpen(null)
     const el = document.getElementById(textareaId) as HTMLTextAreaElement | null
@@ -96,6 +138,13 @@ export function QuickAdd({
           onClick={() => toggle('Event')}
         >
           ＋ Event
+        </button>
+        <button
+          type="button"
+          className={`life-quick-chip${open === 'Person' ? ' is-open' : ''}`}
+          onClick={() => toggle('Person')}
+        >
+          ＋ Person
         </button>
       </div>
 
@@ -131,11 +180,43 @@ export function QuickAdd({
             </label>
           </div>
           <div className="life-quick-form-actions">
-            <button type="submit" className="primary-button" disabled={savingTask}>
+            <button type="submit" className="life-btn primary" disabled={savingTask}>
               {savingTask ? 'Adding…' : 'Add task'}
             </button>
             {taskError ? <span className="error-text">{taskError}</span> : null}
             {taskSaved && !taskError ? <span className="life-quick-saved">Added ✓</span> : null}
+          </div>
+        </form>
+      ) : null}
+
+      {open === 'Person' ? (
+        <form onSubmit={handlePersonSubmit} className="life-quick-form">
+          <label className="life-quick-field">
+            <span className="life-quick-field-label">Person</span>
+            <input autoFocus required type="text" name="name" placeholder="Who did you meet?" className="text-input" />
+          </label>
+          <div className="life-quick-form-row">
+            <label className="life-quick-field">
+              <span className="life-quick-field-label">Role</span>
+              <input className="text-input" type="text" name="role" placeholder="e.g. Design lead at …" />
+            </label>
+            <label className="life-quick-field">
+              <span className="life-quick-field-label">Relationship</span>
+              <select className="text-input" defaultValue="contact" name="relationship">
+                {RELATIONSHIP_OPTIONS.map((option) => (
+                  <option key={option} value={option}>
+                    {RELATIONSHIP_LABEL[option]}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <div className="life-quick-form-actions">
+            <button type="submit" className="life-btn primary" disabled={savingPerson}>
+              {savingPerson ? 'Adding…' : 'Add person'}
+            </button>
+            {personError ? <span className="error-text">{personError}</span> : null}
+            {personSaved && !personError ? <span className="life-quick-saved">Added ✓</span> : null}
           </div>
         </form>
       ) : null}
@@ -151,7 +232,7 @@ export function QuickAdd({
             <label className="life-quick-check">
               <input type="checkbox" name="allDay" value="on" /> All day
             </label>
-            <button type="submit" className="primary-button">
+            <button type="submit" className="life-btn primary">
               Add event
             </button>
           </div>

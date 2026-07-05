@@ -79,6 +79,7 @@ export interface TaskRecord {
   fingerprint: string | null;
   calendar_event_id: string | null;
   milestone_id: string | null;
+  person_id: string | null;
   desk_eligible: boolean;
   created_at: string;
   updated_at: string;
@@ -258,6 +259,44 @@ export interface LifeProjectClient {
   color: string | null;
   parent_slug: string | null;
   project_kind: ProjectKind;
+}
+
+export type PersonRelationship =
+  | "mentor"
+  | "professor"
+  | "alumni"
+  | "recruiter"
+  | "founder"
+  | "collaborator"
+  | "contact";
+
+/** A professional contact in the Rolodex. */
+export interface PersonRecord {
+  id: string;
+  user_id: string;
+  name: string;
+  role: string | null;
+  relationship: PersonRelationship;
+  why: string | null;
+  channel: string | null;
+  cadence_days: number | null;
+  archived: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export type InteractionKind = "met" | "call" | "message" | "showed_work" | "note";
+
+/** A dated log entry of contact with a person. */
+export interface InteractionRecord {
+  id: string;
+  user_id: string;
+  person_id: string;
+  local_date: string;
+  kind: InteractionKind;
+  summary: string;
+  project_slug: string | null;
+  created_at: string;
 }
 
 export type StudioItemKind = "image" | "link" | "moodboard" | "critique" | "note";

@@ -10,11 +10,16 @@ export function Footer() {
       >
         Designed between meals and gym sets. My mum thinks it looks nice. © 2026
       </span>
-      <span
-        className="justify-self-end shrink-0"
-        style={{ fontSize: '10px', letterSpacing: '0.14em', color: 'var(--footer-mark-color)' }}
-      >
-        PR_
+      <span className="justify-self-end shrink-0 flex items-center" style={{ gap: '20px' }}>
+        <a href="/lab" className="footer-link" style={{ fontSize: '10px', letterSpacing: '0.14em' }}>
+          LAB_
+        </a>
+        <a href="/colophon" className="footer-link" style={{ fontSize: '10px', letterSpacing: '0.14em' }}>
+          COLOPHON_
+        </a>
+        <span style={{ fontSize: '10px', letterSpacing: '0.14em', color: 'var(--footer-mark-color)' }}>
+          PR_
+        </span>
       </span>
     </footer>
   )

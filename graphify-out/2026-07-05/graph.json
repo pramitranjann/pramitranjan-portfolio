@@ -375,7 +375,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_api_life_calendar_events_route",
-      "community": 4,
+      "community": 6,
       "norm_label": "route.ts"
     },
     {
@@ -385,7 +385,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "app_api_life_calendar_events_route_getsaferedirectto",
-      "community": 4,
+      "community": 6,
       "norm_label": "getsaferedirectto()"
     },
     {
@@ -395,7 +395,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "app_api_life_calendar_events_route_get",
-      "community": 4,
+      "community": 6,
       "norm_label": "get()"
     },
     {
@@ -405,7 +405,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "app_api_life_calendar_events_route_normalizeoptionaltext",
-      "community": 4,
+      "community": 6,
       "norm_label": "normalizeoptionaltext()"
     },
     {
@@ -415,7 +415,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "app_api_life_calendar_events_route_post",
-      "community": 4,
+      "community": 6,
       "norm_label": "post()"
     },
     {
@@ -465,7 +465,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_api_life_cron_daily_route",
-      "community": 6,
+      "community": 44,
       "norm_label": "route.ts"
     },
     {
@@ -475,7 +475,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "app_api_life_cron_daily_route_getlocaldayofweek",
-      "community": 6,
+      "community": 44,
       "norm_label": "getlocaldayofweek()"
     },
     {
@@ -485,7 +485,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "app_api_life_cron_daily_route_get",
-      "community": 6,
+      "community": 44,
       "norm_label": "get()"
     },
     {
@@ -495,7 +495,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_api_life_entries_entryid_route",
-      "community": 17,
+      "community": 4,
       "norm_label": "route.ts"
     },
     {
@@ -505,7 +505,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "app_api_life_entries_entryid_route_getstoredentry",
-      "community": 17,
+      "community": 4,
       "norm_label": "getstoredentry()"
     },
     {
@@ -515,7 +515,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "app_api_life_entries_entryid_route_patch",
-      "community": 17,
+      "community": 4,
       "norm_label": "patch()"
     },
     {
@@ -525,7 +525,7 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "app_api_life_entries_entryid_route_delete",
-      "community": 17,
+      "community": 4,
       "norm_label": "delete()"
     },
     {
@@ -545,7 +545,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "app_api_life_entries_route_get",
-      "community": 15,
+      "community": 6,
       "norm_label": "get()"
     },
     {
@@ -597,116 +597,6 @@
       "id": "app_api_life_month_route_get",
       "community": 6,
       "norm_label": "get()"
-    },
-    {
-      "label": "route.ts",
-      "file_type": "code",
-      "source_file": "app/api/life/people/[personId]/follow-up/route.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_api_life_people_personid_follow_up_route",
-      "community": 16,
-      "norm_label": "route.ts"
-    },
-    {
-      "label": "POST()",
-      "file_type": "code",
-      "source_file": "app/api/life/people/[personId]/follow-up/route.ts",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "app_api_life_people_personid_follow_up_route_post",
-      "community": 16,
-      "norm_label": "post()"
-    },
-    {
-      "label": "route.ts",
-      "file_type": "code",
-      "source_file": "app/api/life/people/[personId]/interactions/route.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_api_life_people_personid_interactions_route",
-      "community": 16,
-      "norm_label": "route.ts"
-    },
-    {
-      "label": "GET()",
-      "file_type": "code",
-      "source_file": "app/api/life/people/[personId]/interactions/route.ts",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "app_api_life_people_personid_interactions_route_get",
-      "community": 16,
-      "norm_label": "get()"
-    },
-    {
-      "label": "POST()",
-      "file_type": "code",
-      "source_file": "app/api/life/people/[personId]/interactions/route.ts",
-      "source_location": "L22",
-      "_origin": "ast",
-      "id": "app_api_life_people_personid_interactions_route_post",
-      "community": 16,
-      "norm_label": "post()"
-    },
-    {
-      "label": "route.ts",
-      "file_type": "code",
-      "source_file": "app/api/life/people/[personId]/route.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_api_life_people_personid_route",
-      "community": 4,
-      "norm_label": "route.ts"
-    },
-    {
-      "label": "GET()",
-      "file_type": "code",
-      "source_file": "app/api/life/people/[personId]/route.ts",
-      "source_location": "L6",
-      "_origin": "ast",
-      "id": "app_api_life_people_personid_route_get",
-      "community": 4,
-      "norm_label": "get()"
-    },
-    {
-      "label": "PATCH()",
-      "file_type": "code",
-      "source_file": "app/api/life/people/[personId]/route.ts",
-      "source_location": "L24",
-      "_origin": "ast",
-      "id": "app_api_life_people_personid_route_patch",
-      "community": 4,
-      "norm_label": "patch()"
-    },
-    {
-      "label": "route.ts",
-      "file_type": "code",
-      "source_file": "app/api/life/people/route.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_api_life_people_route",
-      "community": 4,
-      "norm_label": "route.ts"
-    },
-    {
-      "label": "GET()",
-      "file_type": "code",
-      "source_file": "app/api/life/people/route.ts",
-      "source_location": "L6",
-      "_origin": "ast",
-      "id": "app_api_life_people_route_get",
-      "community": 4,
-      "norm_label": "get()"
-    },
-    {
-      "label": "POST()",
-      "file_type": "code",
-      "source_file": "app/api/life/people/route.ts",
-      "source_location": "L20",
-      "_origin": "ast",
-      "id": "app_api_life_people_route_post",
-      "community": 4,
-      "norm_label": "post()"
     },
     {
       "label": "route.ts",
@@ -855,7 +745,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_api_life_projects_slug_milestones_milestoneid_route",
-      "community": 4,
+      "community": 76,
       "norm_label": "route.ts"
     },
     {
@@ -865,7 +755,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "app_api_life_projects_slug_milestones_milestoneid_route_patch",
-      "community": 4,
+      "community": 76,
       "norm_label": "patch()"
     },
     {
@@ -875,7 +765,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "app_api_life_projects_slug_milestones_milestoneid_route_delete",
-      "community": 4,
+      "community": 76,
       "norm_label": "delete()"
     },
     {
@@ -885,7 +775,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_api_life_projects_slug_milestones_route",
-      "community": 4,
+      "community": 76,
       "norm_label": "route.ts"
     },
     {
@@ -895,7 +785,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "app_api_life_projects_slug_milestones_route_get",
-      "community": 4,
+      "community": 76,
       "norm_label": "get()"
     },
     {
@@ -905,7 +795,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "app_api_life_projects_slug_milestones_route_post",
-      "community": 4,
+      "community": 76,
       "norm_label": "post()"
     },
     {
@@ -915,7 +805,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_api_life_projects_slug_pages_pageid_route",
-      "community": 17,
+      "community": 4,
       "norm_label": "route.ts"
     },
     {
@@ -925,7 +815,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "app_api_life_projects_slug_pages_pageid_route_patch",
-      "community": 17,
+      "community": 4,
       "norm_label": "patch()"
     },
     {
@@ -935,7 +825,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "app_api_life_projects_slug_pages_pageid_route_delete",
-      "community": 17,
+      "community": 4,
       "norm_label": "delete()"
     },
     {
@@ -945,7 +835,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_api_life_projects_slug_pages_route",
-      "community": 17,
+      "community": 4,
       "norm_label": "route.ts"
     },
     {
@@ -955,7 +845,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "app_api_life_projects_slug_pages_route_get",
-      "community": 17,
+      "community": 4,
       "norm_label": "get()"
     },
     {
@@ -965,7 +855,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "app_api_life_projects_slug_pages_route_post",
-      "community": 17,
+      "community": 4,
       "norm_label": "post()"
     },
     {
@@ -995,7 +885,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_api_life_projects_slug_refs_route",
-      "community": 17,
+      "community": 34,
       "norm_label": "route.ts"
     },
     {
@@ -1005,7 +895,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "app_api_life_projects_slug_refs_route_normalizekind",
-      "community": 17,
+      "community": 34,
       "norm_label": "normalizekind()"
     },
     {
@@ -1015,7 +905,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "app_api_life_projects_slug_refs_route_get",
-      "community": 17,
+      "community": 34,
       "norm_label": "get()"
     },
     {
@@ -1025,7 +915,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "app_api_life_projects_slug_refs_route_post",
-      "community": 17,
+      "community": 34,
       "norm_label": "post()"
     },
     {
@@ -1035,7 +925,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_api_life_projects_slug_route",
-      "community": 35,
+      "community": 37,
       "norm_label": "route.ts"
     },
     {
@@ -1045,7 +935,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "app_api_life_projects_slug_route_normalizestatus",
-      "community": 35,
+      "community": 37,
       "norm_label": "normalizestatus()"
     },
     {
@@ -1055,7 +945,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "app_api_life_projects_slug_route_normalizeprojectkind",
-      "community": 35,
+      "community": 37,
       "norm_label": "normalizeprojectkind()"
     },
     {
@@ -1065,7 +955,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "app_api_life_projects_slug_route_patch",
-      "community": 35,
+      "community": 37,
       "norm_label": "patch()"
     },
     {
@@ -1075,7 +965,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "app_api_life_projects_slug_route_delete",
-      "community": 4,
+      "community": 37,
       "norm_label": "delete()"
     },
     {
@@ -1085,7 +975,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_api_life_projects_slug_ux_templates_route",
-      "community": 35,
+      "community": 4,
       "norm_label": "route.ts"
     },
     {
@@ -1095,7 +985,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "app_api_life_projects_slug_ux_templates_route_post",
-      "community": 35,
+      "community": 4,
       "norm_label": "post()"
     },
     {
@@ -1105,7 +995,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_api_life_projects_route",
-      "community": 35,
+      "community": 4,
       "norm_label": "route.ts"
     },
     {
@@ -1115,7 +1005,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "app_api_life_projects_route_normalizeprojectkind",
-      "community": 35,
+      "community": 4,
       "norm_label": "normalizeprojectkind()"
     },
     {
@@ -1125,7 +1015,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "app_api_life_projects_route_get",
-      "community": 35,
+      "community": 4,
       "norm_label": "get()"
     },
     {
@@ -1135,7 +1025,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "app_api_life_projects_route_post",
-      "community": 35,
+      "community": 4,
       "norm_label": "post()"
     },
     {
@@ -1275,7 +1165,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_api_life_synthesis_eod_route",
-      "community": 4,
+      "community": 44,
       "norm_label": "route.ts"
     },
     {
@@ -1285,7 +1175,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "app_api_life_synthesis_eod_route_post",
-      "community": 4,
+      "community": 44,
       "norm_label": "post()"
     },
     {
@@ -1295,7 +1185,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_api_life_synthesis_morning_route",
-      "community": 4,
+      "community": 44,
       "norm_label": "route.ts"
     },
     {
@@ -1305,7 +1195,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "app_api_life_synthesis_morning_route_post",
-      "community": 4,
+      "community": 44,
       "norm_label": "post()"
     },
     {
@@ -1315,7 +1205,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_api_life_synthesis_weekly_route",
-      "community": 6,
+      "community": 44,
       "norm_label": "route.ts"
     },
     {
@@ -1325,7 +1215,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "app_api_life_synthesis_weekly_route_post",
-      "community": 6,
+      "community": 44,
       "norm_label": "post()"
     },
     {
@@ -1497,46 +1387,6 @@
       "id": "app_api_spotify_route_get",
       "community": 22,
       "norm_label": "get()"
-    },
-    {
-      "label": "page.tsx",
-      "file_type": "code",
-      "source_file": "app/colophon/page.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_colophon_page",
-      "community": 31,
-      "norm_label": "page.tsx"
-    },
-    {
-      "label": "generateMetadata()",
-      "file_type": "code",
-      "source_file": "app/colophon/page.tsx",
-      "source_location": "L10",
-      "_origin": "ast",
-      "id": "app_colophon_page_generatemetadata",
-      "community": 31,
-      "norm_label": "generatemetadata()"
-    },
-    {
-      "label": "STACK",
-      "file_type": "code",
-      "source_file": "app/colophon/page.tsx",
-      "source_location": "L20",
-      "_origin": "ast",
-      "id": "app_colophon_page_stack",
-      "community": 31,
-      "norm_label": "stack"
-    },
-    {
-      "label": "ColophonPage()",
-      "file_type": "code",
-      "source_file": "app/colophon/page.tsx",
-      "source_location": "L29",
-      "_origin": "ast",
-      "id": "app_colophon_page_colophonpage",
-      "community": 31,
-      "norm_label": "colophonpage()"
     },
     {
       "label": "page.tsx",
@@ -1969,76 +1819,6 @@
       "norm_label": "icon()"
     },
     {
-      "label": "page.tsx",
-      "file_type": "code",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_lab_page",
-      "community": 31,
-      "norm_label": "page.tsx"
-    },
-    {
-      "label": "generateMetadata()",
-      "file_type": "code",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L10",
-      "_origin": "ast",
-      "id": "app_lab_page_generatemetadata",
-      "community": 31,
-      "norm_label": "generatemetadata()"
-    },
-    {
-      "label": "DiagramBox()",
-      "file_type": "code",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L21",
-      "_origin": "ast",
-      "id": "app_lab_page_diagrambox",
-      "community": 31,
-      "norm_label": "diagrambox()"
-    },
-    {
-      "label": "ArchitectureDiagram()",
-      "file_type": "code",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L56",
-      "_origin": "ast",
-      "id": "app_lab_page_architecturediagram",
-      "community": 31,
-      "norm_label": "architecturediagram()"
-    },
-    {
-      "label": "Receipt()",
-      "file_type": "code",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L113",
-      "_origin": "ast",
-      "id": "app_lab_page_receipt",
-      "community": 31,
-      "norm_label": "receipt()"
-    },
-    {
-      "label": "SectionLabel()",
-      "file_type": "code",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L145",
-      "_origin": "ast",
-      "id": "app_lab_page_sectionlabel",
-      "community": 31,
-      "norm_label": "sectionlabel()"
-    },
-    {
-      "label": "LabPage()",
-      "file_type": "code",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L156",
-      "_origin": "ast",
-      "id": "app_lab_page_labpage",
-      "community": 31,
-      "norm_label": "labpage()"
-    },
-    {
       "label": "layout.tsx",
       "file_type": "code",
       "source_file": "app/layout.tsx",
@@ -2295,7 +2075,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_life_month_page",
-      "community": 6,
+      "community": 16,
       "norm_label": "page.tsx"
     },
     {
@@ -2305,7 +2085,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "app_life_month_page_lifemonthpage",
-      "community": 6,
+      "community": 16,
       "norm_label": "lifemonthpage()"
     },
     {
@@ -2315,7 +2095,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_life_page",
-      "community": 74,
+      "community": 16,
       "norm_label": "page.tsx"
     },
     {
@@ -2325,7 +2105,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "app_life_page_shortdate",
-      "community": 74,
+      "community": 16,
       "norm_label": "shortdate()"
     },
     {
@@ -2335,7 +2115,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "app_life_page_shortday",
-      "community": 74,
+      "community": 23,
       "norm_label": "shortday()"
     },
     {
@@ -2345,7 +2125,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "app_life_page_greetingforhour",
-      "community": 74,
+      "community": 16,
       "norm_label": "greetingforhour()"
     },
     {
@@ -2355,7 +2135,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "app_life_page_capturedtodaycard",
-      "community": 74,
+      "community": 16,
       "norm_label": "capturedtodaycard()"
     },
     {
@@ -2365,7 +2145,7 @@
       "source_location": "L117",
       "_origin": "ast",
       "id": "app_life_page_todaysidecards",
-      "community": 74,
+      "community": 16,
       "norm_label": "todaysidecards()"
     },
     {
@@ -2375,48 +2155,8 @@
       "source_location": "L249",
       "_origin": "ast",
       "id": "app_life_page_lifetodaypage",
-      "community": 74,
+      "community": 16,
       "norm_label": "lifetodaypage()"
-    },
-    {
-      "label": "page.tsx",
-      "file_type": "code",
-      "source_file": "app/life/people/[id]/page.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_life_people_id_page",
-      "community": 16,
-      "norm_label": "page.tsx"
-    },
-    {
-      "label": "PersonDetailPage()",
-      "file_type": "code",
-      "source_file": "app/life/people/[id]/page.tsx",
-      "source_location": "L9",
-      "_origin": "ast",
-      "id": "app_life_people_id_page_persondetailpage",
-      "community": 16,
-      "norm_label": "persondetailpage()"
-    },
-    {
-      "label": "page.tsx",
-      "file_type": "code",
-      "source_file": "app/life/people/page.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_life_people_page",
-      "community": 16,
-      "norm_label": "page.tsx"
-    },
-    {
-      "label": "LifePeoplePage()",
-      "file_type": "code",
-      "source_file": "app/life/people/page.tsx",
-      "source_location": "L9",
-      "_origin": "ast",
-      "id": "app_life_people_page_lifepeoplepage",
-      "community": 16,
-      "norm_label": "lifepeoplepage()"
     },
     {
       "label": "page.tsx",
@@ -2425,7 +2165,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_life_projects_slug_page",
-      "community": 17,
+      "community": 16,
       "norm_label": "page.tsx"
     },
     {
@@ -2435,7 +2175,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "app_life_projects_slug_page_projectdetailpage",
-      "community": 17,
+      "community": 16,
       "norm_label": "projectdetailpage()"
     },
     {
@@ -2445,7 +2185,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_life_projects_page",
-      "community": 6,
+      "community": 16,
       "norm_label": "page.tsx"
     },
     {
@@ -2455,7 +2195,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "app_life_projects_page_lifeprojectspage",
-      "community": 6,
+      "community": 16,
       "norm_label": "lifeprojectspage()"
     },
     {
@@ -2545,7 +2285,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_life_review_page",
-      "community": 6,
+      "community": 16,
       "norm_label": "page.tsx"
     },
     {
@@ -2555,7 +2295,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "app_life_review_page_lifeweekpage",
-      "community": 6,
+      "community": 16,
       "norm_label": "lifeweekpage()"
     },
     {
@@ -2625,7 +2365,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_life_tasks_page",
-      "community": 13,
+      "community": 16,
       "norm_label": "page.tsx"
     },
     {
@@ -2635,7 +2375,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "app_life_tasks_page_lifetaskspage",
-      "community": 13,
+      "community": 16,
       "norm_label": "lifetaskspage()"
     },
     {
@@ -2665,7 +2405,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_not_found",
-      "community": 31,
+      "community": 28,
       "norm_label": "not-found.tsx"
     },
     {
@@ -2675,7 +2415,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "app_not_found_notfound",
-      "community": 31,
+      "community": 2,
       "norm_label": "notfound()"
     },
     {
@@ -2755,7 +2495,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_play_test_page",
-      "community": 31,
+      "community": 8,
       "norm_label": "page.tsx"
     },
     {
@@ -2765,7 +2505,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "app_play_test_page_metadata",
-      "community": 31,
+      "community": 8,
       "norm_label": "metadata"
     },
     {
@@ -2775,7 +2515,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "app_play_test_page_playtestpage",
-      "community": 31,
+      "community": 8,
       "norm_label": "playtestpage()"
     },
     {
@@ -2905,7 +2645,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_scad_scholarship_page",
-      "community": 28,
+      "community": 8,
       "norm_label": "page.tsx"
     },
     {
@@ -3315,7 +3055,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "components_casestudylayout_casestudylayoutprops",
-      "community": 73,
+      "community": 2,
       "norm_label": "casestudylayoutprops"
     },
     {
@@ -3665,7 +3405,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_footer",
-      "community": 31,
+      "community": 28,
       "norm_label": "footer.tsx"
     },
     {
@@ -3675,7 +3415,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_footer_footer",
-      "community": 31,
+      "community": 28,
       "norm_label": "footer()"
     },
     {
@@ -3685,7 +3425,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_gamecasestudylayout",
-      "community": 31,
+      "community": 28,
       "norm_label": "gamecasestudylayout.tsx"
     },
     {
@@ -3695,7 +3435,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "components_gamecasestudylayout_gamecasestudylayoutprops",
-      "community": 31,
+      "community": 28,
       "norm_label": "gamecasestudylayoutprops"
     },
     {
@@ -3705,7 +3445,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "components_gamecasestudylayout_gamecasestudylayout",
-      "community": 31,
+      "community": 28,
       "norm_label": "gamecasestudylayout()"
     },
     {
@@ -3985,7 +3725,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_nav",
-      "community": 31,
+      "community": 28,
       "norm_label": "nav.tsx"
     },
     {
@@ -3995,7 +3735,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "components_nav_nav",
-      "community": 31,
+      "community": 28,
       "norm_label": "nav()"
     },
     {
@@ -4055,7 +3795,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "components_photogallerylayout_photogallerylayoutprops",
-      "community": 73,
+      "community": 25,
       "norm_label": "photogallerylayoutprops"
     },
     {
@@ -4115,7 +3855,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_photographyindexclient",
-      "community": 31,
+      "community": 28,
       "norm_label": "photographyindexclient.tsx"
     },
     {
@@ -4125,7 +3865,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "components_photographyindexclient_photographyindexclient",
-      "community": 31,
+      "community": 25,
       "norm_label": "photographyindexclient()"
     },
     {
@@ -4175,7 +3915,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_playpageclient",
-      "community": 31,
+      "community": 28,
       "norm_label": "playpageclient.tsx"
     },
     {
@@ -4185,7 +3925,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "components_playpageclient_playpageclient",
-      "community": 31,
+      "community": 28,
       "norm_label": "playpageclient()"
     },
     {
@@ -4195,7 +3935,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_playpagelive",
-      "community": 31,
+      "community": 8,
       "norm_label": "playpagelive.tsx"
     },
     {
@@ -4255,7 +3995,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_projectspotifysection",
-      "community": 73,
+      "community": 22,
       "norm_label": "projectspotifysection.tsx"
     },
     {
@@ -4265,7 +4005,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "components_projectspotifysection_projectspotifysection",
-      "community": 73,
+      "community": 22,
       "norm_label": "projectspotifysection()"
     },
     {
@@ -4305,7 +4045,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_readingprogress",
-      "community": 31,
+      "community": 28,
       "norm_label": "readingprogress.tsx"
     },
     {
@@ -4315,7 +4055,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "components_readingprogress_readingprogress",
-      "community": 31,
+      "community": 28,
       "norm_label": "readingprogress()"
     },
     {
@@ -4575,7 +4315,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "components_sitecopyprovider_usesitepages",
-      "community": 31,
+      "community": 28,
       "norm_label": "usesitepages()"
     },
     {
@@ -4835,7 +4575,7 @@
       "source_location": "L151",
       "_origin": "ast",
       "id": "components_admin_dashboardeditor_parsepxvalue",
-      "community": 76,
+      "community": 0,
       "norm_label": "parsepxvalue()"
     },
     {
@@ -4845,7 +4585,7 @@
       "source_location": "L157",
       "_origin": "ast",
       "id": "components_admin_dashboardeditor_parsepercentvalue",
-      "community": 76,
+      "community": 0,
       "norm_label": "parsepercentvalue()"
     },
     {
@@ -4855,7 +4595,7 @@
       "source_location": "L163",
       "_origin": "ast",
       "id": "components_admin_dashboardeditor_parseclampmaxpx",
-      "community": 76,
+      "community": 0,
       "norm_label": "parseclampmaxpx()"
     },
     {
@@ -4865,7 +4605,7 @@
       "source_location": "L169",
       "_origin": "ast",
       "id": "components_admin_dashboardeditor_parseaspectratiovalue",
-      "community": 76,
+      "community": 0,
       "norm_label": "parseaspectratiovalue()"
     },
     {
@@ -4875,7 +4615,7 @@
       "source_location": "L179",
       "_origin": "ast",
       "id": "components_admin_dashboardeditor_getblockwidthguide",
-      "community": 76,
+      "community": 0,
       "norm_label": "getblockwidthguide()"
     },
     {
@@ -4885,7 +4625,7 @@
       "source_location": "L203",
       "_origin": "ast",
       "id": "components_admin_dashboardeditor_getimageexportguide",
-      "community": 76,
+      "community": 0,
       "norm_label": "getimageexportguide()"
     },
     {
@@ -4955,7 +4695,7 @@
       "source_location": "L446",
       "_origin": "ast",
       "id": "components_admin_dashboardeditor_tagstotext",
-      "community": 0,
+      "community": 36,
       "norm_label": "tagstotext()"
     },
     {
@@ -5075,7 +4815,7 @@
       "source_location": "L564",
       "_origin": "ast",
       "id": "components_admin_dashboardeditor_normalizemediablock",
-      "community": 76,
+      "community": 0,
       "norm_label": "normalizemediablock()"
     },
     {
@@ -5265,7 +5005,7 @@
       "source_location": "L2622",
       "_origin": "ast",
       "id": "components_admin_dashboardeditor_casestudyeditor",
-      "community": 0,
+      "community": 36,
       "norm_label": "casestudyeditor()"
     },
     {
@@ -5345,7 +5085,7 @@
       "source_location": "L3472",
       "_origin": "ast",
       "id": "components_admin_dashboardeditor_mediablockeditor",
-      "community": 76,
+      "community": 0,
       "norm_label": "mediablockeditor()"
     },
     {
@@ -5625,7 +5365,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_life_historyclient",
-      "community": 37,
+      "community": 74,
       "norm_label": "historyclient.tsx"
     },
     {
@@ -5635,7 +5375,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "components_life_historyclient_historypayload",
-      "community": 37,
+      "community": 74,
       "norm_label": "historypayload"
     },
     {
@@ -5645,7 +5385,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "components_life_historyclient_historyclientprops",
-      "community": 37,
+      "community": 74,
       "norm_label": "historyclientprops"
     },
     {
@@ -5655,7 +5395,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "components_life_historyclient_phonedaylabel",
-      "community": 37,
+      "community": 23,
       "norm_label": "phonedaylabel()"
     },
     {
@@ -5665,7 +5405,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "components_life_historyclient_desktopdaylabel",
-      "community": 37,
+      "community": 74,
       "norm_label": "desktopdaylabel()"
     },
     {
@@ -5675,7 +5415,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "components_life_historyclient_historyclient",
-      "community": 37,
+      "community": 74,
       "norm_label": "historyclient()"
     },
     {
@@ -5712,7 +5452,7 @@
       "label": "isLeafActive()",
       "file_type": "code",
       "source_file": "components/life/LifeHeader.tsx",
-      "source_location": "L41",
+      "source_location": "L40",
       "_origin": "ast",
       "id": "components_life_lifeheader_isleafactive",
       "community": 35,
@@ -5722,7 +5462,7 @@
       "label": "LifeHeader()",
       "file_type": "code",
       "source_file": "components/life/LifeHeader.tsx",
-      "source_location": "L47",
+      "source_location": "L46",
       "_origin": "ast",
       "id": "components_life_lifeheader_lifeheader",
       "community": 35,
@@ -5775,7 +5515,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_life_lifeprojectsprovider",
-      "community": 78,
+      "community": 35,
       "norm_label": "lifeprojectsprovider.tsx"
     },
     {
@@ -5785,7 +5525,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "components_life_lifeprojectsprovider_project_tints",
-      "community": 78,
+      "community": 35,
       "norm_label": "project_tints"
     },
     {
@@ -5795,7 +5535,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "components_life_lifeprojectsprovider_hextorgb",
-      "community": 78,
+      "community": 35,
       "norm_label": "hextorgb()"
     },
     {
@@ -5805,7 +5545,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "components_life_lifeprojectsprovider_tintstylefromhex",
-      "community": 78,
+      "community": 35,
       "norm_label": "tintstylefromhex()"
     },
     {
@@ -5815,7 +5555,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "components_life_lifeprojectsprovider_lifeprojectscontextvalue",
-      "community": 78,
+      "community": 35,
       "norm_label": "lifeprojectscontextvalue"
     },
     {
@@ -5825,7 +5565,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "components_life_lifeprojectsprovider_buildvalue",
-      "community": 78,
+      "community": 35,
       "norm_label": "buildvalue()"
     },
     {
@@ -5835,7 +5575,7 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "components_life_lifeprojectsprovider_lifeprojectscontext",
-      "community": 78,
+      "community": 35,
       "norm_label": "lifeprojectscontext"
     },
     {
@@ -5855,7 +5595,7 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "components_life_lifeprojectsprovider_uselifeprojects",
-      "community": 30,
+      "community": 35,
       "norm_label": "uselifeprojects()"
     },
     {
@@ -5865,7 +5605,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_life_markdowncard",
-      "community": 12,
+      "community": 96,
       "norm_label": "markdowncard.tsx"
     },
     {
@@ -5875,7 +5615,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "components_life_markdowncard_markdowncard",
-      "community": 12,
+      "community": 96,
       "norm_label": "markdowncard()"
     },
     {
@@ -5885,7 +5625,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_life_monthclient",
-      "community": 24,
+      "community": 23,
       "norm_label": "monthclient.tsx"
     },
     {
@@ -5895,7 +5635,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "components_life_monthclient_monthresponse",
-      "community": 38,
+      "community": 23,
       "norm_label": "monthresponse"
     },
     {
@@ -5905,7 +5645,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "components_life_monthclient_weekday_names",
-      "community": 24,
+      "community": 23,
       "norm_label": "weekday_names"
     },
     {
@@ -5915,7 +5655,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "components_life_monthclient_daysbetween",
-      "community": 24,
+      "community": 23,
       "norm_label": "daysbetween()"
     },
     {
@@ -5925,7 +5665,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "components_life_monthclient_daysinmonth",
-      "community": 24,
+      "community": 23,
       "norm_label": "daysinmonth()"
     },
     {
@@ -5935,7 +5675,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "components_life_monthclient_monthlabel",
-      "community": 24,
+      "community": 23,
       "norm_label": "monthlabel()"
     },
     {
@@ -5945,7 +5685,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "components_life_monthclient_monthparts",
-      "community": 24,
+      "community": 23,
       "norm_label": "monthparts()"
     },
     {
@@ -5965,7 +5705,7 @@
       "source_location": "L64",
       "_origin": "ast",
       "id": "components_life_monthclient_browserlocaldatestring",
-      "community": 24,
+      "community": 23,
       "norm_label": "browserlocaldatestring()"
     },
     {
@@ -5975,7 +5715,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "components_life_monthclient_monthclient",
-      "community": 24,
+      "community": 23,
       "norm_label": "monthclient()"
     },
     {
@@ -5985,27 +5725,27 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_life_quickadd",
-      "community": 30,
+      "community": 35,
       "norm_label": "quickadd.tsx"
     },
     {
       "label": "QuickKind",
       "file_type": "code",
       "source_file": "components/life/QuickAdd.tsx",
-      "source_location": "L10",
+      "source_location": "L9",
       "_origin": "ast",
       "id": "components_life_quickadd_quickkind",
-      "community": 30,
+      "community": 35,
       "norm_label": "quickkind"
     },
     {
       "label": "QuickAdd()",
       "file_type": "code",
       "source_file": "components/life/QuickAdd.tsx",
-      "source_location": "L12",
+      "source_location": "L11",
       "_origin": "ast",
       "id": "components_life_quickadd_quickadd",
-      "community": 30,
+      "community": 35,
       "norm_label": "quickadd()"
     },
     {
@@ -6025,7 +5765,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "components_life_reportclient_reportslistresponse",
-      "community": 37,
+      "community": 74,
       "norm_label": "reportslistresponse"
     },
     {
@@ -6035,7 +5775,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "components_life_reportclient_reportdetailresponse",
-      "community": 38,
+      "community": 74,
       "norm_label": "reportdetailresponse"
     },
     {
@@ -6395,7 +6135,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "components_life_weekclient_weekresponse",
-      "community": 38,
+      "community": 23,
       "norm_label": "weekresponse"
     },
     {
@@ -6415,7 +6155,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "components_life_weekclient_positionedevent",
-      "community": 38,
+      "community": 23,
       "norm_label": "positionedevent"
     },
     {
@@ -6579,153 +6319,13 @@
       "norm_label": "weekclient()"
     },
     {
-      "label": "PeopleIndex.tsx",
-      "file_type": "code",
-      "source_file": "components/life/people/PeopleIndex.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "components_life_people_peopleindex",
-      "community": 30,
-      "norm_label": "peopleindex.tsx"
-    },
-    {
-      "label": "PersonListItem",
-      "file_type": "code",
-      "source_file": "components/life/people/PeopleIndex.tsx",
-      "source_location": "L9",
-      "_origin": "ast",
-      "id": "components_life_people_peopleindex_personlistitem",
-      "community": 30,
-      "norm_label": "personlistitem"
-    },
-    {
-      "label": "overdueDays()",
-      "file_type": "code",
-      "source_file": "components/life/people/PeopleIndex.tsx",
-      "source_location": "L24",
-      "_origin": "ast",
-      "id": "components_life_people_peopleindex_overduedays",
-      "community": 30,
-      "norm_label": "overduedays()"
-    },
-    {
-      "label": "PersonRow()",
-      "file_type": "code",
-      "source_file": "components/life/people/PeopleIndex.tsx",
-      "source_location": "L29",
-      "_origin": "ast",
-      "id": "components_life_people_peopleindex_personrow",
-      "community": 30,
-      "norm_label": "personrow()"
-    },
-    {
-      "label": "PeopleIndex()",
-      "file_type": "code",
-      "source_file": "components/life/people/PeopleIndex.tsx",
-      "source_location": "L46",
-      "_origin": "ast",
-      "id": "components_life_people_peopleindex_peopleindex",
-      "community": 30,
-      "norm_label": "peopleindex()"
-    },
-    {
-      "label": "PersonDetail.tsx",
-      "file_type": "code",
-      "source_file": "components/life/people/PersonDetail.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "components_life_people_persondetail",
-      "community": 30,
-      "norm_label": "persondetail.tsx"
-    },
-    {
-      "label": "PersonDetail()",
-      "file_type": "code",
-      "source_file": "components/life/people/PersonDetail.tsx",
-      "source_location": "L21",
-      "_origin": "ast",
-      "id": "components_life_people_persondetail_persondetail",
-      "community": 30,
-      "norm_label": "persondetail()"
-    },
-    {
-      "label": "shared.ts",
-      "file_type": "code",
-      "source_file": "components/life/people/shared.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "components_life_people_shared",
-      "community": 30,
-      "norm_label": "shared.ts"
-    },
-    {
-      "label": "RELATIONSHIP_OPTIONS",
-      "file_type": "code",
-      "source_file": "components/life/people/shared.ts",
-      "source_location": "L3",
-      "_origin": "ast",
-      "id": "components_life_people_shared_relationship_options",
-      "community": 30,
-      "norm_label": "relationship_options"
-    },
-    {
-      "label": "RELATIONSHIP_LABEL",
-      "file_type": "code",
-      "source_file": "components/life/people/shared.ts",
-      "source_location": "L13",
-      "_origin": "ast",
-      "id": "components_life_people_shared_relationship_label",
-      "community": 30,
-      "norm_label": "relationship_label"
-    },
-    {
-      "label": "INTERACTION_KIND_OPTIONS",
-      "file_type": "code",
-      "source_file": "components/life/people/shared.ts",
-      "source_location": "L23",
-      "_origin": "ast",
-      "id": "components_life_people_shared_interaction_kind_options",
-      "community": 30,
-      "norm_label": "interaction_kind_options"
-    },
-    {
-      "label": "INTERACTION_KIND_LABEL",
-      "file_type": "code",
-      "source_file": "components/life/people/shared.ts",
-      "source_location": "L25",
-      "_origin": "ast",
-      "id": "components_life_people_shared_interaction_kind_label",
-      "community": 30,
-      "norm_label": "interaction_kind_label"
-    },
-    {
-      "label": "daysBetween()",
-      "file_type": "code",
-      "source_file": "components/life/people/shared.ts",
-      "source_location": "L34",
-      "_origin": "ast",
-      "id": "components_life_people_shared_daysbetween",
-      "community": 30,
-      "norm_label": "daysbetween()"
-    },
-    {
-      "label": "agoLabel()",
-      "file_type": "code",
-      "source_file": "components/life/people/shared.ts",
-      "source_location": "L41",
-      "_origin": "ast",
-      "id": "components_life_people_shared_agolabel",
-      "community": 30,
-      "norm_label": "agolabel()"
-    },
-    {
       "label": "ProjectEvents.tsx",
       "file_type": "code",
       "source_file": "components/life/projects/ProjectEvents.tsx",
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_life_projects_projectevents",
-      "community": 32,
+      "community": 3,
       "norm_label": "projectevents.tsx"
     },
     {
@@ -6735,7 +6335,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "components_life_projects_projectevents_formateventwhen",
-      "community": 32,
+      "community": 3,
       "norm_label": "formateventwhen()"
     },
     {
@@ -6745,7 +6345,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "components_life_projects_projectevents_projectevents",
-      "community": 32,
+      "community": 3,
       "norm_label": "projectevents()"
     },
     {
@@ -6775,7 +6375,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_life_projects_projectrefs",
-      "community": 34,
+      "community": 3,
       "norm_label": "projectrefs.tsx"
     },
     {
@@ -6785,7 +6385,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "components_life_projects_projectrefs_kinds",
-      "community": 34,
+      "community": 3,
       "norm_label": "kinds"
     },
     {
@@ -6795,7 +6395,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "components_life_projects_projectrefs_hostof",
-      "community": 34,
+      "community": 3,
       "norm_label": "hostof()"
     },
     {
@@ -6805,7 +6405,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "components_life_projects_projectrefs_projectrefs",
-      "community": 34,
+      "community": 3,
       "norm_label": "projectrefs()"
     },
     {
@@ -6815,7 +6415,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_life_projects_projecttasks",
-      "community": 32,
+      "community": 7,
       "norm_label": "projecttasks.tsx"
     },
     {
@@ -6825,7 +6425,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "components_life_projects_projecttasks_pri_label",
-      "community": 32,
+      "community": 7,
       "norm_label": "pri_label"
     },
     {
@@ -6835,7 +6435,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "components_life_projects_projecttasks_projecttasks",
-      "community": 3,
+      "community": 7,
       "norm_label": "projecttasks()"
     },
     {
@@ -7085,7 +6685,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_life_reports_reportssidebar",
-      "community": 37,
+      "community": 23,
       "norm_label": "reportssidebar.tsx"
     },
     {
@@ -7095,7 +6695,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "components_life_reports_reportssidebar_type_short",
-      "community": 37,
+      "community": 23,
       "norm_label": "type_short"
     },
     {
@@ -7105,7 +6705,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "components_life_reports_reportssidebar_shortday",
-      "community": 37,
+      "community": 23,
       "norm_label": "shortday()"
     },
     {
@@ -7115,7 +6715,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "components_life_reports_reportssidebar_reportssidebar",
-      "community": 37,
+      "community": 23,
       "norm_label": "reportssidebar()"
     },
     {
@@ -7335,7 +6935,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_life_tasks_printmanagement",
-      "community": 44,
+      "community": 29,
       "norm_label": "printmanagement.tsx"
     },
     {
@@ -7345,7 +6945,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "components_life_tasks_printmanagement_print_state_label",
-      "community": 44,
+      "community": 29,
       "norm_label": "print_state_label"
     },
     {
@@ -7355,7 +6955,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "components_life_tasks_printmanagement_whenlabel",
-      "community": 44,
+      "community": 29,
       "norm_label": "whenlabel()"
     },
     {
@@ -7365,7 +6965,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "components_life_tasks_printmanagement_duelabel",
-      "community": 44,
+      "community": 29,
       "norm_label": "duelabel()"
     },
     {
@@ -7375,7 +6975,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "components_life_tasks_printmanagement_isleasestale",
-      "community": 44,
+      "community": 29,
       "norm_label": "isleasestale()"
     },
     {
@@ -7385,7 +6985,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "components_life_tasks_printmanagement_ismanualcancel",
-      "community": 44,
+      "community": 29,
       "norm_label": "ismanualcancel()"
     },
     {
@@ -7395,7 +6995,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "components_life_tasks_printmanagement_iscancelledinfo",
-      "community": 44,
+      "community": 29,
       "norm_label": "iscancelledinfo()"
     },
     {
@@ -7405,7 +7005,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "components_life_tasks_printmanagement_latesttimestamp",
-      "community": 44,
+      "community": 29,
       "norm_label": "latesttimestamp()"
     },
     {
@@ -7415,7 +7015,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "components_life_tasks_printmanagement_isattentionfresh",
-      "community": 44,
+      "community": 29,
       "norm_label": "isattentionfresh()"
     },
     {
@@ -7425,7 +7025,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "components_life_tasks_printmanagement_printmanagement",
-      "community": 44,
+      "community": 29,
       "norm_label": "printmanagement()"
     },
     {
@@ -7435,7 +7035,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_life_tasks_taskform",
-      "community": 32,
+      "community": 7,
       "norm_label": "taskform.tsx"
     },
     {
@@ -7445,7 +7045,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "components_life_tasks_taskform_calmode",
-      "community": 32,
+      "community": 7,
       "norm_label": "calmode"
     },
     {
@@ -7455,7 +7055,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "components_life_tasks_taskform_menukey",
-      "community": 32,
+      "community": 7,
       "norm_label": "menukey"
     },
     {
@@ -7465,7 +7065,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "components_life_tasks_taskform_pri_label",
-      "community": 32,
+      "community": 7,
       "norm_label": "pri_label"
     },
     {
@@ -7475,7 +7075,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "components_life_tasks_taskform_pri_options",
-      "community": 32,
+      "community": 7,
       "norm_label": "pri_options"
     },
     {
@@ -7485,7 +7085,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "components_life_tasks_taskform_adddaysymd",
-      "community": 32,
+      "community": 7,
       "norm_label": "adddaysymd()"
     },
     {
@@ -7495,7 +7095,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "components_life_tasks_taskform_nextweekendymd",
-      "community": 32,
+      "community": 7,
       "norm_label": "nextweekendymd()"
     },
     {
@@ -7505,7 +7105,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "components_life_tasks_taskform_duelabel",
-      "community": 32,
+      "community": 7,
       "norm_label": "duelabel()"
     },
     {
@@ -7515,7 +7115,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "components_life_tasks_taskform_eventtimelabel",
-      "community": 32,
+      "community": 7,
       "norm_label": "eventtimelabel()"
     },
     {
@@ -7525,7 +7125,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "components_life_tasks_taskform_taskform",
-      "community": 32,
+      "community": 7,
       "norm_label": "taskform()"
     },
     {
@@ -7615,7 +7215,7 @@
       "source_location": "L123",
       "_origin": "ast",
       "id": "components_life_tasks_tasksclient_diffdays",
-      "community": 37,
+      "community": 7,
       "norm_label": "diffdays()"
     },
     {
@@ -7625,7 +7225,7 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "components_life_tasks_tasksclient_boardduelabel",
-      "community": 37,
+      "community": 7,
       "norm_label": "boardduelabel()"
     },
     {
@@ -7695,7 +7295,7 @@
       "source_location": "L185",
       "_origin": "ast",
       "id": "components_life_tasks_tasksclient_shortday",
-      "community": 37,
+      "community": 7,
       "norm_label": "shortday()"
     },
     {
@@ -7745,7 +7345,7 @@
       "source_location": "L281",
       "_origin": "ast",
       "id": "components_life_tasks_tasksclient_tasksclient",
-      "community": 30,
+      "community": 35,
       "norm_label": "tasksclient()"
     },
     {
@@ -7885,7 +7485,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "lib_admin_auth_isadminsession",
-      "community": 6,
+      "community": 16,
       "norm_label": "isadminsession()"
     },
     {
@@ -8355,7 +7955,7 @@
       "source_location": "L308",
       "_origin": "ast",
       "id": "lib_life_calendar_getcalendareventsbyids",
-      "community": 13,
+      "community": 16,
       "norm_label": "getcalendareventsbyids()"
     },
     {
@@ -8405,7 +8005,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "lib_life_claude_callclaude",
-      "community": 6,
+      "community": 18,
       "norm_label": "callclaude()"
     },
     {
@@ -8415,7 +8015,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_life_client",
-      "community": 32,
+      "community": 3,
       "norm_label": "client.ts"
     },
     {
@@ -8425,7 +8025,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_life_client_fetchjson",
-      "community": 32,
+      "community": 3,
       "norm_label": "fetchjson()"
     },
     {
@@ -8435,7 +8035,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_life_constants",
-      "community": 6,
+      "community": 44,
       "norm_label": "constants.ts"
     },
     {
@@ -8445,7 +8045,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "lib_life_constants_owner_profile",
-      "community": 38,
+      "community": 74,
       "norm_label": "owner_profile"
     },
     {
@@ -8455,7 +8055,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "lib_life_constants_eod_system_prompt",
-      "community": 6,
+      "community": 44,
       "norm_label": "eod_system_prompt"
     },
     {
@@ -8465,7 +8065,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "lib_life_constants_morning_system_prompt",
-      "community": 6,
+      "community": 44,
       "norm_label": "morning_system_prompt"
     },
     {
@@ -8475,7 +8075,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "lib_life_constants_weekly_system_prompt",
-      "community": 6,
+      "community": 44,
       "norm_label": "weekly_system_prompt"
     },
     {
@@ -8485,7 +8085,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "lib_life_constants_task_extraction_system_prompt",
-      "community": 6,
+      "community": 44,
       "norm_label": "task_extraction_system_prompt"
     },
     {
@@ -8495,7 +8095,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "lib_life_constants_week_ahead_system_prompt",
-      "community": 6,
+      "community": 44,
       "norm_label": "week_ahead_system_prompt"
     },
     {
@@ -8515,7 +8115,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "lib_life_email_sendreportemail",
-      "community": 6,
+      "community": 18,
       "norm_label": "sendreportemail()"
     },
     {
@@ -8685,7 +8285,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_life_milestones",
-      "community": 4,
+      "community": 76,
       "norm_label": "milestones.ts"
     },
     {
@@ -8695,7 +8295,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "lib_life_milestones_listmilestones",
-      "community": 4,
+      "community": 76,
       "norm_label": "listmilestones()"
     },
     {
@@ -8705,7 +8305,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "lib_life_milestones_createmilestone",
-      "community": 4,
+      "community": 76,
       "norm_label": "createmilestone()"
     },
     {
@@ -8715,7 +8315,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "lib_life_milestones_updatemilestone",
-      "community": 4,
+      "community": 76,
       "norm_label": "updatemilestone()"
     },
     {
@@ -8725,7 +8325,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "lib_life_milestones_deletemilestone",
-      "community": 4,
+      "community": 76,
       "norm_label": "deletemilestone()"
     },
     {
@@ -8777,146 +8377,6 @@
       "id": "lib_life_page_body_mergelifepagemetadata",
       "community": 96,
       "norm_label": "mergelifepagemetadata()"
-    },
-    {
-      "label": "people.ts",
-      "file_type": "code",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_life_people",
-      "community": 16,
-      "norm_label": "people.ts"
-    },
-    {
-      "label": "RELATIONSHIPS",
-      "file_type": "code",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "lib_life_people_relationships",
-      "community": 16,
-      "norm_label": "relationships"
-    },
-    {
-      "label": "INTERACTION_KINDS",
-      "file_type": "code",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L8",
-      "_origin": "ast",
-      "id": "lib_life_people_interaction_kinds",
-      "community": 16,
-      "norm_label": "interaction_kinds"
-    },
-    {
-      "label": "normalizeRelationship()",
-      "file_type": "code",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L10",
-      "_origin": "ast",
-      "id": "lib_life_people_normalizerelationship",
-      "community": 16,
-      "norm_label": "normalizerelationship()"
-    },
-    {
-      "label": "normalizeInteractionKind()",
-      "file_type": "code",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L14",
-      "_origin": "ast",
-      "id": "lib_life_people_normalizeinteractionkind",
-      "community": 16,
-      "norm_label": "normalizeinteractionkind()"
-    },
-    {
-      "label": "normalizeCadenceDays()",
-      "file_type": "code",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L18",
-      "_origin": "ast",
-      "id": "lib_life_people_normalizecadencedays",
-      "community": 16,
-      "norm_label": "normalizecadencedays()"
-    },
-    {
-      "label": "listPeople()",
-      "file_type": "code",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L24",
-      "_origin": "ast",
-      "id": "lib_life_people_listpeople",
-      "community": 16,
-      "norm_label": "listpeople()"
-    },
-    {
-      "label": "getPersonById()",
-      "file_type": "code",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L35",
-      "_origin": "ast",
-      "id": "lib_life_people_getpersonbyid",
-      "community": 16,
-      "norm_label": "getpersonbyid()"
-    },
-    {
-      "label": "createPerson()",
-      "file_type": "code",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L42",
-      "_origin": "ast",
-      "id": "lib_life_people_createperson",
-      "community": 16,
-      "norm_label": "createperson()"
-    },
-    {
-      "label": "updatePerson()",
-      "file_type": "code",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L72",
-      "_origin": "ast",
-      "id": "lib_life_people_updateperson",
-      "community": 16,
-      "norm_label": "updateperson()"
-    },
-    {
-      "label": "listInteractions()",
-      "file_type": "code",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L110",
-      "_origin": "ast",
-      "id": "lib_life_people_listinteractions",
-      "community": 16,
-      "norm_label": "listinteractions()"
-    },
-    {
-      "label": "createInteraction()",
-      "file_type": "code",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L123",
-      "_origin": "ast",
-      "id": "lib_life_people_createinteraction",
-      "community": 16,
-      "norm_label": "createinteraction()"
-    },
-    {
-      "label": "latestInteractionDates()",
-      "file_type": "code",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L157",
-      "_origin": "ast",
-      "id": "lib_life_people_latestinteractiondates",
-      "community": 16,
-      "norm_label": "latestinteractiondates()"
-    },
-    {
-      "label": "listOpenTasksForPerson()",
-      "file_type": "code",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L174",
-      "_origin": "ast",
-      "id": "lib_life_people_listopentasksforperson",
-      "community": 16,
-      "norm_label": "listopentasksforperson()"
     },
     {
       "label": "print-jobs.ts",
@@ -8975,7 +8435,7 @@
       "source_location": "L111",
       "_origin": "ast",
       "id": "lib_life_print_jobs_deriveprintinfo",
-      "community": 13,
+      "community": 16,
       "norm_label": "deriveprintinfo()"
     },
     {
@@ -9085,7 +8545,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_life_project_pages",
-      "community": 17,
+      "community": 4,
       "norm_label": "project-pages.ts"
     },
     {
@@ -9095,7 +8555,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "lib_life_project_pages_listprojectpages",
-      "community": 17,
+      "community": 4,
       "norm_label": "listprojectpages()"
     },
     {
@@ -9105,7 +8565,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "lib_life_project_pages_listprojectpagesbyprojects",
-      "community": 17,
+      "community": 16,
       "norm_label": "listprojectpagesbyprojects()"
     },
     {
@@ -9115,7 +8575,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "lib_life_project_pages_createprojectpage",
-      "community": 17,
+      "community": 4,
       "norm_label": "createprojectpage()"
     },
     {
@@ -9125,7 +8585,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "lib_life_project_pages_updateprojectpage",
-      "community": 17,
+      "community": 4,
       "norm_label": "updateprojectpage()"
     },
     {
@@ -9135,7 +8595,7 @@
       "source_location": "L96",
       "_origin": "ast",
       "id": "lib_life_project_pages_deleteprojectpage",
-      "community": 17,
+      "community": 4,
       "norm_label": "deleteprojectpage()"
     },
     {
@@ -9145,7 +8605,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_life_project_refs",
-      "community": 17,
+      "community": 34,
       "norm_label": "project-refs.ts"
     },
     {
@@ -9155,7 +8615,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "lib_life_project_refs_listrefs",
-      "community": 17,
+      "community": 34,
       "norm_label": "listrefs()"
     },
     {
@@ -9165,7 +8625,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "lib_life_project_refs_createref",
-      "community": 17,
+      "community": 34,
       "norm_label": "createref()"
     },
     {
@@ -9185,7 +8645,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "lib_life_project_refs_uploadrefimage",
-      "community": 17,
+      "community": 34,
       "norm_label": "uploadrefimage()"
     },
     {
@@ -9195,7 +8655,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_life_projects_db",
-      "community": 35,
+      "community": 16,
       "norm_label": "projects-db.ts"
     },
     {
@@ -9205,7 +8665,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "lib_life_projects_db_slugify",
-      "community": 35,
+      "community": 4,
       "norm_label": "slugify()"
     },
     {
@@ -9215,7 +8675,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "lib_life_projects_db_seedprojects",
-      "community": 35,
+      "community": 16,
       "norm_label": "seedprojects()"
     },
     {
@@ -9225,7 +8685,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "lib_life_projects_db_readallprojects",
-      "community": 35,
+      "community": 16,
       "norm_label": "readallprojects"
     },
     {
@@ -9235,7 +8695,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "lib_life_projects_db_getallprojects",
-      "community": 35,
+      "community": 16,
       "norm_label": "getallprojects"
     },
     {
@@ -9245,7 +8705,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "lib_life_projects_db_listprojects",
-      "community": 35,
+      "community": 16,
       "norm_label": "listprojects"
     },
     {
@@ -9255,7 +8715,7 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "lib_life_projects_db_getprojectmap",
-      "community": 74,
+      "community": 16,
       "norm_label": "getprojectmap"
     },
     {
@@ -9265,7 +8725,7 @@
       "source_location": "L98",
       "_origin": "ast",
       "id": "lib_life_projects_db_getprojectbyslugdb",
-      "community": 13,
+      "community": 16,
       "norm_label": "getprojectbyslugdb()"
     },
     {
@@ -9275,7 +8735,7 @@
       "source_location": "L103",
       "_origin": "ast",
       "id": "lib_life_projects_db_getprojectlabelasync",
-      "community": 35,
+      "community": 16,
       "norm_label": "getprojectlabelasync()"
     },
     {
@@ -9295,7 +8755,7 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "lib_life_projects_db_normalizeprojectslugdb",
-      "community": 16,
+      "community": 15,
       "norm_label": "normalizeprojectslugdb()"
     },
     {
@@ -9315,7 +8775,7 @@
       "source_location": "L143",
       "_origin": "ast",
       "id": "lib_life_projects_db_createproject",
-      "community": 35,
+      "community": 4,
       "norm_label": "createproject()"
     },
     {
@@ -9325,7 +8785,7 @@
       "source_location": "L192",
       "_origin": "ast",
       "id": "lib_life_projects_db_updateproject",
-      "community": 35,
+      "community": 37,
       "norm_label": "updateproject()"
     },
     {
@@ -9335,7 +8795,7 @@
       "source_location": "L238",
       "_origin": "ast",
       "id": "lib_life_projects_db_deleteproject",
-      "community": 4,
+      "community": 37,
       "norm_label": "deleteproject()"
     },
     {
@@ -9605,7 +9065,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_life_report_context",
-      "community": 38,
+      "community": 74,
       "norm_label": "report-context.ts"
     },
     {
@@ -9615,7 +9075,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "lib_life_report_context_reportcontext",
-      "community": 38,
+      "community": 74,
       "norm_label": "reportcontext"
     },
     {
@@ -9635,7 +9095,7 @@
       "source_location": "L91",
       "_origin": "ast",
       "id": "lib_life_report_context_formatevents",
-      "community": 38,
+      "community": 74,
       "norm_label": "formatevents()"
     },
     {
@@ -9645,7 +9105,7 @@
       "source_location": "L106",
       "_origin": "ast",
       "id": "lib_life_report_context_formatentries",
-      "community": 38,
+      "community": 74,
       "norm_label": "formatentries()"
     },
     {
@@ -9655,7 +9115,7 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "lib_life_report_context_formatopentasks",
-      "community": 38,
+      "community": 74,
       "norm_label": "formatopentasks()"
     },
     {
@@ -9665,7 +9125,7 @@
       "source_location": "L127",
       "_origin": "ast",
       "id": "lib_life_report_context_formatcompletedtasks",
-      "community": 38,
+      "community": 74,
       "norm_label": "formatcompletedtasks()"
     },
     {
@@ -9675,7 +9135,7 @@
       "source_location": "L138",
       "_origin": "ast",
       "id": "lib_life_report_context_buildeodprompt",
-      "community": 38,
+      "community": 74,
       "norm_label": "buildeodprompt()"
     },
     {
@@ -9685,7 +9145,7 @@
       "source_location": "L158",
       "_origin": "ast",
       "id": "lib_life_report_context_buildmorningprompt",
-      "community": 38,
+      "community": 74,
       "norm_label": "buildmorningprompt()"
     },
     {
@@ -9705,7 +9165,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "lib_life_search_shortday",
-      "community": 74,
+      "community": 23,
       "norm_label": "shortday()"
     },
     {
@@ -9845,7 +9305,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "lib_life_supabase_getsupabaseadmin",
-      "community": 17,
+      "community": 6,
       "norm_label": "getsupabaseadmin"
     },
     {
@@ -9855,7 +9315,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_life_synthesis",
-      "community": 6,
+      "community": 44,
       "norm_label": "synthesis.ts"
     },
     {
@@ -9865,7 +9325,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "lib_life_synthesis_getexistingreport",
-      "community": 6,
+      "community": 44,
       "norm_label": "getexistingreport()"
     },
     {
@@ -9875,7 +9335,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "lib_life_synthesis_generateeodreport",
-      "community": 6,
+      "community": 44,
       "norm_label": "generateeodreport()"
     },
     {
@@ -9885,7 +9345,7 @@
       "source_location": "L115",
       "_origin": "ast",
       "id": "lib_life_synthesis_generatemorningbrief",
-      "community": 6,
+      "community": 44,
       "norm_label": "generatemorningbrief()"
     },
     {
@@ -9895,7 +9355,7 @@
       "source_location": "L213",
       "_origin": "ast",
       "id": "lib_life_synthesis_generateweeklysummary",
-      "community": 6,
+      "community": 44,
       "norm_label": "generateweeklysummary()"
     },
     {
@@ -9905,7 +9365,7 @@
       "source_location": "L306",
       "_origin": "ast",
       "id": "lib_life_synthesis_generateweekaheadbrief",
-      "community": 6,
+      "community": 44,
       "norm_label": "generateweekaheadbrief()"
     },
     {
@@ -9985,7 +9445,7 @@
       "source_location": "L103",
       "_origin": "ast",
       "id": "lib_life_tasks_gettasks",
-      "community": 6,
+      "community": 16,
       "norm_label": "gettasks()"
     },
     {
@@ -10012,7 +9472,7 @@
       "label": "updateTask()",
       "file_type": "code",
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L207",
+      "source_location": "L203",
       "_origin": "ast",
       "id": "lib_life_tasks_updatetask",
       "community": 15,
@@ -10022,7 +9482,7 @@
       "label": "updateTaskStatus()",
       "file_type": "code",
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L240",
+      "source_location": "L236",
       "_origin": "ast",
       "id": "lib_life_tasks_updatetaskstatus",
       "community": 15,
@@ -10032,7 +9492,7 @@
       "label": "syncTasksFromReport()",
       "file_type": "code",
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L262",
+      "source_location": "L258",
       "_origin": "ast",
       "id": "lib_life_tasks_synctasksfromreport",
       "community": 15,
@@ -10042,10 +9502,10 @@
       "label": "getWeeklyTaskSnapshot()",
       "file_type": "code",
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L377",
+      "source_location": "L373",
       "_origin": "ast",
       "id": "lib_life_tasks_getweeklytasksnapshot",
-      "community": 6,
+      "community": 44,
       "norm_label": "getweeklytasksnapshot()"
     },
     {
@@ -10055,7 +9515,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_life_time",
-      "community": 6,
+      "community": 16,
       "norm_label": "time.ts"
     },
     {
@@ -10065,7 +9525,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_life_time_fullformattercache",
-      "community": 6,
+      "community": 16,
       "norm_label": "fullformattercache"
     },
     {
@@ -10095,7 +9555,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "lib_life_time_getlocaldatestring",
-      "community": 6,
+      "community": 16,
       "norm_label": "getlocaldatestring()"
     },
     {
@@ -10105,7 +9565,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "lib_life_time_getlocaltimelabel",
-      "community": 38,
+      "community": 74,
       "norm_label": "getlocaltimelabel()"
     },
     {
@@ -10115,7 +9575,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "lib_life_time_getdisplaydate",
-      "community": 37,
+      "community": 23,
       "norm_label": "getdisplaydate()"
     },
     {
@@ -10125,7 +9585,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "lib_life_time_adddays",
-      "community": 6,
+      "community": 44,
       "norm_label": "adddays()"
     },
     {
@@ -10145,7 +9605,7 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "lib_life_time_localdatetimetoutc",
-      "community": 37,
+      "community": 23,
       "norm_label": "localdatetimetoutc()"
     },
     {
@@ -10165,7 +9625,7 @@
       "source_location": "L97",
       "_origin": "ast",
       "id": "lib_life_time_getcurrentlocaldate",
-      "community": 6,
+      "community": 16,
       "norm_label": "getcurrentlocaldate()"
     },
     {
@@ -10175,7 +9635,7 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "lib_life_time_getcurrentlocalclock",
-      "community": 74,
+      "community": 16,
       "norm_label": "getcurrentlocalclock()"
     },
     {
@@ -10185,7 +9645,7 @@
       "source_location": "L106",
       "_origin": "ast",
       "id": "lib_life_time_isbeforenoon",
-      "community": 74,
+      "community": 16,
       "norm_label": "isbeforenoon()"
     },
     {
@@ -10195,7 +9655,7 @@
       "source_location": "L110",
       "_origin": "ast",
       "id": "lib_life_time_ismorningbriefwindow",
-      "community": 74,
+      "community": 16,
       "norm_label": "ismorningbriefwindow()"
     },
     {
@@ -10205,7 +9665,7 @@
       "source_location": "L115",
       "_origin": "ast",
       "id": "lib_life_time_getweekstart",
-      "community": 6,
+      "community": 44,
       "norm_label": "getweekstart()"
     },
     {
@@ -10215,7 +9675,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_life_types",
-      "community": 34,
+      "community": 40,
       "norm_label": "types.ts"
     },
     {
@@ -10225,7 +9685,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_life_types_entrysource",
-      "community": 34,
+      "community": 40,
       "norm_label": "entrysource"
     },
     {
@@ -10235,7 +9695,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "lib_life_types_reporttype",
-      "community": 34,
+      "community": 40,
       "norm_label": "reporttype"
     },
     {
@@ -10255,7 +9715,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "lib_life_types_taskpriority",
-      "community": 32,
+      "community": 7,
       "norm_label": "taskpriority"
     },
     {
@@ -10265,7 +9725,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "lib_life_types_entryrecord",
-      "community": 38,
+      "community": 74,
       "norm_label": "entryrecord"
     },
     {
@@ -10275,7 +9735,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "lib_life_types_reportrecord",
-      "community": 37,
+      "community": 74,
       "norm_label": "reportrecord"
     },
     {
@@ -10285,7 +9745,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "lib_life_types_summaryrecord",
-      "community": 38,
+      "community": 74,
       "norm_label": "summaryrecord"
     },
     {
@@ -10295,7 +9755,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "lib_life_types_settingsrecord",
-      "community": 34,
+      "community": 40,
       "norm_label": "settingsrecord"
     },
     {
@@ -10305,7 +9765,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "lib_life_types_calendareventrecord",
-      "community": 38,
+      "community": 23,
       "norm_label": "calendareventrecord"
     },
     {
@@ -10315,7 +9775,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "lib_life_types_dayhistory",
-      "community": 37,
+      "community": 74,
       "norm_label": "dayhistory"
     },
     {
@@ -10325,24 +9785,24 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "lib_life_types_taskrecord",
-      "community": 38,
+      "community": 23,
       "norm_label": "taskrecord"
     },
     {
       "label": "TaskLinkedEvent",
       "file_type": "code",
       "source_file": "lib/life/types.ts",
-      "source_location": "L90",
+      "source_location": "L89",
       "_origin": "ast",
       "id": "lib_life_types_tasklinkedevent",
-      "community": 7,
+      "community": 16,
       "norm_label": "tasklinkedevent"
     },
     {
       "label": "TaskCalendarIntent",
       "file_type": "code",
       "source_file": "lib/life/types.ts",
-      "source_location": "L99",
+      "source_location": "L98",
       "_origin": "ast",
       "id": "lib_life_types_taskcalendarintent",
       "community": 15,
@@ -10352,57 +9812,57 @@
       "label": "TaskDraft",
       "file_type": "code",
       "source_file": "lib/life/types.ts",
-      "source_location": "L106",
+      "source_location": "L105",
       "_origin": "ast",
       "id": "lib_life_types_taskdraft",
-      "community": 32,
+      "community": 7,
       "norm_label": "taskdraft"
     },
     {
       "label": "TaskCandidate",
       "file_type": "code",
       "source_file": "lib/life/types.ts",
-      "source_location": "L117",
+      "source_location": "L116",
       "_origin": "ast",
       "id": "lib_life_types_taskcandidate",
-      "community": 34,
+      "community": 40,
       "norm_label": "taskcandidate"
     },
     {
       "label": "LifeSearchTaskHit",
       "file_type": "code",
       "source_file": "lib/life/types.ts",
-      "source_location": "L125",
+      "source_location": "L124",
       "_origin": "ast",
       "id": "lib_life_types_lifesearchtaskhit",
-      "community": 34,
+      "community": 40,
       "norm_label": "lifesearchtaskhit"
     },
     {
       "label": "LifeSearchEntryHit",
       "file_type": "code",
       "source_file": "lib/life/types.ts",
-      "source_location": "L135",
+      "source_location": "L134",
       "_origin": "ast",
       "id": "lib_life_types_lifesearchentryhit",
-      "community": 34,
+      "community": 40,
       "norm_label": "lifesearchentryhit"
     },
     {
       "label": "LifeSearchEventHit",
       "file_type": "code",
       "source_file": "lib/life/types.ts",
-      "source_location": "L146",
+      "source_location": "L145",
       "_origin": "ast",
       "id": "lib_life_types_lifesearcheventhit",
-      "community": 34,
+      "community": 40,
       "norm_label": "lifesearcheventhit"
     },
     {
       "label": "LifeSearchResults",
       "file_type": "code",
       "source_file": "lib/life/types.ts",
-      "source_location": "L154",
+      "source_location": "L153",
       "_origin": "ast",
       "id": "lib_life_types_lifesearchresults",
       "community": 35,
@@ -10412,47 +9872,47 @@
       "label": "PrintJobStatus",
       "file_type": "code",
       "source_file": "lib/life/types.ts",
-      "source_location": "L163",
+      "source_location": "L162",
       "_origin": "ast",
       "id": "lib_life_types_printjobstatus",
-      "community": 34,
+      "community": 40,
       "norm_label": "printjobstatus"
     },
     {
       "label": "PrintJobRecord",
       "file_type": "code",
       "source_file": "lib/life/types.ts",
-      "source_location": "L167",
+      "source_location": "L166",
       "_origin": "ast",
       "id": "lib_life_types_printjobrecord",
-      "community": 44,
+      "community": 29,
       "norm_label": "printjobrecord"
     },
     {
       "label": "TaskPrintState",
       "file_type": "code",
       "source_file": "lib/life/types.ts",
-      "source_location": "L185",
+      "source_location": "L184",
       "_origin": "ast",
       "id": "lib_life_types_taskprintstate",
-      "community": 34,
+      "community": 40,
       "norm_label": "taskprintstate"
     },
     {
       "label": "TaskPrintInfo",
       "file_type": "code",
       "source_file": "lib/life/types.ts",
-      "source_location": "L187",
+      "source_location": "L186",
       "_origin": "ast",
       "id": "lib_life_types_taskprintinfo",
-      "community": 44,
+      "community": 29,
       "norm_label": "taskprintinfo"
     },
     {
       "label": "ProjectStatus",
       "file_type": "code",
       "source_file": "lib/life/types.ts",
-      "source_location": "L198",
+      "source_location": "L197",
       "_origin": "ast",
       "id": "lib_life_types_projectstatus",
       "community": 3,
@@ -10462,7 +9922,7 @@
       "label": "ProjectKind",
       "file_type": "code",
       "source_file": "lib/life/types.ts",
-      "source_location": "L199",
+      "source_location": "L198",
       "_origin": "ast",
       "id": "lib_life_types_projectkind",
       "community": 3,
@@ -10472,7 +9932,7 @@
       "label": "ProjectRecord",
       "file_type": "code",
       "source_file": "lib/life/types.ts",
-      "source_location": "L202",
+      "source_location": "L201",
       "_origin": "ast",
       "id": "lib_life_types_projectrecord",
       "community": 3,
@@ -10482,17 +9942,17 @@
       "label": "ProjectMilestoneRecord",
       "file_type": "code",
       "source_file": "lib/life/types.ts",
-      "source_location": "L219",
+      "source_location": "L218",
       "_origin": "ast",
       "id": "lib_life_types_projectmilestonerecord",
-      "community": 3,
+      "community": 76,
       "norm_label": "projectmilestonerecord"
     },
     {
       "label": "ProjectRefKind",
       "file_type": "code",
       "source_file": "lib/life/types.ts",
-      "source_location": "L229",
+      "source_location": "L228",
       "_origin": "ast",
       "id": "lib_life_types_projectrefkind",
       "community": 34,
@@ -10502,17 +9962,17 @@
       "label": "ProjectRefRecord",
       "file_type": "code",
       "source_file": "lib/life/types.ts",
-      "source_location": "L232",
+      "source_location": "L231",
       "_origin": "ast",
       "id": "lib_life_types_projectrefrecord",
-      "community": 34,
+      "community": 3,
       "norm_label": "projectrefrecord"
     },
     {
       "label": "ProjectPageRecord",
       "file_type": "code",
       "source_file": "lib/life/types.ts",
-      "source_location": "L244",
+      "source_location": "L243",
       "_origin": "ast",
       "id": "lib_life_types_projectpagerecord",
       "community": 96,
@@ -10522,57 +9982,17 @@
       "label": "LifeProjectClient",
       "file_type": "code",
       "source_file": "lib/life/types.ts",
-      "source_location": "L256",
+      "source_location": "L255",
       "_origin": "ast",
       "id": "lib_life_types_lifeprojectclient",
-      "community": 78,
+      "community": 35,
       "norm_label": "lifeprojectclient"
-    },
-    {
-      "label": "PersonRelationship",
-      "file_type": "code",
-      "source_file": "lib/life/types.ts",
-      "source_location": "L264",
-      "_origin": "ast",
-      "id": "lib_life_types_personrelationship",
-      "community": 30,
-      "norm_label": "personrelationship"
-    },
-    {
-      "label": "PersonRecord",
-      "file_type": "code",
-      "source_file": "lib/life/types.ts",
-      "source_location": "L274",
-      "_origin": "ast",
-      "id": "lib_life_types_personrecord",
-      "community": 34,
-      "norm_label": "personrecord"
-    },
-    {
-      "label": "InteractionKind",
-      "file_type": "code",
-      "source_file": "lib/life/types.ts",
-      "source_location": "L288",
-      "_origin": "ast",
-      "id": "lib_life_types_interactionkind",
-      "community": 34,
-      "norm_label": "interactionkind"
-    },
-    {
-      "label": "InteractionRecord",
-      "file_type": "code",
-      "source_file": "lib/life/types.ts",
-      "source_location": "L291",
-      "_origin": "ast",
-      "id": "lib_life_types_interactionrecord",
-      "community": 34,
-      "norm_label": "interactionrecord"
     },
     {
       "label": "StudioItemKind",
       "file_type": "code",
       "source_file": "lib/life/types.ts",
-      "source_location": "L302",
+      "source_location": "L263",
       "_origin": "ast",
       "id": "lib_life_types_studioitemkind",
       "community": 40,
@@ -10582,7 +10002,7 @@
       "label": "StudioItemRecord",
       "file_type": "code",
       "source_file": "lib/life/types.ts",
-      "source_location": "L304",
+      "source_location": "L265",
       "_origin": "ast",
       "id": "lib_life_types_studioitemrecord",
       "community": 40,
@@ -10595,7 +10015,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_life_ux_templates",
-      "community": 35,
+      "community": 38,
       "norm_label": "ux-templates.ts"
     },
     {
@@ -10605,7 +10025,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "lib_life_ux_templates_uxtemplatearchetype",
-      "community": 35,
+      "community": 38,
       "norm_label": "uxtemplatearchetype"
     },
     {
@@ -10615,7 +10035,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "lib_life_ux_templates_uxtemplatepage",
-      "community": 35,
+      "community": 38,
       "norm_label": "uxtemplatepage"
     },
     {
@@ -10625,7 +10045,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "lib_life_ux_templates_uxtemplatesection",
-      "community": 35,
+      "community": 38,
       "norm_label": "uxtemplatesection"
     },
     {
@@ -10635,7 +10055,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "lib_life_ux_templates_archetypebody",
-      "community": 35,
+      "community": 38,
       "norm_label": "archetypebody()"
     },
     {
@@ -10645,7 +10065,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "lib_life_ux_templates_researchboardbody",
-      "community": 35,
+      "community": 38,
       "norm_label": "researchboardbody()"
     },
     {
@@ -10655,7 +10075,7 @@
       "source_location": "L65",
       "_origin": "ast",
       "id": "lib_life_ux_templates_problemframebody",
-      "community": 35,
+      "community": 38,
       "norm_label": "problemframebody()"
     },
     {
@@ -10665,7 +10085,7 @@
       "source_location": "L97",
       "_origin": "ast",
       "id": "lib_life_ux_templates_conceptreviewbody",
-      "community": 35,
+      "community": 38,
       "norm_label": "conceptreviewbody()"
     },
     {
@@ -10675,7 +10095,7 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "lib_life_ux_templates_testingreviewbody",
-      "community": 35,
+      "community": 38,
       "norm_label": "testingreviewbody()"
     },
     {
@@ -10685,7 +10105,7 @@
       "source_location": "L162",
       "_origin": "ast",
       "id": "lib_life_ux_templates_casestudydraftbody",
-      "community": 35,
+      "community": 38,
       "norm_label": "casestudydraftbody()"
     },
     {
@@ -10695,7 +10115,7 @@
       "source_location": "L198",
       "_origin": "ast",
       "id": "lib_life_ux_templates_archetypepage",
-      "community": 35,
+      "community": 38,
       "norm_label": "archetypepage()"
     },
     {
@@ -10705,7 +10125,7 @@
       "source_location": "L213",
       "_origin": "ast",
       "id": "lib_life_ux_templates_ux_template_sections",
-      "community": 35,
+      "community": 38,
       "norm_label": "ux_template_sections"
     },
     {
@@ -10715,7 +10135,7 @@
       "source_location": "L296",
       "_origin": "ast",
       "id": "lib_life_ux_templates_uxtemplatebykey",
-      "community": 35,
+      "community": 38,
       "norm_label": "uxtemplatebykey()"
     },
     {
@@ -10725,7 +10145,7 @@
       "source_location": "L300",
       "_origin": "ast",
       "id": "lib_life_ux_templates_applyuxtemplatesections",
-      "community": 35,
+      "community": 4,
       "norm_label": "applyuxtemplatesections()"
     },
     {
@@ -10955,7 +10375,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "lib_seo_person_keywords",
-      "community": 11,
+      "community": 9,
       "norm_label": "person_keywords"
     },
     {
@@ -11025,7 +10445,7 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "lib_seo_getcasestudyroute",
-      "community": 8,
+      "community": 2,
       "norm_label": "getcasestudyroute()"
     },
     {
@@ -11185,7 +10605,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "lib_site_content_schema_linkitem",
-      "community": 5,
+      "community": 8,
       "norm_label": "linkitem"
     },
     {
@@ -11265,7 +10685,7 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "lib_site_content_schema_projectspotifymedia",
-      "community": 73,
+      "community": 2,
       "norm_label": "projectspotifymedia"
     },
     {
@@ -11305,7 +10725,7 @@
       "source_location": "L132",
       "_origin": "ast",
       "id": "lib_site_content_schema_gallerystylesettings",
-      "community": 73,
+      "community": 25,
       "norm_label": "gallerystylesettings"
     },
     {
@@ -11315,7 +10735,7 @@
       "source_location": "L138",
       "_origin": "ast",
       "id": "lib_site_content_schema_nowcardstylesettings",
-      "community": 5,
+      "community": 8,
       "norm_label": "nowcardstylesettings"
     },
     {
@@ -11335,7 +10755,7 @@
       "source_location": "L174",
       "_origin": "ast",
       "id": "lib_site_content_schema_casestudynavstylesettings",
-      "community": 73,
+      "community": 2,
       "norm_label": "casestudynavstylesettings"
     },
     {
@@ -11435,7 +10855,7 @@
       "source_location": "L296",
       "_origin": "ast",
       "id": "lib_site_content_schema_sitepagekey",
-      "community": 5,
+      "community": 8,
       "norm_label": "sitepagekey"
     },
     {
@@ -11445,7 +10865,7 @@
       "source_location": "L297",
       "_origin": "ast",
       "id": "lib_site_content_schema_sitepagestatus",
-      "community": 5,
+      "community": 8,
       "norm_label": "sitepagestatus"
     },
     {
@@ -11485,7 +10905,7 @@
       "source_location": "L335",
       "_origin": "ast",
       "id": "lib_site_content_schema_casestudyuicopy",
-      "community": 73,
+      "community": 2,
       "norm_label": "casestudyuicopy"
     },
     {
@@ -11575,7 +10995,7 @@
       "source_location": "L384",
       "_origin": "ast",
       "id": "lib_site_content_schema_casestudymediasettings",
-      "community": 73,
+      "community": 2,
       "norm_label": "casestudymediasettings"
     },
     {
@@ -11615,7 +11035,7 @@
       "source_location": "L468",
       "_origin": "ast",
       "id": "lib_site_content_schema_sitecontent",
-      "community": 31,
+      "community": 8,
       "norm_label": "sitecontent"
     },
     {
@@ -11645,7 +11065,7 @@
       "source_location": "L532",
       "_origin": "ast",
       "id": "lib_site_content_schema_isnullable",
-      "community": 5,
+      "community": 14,
       "norm_label": "isnullable()"
     },
     {
@@ -12045,7 +11465,7 @@
       "source_location": "L1037",
       "_origin": "ast",
       "id": "lib_site_content_schema_ismotionsettings",
-      "community": 5,
+      "community": 14,
       "norm_label": "ismotionsettings()"
     },
     {
@@ -12055,7 +11475,7 @@
       "source_location": "L1061",
       "_origin": "ast",
       "id": "lib_site_content_schema_isaudiosettings",
-      "community": 5,
+      "community": 14,
       "norm_label": "isaudiosettings()"
     },
     {
@@ -12075,7 +11495,7 @@
       "source_location": "L1073",
       "_origin": "ast",
       "id": "lib_site_content_schema_iscasestudysection",
-      "community": 5,
+      "community": 14,
       "norm_label": "iscasestudysection()"
     },
     {
@@ -12255,7 +11675,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_site_pages",
-      "community": 31,
+      "community": 8,
       "norm_label": "site-pages.ts"
     },
     {
@@ -12265,7 +11685,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "lib_site_pages_sitepagessource",
-      "community": 31,
+      "community": 8,
       "norm_label": "sitepagessource"
     },
     {
@@ -12275,7 +11695,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "lib_site_pages_getsortedvisiblesitepages",
-      "community": 31,
+      "community": 28,
       "norm_label": "getsortedvisiblesitepages()"
     },
     {
@@ -12295,7 +11715,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "lib_site_pages_ispageinconstruction",
-      "community": 31,
+      "community": 8,
       "norm_label": "ispageinconstruction()"
     },
     {
@@ -12305,7 +11725,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "lib_site_pages_ispagehidden",
-      "community": 31,
+      "community": 8,
       "norm_label": "ispagehidden()"
     },
     {
@@ -12475,7 +11895,7 @@
       "source_location": "L289",
       "_origin": "ast",
       "id": "lib_sounds_playnav",
-      "community": 31,
+      "community": 28,
       "norm_label": "playnav()"
     },
     {
@@ -23246,626 +22666,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/follow-up/route.ts",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_follow_up_route",
-      "target": "app_api_life_people_personid_follow_up_route_post",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/follow-up/route.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_follow_up_route",
-      "target": "lib_life_auth",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/follow-up/route.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_follow_up_route",
-      "target": "lib_life_auth_isauthenticatedliferequest",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/follow-up/route.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_follow_up_route",
-      "target": "lib_life_auth_unauthorizedjson",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/follow-up/route.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_follow_up_route",
-      "target": "lib_life_people",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/follow-up/route.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_follow_up_route",
-      "target": "lib_life_people_getpersonbyid",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/follow-up/route.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_follow_up_route",
-      "target": "lib_life_tasks",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/follow-up/route.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_follow_up_route",
-      "target": "lib_life_tasks_createmanualtask",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/api/life/people/[personId]/follow-up/route.ts",
-      "source_location": "L8",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_follow_up_route_post",
-      "target": "lib_life_auth_isauthenticatedliferequest"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/api/life/people/[personId]/follow-up/route.ts",
-      "source_location": "L9",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_follow_up_route_post",
-      "target": "lib_life_auth_unauthorizedjson"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/api/life/people/[personId]/follow-up/route.ts",
-      "source_location": "L20",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_follow_up_route_post",
-      "target": "lib_life_people_getpersonbyid"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/api/life/people/[personId]/follow-up/route.ts",
-      "source_location": "L25",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_follow_up_route_post",
-      "target": "lib_life_tasks_createmanualtask"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/interactions/route.ts",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_interactions_route",
-      "target": "app_api_life_people_personid_interactions_route_get",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/interactions/route.ts",
-      "source_location": "L22",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_interactions_route",
-      "target": "app_api_life_people_personid_interactions_route_post",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/interactions/route.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_interactions_route",
-      "target": "lib_life_auth",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/interactions/route.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_interactions_route",
-      "target": "lib_life_auth_isauthenticatedliferequest",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/interactions/route.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_interactions_route",
-      "target": "lib_life_auth_unauthorizedjson",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/interactions/route.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_interactions_route",
-      "target": "lib_life_people",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/interactions/route.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_interactions_route",
-      "target": "lib_life_people_createinteraction",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/interactions/route.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_interactions_route",
-      "target": "lib_life_people_listinteractions",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/interactions/route.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_interactions_route",
-      "target": "lib_life_projects_db",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/interactions/route.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_interactions_route",
-      "target": "lib_life_projects_db_normalizeprojectslugdb",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/api/life/people/[personId]/interactions/route.ts",
-      "source_location": "L8",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_interactions_route_get",
-      "target": "lib_life_auth_isauthenticatedliferequest"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/api/life/people/[personId]/interactions/route.ts",
-      "source_location": "L9",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_interactions_route_get",
-      "target": "lib_life_auth_unauthorizedjson"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/api/life/people/[personId]/interactions/route.ts",
-      "source_location": "L15",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_interactions_route_get",
-      "target": "lib_life_people_listinteractions"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/api/life/people/[personId]/interactions/route.ts",
-      "source_location": "L23",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_interactions_route_post",
-      "target": "lib_life_auth_isauthenticatedliferequest"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/api/life/people/[personId]/interactions/route.ts",
-      "source_location": "L24",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_interactions_route_post",
-      "target": "lib_life_auth_unauthorizedjson"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/api/life/people/[personId]/interactions/route.ts",
-      "source_location": "L44",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_interactions_route_post",
-      "target": "lib_life_people_createinteraction"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/api/life/people/[personId]/interactions/route.ts",
-      "source_location": "L49",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_interactions_route_post",
-      "target": "lib_life_projects_db_normalizeprojectslugdb"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/route.ts",
-      "source_location": "L6",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_route",
-      "target": "app_api_life_people_personid_route_get",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/route.ts",
-      "source_location": "L24",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_route",
-      "target": "app_api_life_people_personid_route_patch",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/route.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_route",
-      "target": "lib_life_auth",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/route.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_route",
-      "target": "lib_life_auth_isauthenticatedliferequest",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/route.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_route",
-      "target": "lib_life_auth_unauthorizedjson",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/route.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_route",
-      "target": "lib_life_people",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/route.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_route",
-      "target": "lib_life_people_getpersonbyid",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/[personId]/route.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_route",
-      "target": "lib_life_people_updateperson",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/api/life/people/[personId]/route.ts",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_route_get",
-      "target": "lib_life_auth_isauthenticatedliferequest"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/api/life/people/[personId]/route.ts",
-      "source_location": "L8",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_route_get",
-      "target": "lib_life_auth_unauthorizedjson"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/api/life/people/[personId]/route.ts",
-      "source_location": "L14",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_route_get",
-      "target": "lib_life_people_getpersonbyid"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/api/life/people/[personId]/route.ts",
-      "source_location": "L25",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_route_patch",
-      "target": "lib_life_auth_isauthenticatedliferequest"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/api/life/people/[personId]/route.ts",
-      "source_location": "L26",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_route_patch",
-      "target": "lib_life_auth_unauthorizedjson"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/api/life/people/[personId]/route.ts",
-      "source_location": "L42",
-      "weight": 1.0,
-      "source": "app_api_life_people_personid_route_patch",
-      "target": "lib_life_people_updateperson"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/route.ts",
-      "source_location": "L6",
-      "weight": 1.0,
-      "source": "app_api_life_people_route",
-      "target": "app_api_life_people_route_get",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/route.ts",
-      "source_location": "L20",
-      "weight": 1.0,
-      "source": "app_api_life_people_route",
-      "target": "app_api_life_people_route_post",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/route.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "app_api_life_people_route",
-      "target": "lib_life_auth",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/route.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "app_api_life_people_route",
-      "target": "lib_life_auth_isauthenticatedliferequest",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/route.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "app_api_life_people_route",
-      "target": "lib_life_auth_unauthorizedjson",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/route.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "app_api_life_people_route",
-      "target": "lib_life_people",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/route.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "app_api_life_people_route",
-      "target": "lib_life_people_createperson",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/api/life/people/route.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "app_api_life_people_route",
-      "target": "lib_life_people_listpeople",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/api/life/people/route.ts",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "app_api_life_people_route_get",
-      "target": "lib_life_auth_isauthenticatedliferequest"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/api/life/people/route.ts",
-      "source_location": "L8",
-      "weight": 1.0,
-      "source": "app_api_life_people_route_get",
-      "target": "lib_life_auth_unauthorizedjson"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/api/life/people/route.ts",
-      "source_location": "L13",
-      "weight": 1.0,
-      "source": "app_api_life_people_route_get",
-      "target": "lib_life_people_listpeople"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/api/life/people/route.ts",
-      "source_location": "L21",
-      "weight": 1.0,
-      "source": "app_api_life_people_route_post",
-      "target": "lib_life_auth_isauthenticatedliferequest"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/api/life/people/route.ts",
-      "source_location": "L22",
-      "weight": 1.0,
-      "source": "app_api_life_people_route_post",
-      "target": "lib_life_auth_unauthorizedjson"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/api/life/people/route.ts",
-      "source_location": "L39",
-      "weight": 1.0,
-      "source": "app_api_life_people_route_post",
-      "target": "lib_life_people_createperson"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "app/api/life/print-jobs/[jobId]/route.ts",
       "source_location": "L7",
       "weight": 1.0,
@@ -28214,201 +27014,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "app/colophon/page.tsx",
-      "source_location": "L29",
-      "weight": 1.0,
-      "source": "app_colophon_page",
-      "target": "app_colophon_page_colophonpage",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "app/colophon/page.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "source": "app_colophon_page",
-      "target": "app_colophon_page_generatemetadata",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "app/colophon/page.tsx",
-      "source_location": "L20",
-      "weight": 1.0,
-      "source": "app_colophon_page",
-      "target": "app_colophon_page_stack",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/colophon/page.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "app_colophon_page",
-      "target": "components_animatedeyebrow",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/colophon/page.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "app_colophon_page",
-      "target": "components_animatedeyebrow_animatedeyebrow",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/colophon/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "app_colophon_page",
-      "target": "components_footer",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/colophon/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "app_colophon_page",
-      "target": "components_footer_footer",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/colophon/page.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "source": "app_colophon_page",
-      "target": "components_gsapreveal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/colophon/page.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "source": "app_colophon_page",
-      "target": "components_gsapreveal_gsapreveal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/colophon/page.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "app_colophon_page",
-      "target": "components_jsonld",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/colophon/page.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "app_colophon_page",
-      "target": "components_jsonld_jsonld",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/colophon/page.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "app_colophon_page",
-      "target": "components_nav",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/colophon/page.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "app_colophon_page",
-      "target": "components_nav_nav",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/colophon/page.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "source": "app_colophon_page",
-      "target": "lib_seo",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/colophon/page.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "source": "app_colophon_page",
-      "target": "lib_seo_buildbreadcrumbjsonld",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/colophon/page.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "source": "app_colophon_page",
-      "target": "lib_seo_buildmetadata",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/colophon/page.tsx",
-      "source_location": "L11",
-      "weight": 1.0,
-      "source": "app_colophon_page_generatemetadata",
-      "target": "lib_seo_buildmetadata"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/colophon/page.tsx",
-      "source_location": "L34",
-      "weight": 1.0,
-      "source": "app_colophon_page_colophonpage",
-      "target": "lib_seo_buildbreadcrumbjsonld"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "app/creative/branding/[slug]/page.tsx",
       "source_location": "L17",
       "weight": 1.0,
@@ -30319,231 +28924,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L56",
-      "weight": 1.0,
-      "source": "app_lab_page",
-      "target": "app_lab_page_architecturediagram",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L21",
-      "weight": 1.0,
-      "source": "app_lab_page",
-      "target": "app_lab_page_diagrambox",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "source": "app_lab_page",
-      "target": "app_lab_page_generatemetadata",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L156",
-      "weight": 1.0,
-      "source": "app_lab_page",
-      "target": "app_lab_page_labpage",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L113",
-      "weight": 1.0,
-      "source": "app_lab_page",
-      "target": "app_lab_page_receipt",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L145",
-      "weight": 1.0,
-      "source": "app_lab_page",
-      "target": "app_lab_page_sectionlabel",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "app_lab_page",
-      "target": "components_animatedeyebrow",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "app_lab_page",
-      "target": "components_animatedeyebrow_animatedeyebrow",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "app_lab_page",
-      "target": "components_footer",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "app_lab_page",
-      "target": "components_footer_footer",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "source": "app_lab_page",
-      "target": "components_gsapreveal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "source": "app_lab_page",
-      "target": "components_gsapreveal_gsapreveal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "app_lab_page",
-      "target": "components_jsonld",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "app_lab_page",
-      "target": "components_jsonld_jsonld",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "app_lab_page",
-      "target": "components_nav",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "app_lab_page",
-      "target": "components_nav_nav",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "source": "app_lab_page",
-      "target": "lib_seo",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "source": "app_lab_page",
-      "target": "lib_seo_buildbreadcrumbjsonld",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "source": "app_lab_page",
-      "target": "lib_seo_buildmetadata",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L11",
-      "weight": 1.0,
-      "source": "app_lab_page_generatemetadata",
-      "target": "lib_seo_buildmetadata"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/lab/page.tsx",
-      "source_location": "L161",
-      "weight": 1.0,
-      "source": "app_lab_page_labpage",
-      "target": "lib_seo_buildbreadcrumbjsonld"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "app/layout.tsx",
       "source_location": "L41",
       "weight": 1.0,
@@ -32001,422 +30381,6 @@
       "weight": 1.0,
       "source": "app_life_page_lifetodaypage",
       "target": "lib_life_time_ismorningbriefwindow"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/[id]/page.tsx",
-      "source_location": "L9",
-      "weight": 1.0,
-      "source": "app_life_people_id_page",
-      "target": "app_life_people_id_page_persondetailpage",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/[id]/page.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "app_life_people_id_page",
-      "target": "components_life_people_persondetail",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/[id]/page.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "app_life_people_id_page",
-      "target": "components_life_people_persondetail_persondetail",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/[id]/page.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "app_life_people_id_page",
-      "target": "lib_admin_auth",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/[id]/page.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "app_life_people_id_page",
-      "target": "lib_admin_auth_isadminsession",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/[id]/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "app_life_people_id_page",
-      "target": "lib_life_people",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/[id]/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "app_life_people_id_page",
-      "target": "lib_life_people_getpersonbyid",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/[id]/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "app_life_people_id_page",
-      "target": "lib_life_people_listinteractions",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/[id]/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "app_life_people_id_page",
-      "target": "lib_life_people_listopentasksforperson",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/[id]/page.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "source": "app_life_people_id_page",
-      "target": "lib_life_settings",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/[id]/page.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "source": "app_life_people_id_page",
-      "target": "lib_life_settings_getownersettings",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/[id]/page.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "app_life_people_id_page",
-      "target": "lib_life_time",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/[id]/page.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "app_life_people_id_page",
-      "target": "lib_life_time_getcurrentlocaldate",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "app/life/people/[id]/page.tsx",
-      "source_location": "L17",
-      "weight": 1.0,
-      "source": "app_life_people_id_page_persondetailpage",
-      "target": "app_not_found_notfound"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/life/people/[id]/page.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "source": "app_life_people_id_page_persondetailpage",
-      "target": "lib_admin_auth_isadminsession"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/life/people/[id]/page.tsx",
-      "source_location": "L15",
-      "weight": 1.0,
-      "source": "app_life_people_id_page_persondetailpage",
-      "target": "lib_life_people_getpersonbyid"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/life/people/[id]/page.tsx",
-      "source_location": "L24",
-      "weight": 1.0,
-      "source": "app_life_people_id_page_persondetailpage",
-      "target": "lib_life_people_listinteractions"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/life/people/[id]/page.tsx",
-      "source_location": "L25",
-      "weight": 1.0,
-      "source": "app_life_people_id_page_persondetailpage",
-      "target": "lib_life_people_listopentasksforperson"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/life/people/[id]/page.tsx",
-      "source_location": "L20",
-      "weight": 1.0,
-      "source": "app_life_people_id_page_persondetailpage",
-      "target": "lib_life_settings_getownersettings"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/life/people/[id]/page.tsx",
-      "source_location": "L21",
-      "weight": 1.0,
-      "source": "app_life_people_id_page_persondetailpage",
-      "target": "lib_life_time_getcurrentlocaldate"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/page.tsx",
-      "source_location": "L9",
-      "weight": 1.0,
-      "source": "app_life_people_page",
-      "target": "app_life_people_page_lifepeoplepage",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/page.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "app_life_people_page",
-      "target": "components_life_people_peopleindex",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/page.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "app_life_people_page",
-      "target": "components_life_people_peopleindex_peopleindex",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/page.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "app_life_people_page",
-      "target": "components_life_people_peopleindex_personlistitem",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/page.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "app_life_people_page",
-      "target": "lib_admin_auth",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/page.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "app_life_people_page",
-      "target": "lib_admin_auth_isadminsession",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "app_life_people_page",
-      "target": "lib_life_people",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "app_life_people_page",
-      "target": "lib_life_people_latestinteractiondates",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "app_life_people_page",
-      "target": "lib_life_people_listpeople",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/page.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "source": "app_life_people_page",
-      "target": "lib_life_settings",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/page.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "source": "app_life_people_page",
-      "target": "lib_life_settings_getownersettings",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/page.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "app_life_people_page",
-      "target": "lib_life_time",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/life/people/page.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "app_life_people_page",
-      "target": "lib_life_time_getcurrentlocaldate",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/life/people/page.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "source": "app_life_people_page_lifepeoplepage",
-      "target": "lib_admin_auth_isadminsession"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/life/people/page.tsx",
-      "source_location": "L22",
-      "weight": 1.0,
-      "source": "app_life_people_page_lifepeoplepage",
-      "target": "lib_life_people_latestinteractiondates"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/life/people/page.tsx",
-      "source_location": "L22",
-      "weight": 1.0,
-      "source": "app_life_people_page_lifepeoplepage",
-      "target": "lib_life_people_listpeople"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/life/people/page.tsx",
-      "source_location": "L14",
-      "weight": 1.0,
-      "source": "app_life_people_page_lifepeoplepage",
-      "target": "lib_life_settings_getownersettings"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/life/people/page.tsx",
-      "source_location": "L15",
-      "weight": 1.0,
-      "source": "app_life_people_page_lifepeoplepage",
-      "target": "lib_life_time_getcurrentlocaldate"
     },
     {
       "relation": "contains",
@@ -42890,7 +40854,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "components/life/LifeHeader.tsx",
-      "source_location": "L41",
+      "source_location": "L40",
       "weight": 1.0,
       "source": "components_life_lifeheader",
       "target": "components_life_lifeheader_isleafactive",
@@ -42910,7 +40874,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "components/life/LifeHeader.tsx",
-      "source_location": "L47",
+      "source_location": "L46",
       "weight": 1.0,
       "source": "components_life_lifeheader",
       "target": "components_life_lifeheader_lifeheader",
@@ -43096,17 +41060,6 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PersonDetail.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "components_life_people_persondetail",
-      "target": "components_life_lifeprojectsprovider",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "components/life/QuickAdd.tsx",
       "source_location": "L6",
       "weight": 1.0,
@@ -43162,28 +41115,6 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PersonDetail.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "components_life_people_persondetail",
-      "target": "components_life_lifeprojectsprovider_uselifeprojects",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "components/life/people/PersonDetail.tsx",
-      "source_location": "L33",
-      "weight": 1.0,
-      "source": "components_life_people_persondetail_persondetail",
-      "target": "components_life_lifeprojectsprovider_uselifeprojects"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "components/life/QuickAdd.tsx",
       "source_location": "L6",
       "weight": 1.0,
@@ -43197,7 +41128,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "components/life/QuickAdd.tsx",
-      "source_location": "L22",
+      "source_location": "L21",
       "weight": 1.0,
       "source": "components_life_quickadd_quickadd",
       "target": "components_life_lifeprojectsprovider_uselifeprojects"
@@ -43611,43 +41542,10 @@
       "target": "hooks_useviewportmode_useviewportmode"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/QuickAdd.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "components_life_quickadd",
-      "target": "components_life_people_shared",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/QuickAdd.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "components_life_quickadd",
-      "target": "components_life_people_shared_relationship_label",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/QuickAdd.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "components_life_quickadd",
-      "target": "components_life_people_shared_relationship_options",
-      "confidence_score": 1.0
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "components/life/QuickAdd.tsx",
-      "source_location": "L12",
+      "source_location": "L11",
       "weight": 1.0,
       "source": "components_life_quickadd",
       "target": "components_life_quickadd_quickadd",
@@ -43657,7 +41555,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "components/life/QuickAdd.tsx",
-      "source_location": "L10",
+      "source_location": "L9",
       "weight": 1.0,
       "source": "components_life_quickadd",
       "target": "components_life_quickadd_quickkind",
@@ -43668,7 +41566,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "components/life/QuickAdd.tsx",
-      "source_location": "L8",
+      "source_location": "L7",
       "weight": 1.0,
       "source": "components_life_quickadd",
       "target": "lib_life_client",
@@ -43679,7 +41577,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "components/life/QuickAdd.tsx",
-      "source_location": "L8",
+      "source_location": "L7",
       "weight": 1.0,
       "source": "components_life_quickadd",
       "target": "lib_life_client_fetchjson",
@@ -44983,424 +42881,6 @@
       "weight": 1.0,
       "source": "components_life_weekclient_weekclient",
       "target": "lib_life_time_getweekstart"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PeopleIndex.tsx",
-      "source_location": "L24",
-      "weight": 1.0,
-      "source": "components_life_people_peopleindex",
-      "target": "components_life_people_peopleindex_overduedays",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PeopleIndex.tsx",
-      "source_location": "L46",
-      "weight": 1.0,
-      "source": "components_life_people_peopleindex",
-      "target": "components_life_people_peopleindex_peopleindex",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PeopleIndex.tsx",
-      "source_location": "L9",
-      "weight": 1.0,
-      "source": "components_life_people_peopleindex",
-      "target": "components_life_people_peopleindex_personlistitem",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PeopleIndex.tsx",
-      "source_location": "L29",
-      "weight": 1.0,
-      "source": "components_life_people_peopleindex",
-      "target": "components_life_people_peopleindex_personrow",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PeopleIndex.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "components_life_people_peopleindex",
-      "target": "components_life_people_shared",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PeopleIndex.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "components_life_people_peopleindex",
-      "target": "components_life_people_shared_agolabel",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PeopleIndex.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "components_life_people_peopleindex",
-      "target": "components_life_people_shared_daysbetween",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PeopleIndex.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "components_life_people_peopleindex",
-      "target": "components_life_people_shared_relationship_label",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PeopleIndex.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "source": "components_life_people_peopleindex",
-      "target": "lib_life_types",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PeopleIndex.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "source": "components_life_people_peopleindex",
-      "target": "lib_life_types_personrelationship",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "references",
-      "context": "field",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PeopleIndex.tsx",
-      "source_location": "L13",
-      "weight": 1.0,
-      "source": "components_life_people_peopleindex_personlistitem",
-      "target": "lib_life_types_personrelationship",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PeopleIndex.tsx",
-      "source_location": "L26",
-      "weight": 1.0,
-      "source": "components_life_people_peopleindex_overduedays",
-      "target": "components_life_people_shared_daysbetween",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PeopleIndex.tsx",
-      "source_location": "L30",
-      "weight": 1.0,
-      "source": "components_life_people_peopleindex_personrow",
-      "target": "components_life_people_peopleindex_overduedays",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "components/life/people/PeopleIndex.tsx",
-      "source_location": "L40",
-      "weight": 1.0,
-      "source": "components_life_people_peopleindex_personrow",
-      "target": "components_life_people_shared_agolabel"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PersonDetail.tsx",
-      "source_location": "L21",
-      "weight": 1.0,
-      "source": "components_life_people_persondetail",
-      "target": "components_life_people_persondetail_persondetail",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PersonDetail.tsx",
-      "source_location": "L11",
-      "weight": 1.0,
-      "source": "components_life_people_persondetail",
-      "target": "components_life_people_shared",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PersonDetail.tsx",
-      "source_location": "L11",
-      "weight": 1.0,
-      "source": "components_life_people_persondetail",
-      "target": "components_life_people_shared_agolabel",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PersonDetail.tsx",
-      "source_location": "L11",
-      "weight": 1.0,
-      "source": "components_life_people_persondetail",
-      "target": "components_life_people_shared_interaction_kind_label",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PersonDetail.tsx",
-      "source_location": "L11",
-      "weight": 1.0,
-      "source": "components_life_people_persondetail",
-      "target": "components_life_people_shared_interaction_kind_options",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PersonDetail.tsx",
-      "source_location": "L11",
-      "weight": 1.0,
-      "source": "components_life_people_persondetail",
-      "target": "components_life_people_shared_relationship_label",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PersonDetail.tsx",
-      "source_location": "L11",
-      "weight": 1.0,
-      "source": "components_life_people_persondetail",
-      "target": "components_life_people_shared_relationship_options",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PersonDetail.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "source": "components_life_people_persondetail",
-      "target": "lib_life_client",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PersonDetail.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "source": "components_life_people_persondetail",
-      "target": "lib_life_client_fetchjson",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PersonDetail.tsx",
-      "source_location": "L9",
-      "weight": 1.0,
-      "source": "components_life_people_persondetail",
-      "target": "lib_life_time",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PersonDetail.tsx",
-      "source_location": "L9",
-      "weight": 1.0,
-      "source": "components_life_people_persondetail",
-      "target": "lib_life_time_adddays",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PersonDetail.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "source": "components_life_people_persondetail",
-      "target": "lib_life_types",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PersonDetail.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "source": "components_life_people_persondetail",
-      "target": "lib_life_types_interactionrecord",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PersonDetail.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "source": "components_life_people_persondetail",
-      "target": "lib_life_types_personrecord",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/PersonDetail.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "source": "components_life_people_persondetail",
-      "target": "lib_life_types_taskrecord",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/shared.ts",
-      "source_location": "L41",
-      "weight": 1.0,
-      "source": "components_life_people_shared",
-      "target": "components_life_people_shared_agolabel",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/shared.ts",
-      "source_location": "L34",
-      "weight": 1.0,
-      "source": "components_life_people_shared",
-      "target": "components_life_people_shared_daysbetween",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/shared.ts",
-      "source_location": "L25",
-      "weight": 1.0,
-      "source": "components_life_people_shared",
-      "target": "components_life_people_shared_interaction_kind_label",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/shared.ts",
-      "source_location": "L23",
-      "weight": 1.0,
-      "source": "components_life_people_shared",
-      "target": "components_life_people_shared_interaction_kind_options",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/shared.ts",
-      "source_location": "L13",
-      "weight": 1.0,
-      "source": "components_life_people_shared",
-      "target": "components_life_people_shared_relationship_label",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/shared.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "components_life_people_shared",
-      "target": "components_life_people_shared_relationship_options",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/shared.ts",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "components_life_people_shared",
-      "target": "lib_life_types",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/shared.ts",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "components_life_people_shared",
-      "target": "lib_life_types_interactionkind",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/shared.ts",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "components_life_people_shared",
-      "target": "lib_life_types_personrelationship",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "components/life/people/shared.ts",
-      "source_location": "L42",
-      "weight": 1.0,
-      "source": "components_life_people_shared_agolabel",
-      "target": "components_life_people_shared_daysbetween",
-      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -49774,7 +47254,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L269",
+      "source_location": "L265",
       "weight": 1.0,
       "source": "lib_life_tasks_synctasksfromreport",
       "target": "lib_life_claude_callclaude"
@@ -49868,17 +47348,6 @@
       "source_location": "L3",
       "weight": 1.0,
       "source": "lib_life_milestones",
-      "target": "lib_life_constants",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "lib_life_people",
       "target": "lib_life_constants",
       "confidence_score": 1.0
     },
@@ -50685,367 +48154,6 @@
       "source": "lib_life_page_body_striplifepagemetadata",
       "target": "lib_life_page_body_splitlifepagebody",
       "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L123",
-      "weight": 1.0,
-      "source": "lib_life_people",
-      "target": "lib_life_people_createinteraction",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L42",
-      "weight": 1.0,
-      "source": "lib_life_people",
-      "target": "lib_life_people_createperson",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L35",
-      "weight": 1.0,
-      "source": "lib_life_people",
-      "target": "lib_life_people_getpersonbyid",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L8",
-      "weight": 1.0,
-      "source": "lib_life_people",
-      "target": "lib_life_people_interaction_kinds",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L157",
-      "weight": 1.0,
-      "source": "lib_life_people",
-      "target": "lib_life_people_latestinteractiondates",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L110",
-      "weight": 1.0,
-      "source": "lib_life_people",
-      "target": "lib_life_people_listinteractions",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L174",
-      "weight": 1.0,
-      "source": "lib_life_people",
-      "target": "lib_life_people_listopentasksforperson",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L24",
-      "weight": 1.0,
-      "source": "lib_life_people",
-      "target": "lib_life_people_listpeople",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L18",
-      "weight": 1.0,
-      "source": "lib_life_people",
-      "target": "lib_life_people_normalizecadencedays",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L14",
-      "weight": 1.0,
-      "source": "lib_life_people",
-      "target": "lib_life_people_normalizeinteractionkind",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L10",
-      "weight": 1.0,
-      "source": "lib_life_people",
-      "target": "lib_life_people_normalizerelationship",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "lib_life_people",
-      "target": "lib_life_people_relationships",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L72",
-      "weight": 1.0,
-      "source": "lib_life_people",
-      "target": "lib_life_people_updateperson",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "lib_life_people",
-      "target": "lib_life_supabase",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "lib_life_people",
-      "target": "lib_life_supabase_getsupabaseadmin",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "lib_life_people",
-      "target": "lib_life_types",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "lib_life_people",
-      "target": "lib_life_types_interactionkind",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "lib_life_people",
-      "target": "lib_life_types_interactionrecord",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "lib_life_people",
-      "target": "lib_life_types_personrecord",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "lib_life_people",
-      "target": "lib_life_types_personrelationship",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "lib_life_people",
-      "target": "lib_life_types_taskrecord",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L60",
-      "weight": 1.0,
-      "source": "lib_life_people_createperson",
-      "target": "lib_life_people_normalizerelationship",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L92",
-      "weight": 1.0,
-      "source": "lib_life_people_updateperson",
-      "target": "lib_life_people_normalizerelationship",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L141",
-      "weight": 1.0,
-      "source": "lib_life_people_createinteraction",
-      "target": "lib_life_people_normalizeinteractionkind",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L63",
-      "weight": 1.0,
-      "source": "lib_life_people_createperson",
-      "target": "lib_life_people_normalizecadencedays",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/people.ts",
-      "source_location": "L95",
-      "weight": 1.0,
-      "source": "lib_life_people_updateperson",
-      "target": "lib_life_people_normalizecadencedays",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "lib/life/people.ts",
-      "source_location": "L25",
-      "weight": 1.0,
-      "source": "lib_life_people_listpeople",
-      "target": "lib_life_supabase_getsupabaseadmin"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "lib/life/people.ts",
-      "source_location": "L36",
-      "weight": 1.0,
-      "source": "lib_life_people_getpersonbyid",
-      "target": "lib_life_supabase_getsupabaseadmin"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "lib/life/people.ts",
-      "source_location": "L53",
-      "weight": 1.0,
-      "source": "lib_life_people_createperson",
-      "target": "lib_life_supabase_getsupabaseadmin"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "lib/life/people.ts",
-      "source_location": "L84",
-      "weight": 1.0,
-      "source": "lib_life_people_updateperson",
-      "target": "lib_life_supabase_getsupabaseadmin"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "lib/life/people.ts",
-      "source_location": "L111",
-      "weight": 1.0,
-      "source": "lib_life_people_listinteractions",
-      "target": "lib_life_supabase_getsupabaseadmin"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "lib/life/people.ts",
-      "source_location": "L134",
-      "weight": 1.0,
-      "source": "lib_life_people_createinteraction",
-      "target": "lib_life_supabase_getsupabaseadmin"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "lib/life/people.ts",
-      "source_location": "L158",
-      "weight": 1.0,
-      "source": "lib_life_people_latestinteractiondates",
-      "target": "lib_life_supabase_getsupabaseadmin"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "lib/life/people.ts",
-      "source_location": "L175",
-      "weight": 1.0,
-      "source": "lib_life_people_listopentasksforperson",
-      "target": "lib_life_supabase_getsupabaseadmin"
     },
     {
       "relation": "contains",
@@ -52314,7 +49422,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L169",
+      "source_location": "L168",
       "weight": 1.0,
       "source": "lib_life_tasks_createmanualtask",
       "target": "lib_life_projects_db_normalizeprojectslugdb"
@@ -52336,7 +49444,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L171",
+      "source_location": "L170",
       "weight": 1.0,
       "source": "lib_life_tasks_createmanualtask",
       "target": "lib_life_projects_db_detectprojectslugdb"
@@ -53894,7 +51002,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L164",
+      "source_location": "L163",
       "weight": 1.0,
       "source": "lib_life_tasks_createmanualtask",
       "target": "lib_life_settings_getownersettings"
@@ -53905,7 +51013,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L378",
+      "source_location": "L374",
       "weight": 1.0,
       "source": "lib_life_tasks_getweeklytasksnapshot",
       "target": "lib_life_settings_getownersettings"
@@ -54206,7 +51314,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L165",
+      "source_location": "L164",
       "weight": 1.0,
       "source": "lib_life_tasks_createmanualtask",
       "target": "lib_life_supabase_getsupabaseadmin"
@@ -54239,7 +51347,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L382",
+      "source_location": "L378",
       "weight": 1.0,
       "source": "lib_life_tasks_getweeklytasksnapshot",
       "target": "lib_life_supabase_getsupabaseadmin"
@@ -54250,7 +51358,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L268",
+      "source_location": "L264",
       "weight": 1.0,
       "source": "lib_life_tasks_synctasksfromreport",
       "target": "lib_life_supabase_getsupabaseadmin"
@@ -54261,7 +51369,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L217",
+      "source_location": "L213",
       "weight": 1.0,
       "source": "lib_life_tasks_updatetask",
       "target": "lib_life_supabase_getsupabaseadmin"
@@ -54272,7 +51380,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L241",
+      "source_location": "L237",
       "weight": 1.0,
       "source": "lib_life_tasks_updatetaskstatus",
       "target": "lib_life_supabase_getsupabaseadmin"
@@ -54656,7 +51764,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L377",
+      "source_location": "L373",
       "weight": 1.0,
       "source": "lib_life_tasks",
       "target": "lib_life_tasks_getweeklytasksnapshot",
@@ -54706,7 +51814,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L262",
+      "source_location": "L258",
       "weight": 1.0,
       "source": "lib_life_tasks",
       "target": "lib_life_tasks_synctasksfromreport",
@@ -54716,7 +51824,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L207",
+      "source_location": "L203",
       "weight": 1.0,
       "source": "lib_life_tasks",
       "target": "lib_life_tasks_updatetask",
@@ -54726,7 +51834,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L240",
+      "source_location": "L236",
       "weight": 1.0,
       "source": "lib_life_tasks",
       "target": "lib_life_tasks_updatetaskstatus",
@@ -54836,7 +51944,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L302",
+      "source_location": "L298",
       "weight": 1.0,
       "source": "lib_life_tasks_synctasksfromreport",
       "target": "lib_life_tasks_slugify",
@@ -54847,7 +51955,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L183",
+      "source_location": "L182",
       "weight": 1.0,
       "source": "lib_life_tasks_createmanualtask",
       "target": "lib_life_tasks_normalizepriority",
@@ -54869,7 +51977,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L182",
+      "source_location": "L181",
       "weight": 1.0,
       "source": "lib_life_tasks_createmanualtask",
       "target": "lib_life_tasks_normalizeduelocaldate",
@@ -54891,7 +51999,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L275",
+      "source_location": "L271",
       "weight": 1.0,
       "source": "lib_life_tasks_synctasksfromreport",
       "target": "lib_life_tasks_extractjsonarray",
@@ -54902,7 +52010,7 @@
       "context": "argument",
       "confidence": "INFERRED",
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L276",
+      "source_location": "L272",
       "weight": 1.0,
       "source": "lib_life_tasks_synctasksfromreport",
       "target": "lib_life_tasks_normalizetaskcandidate",
@@ -54913,7 +52021,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L271",
+      "source_location": "L267",
       "weight": 1.0,
       "source": "lib_life_tasks_synctasksfromreport",
       "target": "lib_life_tasks_buildtaskprompt",
@@ -54925,7 +52033,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L187",
+      "source_location": "L186",
       "weight": 1.0,
       "source": "lib_life_tasks_createmanualtask",
       "target": "lib_life_time_getcurrentlocaldate"
@@ -54936,7 +52044,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L381",
+      "source_location": "L377",
       "weight": 1.0,
       "source": "lib_life_tasks_getweeklytasksnapshot",
       "target": "lib_life_time_adddays"
@@ -54947,7 +52055,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L379",
+      "source_location": "L375",
       "weight": 1.0,
       "source": "lib_life_tasks_getweeklytasksnapshot",
       "target": "lib_life_time_getcurrentlocaldate"
@@ -54958,7 +52066,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "lib/life/tasks.ts",
-      "source_location": "L380",
+      "source_location": "L376",
       "weight": 1.0,
       "source": "lib_life_tasks_getweeklytasksnapshot",
       "target": "lib_life_time_getweekstart"
@@ -55289,27 +52397,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/types.ts",
-      "source_location": "L288",
-      "weight": 1.0,
-      "source": "lib_life_types",
-      "target": "lib_life_types_interactionkind",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/types.ts",
-      "source_location": "L291",
-      "weight": 1.0,
-      "source": "lib_life_types",
-      "target": "lib_life_types_interactionrecord",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/types.ts",
-      "source_location": "L256",
+      "source_location": "L255",
       "weight": 1.0,
       "source": "lib_life_types",
       "target": "lib_life_types_lifeprojectclient",
@@ -55319,7 +52407,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/types.ts",
-      "source_location": "L135",
+      "source_location": "L134",
       "weight": 1.0,
       "source": "lib_life_types",
       "target": "lib_life_types_lifesearchentryhit",
@@ -55329,7 +52417,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/types.ts",
-      "source_location": "L146",
+      "source_location": "L145",
       "weight": 1.0,
       "source": "lib_life_types",
       "target": "lib_life_types_lifesearcheventhit",
@@ -55339,7 +52427,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/types.ts",
-      "source_location": "L154",
+      "source_location": "L153",
       "weight": 1.0,
       "source": "lib_life_types",
       "target": "lib_life_types_lifesearchresults",
@@ -55349,7 +52437,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/types.ts",
-      "source_location": "L125",
+      "source_location": "L124",
       "weight": 1.0,
       "source": "lib_life_types",
       "target": "lib_life_types_lifesearchtaskhit",
@@ -55359,27 +52447,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/types.ts",
-      "source_location": "L274",
-      "weight": 1.0,
-      "source": "lib_life_types",
-      "target": "lib_life_types_personrecord",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/types.ts",
-      "source_location": "L264",
-      "weight": 1.0,
-      "source": "lib_life_types",
-      "target": "lib_life_types_personrelationship",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/life/types.ts",
-      "source_location": "L167",
+      "source_location": "L166",
       "weight": 1.0,
       "source": "lib_life_types",
       "target": "lib_life_types_printjobrecord",
@@ -55389,7 +52457,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/types.ts",
-      "source_location": "L163",
+      "source_location": "L162",
       "weight": 1.0,
       "source": "lib_life_types",
       "target": "lib_life_types_printjobstatus",
@@ -55399,7 +52467,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/types.ts",
-      "source_location": "L199",
+      "source_location": "L198",
       "weight": 1.0,
       "source": "lib_life_types",
       "target": "lib_life_types_projectkind",
@@ -55409,7 +52477,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/types.ts",
-      "source_location": "L219",
+      "source_location": "L218",
       "weight": 1.0,
       "source": "lib_life_types",
       "target": "lib_life_types_projectmilestonerecord",
@@ -55419,7 +52487,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/types.ts",
-      "source_location": "L244",
+      "source_location": "L243",
       "weight": 1.0,
       "source": "lib_life_types",
       "target": "lib_life_types_projectpagerecord",
@@ -55429,7 +52497,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/types.ts",
-      "source_location": "L202",
+      "source_location": "L201",
       "weight": 1.0,
       "source": "lib_life_types",
       "target": "lib_life_types_projectrecord",
@@ -55439,7 +52507,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/types.ts",
-      "source_location": "L229",
+      "source_location": "L228",
       "weight": 1.0,
       "source": "lib_life_types",
       "target": "lib_life_types_projectrefkind",
@@ -55449,7 +52517,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/types.ts",
-      "source_location": "L232",
+      "source_location": "L231",
       "weight": 1.0,
       "source": "lib_life_types",
       "target": "lib_life_types_projectrefrecord",
@@ -55459,7 +52527,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/types.ts",
-      "source_location": "L198",
+      "source_location": "L197",
       "weight": 1.0,
       "source": "lib_life_types",
       "target": "lib_life_types_projectstatus",
@@ -55499,7 +52567,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/types.ts",
-      "source_location": "L302",
+      "source_location": "L263",
       "weight": 1.0,
       "source": "lib_life_types",
       "target": "lib_life_types_studioitemkind",
@@ -55509,7 +52577,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/types.ts",
-      "source_location": "L304",
+      "source_location": "L265",
       "weight": 1.0,
       "source": "lib_life_types",
       "target": "lib_life_types_studioitemrecord",
@@ -55529,7 +52597,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/types.ts",
-      "source_location": "L99",
+      "source_location": "L98",
       "weight": 1.0,
       "source": "lib_life_types",
       "target": "lib_life_types_taskcalendarintent",
@@ -55539,7 +52607,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/types.ts",
-      "source_location": "L117",
+      "source_location": "L116",
       "weight": 1.0,
       "source": "lib_life_types",
       "target": "lib_life_types_taskcandidate",
@@ -55549,7 +52617,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/types.ts",
-      "source_location": "L106",
+      "source_location": "L105",
       "weight": 1.0,
       "source": "lib_life_types",
       "target": "lib_life_types_taskdraft",
@@ -55559,7 +52627,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/types.ts",
-      "source_location": "L90",
+      "source_location": "L89",
       "weight": 1.0,
       "source": "lib_life_types",
       "target": "lib_life_types_tasklinkedevent",
@@ -55569,7 +52637,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/types.ts",
-      "source_location": "L187",
+      "source_location": "L186",
       "weight": 1.0,
       "source": "lib_life_types",
       "target": "lib_life_types_taskprintinfo",
@@ -55579,7 +52647,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/life/types.ts",
-      "source_location": "L185",
+      "source_location": "L184",
       "weight": 1.0,
       "source": "lib_life_types",
       "target": "lib_life_types_taskprintstate",
@@ -66080,5 +63148,5 @@
       "source_file": "public/_flattened/ho-chi-minh-hq/hcmc-flattened.html"
     }
   ],
-  "built_at_commit": "57cb39233a5c5c45961869646219db8ce0cfb557"
+  "built_at_commit": "85668105c2418f884b2f97158c16e96d6c7c5cf7"
 }
