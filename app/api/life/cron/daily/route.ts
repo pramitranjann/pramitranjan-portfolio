@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { isAuthenticatedLifeRequest, unauthorizedJson } from '@/lib/life/auth'
 import { syncCalendarEvents } from '@/lib/life/calendar'
+import { runProgramApplicationChecks } from '@/lib/life/program-application-monitor'
 import { generateEodReport, generateWeekAheadBrief, generateWeeklySummary } from '@/lib/life/synthesis'
 import { getOwnerSettings } from '@/lib/life/settings'
 import { getCurrentLocalDate } from '@/lib/life/time'
@@ -19,6 +20,7 @@ export async function GET(request: NextRequest) {
   try {
     const settings = await getOwnerSettings()
     const localDate = getCurrentLocalDate(settings.timezone)
+    const applicationsPromise = runProgramApplicationChecks()
     const calendar = await syncCalendarEvents(localDate, undefined, { force: true })
     const eod = await generateEodReport({ localDate })
     const weekly = await generateWeeklySummary({ localDate })
@@ -28,6 +30,7 @@ export async function GET(request: NextRequest) {
     const brief = dow === 0
       ? await generateWeekAheadBrief({ localDate })
       : { skipped: true as const, reason: 'Not Sunday.' }
+    const applications = await applicationsPromise
 
     return NextResponse.json({
       localDate,
@@ -36,6 +39,7 @@ export async function GET(request: NextRequest) {
       eod,
       weekly,
       brief,
+      applications,
     })
   } catch (error) {
     console.error("Daily life cron failed", error);

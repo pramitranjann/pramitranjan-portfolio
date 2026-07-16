@@ -22,3 +22,17 @@ export async function sendReportEmail(subject: string, markdown: string) {
     console.error('Failed to send report email', error)
   }
 }
+
+export async function sendLifeNotificationEmail(input: {
+  title: string
+  body: string
+  url?: string | null
+}) {
+  const markdown = [
+    `# ${input.title}`,
+    input.body,
+    input.url ? `[Open the program page](${input.url})` : null,
+  ].filter(Boolean).join('\n\n')
+
+  await sendReportEmail(`PR Life alert — ${input.title}`, markdown)
+}

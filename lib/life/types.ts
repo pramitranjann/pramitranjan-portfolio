@@ -38,6 +38,35 @@ export interface SettingsRecord {
   updated_at: string;
 }
 
+export interface LifeNotificationRecord {
+  id: string;
+  user_id: string;
+  kind: string;
+  title: string;
+  body: string;
+  url: string | null;
+  metadata: Record<string, unknown>;
+  dedupe_key: string | null;
+  created_at: string;
+  read_at: string | null;
+}
+
+export interface ProgramApplicationMonitorRecord {
+  program_key: string;
+  user_id: string;
+  program_name: string;
+  program_type: string;
+  url: string;
+  status: string;
+  status_excerpt: string;
+  status_hash: string;
+  last_checked_at: string;
+  last_changed_at: string;
+  last_notified_hash: string | null;
+  last_error: string | null;
+  updated_at: string;
+}
+
 export interface CalendarEventRecord {
   id: string;
   user_id: string;

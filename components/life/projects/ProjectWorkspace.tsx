@@ -23,7 +23,7 @@ import { ProjectTasks } from './ProjectTasks'
 import { ProjectUxTemplates } from './ProjectUxTemplates'
 import { healthTone, progressPct, relativeDueLabel, STATUS_LABEL, STATUS_OPTIONS } from './shared'
 
-type Tab = 'tasks' | 'events' | 'refs' | 'pages'
+type Tab = 'overview' | 'tasks' | 'events' | 'refs' | 'pages'
 
 const PRIORITY_RANK: Record<string, number> = { high: 0, medium: 1, low: 2 }
 const PROJECT_SWATCHES = ['#e9b765', '#7fd899', '#9aa6ff', '#e58fb8', '#6fcfd6', '#c79bff', '#ff6c61']
@@ -34,6 +34,20 @@ function compareProjects(a: ProjectRecord, b: ProjectRecord) {
 
 function comparePages(a: ProjectPageRecord, b: ProjectPageRecord) {
   return a.sort_order - b.sort_order || a.title.localeCompare(b.title)
+}
+
+// Same date treatment as ProjectEvents.formatEventWhen.
+function formatEventWhen(event: CalendarEventRecord, timezone: string) {
+  if (!event.start_time) return event.local_date
+  const date = new Date(event.start_time)
+  const day = date.toLocaleDateString('en-GB', { timeZone: timezone, weekday: 'short', day: 'numeric', month: 'short' })
+  if (event.all_day) return day
+  const time = date.toLocaleTimeString('en-GB', { timeZone: timezone, hour: '2-digit', minute: '2-digit' })
+  return `${day} · ${time}`
+}
+
+function formatPageUpdated(iso: string, timezone: string) {
+  return new Date(iso).toLocaleDateString('en-GB', { timeZone: timezone, day: 'numeric', month: 'short' })
 }
 
 export function ProjectWorkspace({
@@ -70,7 +84,11 @@ export function ProjectWorkspace({
   const router = useRouter()
   const searchParams = useSearchParams()
   const activePageId = searchParams.get('page')
-  const defaultTab: Tab = activePageId || (project.project_kind === 'ux' && pages.length > 0 && tasks.length === 0) ? 'pages' : 'tasks'
+  const defaultTab: Tab = activePageId
+    ? 'pages'
+    : project.project_kind === 'ux' && pages.length > 0 && tasks.length === 0
+      ? 'pages'
+      : 'overview'
   const [tab, setTab] = useState<Tab>(defaultTab)
   const [treeOpen, setTreeOpen] = useState(true)
   const [status, setStatus] = useState<ProjectStatus>(project.status)
@@ -149,6 +167,19 @@ export function ProjectWorkspace({
       return ad.localeCompare(bd)
     })[0]
   }, [open])
+
+  const recentPages = useMemo(
+    () => [...pages].sort((a, b) => b.updated_at.localeCompare(a.updated_at)).slice(0, 5),
+    [pages],
+  )
+  const upcomingEvents = useMemo(
+    () =>
+      events
+        .filter((event) => event.local_date >= today)
+        .sort((a, b) => a.local_date.localeCompare(b.local_date) || (a.start_time || '').localeCompare(b.start_time || ''))
+        .slice(0, 5),
+    [events, today],
+  )
 
   async function patchProject(patch: Record<string, unknown>, rollback?: () => void) {
     setError(null)
@@ -500,105 +531,12 @@ export function ProjectWorkspace({
         />
       ) : null}
 
-      <div className="life-project-children">
-        <div className="life-project-children-head">
-          <div className="life-project-children-heading">
-            <span className="eyebrow">{projectKind === 'ux' && !parentProject ? 'Sections' : 'Sub-projects'}</span>
-            <span className="life-project-children-count">{subprojects.length}</span>
-          </div>
-          <div className="life-project-children-actions">
-            <button
-              type="button"
-              className="life-btn ghost life-project-child-add"
-              onClick={() => {
-                setAddingSubproject((value) => !value)
-                setSubprojectName('')
-                setSubprojectSummary('')
-                setSubprojectColor(project.color || PROJECT_SWATCHES[0])
-              }}
-            >
-              {addingSubproject ? 'Cancel' : projectKind === 'ux' && !parentProject ? '+ Section' : '+ Sub-project'}
-            </button>
-          </div>
-        </div>
-
-        {projectKind === 'ux' && !parentProject ? (
-          <ProjectUxTemplates projectSlug={project.slug} subprojects={subprojects} templates={uxTemplates} />
-        ) : null}
-
-        {addingSubproject ? (
-          <div className="life-project-create life-project-child-create">
-            <input
-              className="life-compose-title"
-              autoFocus
-              value={subprojectName}
-              placeholder={projectKind === 'ux' && !parentProject ? `New section inside ${project.name}…` : `New project inside ${project.name}…`}
-              onChange={(event) => setSubprojectName(event.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') {
-                  event.preventDefault()
-                  void createSubproject()
-                }
-                if (event.key === 'Escape') {
-                  setAddingSubproject(false)
-                }
-              }}
-            />
-            <textarea
-              className="life-compose-desc"
-              value={subprojectSummary}
-              placeholder={projectKind === 'ux' && !parentProject ? 'What does this section hold?' : 'What does this sub-project hold?'}
-              rows={2}
-              onChange={(event) => setSubprojectSummary(event.target.value)}
-            />
-            <div className="life-project-create-foot">
-              <div className="life-swatches">
-                {PROJECT_SWATCHES.map((swatch) => (
-                  <button
-                    key={swatch}
-                    type="button"
-                    className={`life-swatch${subprojectColor === swatch ? ' is-active' : ''}`}
-                    style={{ background: swatch }}
-                    aria-label={`Use ${swatch}`}
-                    onClick={() => setSubprojectColor(swatch)}
-                  />
-                ))}
-              </div>
-              <button type="button" className="life-btn primary" disabled={savingSubproject || !subprojectName.trim()} onClick={() => void createSubproject()}>
-                {savingSubproject ? 'Creating…' : projectKind === 'ux' && !parentProject ? 'Create section' : 'Create sub-project'}
-              </button>
-            </div>
-          </div>
-        ) : null}
-
-        {subprojects.length > 0 ? (
-          <div className="life-project-children-grid">
-            {subprojects.map((child) => (
-              <div key={child.slug} className="life-project-child-card">
-                <Link href={`/life/projects/${child.slug}`} className="life-project-child-link">
-                  <span className="life-project-dot" style={{ background: child.color || 'var(--life-label)' }} />
-                  <span className="life-project-child-name">{child.name}</span>
-                </Link>
-                <button
-                  type="button"
-                  className="life-project-child-delete"
-                  disabled={deletingSlug === child.slug}
-                  aria-label={`Delete ${child.name}`}
-                  onClick={() => void deleteProjectBySlug(child.slug, child.name)}
-                >
-                  {deletingSlug === child.slug ? '…' : '×'}
-                </button>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="life-empty">{projectKind === 'ux' && !parentProject ? 'No sections yet.' : 'No sub-projects yet.'}</div>
-        )}
-      </div>
-
       {error ? <p className="error-text">{error}</p> : null}
 
       <div className="life-project-tabs">
+        <button type="button" className={`life-project-tab${tab === 'overview' ? ' is-active' : ''}`} onClick={() => setTab('overview')}>
+          Overview
+        </button>
         <button type="button" className={`life-project-tab${tab === 'pages' ? ' is-active' : ''}`} onClick={() => setTab('pages')}>
           Pages <span className="chip-count">{pages.length}</span>
         </button>
@@ -614,6 +552,143 @@ export function ProjectWorkspace({
       </div>
 
       <div key={tab} className="life-project-tab-body">
+        {tab === 'overview' ? (
+          <div className="life-project-overview">
+            <div className="life-project-children">
+              <div className="life-project-children-head">
+                <div className="life-project-children-heading">
+                  <span className="eyebrow">{projectKind === 'ux' && !parentProject ? 'Sections' : 'Sub-projects'}</span>
+                  <span className="life-project-children-count">{subprojects.length}</span>
+                </div>
+                <div className="life-project-children-actions">
+                  <button
+                    type="button"
+                    className="life-btn ghost life-project-child-add"
+                    onClick={() => {
+                      setAddingSubproject((value) => !value)
+                      setSubprojectName('')
+                      setSubprojectSummary('')
+                      setSubprojectColor(project.color || PROJECT_SWATCHES[0])
+                    }}
+                  >
+                    {addingSubproject ? 'Cancel' : projectKind === 'ux' && !parentProject ? '+ Section' : '+ Sub-project'}
+                  </button>
+                </div>
+              </div>
+
+              {projectKind === 'ux' && !parentProject ? (
+                <ProjectUxTemplates projectSlug={project.slug} subprojects={subprojects} templates={uxTemplates} />
+              ) : null}
+
+              {addingSubproject ? (
+                <div className="life-project-create life-project-child-create">
+                  <input
+                    className="life-compose-title"
+                    autoFocus
+                    value={subprojectName}
+                    placeholder={projectKind === 'ux' && !parentProject ? `New section inside ${project.name}…` : `New project inside ${project.name}…`}
+                    onChange={(event) => setSubprojectName(event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter') {
+                        event.preventDefault()
+                        void createSubproject()
+                      }
+                      if (event.key === 'Escape') {
+                        setAddingSubproject(false)
+                      }
+                    }}
+                  />
+                  <textarea
+                    className="life-compose-desc"
+                    value={subprojectSummary}
+                    placeholder={projectKind === 'ux' && !parentProject ? 'What does this section hold?' : 'What does this sub-project hold?'}
+                    rows={2}
+                    onChange={(event) => setSubprojectSummary(event.target.value)}
+                  />
+                  <div className="life-project-create-foot">
+                    <div className="life-swatches">
+                      {PROJECT_SWATCHES.map((swatch) => (
+                        <button
+                          key={swatch}
+                          type="button"
+                          className={`life-swatch${subprojectColor === swatch ? ' is-active' : ''}`}
+                          style={{ background: swatch }}
+                          aria-label={`Use ${swatch}`}
+                          onClick={() => setSubprojectColor(swatch)}
+                        />
+                      ))}
+                    </div>
+                    <button type="button" className="life-btn primary" disabled={savingSubproject || !subprojectName.trim()} onClick={() => void createSubproject()}>
+                      {savingSubproject ? 'Creating…' : projectKind === 'ux' && !parentProject ? 'Create section' : 'Create sub-project'}
+                    </button>
+                  </div>
+                </div>
+              ) : null}
+
+              {subprojects.length > 0 ? (
+                <div className="life-project-children-grid">
+                  {subprojects.map((child) => (
+                    <div key={child.slug} className="life-project-child-card">
+                      <Link href={`/life/projects/${child.slug}`} className="life-project-child-link">
+                        <span className="life-project-dot" style={{ background: child.color || 'var(--life-label)' }} />
+                        <span className="life-project-child-name">{child.name}</span>
+                      </Link>
+                      <button
+                        type="button"
+                        className="life-project-child-delete"
+                        disabled={deletingSlug === child.slug}
+                        aria-label={`Delete ${child.name}`}
+                        onClick={() => void deleteProjectBySlug(child.slug, child.name)}
+                      >
+                        {deletingSlug === child.slug ? '…' : '×'}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="life-empty">{projectKind === 'ux' && !parentProject ? 'No sections yet.' : 'No sub-projects yet.'}</div>
+              )}
+            </div>
+
+            <div className="life-overview-section">
+              <div className="life-project-children-heading">
+                <span className="eyebrow">Recent pages</span>
+                <span className="life-project-children-count">{pages.length}</span>
+              </div>
+              <div className="life-list">
+                {recentPages.length === 0 ? <div className="life-empty">No pages yet.</div> : null}
+                {recentPages.map((page) => (
+                  <Link
+                    key={page.id}
+                    href={`/life/projects/${project.slug}?page=${page.id}`}
+                    className="life-overview-row"
+                    onClick={() => setTab('pages')}
+                  >
+                    <span className="life-overview-row-title">{page.title}</span>
+                    <span className="life-row-aside">{formatPageUpdated(page.updated_at, timezone)}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <div className="life-overview-section">
+              <div className="life-project-children-heading">
+                <span className="eyebrow">Upcoming events</span>
+                <span className="life-project-children-count">{upcomingEvents.length}</span>
+              </div>
+              <div className="life-list">
+                {upcomingEvents.length === 0 ? <div className="life-empty">No upcoming events.</div> : null}
+                {upcomingEvents.map((event) => (
+                  <div key={event.id} className="life-overview-row">
+                    <span className="life-event-mark" />
+                    <span className="life-overview-row-title">{event.title || 'Event'}</span>
+                    <span className="life-row-aside">{formatEventWhen(event, timezone)}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ) : null}
         {tab === 'tasks' ? (
           <ProjectTasks
             projectSlug={project.slug}
@@ -628,7 +703,7 @@ export function ProjectWorkspace({
           <ProjectEvents projectSlug={project.slug} events={events} today={today} timezone={timezone} />
         ) : null}
         {tab === 'refs' ? <ProjectRefs projectSlug={project.slug} refs={refs} /> : null}
-        {tab === 'pages' ? <ProjectPages projectSlug={project.slug} pages={pages} /> : null}
+        {tab === 'pages' ? <ProjectPages projectSlug={project.slug} pages={pages} tasks={tasks} refs={refs} today={today} /> : null}
       </div>
     </div>
     </div>

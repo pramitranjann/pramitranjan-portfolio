@@ -25,14 +25,15 @@ export default async function LifeProjectsPage() {
     const open = scoped.filter((task) => task.status !== 'done')
     const done = scoped.filter((task) => task.status === 'done')
     const overdue = open.filter((task) => task.due_local_date != null && task.due_local_date < today)
-    const parent = project.parent_slug ? projects.find((candidate) => candidate.slug === project.parent_slug) || null : null
+    const lastUpdated = scoped.reduce(
+      (max, task) => (task.updated_at > max ? task.updated_at : max),
+      project.updated_at,
+    )
     return {
       slug: project.slug,
       name: project.name,
       summary: project.summary,
       color: project.color,
-      parentSlug: project.parent_slug,
-      parentName: parent?.name || null,
       projectKind: project.project_kind,
       status: project.status,
       targetDate: project.target_date,
@@ -40,6 +41,7 @@ export default async function LifeProjectsPage() {
       done: done.length,
       overdue: overdue.length,
       total: scoped.length,
+      lastUpdated,
     }
   })
 

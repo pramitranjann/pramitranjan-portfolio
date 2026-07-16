@@ -1,16 +1,16 @@
-# Graph Report - portfolio  (2026-07-07)
+# Graph Report - portfolio  (2026-07-05)
 
 ## Corpus Check
-- 289 files · ~7,809,440 words
+- 289 files · ~7,808,359 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1954 nodes · 4361 edges · 181 communities (99 shown, 82 thin omitted)
+- 1949 nodes · 4344 edges · 180 communities (97 shown, 83 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 29 edges (avg confidence: 0.59)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `1300b00f`
+- Built from commit: `57cb3923`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -89,7 +89,6 @@
 - [[_COMMUNITY_LifeProjectsProvider.tsx|LifeProjectsProvider.tsx]]
 - [[_COMMUNITY_Interactive Sounds — Design Spec|Interactive Sounds — Design Spec]]
 - [[_COMMUNITY_Case Study Narrative Redesign — Design Spec|Case Study Narrative Redesign — Design Spec]]
-- [[_COMMUNITY_page.tsx|page.tsx]]
 - [[_COMMUNITY_Micro Animations Design Spec|Micro Animations Design Spec]]
 - [[_COMMUNITY_Micro Animations Implementation Plan|Micro Animations Implementation Plan]]
 - [[_COMMUNITY_Case Study Image Layout Implementation Plan|Case Study Image Layout Implementation Plan]]
@@ -203,16 +202,16 @@
 10. `isAdminSession()` - 32 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `OraclePage()` --calls--> `getCaseStudyContent()`  [EXTRACTED]
-  app/creative/branding/oracle/page.tsx → lib/site-content.ts
-- `SohoPage()` --calls--> `getCaseStudyContent()`  [EXTRACTED]
-  app/creative/branding/soho/page.tsx → lib/site-content.ts
-- `FacesOfPowerPage()` --calls--> `getCaseStudyContent()`  [EXTRACTED]
-  app/creative/mixed-media/faces-of-power/page.tsx → lib/site-content.ts
-- `SouthChinaSeaPage()` --calls--> `getCaseStudyContent()`  [EXTRACTED]
-  app/creative/mixed-media/south-china-sea/page.tsx → lib/site-content.ts
+- `generateMetadata()` --calls--> `buildMetadata()`  [EXTRACTED]
+  app/colophon/page.tsx → lib/seo.ts
+- `ColophonPage()` --calls--> `buildBreadcrumbJsonLd()`  [EXTRACTED]
+  app/colophon/page.tsx → lib/seo.ts
 - `DashboardLoginPage()` --calls--> `isAdminSession()`  [EXTRACTED]
   app/dashboard/login/page.tsx → lib/admin-auth.ts
+- `generateMetadata()` --calls--> `buildMetadata()`  [EXTRACTED]
+  app/lab/page.tsx → lib/seo.ts
+- `LabPage()` --calls--> `buildBreadcrumbJsonLd()`  [EXTRACTED]
+  app/lab/page.tsx → lib/seo.ts
 
 ## Import Cycles
 - None detected.
@@ -225,83 +224,83 @@
 - **UX Product Case Studies** — public_portfolio_html_files_atom_portfolio_case_study_atom_os, public_portfolio_html_files_helpoh_portfolio_case_study_helpoh, public_portfolio_html_files_loomlearn_portfolio_case_study_loomlearn, public_portfolio_html_files_franklins_portfolio_case_study_franklins [INFERRED 0.75]
 - **Flattened HQ Photography Exports** — public_flattened_ho_chi_minh_hq_hcmc_flattened_hcmc_flattened, public_flattened_kl_hq_kl_flattened_kl_flattened, public_flattened_penang_hq_penang_flattened_penang_flattened [INFERRED 0.85]
 
-## Communities (181 total, 82 thin omitted)
+## Communities (180 total, 83 thin omitted)
 
 ### Community 0 - "Case Study Dashboard Editor"
 Cohesion: 0.04
 Nodes (48): AboutPageEditor(), CardStyleEditor(), CaseStudyEditor(), CaseStudyNavStyleEditor(), CaseStudyUiEditor(), createCaseStudyDraft(), createMediaBlockDraft(), createMediaImageDraft() (+40 more)
 
 ### Community 1 - "System/AppleScript API Routes"
-Cohesion: 0.09
-Nodes (44): GET(), PUT(), escapeAppleScript(), execFileAsync, POST(), getSafeNextPath(), loginRedirectUrl(), POST() (+36 more)
+Cohesion: 0.07
+Nodes (54): GET(), PUT(), escapeAppleScript(), execFileAsync, POST(), getSafeNextPath(), loginRedirectUrl(), POST() (+46 more)
 
 ### Community 2 - "Case Study Page Routes"
 Cohesion: 0.07
-Nodes (31): OraclePage(), SohoPage(), FacesOfPowerPage(), SouthChinaSeaPage(), AccordPage(), AlbersPage(), Designathon01Page(), Designathon02Page() (+23 more)
+Nodes (49): OraclePage(), BrandingCaseStudyPage(), generateMetadata(), SohoPage(), FacesOfPowerPage(), generateMetadata(), MixedMediaCaseStudyPage(), SouthChinaSeaPage() (+41 more)
 
 ### Community 3 - "Life Project Detail Views"
-Cohesion: 0.08
-Nodes (32): ProjectEvents(), KINDS, ProjectRefs(), ProjectOverviewItem, ProjectsOverview(), SWATCHES, PRI_LABEL, ProjectTasks() (+24 more)
+Cohesion: 0.12
+Nodes (23): ProjectOverviewItem, ProjectsOverview(), SWATCHES, ProjectTasks(), ProjectUxTemplates(), UxTemplateSectionView, PRIORITY_RANK, PROJECT_SWATCHES (+15 more)
 
 ### Community 4 - "Life Entry API Routes"
-Cohesion: 0.13
-Nodes (30): DELETE(), PATCH(), GET(), POST(), DELETE(), PATCH(), GET(), POST() (+22 more)
+Cohesion: 0.09
+Nodes (42): GET(), getSafeRedirectTo(), normalizeOptionalText(), POST(), POST(), GET(), PATCH(), GET() (+34 more)
 
 ### Community 5 - "Site Content Schema"
-Cohesion: 0.07
-Nodes (51): AboutPageCopy, AudioSettings, CaseStudyImagePairSettings, CaseStudyMediaAlign, CaseStudyMediaBlockLayout, CaseStudyMediaPlacement, CaseStudyMediaSlotSettings, CaseStudySection (+43 more)
+Cohesion: 0.06
+Nodes (50): AboutPageCopy, AudioSettings, CaseStudyImagePairSettings, CaseStudyMediaAlign, CaseStudyMediaBlockLayout, CaseStudyMediaPlacement, CaseStudyMediaSlotSettings, CaseStudySection (+42 more)
 
 ### Community 6 - "Life Calendar/Report API"
-Cohesion: 0.14
-Nodes (34): GET(), GET(), GET(), GET(), LifeHistoryPage(), LifeMonthPage(), greetingForHour(), LifeTodayPage() (+26 more)
+Cohesion: 0.13
+Nodes (41): GET(), GET(), getLocalDayOfWeek(), GET(), GET(), GET(), POST(), GET() (+33 more)
 
 ### Community 7 - "Life Projects & Quick Add"
-Cohesion: 0.07
-Nodes (41): dueLabel(), isAttentionFresh(), latestTimestamp(), PRINT_STATE_LABEL, PrintManagement(), whenLabel(), boardDueLabel(), ColumnKey (+33 more)
+Cohesion: 0.10
+Nodes (17): LifeCalendar(), todayYMD(), toYMD(), ColumnKey, COLUMNS, DesktopGroup, dueSortValue(), PRI_LABEL (+9 more)
 
 ### Community 8 - "Creative & Now Landing Pages"
-Cohesion: 0.12
-Nodes (25): generateMetadata(), generateMetadata(), CreativePage(), generateMetadata(), generateMetadata(), HomePage(), generateMetadata(), PlayPage() (+17 more)
+Cohesion: 0.13
+Nodes (30): AboutPage(), generateMetadata(), CreativePage(), generateMetadata(), RootLayout(), generateMetadata(), PlayPage(), ScadScholarshipPage() (+22 more)
 
 ### Community 9 - "Homepage & Hero"
-Cohesion: 0.14
-Nodes (19): metadata, About(), Contact(), CreativePageClient(), GsapReveal(), GsapRevealProps, HeroCarousel(), defaultMotionSettings (+11 more)
+Cohesion: 0.09
+Nodes (18): HomePage(), metadata, About(), Contact(), HeroCarousel(), frames, PhotographyStage(), RuleLabel() (+10 more)
 
 ### Community 10 - "Portfolio Design System"
 Cohesion: 0.18
 Nodes (10): Animations already in place, Design language, GSAP setup, GsapReveal component, Key CSS classes (globals.css), Portfolio Project — Claude App Context, Rules, Site structure (+2 more)
 
 ### Community 11 - "Root Layout & Fonts"
-Cohesion: 0.14
-Nodes (23): AboutPage(), clashDisplay, dmMono, dmSerif, metadata, RootLayout(), MotionSettingsProvider(), ScrollToTopOnRouteChange() (+15 more)
+Cohesion: 0.22
+Nodes (8): clashDisplay, dmMono, dmSerif, metadata, MotionSettingsProvider(), ScrollToTopOnRouteChange(), SoundRouteListener(), PERSON_KEYWORDS
 
 ### Community 12 - "Markdown Report Rendering"
 Cohesion: 0.11
-Nodes (27): MarkdownCard(), escapeRegExp(), FALLBACK_SECTION_LABELS, firstSentence(), getBodySections(), getFallbackStructuredSections(), getPullQuote(), getReportTitle() (+19 more)
+Nodes (26): MarkdownCard(), escapeRegExp(), FALLBACK_SECTION_LABELS, firstSentence(), getBodySections(), getFallbackStructuredSections(), getPullQuote(), getReportTitle() (+18 more)
 
 ### Community 13 - "Creative Listing & Case Study Layouts"
-Cohesion: 0.16
-Nodes (23): DELETE(), getStoredEntry(), PATCH(), POST(), GET(), POST(), VALID_LAYOUTS, POST() (+15 more)
+Cohesion: 0.19
+Nodes (17): POST(), GET(), POST(), VALID_LAYOUTS, LifeTasksPage(), getCalendarEventsByIds(), ACTIVE_STATUSES, cancelPrintJob() (+9 more)
 
 ### Community 14 - "Content Type Guards"
-Cohesion: 0.13
-Nodes (30): isSafeLinkHref(), isSafeRichTextHtml(), isAboutPageCopy(), isAudioSettings(), isCardStyleSettings(), isCaseStudyNavStyleSettings(), isCreativePageCopy(), isEntryItem() (+22 more)
+Cohesion: 0.15
+Nodes (31): isSafeLinkHref(), isSafeRichTextHtml(), isAboutPageCopy(), isCardStyleSettings(), isCaseStudyContent(), isCaseStudyNavStyleSettings(), isCaseStudyUiCopy(), isCreativePageCopy() (+23 more)
 
 ### Community 15 - "Calendar Intent API"
 Cohesion: 0.13
-Nodes (29): POST(), POST(), applyCalendarIntent(), GET(), getSafeRedirectTo(), POST(), getSafeRedirectTo(), normalizeStatus() (+21 more)
+Nodes (29): GET(), POST(), applyCalendarIntent(), GET(), getSafeRedirectTo(), POST(), getSafeRedirectTo(), normalizeStatus() (+21 more)
 
 ### Community 16 - "Life Today & Search Pages"
-Cohesion: 0.17
-Nodes (18): GET(), POST(), GET(), PATCH(), GET(), POST(), createInteraction(), createPerson() (+10 more)
+Cohesion: 0.16
+Nodes (19): POST(), GET(), POST(), PersonDetailPage(), LifePeoplePage(), createInteraction(), createPerson(), getPersonById() (+11 more)
 
 ### Community 17 - "Photo Gallery & Spotify Sections"
-Cohesion: 0.38
-Nodes (8): DELETE(), GET(), POST(), createCalendarEventForTask(), addProjectEvent(), getProjectEvents(), listProjectEventIds(), removeProjectEvent()
+Cohesion: 0.13
+Nodes (28): DELETE(), getStoredEntry(), PATCH(), DELETE(), GET(), POST(), DELETE(), PATCH() (+20 more)
 
 ### Community 18 - "Calendar Event API"
-Cohesion: 0.14
-Nodes (27): GET(), DELETE(), getStoredEvent(), normalizeLocalDate(), normalizeOptionalText(), PATCH(), GET(), getSafeRedirectTo() (+19 more)
+Cohesion: 0.15
+Nodes (20): GET(), DELETE(), getStoredEvent(), normalizeLocalDate(), normalizeOptionalText(), PATCH(), buildEventRequestBody(), createCalendarEvent() (+12 more)
 
 ### Community 19 - "Package Dependencies"
 Cohesion: 0.07
@@ -320,76 +319,76 @@ Cohesion: 0.16
 Nodes (20): GET(), toReferenceInput(), GET(), getAccessToken(), getCurrentOrLastPlayedTrack(), getLastPlayedTrack(), getSpotifyPlaylistSummary(), getSpotifyTrackSummary() (+12 more)
 
 ### Community 23 - "Week Calendar Client"
-Cohesion: 0.05
-Nodes (38): shortDate(), shortDay(), phoneDayLabel(), monthChipText(), MonthClient(), monthLabel(), monthParts(), WEEKDAY_NAMES (+30 more)
+Cohesion: 0.11
+Nodes (18): monthChipText(), clampPhoneWindowStart(), dayMonth(), DraftState, formatRange(), fullDateLabel(), getEventEndMin(), getMinutesFromMidnight() (+10 more)
 
 ### Community 24 - "Month Calendar & Voice Capture"
-Cohesion: 0.13
-Nodes (25): GET(), getLocalDayOfWeek(), GET(), POST(), POST(), POST(), callClaude(), ClaudeCallArgs (+17 more)
+Cohesion: 0.11
+Nodes (11): MonthClient(), monthLabel(), monthParts(), WEEKDAY_NAMES, SpeechRecognitionErrorEventLike, SpeechRecognitionEventLike, SpeechRecognitionLike, SpeechRecognitionResultLike (+3 more)
 
 ### Community 25 - "Photography Case Study Pages"
-Cohesion: 0.17
-Nodes (19): BrandingPage(), generateMetadata(), generateMetadata(), MixedMediaPage(), HCMCPage(), KLPage(), generateMetadata(), PhotographyPage() (+11 more)
+Cohesion: 0.13
+Nodes (23): BrandingPage(), generateMetadata(), generateMetadata(), MixedMediaPage(), HCMCPage(), KLPage(), generateMetadata(), PhotographyPage() (+15 more)
 
 ### Community 26 - "Interaction Sound Engine"
-Cohesion: 0.13
-Nodes (24): IntroAnimation(), PhotographyIndexClient(), SoundRouteListener(), PhotographyCity, areInteractionSoundsEnabled(), clampSample(), getCtx(), getInteractionVolume() (+16 more)
+Cohesion: 0.17
+Nodes (19): IntroAnimation(), areInteractionSoundsEnabled(), clampSample(), getCtx(), getInteractionVolume(), getSoundUrl(), playGeneratedSound(), playIntroKey() (+11 more)
 
 ### Community 27 - "TypeScript Config"
 Cohesion: 0.10
 Nodes (19): compilerOptions, allowJs, esModuleInterop, incremental, isolatedModules, jsx, lib, module (+11 more)
 
 ### Community 28 - "Hover Preview & Carousels"
-Cohesion: 0.13
-Nodes (22): ScadScholarshipPage(), CreativeListingCard(), CreativeListingCardProps, HoverImageCarousel(), HoverPreviewData, HoverPreviewSurface(), MoreWork(), ProjectCard() (+14 more)
+Cohesion: 0.10
+Nodes (33): CreativeListingCard(), CreativeListingCardProps, CreativePageClient(), GsapReveal(), GsapRevealProps, HoverImageCarousel(), HoverPreviewData, HoverPreviewSurface() (+25 more)
 
 ### Community 29 - "Thermal Printer Receipt Builder"
-Cohesion: 0.18
-Nodes (19): ColophonPage(), BrandingCaseStudyPage(), generateMetadata(), generateMetadata(), MixedMediaCaseStudyPage(), LabPage(), NotFound(), generateMetadata() (+11 more)
+Cohesion: 0.27
+Nodes (17): buildCompact(), buildFocus(), buildReceiptPayload(), buildStandard(), centerLine(), DIVIDER_HEAVY, DIVIDER_LIGHT, dueWeekday() (+9 more)
 
 ### Community 30 - "PersonDetail.tsx"
-Cohesion: 0.11
-Nodes (28): useLifeProjects(), overdueDays(), PeopleIndex(), PersonListItem, PersonRow(), PersonDetail(), agoLabel(), daysBetween() (+20 more)
+Cohesion: 0.20
+Nodes (16): useLifeProjects(), overdueDays(), PeopleIndex(), PersonListItem, PersonRow(), PersonDetail(), agoLabel(), daysBetween() (+8 more)
 
 ### Community 31 - "QR/NFC Tap Landing"
-Cohesion: 0.13
-Nodes (12): STACK, metadata, metadata, tapActions, AnimatedEyebrow(), Footer(), Nav(), PlayPageClient() (+4 more)
+Cohesion: 0.07
+Nodes (27): ColophonPage(), generateMetadata(), STACK, generateMetadata(), LabPage(), NotFound(), metadata, metadata (+19 more)
 
 ### Community 32 - "ProjectTasks.tsx"
-Cohesion: 0.20
-Nodes (9): addDaysYMD(), CalMode, dueLabel(), MenuKey, PRI_LABEL, PRI_OPTIONS, TaskForm(), TaskDraft (+1 more)
+Cohesion: 0.16
+Nodes (12): ProjectEvents(), PRI_LABEL, addDaysYMD(), CalMode, dueLabel(), MenuKey, PRI_LABEL, PRI_OPTIONS (+4 more)
 
 ### Community 33 - "Life UX Studio Plan & Data Model"
 Cohesion: 0.07
 Nodes (26): API, Conceptual Architecture, Data Model, Life UX Projects and Studio Spec, Product Intent, Project Workspace, Projects, Projects (+18 more)
 
 ### Community 34 - "Project Events API"
-Cohesion: 0.32
-Nodes (9): DELETE(), GET(), normalizeKind(), POST(), createRef(), deleteRef(), listRefs(), uploadRefImage() (+1 more)
+Cohesion: 0.12
+Nodes (16): KINDS, ProjectRefs(), EntrySource, InteractionKind, InteractionRecord, LifeSearchEntryHit, LifeSearchEventHit, LifeSearchTaskHit (+8 more)
 
 ### Community 35 - "Life Layout & Projects Context"
-Cohesion: 0.12
-Nodes (23): GET(), normalizeProjectKind(), POST(), DELETE(), normalizeProjectKind(), normalizeStatus(), PATCH(), POST() (+15 more)
+Cohesion: 0.07
+Nodes (38): GET(), normalizeProjectKind(), POST(), normalizeProjectKind(), normalizeStatus(), PATCH(), POST(), LifeLayout() (+30 more)
 
 ### Community 36 - "Case Study Media & Templates"
-Cohesion: 0.15
-Nodes (10): CaseStudyLayoutProps, applyTemplate(), CASE_STUDY_TEMPLATES, CaseStudyTemplate, inlineSettings, CaseStudyMediaBlock, CaseStudyMediaSettings, CaseStudyNavStyleSettings (+2 more)
+Cohesion: 0.19
+Nodes (10): createBlockId(), createImage(), deriveCaseStudyMediaBlocks(), applyTemplate(), CASE_STUDY_TEMPLATES, CaseStudyTemplate, inlineSettings, CaseStudyMediaBlock (+2 more)
 
 ### Community 37 - "Projects DB Access"
-Cohesion: 0.22
-Nodes (4): GameCaseStudyLayoutProps, ReadingProgress(), RuleLabel(), CaseStudyContent
+Cohesion: 0.16
+Nodes (15): desktopDayLabel(), HistoryClient(), HistoryClientProps, HistoryPayload, phoneDayLabel(), ReportsListResponse, shortDay(), TYPE_SHORT (+7 more)
 
 ### Community 38 - "UX Template Sections"
-Cohesion: 0.11
-Nodes (31): GET(), LifeSearchPage(), desktopDayLabel(), HistoryClient(), HistoryClientProps, HistoryPayload, MonthResponse, ReportDetailResponse (+23 more)
+Cohesion: 0.22
+Nodes (17): MonthResponse, ReportDetailResponse, PositionedEvent, WeekResponse, OWNER_PROFILE, buildEodPrompt(), buildMorningPrompt(), formatCompletedTasks() (+9 more)
 
 ### Community 39 - "Milestones API"
 Cohesion: 0.06
 Nodes (32): Acceptance, Acceptance, Acceptance, Acceptance, Codebase notes (verified before planning), Dropped from the earlier draft, Expected Final State, Goal (+24 more)
 
 ### Community 40 - "Life Studio Page"
-Cohesion: 0.13
-Nodes (9): DETAIL_ZOOM_RESET, FILTERS, hostFor(), SPRING, StudioClient(), StudioTile(), StudioView, StudioItemKind (+1 more)
+Cohesion: 0.14
+Nodes (8): DETAIL_ZOOM_RESET, FILTERS, hostFor(), SPRING, StudioTile(), StudioView, StudioItemKind, StudioItemRecord
 
 ### Community 41 - "Studio Items API"
 Cohesion: 0.07
@@ -404,8 +403,8 @@ Cohesion: 0.08
 Nodes (24): For /graphify add and --watch, For /graphify query, For the commit hook and native CLAUDE.md integration, For --update and --cluster-only, /graphify, Honesty Rules, Interpreter guard for subcommands, Part A - Structural extraction for code files (+16 more)
 
 ### Community 44 - "Projects API"
-Cohesion: 0.28
-Nodes (11): archetypeBody(), archetypePage(), caseStudyDraftBody(), conceptReviewBody(), problemFrameBody(), researchBoardBody(), testingReviewBody(), UX_TEMPLATE_SECTIONS (+3 more)
+Cohesion: 0.21
+Nodes (8): dueLabel(), isAttentionFresh(), latestTimestamp(), PRINT_STATE_LABEL, PrintManagement(), whenLabel(), PrintJobRecord, TaskPrintInfo
 
 ### Community 46 - "Case Study Image Layout Design"
 Cohesion: 0.67
@@ -432,12 +431,12 @@ Cohesion: 0.12
 Nodes (15): 1. Page Transitions, 2. Card Animations, 2a. Entrance (scroll into view), 2b. Hover (pure CSS — no GSAP), 3. Scroll Reveals — Interior Pages, Architecture note (App Router constraint), Behaviour, Constraints (+7 more)
 
 ### Community 73 - "ProjectSpotifyMedia"
-Cohesion: 0.47
-Nodes (5): createBlockId(), createImage(), deriveCaseStudyMediaBlocks(), CaseStudyMediaBlockSection, CaseStudyMediaImage
+Cohesion: 0.22
+Nodes (7): CaseStudyLayoutProps, PhotoGalleryLayoutProps, CaseStudyMediaSettings, CaseStudyNavStyleSettings, CaseStudyUiCopy, GalleryStyleSettings, ProjectSpotifyMedia
 
 ### Community 74 - "localDateTimeToUtc"
-Cohesion: 0.50
-Nodes (3): DashboardLoginPage(), metadata, DashboardLoginForm()
+Cohesion: 0.14
+Nodes (20): GET(), CapturedTodayCard(), greetingForHour(), LifeTodayPage(), shortDate(), shortDay(), TodaySideCards(), LifeSearchPage() (+12 more)
 
 ### Community 75 - "File Map"
 Cohesion: 0.10
@@ -452,8 +451,8 @@ Cohesion: 0.13
 Nodes (14): Creative Section, Design Spec, Footer, Header, Hero Intro, Implementation Plan, Overview, SCAD Scholarship Page — Spec + Implementation Plan (+6 more)
 
 ### Community 78 - "LifeProjectsProvider.tsx"
-Cohesion: 0.12
-Nodes (15): LifeLayout(), metadata, viewport, LIFE_NAV_GROUPS, LifeHeader(), NavLeaf, LifeInlineSearch(), hexToRgb() (+7 more)
+Cohesion: 0.32
+Nodes (6): hexToRgb(), LifeProjectsContext, LifeProjectsContextValue, PROJECT_TINTS, tintStyleFromHex(), LifeProjectClient
 
 ### Community 79 - "Interactive Sounds — Design Spec"
 Cohesion: 0.14
@@ -462,10 +461,6 @@ Nodes (13): `app/layout.tsx`, Architecture, `components/Nav.tsx`, `components/Ph
 ### Community 80 - "Case Study Narrative Redesign — Design Spec"
 Cohesion: 0.14
 Nodes (13): 1. Prop Additions to `CaseStudyLayout`, 2. Section Headline Style, 3. Pull Quote, 4. Floating Section Nav, 5. Section `data-section` Attributes, 6. Content Updates — Phased, 7. Implementation Scope (Phase 1), 8. Out of Scope (+5 more)
-
-### Community 81 - "page.tsx"
-Cohesion: 0.50
-Nodes (3): LifeLoginPage(), metadata, LifeLoginForm()
 
 ### Community 82 - "Micro Animations Design Spec"
 Cohesion: 0.17
@@ -520,8 +515,8 @@ Cohesion: 0.22
 Nodes (9): Phase 2 — Tasks (four views), Task 10: Tasks unified toolbar, Task 11: TasksClient (view switcher + persistence), Task 12: KanbanView, Task 13: InboxView, Task 14: ListView (Notion-style flat list), Task 15: ChecklistView, Task 16: Tasks page server shell (+1 more)
 
 ### Community 96 - "ProjectPages.tsx"
-Cohesion: 0.36
-Nodes (9): ProjectPages(), shortAgo(), formatYmd(), LifePageBodyParts, mergeLifePageMetadata(), splitLifePageBody(), stripLifePageMetadata(), toggleNthLifeCheckbox() (+1 more)
+Cohesion: 0.46
+Nodes (6): ProjectPages(), LifePageBodyParts, mergeLifePageMetadata(), splitLifePageBody(), stripLifePageMetadata(), ProjectPageRecord
 
 ### Community 97 - "Case Study Narrative Redesign Implementation Plan"
 Cohesion: 0.25
@@ -567,10 +562,6 @@ Nodes (6): 5.1 Layout — list + reader, 5.2 Section-card rendering, 5.3 Morning
 Cohesion: 0.33
 Nodes (6): 6. Visual / UI pass, Buttons & controls, Chrome, Colour, Misc, Typography
 
-### Community 108 - "SpotifySectionBoundary"
-Cohesion: 0.12
-Nodes (12): PhotoGalleryLayoutProps, PhotoLightbox(), PhotoLightboxProps, ProjectSpotifySection, SafeProjectSpotifySection(), SpotifySectionBoundary, SpotifyWidget(), SpotifyWidgetProps (+4 more)
-
 ### Community 109 - "File Map"
 Cohesion: 0.40
 Nodes (4): File Map, Intro Animation Implementation Plan, Task 1: Create `IntroAnimation` component, Task 2: Wire `IntroAnimation` into `app/page.tsx`
@@ -598,22 +589,22 @@ Nodes (3): Deploy on Vercel, Getting Started, Learn More
 ## Knowledge Gaps
 - **687 isolated node(s):** `VALID_LAYOUTS`, `STACK`, `metadata`, `metadata`, `size` (+682 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **82 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **83 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `isAdminSession()` connect `Life Calendar/Report API` to `System/AppleScript API Routes`, `Life Layout & Projects Context`, `UX Template Sections`, `localDateTimeToUtc`, `page.tsx`?**
-  _High betweenness centrality (0.035) - this node is a cross-community bridge._
-- **Why does `isAuthenticatedLifeRequest()` connect `Life Entry API Routes` to `System/AppleScript API Routes`, `Project Events API`, `Life Layout & Projects Context`, `Life Calendar/Report API`, `UX Template Sections`, `Creative Listing & Case Study Layouts`, `Calendar Intent API`, `Life Today & Search Pages`, `Photo Gallery & Spotify Sections`, `Calendar Event API`, `Month Calendar & Voice Capture`?**
-  _High betweenness centrality (0.021) - this node is a cross-community bridge._
+- **Why does `isAdminSession()` connect `Life Calendar/Report API` to `System/AppleScript API Routes`, `Life Layout & Projects Context`, `localDateTimeToUtc`, `Creative Listing & Case Study Layouts`, `Life Today & Search Pages`, `Photo Gallery & Spotify Sections`?**
+  _High betweenness centrality (0.036) - this node is a cross-community bridge._
+- **Why does `isAuthenticatedLifeRequest()` connect `Life Entry API Routes` to `System/AppleScript API Routes`, `Life Layout & Projects Context`, `Life Calendar/Report API`, `localDateTimeToUtc`, `Creative Listing & Case Study Layouts`, `Calendar Intent API`, `Life Today & Search Pages`, `Photo Gallery & Spotify Sections`, `Calendar Event API`?**
+  _High betweenness centrality (0.023) - this node is a cross-community bridge._
 - **Why does `getSiteContent()` connect `Photography Case Study Pages` to `Creative & Now Landing Pages`, `System/AppleScript API Routes`, `Root Layout & Fonts`?**
-  _High betweenness centrality (0.021) - this node is a cross-community bridge._
+  _High betweenness centrality (0.023) - this node is a cross-community bridge._
 - **What connects `VALID_LAYOUTS`, `STACK`, `metadata` to the rest of the system?**
   _689 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Case Study Dashboard Editor` be split into smaller, more focused modules?**
   _Cohesion score 0.03635183382018825 - nodes in this community are weakly interconnected._
 - **Should `System/AppleScript API Routes` be split into smaller, more focused modules?**
-  _Cohesion score 0.08672699849170437 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.0673903211216644 - nodes in this community are weakly interconnected._
 - **Should `Case Study Page Routes` be split into smaller, more focused modules?**
-  _Cohesion score 0.06859903381642513 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06651017214397496 - nodes in this community are weakly interconnected._

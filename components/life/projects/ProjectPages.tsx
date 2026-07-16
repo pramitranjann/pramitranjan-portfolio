@@ -1,14 +1,39 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import { MarkdownCard } from '@/components/life/MarkdownCard'
 import { fetchJson } from '@/lib/life/client'
-import { mergeLifePageMetadata, splitLifePageBody, stripLifePageMetadata } from '@/lib/life/page-body'
-import type { ProjectPageRecord } from '@/lib/life/types'
+import { mergeLifePageMetadata, splitLifePageBody, stripLifePageMetadata, toggleNthLifeCheckbox } from '@/lib/life/page-body'
+import type { ProjectPageRecord, ProjectRefRecord, TaskRecord } from '@/lib/life/types'
 
-export function ProjectPages({ projectSlug, pages }: { projectSlug: string; pages: ProjectPageRecord[] }) {
+import { formatYmd, relativeDueLabel } from './shared'
+
+/** Compact age label for a timestamp: "now", "5m", "3h", "2d", then "12 Jun". */
+function shortAgo(iso: string) {
+  const mins = Math.max(0, Math.floor((Date.now() - new Date(iso).getTime()) / 60000))
+  if (mins < 1) return 'now'
+  if (mins < 60) return `${mins}m`
+  if (mins < 1440) return `${Math.floor(mins / 60)}h`
+  const days = Math.floor(mins / 1440)
+  if (days <= 30) return `${days}d`
+  return formatYmd(iso.slice(0, 10))
+}
+
+export function ProjectPages({
+  projectSlug,
+  pages,
+  tasks,
+  refs,
+  today,
+}: {
+  projectSlug: string
+  pages: ProjectPageRecord[]
+  tasks: TaskRecord[]
+  refs: ProjectRefRecord[]
+  today: string
+}) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const requestedPageId = searchParams.get('page')
@@ -43,8 +68,15 @@ export function ProjectPages({ projectSlug, pages }: { projectSlug: string; page
   }, [selectedPage?.id])
 
   const selectedDraftBody = selectedPage ? stripLifePageMetadata(selectedPage.body) : ''
-  const selectedBody = selectedDraftBody.trim()
   const hasDraftChanges = Boolean(selectedPage && (title !== selectedPage.title || body !== selectedDraftBody))
+
+  const bodyRef = useRef<HTMLTextAreaElement>(null)
+  useEffect(() => {
+    const el = bodyRef.current
+    if (!el) return
+    el.style.height = 'auto'
+    el.style.height = `${el.scrollHeight}px`
+  }, [body, mode, selectedId])
 
   function pageMeta(page: ProjectPageRecord) {
     const { body: visibleBody, templateArchetype } = splitLifePageBody(page.body)
@@ -136,6 +168,48 @@ export function ProjectPages({ projectSlug, pages }: { projectSlug: string; page
     }
   }
 
+  function onReaderClick(event: MouseEvent<HTMLElement>) {
+    // Don't hijack clicks on links inside the rendered markdown.
+    if ((event.target as HTMLElement).closest('a')) return
+    // Task-list checkboxes are disabled + pointer-events:none (clicks on disabled inputs
+    // never fire), so hit-test the click against each rendered checkbox instead. The nth
+    // rendered checkbox corresponds to the nth `- [ ]`/`- [x]` occurrence in the source.
+    const boxes = event.currentTarget.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')
+    for (let i = 0; i < boxes.length; i += 1) {
+      const rect = boxes[i].getBoundingClientRect()
+      if (
+        event.clientX >= rect.left - 4 && event.clientX <= rect.right + 4 &&
+        event.clientY >= rect.top - 4 && event.clientY <= rect.bottom + 4
+      ) {
+        if (!selectedPage) return
+        const next = toggleNthLifeCheckbox(body, i)
+        setBody(next)
+        void savePageDraft(selectedPage, title, next)
+        return
+      }
+    }
+    setMode('edit')
+  }
+
+  const openTasks = tasks.filter((task) => task.status !== 'done').slice(0, 5)
+  const topRefs = refs.slice(0, 5)
+  const readerBody = body.trim()
+
+  if (items.length === 0) {
+    return (
+      <div className="life-project-pages-empty">
+        <span className="eyebrow">Pages</span>
+        <p className="life-project-pages-empty-text">
+          No pages yet. Notes, checklists, references — anything worth writing down lives here.
+        </p>
+        <button type="button" className="life-btn primary life-project-page-action" disabled={creating} onClick={() => void createPage()}>
+          {creating ? 'Adding…' : '+ Page'}
+        </button>
+        {error ? <p className="error-text">{error}</p> : null}
+      </div>
+    )
+  }
+
   return (
     <div className="life-project-pages">
       <div className="life-project-pages-sidebar">
@@ -146,7 +220,6 @@ export function ProjectPages({ projectSlug, pages }: { projectSlug: string; page
           </button>
         </div>
         <div className="life-project-pages-list">
-          {items.length === 0 ? <div className="life-empty">No pages yet.</div> : null}
           {items.map((page) => (
             <button
               key={page.id}
@@ -155,7 +228,9 @@ export function ProjectPages({ projectSlug, pages }: { projectSlug: string; page
               onClick={() => void selectPage(page.id)}
             >
               <span className="life-project-page-link-title">{page.title}</span>
-              <span className="life-project-page-link-meta">{pageMeta(page)}</span>
+              <span className="life-project-page-link-meta" suppressHydrationWarning>
+                {pageMeta(page)} · {shortAgo(page.updated_at)}
+              </span>
             </button>
           ))}
         </div>
@@ -164,45 +239,89 @@ export function ProjectPages({ projectSlug, pages }: { projectSlug: string; page
       <div className="life-project-page-editor">
         {selectedPage ? (
           <>
-            <div className="life-project-page-toolbar">
+            {mode === 'edit' ? (
+              <input
+                className="life-project-page-title"
+                value={title}
+                placeholder="Untitled"
+                autoFocus={!selectedDraftBody.trim()}
+                onChange={(event) => setTitle(event.target.value)}
+                onBlur={() => void saveSelectedPageNow()}
+              />
+            ) : (
+              <h2 className="life-project-page-read-title" onClick={() => setMode('edit')}>
+                {selectedPage.title}
+              </h2>
+            )}
+            <div className="life-project-page-meta" suppressHydrationWarning>
+              <span>created {formatYmd(selectedPage.created_at.slice(0, 10))}</span>
+              <span>·</span>
+              <span>updated {shortAgo(selectedPage.updated_at)}</span>
+              <span>·</span>
               <span className={`life-project-page-save-state is-${saveState}`}>
                 {saveState === 'saving' ? 'Saving…' : saveState === 'error' ? 'Not saved' : 'Saved'}
               </span>
-              <button type="button" className="life-btn ghost life-project-page-action-secondary" onClick={() => void deletePage()}>
+              <button type="button" className="life-project-page-delete" onClick={() => void deletePage()}>
                 Delete
               </button>
             </div>
             {mode === 'edit' ? (
-              <>
-                <input
-                  className="life-project-page-title"
-                  value={title}
-                  placeholder="Untitled"
-                  onChange={(event) => setTitle(event.target.value)}
-                  onBlur={() => void saveSelectedPageNow()}
-                />
-                <textarea
-                  className="life-project-page-body"
-                  value={body}
-                  placeholder="Write notes, links, references, checklists… Markdown works here."
-                  rows={16}
-                  onChange={(event) => setBody(event.target.value)}
-                  onBlur={() => void saveSelectedPageNow()}
-                />
-              </>
+              <textarea
+                ref={bodyRef}
+                className="life-project-page-body"
+                value={body}
+                placeholder="Write notes, links, references, checklists… Markdown works here."
+                rows={1}
+                onChange={(event) => setBody(event.target.value)}
+                onBlur={() => void saveSelectedPageNow()}
+              />
             ) : (
-              <article
-                className="life-project-page-reader"
-                onClick={(event) => {
-                  // Don't hijack clicks on links inside the rendered markdown.
-                  if ((event.target as HTMLElement).closest('a')) return
-                  setMode('edit')
-                }}
-              >
-                <h2 className="life-project-page-read-title">{selectedPage.title}</h2>
-                {selectedBody ? <MarkdownCard content={selectedBody} /> : <div className="life-empty">Empty page.</div>}
+              <article className="life-project-page-reader" onClick={onReaderClick}>
+                {readerBody ? (
+                  <MarkdownCard content={readerBody} />
+                ) : (
+                  <div className="life-project-page-empty-body">Empty page. Click to start writing.</div>
+                )}
               </article>
             )}
+            {openTasks.length > 0 || topRefs.length > 0 ? (
+              <div className="life-project-page-related">
+                {openTasks.length > 0 ? (
+                  <div className="life-project-page-related-block">
+                    <span className="eyebrow">Open tasks</span>
+                    <div className="life-list">
+                      {openTasks.map((task) => {
+                        const due = relativeDueLabel(task.due_local_date, today)
+                        return (
+                          <div key={task.id} className="life-overview-row">
+                            <span className="life-overview-row-title">{task.title}</span>
+                            {due ? <span className={`life-due-chip due-${due.tone}`}>{due.text}</span> : null}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                ) : null}
+                {topRefs.length > 0 ? (
+                  <div className="life-project-page-related-block">
+                    <span className="eyebrow">References</span>
+                    <div className="life-list">
+                      {topRefs.map((ref) =>
+                        ref.url ? (
+                          <a key={ref.id} className="life-overview-row" href={ref.url} target="_blank" rel="noreferrer">
+                            <span className="life-overview-row-title">{ref.title || ref.url}</span>
+                          </a>
+                        ) : (
+                          <div key={ref.id} className="life-overview-row">
+                            <span className="life-overview-row-title">{ref.title || 'Untitled'}</span>
+                          </div>
+                        ),
+                      )}
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
           </>
         ) : (
           <div className="life-empty">Select a page or create a new one.</div>

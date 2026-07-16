@@ -13,8 +13,6 @@ export interface ProjectOverviewItem {
   name: string
   summary: string | null
   color: string | null
-  parentSlug: string | null
-  parentName: string | null
   projectKind: ProjectKind
   status: ProjectStatus
   targetDate: string | null
@@ -22,6 +20,16 @@ export interface ProjectOverviewItem {
   done: number
   overdue: number
   total: number
+  lastUpdated: string
+}
+
+/** "updated 3d ago" — day granularity keeps SSR/client renders in step. */
+function relativeUpdatedLabel(iso: string) {
+  const days = Math.floor((Date.now() - Date.parse(iso)) / 86400000)
+  if (!Number.isFinite(days) || days <= 0) return 'updated today'
+  if (days < 30) return `updated ${days}d ago`
+  if (days < 365) return `updated ${Math.floor(days / 30)}mo ago`
+  return `updated ${Math.floor(days / 365)}y ago`
 }
 
 const SWATCHES = ['#e9b765', '#7fd899', '#9aa6ff', '#e58fb8', '#6fcfd6', '#c79bff', '#ff6c61']
@@ -151,22 +159,20 @@ export function ProjectsOverview({
           const due = relativeDueLabel(item.targetDate, today)
           return (
             <div key={item.slug} className="life-card life-project-card">
+              <span className="life-project-strip" style={{ background: item.color || 'var(--life-label)' }} aria-hidden />
               <Link href={`/life/projects/${item.slug}`} className="life-project-card-link">
                 <div className="life-project-card-top">
                   <div className="life-card-head">
-                    <span className="life-project-dot" style={{ background: item.color || 'var(--life-label)' }} />
                     <h2>{item.name}</h2>
                     <span className={`life-health-dot health-${tone}`} aria-label={`Health: ${tone}`} />
                   </div>
                   <div className="life-project-card-meta">
-                    {item.parentName ? <span className="life-project-parent-chip">Sub-project of {item.parentName}</span> : null}
                     {item.projectKind === 'ux' ? <span className="life-project-kind-chip">UX</span> : null}
                     {item.status !== 'active' ? <span className="life-project-badge">{STATUS_LABEL[item.status]}</span> : null}
                     {due ? <span className={`life-due-chip due-${due.tone}`}>{due.text}</span> : null}
                   </div>
                 </div>
                 {item.summary ? <p className="life-project-summary">{item.summary}</p> : null}
-                {item.parentName ? <p className="life-project-parent">Sub-project of {item.parentName}</p> : null}
                 <div className="life-project-progress">
                   <div className="life-progress-track">
                     <div className="life-progress-fill" style={{ width: `${pct}%` }} />
@@ -177,6 +183,7 @@ export function ProjectsOverview({
                   <span className="life-project-stat">{item.open} open</span>
                   <span className="life-project-stat">{item.done} done</span>
                   {item.overdue > 0 ? <span className="life-project-stat is-overdue">{item.overdue} overdue</span> : null}
+                  <span className="life-project-updated">{relativeUpdatedLabel(item.lastUpdated)}</span>
                 </div>
               </Link>
               <button

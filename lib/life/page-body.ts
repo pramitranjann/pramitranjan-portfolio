@@ -29,6 +29,18 @@ export function stripLifePageMetadata(value: string) {
   return splitLifePageBody(value).body
 }
 
+/** Toggle the nth `- [ ]` / `- [x]` occurrence (document order) in markdown source. */
+// ponytail: only `-` bullets are matched, and occurrences inside code fences still count;
+// switch to a line-aware scan if `*`/`+` task bullets or fenced examples show up in real pages.
+export function toggleNthLifeCheckbox(source: string, index: number) {
+  let seen = -1
+  return source.replace(/- \[( |x)\]/gi, (match, mark: string) => {
+    seen += 1
+    if (seen !== index) return match
+    return mark === ' ' ? '- [x]' : '- [ ]'
+  })
+}
+
 export function mergeLifePageMetadata(storedBody: string, visibleBody: string) {
   const { metadataComments } = splitLifePageBody(storedBody)
   const body = visibleBody.trimStart()

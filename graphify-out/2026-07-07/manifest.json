@@ -1,7 +1,7 @@
 {
   ".claude/settings.local.json": {
-    "mtime": 1783414342.3343282,
-    "ast_hash": "445c6926cd69f9d0d70df99dd9b0e2d8",
+    "mtime": 1783138353.798667,
+    "ast_hash": "b606b682bcb417bc54f97df9d053a43b",
     "semantic_hash": ""
   },
   "app/about/page.tsx": {
@@ -355,9 +355,9 @@
     "semantic_hash": ""
   },
   "app/life/projects/page.tsx": {
-    "mtime": 1783340401.6741362,
-    "ast_hash": "0b8ca4bc1bb7e08656a3dac07b90d1bf",
-    "semantic_hash": ""
+    "mtime": 1783178050.3535137,
+    "ast_hash": "b822e4df617000fcafb6ddfcaed37b2c",
+    "semantic_hash": "b822e4df617000fcafb6ddfcaed37b2c"
   },
   "app/life/report/loading.tsx": {
     "mtime": 1783178050.3536823,
@@ -780,8 +780,8 @@
     "semantic_hash": "58023d9c0d571dcabea4e10aadacfa76"
   },
   "components/life/QuickAdd.tsx": {
-    "mtime": 1783266254.7545002,
-    "ast_hash": "bd1ddb18b3f80d2a77ec75c4b5f1204a",
+    "mtime": 1783263333.2078846,
+    "ast_hash": "399e90373a702bb16a19fd16e10b5b5f",
     "semantic_hash": ""
   },
   "components/life/ReportClient.tsx": {
@@ -805,8 +805,8 @@
     "semantic_hash": "e500a845c5141a9c7facaa7907f3e161"
   },
   "components/life/projects/ProjectPages.tsx": {
-    "mtime": 1783357436.9882472,
-    "ast_hash": "b282189758af9642a1ce960e5027b10f",
+    "mtime": 1783178050.3812425,
+    "ast_hash": "2ed047e5c7bd053a46cd3f6aa083f280",
     "semantic_hash": ""
   },
   "components/life/projects/ProjectRefs.tsx": {
@@ -825,14 +825,14 @@
     "semantic_hash": "fa7ca42309630d27ca0f44e65dc3c04c"
   },
   "components/life/projects/ProjectWorkspace.tsx": {
-    "mtime": 1783357457.5404546,
-    "ast_hash": "b6cdab283d1dc73c3508b48517a0d0e5",
+    "mtime": 1783178050.3824348,
+    "ast_hash": "4540da54dab8c44cb805f83bca955120",
     "semantic_hash": ""
   },
   "components/life/projects/ProjectsOverview.tsx": {
-    "mtime": 1783340420.277775,
-    "ast_hash": "19ddfbc9c68ad369afd0dbcad974f7f5",
-    "semantic_hash": ""
+    "mtime": 1783178050.3829727,
+    "ast_hash": "9da49a361e03a37c26bf79d0ac55724a",
+    "semantic_hash": "9da49a361e03a37c26bf79d0ac55724a"
   },
   "components/life/projects/shared.ts": {
     "mtime": 1783178050.3832302,
@@ -875,8 +875,8 @@
     "semantic_hash": "4665eef8a0c2b14a173bf42d78016ccd"
   },
   "content/site-content.json": {
-    "mtime": 1783267152.640142,
-    "ast_hash": "1f6c369811c0b7df40591d9aef8a8003",
+    "mtime": 1783262645.0027401,
+    "ast_hash": "59631b2676d6c65aea057b43fba2faab",
     "semantic_hash": ""
   },
   "hardware/pr_life_printer/config.example.h": {
@@ -1380,8 +1380,8 @@
     "semantic_hash": ""
   },
   "lib/life/page-body.ts": {
-    "mtime": 1783418376.546818,
-    "ast_hash": "98f907a862cb6f1841e0c26cc9bbdb61",
+    "mtime": 1783178050.389749,
+    "ast_hash": "472938202b60917cc0f198106e04e51a",
     "semantic_hash": ""
   },
   ".claude/CLAUDE.md": {
@@ -2935,8 +2935,8 @@
     "semantic_hash": ""
   },
   "components/life/people/PeopleIndex.tsx": {
-    "mtime": 1783266249.2921252,
-    "ast_hash": "f9880cbdf65a03ac0aad4e46020cd101",
+    "mtime": 1783263239.4045475,
+    "ast_hash": "c4e13c950a75d9edf21a29cf5f321651",
     "semantic_hash": ""
   },
   "components/life/people/PersonDetail.tsx": {

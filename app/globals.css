@@ -3576,6 +3576,7 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
 .life-shell .life-projects-head h1 { text-wrap: balance; }
 .life-shell .life-projects-stat { text-wrap: pretty; }
 .life-shell .life-project-card { position: relative; padding: 0; border-color: transparent; background: transparent; transition-property: background, border-color, box-shadow, transform; transition-duration: 0.16s; }
+.life-shell .life-project-strip { position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
 .life-shell .life-project-card-link { display: flex; flex-direction: column; gap: 10px; padding: 16px; text-decoration: none; color: inherit; }
 .life-shell .life-project-card-top { display: grid; gap: 8px; }
 .life-shell .life-project-card .life-card-head { display: flex; align-items: center; gap: 8px; padding: 0; border: 0; }
@@ -3583,11 +3584,11 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
 .life-shell .life-project-card-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .life-shell .life-project-card:hover { border-color: var(--life-hairline); background: var(--life-muted-bg); box-shadow: 0 4px 18px rgba(0, 0, 0, 0.22); }
 .life-shell .life-project-summary { margin: 0; padding: 0; color: var(--life-label); font-size: 12px; line-height: 1.5; text-wrap: pretty; }
-.life-shell .life-project-parent { margin: -2px 0 0; color: var(--life-muted); font-family: var(--font-mono); font-size: 11px; }
 .life-shell .life-project-parent-chip { display: inline-flex; align-items: center; min-height: 20px; padding: 0 7px; border: 1px solid var(--life-hairline); background: var(--life-muted-bg); color: var(--life-muted); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.04em; text-wrap: pretty; }
 .life-shell .life-project-kind-chip { display: inline-flex; align-items: center; min-height: 20px; padding: 0 7px; border: 1px solid var(--life-accent-line); background: var(--life-accent-soft); color: var(--life-accent); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; }
 .life-shell .life-project-progress { display: flex; align-items: center; gap: 10px; }
 .life-shell .life-project-card-foot { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 11px; color: var(--life-label); }
+.life-shell .life-project-updated { margin-left: auto; color: var(--life-muted); font-size: 10px; letter-spacing: 0.04em; white-space: nowrap; }
 .life-shell .life-project-stat.is-overdue { color: var(--life-danger); }
 .life-shell .life-project-badge { padding: 1px 6px; border: 1px solid var(--life-border); color: var(--life-muted); text-transform: uppercase; letter-spacing: 0.08em; font-size: 10px; }
 .life-shell .life-project-delete { position: absolute; top: 8px; right: 8px; width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; border: 0; background: none; color: var(--life-label); font-size: 18px; line-height: 1; cursor: pointer; opacity: 0; transition: opacity 0.15s, color 0.15s; }
@@ -3604,7 +3605,7 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
 .life-shell .life-project-tree-toggle { min-height: 30px; padding: 0 8px; border: 0; background: transparent; color: var(--life-label); font-family: var(--font-mono); font-size: 11px; cursor: pointer; transition-property: background, color, transform; transition-duration: 0.14s; }
 .life-shell .life-project-tree-toggle:hover { background: var(--life-muted-bg); color: var(--life-text); }
 .life-shell .life-project-tree-toggle:active { transform: scale(0.96); }
-.life-shell .life-project-tree-body { display: grid; gap: 12px; min-width: 0; }
+.life-shell .life-project-tree-body { display: grid; gap: 14px; min-width: 0; }
 .life-shell .life-project-tree-index { display: inline-flex; align-items: center; min-height: 28px; color: var(--life-muted); font-family: var(--font-mono); font-size: 12px; text-decoration: none; transition-property: color, background; transition-duration: 0.14s; }
 .life-shell .life-project-tree-index:hover { color: var(--life-text); }
 .life-shell .life-project-tree-roots { display: grid; gap: 6px; min-width: 0; }
@@ -3616,7 +3617,7 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
 .life-shell .life-project-tree-project.is-active { background: var(--life-accent-soft); color: var(--life-text); }
 .life-shell .life-project-tree-project.is-child { min-height: 28px; }
 .life-shell .life-project-tree-project span:last-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.life-shell .life-project-tree-section-label { margin-top: 2px; color: var(--life-label); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
+.life-shell .life-project-tree-section-label { margin-top: 6px; color: var(--life-label); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
 .life-shell .life-project-tree-pages { gap: 2px; }
 .life-shell .life-project-tree-page { display: block; min-height: 26px; padding: 5px 7px 5px 22px; color: var(--life-label); font-size: 12px; line-height: 1.35; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition-property: background, color, transform; transition-duration: 0.14s; }
 .life-shell .life-project-tree-page:hover { background: var(--life-muted-bg); color: var(--life-text); }
@@ -3627,7 +3628,7 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
 .life-shell .life-back-link { font-family: var(--font-mono); font-size: 12px; color: var(--life-muted); text-decoration: none; transition-property: color; transition-duration: 0.15s; }
 .life-shell .life-back-link:hover { color: var(--life-text); }
 .life-shell .life-project-head { display: block; margin-bottom: 0; }
-.life-shell .life-project-head-copy { display: grid; gap: 8px; max-width: 860px; }
+.life-shell .life-project-head-copy { display: grid; gap: 10px; max-width: 860px; }
 .life-shell .life-project-head .eyebrow { display: inline-flex; align-items: center; gap: 6px; }
 .life-shell .life-project-summary-line { margin: 0; color: var(--life-muted); font-size: 13px; line-height: 1.5; max-width: 60ch; text-wrap: pretty; }
 .life-shell .life-project-properties { position: relative; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; min-height: 30px; color: var(--life-label); font-family: var(--font-mono); font-size: 12px; }
@@ -3644,7 +3645,7 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
 .life-shell .life-project-property-menu button { width: 100%; min-height: 32px; padding: 0 10px; border: 0; background: transparent; color: var(--life-muted); font-family: var(--font-mono); font-size: 12px; text-align: left; cursor: pointer; transition-property: background, color; transition-duration: 0.12s; }
 .life-shell .life-project-property-menu button:hover, .life-shell .life-project-property-menu button.is-active { background: var(--life-muted-bg); color: var(--life-text); }
 .life-shell .life-project-property-menu button.is-danger { color: var(--life-danger); }
-.life-shell .life-project-quiet-status { display: grid; gap: 8px; margin-top: 2px; max-width: 720px; }
+.life-shell .life-project-quiet-status { display: grid; gap: 8px; margin-top: 6px; padding-top: 14px; border-top: 1px solid var(--life-hairline); max-width: 720px; }
 .life-shell .life-project-progress-bar { display: flex; align-items: center; gap: 12px; }
 .life-shell .life-next-action { display: flex; align-items: center; gap: 10px; min-height: 32px; padding: 0; color: var(--life-muted); }
 .life-shell .life-next-action-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--life-label); }
@@ -3673,6 +3674,15 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
 .life-shell .life-project-tab.is-active { color: var(--life-text); border-bottom-color: var(--life-accent); }
 .life-shell .life-project-tab .chip-count { font-family: var(--font-mono); font-size: 11px; color: var(--life-label); }
 .life-shell .life-project-tab-body { display: block; animation: life-tab-in 0.18s cubic-bezier(0.2, 0, 0, 1); }
+
+/* Workspace overview tab */
+.life-shell .life-project-overview { display: grid; gap: 28px; }
+.life-shell .life-project-overview .life-project-children { padding-top: 0; border-top: 0; }
+.life-shell .life-overview-section { display: grid; gap: 12px; }
+.life-shell .life-overview-row { display: flex; align-items: center; gap: 12px; min-height: 42px; padding: 0 16px; border-top: 1px solid var(--life-hairline); color: var(--life-muted); font-size: 13px; text-decoration: none; transition-property: background, color; transition-duration: 0.14s; }
+.life-shell .life-overview-row:first-child { border-top: 0; }
+.life-shell a.life-overview-row:hover { background: var(--life-muted-bg); color: var(--life-text); }
+.life-shell .life-overview-row-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* Workspace tasks / milestones */
 .life-shell .life-project-tasks { display: grid; gap: 20px; }
@@ -3750,24 +3760,29 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
 .life-shell .life-project-page-link.is-active { border-color: var(--life-accent-line); border-left-color: var(--life-accent); background: var(--life-accent-soft); color: var(--life-text); }
 .life-shell .life-project-page-link-title { font-size: 13px; line-height: 1.35; color: var(--life-text); overflow-wrap: anywhere; }
 .life-shell .life-project-page-link-meta { font-family: var(--font-mono); font-size: 10px; line-height: 1.4; color: var(--life-label); text-transform: uppercase; letter-spacing: 0.04em; }
-.life-shell .life-project-page-editor { display: grid; gap: 12px; min-width: 0; }
-.life-shell .life-project-page-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; min-height: 40px; }
-.life-shell .life-project-page-save-state { font-family: var(--font-mono); font-size: 12px; color: var(--life-label); }
+.life-shell .life-project-page-editor { display: grid; gap: 14px; max-width: 860px; min-width: 0; }
+.life-shell .life-project-page-save-state { font-family: var(--font-mono); font-size: 11px; color: var(--life-label); }
 .life-shell .life-project-page-save-state.is-saving { color: var(--life-amber); }
 .life-shell .life-project-page-save-state.is-error { color: var(--life-danger); }
 .life-shell .life-project-page-action { min-height: 40px; padding: 0 16px; border-color: var(--life-accent); background: transparent; color: var(--life-accent); font-family: var(--font-mono); font-size: 13px; font-weight: 500; letter-spacing: 0; }
 .life-shell .life-project-page-action:hover { background: var(--life-accent-soft); border-color: var(--life-accent); filter: none; }
 .life-shell .life-project-page-action:disabled { opacity: 0.45; }
-.life-shell .life-project-page-action-secondary { min-height: 40px; padding: 0 12px; border: 1px solid transparent; background: transparent; color: var(--life-muted); font-family: var(--font-mono); font-size: 13px; letter-spacing: 0; }
-.life-shell .life-project-page-action-secondary:hover { color: var(--life-text); background: var(--life-accent-soft); border-color: var(--life-accent-line); }
-.life-shell .life-project-page-title { width: 100%; border: 0; border-bottom: 1px solid var(--life-border); background: transparent; color: var(--life-text); font-family: var(--life-display); font-size: 30px; outline: none; padding: 0 0 10px; }
-.life-shell .life-project-page-title:focus { border-bottom-color: var(--life-accent-line); }
-.life-shell .life-project-page-body { width: 100%; min-height: 420px; border: 1px solid var(--life-border); background: #111111; color: #d4d0ca; font-size: 15px; line-height: 1.85; padding: 22px 24px; resize: vertical; outline: none; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02); }
-.life-shell .life-project-page-body:focus { border-color: var(--life-accent-line); background: #131313; }
-.life-shell .life-project-page-reader { display: grid; gap: 18px; max-width: 860px; min-height: 420px; padding: 8px 0 28px; cursor: text; }
-.life-shell .life-project-page-read-title { margin: 0; padding: 0 0 12px; border-bottom: 1px solid var(--life-border); color: var(--life-text); font-family: var(--life-display); font-size: 30px; font-weight: 500; line-height: 1.08; text-wrap: balance; }
-.life-shell .life-project-page-reader .markdown-body { gap: 14px; max-width: 780px; }
+.life-shell .life-project-page-title { width: 100%; border: 0; background: transparent; color: var(--life-text); font-family: var(--life-display); font-size: 30px; font-weight: 500; line-height: 1.08; outline: none; padding: 0; }
+.life-shell .life-project-page-title::placeholder { color: var(--life-label); }
+.life-shell .life-project-page-read-title { margin: 0; padding: 0; color: var(--life-text); font-family: var(--life-display); font-size: 30px; font-weight: 500; line-height: 1.08; text-wrap: balance; cursor: text; }
+.life-shell .life-project-page-meta { display: flex; align-items: center; gap: 8px; padding-bottom: 12px; border-bottom: 1px solid var(--life-border); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.02em; color: var(--life-label); }
+.life-shell .life-project-page-delete { margin-left: auto; border: 0; background: none; padding: 0; color: var(--life-label); font-family: var(--font-mono); font-size: 11px; cursor: pointer; }
+.life-shell .life-project-page-delete:hover { color: var(--life-danger); }
+.life-shell .life-project-page-body { width: 100%; max-width: 780px; min-height: 320px; border: 0; background: transparent; color: #d4d0ca; font-size: 15px; line-height: 1.85; padding: 0; resize: none; overflow: hidden; outline: none; }
+.life-shell .life-project-page-reader { display: grid; gap: 14px; max-width: 780px; min-height: 320px; padding: 0 0 8px; cursor: text; }
+.life-shell .life-project-page-reader .markdown-body { gap: 14px; font-size: 15px; line-height: 1.85; }
 .life-shell .life-project-page-reader .markdown-body h2 { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--life-hairline); }
+.life-shell .life-project-page-reader input[type='checkbox'] { pointer-events: none; accent-color: var(--life-accent); }
+.life-shell .life-project-page-empty-body { padding: 2px 0; color: var(--life-label); font-family: var(--font-mono); font-size: 13px; }
+.life-shell .life-project-page-related { display: grid; gap: 18px; max-width: 780px; margin-top: 8px; padding-top: 18px; border-top: 1px solid var(--life-hairline); }
+.life-shell .life-project-page-related-block { display: grid; gap: 8px; }
+.life-shell .life-project-pages-empty { display: grid; gap: 14px; justify-items: start; padding: 32px 28px; border: 1px solid var(--life-border); background: var(--life-panel); }
+.life-shell .life-project-pages-empty-text { margin: 0; max-width: 440px; color: var(--life-muted); font-size: 13px; line-height: 1.6; }
 .life-shell .life-ref-composer { display: grid; gap: 10px; }
 .life-shell .life-ref-fields { display: flex; align-items: flex-start; gap: 8px; flex-wrap: wrap; }
 .life-shell .life-ref-fields .text-input { flex: 1; min-width: 160px; }
@@ -3971,9 +3986,6 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
     gap: 6px;
     padding-right: 34px;
   }
-  .life-shell .life-project-parent {
-    display: none;
-  }
   .life-shell .life-project-summary {
     display: block;
     font-size: 13px;
@@ -4080,9 +4092,6 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
     padding: 14px;
   }
   .life-shell .life-project-pages { grid-template-columns: 1fr; }
-  .life-shell .life-project-page-toolbar {
-    align-items: center;
-  }
   .life-shell .life-refs-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
   .life-shell .life-studio-shell {
     gap: 12px;
