@@ -87,13 +87,13 @@
       ]
     },
     "about": {
-      "body": "UX design student at SCAD, product intern at Swipey. I design in Figma and ship working software. Art came first — it still shapes everything.",
+      "body": "UX design student at SCAD, product intern at Swipey. I design in Figma and ship working software. Trained as an artist first, and it still shapes everything.",
       "spotifyLabel": "LAST PLAYED_"
     }
   },
   "aboutPage": {
-    "heroBody": "UX design student at SCAD, product intern at Swipey. I design in Figma and ship working software — a macOS app, this site, a system that runs my days. Art came first; it still shapes everything.",
-    "whoIAm": "From KL, currently surviving Savannah. I picked up a camera before I picked up Figma, and I still think in frames: who, what, when, where. At SCAD I study UX. Outside class I build what I design — a macOS app, this site, a system that runs my days.",
+    "heroBody": "UX design student at SCAD, product intern at Swipey. I design in Figma and ship working software. Trained as an artist first, and it still shapes everything.",
+    "whoIAm": "A third culture kid, currently surviving Savannah. I picked up a camera before I picked up Figma, and I still think in frames: who, what, when, where. At SCAD I study UX. Outside class I build various expreinces such as — a macOS app, this site, and system that runs my days.",
     "experience": [
       {
         "org": "Swipey",
@@ -181,8 +181,8 @@
       },
       {
         "label": "BUILDING_",
-        "value": "Sling",
-        "sub": "A webcam controlled Angry Birds inspired demolition game"
+        "value": "Custom transaction Fields for Swipey",
+        "sub": "Allowing businesses to manage thier finances how they want to"
       }
     ],
     "contactTitleHtml": "Let's make something <span style=\"color: #FF3120\">worth making.</span>",
@@ -664,16 +664,11 @@
         {
           "number": "01",
           "titleHtml": "<span style=\"color: #FF3120\">Pramit</span><br />Ranjan",
-          "body": "UX at SCAD. I design in Figma and ship the result.",
+          "body": "UX at SCAD. I design in Figma and ship the results using AI.",
           "footerLabel": "SCROLL ↓"
         },
         {
           "number": "02",
-          "titleHtml": "Make it real,<br />then make it <span style=\"color: #FF3120\">right.</span>",
-          "body": "Research finds the problem. Figma gives it shape. Code keeps it honest."
-        },
-        {
-          "number": "03",
           "titleHtml": "Design that <span style=\"color: #FF3120\">solves.</span><br />Art that <span style=\"color: #FF3120\">questions.</span>",
           "body": "UX grounded in research. Creative work that pushes further.",
           "footerLabel": "SEE WORK ↓"
@@ -722,7 +717,7 @@
     "creativePage": {
       "eyebrow": "CREATIVE_",
       "heroTitle": "The other half.",
-      "heroBody": "Photography, mixed media, and branding — the work that exists outside of UX.",
+      "heroBody": "Photography, mixed media, and more work that exists outside of UX.",
       "photographyLabel": "PHOTOGRAPHY",
       "photographyCount": "01",
       "mixedMediaLabel": "MIXED MEDIA",
