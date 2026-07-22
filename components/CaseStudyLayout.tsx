@@ -29,14 +29,6 @@ section?: 'work' | 'mixed-media' | 'branding' | 'play'
   next: ProjectLink | null
   backHref?: string
   backLabel?: string
-  problem?: string
-  role?: string
-  research?: string
-  challenge?: string
-  process?: string
-  usabilityTesting?: string
-  solution?: string
-  outcomes?: string
   // Headlines — new
   problemHeadline?: string
   roleHeadline?: string
@@ -80,11 +72,12 @@ const gridStyle: React.CSSProperties = {
   gap: '48px',
 }
 
+// The single statement per section. Size lives in `.case-study-statement`
+// (20px desktop / 18px mobile) so it can respond; keep fontSize out of here.
 const headlineStyle: React.CSSProperties = {
-  fontSize: 'var(--text-body-lg, 16px)',
-  letterSpacing: '0.01em',
+  letterSpacing: '0.002em',
   color: 'var(--color-heading)',
-  lineHeight: 1.55,
+  lineHeight: 1.6,
   marginBottom: '10px',
 }
 
@@ -325,7 +318,6 @@ export function CaseStudyLayout({
   section = 'work',
   title, oneliner, type, tags, prev, next,
   backHref = '/work', backLabel = 'WORK',
-  problem, role, research, challenge, process, usabilityTesting, solution, outcomes,
   problemHeadline, roleHeadline, researchHeadline, challengeHeadline,
   processHeadline, solutionHeadline, outcomesHeadline, pullQuote,
   heroImage, researchImage, challengeImages, solutionHeroImage: rawSolutionHeroImage, solutionImages: rawSolutionImages, mediaSettings, mediaBlocks: rawMediaBlocks, uiCopy, navStyle,
@@ -404,14 +396,6 @@ export function CaseStudyLayout({
     next,
     backHref: resolvedBackHref,
     backLabel: resolvedBackLabel,
-    problem,
-    role,
-    research,
-    challenge,
-    process,
-    usabilityTesting,
-    solution,
-    outcomes,
     problemHeadline,
     roleHeadline,
     researchHeadline,
@@ -447,11 +431,11 @@ export function CaseStudyLayout({
   const navItems = [
     { id: 'sec-problem', label: copy.navProblemLabel, show: true },
     { id: 'sec-role', label: copy.navRoleLabel, show: true },
-    { id: 'sec-research', label: copy.navResearchLabel, show: !!research },
-    { id: 'sec-challenge', label: copy.navChallengeLabel, show: !!challenge },
-    { id: 'sec-process', label: copy.navProcessLabel, show: !!(process || usabilityTesting) },
+    { id: 'sec-research', label: copy.navResearchLabel, show: !!researchHeadline },
+    { id: 'sec-challenge', label: copy.navChallengeLabel, show: !!challengeHeadline },
+    { id: 'sec-process', label: copy.navProcessLabel, show: !!processHeadline },
     { id: 'sec-solution', label: copy.navSolutionLabel, show: true },
-    { id: 'sec-outcomes', label: copy.navOutcomesLabel, show: !!outcomes },
+    { id: 'sec-outcomes', label: copy.navOutcomesLabel, show: !!outcomesHeadline },
   ].filter(item => item.show)
 
   const [navVisible, setNavVisible] = useState(false)
@@ -691,8 +675,8 @@ export function CaseStudyLayout({
               {title}
             </h1>
             <p
-              className="font-mono mt-3"
-              style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: 'var(--color-label)', lineHeight: 1.6 }}
+              className="font-reading mt-3"
+              style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: 'var(--color-heading)', lineHeight: 1.6 }}
             >
               {oneliner}
             </p>
@@ -710,11 +694,8 @@ export function CaseStudyLayout({
               <span className="font-mono" style={labelStyle}>{copy.problemLabel}</span>
               <div style={{ maxWidth: '640px' }}>
                 {problemHeadline && (
-                  <p className="font-mono" style={headlineStyle}>{problemHeadline}</p>
+                  <p className="case-study-statement font-reading" style={headlineStyle}>{problemHeadline}</p>
                 )}
-                <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: 'var(--color-body)', lineHeight: 1.8 }}>
-                  {problem ?? copy.defaultProblem}
-                </p>
               </div>
             </div>
           </GsapReveal>
@@ -727,35 +708,15 @@ export function CaseStudyLayout({
               <span className="font-mono" style={labelStyle}>{copy.roleLabel}</span>
               <div>
                 {roleHeadline && (
-                  <p className="font-mono" style={headlineStyle}>{roleHeadline}</p>
+                  <p className="case-study-statement font-reading" style={headlineStyle}>{roleHeadline}</p>
                 )}
-                <p className="case-study-body font-mono mb-6" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: 'var(--color-body)', lineHeight: 1.8, maxWidth: '640px' }}>
-                  {role ?? copy.defaultRole}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="font-mono"
-                      style={{
-                        fontSize: 'var(--text-eyebrow)',
-                        letterSpacing: '0.12em',
-                        color: 'var(--color-label)',
-                        border: '1px solid #1f1f1f',
-                        padding: '4px 10px',
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
               </div>
             </div>
           </GsapReveal>
         </section>
 
         {/* Research */}
-        {research && (
+        {researchHeadline && (
           <section
             id="sec-research"
             ref={(node) => { motionSectionRefs.current.research = node }}
@@ -789,11 +750,8 @@ export function CaseStudyLayout({
                     }}
                   >
                     {researchHeadline && (
-                      <p className="font-mono" style={headlineStyle}>{researchHeadline}</p>
+                      <p className="case-study-statement font-reading" style={headlineStyle}>{researchHeadline}</p>
                     )}
-                    <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: 'var(--color-body)', lineHeight: 1.8 }}>
-                      {research}
-                    </p>
                   </div>
                   {researchInlineBlocks.length ? (
                     <div
@@ -840,7 +798,7 @@ export function CaseStudyLayout({
         )}
 
         {/* Challenge */}
-        {challenge && (
+        {challengeHeadline && (
           <section
             id="sec-challenge"
             ref={(node) => { motionSectionRefs.current.challenge = node }}
@@ -874,11 +832,8 @@ export function CaseStudyLayout({
                     }}
                   >
                     {challengeHeadline && (
-                      <p className="font-mono" style={headlineStyle}>{challengeHeadline}</p>
+                      <p className="case-study-statement font-reading" style={headlineStyle}>{challengeHeadline}</p>
                     )}
-                    <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8 }}>
-                      {challenge}
-                    </p>
                   </div>
                   {challengeInlineBlocks.length ? (
                     <div
@@ -914,7 +869,7 @@ export function CaseStudyLayout({
         )}
 
         {/* Process */}
-        {(process || usabilityTesting) && (
+        {processHeadline && (
           <section
             id="sec-process"
             ref={(node) => { motionSectionRefs.current.process = node }}
@@ -948,17 +903,7 @@ export function CaseStudyLayout({
                     }}
                   >
                   {processHeadline && (
-                    <p className="font-mono" style={{ ...headlineStyle, maxWidth: '640px' }}>{processHeadline}</p>
-                  )}
-                  {process && (
-                    <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '640px' }}>
-                      {process}
-                    </p>
-                  )}
-                  {usabilityTesting && (
-                    <p className="case-study-body font-mono mt-6" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8, maxWidth: '640px' }}>
-                      {usabilityTesting}
-                    </p>
+                    <p className="case-study-statement font-reading" style={{ ...headlineStyle, maxWidth: '640px' }}>{processHeadline}</p>
                   )}
                   </div>
                   {processInlineBlocks.length ? (
@@ -1019,11 +964,8 @@ export function CaseStudyLayout({
                   }}
                 >
                   {solutionHeadline && (
-                    <p className="font-mono" style={headlineStyle}>{solutionHeadline}</p>
+                    <p className="case-study-statement font-reading" style={headlineStyle}>{solutionHeadline}</p>
                   )}
-                  <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8 }}>
-                    {solution ?? ''}
-                  </p>
                 </div>
                 {solutionInlineBlocks.length ? (
                   <div
@@ -1064,12 +1006,12 @@ export function CaseStudyLayout({
                         </span>
                       ) : null}
                       {solutionEmbedCalloutTitle ? (
-                        <p className="font-mono" style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.01em', color: '#f5f2ed', lineHeight: 1.5, margin: 0 }}>
+                        <p className="font-reading" style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.01em', color: '#f5f2ed', lineHeight: 1.5, margin: 0 }}>
                           {solutionEmbedCalloutTitle}
                         </p>
                       ) : null}
                       {solutionEmbedCalloutBody ? (
-                        <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.7, margin: 0 }}>
+                        <p className="font-reading" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: 'var(--color-heading)', lineHeight: 1.7, margin: 0 }}>
                           {solutionEmbedCalloutBody}
                         </p>
                       ) : null}
@@ -1234,18 +1176,15 @@ export function CaseStudyLayout({
         ) : null}
 
         {/* Outcomes */}
-        {outcomes && (
+        {outcomesHeadline && (
           <section id="sec-outcomes" data-section={copy.outcomesLabel} className="case-study-section border-b border-divider" style={{ padding: '32px 40px' }}>
             <GsapReveal>
               <div data-reveal className="case-study-meta-grid grid" style={gridStyle}>
                 <span className="font-mono" style={labelStyle}>{copy.outcomesLabel}</span>
                 <div style={{ maxWidth: '640px' }}>
                   {outcomesHeadline && (
-                    <p className="font-mono" style={headlineStyle}>{outcomesHeadline}</p>
+                    <p className="case-study-statement font-reading" style={headlineStyle}>{outcomesHeadline}</p>
                   )}
-                  <p className="case-study-body font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.8 }}>
-                    {outcomes}
-                  </p>
                 </div>
               </div>
             </GsapReveal>

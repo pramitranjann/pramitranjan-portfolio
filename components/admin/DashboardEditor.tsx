@@ -2866,23 +2866,17 @@ function CaseStudyEditor({
         <HeadlineBodyEditor
           title="Problem"
           headline={caseStudy.problemHeadline ?? ''}
-          body={caseStudy.problem ?? ''}
           onHeadlineChange={(value) => onChange((current) => ({ ...current, problemHeadline: value || undefined }))}
-          onBodyChange={(value) => onChange((current) => ({ ...current, problem: value || undefined }))}
         />
         <HeadlineBodyEditor
           title="Role"
           headline={caseStudy.roleHeadline ?? ''}
-          body={caseStudy.role ?? ''}
           onHeadlineChange={(value) => onChange((current) => ({ ...current, roleHeadline: value || undefined }))}
-          onBodyChange={(value) => onChange((current) => ({ ...current, role: value || undefined }))}
         />
         <HeadlineBodyEditor
           title="Research"
           headline={caseStudy.researchHeadline ?? ''}
-          body={caseStudy.research ?? ''}
           onHeadlineChange={(value) => onChange((current) => ({ ...current, researchHeadline: value || undefined }))}
-          onBodyChange={(value) => onChange((current) => ({ ...current, research: value || undefined }))}
         />
         <Field label="Pull Quote">
           <textarea value={caseStudy.pullQuote ?? ''} onChange={(event) => onChange((current) => ({ ...current, pullQuote: event.target.value || undefined }))} style={inputStyle(true)} />
@@ -2890,20 +2884,13 @@ function CaseStudyEditor({
         <HeadlineBodyEditor
           title="Challenge"
           headline={caseStudy.challengeHeadline ?? ''}
-          body={caseStudy.challenge ?? ''}
           onHeadlineChange={(value) => onChange((current) => ({ ...current, challengeHeadline: value || undefined }))}
-          onBodyChange={(value) => onChange((current) => ({ ...current, challenge: value || undefined }))}
         />
         <HeadlineBodyEditor
           title="Process"
           headline={caseStudy.processHeadline ?? ''}
-          body={caseStudy.process ?? ''}
           onHeadlineChange={(value) => onChange((current) => ({ ...current, processHeadline: value || undefined }))}
-          onBodyChange={(value) => onChange((current) => ({ ...current, process: value || undefined }))}
         />
-        <Field label="Usability Testing">
-          <textarea value={caseStudy.usabilityTesting ?? ''} onChange={(event) => onChange((current) => ({ ...current, usabilityTesting: event.target.value || undefined }))} style={inputStyle(true)} />
-        </Field>
         <HeadlineBodyEditor
           title="Solution"
           headline={caseStudy.solutionHeadline ?? ''}
@@ -3042,6 +3029,9 @@ function CaseStudyEditor({
   )
 }
 
+// Work and creative case studies render ONE statement per section, so they pass
+// only `headline`. The body textarea appears solely for sections that still feed
+// the Play/game layout (Solution, Outcomes).
 function HeadlineBodyEditor({
   title,
   headline,
@@ -3051,18 +3041,20 @@ function HeadlineBodyEditor({
 }: {
   title: string
   headline: string
-  body: string
+  body?: string
   onHeadlineChange: (value: string) => void
-  onBodyChange: (value: string) => void
+  onBodyChange?: (value: string) => void
 }) {
   return (
     <EditorItemCard title={title} subtitle={headline || 'Narrative copy'} defaultOpen={false}>
-      <Field label={`${title} Headline`}>
+      <Field label={`${title} Statement`}>
         <textarea value={headline} onChange={(event) => onHeadlineChange(event.target.value)} style={inputStyle(true)} />
       </Field>
-      <Field label={`${title} Body`}>
-        <textarea value={body} onChange={(event) => onBodyChange(event.target.value)} style={inputStyle(true)} />
-      </Field>
+      {onBodyChange && (
+        <Field label={`${title} Body (Play projects only)`}>
+          <textarea value={body ?? ''} onChange={(event) => onBodyChange(event.target.value)} style={inputStyle(true)} />
+        </Field>
+      )}
     </EditorItemCard>
   )
 }

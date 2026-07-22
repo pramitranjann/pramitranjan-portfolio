@@ -55,8 +55,8 @@ export default function ColophonPage() {
             </h1>
             <p
               data-reveal
-              className="font-mono"
-              style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.9, maxWidth: '560px' }}
+              className="font-reading"
+              style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: 'var(--color-heading)', lineHeight: 1.9, maxWidth: '560px' }}
             >
               Built solo. Every word and design token on this site — type scale, spacing, colors —
               lives in one JSON file, edited live through a private dashboard. Nothing is hardcoded
@@ -79,7 +79,7 @@ export default function ColophonPage() {
                   <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.18em', color: '#666666' }}>
                     {row.label}
                   </span>
-                  <span className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.7 }}>
+                  <span className="font-reading" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: 'var(--color-heading)', lineHeight: 1.7 }}>
                     {row.value}
                   </span>
                 </div>

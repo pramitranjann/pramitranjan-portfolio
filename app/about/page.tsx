@@ -57,7 +57,7 @@ function SectionLabel({ html }: { html: string }) {
   return (
     <span
       className="font-mono"
-      style={{ fontSize: 'var(--text-body)', letterSpacing: '0.14em', color: '#f5f2ed', paddingTop: '6px', lineHeight: 1.6 }}
+      style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.16em', color: 'var(--color-red)', paddingTop: '6px', lineHeight: 1.6 }}
       dangerouslySetInnerHTML={{ __html: html }}
     />
   )
@@ -80,12 +80,12 @@ function EntryList({ items }: { items: Array<{ org: string; role: string; date: 
             <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#FF3120' }}>
               {item.role}
             </span>
-            <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: '#999999' }}>
+            <span className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.1em', color: 'var(--color-body)' }}>
               {item.date}
             </span>
           </div>
           {/* Body */}
-          <p className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.03em', color: '#999999', lineHeight: 1.8 }}>
+          <p className="font-reading" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.03em', color: 'var(--color-heading)', lineHeight: 1.8 }}>
             {item.desc}
           </p>
         </div>
@@ -109,7 +109,7 @@ function NowCell({
     <div style={{ background: '#0d0d0d', padding: styleSettings.cardPadding }}>
       <span className="font-mono" style={{ fontSize: styleSettings.labelSize, letterSpacing: '0.18em', color: '#FF3120', display: 'block', marginBottom: '10px' }}>{label}</span>
       <div className="font-serif" style={{ fontSize: styleSettings.titleSize, fontStyle: 'italic', fontWeight: 'var(--font-weight-serif)', color: '#f5f2ed', lineHeight: 1.3, marginBottom: '7px' }}>{value}</div>
-      <div className="font-mono" style={{ fontSize: styleSettings.bodySize, letterSpacing: '0.08em', color: '#999999', lineHeight: 1.6 }}>{sub}</div>
+      <div className="font-mono" style={{ fontSize: styleSettings.bodySize, letterSpacing: '0.08em', color: 'var(--color-body)', lineHeight: 1.6 }}>{sub}</div>
     </div>
   )
 }
@@ -181,8 +181,8 @@ export default async function AboutPage() {
             {/* Body LG */}
             <p
               data-reveal
-              className="font-mono"
-              style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.9, maxWidth: '560px', marginBottom: '40px' }}
+              className="font-reading"
+              style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: 'var(--color-heading)', lineHeight: 1.9, maxWidth: '560px', marginBottom: '40px' }}
             >
               {content.aboutPage.heroBody}
             </p>
@@ -199,14 +199,14 @@ export default async function AboutPage() {
         <section className="border-b border-divider about-who-sidebar" style={{ display: 'grid', gridTemplateColumns: '1fr 320px' }}>
           <div style={{ padding: '28px 40px', borderRight: '1px solid #1f1f1f' }}>
             <GsapReveal>
-              <span data-reveal className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#666666', display: 'block', marginBottom: '12px' }}>{copy.whoIAmLabel}</span>
-              <p data-reveal className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.03em', color: '#999999', lineHeight: 1.8 }}>
+              <span data-reveal className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.16em', color: 'var(--color-red)', display: 'block', marginBottom: '12px' }}>{copy.whoIAmLabel}</span>
+              <p data-reveal className="font-reading" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.03em', color: 'var(--color-heading)', lineHeight: 1.8 }}>
                 {content.aboutPage.whoIAm}
               </p>
             </GsapReveal>
           </div>
           <div style={{ padding: '28px 24px' }}>
-            <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: '#666666', display: 'block', marginBottom: '10px' }}>{copy.onRotationLabel}</span>
+            <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.16em', color: 'var(--color-red)', display: 'block', marginBottom: '10px' }}>{copy.onRotationLabel}</span>
             <SpotifyWidget variant="sidebar" styleSettings={content.design.listeningCard} interactionMode="static" />
           </div>
         </section>
@@ -254,7 +254,7 @@ export default async function AboutPage() {
                     style={{
                       fontSize: 'var(--text-meta)',
                       letterSpacing: '0.12em',
-                      color: '#999999',
+                      color: 'var(--color-body)',
                       border: '1px solid #1f1f1f',
                       padding: '6px 14px',
                     }}
@@ -298,8 +298,8 @@ export default async function AboutPage() {
               />
               <p
                 data-reveal
-                className="font-mono"
-                style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: '#666666', lineHeight: 1.9, marginBottom: '36px' }}
+                className="font-reading"
+                style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: 'var(--color-heading)', lineHeight: 1.9, marginBottom: '36px' }}
               >
                 {content.aboutPage.contactBody}
               </p>

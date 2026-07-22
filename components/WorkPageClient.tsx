@@ -89,7 +89,7 @@ export function WorkPageClient({
             <h1 data-reveal className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 'var(--font-weight-serif)', color: 'var(--color-heading)', lineHeight: 1.05, marginBottom: '20px' }}>
               {heroTitle}
             </h1>
-            <p data-reveal className="font-mono" style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: 'var(--color-body)', lineHeight: 1.9, maxWidth: '480px' }}>
+            <p data-reveal className="font-reading" style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: 'var(--color-heading)', lineHeight: 1.9, maxWidth: '480px' }}>
               {heroBody}
             </p>
           </GsapReveal>

@@ -45,6 +45,16 @@ const clashDisplay = localFont({
   display: 'swap',
 })
 
+// Reading typeface for prose. DM Mono stays on labels, eyebrows, meta and tags.
+const cabinetGrotesk = localFont({
+  src: [
+    { path: './fonts/cabinet-grotesk/CabinetGrotesk-Regular.woff2', weight: '400', style: 'normal' },
+    { path: './fonts/cabinet-grotesk/CabinetGrotesk-Medium.woff2', weight: '500', style: 'normal' },
+  ],
+  variable: '--font-cabinet-grotesk',
+  display: 'swap',
+})
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   applicationName: SITE_NAME,
@@ -162,7 +172,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html
       lang="en"
-      className={`${dmSerif.variable} ${dmMono.variable} ${clashDisplay.variable}`}
+      className={`${dmSerif.variable} ${dmMono.variable} ${clashDisplay.variable} ${cabinetGrotesk.variable}`}
       suppressHydrationWarning
     >
       <head>

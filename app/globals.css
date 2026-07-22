@@ -10,7 +10,7 @@
   /* Text — WCAG contrast on #0d0d0d bg */
   --color-white: #f5f2ed;     /* 17.3:1 — AAA ✓ */
   --color-heading: #f5f2ed;
-  --color-body: #999999;      /*  6.5:1 — AA  ✓ (all sizes) */
+  --color-body: #999999;      /*  6.5:1 — AA  ✓ — secondary text: cards, meta, listings */
   --color-label: #666666;     /*  3.1:1 — AA  ✓ (large text / decorative only) */
   --color-meta: #444444;      /*  2.0:1 — decorative only, not content */
   --color-stagenum: #2a2a2a;  /*  decorative */
@@ -26,6 +26,7 @@
   /* Fonts */
   --font-serif: var(--font-dm-serif), serif;
   --font-mono: "DM Mono", monospace;
+  --font-reading: var(--font-cabinet-grotesk), "Helvetica Neue", Arial, sans-serif;
   --font-weight-serif: 400;
   --font-weight-mono: 400;
 
@@ -101,6 +102,17 @@ html, body {
 
 .font-mono {
   font-weight: var(--font-weight-mono);
+}
+
+/* Reading typeface for prose. Labels, eyebrows, meta and tags stay on .font-mono. */
+.font-reading {
+  font-family: var(--font-reading);
+  font-weight: 400;
+}
+
+/* The single statement that carries each case study section. */
+.case-study-statement {
+  font-size: 20px;
 }
 
 /* Hide scrollbar — prevents layout shift on the fixed nav */
@@ -709,6 +721,10 @@ body.carousel-reengaging main {
   /* Case study — body text maxWidth removed on mobile */
   .case-study-body {
     max-width: 100% !important;
+  }
+
+  .case-study-statement {
+    font-size: 18px;
   }
 
   /* Case study — 2-col image grids collapse to single column */

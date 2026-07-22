@@ -219,7 +219,7 @@ export function HeroCarousel() {
               dangerouslySetInnerHTML={{ __html: stage.titleHtml }}
             />
           )}
-          <p className="font-mono" style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.05em', color: '#999999', maxWidth: '500px', lineHeight: 1.9, marginTop: '44px' }}>
+          <p className="font-reading" style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.05em', color: 'var(--color-heading)', maxWidth: '500px', lineHeight: 1.9, marginTop: '44px' }}>
             {stage.body}
           </p>
           {stage.footerLabel ? (

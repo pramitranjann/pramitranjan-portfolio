@@ -43,8 +43,8 @@ export function SelectedWork({
           {content.heading}
         </h2>
         <p
-          className="font-mono"
-          style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: 'var(--color-body)', lineHeight: 1.7, maxWidth: '480px' }}
+          className="font-reading"
+          style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: 'var(--color-heading)', lineHeight: 1.7, maxWidth: '480px' }}
         >
           {content.body}
         </p>

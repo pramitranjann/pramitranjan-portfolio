@@ -426,12 +426,6 @@ export interface CaseStudyContent {
   next: ProjectLink | null
   backHref?: string
   backLabel?: string
-  problem?: string
-  role?: string
-  research?: string
-  challenge?: string
-  process?: string
-  usabilityTesting?: string
   solution?: string
   outcomes?: string
   problemHeadline?: string

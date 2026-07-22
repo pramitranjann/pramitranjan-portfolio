@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import type { ListeningCardStyleSettings } from '@/lib/site-content-schema'
 import { playNav } from '@/lib/sounds'
 
@@ -156,15 +156,20 @@ export function SpotifyWidget({ variant, restingLabel, styleSettings, interactio
   )
 }
 
-function TrackTitle({
-  title,
-  fontSize,
-  color,
+/**
+ * Scrolls `text` horizontally when it overflows its container, otherwise renders
+ * a plain truncating line. Styling is entirely caller-supplied via
+ * `className` + `textStyle` — only the scroll behaviour is shared.
+ */
+function MarqueeText({
+  text,
+  className,
+  textStyle,
   expanded = false,
 }: {
-  title: string
-  fontSize: string
-  color: string
+  text: string
+  className?: string
+  textStyle?: CSSProperties
   expanded?: boolean
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -205,7 +210,7 @@ function TrackTitle({
       window.removeEventListener('resize', checkOverflow)
       observer?.disconnect()
     }
-  }, [title, expanded])
+  }, [text, expanded])
 
   return (
     <div
@@ -221,47 +226,32 @@ function TrackTitle({
         <div
           className="spotify-marquee-track"
           style={{
-            ['--spotify-marquee-duration' as string]: `${Math.max(10, title.length * 0.34)}s`,
-            color,
-            fontSize,
+            ['--spotify-marquee-duration' as string]: `${Math.max(10, text.length * 0.34)}s`,
           }}
         >
           <span
             ref={textRef}
-            className="font-serif spotify-marquee-segment"
-            style={{
-              fontStyle: 'italic',
-              fontWeight: 'var(--font-weight-serif)',
-              lineHeight: 1.3,
-            }}
+            className={`${className ?? ''} spotify-marquee-segment`.trim()}
+            style={textStyle}
           >
-            {title}
+            {text}
           </span>
           <span
             aria-hidden="true"
-            className="font-serif spotify-marquee-segment"
-            style={{
-              fontStyle: 'italic',
-              fontWeight: 'var(--font-weight-serif)',
-              lineHeight: 1.3,
-            }}
+            className={`${className ?? ''} spotify-marquee-segment`.trim()}
+            style={textStyle}
           >
-            {title}
+            {text}
           </span>
         </div>
       ) : (
         <div
-          className="font-serif"
+          className={className}
           style={{
-            fontSize,
-            fontStyle: 'italic',
-            fontWeight: 'var(--font-weight-serif)',
-            color,
+            ...textStyle,
             whiteSpace: expanded ? 'normal' : 'nowrap',
             overflow: expanded ? 'visible' : 'hidden',
             textOverflow: expanded ? 'clip' : 'ellipsis',
-            lineHeight: expanded ? 1.15 : 1.3,
-            paddingRight: expanded ? '0.08em' : 0,
           }}
         >
           <span
@@ -271,11 +261,62 @@ function TrackTitle({
               whiteSpace: expanded ? 'normal' : 'nowrap',
             }}
           >
-            {title}
+            {text}
           </span>
         </div>
       )}
     </div>
+  )
+}
+
+function TrackTitle({
+  title,
+  fontSize,
+  color,
+  expanded = false,
+}: {
+  title: string
+  fontSize: string
+  color: string
+  expanded?: boolean
+}) {
+  return (
+    <MarqueeText
+      text={title}
+      className="font-serif"
+      expanded={expanded}
+      textStyle={{
+        fontSize,
+        color,
+        fontStyle: 'italic',
+        fontWeight: 'var(--font-weight-serif)',
+        lineHeight: expanded ? 1.15 : 1.3,
+        paddingRight: expanded ? '0.08em' : 0,
+      }}
+    />
+  )
+}
+
+function TrackArtist({
+  artist,
+  fontSize,
+  color,
+  lineHeight,
+  expanded = false,
+}: {
+  artist: string
+  fontSize: string
+  color: string
+  lineHeight?: number
+  expanded?: boolean
+}) {
+  return (
+    <MarqueeText
+      text={artist.toUpperCase()}
+      className="font-mono"
+      expanded={expanded}
+      textStyle={{ fontSize, color, letterSpacing: '0.1em', lineHeight }}
+    />
   )
 }
 
@@ -363,8 +404,13 @@ function SidebarVariant({
               expanded={expanded}
             />
           </div>
-          <div className="font-mono" style={{ fontSize: styleSettings?.artistSize ?? '10px', letterSpacing: '0.1em', color: styleSettings?.artistColor ?? '#999999', marginTop: '3px' }}>
-            {track.artist.toUpperCase()}
+          <div style={{ marginTop: '3px' }}>
+            <TrackArtist
+              artist={track.artist}
+              fontSize={styleSettings?.artistSize ?? '10px'}
+              color={styleSettings?.artistColor ?? '#999999'}
+              expanded={expanded}
+            />
           </div>
           {expanded ? (
             <div className="font-mono" style={{ fontSize: '10px', letterSpacing: '0.12em', color: styleSettings?.labelColor ?? '#666666', marginTop: '8px', lineHeight: 1.6 }}>
@@ -483,9 +529,12 @@ function CellVariant({
                 color={styleSettings?.titleColor ?? '#f5f2ed'}
               />
             </div>
-            <div className="font-mono" style={{ fontSize: styleSettings?.artistSize ?? '10px', letterSpacing: '0.1em', color: styleSettings?.artistColor ?? '#999999', lineHeight: 1.5 }}>
-              {track.artist.toUpperCase()}
-            </div>
+            <TrackArtist
+              artist={track.artist}
+              fontSize={styleSettings?.artistSize ?? '10px'}
+              color={styleSettings?.artistColor ?? '#999999'}
+              lineHeight={1.5}
+            />
           </div>
         </div>
       </div>

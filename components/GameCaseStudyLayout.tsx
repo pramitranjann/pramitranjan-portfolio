@@ -175,7 +175,7 @@ function enterGame() {
                 </h1>
 
                 <p
-                  className="font-mono"
+                  className="font-reading"
                   style={{
                     fontSize: 'var(--text-body-lg)',
                     letterSpacing: '0.03em',
@@ -191,11 +191,11 @@ function enterGame() {
 
                 {project.solution ? (
                   <p
-                    className="font-mono"
+                    className="font-reading"
                     style={{
                       fontSize: 'var(--text-body)',
                       letterSpacing: '0.04em',
-                      color: 'var(--color-body)',
+                      color: 'var(--color-heading)',
                       lineHeight: 1.65,
                       maxWidth: '780px',
                       marginTop: '12px',
@@ -735,11 +735,11 @@ function enterGame() {
               </span>
 
               <p
-                className="case-study-body font-mono"
+                className="case-study-body font-reading"
                 style={{
                   fontSize: 'var(--text-body)',
                   letterSpacing: '0.04em',
-                  color: 'var(--color-body)',
+                  color: 'var(--color-heading)',
                   lineHeight: 1.7,
                   maxWidth: '760px',
                   margin: 0,

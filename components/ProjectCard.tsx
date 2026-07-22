@@ -142,7 +142,7 @@ export function ProjectCard({
         <div className="font-serif" style={{ fontSize: titleSize ?? 'var(--text-h3)', color: 'var(--color-heading)', marginBottom: '8px' }}>
           <span className="card-title-inner">{title}</span>
         </div>
-        <div className="font-mono" style={{ fontSize: bodySize ?? 'var(--text-body)', color: 'var(--color-body)', lineHeight: 1.6 }}>{oneliner}</div>
+        <div className="font-reading" style={{ fontSize: bodySize ?? 'var(--text-body)', color: 'var(--color-body)', lineHeight: 1.6 }}>{oneliner}</div>
         {!comingSoon && (
           <div className="font-mono" style={{ marginTop: '14px', fontSize: metaSize ?? 'var(--text-meta)', color: 'var(--color-red)', letterSpacing: '0.1em' }}>
             <span className="card-cta-inner">VIEW</span> →
@@ -278,7 +278,7 @@ export function ProjectCard({
             <div className="font-serif" style={{ fontSize: titleSize ?? 'var(--text-h3)', color: 'var(--color-heading)', marginBottom: '8px', ...hiddenTextStyle }}>
               <span className="card-title-inner">{title}</span>
             </div>
-            <div className="font-mono" style={{ fontSize: bodySize ?? 'var(--text-body)', color: 'var(--color-body)', lineHeight: 1.6, ...hiddenTextStyle }}>{oneliner}</div>
+            <div className="font-reading" style={{ fontSize: bodySize ?? 'var(--text-body)', color: 'var(--color-body)', lineHeight: 1.6, ...hiddenTextStyle }}>{oneliner}</div>
             {!comingSoon && (
               <div className="font-mono" style={{ marginTop: '14px', fontSize: metaSize ?? 'var(--text-meta)', color: 'var(--color-red)', letterSpacing: '0.1em', ...hiddenTextStyle }}>
                 <span className="card-cta-inner">VIEW</span> →

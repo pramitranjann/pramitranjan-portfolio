@@ -58,8 +58,8 @@ export function About({
         />
 
         <p
-          className="reveal-text font-mono"
-          style={{ fontSize: 'var(--text-body-lg)', color: 'var(--color-body)', lineHeight: 1.9, maxWidth: '440px', letterSpacing: '0.04em' }}
+          className="reveal-text font-reading"
+          style={{ fontSize: 'var(--text-body-lg)', color: 'var(--color-heading)', lineHeight: 1.9, maxWidth: '440px', letterSpacing: '0.04em' }}
         >
           {body}
         </p>

@@ -34,7 +34,7 @@ export function MoreWork({ content, cardStyle }: { content: HomeSection; cardSty
         >
           {content.heading}
         </h2>
-        <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', letterSpacing: '0.04em', lineHeight: 1.6 }}>
+        <p className="font-reading" style={{ fontSize: 'var(--text-body)', color: '#999999', letterSpacing: '0.04em', lineHeight: 1.6 }}>
           {content.body}
         </p>
       </div>

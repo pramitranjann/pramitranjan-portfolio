@@ -70,11 +70,11 @@ export function UnderConstructionPage({
             </h1>
 
             <p
-              className="font-mono"
+              className="font-reading"
               style={{
                 fontSize: 'var(--text-body-lg)',
                 letterSpacing: '0.04em',
-                color: 'var(--color-body)',
+                color: 'var(--color-heading)',
                 lineHeight: 1.8,
                 maxWidth: '620px',
                 marginTop: '24px',
