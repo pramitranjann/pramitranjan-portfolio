@@ -25,7 +25,7 @@ const DRAWER_EASE = "ease-in-out";
 const WARNING_FG = "#B5720B";
 const CAT_COLORS = ["#03B2CB", SUCCESS, WARNING, ERR, MINT, NAVY];
 
-const MEMBERS = ["TAN WEI LING", "Rajesh Nair", "Nurul Hakim", "Daniel Ong"];
+const MEMBERS = ["TAN WEI LING", "Rajesh Nair", "Nurul Hakim", "Daniel Ong", "Rouvin"];
 const MEMBER_COLORS = [NAVY, "#03B2CB", SUCCESS, ERR];
 const initialsOf = (name) => name.split(/\s+/).map(w => w[0]).slice(0, 2).join("").toUpperCase();
 
@@ -345,9 +345,28 @@ const BASE_META = [
   { key: "status", label: "Status" },
   { key: "approval", label: "Approval" },
 ];
-const COL_WIDTH = { date: "170px", details: "minmax(220px,1.3fr)", account: "minmax(220px,1.3fr)", documents: "100px", amount: "minmax(120px,140px)", status: "minmax(180px,1fr)", approval: "160px" };
+const DETAIL_META = [
+  { key: "detail.status", label: "Status" },
+  { key: "detail.accountNumber", label: "Account number" },
+  { key: "detail.accountName", label: "Account name" },
+  { key: "detail.cardEnding", label: "Card ending in" },
+  { key: "detail.cardName", label: "Card name" },
+  { key: "detail.merchantName", label: "Merchant name" },
+  { key: "detail.date", label: "Date & Time" },
+  { key: "detail.category", label: "Category" },
+  { key: "detail.transactionNo", label: "Transaction No." },
+  { key: "detail.employeeName", label: "Employee name" },
+  { key: "detail.notes", label: "Notes" },
+];
+// ponytail: fixed widths, no fr — deterministic tracks so column widths never shift on scroll/overflow
+const COL_WIDTH = { date: "170px", details: "180px", account: "240px", documents: "100px", amount: "140px", status: "200px", approval: "160px" };
+const ADD_COL_WIDTH = 64;
+const TABLE_GAP = 14;
+const TABLE_PAD_X = 28;
+const SELECT_COL_WIDTH = 48;
+const SELECT_TRACK_WIDTH = TABLE_PAD_X + SELECT_COL_WIDTH;
 /* unified: widths follow the single ordered list; base uses fixed widths, custom flexes */
-const buildCols = (visible, withSelect) => `${withSelect ? "40px " : ""}${visible.map(m => m.custom ? "minmax(150px,1fr)" : COL_WIDTH[m.key]).join(" ")} 52px`;
+const buildCols = (visible, withSelect) => `${withSelect ? `${SELECT_TRACK_WIDTH}px ` : ""}${visible.map(m => m.custom ? "200px" : COL_WIDTH[m.key]).join(" ")}`;
 
 /* ───────────────── Field types ───────────────── */
 
@@ -361,6 +380,143 @@ const FIELD_TYPES = [
   { type: "member", label: "Member", color: NAVY },
 ];
 const typeLabelOf = (type) => (FIELD_TYPES.find(f => f.type === type) || {}).label || type;
+const INITIAL_CUSTOM_COLUMNS = [
+  { id: "reviewer", label: "Reviewer", type: "member", options: [], def: "", desc: "Editable reviewer assigned by rules", alfie: null },
+];
+const INITIAL_RULES = [
+  {
+    id: "rule-pramit-reviewer",
+    name: "Assign reviewer for Pramit",
+    active: true,
+    priority: 100,
+    trigger: "create_update",
+    conditions: [{ field: "account", operator: "is", value: "Pramit" }],
+    actions: [{ field: "reviewer", value: "Rouvin" }],
+    alfieDraft: false,
+  },
+];
+
+const RULE_TRIGGERS = [
+  { key: "create_update", label: "a transaction is created or updated" },
+  { key: "created", label: "a transaction is created" },
+  { key: "updated", label: "a transaction is updated" },
+];
+const RULE_OPERATORS = {
+  text: [
+    { key: "is", label: "is" },
+    { key: "is_not", label: "is not" },
+    { key: "contains", label: "contains" },
+    { key: "is_empty", label: "is empty", noValue: true },
+  ],
+  dropdown: [
+    { key: "is", label: "is" },
+    { key: "is_not", label: "is not" },
+    { key: "is_empty", label: "is empty", noValue: true },
+  ],
+  number: [
+    { key: "eq", label: "equals" },
+    { key: "gt", label: "is greater than" },
+    { key: "lt", label: "is less than" },
+    { key: "is_empty", label: "is empty", noValue: true },
+  ],
+  date: [
+    { key: "is", label: "is" },
+    { key: "before", label: "is before" },
+    { key: "after", label: "is after" },
+    { key: "is_empty", label: "is empty", noValue: true },
+  ],
+  checkbox: [
+    { key: "is_checked", label: "is checked", noValue: true },
+    { key: "is_unchecked", label: "is unchecked", noValue: true },
+  ],
+  member: [
+    { key: "is", label: "is" },
+    { key: "is_not", label: "is not" },
+    { key: "is_empty", label: "is empty", noValue: true },
+  ],
+};
+const operatorsForType = (type) => RULE_OPERATORS[type] || RULE_OPERATORS.text;
+const operatorMeta = (type, op) => operatorsForType(type).find(o => o.key === op) || operatorsForType(type)[0];
+const firstValueForField = (field) => {
+  if (!field) return "";
+  if (field.type === "checkbox") return false;
+  if (field.type === "member") return (field.options && field.options[0]) || MEMBERS[0] || "";
+  if (field.type === "dropdown") return (field.options && field.options[0]) || "";
+  return "";
+};
+const blankCondition = (fields) => {
+  const field = fields[0] || null;
+  return { field: field ? field.key : "", operator: operatorsForType(field ? field.type : "text")[0].key, value: firstValueForField(field) };
+};
+const blankAction = (fields) => {
+  const field = fields[0] || null;
+  return { field: field ? field.key : "", value: firstValueForField(field) };
+};
+const ruleFieldByKey = (fields, key) => fields.find(f => f.key === key) || null;
+const labelForRuleValue = (field, value) => {
+  if (!field) return value || "a value";
+  if (field.type === "checkbox") return value ? "checked" : "unchecked";
+  return value || "blank";
+};
+const describeRuleCondition = (condition, fields) => {
+  const field = ruleFieldByKey(fields, condition.field);
+  if (!field) return "unknown field";
+  const op = operatorMeta(field.type, condition.operator);
+  return op.noValue ? `${field.label} ${op.label}` : `${field.label} ${op.label} ${labelForRuleValue(field, condition.value)}`;
+};
+const describeRuleAction = (action, fields) => {
+  const field = ruleFieldByKey(fields, action.field);
+  if (!field) return "Set unknown field";
+  return `Set field ${field.label} to ${labelForRuleValue(field, action.value)}`;
+};
+const summarizeRule = (rule, conditionFields, actionFields) => {
+  const trigger = (RULE_TRIGGERS.find(t => t.key === rule.trigger) || RULE_TRIGGERS[0]).label;
+  const conditions = (rule.conditions || []).filter(c => c.field).map(c => describeRuleCondition(c, conditionFields));
+  const actions = (rule.actions || []).filter(a => a.field).map(a => describeRuleAction(a, actionFields));
+  return `When ${trigger}; if ${conditions.length ? conditions.join(" and ") : "all transactions"}; then ${actions.length ? actions.join("; ") : "no actions yet"}.`;
+};
+const ruleSignature = (rule) => JSON.stringify({
+  trigger: rule.trigger,
+  conditions: (rule.conditions || []).map(condition => ({ field: condition.field, operator: condition.operator, value: condition.value })),
+  actions: (rule.actions || []).map(action => ({ field: action.field, value: action.value })),
+});
+const ruleDateValue = (value) => {
+  if (!value) return "";
+  const d = new Date(String(value).replace("|", ""));
+  return Number.isNaN(d.getTime()) ? "" : d.toISOString().slice(0, 10);
+};
+const compareRuleCondition = (rowValue, condition, field) => {
+  const op = operatorMeta(field.type, condition.operator);
+  const empty = rowValue === "" || rowValue == null || rowValue === false;
+  if (op.key === "is_empty") return empty;
+  if (op.key === "is_checked") return !!rowValue;
+  if (op.key === "is_unchecked") return !rowValue;
+  if (field.type === "number") {
+    const a = parseFloat(rowValue);
+    const b = parseFloat(condition.value);
+    if (Number.isNaN(a) || Number.isNaN(b)) return false;
+    if (op.key === "gt") return a > b;
+    if (op.key === "lt") return a < b;
+    return a === b;
+  }
+  if (field.type === "date") {
+    const a = ruleDateValue(rowValue);
+    const b = ruleDateValue(condition.value);
+    if (!a || !b) return false;
+    if (op.key === "before") return a < b;
+    if (op.key === "after") return a > b;
+    return a === b;
+  }
+  const a = String(rowValue || "").toLowerCase();
+  const b = String(condition.value || "").toLowerCase();
+  if (op.key === "contains") return a.includes(b);
+  if (op.key === "is_not") return a !== b;
+  return a === b;
+};
+const ruleMatchesRow = (rule, row, conditionFields) => (rule.conditions || []).every(condition => {
+  const field = ruleFieldByKey(conditionFields, condition.field);
+  return field ? compareRuleCondition(field.valueOf(row), condition, field) : false;
+});
 
 const FieldTypeIcon = ({ type, color, size = 18 }) => {
   const p = { width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" };
@@ -380,18 +536,21 @@ const OPT_COLORS = CAT_COLORS; /* option dots share the categorical ramp (P1-8) 
 
 /* ───────────────── Custom-column cell (click-to-edit) ───────────────── */
 
-const CustomCell = ({ col, value, onChange, suggested, onConfirm, suggestedOption, onAddOption, required }) => {
+const CustomCell = ({ col, value, onChange, suggested, onConfirm, suggestedOption, onAddOption, required, popoverPlacement = "down" }) => {
   const [editing, setEditing] = React.useState(false);   // input / option-list open
   const [aiMenu, setAiMenu] = React.useState(false);     // Accept/Edit mini popover
   const src = col && col.alfie ? alfieSourceOf(col.alfie) : null;   // P2-8 provenance
   const emptyRequired = required && !value && col.type !== "checkbox";  // P2-9 flag
   const reqDot = <span title="Required — needs a value" style={{ width: 6, height: 6, borderRadius: "50%", background: WARNING, flexShrink: 0 }}/>;
+  const popoverPosition = popoverPlacement === "up"
+    ? { bottom: "calc(100% + 6px)", right: 0 }
+    : { top: "calc(100% + 6px)", left: 0 };
 
   /* Accept/Edit popover shared by suggested textual + dropdown cells */
   const acceptEditPopover = (onEdit) => (
     <>
       <div onClick={() => setAiMenu(false)} style={{ position: "fixed", inset: 0, zIndex: 30 }}/>
-      <div style={{ position: "absolute", top: "calc(100% + 6px)", left: 0, zIndex: 31, background: "#fff", borderRadius: 8, boxShadow: "0 8px 24px rgba(0,40,64,.08)", border: "1px solid #C0EEE4", padding: 12, minWidth: 196 }}>
+      <div style={{ position: "absolute", ...popoverPosition, zIndex: 31, background: "#fff", borderRadius: 8, boxShadow: "0 8px 24px rgba(0,40,64,.08)", border: "1px solid #C0EEE4", padding: 12, minWidth: 196 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 5 }}>
           <Sparkle size={13}/>
           <span style={{ fontFamily: "Quicksand, sans-serif", fontSize: 11, fontWeight: 600, color: ALFIE }}>Suggested by Alfie</span>
@@ -413,7 +572,7 @@ const CustomCell = ({ col, value, onChange, suggested, onConfirm, suggestedOptio
     return (
       <div style={{ position: "relative" }}>
         <div {...activate(() => setAiMenu(true))} title={"Suggested by Alfie" + (src ? " — from " + src : "")} aria-label={"Alfie suggested " + value + (src ? ", from " + src : "")}
-          style={{ display: "inline-flex", alignItems: "center", gap: 6, cursor: "pointer", background: ALFIE_TINT, border: `1px dashed ${ALFIE}`, borderRadius: 8, padding: "5px 10px", fontFamily: "Quicksand, sans-serif", fontSize: 13, fontWeight: 500 }}>
+          style={{ display: "inline-flex", alignItems: "center", gap: 6, cursor: "pointer", background: ALFIE_TINT, border: `1px dashed ${ALFIE}`, borderRadius: 8, padding: "5px 10px", fontFamily: "Quicksand, sans-serif", fontSize: 14, fontWeight: 500 }}>
           <Sparkle size={12}/>
           <span style={{ color: "#1F1F1F", opacity: .8, fontVariantNumeric: col.type === "number" ? "tabular-nums" : "normal" }}>{value}</span>
         </div>
@@ -442,10 +601,10 @@ const CustomCell = ({ col, value, onChange, suggested, onConfirm, suggestedOptio
       <input autoFocus type={inputType} defaultValue={value || ""}
         onBlur={(e) => { onChange(e.target.value); setEditing(false); }}
         onKeyDown={(e) => { if (e.key === "Enter") { onChange(e.target.value); setEditing(false); } if (e.key === "Escape") setEditing(false); }}
-        style={{ width: "100%", boxSizing: "border-box", border: "1px solid " + MINT, borderRadius: 6, padding: "6px 8px", fontFamily: "Poppins, sans-serif", fontSize: 13, color: "#1F1F1F", outline: "none" }}/>
+        style={{ width: "100%", boxSizing: "border-box", border: "1px solid " + MINT, borderRadius: 6, padding: "6px 8px", fontFamily: "Poppins, sans-serif", fontSize: 14, color: "#1F1F1F", outline: "none" }}/>
     ) : (
       <div {...activate(() => setEditing(true))} title={emptyRequired ? "Required — needs a value" : undefined}
-        style={{ cursor: "text", display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Quicksand, sans-serif", fontSize: 13, color: value ? "#1F1F1F" : (emptyRequired ? WARNING_FG : "#CBCBCB"), padding: "6px 4px", borderRadius: 6, minHeight: 18, fontVariantNumeric: col.type === "number" ? "tabular-nums" : "normal" }}>
+        style={{ cursor: "text", display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Quicksand, sans-serif", fontSize: 14, color: value ? "#1F1F1F" : (emptyRequired ? WARNING_FG : "#CBCBCB"), padding: "6px 4px", borderRadius: 6, minHeight: 18, fontVariantNumeric: col.type === "number" ? "tabular-nums" : "normal" }}>
         {emptyRequired && reqDot}
         {value || (emptyRequired ? "Required" : placeholder)}
       </div>
@@ -465,19 +624,19 @@ const CustomCell = ({ col, value, onChange, suggested, onConfirm, suggestedOptio
 
   const suggestedTrigger = (
     <div {...activate(() => setAiMenu(true))} title={"Suggested by Alfie" + (src ? " — from " + src : "")} aria-label={"Alfie suggested " + value + (src ? ", from " + src : "")}
-      style={{ display: "inline-flex", alignItems: "center", gap: 6, cursor: "pointer", background: ALFIE_TINT, border: `1px dashed ${ALFIE}`, borderRadius: 9999, padding: "4px 11px", fontFamily: "Quicksand, sans-serif", fontSize: 12.5, fontWeight: 600, color: "#1F1F1F" }}>
+      style={{ display: "inline-flex", alignItems: "center", gap: 6, cursor: "pointer", background: ALFIE_TINT, border: `1px dashed ${ALFIE}`, borderRadius: 8, padding: "5px 11px", fontFamily: "Quicksand, sans-serif", fontSize: 14, fontWeight: 600, color: "#1F1F1F" }}>
       <Sparkle size={12}/>
       <span style={{ opacity: .8 }}>{value}</span>
     </div>
   );
 
   const trigger = suggested ? suggestedTrigger : (isMember && value ? (
-    <div {...activate(() => setEditing(o => !o))} aria-label={col.label + ": " + value} style={{ display: "inline-flex", alignItems: "center", gap: 8, cursor: "pointer", background: "rgba(39,216,178,.12)", borderRadius: 9999, padding: "4px 11px 4px 4px", fontFamily: "Quicksand, sans-serif", fontSize: 12.5, fontWeight: 600, color: NAVY }}>
+    <div {...activate(() => setEditing(o => !o))} aria-label={col.label + ": " + value} style={{ display: "inline-flex", alignItems: "center", gap: 8, cursor: "pointer", background: "rgba(39,216,178,.12)", border: "1px solid #C0EEE4", borderRadius: 8, padding: "4px 11px 4px 4px", fontFamily: "Quicksand, sans-serif", fontSize: 14, fontWeight: 600, color: NAVY }}>
       {dotFor(value, selIdx < 0 ? 0 : selIdx)} {value}
     </div>
   ) : (
     <div {...activate(() => setEditing(o => !o))} title={emptyRequired ? "Required — needs a value" : undefined} aria-label={(col.label || "") + (value ? ": " + value : emptyRequired ? ": required, empty" : ": empty")}
-      style={{ display: "inline-flex", alignItems: "center", gap: 6, cursor: "pointer", background: value ? "rgba(39,216,178,.14)" : "#F2F2F2", color: value ? NAVY : (emptyRequired ? WARNING_FG : "#939393"), boxShadow: emptyRequired ? "inset 0 0 0 1px rgba(255,194,18,.8)" : "none", borderRadius: 9999, padding: "5px 11px", fontFamily: "Quicksand, sans-serif", fontSize: 12.5, fontWeight: 600 }}>
+      style={{ display: "inline-flex", alignItems: "center", gap: 6, cursor: "pointer", background: value ? "rgba(39,216,178,.14)" : "#F2F2F2", color: value ? NAVY : (emptyRequired ? WARNING_FG : "#939393"), border: value ? "1px solid #C0EEE4" : "1px solid transparent", boxShadow: emptyRequired ? "inset 0 0 0 1px rgba(255,194,18,.8)" : "none", borderRadius: 8, padding: "5px 11px", fontFamily: "Quicksand, sans-serif", fontSize: 14, fontWeight: 600 }}>
       {value && !isMember && <span style={{ width: 9, height: 9, borderRadius: "50%", background: OPT_COLORS[(selIdx < 0 ? 0 : selIdx) % OPT_COLORS.length], flexShrink: 0 }}/>}
       {!value && emptyRequired && reqDot}
       {value || (isMember ? "Assign" : (emptyRequired ? "Required" : "Select"))}
@@ -492,7 +651,7 @@ const CustomCell = ({ col, value, onChange, suggested, onConfirm, suggestedOptio
       {editing && (
         <>
           <div onClick={() => setEditing(false)} style={{ position: "fixed", inset: 0, zIndex: 30 }}/>
-          <div style={{ position: "absolute", top: "calc(100% + 6px)", left: 0, zIndex: 31, background: "#fff", borderRadius: 8, boxShadow: "0 8px 24px rgba(0,40,64,.08)", border: "1px solid #C0EEE4", padding: 6, minWidth: 196 }}>
+          <div style={{ position: "absolute", ...popoverPosition, zIndex: 31, background: "#fff", borderRadius: 8, boxShadow: "0 8px 24px rgba(0,40,64,.08)", border: "1px solid #C0EEE4", padding: 6, minWidth: 196 }}>
             {opts.map((o, i) => (
               <div key={o} {...activate(() => { onChange(o === value ? "" : o); setEditing(false); })}
                 style={{ display: "flex", alignItems: "center", gap: 9, padding: "8px 10px", borderRadius: 8, cursor: "pointer", fontFamily: "Quicksand, sans-serif", fontSize: 13, color: "#1F1F1F", background: o === value ? "rgba(39,216,178,.12)" : "transparent" }}
@@ -534,6 +693,12 @@ const ToggleSwitch = ({ on, onClick, label }) => (
   </button>
 );
 
+const SmallToggleSwitch = ({ on, onClick, label }) => (
+  <button onClick={onClick} role="switch" aria-checked={!!on} aria-label={label} style={{ width: 34, height: 20, borderRadius: 9999, border: "none", cursor: "pointer", background: on ? MINT : "#CBCBCB", position: "relative", transition: `background .15s ${EASE}`, flexShrink: 0 }}>
+    <span style={{ position: "absolute", top: 2, left: on ? 16 : 2, width: 16, height: 16, borderRadius: "50%", background: "#fff", transition: `left .15s ${EASE}`, boxShadow: "0 1px 2px rgba(0,0,0,.07)" }}/>
+  </button>
+);
+
 /* ───────────────── Column header (click-to-edit) ───────────────── */
 
 /* brief one-shot highlight on a freshly created column header — opacity fade only */
@@ -553,7 +718,7 @@ const ColumnHeader = ({ meta, required, onEdit, flash, pendingCount = 0, onAccep
   React.useEffect(() => {
     if (!flash || !ref.current || !ref.current.scrollIntoView) return;
     const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    ref.current.scrollIntoView({ behavior: reduce ? "auto" : "smooth", inline: "center", block: "nearest" });
+    ref.current.scrollIntoView({ behavior: reduce ? "auto" : "smooth", inline: "nearest", block: "nearest" });
   }, [flash]);
   return (
     <div ref={ref} {...activate(onEdit)} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
@@ -633,6 +798,9 @@ const HandleIcon = () => (
 const TrashIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>
 );
+const EditIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M4 20h4l10.5-10.5a2.1 2.1 0 00-3-3L5 17v3z"/><path d="M14 8l2 2"/></svg>
+);
 const LockIcon = ({ size = 13, color = NAVY }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>
 );
@@ -707,9 +875,10 @@ const AlfieSuggestsCard = ({ heading, headingSize = 14, onDismiss, style, childr
   );
 };
 
-const ManagerView = ({ orderedAll, hidden, required, pending, onClose, onReorder, onToggleHidden, onToggleRequired, onEdit, onDeleteRequest, onUndo, onAddField, lab, suggestions, onPickSuggestion, suggestsDismissed, onDismissSuggests }) => {
+const ManagerView = ({ activeTab, onTabChange, orderedAll, hidden, required, pending, onClose, onReorder, onToggleHidden, onToggleRequired, onEdit, onDeleteRequest, onUndo, onAddField, lab, suggestions, onPickSuggestion, suggestsDismissed, onDismissSuggests, rules, conditionFields, actionFields, onStartCreateRule, onStartAlfieDraft, onEditRule, onToggleRule }) => {
   const [armed, setArmed] = React.useState(null);
   const [dragKey, setDragKey] = React.useState(null);
+  const [alfieRuleDismissed, setAlfieRuleDismissed] = React.useState(false);
 
   const keys = orderedAll.map(m => m.key);
   const onDragOver = (e, overKey) => {
@@ -730,7 +899,7 @@ const ManagerView = ({ orderedAll, hidden, required, pending, onClose, onReorder
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 24px", borderBottom: "1px solid #C0EEE4" }}>
           <div>
             <div style={{ fontSize: 19, fontWeight: 700, color: NAVY }}>Manage fields</div>
-            <div style={{ fontFamily: "Quicksand, sans-serif", fontSize: 12, color: "#939393", marginTop: 2 }}>Reorder, show/hide, and edit table columns</div>
+            <div style={{ fontFamily: "Quicksand, sans-serif", fontSize: 12, color: "#939393", marginTop: 2 }}>Manage transaction fields and rules</div>
           </div>
           <button onClick={onClose} aria-label="Close" style={iconBtn} {...press}>{closeSvg}</button>
         </div>
@@ -738,19 +907,36 @@ const ManagerView = ({ orderedAll, hidden, required, pending, onClose, onReorder
         {/* P1-6 — field management is admin-scoped (current user treated as Admin) */}
         <div style={{ display: "flex", alignItems: "center", gap: 8, margin: "12px 24px 0", padding: "9px 12px", background: "rgba(39,216,178,.10)", border: "1px solid rgba(39,216,178,.28)", borderRadius: 8 }}>
           <LockIcon/>
-          <span style={{ fontFamily: "Quicksand, sans-serif", fontSize: 11.5, color: "#4A4A4A", lineHeight: 1.4 }}>Only admins can manage fields. You’re an <b style={{ color: NAVY }}>Admin</b>.</span>
+          <span style={{ fontFamily: "Quicksand, sans-serif", fontSize: 11.5, color: "#4A4A4A", lineHeight: 1.4 }}>Only admins can manage fields and rules. You’re an <b style={{ color: NAVY }}>Admin</b>.</span>
         </div>
 
-        {/* column labels for the toggle columns — matches settings-table header style */}
-        <div style={{ display: "grid", gridTemplateColumns: ROW_GRID, gap: 12, alignItems: "center", padding: "10px 24px 6px", fontFamily: "Quicksand, sans-serif", fontSize: 12, fontWeight: 500, color: "#939393" }}>
-          <span/>
-          <span>Field</span>
-          <span style={{ textAlign: "center" }}>Show</span>
-          <span style={{ textAlign: "center" }}>Required</span>
-          <span/>
+        <div role="tablist" aria-label="Manage fields sections" style={{ display: "flex", margin: "12px 24px 0", borderBottom: "1px solid #C0EEE4" }}>
+          {[
+            { key: "fields", label: "Fields" },
+            { key: "rules", label: "Rules" },
+          ].map(tab => {
+            const active = activeTab === tab.key;
+            return (
+              <button key={tab.key} role="tab" aria-selected={active} onClick={() => onTabChange(tab.key)}
+                style={{ flex: 1, minHeight: 42, border: "none", borderBottom: active ? `2px solid ${MINT}` : "2px solid transparent", background: active ? "#EBFBF6" : "transparent", color: active ? NAVY : "#707070", cursor: "pointer", fontFamily: "Quicksand, sans-serif", fontSize: 13.5, fontWeight: active ? 700 : 600, transition: `background .15s ${EASE}, color .15s ${EASE}, border-color .15s ${EASE}` }}>
+                {tab.label}
+              </button>
+            );
+          })}
         </div>
 
-        <ScrollFade style={{ padding: `0 14px ${FOOTER_CLEARANCE}px` }}>
+        {activeTab === "fields" ? (
+          <>
+            {/* column labels for the toggle columns — matches settings-table header style */}
+            <div style={{ display: "grid", gridTemplateColumns: ROW_GRID, gap: 12, alignItems: "center", padding: "10px 24px 6px", fontFamily: "Quicksand, sans-serif", fontSize: 12, fontWeight: 500, color: "#939393" }}>
+              <span/>
+              <span>Field</span>
+              <span style={{ textAlign: "center" }}>Show</span>
+              <span style={{ textAlign: "center" }}>Required</span>
+              <span/>
+            </div>
+
+            <ScrollFade style={{ padding: `0 14px ${FOOTER_CLEARANCE}px` }}>
           {orderedAll.map(m => {
             const isPending = pending.includes(m.key);
             const isDragged = dragKey === m.key;
@@ -840,8 +1026,22 @@ const ManagerView = ({ orderedAll, hidden, required, pending, onClose, onReorder
               </div>
             );
           })()}
-        </ScrollFade>
+            </ScrollFade>
+          </>
+        ) : (
+          <RulesManagerList
+            rules={rules}
+            conditionFields={conditionFields}
+            actionFields={actionFields}
+            alfieDismissed={alfieRuleDismissed}
+            onDismissAlfie={() => setAlfieRuleDismissed(true)}
+            onStartCreateRule={onStartCreateRule}
+            onStartAlfieDraft={onStartAlfieDraft}
+            onEditRule={onEditRule}
+            onToggleRule={onToggleRule}/>
+        )}
 
+        {activeTab === "fields" && (
         <div style={{ ...footerOverlay, padding: "14px 24px" }}>
           <button onClick={onAddField} {...press} style={{
             width: "100%", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
@@ -852,6 +1052,7 @@ const ManagerView = ({ orderedAll, hidden, required, pending, onClose, onReorder
             Add field
           </button>
         </div>
+        )}
     </>
   );
 };
@@ -859,6 +1060,7 @@ const ManagerView = ({ orderedAll, hidden, required, pending, onClose, onReorder
 /* ───────────────── Field editor view (create + edit; lives inside the unified drawer) ───────────────── */
 
 const EditorView = ({ mode, field, preset, initialRequired, initialHidden, onBack, onSubmit, onDelete, lab, suggestions, suggestsDismissed, onDismissSuggests }) => {
+  const isDetail = !!(field && field.detail);
   const isBase = !!(field && !field.custom);
   const col = field && field.custom ? field.col : null;
 
@@ -914,7 +1116,7 @@ const EditorView = ({ mode, field, preset, initialRequired, initialHidden, onBac
 
   const fieldLabel = { display: "block", fontFamily: "Quicksand, sans-serif", fontSize: 14, fontWeight: 600, color: "#4A4A4A", marginBottom: 8 };
   const textInput = { width: "100%", boxSizing: "border-box", border: "1px solid #E7E7E7", borderRadius: 8, padding: "12px 14px", fontFamily: "Poppins, sans-serif", fontSize: 15, outline: "none", color: NAVY };
-  const title = mode === "create" ? "New field" : (isBase ? "Edit column" : "Edit field");
+  const title = mode === "create" ? "New field" : (isDetail ? "Edit detail field" : (isBase ? "Edit column" : "Edit field"));
 
   /* reference-pill chips: 8% accent tint, vivid blue border + sparkle, ink label (AA on the tint) */
   const suggestChips = (
@@ -1066,8 +1268,8 @@ const EditorView = ({ mode, field, preset, initialRequired, initialHidden, onBac
           <div style={{ marginTop: 24, borderTop: "1px solid #C0EEE4", paddingTop: 8 }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "13px 0", borderBottom: "1px solid #C0EEE4" }}>
               <div>
-                <div style={{ fontFamily: "Quicksand, sans-serif", fontSize: 13.5, fontWeight: 500, color: "#1F1F1F" }}>Show on list</div>
-                <div style={{ fontFamily: "Quicksand, sans-serif", fontSize: 11.5, color: "#939393", marginTop: 2 }}>Display this column in the table</div>
+                <div style={{ fontFamily: "Quicksand, sans-serif", fontSize: 13.5, fontWeight: 500, color: "#1F1F1F" }}>{isDetail ? "Show in detail drawer" : "Show on list"}</div>
+                <div style={{ fontFamily: "Quicksand, sans-serif", fontSize: 11.5, color: "#939393", marginTop: 2 }}>{isDetail ? "Display this field in the transaction detail drawer" : "Display this column in the table"}</div>
               </div>
               <ToggleSwitch on={shownOnList} onClick={() => setShownOnList(v => !v)}/>
             </div>
@@ -1087,7 +1289,7 @@ const EditorView = ({ mode, field, preset, initialRequired, initialHidden, onBac
 
         <div style={{ ...footerOverlay, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, padding: "16px 24px" }}>
           <div>
-            {mode === "edit" && field && field.custom && onDelete && (
+            {mode === "edit" && onDelete && (
               <button onClick={onDelete} {...press} style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "#fff", border: "1px solid rgba(219,44,77,.35)", borderRadius: 8, padding: "11px 18px", fontFamily: "Quicksand, sans-serif", fontSize: 14, fontWeight: 700, color: ERR, cursor: "pointer", transition: `transform .12s ${EASE}` }}><TrashIcon/> Delete</button>
             )}
           </div>
@@ -1101,7 +1303,8 @@ const EditorView = ({ mode, field, preset, initialRequired, initialHidden, onBac
 };
 
 /* ───────────────── Unified field drawer (manager ⇄ editor) ─────────────────
-   One right-side container, fixed 468px × 100vh for both views. The shell itself
+   One right-side container shared by fields and rules.
+   The shell itself
    enters and exits with a slide-from-right + fade, 300ms ease-in-out, from every
    entry point; the parent delays unmount 300ms so the exit can play. The views swap
    inside it via a 48px horizontal slide + cross-fade, 300ms ease-in-out
@@ -1128,7 +1331,7 @@ const ViewPane = ({ id, active, dir, reduce, children }) => {
   );
 };
 
-const FieldDrawer = ({ open, view, onClose, onBack, manager, editorView }) => {
+const FieldDrawer = ({ open, view, editorLabel, onClose, onBack, manager, editorView }) => {
   /* shell enter/exit: parent keeps the drawer mounted for 300ms after open flips
      false, so the slide-out + fade can play before unmount (instant under reduced motion) */
   const entered = useSlideIn();
@@ -1164,7 +1367,7 @@ const FieldDrawer = ({ open, view, onClose, onBack, manager, editorView }) => {
   return (
     <>
       <div onClick={onClose} style={{ position: "fixed", inset: 0, zIndex: 69, background: "rgba(0,40,64,.12)", opacity: shown ? 1 : 0, transition: `opacity .3s ${EASE}`, pointerEvents: open ? "auto" : "none" }}/>
-      <div ref={panelRef} role="dialog" aria-modal="true" aria-label={view === "editor" ? "Field editor" : "Manage fields"} style={{
+      <div ref={panelRef} role="dialog" aria-modal="true" aria-label={view === "editor" ? (editorLabel || "Editor") : "Manage fields"} style={{
         position: "fixed", top: 0, right: 0, height: "100vh", width: 468, maxWidth: "92vw", background: "#fff", zIndex: 70,
         overflow: "hidden", boxShadow: "0 8px 24px rgba(0,40,64,.08)", fontFamily: "Quicksand, sans-serif",
         transform: reduce ? "none" : (shown ? "translateX(0)" : "translateX(100%)"),
@@ -1265,11 +1468,11 @@ const Row = ({ r, last, onApprove, onReject, cols, orderedVisible, stickyLeft, o
   };
   const cellValue = (col) => (r.custom && Object.prototype.hasOwnProperty.call(r.custom, col.id)) ? r.custom[col.id] : col.def;
   return (
-    <div onClick={onOpen} style={{ display: "grid", gridTemplateColumns: cols, alignItems: "center", padding: "16px 28px", gap: 14, borderBottom: last ? "none" : "1px solid #C0EEE4", cursor: "pointer", background: selected ? "#EBFBF6" : "#fff" }}
+    <div onClick={onOpen} style={{ display: "grid", gridTemplateColumns: cols, minWidth: "max-content", alignItems: "center", padding: "16px 0", gap: TABLE_GAP, cursor: "pointer", background: selected ? "#EBFBF6" : "#fff" }}
       onMouseEnter={(e) => { if (!selected) { e.currentTarget.style.background = "#F8F8F8"; e.currentTarget.querySelectorAll("[data-sticky-gap]").forEach(el => el.style.boxShadow = "14px 0 0 #F8F8F8"); } }}
       onMouseLeave={(e) => { if (!selected) { e.currentTarget.style.background = "#fff"; e.currentTarget.querySelectorAll("[data-sticky-gap]").forEach(el => el.style.boxShadow = "14px 0 0 #fff"); } }}>
       {/* P2-11 — sticky row-select cell */}
-      <div data-sticky-gap onClick={(e) => e.stopPropagation()} style={{ position: "sticky", left: (stickyLeft && stickyLeft.select) || 0, zIndex: 1, background: "inherit", boxShadow: "14px 0 0 " + (selected ? "#EBFBF6" : "#fff"), alignSelf: "stretch", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div data-sticky-gap onClick={(e) => e.stopPropagation()} style={{ position: "sticky", left: (stickyLeft && stickyLeft.select) || 0, zIndex: 3, background: "inherit", boxShadow: `14px 0 0 ${selected ? "#EBFBF6" : "#fff"}`, alignSelf: "stretch", display: "flex", alignItems: "center", justifyContent: "flex-start", paddingLeft: TABLE_PAD_X, boxSizing: "border-box" }}>
         <SelectCheck checked={selected} onToggle={onToggleSelect} label="Select row"/>
       </div>
       {orderedVisible.map(m => m.custom
@@ -1282,97 +1485,426 @@ const Row = ({ r, last, onApprove, onReject, cols, orderedVisible, stickyLeft, o
               onAddOption={(val) => onAddOption(m.col.id, val)}/>
           </div>
         : (stickyLeft && stickyLeft[m.key] != null)
-          ? <div key={m.key} data-sticky-gap style={{ position: "sticky", left: stickyLeft[m.key], zIndex: 1, background: "inherit", boxShadow: "14px 0 0 #fff", alignSelf: "stretch", display: "flex", alignItems: "center" }}>{baseCell[m.key]}</div>
+          ? <div key={m.key} data-sticky-gap style={{ position: "sticky", left: stickyLeft[m.key], zIndex: 1, background: "inherit", boxShadow: `14px 0 0 ${selected ? "#EBFBF6" : "#fff"}`, alignSelf: "stretch", display: "flex", alignItems: "center" }}>{baseCell[m.key]}</div>
           : <React.Fragment key={m.key}>{baseCell[m.key]}</React.Fragment>)}
-      <div/>
     </div>
   );
 };
 
 /* ───────────────── Transaction detail drawer ───────────────── */
 
-const DetailRow = ({ label, value, valueColor, isLink }) => (
-  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "15px 0", borderBottom: "1px solid #C0EEE4", gap: 16 }}>
-    <span style={{ fontFamily: "Quicksand, sans-serif", fontSize: 15, color: "#4A4A4A" }}>{label}</span>
-    <span style={{ fontFamily: "Quicksand, sans-serif", fontSize: 15, fontWeight: 700, color: isLink ? MINT : (valueColor || NAVY), textAlign: "right", cursor: isLink ? "pointer" : "default" }}>{value}</span>
-  </div>
-);
+const DetailRow = ({ label, value, valueNode, valueColor, isLink, onEdit, onValueClick, noDivider }) => {
+  const [hover, setHover] = React.useState(false);
+  const editable = typeof onEdit === "function";
+  return (
+    <div {...(editable ? activate(onEdit) : {})} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} title={editable ? "Edit field" : undefined} aria-label={editable ? "Edit " + label : undefined} style={{ position: "relative", display: "grid", gridTemplateColumns: "minmax(0, .9fr) minmax(0, 1.1fr)", alignItems: "center", minHeight: 32, padding: "6px 12px", borderBottom: noDivider ? "none" : "1px solid #C0EEE4", columnGap: 16, background: hover ? "#EBFBF6" : "transparent", cursor: editable ? "pointer" : "default", transition: `background .15s ${EASE}` }}>
+      <span style={{ fontFamily: "Quicksand, sans-serif", fontSize: 14, fontWeight: 500, color: "#707070", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{label}</span>
+      <div style={{ minWidth: 0, justifySelf: "stretch" }}>
+        {valueNode ? (
+          <div onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>{valueNode}</div>
+        ) : onValueClick ? (
+          <button onClick={(e) => { e.stopPropagation(); onValueClick(); }} style={{ display: "block", width: "100%", padding: 0, border: "none", background: "transparent", fontFamily: "Quicksand, sans-serif", fontSize: 14, fontWeight: 700, color: isLink ? MINT : (valueColor || NAVY), textAlign: "right", cursor: "pointer", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</button>
+        ) : (
+          <span style={{ display: "block", fontFamily: "Quicksand, sans-serif", fontSize: 14, fontWeight: 700, color: isLink ? MINT : (valueColor || NAVY), textAlign: "right", cursor: isLink ? "pointer" : "default", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</span>
+        )}
+      </div>
+    </div>
+  );
+};
 
-const TransactionDrawer = ({ r, onClose, customFields, requiredKeys, lab, onCellChange, onConfirmCell, onAddOption, optionSuggestFor }) => {
+/* Transaction-drawer selectors reuse the same white, mint-outlined menu language
+   as the table cell picker, rather than falling back to browser select chrome. */
+const SwipeyPicker = ({ value, options, onChange, placeholder, ariaLabel, renderLeading, allowEmpty = false, menuPlacement = "down", compact = false }) => {
+  const [open, setOpen] = React.useState(false);
+  const hasSelection = value !== "" && value != null;
+  const selected = hasSelection ? options.find(option => option.value === value) : null;
+  const choose = (nextValue) => { onChange(nextValue); setOpen(false); };
+  const onTriggerKeyDown = (e) => {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      setOpen(true);
+    }
+    if (e.key === "Escape" && open) {
+      e.preventDefault();
+      e.stopPropagation();
+      setOpen(false);
+    }
+  };
+  return (
+    <div style={{ position: "relative", width: "100%" }}>
+      <button type="button" onClick={() => setOpen(current => !current)} onKeyDown={onTriggerKeyDown}
+        aria-label={ariaLabel} aria-haspopup="listbox" aria-expanded={open}
+        style={{ width: "100%", minHeight: compact ? 40 : 44, display: "flex", alignItems: "center", gap: compact ? 8 : 9, padding: compact ? "8px 10px" : "10px 12px", border: "1px solid #E7E7E7", borderRadius: 8, background: "#fff", color: selected ? NAVY : "#939393", cursor: "pointer", fontFamily: "Poppins, sans-serif", fontSize: compact ? 13.5 : 14, textAlign: "left", boxSizing: "border-box", transition: `border-color .15s ${EASE}, background .15s ${EASE}` }}>
+        {selected && renderLeading && renderLeading(selected, options.indexOf(selected))}
+        <span style={{ flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{selected ? selected.label : placeholder}</span>
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, transform: open ? "rotate(180deg)" : "none", transition: `transform .15s ${EASE}` }}><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      {open && (
+        <>
+          <div onClick={() => setOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 30 }}/>
+          <div role="listbox" aria-label={ariaLabel} onKeyDown={(e) => { if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); setOpen(false); } }}
+            style={{ position: "absolute", ...(menuPlacement === "up" ? { bottom: "calc(100% + 6px)" } : { top: "calc(100% + 6px)" }), left: 0, zIndex: 31, minWidth: "100%", maxHeight: 264, overflowY: "auto", background: "#fff", border: "1px solid #C0EEE4", borderRadius: 8, padding: 6, boxSizing: "border-box", boxShadow: "0 8px 24px rgba(0,40,64,.08)" }}>
+            {allowEmpty && (
+              <button type="button" role="option" aria-selected={!hasSelection} onClick={() => choose("")}
+                style={{ width: "100%", minHeight: 44, display: "flex", alignItems: "center", padding: "10px 12px", border: "none", borderRadius: 8, background: !hasSelection ? "#EBFBF6" : "transparent", color: "#707070", cursor: "pointer", fontFamily: "Quicksand, sans-serif", fontSize: 14, fontWeight: !hasSelection ? 700 : 600, textAlign: "left", transition: `background .15s ${EASE}` }}
+                onMouseEnter={(e) => { if (hasSelection) e.currentTarget.style.background = "#F8F8F8"; }}
+                onMouseLeave={(e) => { if (hasSelection) e.currentTarget.style.background = "transparent"; }}>
+                <span style={{ flex: 1 }}>{placeholder}</span>
+                {!hasSelection && <svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke={NAVY} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><path d="M5 12l4 4L19 6"/></svg>}
+              </button>
+            )}
+            {options.map((option, index) => {
+              const isSelected = option.value === value;
+              return (
+                <button key={option.value} type="button" role="option" aria-selected={isSelected} onClick={() => choose(option.value)}
+                  style={{ width: "100%", minHeight: 44, display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", border: "none", borderRadius: 8, background: isSelected ? "#EBFBF6" : "transparent", color: NAVY, cursor: "pointer", fontFamily: "Quicksand, sans-serif", fontSize: 14, fontWeight: isSelected ? 700 : 600, textAlign: "left", transition: `background .15s ${EASE}` }}
+                  onMouseEnter={(e) => { if (!isSelected) e.currentTarget.style.background = "#F8F8F8"; }}
+                  onMouseLeave={(e) => { if (!isSelected) e.currentTarget.style.background = "transparent"; }}>
+                  {renderLeading && renderLeading(option, index)}
+                  <span style={{ flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{option.label}</span>
+                  {isSelected && <svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke={NAVY} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><path d="M5 12l4 4L19 6"/></svg>}
+                </button>
+              );
+            })}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+const TransactionDrawer = ({ r, onClose, customFields, requiredKeys, lab, onCellChange, onConfirmCell, onAddOption, optionSuggestFor, onCreateFieldForRow, onSetExistingFieldForRow, onSaveField, onDeleteCustomField, onHideDetailField, hiddenKeys, detailLabels }) => {
+  const entered = useSlideIn();
+  const [open, setOpen] = React.useState(true);
+  const [addingField, setAddingField] = React.useState(false);
+  const [addMode, setAddMode] = React.useState("create");
+  const [existingKey, setExistingKey] = React.useState("");
+  const [fieldName, setFieldName] = React.useState("");
+  const [fieldType, setFieldType] = React.useState("member");
+  const [fieldValue, setFieldValue] = React.useState("");
+  const [fieldRequired, setFieldRequired] = React.useState(false);
+  const [fieldOptions, setFieldOptions] = React.useState("Campaign A, Campaign B");
+  const [alfieDismissed, setAlfieDismissed] = React.useState([]);
+  const [draftFromAlfie, setDraftFromAlfie] = React.useState(null);
+  const [inlineEditorKey, setInlineEditorKey] = React.useState(null);
+  const [drawerView, setDrawerView] = React.useState("details");
+  const [note, setNote] = React.useState("");
+  const [editingNote, setEditingNote] = React.useState(false);
+  const shown = open && entered;
+  const reduce = prefersReducedMotion();
+  const requestClose = React.useCallback(() => {
+    setOpen(false);
+    if (reduce) onClose();
+    else setTimeout(onClose, 300);
+  }, [onClose, reduce]);
+  const panelRef = useDrawerA11y(requestClose);
   if (!r) return null;
+  const runAfterClose = (fn) => {
+    setOpen(false);
+    if (reduce) { onClose(); fn && fn(); }
+    else setTimeout(() => { onClose(); fn && fn(); }, 300);
+  };
+  const isHiddenDetail = (key) => hiddenKeys && hiddenKeys.includes(key);
+  const detailLabel = (key, fallback) => (detailLabels && detailLabels[key]) || fallback;
   const cellValue = (col) => (r.custom && Object.prototype.hasOwnProperty.call(r.custom, col.id)) ? r.custom[col.id] : col.def;
   const last4 = (r.acctSub.match(/(\d{4})\D*$/) || [])[1];
   const isDeclined = r.status === "Declined";
   const txnNo = "1026" + String(Math.abs(r.date.length * 977 + r.amt.length * 31)).padStart(8, "0").slice(0, 8);
   const isDoc = r.acctType === "doc";
+  const fieldByLabel = (label) => customFields.find(m => m.label.toLowerCase() === label.toLowerCase());
+  const reviewerField = fieldByLabel("Reviewer");
+  const projectField = fieldByLabel("Project");
+  const billableField = fieldByLabel("Billable?");
+  const drawerSuggestions = !lab.suggestedFields ? [] : [
+    { key: "reviewer", label: "Reviewer", type: "member", value: "Rouvin", why: "similar account ownership patterns use Rouvin as reviewer", options: [], alfie: "reviewer", field: reviewerField },
+    { key: "project", label: "Project", type: "dropdown", value: r.title ? "Campaign A" : "Ops review", why: "merchant and transaction notes resemble campaign spend", options: ["Campaign A", "Campaign B", "Ops review"], alfie: "project", field: projectField },
+    { key: "billable", label: "Billable?", type: "checkbox", value: true, why: "card expense rows often need billable tracking", options: [], alfie: "billable", field: billableField },
+  ].filter(s => !alfieDismissed.includes(s.key) && (!s.field || !cellValue(s.field.col)));
+  const resetAddField = () => {
+    setAddingField(false);
+    setAddMode("create");
+    setExistingKey("");
+    setFieldName("");
+    setFieldType("member");
+    setFieldValue("");
+    setFieldRequired(false);
+    setFieldOptions("Campaign A, Campaign B");
+    setDraftFromAlfie(null);
+  };
+  const openManualAdd = () => {
+    setAddingField(true);
+    setAddMode("create");
+    setExistingKey("");
+    setFieldName("");
+    setFieldType("member");
+    setFieldValue("");
+    setFieldRequired(false);
+    setFieldOptions("Campaign A, Campaign B");
+    setDraftFromAlfie(null);
+  };
+  const switchAddMode = (mode) => {
+    setAddMode(mode);
+    setFieldValue(mode === "create" && fieldType === "checkbox" ? false : "");
+    setDraftFromAlfie(null);
+    if (mode === "create") setExistingKey("");
+  };
+  const valueControl = (type, value, onChange) => {
+    if (type === "checkbox") {
+      return (
+        <button onClick={() => onChange(!value)} role="switch" aria-checked={!!value} style={{ alignSelf: "flex-start", display: "inline-flex", alignItems: "center", gap: 8, background: value ? "rgba(39,216,178,.12)" : "#F8F8F8", border: value ? `1px solid ${MINT}` : "1px solid #E7E7E7", borderRadius: 8, padding: "9px 12px", cursor: "pointer", fontFamily: "Quicksand, sans-serif", fontSize: 14, fontWeight: 700, color: NAVY }}>
+          <span style={{ width: 18, height: 18, borderRadius: 6, background: value ? MINT : "#fff", border: value ? "none" : "1.5px solid #BDBCBC", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>{value && <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"/></svg>}</span>
+          Yes
+        </button>
+      );
+    }
+    if (type === "member") {
+      return (
+        <SwipeyPicker value={value || ""} onChange={onChange} placeholder="Select member..." ariaLabel="Value for this transaction"
+          options={MEMBERS.map((member, index) => ({ value: member, label: member, color: MEMBER_COLORS[index % MEMBER_COLORS.length] }))}
+          renderLeading={(option) => <span style={{ width: 22, height: 22, borderRadius: "50%", background: option.color, color: "#fff", fontFamily: "Quicksand, sans-serif", fontSize: 9, fontWeight: 700, display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{initialsOf(option.label)}</span>} />
+      );
+    }
+    if (type === "dropdown") {
+      const opts = fieldOptions.split(",").map(o => o.trim()).filter(Boolean);
+      return (
+        <SwipeyPicker value={value || ""} onChange={onChange} placeholder="Select option..." ariaLabel="Value for this transaction"
+          options={opts.map((option, index) => ({ value: option, label: option, color: OPT_COLORS[index % OPT_COLORS.length] }))}
+          renderLeading={(option) => <span style={{ width: 10, height: 10, borderRadius: "50%", background: option.color, flexShrink: 0 }}/>} />
+      );
+    }
+    return (
+      <input type={type === "number" ? "number" : type === "date" ? "date" : "text"} value={value || ""} onChange={e => onChange(e.target.value)} placeholder={type === "number" ? "Add number" : type === "date" ? "" : "Add value"} style={{ width: "100%", boxSizing: "border-box", border: "1px solid #E7E7E7", borderRadius: 8, padding: "12px 14px", fontFamily: "Poppins, sans-serif", fontSize: 14, color: NAVY, outline: "none" }}/>
+    );
+  };
+  const applyDrawerSuggestion = (sug) => {
+    const existingType = sug.field ? sug.field.col.type : sug.type;
+    const existingOptions = sug.field && sug.field.col.options && sug.field.col.options.length ? sug.field.col.options : sug.options;
+    setAddingField(true);
+    setAddMode(sug.field ? "existing" : "create");
+    setExistingKey(sug.field ? sug.field.key : "");
+    setFieldName(sug.label);
+    setFieldType(existingType);
+    setFieldValue(sug.value);
+    setFieldRequired(false);
+    setFieldOptions((existingOptions && existingOptions.length ? existingOptions : ["Campaign A", "Campaign B"]).join(", "));
+    setDraftFromAlfie(sug.key);
+  };
+  const submitAddField = () => {
+    if (addMode === "existing") {
+      const m = customFields.find(f => f.key === existingKey);
+      if (!m) return;
+      if (onSetExistingFieldForRow) onSetExistingFieldForRow(m, fieldValue);
+      else onCellChange(m.col.id, fieldValue);
+      requestClose();
+      return;
+    }
+    if (!fieldName.trim()) return;
+    onCreateFieldForRow({
+      label: fieldName.trim(),
+      type: fieldType,
+      value: fieldValue,
+      options: fieldType === "dropdown" ? fieldOptions.split(",").map(o => o.trim()).filter(Boolean) : [],
+      required: fieldRequired,
+      alfie: draftFromAlfie,
+    });
+    requestClose();
+  };
+  const existingField = customFields.find(f => f.key === existingKey);
+  const detailRows = [
+    { key: "detail.status", label: "Status", value: r.status, valueColor: isDeclined ? ERR : SUCCESS },
+    ...(isDoc ? [
+      { key: "detail.accountNumber", label: "Account number", value: r.acct },
+      { key: "detail.accountName", label: "Account name", value: r.acctSub },
+    ] : [
+      { key: "detail.cardEnding", label: "Card ending in", value: last4 ? ("* " + last4) : "—" },
+      { key: "detail.cardName", label: "Card name", value: r.acctSub ? r.acctSub.replace(/\s*\*+\s*\d+$/, "") : "—" },
+      { key: "detail.merchantName", label: "Merchant name", value: (r.title || r.acct || "—").toUpperCase() },
+    ]),
+    { key: "detail.date", label: "Date & Time", value: r.date },
+    { key: "detail.category", label: "Category", value: r.badge === "CHARGES" ? "Charges" : r.badge === "Expenses" ? "Spending" : r.badge === "Cashback" ? "Cashback" : r.badge === "PAY_OUT" ? "Payout" : r.badge },
+    { key: "detail.transactionNo", label: "Transaction No.", value: txnNo },
+    ...(!isDoc ? [{ key: "detail.employeeName", label: "Employee name", value: r.acct }] : []),
+    { key: "detail.notes", label: "Notes", value: note || "Add note", isLink: true },
+  ].filter(row => !isHiddenDetail(row.key));
+  const inlineEditorField = inlineEditorKey
+    ? (customFields.find(m => m.key === inlineEditorKey) || (() => {
+        const row = detailRows.find(item => item.key === inlineEditorKey);
+        return row ? { key: row.key, label: detailLabel(row.key, row.label), detail: true, custom: false } : null;
+      })())
+    : null;
+  const openInlineEditor = (key) => { setInlineEditorKey(key); setDrawerView("editor"); };
+  const closeInlineEditor = () => {
+    setDrawerView("details");
+    if (reduce) setInlineEditorKey(null);
+    else setTimeout(() => setInlineEditorKey(null), 300);
+  };
+  const submitInlineEditor = (payload) => { onSaveField && onSaveField(payload); closeInlineEditor(); };
+  const deleteInlineEditor = () => {
+    if (!inlineEditorField) return;
+    if (inlineEditorField.custom) onDeleteCustomField && onDeleteCustomField(inlineEditorField.key);
+    else onHideDetailField && onHideDetailField(inlineEditorField.key);
+    closeInlineEditor();
+  };
   const cardEl = (
-    <div style={{ background: "#fff", border: "1px solid #C0EEE4", borderRadius: 14, padding: "6px 22px", marginBottom: 20 }}>
-      <DetailRow label="Status" value={r.status} valueColor={isDeclined ? ERR : SUCCESS}/>
-      {isDoc ? (
-        <>
-          <DetailRow label="Account number" value={r.acct}/>
-          <DetailRow label="Account name" value={r.acctSub}/>
-        </>
-      ) : (
-        <>
-          <DetailRow label="Card ending in" value={last4 ? ("* " + last4) : "—"}/>
-          <DetailRow label="Card name" value={r.acctSub ? r.acctSub.replace(/\s*\*+\s*\d+$/, "") : "—"}/>
-          <DetailRow label="Merchant name" value={(r.title || r.acct || "—").toUpperCase()}/>
-        </>
-      )}
-      <DetailRow label="Date & Time" value={r.date}/>
-      <DetailRow label="Category" value={r.badge === "CHARGES" ? "Charges" : r.badge === "Expenses" ? "Spending" : r.badge === "Cashback" ? "Cashback" : r.badge === "PAY_OUT" ? "Payout" : r.badge}/>
-      <DetailRow label="Transaction No." value={txnNo}/>
-      {!isDoc && <DetailRow label="Employee name" value={r.acct}/>}
-      <DetailRow label="Notes" value="Add note" isLink/>
+    <div style={{ marginBottom: 18, background: "#fff", border: "1px solid #C0EEE4", borderRadius: 12, overflow: "hidden" }}>
+      {detailRows.map((row, idx) => (
+        <DetailRow key={row.key}
+          label={detailLabel(row.key, row.label)}
+          value={row.value}
+          valueColor={row.valueColor}
+          isLink={row.isLink}
+          onValueClick={row.key === "detail.notes" ? () => setEditingNote(true) : undefined}
+          noDivider={idx === detailRows.length - 1 && customFields.length === 0}
+          valueNode={row.key === "detail.notes" && editingNote ? <input autoFocus value={note} onChange={e => setNote(e.target.value)} onBlur={() => setEditingNote(false)} onKeyDown={e => { if (e.key === "Enter") setEditingNote(false); if (e.key === "Escape") { setNote(""); setEditingNote(false); } }} placeholder="Add a note..." style={{ width: "100%", boxSizing: "border-box", border: `1px solid ${MINT}`, borderRadius: 6, padding: "5px 8px", fontFamily: "Poppins, sans-serif", fontSize: 14, color: NAVY, outline: "none" }}/> : undefined}
+          onEdit={row.key === "detail.notes" ? undefined : () => openInlineEditor(row.key)}/>
+      ))}
+      {customFields.map((m, idx) => (
+        <DetailRow key={m.key}
+          label={m.label}
+          valueNode={
+            <div style={{ minWidth: 0, display: "flex", justifyContent: "flex-end" }}>
+              <CustomCell col={m.col} value={cellValue(m.col)}
+                onChange={(v) => onCellChange(m.col.id, v)}
+                suggested={!!(lab && lab.autofill && r.aiPending && r.aiPending[m.col.id])}
+                onConfirm={() => onConfirmCell(m.col.id)}
+                required={!!(requiredKeys && requiredKeys.includes(m.key))}
+                suggestedOption={optionSuggestFor ? optionSuggestFor(m.col) : null}
+                onAddOption={(val) => onAddOption(m.col.id, val)}
+                popoverPlacement="up"/>
+            </div>
+          }
+          noDivider={idx === customFields.length - 1}
+          onEdit={() => openInlineEditor(m.key)}/>
+      ))}
     </div>
   );
   return (
     <>
-      <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,40,64,.4)", zIndex: 60 }}/>
-      <div style={{ position: "fixed", top: 0, right: 0, height: "100vh", width: 560, maxWidth: "92vw", background: "#fff", zIndex: 61, display: "flex", flexDirection: "column", boxShadow: "0 8px 24px rgba(0,40,64,.08)", fontFamily: "Quicksand, sans-serif" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 28px", borderBottom: "1px solid #C0EEE4", background: "#F8F8F8" }}>
+      <div onClick={requestClose} style={{ position: "fixed", inset: 0, background: "rgba(0,40,64,.12)", zIndex: 60, opacity: shown ? 1 : 0, transition: `opacity .3s ${EASE}`, pointerEvents: open ? "auto" : "none" }}/>
+      <div ref={panelRef} role="dialog" aria-modal="true" aria-label="Transaction detail" style={{ position: "fixed", top: 0, right: 0, height: "100vh", width: 520, maxWidth: "92vw", background: "#fff", zIndex: 61, overflow: "hidden", display: "flex", flexDirection: "column", boxShadow: "0 8px 24px rgba(0,40,64,.08)", fontFamily: "Quicksand, sans-serif", transform: reduce ? "none" : (shown ? "translateX(0)" : "translateX(100%)"), opacity: shown ? 1 : 0, transition: `transform .3s ${DRAWER_EASE}, opacity .3s ${EASE}`, pointerEvents: open ? "auto" : "none" }}>
+        {inlineEditorField && (
+          <ViewPane id="transaction-editor" active={drawerView === "editor"} dir={1} reduce={reduce}>
+            <EditorView mode="edit" field={inlineEditorField} preset={null}
+              initialRequired={!!(requiredKeys && requiredKeys.includes(inlineEditorField.key))}
+              initialHidden={!!(hiddenKeys && hiddenKeys.includes(inlineEditorField.key))}
+              onBack={closeInlineEditor} onSubmit={submitInlineEditor} onDelete={deleteInlineEditor}
+              lab={lab} suggestions={[]} suggestsDismissed={true} onDismissSuggests={() => {}}/>
+          </ViewPane>
+        )}
+        <ViewPane id="transaction-details" active={drawerView === "details"} dir={-1} reduce={reduce}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 24px", borderBottom: "1px solid #C0EEE4", background: "#fff" }}>
           <span style={{ fontSize: 20, fontWeight: 700, color: NAVY }}>Transaction detail</span>
-          <button onClick={onClose} aria-label="Close" style={{ background: "transparent", border: "none", cursor: "pointer", color: NAVY, display: "inline-flex", padding: 4 }}>
+          <button onClick={requestClose} aria-label="Close" style={{ background: "transparent", border: "none", cursor: "pointer", color: NAVY, display: "inline-flex", padding: 4 }}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
           </button>
         </div>
-        <div style={{ overflowY: "auto", flex: 1, padding: "22px 28px" }}>
-          <div style={{ background: "#F8F8F8", borderRadius: 14, padding: "22px 24px", display: "flex", alignItems: "center", gap: 16, marginBottom: 22 }}>
-            <span style={{ width: 46, height: 46, borderRadius: "50%", background: "#fff", display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+        <div style={{ overflowY: "auto", flex: 1, padding: `22px 24px ${FOOTER_CLEARANCE}px` }}>
+          <div style={{ background: "#F8F8F8", borderRadius: 12, padding: "16px 18px", display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
+            <span style={{ width: 40, height: 40, borderRadius: "50%", background: "#fff", display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
               <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke={NAVY} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="12" r="9"/><path d="M11 17V7"/><path d="M13.9 8.8c-.6-.8-1.6-1.3-2.9-1.3-1.6 0-2.9.9-2.9 2.1 0 1.3 1.3 1.7 2.9 2.2 1.5.5 2.9.8 2.9 2.1 0 1.2-1.3 2.1-2.9 2.1-1.2 0-2.3-.5-2.9-1.3"/><path d="M18 5l3 3-3 3"/></svg>
             </span>
             <div>
               <div style={{ fontFamily: "Quicksand, sans-serif", fontSize: 14, color: "#707070" }}>{r.badge === "CHARGES" ? "Charges" : r.badge === "Expenses" ? "Spending" : r.badge === "Cashback" ? "Cashback" : r.badge === "PAY_OUT" ? "Payout" : r.badge}</div>
-              <div style={{ fontFamily: "Quicksand, sans-serif", fontSize: 30, fontWeight: 700, color: NAVY, lineHeight: "36px" }}>{r.amt}</div>
+              <div style={{ fontFamily: "Quicksand, sans-serif", fontSize: 26, fontWeight: 700, color: NAVY, lineHeight: "31px" }}>{r.amt}</div>
               {r.amtSub && <div style={{ fontFamily: "Quicksand, sans-serif", fontSize: 15, color: "#707070" }}>{r.amtSub}</div>}
             </div>
           </div>
 
           {cardEl}
 
-          {/* P0-3 — custom fields, editable with the same cell editors (incl. Alfie suggested state) */}
-          {customFields && customFields.length > 0 && (
-            <div style={{ background: "#fff", border: "1px solid #C0EEE4", borderRadius: 14, padding: "6px 22px", marginBottom: 20 }}>
-              <div style={{ fontSize: 16, fontWeight: 700, color: NAVY, padding: "14px 0 4px" }}>Custom fields</div>
-              {customFields.map((m, i) => (
-                <div key={m.key} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, padding: "13px 0", borderBottom: i === customFields.length - 1 ? "none" : "1px solid #C0EEE4", minHeight: 30 }}>
-                  <span style={{ fontFamily: "Quicksand, sans-serif", fontSize: 15, color: "#4A4A4A", flexShrink: 0 }}>{m.label}</span>
-                  <div style={{ minWidth: 0, display: "flex", justifyContent: "flex-end" }}>
-                    <CustomCell col={m.col} value={cellValue(m.col)}
-                      onChange={(v) => onCellChange(m.col.id, v)}
-                      suggested={!!(lab && lab.autofill && r.aiPending && r.aiPending[m.col.id])}
-                      onConfirm={() => onConfirmCell(m.col.id)}
-                      required={!!(requiredKeys && requiredKeys.includes(m.key))}
-                      suggestedOption={optionSuggestFor ? optionSuggestFor(m.col) : null}
-                      onAddOption={(val) => onAddOption(m.col.id, val)}/>
+          {(addingField || drawerSuggestions.length > 0) && (
+          <div style={{ marginBottom: 12 }}>
+
+            {addingField && (
+              <div style={{ marginTop: 12, marginBottom: 20, border: `1px solid ${draftFromAlfie ? "rgba(47,109,247,.44)" : "rgba(39,216,178,.36)"}`, borderRadius: 12, padding: 18, background: draftFromAlfie ? ALFIE_TINT : "#EBFBF6", boxShadow: draftFromAlfie ? "0 0 0 1px rgba(47,109,247,.08), 0 8px 18px rgba(0,40,64,.04)" : "0 8px 18px rgba(0,40,64,.035)" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 18 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
+                    {draftFromAlfie ? <Sparkle size={15}/> : <span style={{ width: 16, height: 16, borderRadius: "50%", background: "rgba(39,216,178,.12)", color: MINT, display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14"/></svg></span>}
+                    <span style={{ fontFamily: "Quicksand, sans-serif", fontSize: 14, fontWeight: 700, color: draftFromAlfie ? ALFIE : NAVY }}>{draftFromAlfie ? "Draft filled by Alfie" : "Add field"}</span>
                   </div>
+                  <button onClick={resetAddField} aria-label={draftFromAlfie ? "Dismiss Alfie draft" : "Dismiss add field"} title={draftFromAlfie ? "Dismiss draft" : "Dismiss add field"} {...press}
+                    style={{ marginLeft: "auto", width: 24, height: 24, borderRadius: "50%", border: "none", background: "transparent", color: "#707070", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", padding: 0, flexShrink: 0 }}>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+                  </button>
                 </div>
-              ))}
-            </div>
+
+                <div style={{ background: "#fff", border: "1px solid rgba(0,40,64,.10)", borderRadius: 8, padding: 16, boxShadow: "0 2px 4px rgba(0,40,64,.04)" }}>
+                <div style={{ display: "inline-flex", background: "#fff", border: "1px solid #E7E7E7", borderRadius: 8, padding: 3, marginBottom: 20 }}>
+                  {["create", "existing"].map(mode => (
+                    <button key={mode} onClick={() => switchAddMode(mode)} style={{ border: "none", borderRadius: 6, padding: "8px 12px", background: addMode === mode ? NAVY : "transparent", color: addMode === mode ? "#fff" : "#4A4A4A", fontFamily: "Quicksand, sans-serif", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>{mode === "create" ? "Create new" : "Use existing"}</button>
+                  ))}
+                </div>
+
+                {addMode === "existing" ? (
+                  <>
+                    <label style={{ display: "block", fontFamily: "Quicksand, sans-serif", fontSize: 14, fontWeight: 600, color: "#4A4A4A", marginBottom: 8 }}>Field</label>
+                    <div style={{ marginBottom: 16 }}>
+                      <SwipeyPicker value={existingKey} onChange={(nextKey) => { const next = customFields.find(f => f.key === nextKey); setExistingKey(nextKey); setFieldValue(""); if (next && next.col.type === "dropdown") setFieldOptions((next.col.options || []).join(", ")); }} placeholder="Choose field..." ariaLabel="Existing field" allowEmpty
+                        options={customFields.map(field => {
+                          const meta = FIELD_TYPES.find(type => type.type === field.col.type);
+                          return { value: field.key, label: field.label, type: field.col.type, color: meta ? meta.color : NAVY };
+                        })}
+                        renderLeading={(option) => <FieldTypeIcon type={option.type} color={option.color} size={17}/>} />
+                    </div>
+                    {existingField && valueControl(existingField.col.type, fieldValue, setFieldValue)}
+                  </>
+                ) : (
+                  <>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 140px", gap: 12, marginBottom: 18 }}>
+                      <div>
+                        <label style={{ display: "block", fontFamily: "Quicksand, sans-serif", fontSize: 14, fontWeight: 600, color: "#4A4A4A", marginBottom: 8 }}>Field name</label>
+                        <input value={fieldName} onChange={e => setFieldName(e.target.value)} placeholder="Reviewer" style={{ width: "100%", boxSizing: "border-box", border: "1px solid #E7E7E7", borderRadius: 8, padding: "12px 14px", fontFamily: "Poppins, sans-serif", fontSize: 15, color: NAVY, outline: "none" }}/>
+                      </div>
+                      <div>
+                        <label style={{ display: "block", fontFamily: "Quicksand, sans-serif", fontSize: 14, fontWeight: 600, color: "#4A4A4A", marginBottom: 8 }}>Type</label>
+                        <SwipeyPicker value={fieldType} onChange={(nextType) => { setFieldType(nextType); setFieldValue(nextType === "checkbox" ? false : ""); }} placeholder="Select type" ariaLabel="Field type"
+                          options={FIELD_TYPES.map(field => ({ value: field.type, label: field.label, color: field.color }))}
+                          renderLeading={(option) => <FieldTypeIcon type={option.value} color={option.color} size={17}/>} />
+                      </div>
+                    </div>
+                    {fieldType === "dropdown" && (
+                      <div style={{ marginBottom: 18 }}>
+                        <label style={{ display: "block", fontFamily: "Quicksand, sans-serif", fontSize: 14, fontWeight: 600, color: "#4A4A4A", marginBottom: 8 }}>Options</label>
+                        <input value={fieldOptions} onChange={e => setFieldOptions(e.target.value)} placeholder="Campaign A, Campaign B" style={{ width: "100%", boxSizing: "border-box", border: "1px solid #E7E7E7", borderRadius: 8, padding: "12px 14px", fontFamily: "Poppins, sans-serif", fontSize: 15, color: NAVY, outline: "none" }}/>
+                      </div>
+                    )}
+                    <label style={{ display: "block", fontFamily: "Quicksand, sans-serif", fontSize: 14, fontWeight: 600, color: "#4A4A4A", marginBottom: 8 }}>Value for this transaction</label>
+                    {valueControl(fieldType, fieldValue, setFieldValue)}
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 0 4px", marginTop: 8 }}>
+                      <span style={{ fontFamily: "Quicksand, sans-serif", fontSize: 13.5, fontWeight: 500, color: "#1F1F1F" }}>Required to submit expense</span>
+                      <ToggleSwitch on={fieldRequired} onClick={() => setFieldRequired(v => !v)} label="Required to submit expense"/>
+                    </div>
+                  </>
+                )}
+                </div>
+              </div>
+            )}
+
+            {drawerSuggestions.length > 0 && (
+              <AlfieSuggestsCard heading="Alfie suggests" headingSize={13.5}
+                onDismiss={() => setAlfieDismissed(p => Array.from(new Set([...p, ...drawerSuggestions.map(s => s.key)])))}
+                style={{ marginTop: addingField ? 12 : 0 }}>
+                {drawerSuggestions.map(sug => (
+                  <div key={sug.key} {...activate(() => applyDrawerSuggestion(sug))} title={sug.why} aria-label={(sug.field ? "Set " : "Add ") + sug.label} {...press}
+                    style={{ display: "flex", alignItems: "center", gap: 11, padding: "11px 12px", marginTop: 6, borderRadius: 8, cursor: "pointer", background: draftFromAlfie === sug.key ? "rgba(47,109,247,.12)" : ALFIE_TINT, border: draftFromAlfie === sug.key ? "1px solid rgba(47,109,247,.54)" : "1px solid rgba(47,109,247,.22)", boxShadow: draftFromAlfie === sug.key ? "inset 0 0 0 1px rgba(47,109,247,.10)" : "none", transition: `transform .12s ${EASE}, background .15s ${EASE}, border-color .15s ${EASE}` }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = "rgba(47,109,247,.16)"}
+                    onMouseLeave={(e) => e.currentTarget.style.background = draftFromAlfie === sug.key ? "rgba(47,109,247,.12)" : ALFIE_TINT}>
+                    <FieldTypeIcon type={sug.field ? sug.field.col.type : sug.type} color={ALFIE} size={18}/>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontFamily: "Quicksand, sans-serif", fontSize: 13.5, fontWeight: 600, color: "#1F1F1F" }}>{sug.field ? "Set " + sug.label : sug.label}</div>
+                      <div style={{ fontFamily: "Quicksand, sans-serif", fontSize: 11.5, color: "#939393", marginTop: 1 }}>{typeLabelOf(sug.field ? sug.field.col.type : sug.type)} · {sug.why}</div>
+                    </div>
+                    <span style={{ display: "inline-flex", width: 26, height: 26, borderRadius: "50%", background: "#fff", alignItems: "center", justifyContent: "center", color: ALFIE, flexShrink: 0 }}>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                    </span>
+                  </div>
+                ))}
+              </AlfieSuggestsCard>
+            )}
+          </div>
           )}
 
-          <div style={{ background: "#fff", border: "1px solid #C0EEE4", borderRadius: 14, padding: "18px 22px 26px" }}>
+          <div style={{ background: "#fff", border: "1px solid #C0EEE4", borderRadius: 12, padding: "16px 18px 22px" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
               <span style={{ fontSize: 16, fontWeight: 700, color: NAVY }}>Documents</span>
               <span style={{ fontSize: 15, fontWeight: 700, color: MINT, cursor: "pointer" }}>Upload</span>
@@ -1383,6 +1915,20 @@ const TransactionDrawer = ({ r, onClose, customFields, requiredKeys, lab, onCell
             </div>
           </div>
         </div>
+        <div style={{ ...footerOverlay, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, padding: "16px 24px" }}>
+          {addingField ? (
+            <>
+              <button onClick={resetAddField} {...press} style={{ background: "#fff", border: "1px solid #E7E7E7", borderRadius: 8, padding: "11px 22px", fontFamily: "Quicksand, sans-serif", fontSize: 14, fontWeight: 700, color: "#4A4A4A", cursor: "pointer", transition: `transform .12s ${EASE}` }}>Cancel</button>
+              <button onClick={submitAddField} disabled={addMode === "create" ? !fieldName.trim() : !existingField} {...((addMode === "create" ? fieldName.trim() : existingField) ? press : {})} style={{ marginLeft: "auto", background: (addMode === "create" ? fieldName.trim() : existingField) ? NAVY : "#CBCBCB", color: "#fff", border: "none", borderRadius: 8, padding: "11px 26px", fontFamily: "Quicksand, sans-serif", fontSize: 14, fontWeight: 700, cursor: (addMode === "create" ? fieldName.trim() : existingField) ? "pointer" : "not-allowed", transition: `transform .12s ${EASE}` }}>Add field</button>
+            </>
+          ) : (
+            <button onClick={openManualAdd} {...press} style={{ width: "100%", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8, background: NAVY, color: "#fff", border: "none", borderRadius: 8, padding: "12px 16px", fontFamily: "Quicksand, sans-serif", fontSize: 14.5, fontWeight: 700, cursor: "pointer", transition: `transform .12s ${EASE}` }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+              Add field
+            </button>
+          )}
+        </div>
+        </ViewPane>
       </div>
     </>
   );
@@ -1481,56 +2027,6 @@ const AlfieNudge = ({ onCreate, onDismiss }) => {
   );
 };
 
-/* ───────────────── Design Lab panel (prototype chrome, bottom-left) ───────────────── */
-
-const LAB_TOGGLES = [
-  { key: "suggestedFields", label: "Suggested fields" },
-  { key: "autofill",        label: "Auto-fill columns" },
-  { key: "nudge",           label: "Proactive nudge" },
-  { key: "optionSuggest",   label: "Option suggestions" },
-  { key: "suggestsCard",    label: "Dismissable suggests card" },
-];
-
-const DesignLabPanel = ({ lab, onToggle }) => {
-  const [open, setOpen] = React.useState(false);
-  const FlaskIcon = () => (
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke={ALFIE} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-      <path d="M9 3h6M10 3v6.5L5.2 17a2 2 0 001.7 3h10.2a2 2 0 001.7-3L14 9.5V3"/><path d="M7.5 14h9"/>
-    </svg>
-  );
-  return (
-    <div style={{ position: "fixed", left: 16, bottom: 16, zIndex: 90, fontFamily: "Quicksand, sans-serif" }}>
-      {open ? (
-        <div style={{ width: 250, background: "#fff", border: "1px solid #C0EEE4", borderRadius: 14, boxShadow: "0 8px 24px rgba(0,40,64,.08)", overflow: "hidden" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 9, padding: "13px 15px 11px", borderBottom: "1px solid #C0EEE4" }}>
-            <FlaskIcon/>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 14.5, fontWeight: 700, color: NAVY }}>Design Lab</div>
-              <div style={{ fontFamily: "Quicksand, sans-serif", fontSize: 10.5, color: "#939393" }}>Prototype-only toggles</div>
-            </div>
-            <button onClick={() => setOpen(false)} aria-label="Collapse" {...press} style={{ width: 26, height: 26, borderRadius: 8, border: "none", background: "#F8F8F8", color: "#707070", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", transition: `transform .12s ${EASE}` }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M6 15l6-6 6 6"/></svg>
-            </button>
-          </div>
-          <div style={{ padding: "8px 15px 12px" }}>
-            {LAB_TOGGLES.map(t => (
-              <div key={t.key} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, padding: "9px 0" }}>
-                <span style={{ fontFamily: "Quicksand, sans-serif", fontSize: 13, fontWeight: 500, color: "#1F1F1F" }}>{t.label}</span>
-                <ToggleSwitch on={lab[t.key]} onClick={() => onToggle(t.key)}/>
-              </div>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <button onClick={() => setOpen(true)} {...press} style={{ display: "inline-flex", alignItems: "center", gap: 9, background: "#fff", border: "1px solid #C0EEE4", borderRadius: 9999, boxShadow: "0 8px 24px rgba(0,40,64,.08)", padding: "10px 16px", cursor: "pointer", transition: `transform .12s ${EASE}` }}>
-          <FlaskIcon/>
-          <span style={{ fontSize: 13.5, fontWeight: 700, color: NAVY }}>Design Lab</span>
-        </button>
-      )}
-    </div>
-  );
-};
-
 /* ───────────────── Filters (P1-5, prototype scope) ───────────────── */
 
 const STATUS_VALUES = [...new Set(ROWS.map(r => r.status))];
@@ -1581,21 +2077,348 @@ const FiltersPopover = ({ customFields, filters, onToggle, onClear, onClose }) =
   );
 };
 
+/* ───────────────── Rules / automations (Task 2 prototype) ───────────────── */
+
+const RuleValueControl = ({ field, value, onChange, operatorKey, menuPlacement = "down", compact = false }) => {
+  const base = { width: "100%", minHeight: compact ? 40 : 44, boxSizing: "border-box", border: "1px solid #E7E7E7", borderRadius: 8, padding: compact ? "8px 10px" : "10px 12px", fontFamily: "Poppins, sans-serif", fontSize: 13.5, color: NAVY, background: "#fff", outline: "none" };
+  if (!field || (operatorKey && operatorMeta(field.type, operatorKey).noValue)) {
+    return <div style={{ ...base, display: "flex", alignItems: "center", color: "#939393", background: "#F8F8F8" }}>No value needed</div>;
+  }
+  if (field.type === "checkbox") {
+    return (
+      <button onClick={() => onChange(!value)} role="switch" aria-checked={!!value} style={{ minHeight: compact ? 40 : 44, boxSizing: "border-box", alignSelf: "flex-start", display: "inline-flex", alignItems: "center", gap: 8, background: value ? "rgba(39,216,178,.12)" : "#F8F8F8", border: value ? `1px solid ${MINT}` : "1px solid #E7E7E7", borderRadius: 8, padding: compact ? "7px 10px" : "9px 12px", cursor: "pointer", fontFamily: "Quicksand, sans-serif", fontSize: 13.5, fontWeight: 700, color: NAVY }}>
+        <span style={{ width: 18, height: 18, borderRadius: 6, background: value ? MINT : "#fff", border: value ? "none" : "1.5px solid #BDBCBC", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>{value && <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"/></svg>}</span>
+        Checked
+      </button>
+    );
+  }
+  if (field.type === "dropdown" || field.type === "member") {
+    const opts = field.type === "member" ? (field.options && field.options.length ? field.options : MEMBERS) : (field.options || []);
+    return (
+      <SwipeyPicker
+        value={value || ""}
+        options={opts.map(option => ({ value: option, label: option }))}
+        onChange={onChange}
+        placeholder="Select value..."
+        ariaLabel={"Value for " + field.label}
+        allowEmpty
+        menuPlacement={menuPlacement}
+        compact={compact}
+        renderLeading={(option, index) => field.type === "member"
+          ? <span style={{ width: 22, height: 22, borderRadius: "50%", background: MEMBER_COLORS[index % MEMBER_COLORS.length], color: "#fff", display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontFamily: "Quicksand, sans-serif", fontSize: 9.5, fontWeight: 700 }}>{initialsOf(option.label)}</span>
+          : <span style={{ width: 9, height: 9, borderRadius: "50%", background: OPT_COLORS[index % OPT_COLORS.length], flexShrink: 0 }}/>}
+      />
+    );
+  }
+  return (
+    <input type={field.type === "number" ? "number" : field.type === "date" ? "date" : "text"} value={value || ""} onChange={e => onChange(e.target.value)} placeholder={field.type === "number" ? "0" : field.type === "date" ? "" : "Enter value"} style={base}/>
+  );
+};
+
+const CompactRuleCondition = ({ condition, index, fields, canRemove, showDivider, onChange, onRemove }) => {
+  const field = ruleFieldByKey(fields, condition.field) || fields[0] || null;
+  const setField = (key) => {
+    const next = ruleFieldByKey(fields, key);
+    onChange({ field: key, operator: operatorsForType(next ? next.type : "text")[0].key, value: firstValueForField(next) });
+  };
+  return (
+    <div style={{ paddingTop: showDivider ? 10 : 0, marginTop: showDivider ? 10 : 0, borderTop: showDivider ? "1px solid #C0EEE4" : "none" }}>
+      <div style={{ display: "grid", gridTemplateColumns: canRemove ? "1.1fr 1fr 1.1fr 40px" : "1.1fr 1fr 1.1fr", gap: 8, alignItems: "center" }}>
+        <SwipeyPicker
+          value={condition.field}
+          options={fields.map(item => ({ value: item.key, label: item.label }))}
+          onChange={setField}
+          placeholder="Field"
+          ariaLabel={"Condition " + (index + 1) + " field"}
+          compact/>
+        <SwipeyPicker
+          value={condition.operator}
+          options={operatorsForType(field ? field.type : "text").map(item => ({ value: item.key, label: item.label }))}
+          onChange={(operator) => onChange({ operator })}
+          placeholder="Operator"
+          ariaLabel={"Condition " + (index + 1) + " operator"}
+          compact/>
+        <RuleValueControl field={field} value={condition.value} operatorKey={condition.operator} onChange={(value) => onChange({ value })} compact/>
+        {canRemove && (
+          <button onClick={onRemove} aria-label="Remove condition" title="Remove condition" style={{ ...iconBtn, width: 40, height: 40, color: ERR }}><TrashIcon/></button>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const CompactRuleAction = ({ action, index, fields, canRemove, showDivider, onChange, onRemove }) => {
+  const field = ruleFieldByKey(fields, action.field) || fields[0] || null;
+  const setField = (key) => {
+    const next = ruleFieldByKey(fields, key);
+    onChange({ field: key, value: firstValueForField(next) });
+  };
+  return (
+    <div style={{ paddingTop: showDivider ? 10 : 0, marginTop: showDivider ? 10 : 0, borderTop: showDivider ? "1px solid #C0EEE4" : "none" }}>
+      {fields.length === 0 ? (
+        <div style={{ fontFamily: "Quicksand, sans-serif", fontSize: 13, color: "#707070", lineHeight: 1.45 }}>Create an editable custom field before adding actions.</div>
+      ) : (
+        <div style={{ display: "grid", gridTemplateColumns: canRemove ? "1fr 1fr 40px" : "1fr 1fr", gap: 8, alignItems: "center" }}>
+          <SwipeyPicker
+            value={action.field}
+            options={fields.map(item => ({ value: item.key, label: item.label }))}
+            onChange={setField}
+            placeholder="Editable field"
+            ariaLabel={"Action " + (index + 1) + " field"}
+            menuPlacement="up"
+            compact/>
+          <RuleValueControl field={field} value={action.value} onChange={(value) => onChange({ value })} menuPlacement="up" compact/>
+          {canRemove && (
+            <button onClick={onRemove} aria-label="Remove action" title="Remove action" style={{ ...iconBtn, width: 40, height: 40, color: ERR }}><TrashIcon/></button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const CompactRuleRow = ({ rule, conditionFields, actionFields, onToggle, onEdit }) => {
+  const primaryAction = (rule.actions || [])[0];
+  const actionField = primaryAction ? ruleFieldByKey(actionFields, primaryAction.field) : null;
+  const actionType = actionField ? actionField.type : "text";
+  const conditionText = (rule.conditions || []).length
+    ? rule.conditions.map(condition => describeRuleCondition(condition, conditionFields)).join(" and ")
+    : "All transactions";
+  const actionText = (rule.actions || []).length
+    ? rule.actions.map(action => describeRuleAction(action, actionFields).replace(/^Set field /, "")).join(" and ")
+    : "No fields updated";
+  return (
+    <div
+      onMouseEnter={(event) => { event.currentTarget.style.background = "#EBFBF6"; }}
+      onMouseLeave={(event) => { event.currentTarget.style.background = "#fff"; }}
+      style={{ minHeight: 124, boxSizing: "border-box", display: "flex", flexDirection: "column", border: "1px solid #C0EEE4", borderRadius: 16, background: "#fff", padding: 12, boxShadow: "0 2px 4px rgba(0,0,0,.07)", transition: `background .15s ${EASE}, box-shadow .15s ${EASE}` }}>
+      <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
+        <span style={{ width: 30, height: 30, borderRadius: 8, background: "#EBFBF6", display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+          <FieldTypeIcon type={actionType} color={NAVY} size={15}/>
+        </span>
+        <button onClick={() => onEdit(rule)} style={{ flex: 1, minWidth: 0, border: "none", background: "transparent", padding: "1px 0 0", cursor: "pointer", textAlign: "left" }}>
+          <span style={{ display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", fontFamily: "Quicksand, sans-serif", fontSize: 13, lineHeight: 1.28, fontWeight: 700, color: NAVY, textWrap: "pretty" }}>{rule.name}</span>
+        </button>
+        <div style={{ minWidth: 36, minHeight: 32, display: "flex", alignItems: "center", justifyContent: "center", margin: "-2px -4px 0 0" }}>
+          <SmallToggleSwitch on={rule.active} onClick={() => onToggle(rule.id)} label={"Active " + rule.name}/>
+        </div>
+      </div>
+
+      <button onClick={() => onEdit(rule)} style={{ flex: 1, width: "100%", border: "none", background: "transparent", padding: "8px 0 0", cursor: "pointer", textAlign: "left" }}>
+        <span style={{ display: "grid", gridTemplateColumns: "34px minmax(0, 1fr)", gap: 8, alignItems: "start" }}>
+          <span style={{ fontFamily: "Quicksand, sans-serif", fontSize: 11.5, fontWeight: 700, color: "#707070" }}>If</span>
+          <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontFamily: "Quicksand, sans-serif", fontSize: 12, lineHeight: 1.4, color: "#4A4A4A" }}>{conditionText}</span>
+        </span>
+        <span style={{ display: "grid", gridTemplateColumns: "34px minmax(0, 1fr)", gap: 8, alignItems: "start", marginTop: 4 }}>
+          <span style={{ fontFamily: "Quicksand, sans-serif", fontSize: 11.5, fontWeight: 700, color: "#707070" }}>Then</span>
+          <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontFamily: "Quicksand, sans-serif", fontSize: 12, lineHeight: 1.4, color: "#4A4A4A" }}>{actionText}</span>
+        </span>
+      </button>
+
+    </div>
+  );
+};
+
+const RulesManagerList = ({ rules, conditionFields, actionFields, alfieDismissed, onDismissAlfie, onStartCreateRule, onStartAlfieDraft, onEditRule, onToggleRule }) => {
+  const sortedRules = rules.slice().sort((a, b) => (b.priority || 0) - (a.priority || 0));
+  return (
+    <ScrollFade style={{ padding: "16px 20px 20px" }}>
+      <div style={{ width: "100%", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", justifyContent: "stretch", gap: 12 }}>
+        {sortedRules.map(rule => (
+          <CompactRuleRow key={rule.id} rule={rule} conditionFields={conditionFields} actionFields={actionFields} onToggle={onToggleRule} onEdit={onEditRule}/>
+        ))}
+        <button onClick={onStartCreateRule} {...press} style={{ minHeight: 124, boxSizing: "border-box", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, border: "none", borderRadius: 16, background: NAVY, color: "#fff", padding: 12, boxShadow: "0 2px 4px rgba(0,0,0,.07)", cursor: "pointer", fontFamily: "Quicksand, sans-serif", fontSize: 14.5, fontWeight: 700, transition: `transform .12s ${EASE}` }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          Create rule
+        </button>
+        {sortedRules.length === 0 && (
+          <div style={{ gridColumn: "1 / -1", border: "1px dashed #C0EEE4", borderRadius: 16, background: "#fff", padding: "28px 16px", textAlign: "center", fontFamily: "Quicksand, sans-serif", fontSize: 13.5, color: "#707070" }}>No rules yet.</div>
+        )}
+      </div>
+      {!alfieDismissed && actionFields.some(field => field.key === "reviewer") && (
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 14, padding: "10px 10px 10px 12px", border: "1px solid rgba(47,109,247,.28)", borderRadius: 8, background: ALFIE_TINT }}>
+          <Sparkle size={15}/>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontFamily: "Quicksand, sans-serif", fontSize: 12, fontWeight: 700, color: ALFIE_INK }}>Suggested by Alfie</div>
+            <div style={{ marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontFamily: "Quicksand, sans-serif", fontSize: 12, color: "#4A4A4A" }}>Assign Rouvin when Account is Pramit.</div>
+          </div>
+          <button onClick={onStartAlfieDraft} style={{ minHeight: 40, flexShrink: 0, border: `1px solid ${ALFIE}`, borderRadius: 8, background: "#fff", color: ALFIE_INK, cursor: "pointer", padding: "8px 11px", fontFamily: "Poppins, sans-serif", fontSize: 12.5, fontWeight: 600 }}>Use suggestion</button>
+          <button onClick={onDismissAlfie} aria-label="Dismiss Alfie suggestion" title="Dismiss for this session" style={{ ...iconBtn, width: 40, height: 40, flexShrink: 0, color: "#707070", background: "transparent", borderColor: "transparent" }}>{closeSvg}</button>
+        </div>
+      )}
+    </ScrollFade>
+  );
+};
+
+const RuleEditorView = ({ draft, isNew, conditionFields, actionFields, rows, onBack, onDraftChange, onSave, onDelete }) => {
+  const [testResult, setTestResult] = React.useState(null);
+  const [confirmingDelete, setConfirmingDelete] = React.useState(false);
+  React.useEffect(() => {
+    setTestResult(null);
+    setConfirmingDelete(false);
+  }, [draft.id]);
+  const patchDraft = (patch) => onDraftChange({ ...draft, ...patch });
+  const updateCondition = (index, patch) => patchDraft({ conditions: draft.conditions.map((condition, current) => current === index ? { ...condition, ...patch } : condition) });
+  const updateAction = (index, patch) => patchDraft({ actions: draft.actions.map((action, current) => current === index ? { ...action, ...patch } : action) });
+  const canSave = !!(
+    draft.name.trim()
+    && actionFields.length
+    && draft.actions.length
+    && draft.actions.every(action => action.field && actionFields.some(field => field.key === action.field))
+  );
+  const summary = summarizeRule(draft, conditionFields, actionFields);
+  const testRule = () => setTestResult(rows.filter(row => ruleMatchesRow(draft, row, conditionFields)));
+  const labelStyle = { display: "block", marginBottom: 6, fontFamily: "Quicksand, sans-serif", fontSize: 13.5, fontWeight: 700, color: NAVY };
+  const addRowStyle = {
+    width: "100%", minHeight: 40, boxSizing: "border-box", marginTop: 8, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+    border: "1px solid #E7E7E7", borderRadius: 8, background: "#fff", color: "#707070", cursor: "pointer",
+    fontFamily: "Quicksand, sans-serif", fontSize: 13.5, fontWeight: 600,
+  };
+  const sectionCardStyle = {
+    border: "1px solid #C0EEE4",
+    borderRadius: 16,
+    background: "#fff",
+    padding: 14,
+    boxShadow: "0 0 2px rgba(39,216,178,.25)",
+  };
+  const sectionHeading = (step, label, color, tint) => (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+      <span style={{ width: 24, height: 24, borderRadius: 8, display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0, background: tint, color, fontFamily: "Poppins, sans-serif", fontSize: 11.5, fontWeight: 700, fontVariantNumeric: "tabular-nums" }}>{step}</span>
+      <span style={{ fontFamily: "Quicksand, sans-serif", fontSize: 13.5, fontWeight: 700, color: NAVY, textWrap: "balance" }}>{label}</span>
+    </div>
+  );
+  const renderFormSurface = () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      <div style={{ ...sectionCardStyle, display: "grid", gridTemplateColumns: "minmax(0, 1fr) 128px", gap: 12, alignItems: "end" }}>
+        <div>
+          <label style={labelStyle}>Rule name</label>
+          <input autoFocus value={draft.name} onChange={event => patchDraft({ name: event.target.value })} placeholder="Enter rule name"
+            style={{ width: "100%", minHeight: 40, boxSizing: "border-box", border: "1px solid #BDBCBC", borderRadius: 8, padding: "8px 10px", outline: "none", fontFamily: "Poppins, sans-serif", fontSize: 13.5, color: NAVY }}/>
+        </div>
+        <div style={{ minHeight: 56, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, borderLeft: "1px solid #C0EEE4", paddingLeft: 12 }}>
+          <div>
+            <div style={{ fontFamily: "Quicksand, sans-serif", fontSize: 13, fontWeight: 700, color: NAVY }}>Active</div>
+            <div style={{ marginTop: 2, fontFamily: "Quicksand, sans-serif", fontSize: 11, color: "#707070" }}>Apply rule</div>
+          </div>
+          <ToggleSwitch on={draft.active} onClick={() => patchDraft({ active: !draft.active })} label="Active rule"/>
+        </div>
+      </div>
+
+      <div style={{ ...sectionCardStyle, background: "rgba(3,178,203,.07)" }}>
+        {sectionHeading("1", "When", NAVY, "#03B2CB")}
+        <SwipeyPicker
+          value={draft.trigger}
+          options={RULE_TRIGGERS.map(trigger => ({ value: trigger.key, label: trigger.label }))}
+          onChange={(trigger) => patchDraft({ trigger })}
+          placeholder="Choose trigger"
+          ariaLabel="Rule trigger"
+          compact/>
+      </div>
+
+      <div style={{ ...sectionCardStyle, background: "#EBFBF6" }}>
+        {sectionHeading("2", "If all conditions match", NAVY, MINT)}
+        <div>
+          {draft.conditions.map((condition, index) => (
+            <CompactRuleCondition key={index} condition={condition} index={index} fields={conditionFields} canRemove={draft.conditions.length > 1} showDivider={index > 0} onChange={(patch) => updateCondition(index, patch)} onRemove={() => patchDraft({ conditions: draft.conditions.filter((_, current) => current !== index) })}/>
+          ))}
+        </div>
+        <button onClick={() => patchDraft({ conditions: [...draft.conditions, blankCondition(conditionFields)] })} style={addRowStyle}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          Add condition
+        </button>
+      </div>
+
+      <div style={{ ...sectionCardStyle, background: "rgba(0,40,64,.045)" }}>
+        {sectionHeading("3", "Then update fields", "#fff", NAVY)}
+        <div>
+          {draft.actions.map((action, index) => (
+            <CompactRuleAction key={index} action={action} index={index} fields={actionFields} canRemove={draft.actions.length > 1} showDivider={index > 0} onChange={(patch) => updateAction(index, patch)} onRemove={() => patchDraft({ actions: draft.actions.filter((_, current) => current !== index) })}/>
+          ))}
+        </div>
+        <button onClick={() => patchDraft({ actions: [...draft.actions, blankAction(actionFields)] })} disabled={!actionFields.length} style={{ ...addRowStyle, color: actionFields.length ? "#707070" : "#CBCBCB", cursor: actionFields.length ? "pointer" : "not-allowed" }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          Add action
+        </button>
+      </div>
+
+      <div style={{ ...sectionCardStyle, minHeight: 96, background: "#EBFBF6", padding: "10px 12px" }}>
+        <div style={{ fontFamily: "Quicksand, sans-serif", fontSize: 14, fontWeight: 700, color: NAVY, marginBottom: 5 }}>Rule preview</div>
+        <div style={{ fontFamily: "Quicksand, sans-serif", fontSize: 15.5, lineHeight: 1.42, fontWeight: 500, color: NAVY, textWrap: "pretty" }}>{summary}</div>
+      </div>
+
+      {testResult && (
+        <div style={{ marginTop: 18, border: "1px solid #C0EEE4", borderRadius: 8, background: "#EBFBF6", padding: 12 }}>
+          <div style={{ fontFamily: "Quicksand, sans-serif", fontSize: 13, fontWeight: 700, color: NAVY, fontVariantNumeric: "tabular-nums" }}>{testResult.length} matching transaction{testResult.length === 1 ? "" : "s"}</div>
+          {testResult.slice(0, 3).map((row, index) => (
+            <div key={index} style={{ marginTop: 5, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontFamily: "Quicksand, sans-serif", fontSize: 12, color: "#4A4A4A" }}>{row.title || row.badge} - {row.acct} - {row.amt}</div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+  return (
+    <>
+      <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 20px", borderBottom: "1px solid #C0EEE4" }}>
+        <button onClick={onBack} aria-label="Back to rules" title="Back to rules" style={iconBtn} {...press}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <span style={{ flex: 1, fontFamily: "Quicksand, sans-serif", fontSize: 18, fontWeight: 700, color: NAVY }}>{isNew ? "Create rule" : "Edit rule"}</span>
+      </div>
+
+      <ScrollFade style={{ padding: "12px 16px 76px" }}>
+        {draft.alfieDraft ? (
+          <div style={{ border: "1px solid rgba(47,109,247,.44)", borderRadius: 12, padding: 18, background: ALFIE_TINT, boxShadow: "0 0 0 1px rgba(47,109,247,.08), 0 8px 18px rgba(0,40,64,.04)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
+              <Sparkle size={15}/>
+              <span style={{ flex: 1, minWidth: 0, fontFamily: "Quicksand, sans-serif", fontSize: 14, fontWeight: 700, color: ALFIE }}>Draft filled by Alfie</span>
+              <button onClick={onBack} aria-label="Dismiss Alfie draft" title="Dismiss draft" style={{ width: 40, height: 40, margin: "-8px -8px -8px 0", borderRadius: "50%", border: "none", background: "transparent", color: "#707070", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", padding: 0, flexShrink: 0 }}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+              </button>
+            </div>
+            {renderFormSurface()}
+          </div>
+        ) : renderFormSurface()}
+      </ScrollFade>
+
+      <div style={{ ...footerOverlay, padding: "12px 24px 14px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: isNew ? "flex-end" : "space-between", gap: 12 }}>
+          {!isNew && (
+            <button onClick={() => confirmingDelete ? onDelete(draft.id) : setConfirmingDelete(true)} onBlur={() => setConfirmingDelete(false)}
+              aria-label={(confirmingDelete ? "Confirm delete " : "Delete ") + draft.name}
+              style={{ minWidth: 122, minHeight: 40, boxSizing: "border-box", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 7, background: confirmingDelete ? "rgba(219,44,77,.08)" : "#fff", border: `1px solid ${confirmingDelete ? "rgba(219,44,77,.35)" : "#E7E7E7"}`, borderRadius: 8, padding: "8px 12px", color: ERR, cursor: "pointer", fontFamily: "Poppins, sans-serif", fontSize: 13, fontWeight: 600 }}>
+              <TrashIcon/>
+              {confirmingDelete ? "Confirm delete" : "Delete rule"}
+            </button>
+          )}
+          <div style={{ display: "flex", justifyContent: "flex-end", gap: 8 }}>
+            <button onClick={onBack} style={{ minHeight: 40, boxSizing: "border-box", background: "#fff", border: "1px solid #E7E7E7", borderRadius: 8, padding: "8px 14px", color: "#4A4A4A", cursor: "pointer", fontFamily: "Poppins, sans-serif", fontSize: 13, fontWeight: 600 }}>Cancel</button>
+            <button onClick={testRule} style={{ minHeight: 40, boxSizing: "border-box", background: "#fff", border: `1px solid ${MINT}`, borderRadius: 8, padding: "8px 14px", color: NAVY, cursor: "pointer", fontFamily: "Poppins, sans-serif", fontSize: 13, fontWeight: 600 }}>Test</button>
+            <button onClick={() => canSave && onSave(draft)} disabled={!canSave} style={{ minHeight: 40, boxSizing: "border-box", background: canSave ? NAVY : "#CBCBCB", border: "none", borderRadius: 8, padding: "8px 18px", color: "#fff", cursor: canSave ? "pointer" : "not-allowed", fontFamily: "Poppins, sans-serif", fontSize: 13, fontWeight: 600 }}>Save</button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
 /* ───────────────── Screen ───────────────── */
 
 const FieldManagerExplorer = () => {
   /* useTweaks removed — approval workflow fixed to "List view", so the Approval column always renders in the table */
   const [query, setQuery] = React.useState("");
   const [rowsState, setRowsState] = React.useState(ROWS);
-  const setApproval = (row, approval) => setRowsState(prev => prev.map(x => x === row ? { ...x, approval } : x));
 
-  const [customColumns, setCustomColumns] = React.useState([]);
-  const [order, setOrder] = React.useState(() => BASE_META.map(m => m.key));
+  const [customColumns, setCustomColumns] = React.useState(INITIAL_CUSTOM_COLUMNS);
+  const [order, setOrder] = React.useState(() => [...BASE_META.map(m => m.key), ...INITIAL_CUSTOM_COLUMNS.map(c => c.id)]);
   const [hidden, setHidden] = React.useState([]);
   const [required, setRequired] = React.useState([]);
   const [baseLabels, setBaseLabels] = React.useState({});
 
   const [managerOpen, setManagerOpen] = React.useState(false);
+  const [activeManagerTab, setActiveManagerTab] = React.useState("fields");
+  const [rules, setRules] = React.useState(INITIAL_RULES);
+  const [ruleDraft, setRuleDraft] = React.useState(null);
+  const [detailReturnIdx, setDetailReturnIdx] = React.useState(null);
   /* keep the field drawer mounted through its 300ms exit slide (instant under reduced motion) */
   const [drawerMounted, setDrawerMounted] = React.useState(false);
   React.useEffect(() => {
@@ -1614,25 +2437,31 @@ const FieldManagerExplorer = () => {
   const headerRowRef = React.useRef(null);
   const flashTimer = React.useRef(null);
   /* sticky-left offsets for pinned select/Date/Details columns, measured from actual rendered widths (not assumed mins) */
-  const [stickyLeft, setStickyLeft] = React.useState({ select: 0, date: 0, details: 0 });
+  const [stickyLeft, setStickyLeft] = React.useState({ select: 0, date: SELECT_TRACK_WIDTH + TABLE_GAP, details: SELECT_TRACK_WIDTH + TABLE_GAP + parseInt(COL_WIDTH.date, 10) + TABLE_GAP });
 
   /* P2-11 — bulk select (indices into rowsState; order is stable, rows are never added/removed) */
   const [selected, setSelected] = React.useState(() => new Set());
 
-  /* Alfie / Design Lab state */
-  const [lab, setLab] = React.useState({ suggestedFields: true, autofill: true, nudge: true, optionSuggest: true, suggestsCard: true });
+  /* Alfie feature flags — the Design Lab panel that toggled these is prototype-only chrome and is
+     stripped from the portfolio embed, so every Alfie feature is hard-on. */
+  const lab = { suggestedFields: true, autofill: true, nudge: true, optionSuggest: true, suggestsCard: true };
   /* change 3 — "Alfie suggests" card dismissal is session-scoped (shared by manager + editor views) */
   const [suggestsDismissed, setSuggestsDismissed] = React.useState(false);
-  const toggleLab = (k) => setLab(p => ({ ...p, [k]: !p[k] }));
   const [nudgeReady, setNudgeReady] = React.useState(false);
   const [nudgeDismissed, setNudgeDismissed] = React.useState(false);
   const [reviewLater, setReviewLater] = React.useState([]);
+  const [createdFieldToast, setCreatedFieldToast] = React.useState(null);
+  const createdFieldTimer = React.useRef(null);
 
   /* Filters (P1-5) */
   const [filtersOpen, setFiltersOpen] = React.useState(false);
   const [filters, setFilters] = React.useState({});
 
-  React.useEffect(() => () => { Object.values(timers.current).forEach(clearTimeout); if (flashTimer.current) clearTimeout(flashTimer.current); }, []);
+  React.useEffect(() => () => {
+    Object.values(timers.current).forEach(clearTimeout);
+    if (flashTimer.current) clearTimeout(flashTimer.current);
+    if (createdFieldTimer.current) clearTimeout(createdFieldTimer.current);
+  }, []);
 
   /* nudge appears ~1.5s after load */
   React.useEffect(() => {
@@ -1643,12 +2472,19 @@ const FieldManagerExplorer = () => {
   const resolveMeta = (key) => {
     const b = BASE_META.find(m => m.key === key);
     if (b) return { key, label: baseLabels[key] || b.label, custom: false, col: null };
+    const d = DETAIL_META.find(m => m.key === key);
+    if (d) return { key, label: baseLabels[key] || d.label, custom: false, detail: true, col: null };
     const c = customColumns.find(x => x.id === key);
     return c ? { key, label: c.label, custom: true, col: c } : null;
   };
   const orderedAll = order.map(resolveMeta).filter(Boolean);
   const orderedVisible = orderedAll.filter(m => !hidden.includes(m.key));
   const cols = buildCols(orderedVisible, true);
+
+  React.useLayoutEffect(() => {
+    const scroller = scrollRef.current;
+    if (scroller) scroller.scrollLeft = 0;
+  }, [cols]);
 
   /* P1-5 filters + P1-4 search across custom values */
   const filterableFields = orderedVisible.filter(m => m.custom && FILTERABLE_TYPES.includes(m.col.type));
@@ -1679,6 +2515,34 @@ const FieldManagerExplorer = () => {
     return matchesFilters(r);
   });
 
+  const ruleConditionFields = [
+    { key: "account", label: "Account", type: "member", options: Array.from(new Set(["Pramit", ...rowsState.map(r => r.acct)])), valueOf: (r) => r.acct },
+    { key: "merchant", label: "Merchant", type: "text", options: [], valueOf: (r) => r.title || r.badge || "" },
+    { key: "status", label: "Status", type: "dropdown", options: STATUS_VALUES, valueOf: (r) => r.status },
+    { key: "amount", label: "Amount", type: "number", options: [], valueOf: (r) => parseAmt(r.amt) },
+    { key: "date", label: "Date & Time", type: "date", options: [], valueOf: (r) => r.date },
+    { key: "approval", label: "Approval", type: "dropdown", options: ["pending", "approved", "rejected"], valueOf: (r) => r.approval || "" },
+    ...customColumns.map(c => ({ key: c.id, label: c.label, type: c.type, options: c.type === "member" ? MEMBERS : (c.options || []), editable: true, valueOf: (r) => (r.custom && Object.prototype.hasOwnProperty.call(r.custom, c.id)) ? r.custom[c.id] : c.def })),
+  ];
+  const ruleActionFields = customColumns.map(c => ({ key: c.id, label: c.label, type: c.type, options: c.type === "member" ? MEMBERS : (c.options || []), editable: true, valueOf: (r) => (r.custom && Object.prototype.hasOwnProperty.call(r.custom, c.id)) ? r.custom[c.id] : c.def }));
+  const applyRulesToEvent = (eventSnapshot, eventType = "updated") => {
+    const winningActions = {};
+    rules
+      .filter(rule => rule.active)
+      .sort((a, b) => (b.priority || 0) - (a.priority || 0))
+      .forEach(rule => {
+        if (rule.trigger !== "create_update" && rule.trigger !== eventType) return;
+        if (!ruleMatchesRow(rule, eventSnapshot, ruleConditionFields)) return;
+        (rule.actions || []).forEach(action => {
+          if (!action.field || Object.prototype.hasOwnProperty.call(winningActions, action.field)) return;
+          if (!ruleActionFields.some(field => field.key === action.field)) return;
+          winningActions[action.field] = action.value;
+        });
+      });
+    if (!Object.keys(winningActions).length) return eventSnapshot;
+    return { ...eventSnapshot, custom: { ...(eventSnapshot.custom || {}), ...winningActions } };
+  };
+
   /* P2-11 — selection derived from the currently-visible (filtered) rows */
   const rowIndices = rows.map(r => rowsState.indexOf(r));
   const allSelected = rowIndices.length > 0 && rowIndices.every(i => selected.has(i));
@@ -1688,7 +2552,7 @@ const FieldManagerExplorer = () => {
   const clearSelection = () => setSelected(new Set());
   const bulkFields = orderedVisible.filter(m => m.custom && (m.col.type === "dropdown" || m.col.type === "member"));
   const bulkSetValue = (colId, value) => {
-    setRowsState(prev => prev.map((x, i) => selected.has(i) ? clearPending({ ...x, custom: { ...(x.custom || {}), [colId]: value } }, colId) : x));
+    setRowsState(prev => prev.map((x, i) => selected.has(i) ? clearPending(applyRulesToEvent({ ...x, custom: { ...(x.custom || {}), [colId]: value } }), colId) : x));
     clearSelection();
   };
 
@@ -1733,7 +2597,8 @@ const FieldManagerExplorer = () => {
     delete next[colId];
     return { ...r, aiPending: next };
   };
-  const setCellValue = (row, colId, value) => setRowsState(prev => prev.map(x => x === row ? clearPending({ ...x, custom: { ...(x.custom || {}), [colId]: value } }, colId) : x));
+  const setApproval = (row, approval) => setRowsState(prev => prev.map(x => x === row ? applyRulesToEvent({ ...x, approval }) : x));
+  const setCellValue = (row, colId, value) => setRowsState(prev => prev.map(x => x === row ? clearPending(applyRulesToEvent({ ...x, custom: { ...(x.custom || {}), [colId]: value } }), colId) : x));
   const confirmCell = (row, colId) => setRowsState(prev => prev.map(x => x === row ? clearPending(x, colId) : x));
   const confirmColumn = (colId) => setRowsState(prev => prev.map(x => (x.aiPending && colId in x.aiPending) ? clearPending(x, colId) : x));
   const addOptionToField = (row, colId, optValue) => {
@@ -1786,6 +2651,10 @@ const FieldManagerExplorer = () => {
     setOrder(o => o.filter(k => k !== key));
     setHidden(h => h.filter(k => k !== key));
     setRequired(rq => rq.filter(k => k !== key));
+    setRules(rs => rs.filter(rule =>
+      !(rule.conditions || []).some(condition => condition.field === key) &&
+      !(rule.actions || []).some(action => action.field === key)
+    ));
   };
 
   const saveField = (p) => {
@@ -1811,9 +2680,72 @@ const FieldManagerExplorer = () => {
       setFlashId(id);
       if (flashTimer.current) clearTimeout(flashTimer.current);
       flashTimer.current = setTimeout(() => setFlashId(null), 1500);
-      setManagerOpen(false); // creating closes the drawer so the highlighted new column is visible
+      if (!(editor && editor.origin === "transaction")) setManagerOpen(false); // creating from the manager reveals the new column
     }
-    setEditor(null);
+    if (editor && editor.origin === "transaction") returnFromEditor();
+    else setEditor(null);
+  };
+
+  const createFieldForRow = (rowIndex, p) => {
+    const id = "c" + Date.now();
+    const options = p.type === "dropdown"
+      ? Array.from(new Set([...(p.options || []), p.value].map(v => String(v || "").trim()).filter(Boolean)))
+      : [];
+    const def = p.type === "checkbox" ? false : "";
+    setCustomColumns(cs => [...cs, { id, label: p.label, type: p.type, options, def, desc: "", alfie: p.alfie || null }]);
+    setOrder(o => { const i = o.indexOf("status"); return i === -1 ? [...o, id] : [...o.slice(0, i + 1), id, ...o.slice(i + 1)]; });
+    setRequired(rq => p.required ? (rq.includes(id) ? rq : [...rq, id]) : rq);
+    setRowsState(prev => prev.map((x, i) => i === rowIndex ? applyRulesToEvent({ ...x, custom: { ...(x.custom || {}), [id]: p.value } }) : x));
+    setFlashId(id);
+    if (flashTimer.current) clearTimeout(flashTimer.current);
+    flashTimer.current = setTimeout(() => setFlashId(null), 1500);
+    setCreatedFieldToast({ kind: "created", id, label: p.label });
+    if (createdFieldTimer.current) clearTimeout(createdFieldTimer.current);
+    createdFieldTimer.current = setTimeout(() => setCreatedFieldToast(null), 5000);
+    return id;
+  };
+
+  const setExistingFieldForRow = (rowIndex, field, value) => {
+    const row = rowsState[rowIndex];
+    if (!row || !field) return;
+    const colId = field.col.id;
+    const custom = row.custom || {};
+    const hadPrevious = Object.prototype.hasOwnProperty.call(custom, colId);
+    const previousValue = hadPrevious ? custom[colId] : undefined;
+    setRowsState(prev => prev.map((x, i) => i === rowIndex ? clearPending(applyRulesToEvent({ ...x, custom: { ...(x.custom || {}), [colId]: value } }), colId) : x));
+    setCreatedFieldToast({ kind: "set", id: colId, label: field.label, rowIndex, colId, hadPrevious, previousValue });
+    if (createdFieldTimer.current) clearTimeout(createdFieldTimer.current);
+    createdFieldTimer.current = setTimeout(() => setCreatedFieldToast(null), 5000);
+  };
+
+  const undoCreatedField = (actionOrId) => {
+    if (createdFieldTimer.current) clearTimeout(createdFieldTimer.current);
+    setCreatedFieldToast(null);
+    const action = typeof actionOrId === "object" && actionOrId ? actionOrId : { kind: "created", id: actionOrId };
+    if (action.kind === "set") {
+      setRowsState(prev => prev.map((row, i) => {
+        if (i !== action.rowIndex) return row;
+        const next = { ...(row.custom || {}) };
+        if (action.hadPrevious) next[action.colId] = action.previousValue;
+        else delete next[action.colId];
+        return { ...row, custom: next };
+      }));
+      return;
+    }
+    const id = action.id;
+    setCustomColumns(cs => cs.filter(c => c.id !== id));
+    setOrder(o => o.filter(k => k !== id));
+    setHidden(h => h.filter(k => k !== id));
+    setRequired(rq => rq.filter(k => k !== id));
+    setReviewLater(r => r.filter(k => k !== id));
+    setRowsState(prev => prev.map(row => {
+      if (!row.custom || !(id in row.custom)) return row;
+      const next = { ...row.custom };
+      delete next[id];
+      const aiPending = row.aiPending ? { ...row.aiPending } : null;
+      if (aiPending) delete aiPending[id];
+      return { ...row, custom: next, ...(aiPending ? { aiPending } : {}) };
+    }));
   };
 
   /* Feature 3 — nudge "Create" adds the Project field directly */
@@ -1824,6 +2756,85 @@ const FieldManagerExplorer = () => {
 
   const openRow = (r) => setSelectedIdx(rowsState.indexOf(r));
 
+  const openDetailFieldEditor = (key) => {
+    if (selectedIdx == null) return;
+    setDetailReturnIdx(selectedIdx);
+    setActiveManagerTab("fields");
+    setManagerOpen(true);
+    setEditor({ mode: "edit", key, origin: "transaction" });
+  };
+  const returnFromEditor = () => {
+    if (editor && editor.origin === "transaction" && detailReturnIdx != null) {
+      const transactionIndex = detailReturnIdx;
+      setManagerOpen(false);
+      setEditor(null);
+      setDetailReturnIdx(null);
+      setSelectedIdx(transactionIndex);
+      return;
+    }
+    setEditor(null);
+  };
+  const closeFieldDrawer = () => {
+    if (editor && editor.origin === "transaction" && detailReturnIdx != null) {
+      returnFromEditor();
+      return;
+    }
+    setManagerOpen(false);
+    setEditor(null);
+    setRuleDraft(null);
+  };
+
+  const makeRuleDraft = (rule, fromAlfie) => {
+    if (rule) {
+      return {
+        ...rule,
+        conditions: (rule.conditions || []).map(c => ({ ...c })),
+        actions: (rule.actions || []).map(a => ({ ...a })),
+      };
+    }
+    return {
+      id: "rule-" + Date.now(),
+      name: fromAlfie ? "Assign reviewer for Pramit" : "New rule",
+      active: false,
+      priority: fromAlfie ? 90 : 50,
+      trigger: "create_update",
+      conditions: fromAlfie ? [{ field: "account", operator: "is", value: "Pramit" }] : [blankCondition(ruleConditionFields)],
+      actions: fromAlfie ? [{ field: "reviewer", value: "Rouvin" }] : [blankAction(ruleActionFields)],
+      alfieDraft: !!fromAlfie,
+    };
+  };
+  const startCreateRule = () => {
+    setActiveManagerTab("rules");
+    setEditor(null);
+    setRuleDraft(makeRuleDraft(null, false));
+  };
+  const startAlfieRuleDraft = () => {
+    setActiveManagerTab("rules");
+    setEditor(null);
+    setRuleDraft(makeRuleDraft(null, true));
+  };
+  const editRule = (rule) => {
+    setActiveManagerTab("rules");
+    setEditor(null);
+    setRuleDraft(makeRuleDraft(rule, false));
+  };
+  const saveRuleDraft = (draft) => {
+    const savedDraft = { ...draft, alfieDraft: false };
+    setRules(prev => {
+      if (prev.some(rule => rule.id === draft.id)) {
+        return prev.map(rule => rule.id === draft.id ? savedDraft : rule);
+      }
+      if (prev.some(rule => ruleSignature(rule) === ruleSignature(draft))) return prev;
+      return [...prev, savedDraft];
+    });
+    setRuleDraft(null);
+  };
+  const toggleRule = (id) => setRules(prev => prev.map(r => r.id === id ? { ...r, active: !r.active } : r));
+  const deleteRule = (id) => {
+    setRules(prev => prev.filter(r => r.id !== id));
+    if (ruleDraft && ruleDraft.id === id) setRuleDraft(null);
+  };
+
   const filtersBtn = {
     display: "flex", alignItems: "center", gap: 8,
     background: "#fff", border: "1px solid #E7E7E7", borderRadius: 8,
@@ -1833,6 +2844,30 @@ const FieldManagerExplorer = () => {
   };
 
   const editorField = editor && editor.key ? resolveMeta(editor.key) : null;
+  const editorDelete = (() => {
+    if (!editorField) return undefined;
+
+    if (editor && editor.origin === "transaction") {
+      if (editorField.custom) {
+        return () => {
+          const key = editor.key;
+          returnFromEditor();
+          setConfirmKey(key);
+        };
+      }
+      if (editorField.detail) {
+        return () => {
+          const key = editor.key;
+          returnFromEditor();
+          setHidden(current => current.includes(key) ? current : [...current, key]);
+        };
+      }
+    }
+
+    return editorField.custom
+      ? () => { const key = editor.key; setEditor(null); setConfirmKey(key); }
+      : undefined;
+  })();
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", height: "100vh", background: "#F2F2F2", WebkitFontSmoothing: "antialiased" }} data-screen-label="Transactions">
@@ -1872,7 +2907,7 @@ const FieldManagerExplorer = () => {
                     onToggle={toggleFilterValue} onClear={clearFilters} onClose={() => setFiltersOpen(false)}/>
                 )}
               </div>
-              <button onClick={() => setManagerOpen(true)} style={filtersBtn} {...press}>
+              <button onClick={() => { setActiveManagerTab("fields"); setManagerOpen(true); }} style={filtersBtn} {...press}>
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke={MINT} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 6h10M4 12h16M4 18h7"/><circle cx="17" cy="6" r="2.4"/><circle cx="14" cy="18" r="2.4"/></svg>
                 Manage fields
               </button>
@@ -1910,43 +2945,47 @@ const FieldManagerExplorer = () => {
           )}
 
           {/* Table */}
-          <div style={{ background: "#fff", borderRadius: 14, flex: 1, minHeight: 0, display: "flex", flexDirection: "column", overflow: "hidden", border: "1px solid #C0EEE4", boxShadow: "0 0 2px rgba(39,216,178,.25)" }}>
+          <div style={{ background: "#fff", borderRadius: 14, flex: 1, minHeight: 0, display: "flex", flexDirection: "column", overflow: "hidden", border: "1px solid #C0EEE4", boxShadow: "0 0 2px rgba(39,216,178,.25)", position: "relative" }}>
             {pendingBars.map(b => (
               <AlfieAcceptBar key={b.key} label={b.label} count={b.count} source={b.source}
                 onAcceptAll={() => confirmColumn(b.key)}
                 onReviewLater={() => setReviewLater(p => [...p, b.key])}/>
             ))}
+            <div style={{ position: "relative", flex: 1, minHeight: 0, display: "flex", flexDirection: "column", overflow: "hidden" }}>
             {/* single scroll container: horizontal scroll is scoped here (sidebar/toolbar stay put); header is sticky-top; Date & Details are sticky-left.
                 inner wrapper sizes to content (min-width:max-content) so the sticky header and data rows resolve identical grid tracks and share the same content width — header always spans every column, no collapse/overlap. */}
-            <div ref={scrollRef} style={{ flex: 1, minHeight: 0, overflow: "auto" }}>
-              <div style={{ minWidth: "max-content" }}>
-              <div ref={headerRowRef} style={{ position: "sticky", top: 0, zIndex: 3, display: "grid", gridTemplateColumns: cols, padding: "14px 28px", gap: 14, background: MINT, fontFamily: "Quicksand, sans-serif", fontSize: 13, fontWeight: 600, color: "#fff", alignItems: "center" }}>
+            <div ref={scrollRef} className="txn-scroll" style={{ flex: 1, minHeight: 0, overflow: "auto", position: "relative", overscrollBehavior: "none", WebkitOverflowScrolling: "auto" }}>
+              <div style={{ width: "max-content", minWidth: "100%", paddingRight: ADD_COL_WIDTH, boxSizing: "border-box" }}>
+              <div ref={headerRowRef} style={{ position: "sticky", top: 0, zIndex: 3, display: "grid", gridTemplateColumns: cols, minWidth: "max-content", padding: "14px 0", gap: TABLE_GAP, background: MINT, fontFamily: "Quicksand, sans-serif", fontSize: 13, fontWeight: 600, color: "#fff", alignItems: "center" }}>
                 {/* P2-11 — sticky select-all cell (leads the pinned Date/Details columns) */}
-                <div data-col-key="select" style={{ position: "sticky", left: stickyLeft.select, zIndex: 2, background: MINT, boxShadow: "14px 0 0 " + MINT, alignSelf: "stretch", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <div data-col-key="select" style={{ position: "sticky", left: stickyLeft.select, zIndex: 4, background: MINT, boxShadow: `14px 0 0 ${MINT}`, alignSelf: "stretch", display: "flex", alignItems: "center", justifyContent: "flex-start", paddingLeft: TABLE_PAD_X, boxSizing: "border-box" }}>
                   <SelectCheck checked={allSelected} indeterminate={!allSelected && someSelected} onToggle={toggleSelectAll} label={allSelected ? "Deselect all rows" : "Select all rows"}/>
                 </div>
                 {orderedVisible.map(m => {
                   const pc = (lab.autofill && m.custom && reviewLater.includes(m.key)) ? pendingCountFor(m.key) : 0;
                   /* header click lands on the editor view of the unified drawer; back from there reveals the manager */
                   const header = <ColumnHeader meta={m} required={required.includes(m.key)} flash={m.key === flashId}
-                    onEdit={() => { setManagerOpen(true); setEditor({ mode: "edit", key: m.key }); }}
+                    onEdit={() => { setActiveManagerTab("fields"); setManagerOpen(true); setEditor({ mode: "edit", key: m.key }); }}
                     pendingCount={pc} onAcceptAll={() => confirmColumn(m.key)} onReopen={() => setReviewLater(p => p.filter(k => k !== m.key))}/>;
                   return stickyLeft[m.key] != null
                     /* zIndex 2 (not 1): the non-sticky ColumnHeader label spans carry zIndex 1 to sit above FieldFlash — a sticky cell at the same level would let a scrolled label paint through the mint band. */
-                    ? <div key={m.key} data-col-key={m.key} style={{ position: "sticky", left: stickyLeft[m.key], zIndex: 2, background: MINT, boxShadow: "14px 0 0 " + MINT, alignSelf: "stretch", display: "flex", alignItems: "center" }}>{header}</div>
+                    ? <div key={m.key} data-col-key={m.key} style={{ position: "sticky", left: stickyLeft[m.key], zIndex: 2, background: MINT, boxShadow: `14px 0 0 ${MINT}`, alignSelf: "stretch", display: "flex", alignItems: "center" }}>{header}</div>
                     : <React.Fragment key={m.key}>{header}</React.Fragment>;
                 })}
-                <div style={{ display: "flex", justifyContent: "center" }}>
-                  <button aria-label="Manage fields" onClick={() => setManagerOpen(true)} style={{ width: 28, height: 28, borderRadius: 8, border: "none", background: "rgba(255,255,255,.22)", color: "#fff", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", transition: `transform .12s ${EASE}` }} {...press}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-                  </button>
-                </div>
               </div>
               {rows.map((r, i) => <Row key={i} r={r} last={i === rows.length - 1} cols={cols} orderedVisible={orderedVisible} stickyLeft={stickyLeft} onOpen={() => openRow(r)} onCellChange={(colId, v) => setCellValue(r, colId, v)} onApprove={() => setApproval(r, "approved")} onReject={() => setApproval(r, "rejected")}
                 lab={lab} onConfirmCell={(colId) => confirmCell(r, colId)} onAddOption={(colId, val) => addOptionToField(r, colId, val)} optionSuggestFor={optionSuggestFor}
                 selected={selected.has(rowIndices[i])} onToggleSelect={() => toggleSelect(rowIndices[i])} requiredKeys={required}/>)}
               </div>
             </div>
+            <div style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: ADD_COL_WIDTH, background: "#fff", borderLeft: "1px solid #C0EEE4", zIndex: 5 }}>
+              <div style={{ height: 46, background: MINT, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <button aria-label="Manage fields" onClick={() => { setActiveManagerTab("fields"); setManagerOpen(true); }} style={{ width: 28, height: 28, borderRadius: 8, border: "none", background: "rgba(255,255,255,.22)", color: "#fff", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", transition: `transform .12s ${EASE}` }} {...press}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
           </div>
 
           {/* Footer */}
@@ -1957,35 +2996,64 @@ const FieldManagerExplorer = () => {
 
         {selectedIdx != null && rowsState[selectedIdx] && (
           <TransactionDrawer r={rowsState[selectedIdx]} onClose={() => setSelectedIdx(null)}
-            customFields={orderedVisible.filter(m => m.custom)} requiredKeys={required} lab={lab}
+            customFields={orderedAll.filter(m => m.custom)} requiredKeys={required} lab={lab}
             onCellChange={(colId, v) => setCellValue(rowsState[selectedIdx], colId, v)}
             onConfirmCell={(colId) => confirmCell(rowsState[selectedIdx], colId)}
             onAddOption={(colId, val) => addOptionToField(rowsState[selectedIdx], colId, val)}
-            optionSuggestFor={optionSuggestFor}/>
+            optionSuggestFor={optionSuggestFor}
+            onCreateFieldForRow={(p) => createFieldForRow(selectedIdx, p)}
+            onSetExistingFieldForRow={(field, value) => setExistingFieldForRow(selectedIdx, field, value)}
+            onSaveField={saveField}
+            onDeleteCustomField={(key) => setConfirmKey(key)}
+            onHideDetailField={(key) => setHidden(p => p.includes(key) ? p : [...p, key])}
+            hiddenKeys={hidden}
+            detailLabels={baseLabels}/>
         )}
 
         {drawerMounted && (
           <FieldDrawer
             open={managerOpen}
-            view={editor ? "editor" : "manager"}
-            onClose={() => { setManagerOpen(false); setEditor(null); }}
-            onBack={() => setEditor(null)}
+            view={(editor || ruleDraft) ? "editor" : "manager"}
+            editorLabel={ruleDraft ? "Rule editor" : "Field editor"}
+            onClose={closeFieldDrawer}
+            onBack={ruleDraft ? () => setRuleDraft(null) : returnFromEditor}
             manager={
               <ManagerView
+                activeTab={activeManagerTab}
+                onTabChange={setActiveManagerTab}
                 orderedAll={orderedAll} hidden={hidden} required={required} pending={pending}
-                onClose={() => { setManagerOpen(false); setEditor(null); }}
+                onClose={closeFieldDrawer}
                 onReorder={setOrder}
                 onToggleHidden={toggleHidden}
                 onToggleRequired={toggleRequired}
-                onEdit={(key) => setEditor({ mode: "edit", key })}
+                onEdit={(key) => { setActiveManagerTab("fields"); setEditor({ mode: "edit", key }); }}
                 onDeleteRequest={(key) => setConfirmKey(key)}
                 onUndo={undoDelete}
-                onAddField={() => setEditor({ mode: "create" })}
+                onAddField={() => { setActiveManagerTab("fields"); setEditor({ mode: "create" }); }}
                 lab={lab} suggestions={availableSuggestions}
-                onPickSuggestion={(sug) => setEditor({ mode: "create", preset: sug })}
-                suggestsDismissed={suggestsDismissed} onDismissSuggests={() => setSuggestsDismissed(true)}/>
+                onPickSuggestion={(sug) => { setActiveManagerTab("fields"); setEditor({ mode: "create", preset: sug }); }}
+                suggestsDismissed={suggestsDismissed} onDismissSuggests={() => setSuggestsDismissed(true)}
+                rules={rules}
+                conditionFields={ruleConditionFields}
+                actionFields={ruleActionFields}
+                onStartCreateRule={startCreateRule}
+                onStartAlfieDraft={startAlfieRuleDraft}
+                onEditRule={editRule}
+                onToggleRule={toggleRule}/>
             }
-            editorView={editor ? (
+            editorView={ruleDraft ? (
+              <RuleEditorView
+                key={ruleDraft.id}
+                draft={ruleDraft}
+                isNew={!rules.some(rule => rule.id === ruleDraft.id)}
+                conditionFields={ruleConditionFields}
+                actionFields={ruleActionFields}
+                rows={rowsState}
+                onBack={() => setRuleDraft(null)}
+                onDraftChange={setRuleDraft}
+                onSave={saveRuleDraft}
+                onDelete={deleteRule}/>
+            ) : editor ? (
               <EditorView
                 key={editor.mode + ":" + (editor.key || "") + ":" + (editor.preset ? editor.preset.key : "")}
                 mode={editor.mode}
@@ -1993,9 +3061,9 @@ const FieldManagerExplorer = () => {
                 preset={editor.preset || null}
                 initialRequired={editor.key ? required.includes(editor.key) : false}
                 initialHidden={editor.key ? hidden.includes(editor.key) : false}
-                onBack={() => setEditor(null)}
+                onBack={returnFromEditor}
                 onSubmit={saveField}
-                onDelete={editorField && editorField.custom ? () => { const k = editor.key; setEditor(null); setConfirmKey(k); } : undefined}
+                onDelete={editorDelete}
                 lab={lab} suggestions={availableSuggestions}
                 suggestsDismissed={suggestsDismissed} onDismissSuggests={() => setSuggestsDismissed(true)}/>
             ) : null}/>
@@ -2014,12 +3082,20 @@ const FieldManagerExplorer = () => {
           <PendingToasts items={pending.map(resolveMeta).filter(Boolean)} onUndo={undoDelete}/>
         )}
 
-        {/* P2-11 — bulk action bar (hidden while a delete toast is showing to avoid stacking at the same spot) */}
-        {selected.size > 0 && !(!managerOpen && pending.length > 0) && (
-          <BulkBar count={selected.size} fields={bulkFields} onApply={bulkSetValue} onClear={clearSelection}/>
+        {createdFieldToast && !managerOpen && pending.length === 0 && (
+          <div style={{ position: "fixed", left: "50%", bottom: 26, transform: "translateX(-50%)", zIndex: 75, minWidth: 320, background: "#fff", borderRadius: 14, boxShadow: "0 8px 24px rgba(0,40,64,.08)", border: "1px solid #C0EEE4", padding: "12px 14px", display: "flex", alignItems: "center", gap: 12, fontFamily: "Quicksand, sans-serif" }}>
+            <span style={{ width: 28, height: 28, borderRadius: "50%", background: "rgba(39,216,178,.12)", color: MINT, display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            </span>
+            <span style={{ flex: 1, minWidth: 0, fontFamily: "Quicksand, sans-serif", fontSize: 13.5, fontWeight: 600, color: NAVY }}>{createdFieldToast.kind === "set" ? "Updated" : "Added"} “{createdFieldToast.label}”</span>
+            <button onClick={() => undoCreatedField(createdFieldToast)} {...press} style={{ background: "#fff", border: "1px solid #E7E7E7", borderRadius: 8, padding: "8px 12px", fontFamily: "Quicksand, sans-serif", fontSize: 13, fontWeight: 700, color: "#4A4A4A", cursor: "pointer", transition: `transform .12s ${EASE}` }}>Undo</button>
+          </div>
         )}
 
-        <DesignLabPanel lab={lab} onToggle={toggleLab}/>
+        {/* P2-11 — bulk action bar (hidden while a delete toast is showing to avoid stacking at the same spot) */}
+        {selected.size > 0 && !(!managerOpen && (pending.length > 0 || createdFieldToast)) && (
+          <BulkBar count={selected.size} fields={bulkFields} onApply={bulkSetValue} onClear={clearSelection}/>
+        )}
       </main>
     </div>
   );

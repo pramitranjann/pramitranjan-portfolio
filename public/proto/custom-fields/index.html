@@ -2,21 +2,21 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Swipey · Transactions — Model C</title>
+<title>Swipey · Transactions — Custom Fields</title>
 <link rel="stylesheet" href="./colors_and_type.css">
 <style>
   html, body { margin: 0; padding: 0; background: #E9EFED; font-family: "Quicksand", sans-serif; }
   *::-webkit-scrollbar { height: 8px; width: 8px; }
   *::-webkit-scrollbar-thumb { background: #d0e6df; border-radius: 4px; }
   *::-webkit-scrollbar-track { background: transparent; }
+  .txn-scroll::-webkit-scrollbar { width: 0; height: 8px; }
 </style>
 <script src="./react.production.min.js"></script>
 <script src="./react-dom.production.min.js"></script>
 </head>
 <body>
 <div id="root"></div>
-<script src="./tweaks-panel.js"></script>
-<script src="./model-c.js"></script>
+<script src="./transactions.js"></script>
 <script>
 /* global React, ReactDOM, FieldManagerExplorer */
 ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(FieldManagerExplorer));
