@@ -42,7 +42,7 @@
 
 /* Poppins is referenced for body input/button copy in Swipey's CSS but
    no Poppins TTFs ship in the repo — load it from Google Fonts. */
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+@import url("./fonts/poppins.css");
 
 :root {
   /* === Brand color tokens =============================================== */

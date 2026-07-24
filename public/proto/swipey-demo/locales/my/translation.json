@@ -1,0 +1,248 @@
+{
+    "api": {
+        "messages": {
+            "authentication_failed": "Pengesahan gagal",
+            "not_authenticated": "Tidak Disahkan",
+            "not_found": "Tidak ditemui"
+        }
+    },
+    "fund-request": {
+        "fields": {
+            "limit": "Tetapkan Had",
+            "status": "Status Dana"
+        },
+        "statuses": {
+            "pending": "Yang belum selesai"
+        }
+    },
+    "general": {
+        "actions": {
+            "book-a-demo": "Tempah demo",
+            "contact-now": "Hubungi sekarang",
+            "create-account": "Buat akaun percuma saya",
+            "login": "Log masuk",
+            "request-for-a-new-card": "Memohon Kad Baru",
+            "request-top-up": "Minta Penambahan",
+            "show-less": "Tunjukkan kurang",
+            "show-more": "Tunjukkan lagi",
+            "view-all": "Lihat semua",
+            "view-all-cards": "Lihat semua kad"
+        },
+        "errors": {
+            "bad-request": "Permintaan buruk",
+            "error": "Ralat",
+            "invalid": "Tidak Sah",
+            "invalid-number": "Nombor tidak sah",
+            "page-404": "404",
+            "passwords-do-not-match": "Kata laluan tidak sepadan",
+            "required-field": "Padang adalah wajib"
+        },
+        "fields": {
+            "address": "Alamat",
+            "all": "Semua",
+            "card": "Kad",
+            "category": "Kategori",
+            "create-password": "Bina kata laluan",
+            "date": "Tarikh",
+            "email": "E-mel",
+            "filter-by-status": "Tapis Mengikut Status",
+            "full-name": "Nama penuh",
+            "login": "Emel anda",
+            "name": "Nama",
+            "password": "Kata laluan Awak",
+            "password-confirm": "Sahkan Kata Laluan",
+            "phone": "Nombor telefon",
+            "postal-code": "Poskod",
+            "role": "Peranan pengguna",
+            "search-by": "Dicari oleh",
+            "spent": "Dibelanjakan (MYR)",
+            "status": "Status",
+            "user-name": "Nama Pengguna"
+        },
+        "language": {
+            "english": "Bahasa Inggeris",
+            "malaysian": "Orang Malaysia"
+        },
+        "menu": {
+            "about": "Mengenai",
+            "account-settings": "Tetapan Akaun",
+            "admin-reports": "Laporan pentadbir",
+            "allocate-funds": "Peruntukkan Dana",
+            "cards": "Kad",
+            "contacts": "Kenalan",
+            "dashboard": "Papan Pemuka",
+            "feedback": "Maklum balas",
+            "home": "Rumah",
+            "login": "Log masuk",
+            "logout": "Log keluar",
+            "manage-cards-&-users": "Urus kad & pengguna",
+            "menu": "Menu",
+            "merchant-offers": "Tawaran Pedagang",
+            "my-card": "Lihat kad saya",
+            "partners": "Rakan kongsi",
+            "profile": "Lihat profil",
+            "projects": "Projek",
+            "register": "Daftar",
+            "reports": "Laporan",
+            "services": "Perkhidmatan",
+            "terms-&-conditions": "Terma & Syarat",
+            "transactions": "Urus Niaga"
+        },
+        "messages": {
+            "registration-success": "Pendaftaran berjaya",
+            "success": "Kejayaan"
+        },
+        "placeholders": {
+            "full-name": "mengikut kad pengenalan rakyat malaysia",
+            "password": "Sekurang-kurangnya 8 aksara",
+            "password-confirm": "Taip semula kata laluan anda",
+            "phone": "sila masukkan nombor sahaja",
+            "your-company-email": "e-mel syarikat anda"
+        }
+    },
+    "layouts": {
+        "dashboard": {
+            "header": "Kepala"
+        },
+        "footer": {
+            "address": "Unit 15-1, Jalan Sri Hartamas 7, 50480 Kuala Lumpur",
+            "email": "ask.us@swipey.com",
+            "rights": "@ 2021. Hak cipta terpelihara. Swipey."
+        },
+        "onboarding": {
+            "description": "Lorem ipsum dolor duduk amet, consectetur adipiscing elit. Donec vitae luctus cth.",
+            "title": "Penyelesaian moden untuk perniagaan anda"
+        }
+    },
+    "pages": {
+        "create-account": {
+            "agree-label": "<font color=\"text.disabled\">Dengan mendaftar, saya bersetuju dengan [terma & syarat](${ROUTES.termsAndConditions}) Swipey</font>",
+            "description": "Hanya beberapa langkah mudah dan anda sudah selesai.",
+            "title": "Buat akaun Swipey PERCUMA anda hari ini"
+        },
+        "dashboard": {
+            "fund-requests-title": "Status Dana",
+            "notifications-title": "Pemberitahuan",
+            "title-administrator": "Semua kad",
+            "title-employee": "Kad saya",
+            "transactions-title": "Urus Niaga yang Tidak Dihormati"
+        },
+        "landing": {
+            "first-section-button": "Eksplor",
+            "first-section-description": "Nam libero tempore, cum soluta nols est allowendi optio cumque nihil impedit quo minus id quo maxime placeat facere possimus.",
+            "first-section-title": "Autem quibusdam et aut officiis debitis aut rerum.",
+            "fourth-section-button": "Cuba sekarang",
+            "fourth-section-description": "Nam libero tempore, cum soluta nobis est elendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus.",
+            "fourth-section-title": "Omnis voluptas assuda est, itilde sint dolor repudae nihil.",
+            "register-section-button": "Hantar",
+            "register-section-description": "Di vero eos et accusamus et iusto odio honissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias kecualiuri sint occaecati cupiditate non provident, similique sunt in culpa.",
+            "register-section-title": "Daftar sekarang!",
+            "second-section-description": "Nam libero tempore, cum soluta nobis est elendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus",
+            "second-section-title": "Omnis voluptas assuda est, omnis sint dolor repudae nihil.",
+            "third-section-badge-1": "Di vero eos et accusamus et iusto odio honissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias kecualiuri sint occaecati cupiditate non provident, similique sunt in culpa.",
+            "third-section-badge-2": "Di vero eos et accusamus et iusto odio honissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias kecualiuri sint occaecati cupiditate non provident, similique sunt in culpa.",
+            "third-section-badge-3": "Di vero eos et accusamus et iusto odio honissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias kecualiuri sint occaecati cupiditate non provident, similique sunt in culpa.",
+            "third-section-badge-4": "Di vero eos et accusamus et iusto odio honissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias kecualiuri sint occaecati cupiditate non provident, similique sunt in culpa.",
+            "third-section-title": "Omnis voluptas assuda"
+        },
+        "manage-entries": {
+            "button-report": "Muat turun laporan",
+            "tab-all": "Semua Kad",
+            "tab-fund-request": "Permintaan Dana",
+            "tab-issue-cards": "Kad Terbitan",
+            "tab-view-users": "Lihat Pengguna",
+            "title": "Urus kad & pengguna"
+        },
+        "my-cards": {
+            "tabs": {
+                "all-cards": "Semua Kad",
+                "physical-cards": "Kad Fizikal",
+                "virtual-cards": "Kad Maya"
+            },
+            "title": "Lihat kad saya"
+        },
+        "my-notifications": {
+            "empty-list": "Tiada pemberitahuan",
+            "title": "Pemberitahuan"
+        },
+        "my-transactions": {
+            "table-title": "sejarah transaksi",
+            "title": "Lihat urus niaga"
+        },
+        "profile": {
+            "title": "Profil"
+        },
+        "welcome": {
+            "description": "Kami mencadangkan menggunakan e-mel kerja anda.",
+            "title": "Hai, Selamat Datang ke Swipey!"
+        }
+    },
+    "payment-card": {
+        "fields": {
+            "card-number": "Kad #",
+            "name": "Nama Kad",
+            "status": "Status Kad",
+            "type": "Jenis kad"
+        },
+        "labels": {
+            "active-card": {
+                "other": "Kad aktif"
+            },
+            "balance": "Seimbang",
+            "card": {
+                "other": "Kad"
+            },
+            "cashback-balance": "Baki Pulangan Tunai",
+            "funds-request-status1": "Status Permintaan Dana1",
+            "inactive-card": {
+                "other": "Kad Tidak Aktif"
+            },
+            "low-balance": "Baki Rendah!",
+            "physical-card": "Kad Fizikal",
+            "total-cashback": "Jumlah Pulangan Tunai",
+            "virtual-card": "$t (payment-card.types.virtual) $ t (payment-card.labels.card.one)"
+        },
+        "options": {
+            "block-card": "Sekat kad",
+            "channel-restriction": "Sekatan Saluran",
+            "cross-border-transactions": "Urus niaga rentas sempadan",
+            "in-store-purchases": "Di kedai Pembelian",
+            "increase-transaction-limit": "Tingkatkan had transaksi",
+            "international-atm-withdrawals": "Pengeluaran ATM antarabangsa",
+            "merchant-code": "Kod pedagang",
+            "new-pin-number": "Nombor pin baru",
+            "online-transactions": "Urus niaga dalam talian",
+            "transaction-limit": "Had transaksi"
+        },
+        "statuses": {
+            "active": "Aktif",
+            "inactive": "Tidak aktif"
+        },
+        "types": {
+            "physical": "Fizikal",
+            "virtual": "Maya"
+        }
+    },
+    "transaction": {
+        "statuses": {
+            "pending_review": "Ulasan menunggu keputusan",
+            "submit_bills": "Hantar bil"
+        }
+    },
+    "user": {
+        "fields": {
+            "contact-admin": "Hubungi pentadbir",
+            "department": "Jabatan",
+            "location": "Lokasi",
+            "role": "Peranan yang Ditugaskan",
+            "status": "Status"
+        },
+        "labels": {
+            "all": "Semua"
+        },
+        "roles": {
+            "administrator": "Pentadbir",
+            "employee": "Pekerja"
+        }
+    }
+}

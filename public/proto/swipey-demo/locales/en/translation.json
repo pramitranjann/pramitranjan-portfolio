@@ -1,0 +1,345 @@
+{
+    "api": {
+        "messages": {
+            "authentication_failed": "Authentication failed",
+            "code_not_found": "Code not found",
+            "invalid": "Invalid",
+            "not_authenticated": "Not Authenticated",
+            "not_found": "Not found"
+        }
+    },
+    "company-admin": {
+        "state": {
+            "active": "Active",
+            "verified": "Verified"
+        }
+    },
+    "fund-request": {
+        "fields": {
+            "limit": "Set Limit",
+            "status": "Fund Status"
+        },
+        "statuses": {
+            "pending": "Pending"
+        }
+    },
+    "general": {
+        "actions": {
+            "book-a-demo": "Book a demo",
+            "change-number": "Change number",
+            "contact-now": "Contact Now",
+            "continue": "Continue",
+            "create-account": "Create my free account",
+            "done": "Done",
+            "login": "Log in",
+            "request-for-a-new-card": "Request For A New Card",
+            "request-top-up": "Request Top Up",
+            "resend-email": "Resend email",
+            "resend-otp": "Resend OTP",
+            "save-and-continue": "Save and continue",
+            "send-for-approval": "Send for approval",
+            "show-less": "Show less",
+            "show-more": "Show more",
+            "skip-and-do-it-later": "Skip and do it later",
+            "verify-company": "Verify company",
+            "view-all": "View all",
+            "view-all-cards": "View all cards",
+            "view-my-dashboard": "View my dashboard"
+        },
+        "errors": {
+            "bad-request": "Bad request",
+            "error": "Error",
+            "invalid": "Invalid",
+            "invalid-number": "Invalid number",
+            "page-404": "404",
+            "passwords-do-not-match": "Passwords do not match",
+            "required-field": "Field is mandatory"
+        },
+        "fields": {
+            "address": "Address",
+            "all": "All",
+            "card": "Card",
+            "category": "Category",
+            "company-name": "Company Name",
+            "company-registration-no": "Company Registration No",
+            "create-password": "Create Password",
+            "date": "Date",
+            "directors-email": "Directors Email Address",
+            "directors-name": "Directors Name",
+            "email": "Email",
+            "filter-by-status": "Filter By Status",
+            "form-9-24-49": "Form 9, 24 & 49",
+            "form-d": "Form D",
+            "full-name": "Full name",
+            "is-director-question": "Authorisation Question",
+            "login": "Your email",
+            "mailing-address": "Mailing Address",
+            "name": "Name",
+            "no-website": "I do not have a company website",
+            "password": "Your password",
+            "password-confirm": "Confirm Password",
+            "phone": "Mobile Number",
+            "postal-code": "Postal code",
+            "registered-company-name": "Registered Company Name",
+            "role": "User role",
+            "search-by": "Search by",
+            "section-14": "Section 14",
+            "section-14-or-form-9-24-49": "Section 14 or Form 9, 24, 49",
+            "spent": "Spent (MYR)",
+            "ssm-business-profile": "SSM Business Profile",
+            "status": "Status",
+            "type-of-business": "Type of business",
+            "user-name": "User Name",
+            "website": "Company or Business website",
+            "your-industry": "Your Industry"
+        },
+        "labels": {
+            "or": "or",
+            "resend-notice": "Didn't receive?",
+            "variant-is-director": "I am a registered director of the company",
+            "variant-is-not-director": "I am not a director of the company"
+        },
+        "language": {
+            "english": "English",
+            "malaysian": "Malaysian"
+        },
+        "menu": {
+            "about": "About",
+            "account-settings": "Account Settings",
+            "admin-reports": "Admin reports",
+            "allocate-funds": "Allocate Funds",
+            "cards": "Cards",
+            "contacts": "Contacts",
+            "dashboard": "Dashboard",
+            "feedback": "Feedback",
+            "home": "Home",
+            "login": "Login",
+            "logout": "Log Out",
+            "manage-cards-&-users": "Manage cards & users",
+            "menu": "Menu",
+            "merchant-offers": "Merchant Offers",
+            "my-card": "View my card",
+            "partners": "Partners",
+            "profile": "View Profile",
+            "projects": "Projects",
+            "register": "Register",
+            "reports": "Reports",
+            "services": "Services",
+            "terms-&-conditions": "Terms & conditions",
+            "transactions": "Transactions"
+        },
+        "messages": {
+            "registration-success": "Registration success",
+            "success": "Success"
+        },
+        "placeholders": {
+            "city": "City",
+            "company-name": "your dashboard will use this name",
+            "company-registration-no": "As per company SSM documents",
+            "directors-email": "What’s their company email address?",
+            "directors-name": "Directors full name as per NRIC",
+            "file": "Please ensure file is below 20MB",
+            "full-name": "as per malaysian identify card",
+            "password": "At least 8 characters",
+            "password-confirm": "Retype your password",
+            "phone": "please enter numbers only",
+            "please-select": "Please select",
+            "postcode": "Postcode",
+            "registered-company-name": "As per company SSM documents",
+            "state": "State",
+            "unit-and-street": "Unit & Street",
+            "website": "http://",
+            "your-company-email": "your company email"
+        }
+    },
+    "layouts": {
+        "dashboard": {
+            "header": "Header"
+        },
+        "footer": {
+            "address": "Unit 15-1, Jalan Sri Hartamas 7, 50480 Kuala Lumpur",
+            "email": "ask.us@swipey.com",
+            "rights": "@2021. All rights Reserved. Swipey."
+        },
+        "landing": {
+            "footer": {}
+        },
+        "onboarding": {
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vitae luctus ex.",
+            "title": "Modern solutions for your business"
+        }
+    },
+    "pages": {
+        "account-created": {
+            "button": "Setup company dashboard",
+            "description": "Your mobile number is successfully verified and you’re one step closer to using Swipey to simplify your company finances",
+            "title": "Hooray! Your account is created."
+        },
+        "company-details": {
+            "title": "Company details"
+        },
+        "company-documents": {
+            "description": "Please submit either section 14 or From 9, 24 & 49 for verification purposes",
+            "title": "Upload company documents"
+        },
+        "company-verification-from-scratch": {
+            "description": "Please prepare the following documents for verification purposes.",
+            "title": "Thank you. Swipey Team will get in touch to setup your account."
+        },
+        "create-account": {
+            "agree-label": "<font color=\"text.disabled\">By signing up, i agree to Swipey's [terms & conditions](${ROUTES.termsAndConditions})</font>",
+            "description": "Just a few simple steps and you’re done.",
+            "title": "Create your FREE Swipey account today"
+        },
+        "create-company": {
+            "title": "Your dashboard is almost ready"
+        },
+        "dashboard": {
+            "fund-requests-title": "Funds Status",
+            "notifications-title": "Notifications",
+            "title-companyadmin": "All cards",
+            "title-employee": "My cards",
+            "transactions-title": "Resent Transactions"
+        },
+        "director-details": {
+            "description": "We’ll send an email to the company director requesting for their consent to proceed with the company setup",
+            "title": "Get directors approval for setup"
+        },
+        "landing": {
+            "first-section-button": "Exlpore",
+            "first-section-description": "Nam libero tempore, cum soluta nols est eligendi optio cumque nihil impedit quo minus id quo maxime placeat facere possimus.",
+            "first-section-title": "Autem quibusdam et aut officiis debitis aut rerum.",
+            "fourth-section-button": "Try now",
+            "fourth-section-description": "Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus.",
+            "fourth-section-title": "Omnis voluptas assuda est, itilde sint dolor repudae nihil.",
+            "register-section-button": "Submit",
+            "register-section-description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa.",
+            "register-section-title": "Register Now!",
+            "second-section-description": "Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus",
+            "second-section-title": "Omnis voluptas assuda est, omnis sint dolor repudae nihil.",
+            "third-section-badge-1": "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa.",
+            "third-section-badge-2": "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa.",
+            "third-section-badge-3": "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa.",
+            "third-section-badge-4": "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa.",
+            "third-section-title": "Omnis voluptas assuda"
+        },
+        "manage-entries": {
+            "button-report": "Download report",
+            "tab-all": "All Cards",
+            "tab-fund-request": "Funds Request",
+            "tab-issue-cards": "Issue Cards",
+            "tab-view-users": "View Users",
+            "title": "Manage cards & users"
+        },
+        "my-cards": {
+            "tabs": {
+                "all-cards": "All Cards",
+                "physical-cards": "Physical Cards",
+                "virtual-cards": "Virtual Cards"
+            },
+            "title": "View my cards"
+        },
+        "my-notifications": {
+            "empty-list": "No notifications",
+            "title": "Notifications"
+        },
+        "my-transactions": {
+            "table-title": "Transaction History",
+            "title": "View transactions"
+        },
+        "onboarding-company-notice": {
+            "description": "Please prepare the following documents for verification purposes.",
+            "title": "Dashboard is now ready! Verify your company to begin."
+        },
+        "profile": {
+            "title": "Profile"
+        },
+        "verify-account": {
+            "otp-notice": "Didn’t receive?",
+            "title": "Please enter the \n4-digit OTP sent to"
+        },
+        "verify-email-director": {
+            "description": "We’ll send you an email once the verification process is complete. This may take up to 3 business days.",
+            "title": "Awesome! Your documents are sent for approval."
+        },
+        "verify-email-user": {
+            "description": "We have sent a consent form link to <font weight=\"bold\">${email}</font> in order to complete consent. After receiving the email, follow the link provided to complete your verification.",
+            "title": "You’re almost done!"
+        },
+        "welcome": {
+            "description": "We suggest using your work email.",
+            "title": "Hi, Welcome to Swipey!"
+        }
+    },
+    "payment-card": {
+        "fields": {
+            "card-number": "Card #",
+            "name": "Card Name",
+            "status": "Card Status",
+            "type": "Card type"
+        },
+        "labels": {
+            "active-card": {
+                "one": "Active card",
+                "other": "Active cards"
+            },
+            "balance": "Balance",
+            "card": {
+                "one": "Card",
+                "other": "Cards"
+            },
+            "cashback-balance": "Cashback Balance",
+            "funds-request-status1": "Funds Request Status1",
+            "inactive-card": {
+                "one": "Inactive Card",
+                "other": "Inactive Cards"
+            },
+            "low-balance": "Low Balance!",
+            "physical-card": "Physical Card",
+            "total-cashback": "Total Cashback",
+            "virtual-card": "Virtual Card"
+        },
+        "options": {
+            "block-card": "Block card",
+            "channel-restriction": "Channel Restriction",
+            "cross-border-transactions": "Cross border transactions",
+            "in-store-purchases": "In store Purchases",
+            "increase-transaction-limit": "Increase transaction limit",
+            "international-atm-withdrawals": "International ATM withdrawals",
+            "merchant-code": "Merchant code",
+            "new-pin-number": "New pin number",
+            "online-transactions": "Online transactions",
+            "transaction-limit": "Transaction limit"
+        },
+        "statuses": {
+            "active": "Active",
+            "inactive": "Inactive"
+        },
+        "types": {
+            "physical": "Physical",
+            "virtual": "Virtual"
+        }
+    },
+    "transaction": {
+        "statuses": {
+            "pending_review": "Pending review",
+            "submit_bills": "Submit bills"
+        }
+    },
+    "user": {
+        "fields": {
+            "contact-admin": "Contact admin",
+            "department": "Department",
+            "location": "Location",
+            "role": "Role Assigned",
+            "status": "Status"
+        },
+        "labels": {
+            "all": "All"
+        },
+        "roles": {
+            "companyadmin": "Company Admin",
+            "employee": "Employee"
+        }
+    }
+}
