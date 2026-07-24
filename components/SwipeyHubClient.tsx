@@ -101,11 +101,10 @@ function StoryFrame({ story, onClose }: { story: Story; onClose: () => void }) {
       const { w, h } = designSizeFor(iframe.getAttribute('src') ?? undefined)
       const availableW = host.clientWidth - EMBED_PAD * 2
       if (availableW <= 0) return
-      // The embed must sit wholly inside the modal with room to breathe, so
-      // bound it by both axes — width keeps it wide, height keeps it from
-      // running past the fold.
-      const availableH = frame.clientHeight * 0.8 - EMBED_PAD * 2
-      const scale = Math.min(availableW / w, availableH / h, 1)
+      // Fill the available width. Bounding by height too left unused width and
+      // pushed the side gaps wider than the top — the design heights are short
+      // enough that width alone still fits the frame.
+      const scale = Math.min(availableW / w, 1)
 
       // transform, not zoom. Safari applies zoom to an iframe's internal
       // viewport as well as its box, so a zoomed 1440px iframe actually laid
@@ -116,16 +115,23 @@ function StoryFrame({ story, onClose }: { story: Story; onClose: () => void }) {
       iframe.style.removeProperty('zoom')
       iframe.style.setProperty('transform', `scale(${scale})`)
       iframe.style.setProperty('transform-origin', 'top left')
-      // transform doesn't shrink the layout box, so pull the leftover back in
-      // with negative margins, then add EMBED_PAD on every side and centre
-      // what remains horizontally.
       const renderedW = w * scale
       const renderedH = h * scale
+
+      // The wrapper carries its own aspect-ratio, so it reserves a fixed-height
+      // box no matter how tall the embed ends up — that was the dead space
+      // underneath. Make it hug the embed instead.
+      host.style.setProperty('aspect-ratio', 'auto', 'important')
+      host.style.setProperty('height', `${renderedH + EMBED_PAD * 2}px`, 'important')
+
+      // transform doesn't shrink the layout box, so pull the leftover back in
+      // with negative margins. With the embed filling the available width, an
+      // equal EMBED_PAD on every side falls out of the arithmetic.
       const centreOffset = Math.max(0, (availableW - renderedW) / 2)
       iframe.style.setProperty('margin-left', `${EMBED_PAD + centreOffset}px`, 'important')
       iframe.style.setProperty('margin-top', `${EMBED_PAD}px`, 'important')
       iframe.style.setProperty('margin-right', `${-(w - renderedW)}px`, 'important')
-      iframe.style.setProperty('margin-bottom', `${-(h - renderedH) + EMBED_PAD}px`, 'important')
+      iframe.style.setProperty('margin-bottom', `${-(h - renderedH)}px`, 'important')
     }
 
     // Watch the host, not just the frame: the iframe's wrapper can gain width
