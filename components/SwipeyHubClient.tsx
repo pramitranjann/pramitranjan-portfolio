@@ -42,8 +42,6 @@ const DESIGN_SIZE: Record<string, { w: number; h: number }> = {
   'swipey-demo': { w: 1440, h: 820 },
 }
 
-// Breathing room between the embed and its container, on all four sides.
-const EMBED_PAD = 24
 
 function designSizeFor(url?: string) {
   const key = Object.keys(DESIGN_SIZE).find((k) => url?.includes(`/proto/${k}/`))
@@ -99,11 +97,13 @@ function StoryFrame({ story, onClose }: { story: Story; onClose: () => void }) {
       const host = iframe?.parentElement
       if (!iframe || !host) return
       const { w, h } = designSizeFor(iframe.getAttribute('src') ?? undefined)
-      const availableW = host.clientWidth - EMBED_PAD * 2
+      // host is the inner surface; its parent carries the aspect-ratio and the
+      // 12px padding that frames the embed on all four sides.
+      const outer = host.parentElement
+      const availableW = host.clientWidth
       if (availableW <= 0) return
       // Fill the available width. Bounding by height too left unused width and
-      // pushed the side gaps wider than the top — the design heights are short
-      // enough that width alone still fits the frame.
+      // pushed the side gaps wider than the top.
       const scale = Math.min(availableW / w, 1)
 
       // transform, not zoom. Safari applies zoom to an iframe's internal
@@ -118,18 +118,17 @@ function StoryFrame({ story, onClose }: { story: Story; onClose: () => void }) {
       const renderedW = w * scale
       const renderedH = h * scale
 
-      // The wrapper carries its own aspect-ratio, so it reserves a fixed-height
-      // box no matter how tall the embed ends up — that was the dead space
-      // underneath. Make it hug the embed instead.
-      host.style.setProperty('aspect-ratio', 'auto', 'important')
-      host.style.setProperty('height', `${renderedH + EMBED_PAD * 2}px`, 'important')
+      // The aspect-ratio lives on the OUTER wrapper, so sizing the inner one
+      // left the outer box reserving its full 16:10 height — that was the dead
+      // space underneath. Release the ratio and let both hug the embed; the
+      // outer wrapper's own 12px padding then reads evenly on all four sides.
+      if (outer) {
+        outer.style.setProperty('aspect-ratio', 'auto', 'important')
+        outer.style.setProperty('height', 'auto', 'important')
+      }
+      host.style.setProperty('height', `${renderedH}px`, 'important')
 
-      // transform doesn't shrink the layout box, so pull the leftover back in
-      // with negative margins. With the embed filling the available width, an
-      // equal EMBED_PAD on every side falls out of the arithmetic.
-      const centreOffset = Math.max(0, (availableW - renderedW) / 2)
-      iframe.style.setProperty('margin-left', `${EMBED_PAD + centreOffset}px`, 'important')
-      iframe.style.setProperty('margin-top', `${EMBED_PAD}px`, 'important')
+      // transform doesn't shrink the layout box, so pull the leftover back in.
       iframe.style.setProperty('margin-right', `${-(w - renderedW)}px`, 'important')
       iframe.style.setProperty('margin-bottom', `${-(h - renderedH)}px`, 'important')
     }
