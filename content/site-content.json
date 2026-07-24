@@ -2080,6 +2080,39 @@
       "solutionEmbedCalloutBody": "Add the Vercel URL when the fourth game is ready to embed.",
       "solutionEmbedCtaLabel": "OPEN FULLSCREEN",
       "hidden": true
+    },
+    {
+      "slug": "swipey-admin",
+      "section": "work",
+      "hidden": true,
+      "title": "Swipey Admin",
+      "oneliner": "Proven on desktop. Unusable in a pocket.",
+      "type": "PRODUCT DESIGN · 2026",
+      "tags": [
+        "Product Design",
+        "Mobile UX",
+        "Accessibility",
+        "Design QA",
+        "Design Systems"
+      ],
+      "prev": null,
+      "next": null,
+      "heroImage": "/work/swipey-admin/cover.png",
+      "problemHeadline": "Every admin flow already worked on desktop: deposit, top up, clawback, issue card, invite, approve. None of it was reachable from a phone, and the people who needed it most were the ones away from their desks.",
+      "roleHeadline": "Design and design QA on the first admin-facing mobile release, built as a stakeholder-ready prototype for an audience aged 30 to 60.",
+      "researchHeadline": "The desktop product was the research. Every rule, status and edge case already had a proven answer, so the job was translation, not invention.",
+      "challengeHeadline": "Port the business rules, don't reinvent them. Writing new validation for flows that already worked would have been risk with extra steps.",
+      "processHeadline": "I reviewed it screen by screen with stable finding IDs and severity tiers, so fixes could be referenced across sessions without collisions, and tagged the ones engineering needed as requirements rather than visual edits.",
+      "solutionHeadline": "Every admin flow on a phone, with a legibility floor, 44px targets, an AA contrast system, and one status vocabulary instead of two.",
+      "outcomesHeadline": "The audit found three blockers that seventy-four findings of review had walked straight past, which is the argument for auditing separately from reviewing. Next I'd test it with actual sixty-year-olds instead of designing for them.",
+      "pullQuote": "Grey doesn't read as \"done\" to someone who's sixty. It reads as something went wrong.",
+      "solutionEmbedUrl": "/proto/swipey-admin/index.html",
+      "solutionEmbedTitle": "Swipey Admin mobile prototype",
+      "solutionEmbedAspectRatio": "16 / 10",
+      "solutionEmbedWidth": "min(100%, 1325px)",
+      "solutionEmbedCalloutLabel": "LIVE PROTOTYPE_",
+      "solutionEmbedCalloutTitle": "The working prototype is embedded below.",
+      "solutionEmbedCalloutBody": "Sign in with any nine-digit phone number, then any six-digit code, pick a workspace and choose the Admin role. Every admin flow is clickable from there."
     }
   ]
 }
