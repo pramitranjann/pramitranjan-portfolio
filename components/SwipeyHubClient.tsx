@@ -212,19 +212,21 @@ function StoryFrame({ story, onClose }: { story: Story; onClose: () => void }) {
             top: 12,
             right: 12,
             zIndex: 10,
-            padding: '10px 14px',
+            width: 36,
+            height: 36,
+            display: 'grid',
+            placeItems: 'center',
             border: '1px solid var(--color-red)',
             background: 'rgba(13, 13, 13, 0.92)',
             backdropFilter: 'blur(6px)',
             WebkitBackdropFilter: 'blur(6px)',
             color: 'var(--color-red)',
             cursor: 'pointer',
-            fontSize: 'var(--text-meta)',
-            letterSpacing: '0.14em',
+            fontSize: 16,
             lineHeight: 1,
           }}
         >
-          CLOSE ×
+          ×
         </button>
       </div>
     </div>
