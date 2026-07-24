@@ -95,20 +95,34 @@ function StoryFrame({ story, onClose }: { story: Story; onClose: () => void }) {
       if (!iframe || !host) return
       const { w, h } = designSizeFor(iframe.getAttribute('src') ?? undefined)
       const availableW = host.clientWidth
-      // Fit against the frame's visible height too, or a tall viewport would
-      // just make a tall box. Bounding both is what turns "more rows" into
-      // "more rows, smaller" rather than "more rows, off-screen".
-      const availableH = frame.clientHeight * 0.92
-      if (!availableW || !availableH) return
-      const scale = Math.min(availableW / w, availableH / h, 1)
+      if (!availableW) return
+      // Scale off width alone. Binding to window height made the embed collapse
+      // on short windows, and the row count comes from the design height, not
+      // from the scale — so height never needed to be in this calculation. The
+      // 0.8 insets it from the frame edge; if the result runs past the fold,
+      // the frame scrolls.
+      const scale = Math.min(availableW / w, 1) * 0.8
       iframe.style.setProperty('width', `${w}px`, 'important')
       iframe.style.setProperty('height', `${h}px`, 'important')
       iframe.style.setProperty('zoom', String(scale))
     }
+
+    // Watch the host, not just the frame: the iframe's wrapper can gain width
+    // after first paint (it is hidden below md), and a bail-out on width 0 with
+    // nothing observing it leaves the iframe at CaseStudyLayout's inline
+    // width:100% — a narrow viewport that makes the prototype wrap to pieces.
     fit()
     const ro = new ResizeObserver(fit)
     ro.observe(frame)
-    return () => ro.disconnect()
+    const iframe = frame.querySelector('iframe')
+    if (iframe?.parentElement) ro.observe(iframe.parentElement)
+    iframe?.addEventListener('load', fit)
+    const retry = setTimeout(fit, 250)
+    return () => {
+      ro.disconnect()
+      iframe?.removeEventListener('load', fit)
+      clearTimeout(retry)
+    }
   }, [story.slug])
 
   // The section nav scrolls the window, which is not the scroller in here, so
