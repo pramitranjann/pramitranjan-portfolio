@@ -152,7 +152,8 @@ html, body {
    viewport than its box so the prototype renders smaller and uncramped. */
 .swipey-frame iframe {
   width: 80% !important;
-  zoom: 0.64;
+  height: 80% !important;
+  zoom: 0.5;
   display: block;
   margin-inline: auto;
 }
