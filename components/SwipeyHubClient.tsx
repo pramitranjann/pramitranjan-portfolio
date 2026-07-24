@@ -32,12 +32,18 @@ const FRAME_INSET = 'clamp(16px, 3.5vw, 56px)'
 // Each prototype's native viewport. Keep the desktop ones wide and 16:10 —
 // the embed has to fit inside the modal, so a tall viewport just forces the
 // scale down and makes everything small. A few visible rows is enough.
+// The transactions prototype gives its row scroller the viewport height minus
+// ~266px of chrome, at ~115px a row — so 730 lands on 4 visible rows. Wider
+// than 16:10 on purpose: short and wide beats tall and cramped in the frame.
 const DESIGN_SIZE: Record<string, { w: number; h: number }> = {
-  'custom-fields': { w: 1440, h: 900 },
+  'custom-fields': { w: 1440, h: 730 },
   'swipey-admin': { w: 430, h: 932 },
   'card-rename': { w: 520, h: 880 },
-  'swipey-demo': { w: 1440, h: 900 },
+  'swipey-demo': { w: 1440, h: 820 },
 }
+
+// Breathing room between the embed and its container, on all four sides.
+const EMBED_PAD = 24
 
 function designSizeFor(url?: string) {
   const key = Object.keys(DESIGN_SIZE).find((k) => url?.includes(`/proto/${k}/`))
@@ -93,12 +99,12 @@ function StoryFrame({ story, onClose }: { story: Story; onClose: () => void }) {
       const host = iframe?.parentElement
       if (!iframe || !host) return
       const { w, h } = designSizeFor(iframe.getAttribute('src') ?? undefined)
-      const availableW = host.clientWidth
-      if (!availableW) return
+      const availableW = host.clientWidth - EMBED_PAD * 2
+      if (availableW <= 0) return
       // The embed must sit wholly inside the modal with room to breathe, so
       // bound it by both axes — width keeps it wide, height keeps it from
-      // running past the fold. 0.8 of the frame's height is the padding.
-      const availableH = frame.clientHeight * 0.8
+      // running past the fold.
+      const availableH = frame.clientHeight * 0.8 - EMBED_PAD * 2
       const scale = Math.min(availableW / w, availableH / h, 1)
 
       // transform, not zoom. Safari applies zoom to an iframe's internal
@@ -111,10 +117,15 @@ function StoryFrame({ story, onClose }: { story: Story; onClose: () => void }) {
       iframe.style.setProperty('transform', `scale(${scale})`)
       iframe.style.setProperty('transform-origin', 'top left')
       // transform doesn't shrink the layout box, so pull the leftover back in
-      // and centre what remains.
-      iframe.style.setProperty('margin-right', `${-w * (1 - scale)}px`, 'important')
-      iframe.style.setProperty('margin-bottom', `${-h * (1 - scale)}px`, 'important')
-      iframe.style.setProperty('margin-left', `${Math.max(0, (availableW - w * scale) / 2)}px`, 'important')
+      // with negative margins, then add EMBED_PAD on every side and centre
+      // what remains horizontally.
+      const renderedW = w * scale
+      const renderedH = h * scale
+      const centreOffset = Math.max(0, (availableW - renderedW) / 2)
+      iframe.style.setProperty('margin-left', `${EMBED_PAD + centreOffset}px`, 'important')
+      iframe.style.setProperty('margin-top', `${EMBED_PAD}px`, 'important')
+      iframe.style.setProperty('margin-right', `${-(w - renderedW)}px`, 'important')
+      iframe.style.setProperty('margin-bottom', `${-(h - renderedH) + EMBED_PAD}px`, 'important')
     }
 
     // Watch the host, not just the frame: the iframe's wrapper can gain width
