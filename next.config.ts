@@ -26,6 +26,13 @@ const contentSecurityPolicy = [
   ...(isProduction ? ['upgrade-insecure-requests'] : []),
 ].join('; ')
 
+// Vendored prototypes under /proto are embedded in case study pages via iframe,
+// and transpile JSX at runtime (Babel standalone), so they need same-origin
+// framing and eval. Scoped to /proto only; the site-wide policy stays strict.
+const protoContentSecurityPolicy = contentSecurityPolicy
+  .replace("frame-ancestors 'none'", "frame-ancestors 'self'")
+  .replace(`script-src ${scriptSrc}`, `script-src ${scriptSrc}${isProduction ? " 'unsafe-eval'" : ''}`)
+
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [new URL('https://jqklreasrzeulcsjewav.supabase.co/storage/v1/object/public/**')],
@@ -47,6 +54,14 @@ const nextConfig: NextConfig = {
           ...(isProduction
             ? [{ key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains; preload' }]
             : []),
+        ],
+      },
+      {
+        // Later match wins per-key: relax framing for embedded prototypes only.
+        source: '/proto/:path*',
+        headers: [
+          { key: 'Content-Security-Policy', value: protoContentSecurityPolicy },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
         ],
       },
     ]
