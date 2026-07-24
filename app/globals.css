@@ -152,7 +152,6 @@ html, body {
    here; !important because CaseStudyLayout sets display/margin inline. */
 .swipey-frame iframe {
   display: block !important;
-  margin-inline: auto !important;
 }
 
 /* No live app to open — these prototypes only exist inside the frame. */

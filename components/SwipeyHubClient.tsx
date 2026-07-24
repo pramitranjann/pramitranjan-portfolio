@@ -100,9 +100,21 @@ function StoryFrame({ story, onClose }: { story: Story; onClose: () => void }) {
       // running past the fold. 0.8 of the frame's height is the padding.
       const availableH = frame.clientHeight * 0.8
       const scale = Math.min(availableW / w, availableH / h, 1)
+
+      // transform, not zoom. Safari applies zoom to an iframe's internal
+      // viewport as well as its box, so a zoomed 1440px iframe actually laid
+      // out at ~1000px and the prototype wrapped and clipped itself. transform
+      // leaves the internal viewport at the CSS width in every browser.
       iframe.style.setProperty('width', `${w}px`, 'important')
       iframe.style.setProperty('height', `${h}px`, 'important')
-      iframe.style.setProperty('zoom', String(scale))
+      iframe.style.removeProperty('zoom')
+      iframe.style.setProperty('transform', `scale(${scale})`)
+      iframe.style.setProperty('transform-origin', 'top left')
+      // transform doesn't shrink the layout box, so pull the leftover back in
+      // and centre what remains.
+      iframe.style.setProperty('margin-right', `${-w * (1 - scale)}px`, 'important')
+      iframe.style.setProperty('margin-bottom', `${-h * (1 - scale)}px`, 'important')
+      iframe.style.setProperty('margin-left', `${Math.max(0, (availableW - w * scale) / 2)}px`, 'important')
     }
 
     // Watch the host, not just the frame: the iframe's wrapper can gain width
