@@ -147,15 +147,12 @@ html, body {
 /* The prototypes are desktop-scale. Give the iframe a wider internal viewport
    than its box, then zoom back down so the content fits the frame uncramped.
    zoom (unlike transform) scales the layout box too, so no phantom gap. */
-/* !important because CaseStudyLayout sets width:100% inline, which otherwise
-   wins. The box sits at 80% and centres; zoom gives the embed a wider internal
-   viewport than its box so the prototype renders smaller and uncramped. */
+/* Size and scale are set per-prototype in SwipeyHubClient — each one is
+   rendered at its own design size, then scaled to fit. Only centring lives
+   here; !important because CaseStudyLayout sets display/margin inline. */
 .swipey-frame iframe {
-  width: 80% !important;
-  height: 80% !important;
-  zoom: 0.5;
-  display: block;
-  margin-inline: auto;
+  display: block !important;
+  margin-inline: auto !important;
 }
 
 /* No live app to open — these prototypes only exist inside the frame. */

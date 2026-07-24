@@ -26,6 +26,21 @@ const ENTER_MS = 260
 // Equal inset on all four sides, so the frame is centred in the viewport.
 const FRAME_INSET = 'clamp(16px, 3.5vw, 56px)'
 
+// Each prototype was built for a specific viewport. Rendering it at that size
+// and scaling the whole thing down keeps its own layout decisions intact —
+// letterboxing it into an arbitrary box just makes it crop itself instead.
+const DESIGN_SIZE: Record<string, { w: number; h: number }> = {
+  'custom-fields': { w: 1440, h: 900 },
+  'swipey-admin': { w: 430, h: 932 },
+  'card-rename': { w: 520, h: 880 },
+  'swipey-demo': { w: 1440, h: 900 },
+}
+
+function designSizeFor(url?: string) {
+  const key = Object.keys(DESIGN_SIZE).find((k) => url?.includes(`/proto/${k}/`))
+  return key ? DESIGN_SIZE[key] : { w: 1440, h: 900 }
+}
+
 type Story = CaseStudyContent & { navStyle?: unknown; listeningStyle?: unknown }
 
 function StoryFrame({ story, onClose }: { story: Story; onClose: () => void }) {
@@ -63,6 +78,31 @@ function StoryFrame({ story, onClose }: { story: Story; onClose: () => void }) {
     frameRef.current?.focus()
     return () => document.removeEventListener('keydown', onKey, true)
   }, [onClose])
+
+  // Render the prototype at its own design viewport, then zoom the whole thing
+  // to fit the frame. Measured rather than guessed in CSS, because the scale
+  // depends on the frame's width and the prototype's native size.
+  useEffect(() => {
+    const frame = frameRef.current
+    if (!frame) return
+    const fit = () => {
+      const iframe = frame.querySelector('iframe')
+      const host = iframe?.parentElement
+      if (!iframe || !host) return
+      const { w, h } = designSizeFor(iframe.getAttribute('src') ?? undefined)
+      const available = host.clientWidth
+      if (!available) return
+      // Never scale up past 1:1 — a prototype blown past its design size looks worse.
+      const scale = Math.min(available / w, 1)
+      iframe.style.setProperty('width', `${w}px`, 'important')
+      iframe.style.setProperty('height', `${h}px`, 'important')
+      iframe.style.setProperty('zoom', String(scale))
+    }
+    fit()
+    const ro = new ResizeObserver(fit)
+    ro.observe(frame)
+    return () => ro.disconnect()
+  }, [story.slug])
 
   // The section nav scrolls the window, which is not the scroller in here, so
   // its links do nothing. Re-point them at the frame. Nav items and sections
