@@ -119,13 +119,20 @@ html, body {
 }
 
 /* The Swipey stories render inside a framed overlay on /work/swipey rather
-   than as their own pages, so the page-level chrome is redundant there.
-   The section nav is position:fixed, so inside the frame it anchors to the
-   viewport and escapes the red border — it has to go too. !important because
-   its visibility is driven by an inline style. */
-.swipey-frame nav,
+   than as their own pages, so the site nav and footer are redundant there. */
+.swipey-frame .site-nav,
 .swipey-frame footer {
   display: none !important;
+}
+
+/* The section nav stays. It reveals itself by clearing an inline opacity once
+   window scroll passes the hero — which never happens inside the frame's own
+   scroll container, so it would sit invisible forever. Force it shown.
+   position:fixed is left alone: the frame is inset ~50px, so its 88px offset
+   still lands inside the red border. */
+.swipey-frame .case-study-section-nav {
+  opacity: 1 !important;
+  pointer-events: auto !important;
 }
 
 /* GsapReveal drives its reveals off ScrollTrigger, which watches window
