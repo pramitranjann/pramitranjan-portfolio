@@ -77,9 +77,9 @@ function StoryFrame({ story, onClose }: { story: Story; onClose: () => void }) {
         inset: 0,
         zIndex: 120,
         padding: FRAME_INSET,
-        background: 'rgba(6, 6, 6, 0.72)',
-        backdropFilter: 'blur(16px) saturate(120%)',
-        WebkitBackdropFilter: 'blur(16px) saturate(120%)',
+        background: 'rgba(6, 6, 6, 0.66)',
+        backdropFilter: 'blur(5px)',
+        WebkitBackdropFilter: 'blur(5px)',
         opacity: shown ? 1 : 0,
         transition: `opacity ${ENTER_MS}ms ${EASE_OUT}`,
       }}
@@ -87,6 +87,7 @@ function StoryFrame({ story, onClose }: { story: Story; onClose: () => void }) {
       <div
         ref={frameRef}
         tabIndex={-1}
+        className="swipey-frame"
         style={{
           position: 'relative',
           height: '100%',
@@ -105,28 +106,29 @@ function StoryFrame({ story, onClose }: { story: Story; onClose: () => void }) {
           type="button"
           onClick={onClose}
           aria-label={`Close ${story.title}`}
+          className="font-mono"
           style={{
             position: 'sticky',
-            top: 16,
+            top: 0,
             float: 'right',
-            marginRight: 16,
             zIndex: 5,
-            width: 40,
-            height: 40,
-            borderRadius: 9999,
-            border: '1px solid var(--color-red)',
-            background: 'rgba(13, 13, 13, 0.8)',
-            backdropFilter: 'blur(8px)',
+            padding: '20px 24px',
+            border: 0,
+            background: 'transparent',
             color: 'var(--color-red)',
             cursor: 'pointer',
-            fontSize: 18,
+            fontSize: 'var(--text-meta)',
+            letterSpacing: '0.14em',
             lineHeight: 1,
-            transition: `background 150ms ease`,
           }}
         >
-          ×
+          CLOSE ×
         </button>
-        <CaseStudyLayout {...(story as Parameters<typeof CaseStudyLayout>[0])} />
+        <CaseStudyLayout
+          {...(story as Parameters<typeof CaseStudyLayout>[0])}
+          backHref="/work/swipey"
+          backLabel="SWIPEY"
+        />
       </div>
     </div>
   )

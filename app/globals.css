@@ -118,6 +118,33 @@ html, body {
   max-width: 640px;
 }
 
+/* The Swipey stories render inside a framed overlay on /work/swipey rather
+   than as their own pages, so the page-level chrome is redundant there.
+   The section nav is position:fixed, so inside the frame it anchors to the
+   viewport and escapes the red border — it has to go too. !important because
+   its visibility is driven by an inline style. */
+.swipey-frame nav,
+.swipey-frame footer {
+  display: none !important;
+}
+
+/* GsapReveal drives its reveals off ScrollTrigger, which watches window
+   scroll. Inside the frame's own scroll container that never fires, so every
+   section below the fold would sit at opacity 0 forever. Show them outright —
+   a scroll-reveal inside a modal earns nothing anyway. */
+.swipey-frame [data-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* The prototypes are desktop-scale. Give the iframe a wider internal viewport
+   than its box, then zoom back down so the content fits the frame uncramped.
+   zoom (unlike transform) scales the layout box too, so no phantom gap. */
+.swipey-frame iframe {
+  width: 125%;
+  zoom: 0.8;
+}
+
 /* Hide scrollbar — prevents layout shift on the fixed nav */
 html {
   scrollbar-width: none;
