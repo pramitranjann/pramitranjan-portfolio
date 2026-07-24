@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { CaseStudyLayout } from '@/components/CaseStudyLayout'
 import { Footer } from '@/components/Footer'
+import { Nav } from '@/components/Nav'
 import { ProjectCard } from '@/components/ProjectCard'
 import { RuleLabel } from '@/components/RuleLabel'
 import type { CardStyleSettings, CaseStudyContent, HoverPreviewSettings } from '@/lib/site-content-schema'
@@ -183,7 +184,9 @@ export function SwipeyHubClient({
 
   return (
     <>
-      <main>
+      <Nav />
+      {/* Clears the fixed nav, matching WorkPageClient. */}
+      <main style={{ paddingTop: '57px' }}>
         <div style={{ padding: '24px var(--layout-page-gutter) 0' }}>
           <Link href="/work" className="font-mono back-link" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.14em' }}>
             <span className="arrow-nudge-back">←</span> WORK
