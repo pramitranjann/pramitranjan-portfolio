@@ -29,11 +29,15 @@ const FRAME_INSET = 'clamp(16px, 3.5vw, 56px)'
 // Each prototype was built for a specific viewport. Rendering it at that size
 // and scaling the whole thing down keeps its own layout decisions intact —
 // letterboxing it into an arbitrary box just makes it crop itself instead.
+// Heights are deliberately taller than a real screen where the prototype has
+// its own inner scroller: the transactions table sizes .txn-scroll off the
+// viewport height, so a taller viewport is the only thing that reveals more
+// rows — zooming out just shrinks the same few.
 const DESIGN_SIZE: Record<string, { w: number; h: number }> = {
-  'custom-fields': { w: 1440, h: 900 },
+  'custom-fields': { w: 1440, h: 1300 },
   'swipey-admin': { w: 430, h: 932 },
   'card-rename': { w: 520, h: 880 },
-  'swipey-demo': { w: 1440, h: 900 },
+  'swipey-demo': { w: 1440, h: 1100 },
 }
 
 function designSizeFor(url?: string) {
@@ -90,10 +94,13 @@ function StoryFrame({ story, onClose }: { story: Story; onClose: () => void }) {
       const host = iframe?.parentElement
       if (!iframe || !host) return
       const { w, h } = designSizeFor(iframe.getAttribute('src') ?? undefined)
-      const available = host.clientWidth
-      if (!available) return
-      // Never scale up past 1:1 — a prototype blown past its design size looks worse.
-      const scale = Math.min(available / w, 1)
+      const availableW = host.clientWidth
+      // Fit against the frame's visible height too, or a tall viewport would
+      // just make a tall box. Bounding both is what turns "more rows" into
+      // "more rows, smaller" rather than "more rows, off-screen".
+      const availableH = frame.clientHeight * 0.92
+      if (!availableW || !availableH) return
+      const scale = Math.min(availableW / w, availableH / h, 1)
       iframe.style.setProperty('width', `${w}px`, 'important')
       iframe.style.setProperty('height', `${h}px`, 'important')
       iframe.style.setProperty('zoom', String(scale))
