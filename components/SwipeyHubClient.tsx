@@ -26,27 +26,26 @@ const ENTER_MS = 260
 // Equal inset on all four sides, so the frame is centred in the viewport.
 const FRAME_INSET = 'clamp(16px, 3.5vw, 56px)'
 
-// Every embed occupies the same box whatever shape its prototype is, so the
-// modal reads consistently across the three stories. The transactions
-// prototype set these dimensions: it gives its row scroller the viewport
-// height minus ~266px of chrome at ~115px a row, so 730 lands on 4 rows.
-const STAGE = { w: 1440, h: 730 }
+// Fallback viewport for a prototype with no entry below. 730 comes from the
+// transactions prototype: it gives its row scroller the viewport height minus
+// ~266px of chrome at ~115px a row, so 730 lands on 4 visible rows.
+const DEFAULT_SIZE = { w: 1440, h: 730 }
 
-// Each prototype renders at its own viewport — rendering it at its design size
-// and scaling the whole thing down keeps its layout decisions intact, where
-// letterboxing it into an arbitrary box just makes it crop itself. `stage`
-// marks one narrower than the box: it sits centred on a tinted backdrop of the
-// canonical size instead of being stretched to fill it.
-const DESIGN_SIZE: Record<string, { w: number; h: number; stage?: string }> = {
+// Every prototype gets a wide viewport, including the phone and the rename
+// panel. Both already draw their own backdrop and centre their content on it,
+// so handing them the width lets them do that — wrapping a narrow one in a
+// backdrop of ours just framed an already-framed thing. Their heights are
+// their content's natural height; the scale fits that to the stage.
+const DESIGN_SIZE: Record<string, { w: number; h: number }> = {
   'custom-fields': { w: 1440, h: 730 },
   'swipey-demo': { w: 1440, h: 730 },
-  'swipey-admin': { w: 430, h: 932, stage: '#e4edeb' },
-  'card-rename': { w: 520, h: 880, stage: '#e4edeb' },
+  'swipey-admin': { w: 1440, h: 950 },
+  'card-rename': { w: 1440, h: 900 },
 }
 
 function designSizeFor(url?: string) {
   const key = Object.keys(DESIGN_SIZE).find((k) => url?.includes(`/proto/${k}/`))
-  return key ? DESIGN_SIZE[key] : { w: STAGE.w, h: STAGE.h }
+  return key ? DESIGN_SIZE[key] : DEFAULT_SIZE
 }
 
 type Story = CaseStudyContent & { navStyle?: unknown; listeningStyle?: unknown }
@@ -97,24 +96,18 @@ function StoryFrame({ story, onClose }: { story: Story; onClose: () => void }) {
       const iframe = frame.querySelector('iframe')
       const host = iframe?.parentElement
       if (!iframe || !host) return
-      const { w, h, stage } = designSizeFor(iframe.getAttribute('src') ?? undefined)
+      const { w, h } = designSizeFor(iframe.getAttribute('src') ?? undefined)
       // host is the inner surface; its parent carries the aspect-ratio and the
       // 12px padding that frames the embed on all four sides.
       const outer = host.parentElement
       const availableW = host.clientWidth
       if (availableW <= 0) return
 
-      // The stage is the same box for every story: canonical ratio, scaled to
-      // the width available.
-      const stageScale = Math.min(availableW / STAGE.w, 1)
-      const stageH = STAGE.h * stageScale
-
-      // A full-width prototype fills the stage. A narrow one (the phone, the
-      // rename panel) is scaled to fit the stage's height and centred on a
-      // tinted backdrop — stretching it to the box width would distort it.
-      const scale = stage
-        ? Math.min((stageH - 24) / h, availableW / w, 1)
-        : Math.min(availableW / w, 1)
+      // Fill the width always, so each prototype's own backdrop spans the box.
+      // Clamping to the stage height instead left the width unused and the
+      // backdrop floating in the middle. Height follows the content, so the
+      // phone's box is simply taller than the transactions one.
+      const scale = Math.min(availableW / w, 1)
 
       // transform, not zoom. Safari applies zoom to an iframe's internal
       // viewport as well as its box, so a zoomed 1440px iframe actually laid
@@ -136,20 +129,12 @@ function StoryFrame({ story, onClose }: { story: Story; onClose: () => void }) {
         outer.style.setProperty('aspect-ratio', 'auto', 'important')
         outer.style.setProperty('height', 'auto', 'important')
       }
-      // Always the stage height, so all three embeds are the same size.
-      host.style.setProperty('height', `${stageH}px`, 'important')
+      host.style.setProperty('height', `${renderedH}px`, 'important')
 
-      if (stage) {
-        // Grid centring works because the negative margins below collapse the
-        // iframe's layout box down to its rendered size.
-        host.style.setProperty('background', stage, 'important')
-        host.style.setProperty('display', 'grid', 'important')
-        host.style.setProperty('place-items', 'center', 'important')
-      } else {
-        host.style.removeProperty('background')
-        host.style.removeProperty('display')
-        host.style.removeProperty('place-items')
-      }
+      // Grid centring works because the negative margins below collapse the
+      // iframe's layout box down to its rendered size.
+      host.style.setProperty('display', 'grid', 'important')
+      host.style.setProperty('place-items', 'center', 'important')
 
       // transform doesn't shrink the layout box, so pull the leftover back in.
       iframe.style.setProperty('margin-right', `${-(w - renderedW)}px`, 'important')
