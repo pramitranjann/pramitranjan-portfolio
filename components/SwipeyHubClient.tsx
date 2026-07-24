@@ -173,36 +173,50 @@ function StoryFrame({ story, onClose }: { story: Story; onClose: () => void }) {
       }}
     >
       <div
-        ref={frameRef}
-        tabIndex={-1}
-        className="swipey-frame"
         style={{
           position: 'relative',
           height: '100%',
-          overflowY: 'auto',
-          overflowX: 'hidden',
-          background: '#0d0d0d',
-          border: '1px solid var(--color-red)',
-          outline: 'none',
           // Never from scale(0) — enter from near-rest.
           transform: shown ? 'scale(1)' : 'scale(0.985)',
           opacity: shown ? 1 : 0,
           transition: `transform ${ENTER_MS}ms ${EASE_OUT}, opacity ${ENTER_MS}ms ${EASE_OUT}`,
         }}
       >
+        <div
+          ref={frameRef}
+          tabIndex={-1}
+          className="swipey-frame"
+          style={{
+            height: '100%',
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            background: '#0d0d0d',
+            border: '1px solid var(--color-red)',
+            outline: 'none',
+          }}
+        >
+          <CaseStudyLayout
+            {...(story as Parameters<typeof CaseStudyLayout>[0])}
+            backHref="/work/swipey"
+            backLabel="SWIPEY"
+          />
+        </div>
+        {/* Outside the scroller, so it can't ride over the content beneath it. */}
         <button
           type="button"
           onClick={onClose}
           aria-label={`Close ${story.title}`}
           className="font-mono"
           style={{
-            position: 'sticky',
-            top: 0,
-            float: 'right',
-            zIndex: 5,
-            padding: '20px 24px',
-            border: 0,
-            background: 'transparent',
+            position: 'absolute',
+            top: 12,
+            right: 12,
+            zIndex: 10,
+            padding: '10px 14px',
+            border: '1px solid var(--color-red)',
+            background: 'rgba(13, 13, 13, 0.92)',
+            backdropFilter: 'blur(6px)',
+            WebkitBackdropFilter: 'blur(6px)',
             color: 'var(--color-red)',
             cursor: 'pointer',
             fontSize: 'var(--text-meta)',
@@ -212,11 +226,6 @@ function StoryFrame({ story, onClose }: { story: Story; onClose: () => void }) {
         >
           CLOSE ×
         </button>
-        <CaseStudyLayout
-          {...(story as Parameters<typeof CaseStudyLayout>[0])}
-          backHref="/work/swipey"
-          backLabel="SWIPEY"
-        />
       </div>
     </div>
   )
