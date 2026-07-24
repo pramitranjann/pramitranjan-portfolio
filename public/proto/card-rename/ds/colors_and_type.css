@@ -1,0 +1,217 @@
+/* ==========================================================================
+   Swipey Design System — Colors & Type
+   Source: frontend/tailwind.config.js + frontend/src/assets/css/tailwind.css
+   ========================================================================== */
+
+/* --- Fonts ----------------------------------------------------------------*/
+@font-face {
+  font-family: "Quicksand";
+  src: url("./fonts/Quicksand-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Quicksand";
+  src: url("./fonts/Quicksand-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Quicksand";
+  src: url("./fonts/Quicksand-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Quicksand";
+  src: url("./fonts/Quicksand-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Quicksand";
+  src: url("./fonts/Quicksand-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Poppins is referenced for body input/button copy in Swipey's CSS but
+   no Poppins TTFs ship in the repo — load it from Google Fonts. */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+:root {
+  /* === Brand color tokens =============================================== */
+  --swipey-mint: #27d8b2;          /* primary — brand teal/mint. FILLS/BORDERS/ON-NAVY ONLY:
+                                      1.8:1 on white — never text or icon ink on light bg
+                                      (2026-07-07 audit: Overview "View all" link was illegible) */
+  --swipey-mint-ink: #14735e;      /* text-safe mint — links, active tab labels, RM prefixes on light bg (≥4.5:1) */
+  --swipey-mint-light: #ebfbf6;    /* primary-light, subtle bg fill */
+  --swipey-mint-rgba: rgba(39, 216, 178, 0.5);
+  --swipey-mint-soft: #c0eee4;     /* default card / table border tint */
+  --swipey-mint-pale: #a6fabb;     /* auth container backdrop */
+
+  --swipey-navy: #002840;          /* secondary — deep navy */
+  --swipey-navy-rgba: rgba(0, 40, 64, 0.7);
+  --swipey-navy-suspended: #014e79;
+
+  /* === Neutrals ========================================================= */
+  --neutral-0: #ffffff;
+  --neutral-50: #f8f8f8;           /* page surfaces, white card alt */
+  --neutral-100: #f2f2f2;          /* dashboard background */
+  --neutral-200: #e7e7e7;          /* input borders */
+  --neutral-300: #cbcbcb;          /* disabled */
+  --neutral-400: #bdbcbc;          /* strong input border */
+  --neutral-500: #939393;          /* light copy */
+  --neutral-600: #707070;          /* darkSilver — labels */
+  --neutral-700: #4a4a4a;          /* dark / general body */
+  --neutral-800: #333333;          /* color.general */
+  --neutral-900: #222222;          /* font.primary */
+  --neutral-1000: #1f1f1f;         /* color.primary */
+
+  /* === Semantic foreground ============================================== */
+  --fg-primary: var(--neutral-900);
+  --fg-secondary: #777777;          /* color.secondary */
+  --fg-tertiary: var(--neutral-500);
+  --fg-muted: #a4a4a4;              /* placeholder */
+  --fg-disabled: var(--neutral-300);
+  --fg-on-mint: var(--swipey-navy);
+  --fg-on-navy: #ffffff;
+
+  /* === Semantic background ============================================== */
+  --bg-app: var(--neutral-100);
+  --bg-app-tinted: linear-gradient(180deg, rgba(175, 232, 217, 0.3) -3.94%, rgba(255, 255, 255, 0.3) 130.05%);
+  --bg-surface: #ffffff;
+  --bg-surface-alt: var(--neutral-50);
+  --bg-mint-tint: var(--swipey-mint-light);
+  --bg-auth: var(--swipey-mint-pale);
+
+  /* === Status =========================================================== */
+  /* Fill/badge-background hues. For status TEXT at 12–14px use the -ink
+     variants below — the fill hues fail AA as small text on white
+     (2026-07-07 audit: Txns "Pending" in --warning was 1.9:1). */
+  --success: #30bc53;
+  --success-light: #eefaf1;
+  --warning: #ffc212;
+  --error: #db2c4d;
+  --info: #03b2cb;
+  --success-ink: #14735e;   /* on white or --success-light */
+  --warning-ink: #8a6d00;   /* on white or #fff7e6 */
+  --error-ink: #b91c3c;     /* small-text variant of --error */
+
+  /* Card surface palette (from CardBackground.tsx) ----------------------- */
+  --card-default: var(--swipey-mint-soft);   /* primary card */
+  --card-secondary: var(--swipey-navy);
+  --card-suspended: #014e79;
+  --card-suspended-virtual: rgba(3, 132, 205, 0.41);
+  --card-gray: #cbcbcb;
+  --card-light-blue: #71c1da;
+  --card-white: var(--neutral-50);
+
+  /* === Borders ========================================================== */
+  --border-subtle: var(--swipey-mint-soft);
+  --border-default: var(--neutral-200);
+  --border-strong: var(--neutral-400);
+
+  /* === Shadows (from tailwind.config.js) ================================ */
+  --shadow-primary: 0px 0px 2px rgba(39, 216, 178, 0.25);
+  --shadow-secondary: 0px 0px 2px rgba(109, 214, 191, 0.25);
+  --shadow-table: 0px 2px 4px rgba(0, 0, 0, 0.07);
+  --shadow-elevated: 0px 8px 24px rgba(0, 40, 64, 0.08);
+
+  /* === Radii ============================================================ */
+  --radius-none: 0;
+  --radius-sm: 0.125rem;     /* 2 */
+  --radius-md: 0.375rem;     /* 6 */
+  --radius-lg: 0.5rem;       /* 8 — default for inputs/buttons */
+  --radius-xl: 0.875rem;     /* 14 — balance card */
+  --radius-2xl: 1rem;        /* 16 — content cards */
+  --radius-pill: 9999px;     /* badges, search field */
+
+  /* === Spacing scale (4 px base) ======================================== */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* === Type families ==================================================== */
+  --font-display: "Quicksand", "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-body:    "Quicksand", "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-ui:      "Poppins", "Quicksand", -apple-system, BlinkMacSystemFont, sans-serif; /* inputs / buttons */
+  --font-mono:    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  /* === Type scale (from tailwind.config.js) ============================= */
+  --fs-h1: 52px;        --lh-h1: 62px;        --fw-h1: 700;
+  --fs-h2: 48px;        --lh-h2: 60px;        --fw-h2: 700;
+  --fs-h3: 32px;        --lh-h3: 40px;        --fw-h3: 700;
+  --fs-title-lg: 24px;  --lh-title-lg: 31px;  --fw-title-lg: 700;
+  --fs-title-md: 20px;  --lh-title-md: 26px;  --fw-title-md: 700;
+  --fs-title-sm: 18px;  --lh-title-sm: 24px;  --fw-title-sm: 700;
+  --fs-subtitle-lg: 20px; --lh-subtitle-lg: 26px; --fw-subtitle-lg: 500;
+  --fs-subtitle-sm: 18px; --lh-subtitle-sm: 24px; --fw-subtitle-sm: 500;
+  --fs-p-lg: 16px;      --lh-p-lg: 26px;      --fw-p-lg: 400;
+  --fs-p-sm: 14px;      --lh-p-sm: 22px;      --fw-p-sm: 400;
+  --fs-caption: 12px;   --lh-caption: 18px;   --fw-caption: 400;
+  --fs-caption-xs: 10px;--lh-caption-xs: 16px;--fw-caption-xs: 500;
+
+  /* === Animation ======================================================== */
+  --motion-fast: 150ms;
+  --motion-base: 300ms;
+  --motion-slow: 500ms;
+  --ease-default: ease-in-out;
+  --ease-emph:    cubic-bezier(0.87, 0, 0.13, 1);
+}
+
+/* === Semantic typography classes / element defaults ===================== */
+html, body {
+  font-family: var(--font-body);
+  color: var(--fg-primary);
+  background: var(--bg-app);
+  font-size: var(--fs-p-lg);
+  line-height: var(--lh-p-lg);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, .h1 { font: var(--fw-h1) var(--fs-h1)/var(--lh-h1) var(--font-display); color: var(--fg-primary); margin: 0; }
+h2, .h2 { font: var(--fw-h2) var(--fs-h2)/var(--lh-h2) var(--font-display); color: var(--fg-primary); margin: 0; }
+h3, .h3 { font: var(--fw-h3) var(--fs-h3)/var(--lh-h3) var(--font-display); color: var(--fg-primary); margin: 0; }
+
+.title-lg { font: var(--fw-title-lg) var(--fs-title-lg)/var(--lh-title-lg) var(--font-display); }
+.title-md { font: var(--fw-title-md) var(--fs-title-md)/var(--lh-title-md) var(--font-display); }
+.title-sm { font: var(--fw-title-sm) var(--fs-title-sm)/var(--lh-title-sm) var(--font-display); }
+
+.subtitle-lg { font: var(--fw-subtitle-lg) var(--fs-subtitle-lg)/var(--lh-subtitle-lg) var(--font-display); color: var(--fg-secondary); }
+.subtitle-sm { font: var(--fw-subtitle-sm) var(--fs-subtitle-sm)/var(--lh-subtitle-sm) var(--font-display); color: var(--fg-secondary); }
+
+p, .p-lg { font: var(--fw-p-lg) var(--fs-p-lg)/var(--lh-p-lg) var(--font-body); color: var(--fg-primary); }
+.p-sm  { font: var(--fw-p-sm) var(--fs-p-sm)/var(--lh-p-sm) var(--font-body); color: var(--neutral-700); }
+.caption    { font: var(--fw-caption) var(--fs-caption)/var(--lh-caption) var(--font-body); color: var(--fg-secondary); }
+.caption-xs { font: var(--fw-caption-xs) var(--fs-caption-xs)/var(--lh-caption-xs) var(--font-body); color: var(--fg-secondary); text-transform: uppercase; letter-spacing: 0.04em; }
+
+.ui-label  { font-family: var(--font-ui); font-weight: 600; font-size: 14px; color: var(--neutral-700); }
+.input-label { font-family: var(--font-ui); font-weight: 700; font-size: 18px; line-height: 24px; color: var(--neutral-700); }
+
+a { color: var(--swipey-mint-ink); text-decoration: none; font-weight: 700; } /* was --swipey-mint: 1.8:1 on white (2026-07-07 audit) */
+a:hover { opacity: 0.8; }
+
+/* === Interaction floor (2026-07-07 audit) ================================ */
+/* Every product surface ships these two rules verbatim. */
+button:focus-visible, a:focus-visible, input:focus-visible, [role="button"]:focus-visible {
+  outline: 2px solid var(--swipey-mint-ink);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+code, kbd, pre { font-family: var(--font-mono); }

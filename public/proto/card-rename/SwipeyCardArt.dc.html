@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="width:340px;height:214px;border-radius:16px;background:#c0eee4;position:relative;overflow:hidden;box-shadow:0 10px 30px rgba(0,40,64,.14),0 3px 8px rgba(39,216,178,.22)">
+  <img src="assets/swipey-card-mark.png" alt="" style="position:absolute;right:-14px;top:50%;transform:translateY(-50%);height:264px;width:auto;opacity:.5;pointer-events:none"/>
+  <div style="position:absolute;inset:0;padding:20px 22px;display:flex;flex-direction:column;justify-content:space-between">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font:700 20px/1 var(--font-display);color:#002840;letter-spacing:-.01em">swipey</span>
+      <span style="border:1.5px solid rgba(0,40,64,.35);border-radius:99px;padding:4px 9px;font:700 10px/1 var(--font-display);color:#002840;letter-spacing:.07em">VIRTUAL</span>
+    </div>
+    <div>
+      <div style="font:500 12px/1 var(--font-display);color:rgba(0,40,64,.48);margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:230px">{{ cardName }}</div>
+      <div style="font:700 28px/1 var(--font-display);color:#002840;letter-spacing:-.02em">RM 0.00</div>
+    </div>
+    <div style="display:flex;align-items:flex-end;justify-content:space-between">
+      <span style="font:600 13px/1 var(--font-display);color:rgba(0,40,64,.65);letter-spacing:.18em">***6065</span>
+      <div style="text-align:right">
+        <div style="font:500 9px/1 var(--font-display);color:rgba(0,40,64,.55);letter-spacing:.06em;margin-bottom:4px">Business</div>
+        <div style="font:italic 900 20px/1 var(--font-display);color:#002840;letter-spacing:.02em">VISA</div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: { &quot;width&quot;: 340, &quot;height&quot;: 214 },
+  &quot;cardName&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Pramit Ranjan 2&quot;, &quot;tsType&quot;: &quot;string&quot; }
+}"></script>
+</body>
+</html>

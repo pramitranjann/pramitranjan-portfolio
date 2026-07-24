@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="ds/colors_and_type.css">
+  <style>
+    body { margin:0; background:#e4edeb; font-family: var(--font-display, system-ui, sans-serif); }
+    input, button { font-family: var(--font-display); }
+    .hero-title-row:hover .hero-title-text { border-bottom: 2px dotted var(--neutral-300); }
+    .expl-hover:hover .expl-pencil { opacity: 1 !important; }
+    .expl-hover:hover { background: var(--swipey-mint-light); }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
+    .edit-zone { animation: fadeUp .15s ease-out; }
+    .col { display:flex; flex-direction:column; }
+    .panel { width:460px; background:#fff; border-radius:16px; border:1px solid var(--swipey-mint-soft); box-shadow:var(--shadow-elevated); overflow:hidden; }
+  </style>
+</helmet>
+<div style="min-height:100vh;padding:48px 40px;box-sizing:border-box">
+  <div style="max-width:1010px;margin:0 auto">
+    <div style="font:700 13px/1 var(--font-display);color:var(--swipey-mint);text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px">Card detail panel</div>
+    <h1 style="font:700 32px/40px var(--font-display);color:var(--fg-primary);margin:0 0 6px">Rename UX — finalists</h1>
+    <p style="font:400 15px/22px var(--font-body);color:var(--fg-secondary);margin:0 0 40px;max-width:600px">Two recommended directions up top, both with the full inline edit. Every earlier exploration is preserved below for reference. Click a card name (or the pencil) to rename it live — the card art updates with it.</p>
+
+    <div style="display:flex;gap:56px;flex-wrap:wrap;align-items:flex-start">
+
+      <!-- ════════ DESIGN 1 — Refreshed panel ════════ -->
+      <div class="col" style="gap:22px">
+        <div>
+          <div style="display:flex;align-items:baseline;gap:14px">
+            <span style="font:700 46px/1 var(--font-display);color:var(--swipey-mint)">1</span>
+            <span style="font:700 26px/1.1 var(--font-display);color:var(--fg-primary)">Refreshed panel</span>
+            <span style="align-self:center;background:var(--swipey-mint);color:var(--swipey-navy);font:700 10px/1 var(--font-ui);letter-spacing:.06em;text-transform:uppercase;border-radius:9999px;padding:5px 10px">Recommended</span>
+          </div>
+          <div style="font:400 14px/20px var(--font-body);color:var(--fg-secondary);margin-top:8px">Name leads as the headline, with a small pencil · hero card · quick actions</div>
+        </div>
+        <div class="col panel" data-screen-label="1">
+          <div style="padding:18px 20px 16px;border-bottom:1px solid var(--swipey-mint-soft)">
+            <div style="font:600 10px/14px var(--font-ui);color:var(--fg-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Card name</div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="flex:1;min-width:0">
+                <sc-if value="{{ show1 }}" hint-placeholder-val="{{ true }}">
+                  <div class="hero-title-row" onClick="{{ start1 }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:8px;max-width:100%">
+                    <div class="hero-title-text" style="font:700 24px/30px var(--font-display);color:var(--fg-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:268px;padding-bottom:2px;transition:border-bottom 100ms ease">{{ name1 }}</div>
+                    <span style="display:inline-flex;align-items:center;justify-content:center;color:var(--swipey-navy);flex-shrink:0" title="Rename card">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </span>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ editing1 }}" hint-placeholder-val="{{ false }}">
+                  <div class="edit-zone" style="display:flex;align-items:center;gap:8px">
+                    <input class="ni1" value="{{ draft1 }}" onChange="{{ onDraft1 }}" onKeyDown="{{ key1 }}" style="font:700 24px/30px var(--font-display);border:none;border-bottom:2px solid var(--swipey-mint);background:transparent;outline:none;flex:1;min-width:0;padding:0 0 3px;color:var(--fg-primary)">
+                    <button onClick="{{ save1 }}" style="font:600 12px var(--font-ui);background:var(--swipey-mint);color:var(--swipey-navy);border:none;border-radius:8px;padding:5px 12px;cursor:pointer;flex-shrink:0">Save</button>
+                    <button onClick="{{ dismiss1 }}" style="font:600 12px var(--font-ui);background:none;border:1px solid var(--neutral-200);color:var(--neutral-700);border-radius:8px;padding:5px 12px;cursor:pointer;flex-shrink:0">Cancel</button>
+                  </div>
+                </sc-if>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+                <sc-if value="{{ statusInCorner }}" hint-placeholder-val="{{ true }}">
+                  <span style="display:inline-flex;align-items:center;gap:5px;font:600 12px var(--font-ui);color:#30BC53"><span style="width:7px;height:7px;border-radius:50%;background:#30BC53;display:inline-block"></span>Active</span>
+                </sc-if>
+                <button style="width:28px;height:28px;background:none;border:none;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--neutral-500)" style-hover="background:var(--neutral-100)">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+              </div>
+            </div>
+            <sc-if value="{{ statusInMeta }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:9px"><span style="display:inline-flex;align-items:center;gap:5px;font:600 12px var(--font-body);color:#30BC53"><span style="width:7px;height:7px;border-radius:50%;background:#30BC53;display:inline-block"></span>Active</span></div>
+            </sc-if>
+          </div>
+          <div style="padding:16px 20px 0">
+            <div style="width:420px;height:265px">
+              <div style="width:340px;height:214px;transform:scale(1.23529);transform-origin:top left">
+                <dc-import name="SwipeyCardArt" card-name="{{ name1 }}" hint-size="340px,214px" style="display:block"></dc-import>
+              </div>
+            </div>
+          </div>
+          <dc-import name="PanelBody" hint-size="460px,300px" style="display:block"></dc-import>
+        </div>
+      </div>
+
+      <!-- ════════ DESIGN 2 — Familiar layout ════════ -->
+      <div class="col" style="gap:22px">
+        <div>
+          <div style="display:flex;align-items:baseline;gap:14px">
+            <span style="font:700 46px/1 var(--font-display);color:var(--swipey-navy)">2</span>
+            <span style="font:700 26px/1.1 var(--font-display);color:var(--fg-primary)">Familiar layout</span>
+          </div>
+          <div style="font:400 14px/20px var(--font-body);color:var(--fg-secondary);margin-top:8px">Today's panel · name on top with an obvious Rename button</div>
+        </div>
+        <div class="col panel" data-screen-label="2">
+          <div style="padding:18px 20px 16px;border-bottom:1px solid var(--swipey-mint-soft)">
+            <div style="display:flex;align-items:center;gap:8px">
+              <sc-if value="{{ show2 }}" hint-placeholder-val="{{ true }}">
+                <span style="font:700 20px/26px var(--font-display);color:var(--fg-primary);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ name2 }}</span>
+                <button onClick="{{ start2 }}" style="display:flex;align-items:center;gap:5px;font:600 12px var(--font-ui);background:none;border:1.5px solid var(--swipey-mint);color:var(--swipey-mint);border-radius:9999px;padding:4px 12px;cursor:pointer;white-space:nowrap;flex-shrink:0">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                  Rename
+                </button>
+              </sc-if>
+              <sc-if value="{{ editing2 }}" hint-placeholder-val="{{ false }}">
+                <input class="ni2" value="{{ draft2 }}" onChange="{{ onDraft2 }}" onKeyDown="{{ key2 }}" style="font:700 20px/26px var(--font-display);border:none;border-bottom:2px solid var(--swipey-mint);background:transparent;outline:none;flex:1;min-width:0;padding:0 0 3px;color:var(--fg-primary)">
+                <button onClick="{{ save2 }}" style="font:600 12px var(--font-ui);background:var(--swipey-mint);color:var(--swipey-navy);border:none;border-radius:9999px;padding:5px 14px;cursor:pointer;flex-shrink:0">Save</button>
+                <button onClick="{{ dismiss2 }}" style="font:600 12px var(--font-ui);background:none;border:1px solid var(--neutral-300);color:var(--neutral-600);border-radius:9999px;padding:5px 14px;cursor:pointer;flex-shrink:0">Cancel</button>
+              </sc-if>
+              <button style="width:28px;height:28px;background:none;border:none;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--neutral-500);flex-shrink:0" style-hover="background:var(--neutral-100)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
+            </div>
+          </div>
+          <dc-import name="FamiliarBody" card-name="{{ name2 }}" withCard="{{ true }}" hint-size="460px,420px" style="display:block"></dc-import>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ════════ OTHER EXPLORATIONS (recovered) ════════ -->
+    <div style="margin-top:64px;padding-top:40px;border-top:1px solid var(--swipey-mint-soft)">
+      <div style="font:700 13px/1 var(--font-display);color:var(--fg-tertiary);text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px">Other explorations</div>
+      <h2 style="font:700 24px/30px var(--font-display);color:var(--fg-primary);margin:0 0 6px">Earlier rename ideas</h2>
+      <p style="font:400 14px/21px var(--font-body);color:var(--fg-secondary);margin:0 0 32px;max-width:600px">Kept for reference — every affordance we tried on the way to the finalists, each a full panel. All still editable.</p>
+
+      <div style="display:flex;flex-wrap:wrap;gap:56px;align-items:flex-start">
+
+        <!-- A · Ghost pencil -->
+        <div class="col" style="gap:14px">
+          <div style="font:600 13px/1 var(--font-ui);color:var(--fg-secondary)"><span style="color:var(--swipey-navy);font-weight:700">A</span> · Ghost pencil — hover to reveal</div>
+          <div class="col panel" data-screen-label="expl-a">
+            <div style="padding:18px 20px 16px;border-bottom:1px solid var(--swipey-mint-soft);display:flex;align-items:center;gap:8px">
+              <sc-if value="{{ showEa }}" hint-placeholder-val="{{ true }}">
+                <div class="expl-hover" onClick="{{ startEa }}" style="display:flex;align-items:center;gap:8px;cursor:pointer;border-radius:8px;padding:5px 7px;margin:-5px -7px;flex:1;min-width:0;transition:background 120ms ease">
+                  <span style="font:700 20px/26px var(--font-display);color:var(--fg-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ nameEa }}</span>
+                  <span class="expl-pencil" style="opacity:0;transition:opacity 120ms ease;display:flex;color:var(--neutral-500);flex-shrink:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></span>
+                </div>
+              </sc-if>
+              <sc-if value="{{ editingEa }}" hint-placeholder-val="{{ false }}">
+                <div class="edit-zone" style="display:flex;align-items:center;gap:8px;flex:1">
+                  <input class="niEa" value="{{ draftEa }}" onChange="{{ onDraftEa }}" onKeyDown="{{ keyEa }}" style="font:700 20px/26px var(--font-display);border:none;border-bottom:2px solid var(--swipey-mint);background:transparent;outline:none;flex:1;min-width:0;padding:0 0 2px;color:var(--fg-primary)">
+                  <button onClick="{{ saveEa }}" style="font:600 12px var(--font-ui);background:var(--swipey-mint);color:var(--swipey-navy);border:none;border-radius:8px;padding:5px 12px;cursor:pointer;flex-shrink:0">Save</button>
+                  <button onClick="{{ dismissEa }}" style="font:600 12px var(--font-ui);background:none;border:1px solid var(--neutral-200);color:var(--neutral-600);border-radius:8px;padding:5px 11px;cursor:pointer;flex-shrink:0">Cancel</button>
+                </div>
+              </sc-if>
+              <button style="width:28px;height:28px;background:none;border:none;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--neutral-500);flex-shrink:0" style-hover="background:var(--neutral-100)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+            </div>
+            <dc-import name="FamiliarBody" card-name="{{ nameEa }}" withCard="{{ true }}" hint-size="460px,420px" style="display:block"></dc-import>
+          </div>
+        </div>
+
+        <!-- B · Click to rename with hint -->
+        <div class="col" style="gap:14px">
+          <div style="font:600 13px/1 var(--font-ui);color:var(--fg-secondary)"><span style="color:var(--swipey-navy);font-weight:700">B</span> · Click to rename — guided hint</div>
+          <div class="col panel" data-screen-label="expl-b">
+            <div style="padding:18px 20px 16px;border-bottom:1px solid var(--swipey-mint-soft);display:flex;align-items:flex-start;gap:8px">
+              <div style="flex:1;min-width:0">
+                <sc-if value="{{ showEb }}" hint-placeholder-val="{{ true }}">
+                  <div class="expl-hover" onClick="{{ startEb }}" style="cursor:pointer;border-radius:8px;padding:5px 7px;margin:-5px -7px;display:inline-block;max-width:100%;transition:background 120ms ease">
+                    <div style="font:700 20px/26px var(--font-display);color:var(--fg-primary)">{{ nameEb }}</div>
+                    <div style="font:400 11px/15px var(--font-body);color:var(--fg-muted);display:flex;align-items:center;gap:3px;margin-top:3px"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>Click to rename</div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ editingEb }}" hint-placeholder-val="{{ false }}">
+                  <div class="edit-zone" style="display:flex;align-items:center;gap:8px">
+                    <input class="niEb" value="{{ draftEb }}" onChange="{{ onDraftEb }}" onKeyDown="{{ keyEb }}" style="font:700 20px/26px var(--font-display);border:none;border-bottom:2px solid var(--swipey-mint);background:transparent;outline:none;flex:1;min-width:0;padding:0 0 2px;color:var(--fg-primary)">
+                    <button onClick="{{ saveEb }}" style="font:600 12px var(--font-ui);background:var(--swipey-mint);color:var(--swipey-navy);border:none;border-radius:8px;padding:5px 12px;cursor:pointer;flex-shrink:0">Save</button>
+                    <button onClick="{{ dismissEb }}" style="font:600 12px var(--font-ui);background:none;border:1px solid var(--neutral-200);color:var(--neutral-600);border-radius:8px;padding:5px 11px;cursor:pointer;flex-shrink:0">Cancel</button>
+                  </div>
+                </sc-if>
+              </div>
+              <button style="width:28px;height:28px;background:none;border:none;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--neutral-500);flex-shrink:0;margin-top:2px" style-hover="background:var(--neutral-100)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+            </div>
+            <dc-import name="FamiliarBody" card-name="{{ nameEb }}" withCard="{{ true }}" hint-size="460px,420px" style="display:block"></dc-import>
+          </div>
+        </div>
+
+        <!-- C · Name-on-open -->
+        <div class="col" style="gap:14px">
+          <div style="font:600 13px/1 var(--font-ui);color:var(--fg-secondary)"><span style="color:var(--swipey-navy);font-weight:700">C</span> · Name-on-open — input ready</div>
+          <div class="col panel" data-screen-label="expl-c">
+            <div style="padding:14px 20px 16px;border-bottom:1px solid var(--swipey-mint-soft)">
+              <div style="background:var(--swipey-mint-light);border:1px solid var(--swipey-mint-soft);border-radius:12px;padding:14px 16px">
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--swipey-navy)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg><span style="font:700 13px/18px var(--font-display);color:var(--swipey-navy)">Name your card</span></div>
+                <div style="display:flex;gap:8px">
+                  <input value="{{ draftEc }}" onChange="{{ onDraftEc }}" onKeyDown="{{ keyEc }}" placeholder="e.g. Marketing, Travel" style="flex:1;min-width:0;border:1.5px solid var(--swipey-mint);border-radius:8px;padding:9px 12px;font:600 14px/20px var(--font-display);outline:none;background:white;color:var(--fg-primary)">
+                  <button onClick="{{ saveEc }}" style="background:var(--swipey-navy);color:white;border:none;border-radius:8px;padding:0 16px;font:600 12px var(--font-ui);cursor:pointer;flex-shrink:0">Save</button>
+                </div>
+              </div>
+            </div>
+            <dc-import name="FamiliarBody" card-name="{{ nameEc }}" withCard="{{ true }}" hint-size="460px,420px" style="display:block"></dc-import>
+          </div>
+        </div>
+
+        <!-- D · Hero title -->
+        <div class="col" style="gap:14px">
+          <div style="font:600 13px/1 var(--font-ui);color:var(--fg-secondary)"><span style="color:var(--swipey-navy);font-weight:700">D</span> · Hero title — name as headline</div>
+          <div class="col panel" data-screen-label="expl-d">
+            <div style="padding:22px 20px 18px;border-bottom:1px solid var(--swipey-mint-soft);display:flex;align-items:flex-start;gap:8px">
+              <div style="flex:1;min-width:0">
+                <sc-if value="{{ showEe }}" hint-placeholder-val="{{ true }}">
+                  <div class="hero-title-row" onClick="{{ startEe }}" style="cursor:pointer;display:inline-block;max-width:100%">
+                    <div class="hero-title-text" style="font:700 26px/32px var(--font-display);color:var(--fg-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:370px;padding-bottom:2px;transition:border-bottom 100ms ease">{{ nameEe }}</div>
+                    <div style="font:400 12px/17px var(--font-body);color:var(--fg-secondary);margin-top:5px">Virtual card · ••• 6065</div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ editingEe }}" hint-placeholder-val="{{ false }}">
+                  <div class="edit-zone" style="display:flex;flex-direction:column;gap:8px">
+                    <input class="niEe" value="{{ draftEe }}" onChange="{{ onDraftEe }}" onKeyDown="{{ keyEe }}" style="font:700 26px/32px var(--font-display);border:none;border-bottom:2px solid var(--swipey-mint);background:transparent;outline:none;width:100%;padding:0 0 3px;color:var(--fg-primary);box-sizing:border-box">
+                    <div style="display:flex;gap:8px"><button onClick="{{ saveEe }}" style="font:600 12px var(--font-ui);background:var(--swipey-mint);color:var(--swipey-navy);border:none;border-radius:8px;padding:5px 14px;cursor:pointer">Save</button><button onClick="{{ dismissEe }}" style="font:600 12px var(--font-ui);background:none;border:1px solid var(--neutral-200);color:var(--neutral-700);border-radius:8px;padding:5px 13px;cursor:pointer">Cancel</button></div>
+                  </div>
+                </sc-if>
+              </div>
+              <button style="width:28px;height:28px;background:none;border:none;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--neutral-500);flex-shrink:0;margin-top:4px" style-hover="background:var(--neutral-100)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+            </div>
+            <dc-import name="FamiliarBody" card-name="{{ nameEe }}" withCard="{{ true }}" hint-size="460px,420px" style="display:block"></dc-import>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;statusPlacement&quot;: {
+    &quot;editor&quot;: &quot;enum&quot;,
+    &quot;options&quot;: [&quot;Top corner&quot;, &quot;Meta line&quot;, &quot;Hidden&quot;],
+    &quot;default&quot;: &quot;Top corner&quot;,
+    &quot;tsType&quot;: &quot;string&quot;,
+    &quot;section&quot;: &quot;Design 1 — status&quot;,
+    &quot;label&quot;: &quot;Status placement&quot;
+  }
+}">
+class Component extends DCLogic {
+  state = {
+    name1: 'Pramit Ranjan 2', editing1: false, draft1: '',
+    name2: 'Pramit Ranjan 2', editing2: false, draft2: '',
+    nameEa: 'Pramit Ranjan 2', editingEa: false, draftEa: '',
+    nameEb: 'Pramit Ranjan 2', editingEb: false, draftEb: '',
+    nameEc: 'Pramit Ranjan 2', draftEc: 'Pramit Ranjan 2',
+    nameEd: 'Pramit Ranjan 2', editingEd: false, draftEd: '',
+    nameEe: 'Pramit Ranjan 2', editingEe: false, draftEe: ''
+  };
+
+  startEdit(n) {
+    this.setState(s => ({ ['editing' + n]: true, ['draft' + n]: s['name' + n] }), () => {
+      setTimeout(() => { const el = document.querySelector('.ni' + n); if (el) { el.focus(); el.select(); } }, 60);
+    });
+  }
+  commit(n) {
+    const v = this.state['draft' + n].trim();
+    this.setState(s => ({ ['name' + n]: v || s['name' + n], ['editing' + n]: false, ['draft' + n]: '' }));
+  }
+  dismiss(n) {
+    this.setState({ ['editing' + n]: false, ['draft' + n]: '' });
+  }
+
+  explVals(k) {
+    const s = this.state;
+    return {
+      ['name' + k]: s['name' + k],
+      ['editing' + k]: s['editing' + k],
+      ['show' + k]: !s['editing' + k],
+      ['draft' + k]: s['draft' + k],
+      ['onDraft' + k]: e => this.setState({ ['draft' + k]: e.target.value }),
+      ['start' + k]: () => this.startEdit(k),
+      ['save' + k]: () => this.commit(k),
+      ['dismiss' + k]: () => this.dismiss(k),
+      ['key' + k]: e => { if (e.key === 'Enter') this.commit(k); if (e.key === 'Escape') this.dismiss(k); }
+    };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const sp = this.props.statusPlacement ?? 'Top corner';
+    return {
+      name1: s.name1, editing1: s.editing1, show1: !s.editing1, draft1: s.draft1,
+      onDraft1: e => this.setState({ draft1: e.target.value }),
+      start1: () => this.startEdit(1), save1: () => this.commit(1), dismiss1: () => this.dismiss(1),
+      key1: e => { if (e.key === 'Enter') this.commit(1); if (e.key === 'Escape') this.dismiss(1); },
+
+      name2: s.name2, editing2: s.editing2, show2: !s.editing2, draft2: s.draft2,
+      onDraft2: e => this.setState({ draft2: e.target.value }),
+      start2: () => this.startEdit(2), save2: () => this.commit(2), dismiss2: () => this.dismiss(2),
+      key2: e => { if (e.key === 'Enter') this.commit(2); if (e.key === 'Escape') this.dismiss(2); },
+
+      statusInMeta: sp === 'Meta line',
+      statusInCorner: sp === 'Top corner',
+
+      ...this.explVals('Ea'),
+      ...this.explVals('Eb'),
+      ...this.explVals('Ed'),
+      ...this.explVals('Ee'),
+
+      nameEc: s.nameEc, draftEc: s.draftEc,
+      onDraftEc: e => this.setState({ draftEc: e.target.value }),
+      saveEc: () => { const v = (this.state.draftEc || '').trim(); if (v) this.setState({ nameEc: v }); },
+      keyEc: e => { if (e.key === 'Enter') { const v = (this.state.draftEc || '').trim(); if (v) this.setState({ nameEc: v }); } }
+    };
+  }
+}
+</script>
+</body>
+</html>
