@@ -278,10 +278,13 @@
         "href": "/work/purcast"
       },
       {
-        "title": "Custom Fields",
-        "oneliner": "People were already tracking projects. Just not anywhere the software could see.",
-        "tags": ["PRODUCT", "AI"],
-        "href": "/work/swipey-fields",
+        "title": "Swipey",
+        "oneliner": "Six months designing corporate card software for Malaysian SMEs.",
+        "tags": [
+          "PRODUCT",
+          "INTERNSHIP"
+        ],
+        "href": "/work/swipey",
         "cover": "/work/swipey-fields/cover.png",
         "coverPosition": "center"
       }
@@ -1367,7 +1370,14 @@
       "title": "Custom Fields",
       "oneliner": "People were already tracking projects. Just not anywhere the software could see.",
       "type": "PRODUCT DESIGN · 2026",
-      "tags": ["Product Design", "Data UX", "AI Interaction", "Design Systems", "Accessibility", "React"],
+      "tags": [
+        "Product Design",
+        "Data UX",
+        "AI Interaction",
+        "Design Systems",
+        "Accessibility",
+        "React"
+      ],
       "prev": null,
       "next": null,
       "heroImage": "/work/swipey-fields/cover.png",
@@ -1385,8 +1395,7 @@
       "solutionEmbedWidth": "min(100%, 1325px)",
       "solutionEmbedCalloutLabel": "LIVE PROTOTYPE_",
       "solutionEmbedCalloutTitle": "The working prototype is embedded below.",
-      "solutionEmbedCalloutBody": "This is the real exploration, not a mockup. Open the Alfie nudge to create a Project field, then accept or edit what it fills in.",
-      "solutionEmbedCtaLabel": "OPEN FULLSCREEN"
+      "solutionEmbedCalloutBody": "This is the real exploration, not a mockup. Open the Alfie nudge to create a Project field, then accept or edit what it fills in."
     },
     {
       "slug": "south-china-sea",

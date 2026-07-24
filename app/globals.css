@@ -110,9 +110,12 @@ html, body {
   font-weight: 400;
 }
 
-/* The single statement that carries each case study section. */
+/* The single statement that carries each case study section.
+   One measure for every section — 640px at 20px is ~65 characters. Lives here,
+   not on the per-section wrappers, so no section can drift off it. */
 .case-study-statement {
   font-size: 20px;
+  max-width: 640px;
 }
 
 /* Hide scrollbar — prevents layout shift on the fixed nav */

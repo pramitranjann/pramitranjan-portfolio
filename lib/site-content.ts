@@ -111,6 +111,33 @@ export async function getCaseStudyContent(slug: string) {
   }
 }
 
+// The three Swipey sub-studies are `hidden` on purpose: they are modal content on
+// /work/swipey, not standalone pages. The hub still has to read them, so this bypasses
+// the visibility filter for exactly these slugs — nothing else. Missing slugs are
+// dropped, so the hub keeps working while entries are still being written.
+const SWIPEY_CASE_STUDY_SLUGS = ['swipey-fields', 'swipey-admin', 'side-by-side'] as const
+
+export async function getSwipeyCaseStudies() {
+  const content = await getSiteContent()
+  return SWIPEY_CASE_STUDY_SLUGS
+    .map((slug) => content.caseStudies.find((item) => item.slug === slug))
+    .filter((item): item is CaseStudyContent => Boolean(item))
+}
+
+// The Swipey stories render inside the /work/swipey hub as modals, never as
+// standalone pages — so they stay `hidden`, which correctly 404s them as routes.
+// The hub still has to read them, hence this narrow bypass: it reads the raw
+// file for these slugs only, leaving filterVisibleCaseStudies untouched for
+// everything else.
+export const SWIPEY_STORY_SLUGS = ['swipey-fields', 'swipey-admin', 'swipey-get-started'] as const
+
+export async function getSwipeyStories() {
+  const content = await readSiteContentFile()
+  return SWIPEY_STORY_SLUGS.map((slug) => content.caseStudies.find((item) => item.slug === slug)).filter(
+    (item): item is CaseStudyContent => Boolean(item),
+  )
+}
+
 export async function getCaseStudiesBySection(section: CaseStudyContent['section']) {
   const content = await getPublicSiteContent()
   return content.caseStudies.filter((item) => item.section === section)
