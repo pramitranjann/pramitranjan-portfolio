@@ -151,30 +151,6 @@ function StoryFrame({ story, onClose }: { story: Story; onClose: () => void }) {
     }
   }, [story.slug])
 
-  // The section nav scrolls the window, which is not the scroller in here, so
-  // its links do nothing. Re-point them at the frame. Nav items and sections
-  // are matched by order rather than by parsing labels into ids.
-  useEffect(() => {
-    const frame = frameRef.current
-    if (!frame) return
-    const onClick = (event: MouseEvent) => {
-      const target = event.target as HTMLElement
-      const item = target.closest('.case-study-section-nav button, .case-study-section-nav a')
-      if (!item) return
-      const nav = item.closest('.case-study-section-nav')
-      if (!nav) return
-      const items = [...nav.querySelectorAll('button, a')]
-      const sections = [...frame.querySelectorAll('[id^="sec-"]')].filter((el) => el.id !== 'sec-hero')
-      const section = sections[items.indexOf(item)]
-      if (!section) return
-      event.preventDefault()
-      event.stopPropagation()
-      frame.scrollTo({ top: (section as HTMLElement).offsetTop - 96, behavior: 'smooth' })
-    }
-    frame.addEventListener('click', onClick, true)
-    return () => frame.removeEventListener('click', onClick, true)
-  }, [])
-
   return (
     <div
       role="dialog"

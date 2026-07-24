@@ -125,14 +125,13 @@ html, body {
   display: none !important;
 }
 
-/* The section nav stays. It reveals itself by clearing an inline opacity once
-   window scroll passes the hero — which never happens inside the frame's own
-   scroll container, so it would sit invisible forever. Force it shown.
-   position:fixed is left alone: the frame is inset ~50px, so its 88px offset
-   still lands inside the red border. */
-.swipey-frame .case-study-section-nav {
-  opacity: 1 !important;
-  pointer-events: auto !important;
+/* The section nav and the prev/next pair are page navigation. Inside a modal
+   there is nowhere to navigate to — the stories aren't routes — so both go.
+   :has() targets the prev/next grid wrapper, which has no class of its own,
+   so its divider goes with it rather than leaving a stray rule. */
+.swipey-frame .case-study-section-nav,
+.swipey-frame .grid:has(> .case-study-prev-next) {
+  display: none !important;
 }
 
 /* GsapReveal drives its reveals off ScrollTrigger, which watches window
