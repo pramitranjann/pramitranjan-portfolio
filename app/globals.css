@@ -149,7 +149,9 @@ html, body {
    zoom (unlike transform) scales the layout box too, so no phantom gap. */
 .swipey-frame iframe {
   width: 125%;
-  zoom: 0.8;
+  zoom: 0.64;
+  display: block;
+  margin-inline: auto;
 }
 
 /* Hide scrollbar — prevents layout shift on the fixed nav */
