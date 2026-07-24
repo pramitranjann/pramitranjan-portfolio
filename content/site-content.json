@@ -276,6 +276,14 @@
           "COMPETITION"
         ],
         "href": "/work/purcast"
+      },
+      {
+        "title": "Custom Fields",
+        "oneliner": "People were already tracking projects. Just not anywhere the software could see.",
+        "tags": ["PRODUCT", "AI"],
+        "href": "/work/swipey-fields",
+        "cover": "/work/swipey-fields/cover.png",
+        "coverPosition": "center"
       }
     ]
   },
@@ -1351,6 +1359,34 @@
       },
       "next": null,
       "hidden": true
+    },
+    {
+      "slug": "swipey-fields",
+      "section": "work",
+      "hidden": true,
+      "title": "Custom Fields",
+      "oneliner": "People were already tracking projects. Just not anywhere the software could see.",
+      "type": "PRODUCT DESIGN · 2026",
+      "tags": ["Product Design", "Data UX", "AI Interaction", "Design Systems", "Accessibility", "React"],
+      "prev": null,
+      "next": null,
+      "heroImage": "/work/swipey-fields/cover.png",
+      "problemHeadline": "Finance teams needed columns Swipey didn't have: Project, Client, Billable. So they improvised in the notes field, where nothing can be filtered, grouped, or reported on.",
+      "roleHeadline": "Design intern at Swipey, a corporate card and spend platform for Malaysian SMEs. I owned this exploration end to end: the interaction model, the AI layer, and the prototype it ran in.",
+      "researchHeadline": "Two things already existed. Project names sitting in the notes field, and Alfie, the receipt reader people already trusted to file their expenses. The work was connecting them.",
+      "challengeHeadline": "Custom fields are org-wide. One person deleting a column destroys everyone's reporting, so management is admin-gated and deletion is something you have to type your way through.",
+      "processHeadline": "I extended the assistant people already knew instead of introducing a second one. Alfie read receipts; now it reads notes too. Suggestions land as dashed pills carrying the note they came from, so accepting eight at once is still an informed decision.",
+      "solutionHeadline": "A field you create in one click from a nudge that cites its own evidence, filled by Alfie, confirmed by a human, and filterable the moment it exists.",
+      "outcomesHeadline": "Then I used my own prototype as the admin who'd live in it, and found eleven things wrong — three of them blocking. Creating a column scrolled it off screen. Next I'd take the same lens to the mobile table.",
+      "pullQuote": "The structure was already there. It was just sitting in a text box where nothing could reach it.",
+      "solutionEmbedUrl": "/proto/custom-fields/index.html",
+      "solutionEmbedTitle": "Custom Fields prototype",
+      "solutionEmbedAspectRatio": "16 / 10",
+      "solutionEmbedWidth": "min(100%, 1325px)",
+      "solutionEmbedCalloutLabel": "LIVE PROTOTYPE_",
+      "solutionEmbedCalloutTitle": "The working prototype is embedded below.",
+      "solutionEmbedCalloutBody": "This is the real exploration, not a mockup. Open the Alfie nudge to create a Project field, then accept or edit what it fills in.",
+      "solutionEmbedCtaLabel": "OPEN FULLSCREEN"
     },
     {
       "slug": "south-china-sea",
