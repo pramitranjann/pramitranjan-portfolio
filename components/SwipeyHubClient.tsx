@@ -29,15 +29,14 @@ const FRAME_INSET = 'clamp(16px, 3.5vw, 56px)'
 // Each prototype was built for a specific viewport. Rendering it at that size
 // and scaling the whole thing down keeps its own layout decisions intact —
 // letterboxing it into an arbitrary box just makes it crop itself instead.
-// Heights are deliberately taller than a real screen where the prototype has
-// its own inner scroller: the transactions table sizes .txn-scroll off the
-// viewport height, so a taller viewport is the only thing that reveals more
-// rows — zooming out just shrinks the same few.
+// Each prototype's native viewport. Keep the desktop ones wide and 16:10 —
+// the embed has to fit inside the modal, so a tall viewport just forces the
+// scale down and makes everything small. A few visible rows is enough.
 const DESIGN_SIZE: Record<string, { w: number; h: number }> = {
-  'custom-fields': { w: 1440, h: 1300 },
+  'custom-fields': { w: 1440, h: 900 },
   'swipey-admin': { w: 430, h: 932 },
   'card-rename': { w: 520, h: 880 },
-  'swipey-demo': { w: 1440, h: 1100 },
+  'swipey-demo': { w: 1440, h: 900 },
 }
 
 function designSizeFor(url?: string) {
@@ -96,12 +95,11 @@ function StoryFrame({ story, onClose }: { story: Story; onClose: () => void }) {
       const { w, h } = designSizeFor(iframe.getAttribute('src') ?? undefined)
       const availableW = host.clientWidth
       if (!availableW) return
-      // Scale off width alone. Binding to window height made the embed collapse
-      // on short windows, and the row count comes from the design height, not
-      // from the scale — so height never needed to be in this calculation. The
-      // 0.8 insets it from the frame edge; if the result runs past the fold,
-      // the frame scrolls.
-      const scale = Math.min(availableW / w, 1) * 0.8
+      // The embed must sit wholly inside the modal with room to breathe, so
+      // bound it by both axes — width keeps it wide, height keeps it from
+      // running past the fold. 0.8 of the frame's height is the padding.
+      const availableH = frame.clientHeight * 0.8
+      const scale = Math.min(availableW / w, availableH / h, 1)
       iframe.style.setProperty('width', `${w}px`, 'important')
       iframe.style.setProperty('height', `${h}px`, 'important')
       iframe.style.setProperty('zoom', String(scale))
