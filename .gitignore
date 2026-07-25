@@ -45,3 +45,8 @@ next-env.d.ts
 
 # ESP32 firmware local secrets (Wi-Fi creds + device token)
 hardware/**/config.h
+
+# Generated knowledge graph — rebuilt locally with `graphify update .`.
+# 20MB of derived output that churns on every code change; .graphifyignore
+# (the config that drives it) stays tracked.
+graphify-out/
