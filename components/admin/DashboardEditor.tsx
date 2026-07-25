@@ -3864,11 +3864,22 @@ function WorkProjectListEditor({
       {items.map((item, index) => (
         <EditorItemCard
           key={`work-project-${index}`}
-          title={item.title || `Work item ${index + 1}`}
+          title={item.hidden ? `${item.title || `Work item ${index + 1}`} [HIDDEN]` : item.title || `Work item ${index + 1}`}
           subtitle={item.href || item.oneliner || 'Work card'}
           defaultOpen={index === 0}
         >
           <ReorderButtons index={index} length={items.length} onMove={(direction) => onChange(moveItem(items, index, direction))} />
+          <label className="font-mono" style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', color: '#d2cec8', letterSpacing: '0.12em' }}>
+            <input
+              type="checkbox"
+              checked={Boolean(item.hidden)}
+              onChange={(event) => onChange(updateAt(items, index, { ...item, hidden: event.target.checked || undefined }))}
+            />
+            Hide From Public Site
+          </label>
+          <p className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#777777', lineHeight: 1.6, margin: 0 }}>
+            Hidden cards stay visible locally in the dashboard and on localhost, but won’t show on the public site.
+          </p>
           <Field label="Title">
             <input value={item.title} onChange={(event) => onChange(updateAt(items, index, { ...item, title: event.target.value }))} style={inputStyle()} />
           </Field>

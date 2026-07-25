@@ -5,6 +5,7 @@ export interface WorkProject {
   oneliner: string
   tags: string[]
   href: string
+  hidden?: boolean
   cover?: string
   coverBackground?: string
   coverFit?: 'cover' | 'contain'
@@ -538,6 +539,7 @@ function isWorkProject(value: unknown): value is WorkProject {
     isStringArray(item.tags) &&
     isString(item.href) &&
     isSafeLinkHref(item.href) &&
+    (item.hidden === undefined || typeof item.hidden === 'boolean') &&
     (item.cover === undefined || isString(item.cover)) &&
     isOptionalString(item.coverBackground) &&
     (item.coverFit === undefined || item.coverFit === 'cover' || item.coverFit === 'contain') &&

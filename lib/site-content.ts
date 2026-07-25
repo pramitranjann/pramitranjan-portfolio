@@ -38,6 +38,7 @@ function filterWorkProjectsByVisibleCaseStudies(content: SiteContent) {
   const caseStudyBySlug = new Map(content.caseStudies.map((item) => [item.slug, item]))
   const filterItems = (items: SiteContent['home']['selectedWork']['items']) =>
     items.filter((item) => {
+      if (!canSeeHiddenCaseStudies() && item.hidden) return false
       const slug = getCaseStudySlugFromHref(item.href)
       return canSeeHiddenCaseStudies() || !slug || !hiddenSlugs.has(slug)
     })
