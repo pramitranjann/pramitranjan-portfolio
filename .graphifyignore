@@ -1,0 +1,6 @@
+# Paths graphify must not index. gitignore syntax; merged after .gitignore.
+#
+# Vendored third-party prototype bundles (React UMD builds, pdf.worker.min.mjs,
+# CRA static/js/main.*.js). Served statically from public/; not this project's
+# source. Indexing them buried the real components under ~9.5k minified nodes.
+public/proto/

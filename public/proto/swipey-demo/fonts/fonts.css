@@ -1,0 +1,41 @@
+/* Self-hosted replacement for the Google Fonts <link> the CRA build ships in
+   its index.html. A vendored prototype must make zero external requests, so
+   Quicksand and Poppins are served from this folder instead. Files are the
+   same ones already vendored for the other Swipey prototypes. */
+@import url("./poppins.css");
+
+@font-face {
+  font-family: "Quicksand";
+  src: url("./Quicksand-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Quicksand";
+  src: url("./Quicksand-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Quicksand";
+  src: url("./Quicksand-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Quicksand";
+  src: url("./Quicksand-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Quicksand";
+  src: url("./Quicksand-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}

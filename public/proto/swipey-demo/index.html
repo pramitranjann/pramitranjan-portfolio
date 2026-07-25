@@ -1,0 +1,34 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="icon" href="/proto/swipey-demo/fav.png"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><meta name="description" content="Swipey Demo"/><link rel="apple-touch-icon" href="/proto/swipey-demo/logo192.png"/><link rel="icon" href="/proto/swipey-demo/fav.png" sizes="32x32"/><link rel="icon" href="/proto/swipey-demo/fav.png" sizes="192x192"/><link href="/proto/swipey-demo/fonts/fonts.css" rel="stylesheet"/><link rel="manifest" href="/proto/swipey-demo/manifest.json"/><title>Swipey Demo</title><script>
+/* Vendored-embed seed. In the source app the onboarding variants this case
+   study is about (diegetic questions, mad-libs identity, industry-seeded
+   toasts, persona fork, finale) ship default-off behind the ?lab dev panel,
+   and the tour writes "0" the moment a visitor hits Skip. The embed must open
+   on the designed experience every time, so the flags are set here — before
+   the deferred bundle runs — instead of patching the minified bundle or the
+   source repo. "scorecard" stays off: it ends in an email capture with no
+   backend on this host. Read by src/modules/GetStarted/sandbox/onboarding/tourStore.ts. */
+try {
+  localStorage.setItem("swipey_demo_tour_enabled", "1");
+  localStorage.setItem("swipey_demo_qualify_enabled", "1");
+  localStorage.setItem("swipey_demo_variants", JSON.stringify({
+    diegetic: true, personalize: true, madlibs: true, persona: true,
+    finale: true, scorecard: false
+  }));
+} catch (e) { /* private mode — demo still runs on its own defaults */ }
+</script><script>
+/* The onboarding tour ships behind dev-only localStorage toggles, so a fresh
+   load lands on the plain dashboard. Seed them on every load so the embed
+   always opens in the state the case study describes: questions disguised as
+   card setup, identity as a sentence, toasts that re-seed to your industry,
+   the persona fork and the closing argument. Scorecard stays off — it was an
+   explored alternative to the finale, not the shipped one. */
+try {
+  localStorage.setItem('swipey_demo_tour_enabled', '1');
+  localStorage.setItem('swipey_demo_qualify_enabled', '1');
+  localStorage.setItem('swipey_demo_variants', JSON.stringify({
+    diegetic: true, personalize: true, madlibs: true,
+    persona: true, finale: true, scorecard: false
+  }));
+} catch (e) {}
+</script>
+<script defer="defer" src="/proto/swipey-demo/static/js/main.1207a657.js"></script><link href="/proto/swipey-demo/static/css/main.99b05c1e.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div></body></html>

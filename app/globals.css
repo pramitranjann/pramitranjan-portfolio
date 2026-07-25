@@ -110,9 +110,58 @@ html, body {
   font-weight: 400;
 }
 
-/* The single statement that carries each case study section. */
+/* The single statement that carries each case study section.
+   One measure for every section — 640px at 20px is ~65 characters. Lives here,
+   not on the per-section wrappers, so no section can drift off it. */
 .case-study-statement {
   font-size: 20px;
+  max-width: 640px;
+}
+
+/* The Swipey stories render inside a framed overlay on /work/swipey rather
+   than as their own pages, so the site nav and footer are redundant there. */
+.swipey-frame .site-nav,
+.swipey-frame footer,
+/* The frame's wrapper is transformed, which makes it the containing block for
+   every position:fixed descendant — so the reading bar lands on the wrapper's
+   top edge, not the viewport's, covering the frame's red top border. It also
+   tracks window scroll, which is locked while the modal is open, so it would
+   sit at 0% forever regardless. */
+.swipey-frame .reading-progress {
+  display: none !important;
+}
+
+/* The section nav and the prev/next pair are page navigation. Inside a modal
+   there is nowhere to navigate to — the stories aren't routes — so both go.
+   :has() targets the prev/next grid wrapper, which has no class of its own,
+   so its divider goes with it rather than leaving a stray rule. */
+.swipey-frame .case-study-section-nav,
+.swipey-frame .grid:has(> .case-study-prev-next) {
+  display: none !important;
+}
+
+/* GsapReveal drives its reveals off ScrollTrigger, which watches window
+   scroll. Inside the frame's own scroll container that never fires, so every
+   section below the fold would sit at opacity 0 forever. Show them outright —
+   a scroll-reveal inside a modal earns nothing anyway. */
+.swipey-frame [data-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* The prototypes are desktop-scale. Give the iframe a wider internal viewport
+   than its box, then zoom back down so the content fits the frame uncramped.
+   zoom (unlike transform) scales the layout box too, so no phantom gap. */
+/* Size and scale are set per-prototype in SwipeyHubClient — each one is
+   rendered at its own design size, then scaled to fit. Only centring lives
+   here; !important because CaseStudyLayout sets display/margin inline. */
+.swipey-frame iframe {
+  display: block !important;
+}
+
+/* No live app to open — these prototypes only exist inside the frame. */
+.swipey-frame a[href^="/proto/"] {
+  display: none !important;
 }
 
 /* Hide scrollbar — prevents layout shift on the fixed nav */

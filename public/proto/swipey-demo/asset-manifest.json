@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/proto/swipey-demo/static/css/main.99b05c1e.css",
+    "main.js": "/proto/swipey-demo/static/js/main.1207a657.js",
+    "static/media/frozen-effect.png": "/proto/swipey-demo/static/media/frozen-effect.6ef1d5bcb9cf0c5a93d1.png",
+    "static/media/illustration.png": "/proto/swipey-demo/static/media/illustration.95d2a89f3d95aec65857.png",
+    "static/media/mobile_gate_whale.png": "/proto/swipey-demo/static/media/mobile_gate_whale.d0af40d078f32fe85ace.png",
+    "static/media/mobile_gate_sent.png": "/proto/swipey-demo/static/media/mobile_gate_sent.1ba2e570fd02604b031c.png",
+    "static/media/card_lists_empty.png": "/proto/swipey-demo/static/media/card_lists_empty.138a8f6c0ca3ceb94f4c.png",
+    "static/media/bukku-logo.png": "/proto/swipey-demo/static/media/bukku-logo.7b9b9205f5bcc35915a9.png",
+    "static/media/funds-deposit.png": "/proto/swipey-demo/static/media/funds-deposit.ab4b63a7831caf23b6cf.png",
+    "static/media/pending_topup.png": "/proto/swipey-demo/static/media/pending_topup.39a1b9c885e2944f91f3.png",
+    "static/media/dashboard_header.png": "/proto/swipey-demo/static/media/dashboard_header.69c3450aac6e5e3c95f1.png",
+    "static/media/UploadFileIcon.svg": "/proto/swipey-demo/static/media/UploadFileIcon.19f14a71cb168d118bf8a83f223b6d5e.svg",
+    "index.html": "/proto/swipey-demo/index.html"
+  },
+  "entrypoints": [
+    "static/css/main.99b05c1e.css",
+    "static/js/main.1207a657.js"
+  ]
+}

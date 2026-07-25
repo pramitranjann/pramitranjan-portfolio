@@ -15,7 +15,7 @@ export function ReadingProgress() {
   }, [])
 
   return (
-    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '2px', zIndex: 49, background: 'var(--reading-track-color)' }}>
+    <div className="reading-progress" style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '2px', zIndex: 49, background: 'var(--reading-track-color)' }}>
       <div style={{ height: '100%', width: `${pct}%`, background: 'var(--reading-fill-color)', transition: 'width 0.05s linear' }} />
     </div>
   )

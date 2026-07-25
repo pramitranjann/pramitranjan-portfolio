@@ -82,6 +82,11 @@ export function isSafeEmbedUrl(value: string) {
   const trimmed = trimUrl(value)
   if (!trimmed) return false
 
+  // Same-origin relative paths (e.g. vendored prototypes under /proto/) are safe by definition.
+  if (trimmed.startsWith('/')) {
+    return !trimmed.startsWith('//')
+  }
+
   try {
     const url = new URL(trimmed)
     if (url.username || url.password) return false

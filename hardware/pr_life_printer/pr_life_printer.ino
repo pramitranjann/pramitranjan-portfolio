@@ -42,6 +42,12 @@ static BLEAdvertisedDevice *printerDevice = nullptr;
 static BLEClient           *bleClient     = nullptr;
 static BLERemoteCharacteristic *writeChar = nullptr;
 static unsigned long lastPoll = 0;
+// Guards against reprinting: if /complete fails to land (BLE activity often
+// leaves Wi-Fi degraded right after), the job's lease expires server-side and
+// gets reclaimed as pending — the same device would otherwise print it again
+// every poll until a report finally lands. Remembering only the most recent
+// job id is enough since jobs are processed strictly one at a time.
+static String lastPrintedJobId = "";
 
 // ---- BLE scanner -----------------------------------------------------------
 class ScanCallback : public BLEAdvertisedDeviceCallbacks {
@@ -188,6 +194,14 @@ bool printPayload(const String &payload) {
     return false;
   }
   String cleanPayload = sanitizePayload(payload);
+
+  // A payload starting with this marker prints double-width/double-height
+  // (GS ! 0x11) instead of the normal size — used for jar labels that need to
+  // be readable at a glance, not 32-col task receipts. Stripped before printing.
+  const char *largeMarker = "[[LARGE]]\n";
+  bool large = cleanPayload.startsWith(largeMarker);
+  if (large) cleanPayload.remove(0, strlen(largeMarker));
+
   Serial.printf("[JOB] Payload preview: %s\n", payloadPreview(cleanPayload).c_str());
 
   const uint8_t init[] = { 0x1B, 0x40 };
@@ -198,7 +212,18 @@ bool printPayload(const String &payload) {
   if (!bleWrite((const uint8_t *)sentinel, strlen(sentinel))) return false;
   delay(120);
 
+  if (large) {
+    const uint8_t bigSize[] = { 0x1D, 0x21, 0x11 };
+    if (!bleWrite(bigSize, sizeof(bigSize))) return false;
+  }
+
   if (!bleWrite((const uint8_t *)cleanPayload.c_str(), cleanPayload.length())) return false;
+
+  if (large) {
+    const uint8_t normalSize[] = { 0x1D, 0x21, 0x00 };
+    if (!bleWrite(normalSize, sizeof(normalSize))) return false;
+  }
+
   const uint8_t nl[] = { '\n', '\n' };
   if (!bleWrite(nl, sizeof(nl))) return false;
   delay(TRAILER_DELAY_MS);
@@ -310,11 +335,21 @@ void pollOnce() {
 
   String jobId   = doc["job"]["id"].as<String>();
   String payload = doc["job"]["payload"].as<String>();
+
+  if (jobId == lastPrintedJobId) {
+    // Already printed this exact job this session — the prior success report
+    // just never landed. Retry the report only; do not print again.
+    Serial.printf("[JOB] %s already printed; re-reporting success only.\n", jobId.c_str());
+    reportResult(jobId, true, "");
+    return;
+  }
+
   Serial.printf("[JOB] Leased %s (%d bytes)\n", jobId.c_str(), payload.length());
 
   // Reconnect BLE to print.
   if (printPayload(payload)) {
     Serial.println("[JOB] Printed OK.");
+    lastPrintedJobId = jobId;
     bleDisconnect();  // free heap before reporting
     reportResult(jobId, true, "");
   } else {
