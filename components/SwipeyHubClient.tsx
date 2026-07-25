@@ -251,10 +251,16 @@ export function SwipeyHubClient({
   stories,
   cardStyle,
   hoverPreviewSettings,
+  coverImage,
+  coverBackground,
+  coverFit,
 }: {
   stories: Story[]
   cardStyle: CardStyleSettings
   hoverPreviewSettings: HoverPreviewSettings
+  coverImage: string
+  coverBackground?: string
+  coverFit?: 'cover' | 'contain'
 }) {
   const [openSlug, setOpenSlug] = useState<string | null>(null)
   const cardRefs = useRef<Record<string, HTMLDivElement | null>>({})
@@ -302,8 +308,8 @@ export function SwipeyHubClient({
               handoffs to the engineers — I built these prototypes with AI agents to keep that pace.
             </p>
           </div>
-          <div className="case-study-hero-image" style={{ position: 'relative', backgroundColor: '#111111', overflow: 'hidden', minHeight: '280px' }}>
-            <Image src="/work/swipey-fields/cover.png" alt="Swipey" fill style={{ objectFit: 'cover', objectPosition: 'center' }} sizes="50vw" />
+          <div className="case-study-hero-image" style={{ position: 'relative', backgroundColor: coverBackground || '#111111', overflow: 'hidden', minHeight: '280px' }}>
+            <Image src={coverImage} alt="Swipey" fill style={{ objectFit: coverFit ?? 'cover', objectPosition: 'center' }} sizes="50vw" />
           </div>
         </section>
 

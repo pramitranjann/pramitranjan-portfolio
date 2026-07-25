@@ -285,8 +285,9 @@
           "INTERNSHIP"
         ],
         "href": "/work/swipey",
-        "cover": "/work/swipey-fields/cover.png",
-        "coverPosition": "center"
+        "cover": "/Frame 54.png",
+        "coverPosition": "center",
+        "coverBackground": "#FFFFFF"
       }
     ]
   },
@@ -1249,8 +1250,8 @@
         "title": "HelpOH"
       },
       "next": {
-        "slug": "purcast",
-        "title": "Purcast"
+        "slug": "swipey-admin",
+        "title": "Swipey Admin"
       },
       "heroImage": "/work/atom/cover-hor.png",
       "solutionHeroImage": "/work/atom/solution-hero-processed.png",
@@ -1324,44 +1325,49 @@
       ]
     },
     {
-      "slug": "purcast",
+      "slug": "swipey-admin",
       "section": "work",
-      "title": "Purcast",
-      "oneliner": "A podcast app designed for the Fluxathon.",
-      "type": "UI DESIGN · 2025",
+      "hidden": true,
+      "title": "Swipey Admin",
+      "oneliner": "Proven on desktop. Unusable in a pocket.",
+      "type": "PRODUCT DESIGN · 2026",
       "tags": [
-        "UI Design",
-        "Figma",
-        "Competition",
-        "Sprint"
+        "Product Design",
+        "Mobile UX",
+        "Accessibility",
+        "Design QA",
+        "Design Systems"
       ],
       "prev": {
         "slug": "atom",
         "title": "Atom OS"
       },
       "next": {
-        "slug": "designathon-02",
-        "title": "Design-athon 02"
+        "slug": "swipey-fields",
+        "title": "Custom Fields"
       },
-      "hidden": true
-    },
-    {
-      "slug": "designathon-02",
-      "section": "work",
-      "title": "Design-athon 02",
-      "oneliner": "Redesigning Passio Go with Figma Make.",
-      "type": "UI DESIGN · 2025",
-      "tags": [
-        "UI Design",
-        "Sprint",
-        "Figma Make"
-      ],
-      "prev": {
-        "slug": "purcast",
-        "title": "Purcast"
-      },
-      "next": null,
-      "hidden": true
+      "heroImage": "/work/swipey-admin/cover copy.png",
+      "problemHeadline": "Every admin flow already worked on desktop: deposit, top up, clawback, issue card, invite, approve. None of it was reachable from a phone. The people who needed it were away from their desks.",
+      "roleHeadline": "Design and design QA on the first admin-facing mobile release, built with AI agents and prototyped for stakeholders and an audience aged 30 to 60.",
+      "researchHeadline": "The desktop product was the research. Every rule, status and edge case already had a proven answer, so the job was translation, not invention.",
+      "challengeHeadline": "Port the business rules, don't reinvent them. Writing new validation for flows that already worked would have been risk with extra steps.",
+      "processHeadline": "I reviewed it screen by screen, giving every finding a stable ID and a severity tier, and tagging the ones engineering had to build as requirements rather than visual edits.",
+      "solutionHeadline": "Every admin flow on a phone, with a legibility floor, 44px targets, an AA contrast system, and one status vocabulary instead of two.",
+      "outcomesHeadline": "Three blockers survived seventy-four findings of review. An audit is not the same job as a review. Next I'd test with actual sixty-year-olds instead of designing for them.",
+      "pullQuote": "Grey doesn't read as \"done\" to someone who's sixty. It reads as something went wrong.",
+      "solutionEmbedUrl": "/proto/swipey-admin/index.html",
+      "solutionEmbedTitle": "Swipey Admin mobile prototype",
+      "solutionEmbedAspectRatio": "16 / 10",
+      "solutionEmbedWidth": "min(100%, 1325px)",
+      "solutionEmbedCalloutLabel": "LIVE PROTOTYPE_",
+      "solutionEmbedCalloutTitle": "The working prototype is embedded below.",
+      "solutionEmbedCalloutBody": "Sign in with any nine-digit phone number, then any six-digit code, pick a workspace and choose the Admin role. Every admin flow is clickable from there.",
+      "mediaSettings": {
+        "hero": {
+          "background": "#e4edeb",
+          "fit": "contain"
+        }
+      }
     },
     {
       "slug": "swipey-fields",
@@ -1378,9 +1384,15 @@
         "Accessibility",
         "React"
       ],
-      "prev": null,
-      "next": null,
-      "heroImage": "/work/swipey-fields/cover.png",
+      "prev": {
+        "slug": "swipey-admin",
+        "title": "Swipey Admin"
+      },
+      "next": {
+        "slug": "swipey-get-started",
+        "title": "Get Started"
+      },
+      "heroImage": "/work/swipey-fields/cover copy.png",
       "problemHeadline": "Finance teams needed columns Swipey didn't have: Project, Client, Billable. They improvised in the notes field, where nothing can be filtered, grouped, or reported on.",
       "roleHeadline": "Design intern at Swipey, a corporate card and spend platform for Malaysian SMEs. I did the interaction model and the AI layer, and built the prototype with AI agents.",
       "researchHeadline": "Two things already existed. Project names in the notes field, and Alfie, the receipt reader people trusted to file their expenses. The work was connecting them.",
@@ -1395,7 +1407,58 @@
       "solutionEmbedWidth": "min(100%, 1325px)",
       "solutionEmbedCalloutLabel": "LIVE PROTOTYPE_",
       "solutionEmbedCalloutTitle": "The working prototype is embedded below.",
-      "solutionEmbedCalloutBody": "This is the real exploration, not a mockup. Open the Alfie nudge to create a Project field, then accept or edit what it fills in."
+      "solutionEmbedCalloutBody": "This is the real exploration, not a mockup. Open the Alfie nudge to create a Project field, then accept or edit what it fills in.",
+      "mediaSettings": {
+        "hero": {
+          "background": "#e4edeb",
+          "fit": "contain"
+        }
+      }
+    },
+    {
+      "slug": "swipey-get-started",
+      "section": "work",
+      "hidden": true,
+      "title": "Get Started",
+      "oneliner": "The questions never look like questions.",
+      "type": "PRODUCT DESIGN · 2026",
+      "tags": [
+        "Product Design",
+        "Onboarding",
+        "Conversion",
+        "Front-end",
+        "React"
+      ],
+      "prev": {
+        "slug": "swipey-fields",
+        "title": "Custom Fields"
+      },
+      "next": {
+        "slug": "purcast",
+        "title": "Purcast"
+      },
+      "heroImage": "/work/swipey-get-started/cover copy.png",
+      "problemHeadline": "A demo you can explore freely gives people no reason to say who they are. Sales ends up with a visit and nobody to follow up with.",
+      "roleHeadline": "Design and front-end on the get-started demo. I built the tour, the qualifying questions and the flows they hide inside, with AI agents on the implementation.",
+      "researchHeadline": "People skip a form when the thing behind it is already open. So the questions couldn't be a toll gate. They had to happen inside the demo itself.",
+      "challengeHeadline": "Qualify a prospect — company, role, monthly spend, team size — without a single moment that feels like a form. Every answer had to hand something back.",
+      "processHeadline": "The questions became the setup. \"What's this card for?\" and \"roughly how much a month?\" configure the demo card and capture spend category and budget in one tap.",
+      "solutionHeadline": "Questions disguised as card setup, an identity you fill in like a mad-lib, a feed that re-seeds to vendors from your industry, and a closing line that answers the pain you picked.",
+      "outcomesHeadline": "Every question had to pay for itself, and the ones that did stopped reading as questions. Next I'd find the ones people still notice and cut those too.",
+      "pullQuote": "The best question doesn't feel like a question. It feels like the thing you came to do.",
+      "solutionEmbedUrl": "/proto/swipey-demo/index.html",
+      "solutionEmbedTitle": "Get Started demo",
+      "solutionEmbedAspectRatio": "16 / 10",
+      "solutionEmbedWidth": "min(100%, 1325px)",
+      "solutionEmbedCalloutLabel": "LIVE PROTOTYPE_",
+      "solutionEmbedCalloutTitle": "The working demo is embedded below.",
+      "solutionEmbedCalloutBody": "This is the real prospect demo. Walk the tour — issue a card, add a teammate — and watch the questions do double duty as you go.",
+      "mediaSettings": {
+        "hero": {
+          "background": "#e4edeb",
+          "fit": "contain"
+        }
+      }
     },
     {
       "slug": "south-china-sea",
@@ -2082,70 +2145,44 @@
       "hidden": true
     },
     {
-      "slug": "swipey-admin",
+      "slug": "purcast",
       "section": "work",
-      "hidden": true,
-      "title": "Swipey Admin",
-      "oneliner": "Proven on desktop. Unusable in a pocket.",
-      "type": "PRODUCT DESIGN · 2026",
+      "title": "Purcast",
+      "oneliner": "A podcast app designed for the Fluxathon.",
+      "type": "UI DESIGN · 2025",
       "tags": [
-        "Product Design",
-        "Mobile UX",
-        "Accessibility",
-        "Design QA",
-        "Design Systems"
+        "UI Design",
+        "Figma",
+        "Competition",
+        "Sprint"
       ],
-      "prev": null,
-      "next": null,
-      "heroImage": "/work/swipey-admin/cover.png",
-      "problemHeadline": "Every admin flow already worked on desktop: deposit, top up, clawback, issue card, invite, approve. None of it was reachable from a phone. The people who needed it were away from their desks.",
-      "roleHeadline": "Design and design QA on the first admin-facing mobile release, built with AI agents and prototyped for stakeholders and an audience aged 30 to 60.",
-      "researchHeadline": "The desktop product was the research. Every rule, status and edge case already had a proven answer, so the job was translation, not invention.",
-      "challengeHeadline": "Port the business rules, don't reinvent them. Writing new validation for flows that already worked would have been risk with extra steps.",
-      "processHeadline": "I reviewed it screen by screen, giving every finding a stable ID and a severity tier, and tagging the ones engineering had to build as requirements rather than visual edits.",
-      "solutionHeadline": "Every admin flow on a phone, with a legibility floor, 44px targets, an AA contrast system, and one status vocabulary instead of two.",
-      "outcomesHeadline": "Three blockers survived seventy-four findings of review. An audit is not the same job as a review. Next I'd test with actual sixty-year-olds instead of designing for them.",
-      "pullQuote": "Grey doesn't read as \"done\" to someone who's sixty. It reads as something went wrong.",
-      "solutionEmbedUrl": "/proto/swipey-admin/index.html",
-      "solutionEmbedTitle": "Swipey Admin mobile prototype",
-      "solutionEmbedAspectRatio": "16 / 10",
-      "solutionEmbedWidth": "min(100%, 1325px)",
-      "solutionEmbedCalloutLabel": "LIVE PROTOTYPE_",
-      "solutionEmbedCalloutTitle": "The working prototype is embedded below.",
-      "solutionEmbedCalloutBody": "Sign in with any nine-digit phone number, then any six-digit code, pick a workspace and choose the Admin role. Every admin flow is clickable from there."
+      "prev": {
+        "slug": "swipey-get-started",
+        "title": "Get Started"
+      },
+      "next": {
+        "slug": "designathon-02",
+        "title": "Design-athon 02"
+      },
+      "hidden": true
     },
     {
-      "slug": "swipey-get-started",
+      "slug": "designathon-02",
       "section": "work",
-      "hidden": true,
-      "title": "Get Started",
-      "oneliner": "The questions never look like questions.",
-      "type": "PRODUCT DESIGN · 2026",
+      "title": "Design-athon 02",
+      "oneliner": "Redesigning Passio Go with Figma Make.",
+      "type": "UI DESIGN · 2025",
       "tags": [
-        "Product Design",
-        "Onboarding",
-        "Conversion",
-        "Front-end",
-        "React"
+        "UI Design",
+        "Sprint",
+        "Figma Make"
       ],
-      "prev": null,
+      "prev": {
+        "slug": "purcast",
+        "title": "Purcast"
+      },
       "next": null,
-      "heroImage": "/work/swipey-get-started/cover.png",
-      "problemHeadline": "A demo you can explore freely gives people no reason to say who they are. Sales ends up with a visit and nobody to follow up with.",
-      "roleHeadline": "Design and front-end on the get-started demo. I built the tour, the qualifying questions and the flows they hide inside, with AI agents on the implementation.",
-      "researchHeadline": "People skip a form when the thing behind it is already open. So the questions couldn't be a toll gate. They had to happen inside the demo itself.",
-      "challengeHeadline": "Qualify a prospect — company, role, monthly spend, team size — without a single moment that feels like a form. Every answer had to hand something back.",
-      "processHeadline": "The questions became the setup. \"What's this card for?\" and \"roughly how much a month?\" configure the demo card and capture spend category and budget in one tap.",
-      "solutionHeadline": "Questions disguised as card setup, an identity you fill in like a mad-lib, a feed that re-seeds to vendors from your industry, and a closing line that answers the pain you picked.",
-      "outcomesHeadline": "Every question had to pay for itself, and the ones that did stopped reading as questions. Next I'd find the ones people still notice and cut those too.",
-      "pullQuote": "The best question doesn't feel like a question. It feels like the thing you came to do.",
-      "solutionEmbedUrl": "/proto/swipey-demo/index.html",
-      "solutionEmbedTitle": "Get Started demo",
-      "solutionEmbedAspectRatio": "16 / 10",
-      "solutionEmbedWidth": "min(100%, 1325px)",
-      "solutionEmbedCalloutLabel": "LIVE PROTOTYPE_",
-      "solutionEmbedCalloutTitle": "The working demo is embedded below.",
-      "solutionEmbedCalloutBody": "This is the real prospect demo. Walk the tour — issue a card, add a teammate — and watch the questions do double duty as you go."
+      "hidden": true
     }
   ]
 }

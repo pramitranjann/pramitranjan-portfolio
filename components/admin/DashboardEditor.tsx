@@ -3887,6 +3887,15 @@ function WorkProjectListEditor({
             localWriteEnabled={localWriteEnabled}
             onChange={(value) => onChange(updateAt(items, index, { ...item, cover: value || undefined }))}
           />
+          <Field label="Cover Image Background">
+            <input value={item.coverBackground ?? ''} onChange={(event) => onChange(updateAt(items, index, { ...item, coverBackground: event.target.value || undefined }))} style={inputStyle()} />
+          </Field>
+          <Field label="Cover Image Fit">
+            <select value={item.coverFit ?? 'cover'} onChange={(event) => onChange(updateAt(items, index, { ...item, coverFit: event.target.value === 'contain' ? 'contain' : undefined }))} style={inputStyle()}>
+              <option value="cover">cover</option>
+              <option value="contain">contain</option>
+            </select>
+          </Field>
           <SourcePathField
             label="Hover Image Path"
             value={item.hoverImage ?? ''}

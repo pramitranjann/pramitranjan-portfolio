@@ -6,6 +6,8 @@ export interface WorkProject {
   tags: string[]
   href: string
   cover?: string
+  coverBackground?: string
+  coverFit?: 'cover' | 'contain'
   hoverImage?: string
   coverPosition?: string
   coverScale?: string
@@ -537,6 +539,8 @@ function isWorkProject(value: unknown): value is WorkProject {
     isString(item.href) &&
     isSafeLinkHref(item.href) &&
     (item.cover === undefined || isString(item.cover)) &&
+    isOptionalString(item.coverBackground) &&
+    (item.coverFit === undefined || item.coverFit === 'cover' || item.coverFit === 'contain') &&
     (item.hoverImage === undefined || isString(item.hoverImage)) &&
     (item.coverPosition === undefined || isString(item.coverPosition)) &&
     isOptionalString(item.coverScale) &&
