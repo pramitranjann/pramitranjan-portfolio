@@ -15,4 +15,20 @@ try {
     finale: true, scorecard: false
   }));
 } catch (e) { /* private mode — demo still runs on its own defaults */ }
-</script><script defer="defer" src="/proto/swipey-demo/static/js/main.1207a657.js"></script><link href="/proto/swipey-demo/static/css/main.99b05c1e.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div></body></html>
+</script><script>
+/* The onboarding tour ships behind dev-only localStorage toggles, so a fresh
+   load lands on the plain dashboard. Seed them on every load so the embed
+   always opens in the state the case study describes: questions disguised as
+   card setup, identity as a sentence, toasts that re-seed to your industry,
+   the persona fork and the closing argument. Scorecard stays off — it was an
+   explored alternative to the finale, not the shipped one. */
+try {
+  localStorage.setItem('swipey_demo_tour_enabled', '1');
+  localStorage.setItem('swipey_demo_qualify_enabled', '1');
+  localStorage.setItem('swipey_demo_variants', JSON.stringify({
+    diegetic: true, personalize: true, madlibs: true,
+    persona: true, finale: true, scorecard: false
+  }));
+} catch (e) {}
+</script>
+<script defer="defer" src="/proto/swipey-demo/static/js/main.1207a657.js"></script><link href="/proto/swipey-demo/static/css/main.99b05c1e.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div></body></html>
