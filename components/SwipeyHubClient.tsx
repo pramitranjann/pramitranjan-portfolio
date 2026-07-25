@@ -298,7 +298,8 @@ export function SwipeyHubClient({
               className="font-reading mt-3"
               style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: 'var(--color-heading)', lineHeight: 1.6 }}
             >
-              Three months designing corporate card software for Malaysian SMEs.
+              Three months designing corporate card software for Malaysian SMEs. Small team, quick
+              handoffs to the engineers — I built these prototypes with AI agents to keep that pace.
             </p>
           </div>
           <div className="case-study-hero-image" style={{ position: 'relative', backgroundColor: '#111111', overflow: 'hidden', minHeight: '280px' }}>

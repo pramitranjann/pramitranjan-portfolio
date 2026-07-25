@@ -279,7 +279,7 @@
       },
       {
         "title": "Swipey",
-        "oneliner": "Six months designing corporate card software for Malaysian SMEs.",
+        "oneliner": "Three months designing corporate card software for Malaysian SMEs.",
         "tags": [
           "PRODUCT",
           "INTERNSHIP"
@@ -1382,7 +1382,7 @@
       "next": null,
       "heroImage": "/work/swipey-fields/cover.png",
       "problemHeadline": "Finance teams needed columns Swipey didn't have: Project, Client, Billable. They improvised in the notes field, where nothing can be filtered, grouped, or reported on.",
-      "roleHeadline": "Design intern at Swipey, a corporate card and spend platform for Malaysian SMEs. I did the interaction model, the AI layer, and the prototype it ran in.",
+      "roleHeadline": "Design intern at Swipey, a corporate card and spend platform for Malaysian SMEs. I did the interaction model and the AI layer, and built the prototype with AI agents.",
       "researchHeadline": "Two things already existed. Project names in the notes field, and Alfie, the receipt reader people trusted to file their expenses. The work was connecting them.",
       "challengeHeadline": "Custom fields are org-wide. One person deleting a column destroys everyone's reporting, so management is admin-gated and deletion takes a typed confirmation.",
       "processHeadline": "Alfie read receipts. I gave it notes to read rather than introduce a second assistant. Suggestions land as dashed pills carrying the note they came from, so accepting eight at once is still informed.",
@@ -2099,7 +2099,7 @@
       "next": null,
       "heroImage": "/work/swipey-admin/cover.png",
       "problemHeadline": "Every admin flow already worked on desktop: deposit, top up, clawback, issue card, invite, approve. None of it was reachable from a phone. The people who needed it were away from their desks.",
-      "roleHeadline": "Design and design QA on the first admin-facing mobile release, prototyped for stakeholders and an audience aged 30 to 60.",
+      "roleHeadline": "Design and design QA on the first admin-facing mobile release, built with AI agents and prototyped for stakeholders and an audience aged 30 to 60.",
       "researchHeadline": "The desktop product was the research. Every rule, status and edge case already had a proven answer, so the job was translation, not invention.",
       "challengeHeadline": "Port the business rules, don't reinvent them. Writing new validation for flows that already worked would have been risk with extra steps.",
       "processHeadline": "I reviewed it screen by screen, giving every finding a stable ID and a severity tier, and tagging the ones engineering had to build as requirements rather than visual edits.",
@@ -2132,7 +2132,7 @@
       "next": null,
       "heroImage": "/work/swipey-get-started/cover.png",
       "problemHeadline": "A demo you can explore freely gives people no reason to say who they are. Sales ends up with a visit and nobody to follow up with.",
-      "roleHeadline": "Design and front-end on the get-started demo. I built the tour, the qualifying questions, and the flows they hide inside.",
+      "roleHeadline": "Design and front-end on the get-started demo. I built the tour, the qualifying questions and the flows they hide inside, with AI agents on the implementation.",
       "researchHeadline": "People skip a form when the thing behind it is already open. So the questions couldn't be a toll gate. They had to happen inside the demo itself.",
       "challengeHeadline": "Qualify a prospect — company, role, monthly spend, team size — without a single moment that feels like a form. Every answer had to hand something back.",
       "processHeadline": "The questions became the setup. \"What's this card for?\" and \"roughly how much a month?\" configure the demo card and capture spend category and budget in one tap.",
