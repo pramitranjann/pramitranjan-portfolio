@@ -2438,6 +2438,9 @@ const FieldManagerExplorer = () => {
   const flashTimer = React.useRef(null);
   /* sticky-left offsets for pinned select/Date/Details columns, measured from actual rendered widths (not assumed mins) */
   const [stickyLeft, setStickyLeft] = React.useState({ select: 0, date: SELECT_TRACK_WIDTH + TABLE_GAP, details: SELECT_TRACK_WIDTH + TABLE_GAP + parseInt(COL_WIDTH.date, 10) + TABLE_GAP });
+  /* mint cap on the add-column rail: measured, not assumed. The header row is padding + its
+     tallest cell, so a hard-coded guess drifts the moment the type metrics or a badge change it. */
+  const [headerH, setHeaderH] = React.useState(46);
 
   /* P2-11 — bulk select (indices into rowsState; order is stable, rows are never added/removed) */
   const [selected, setSelected] = React.useState(() => new Set());
@@ -2574,10 +2577,15 @@ const FieldManagerExplorer = () => {
       });
       if (prevScroll) scroller.scrollLeft = prevScroll;
       setStickyLeft(prev => (prev.select === next.select && prev.date === next.date && prev.details === next.details) ? prev : { ...prev, ...next });
+      setHeaderH(row.offsetHeight);
     };
     measure();
     window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
+    /* watch the row itself, not just orderedVisible: a pending-suggestions badge grows the
+       header without changing the column list, and the rail's cap has to follow it. */
+    const ro = new ResizeObserver(measure);
+    ro.observe(row);
+    return () => { window.removeEventListener("resize", measure); ro.disconnect(); };
   }, [orderedVisible]);
 
   /* Feature 2 — one accept-bar per visible assisted column with unconfirmed cells */
@@ -2956,7 +2964,10 @@ const FieldManagerExplorer = () => {
                 inner wrapper sizes to content (min-width:max-content) so the sticky header and data rows resolve identical grid tracks and share the same content width — header always spans every column, no collapse/overlap. */}
             <div ref={scrollRef} className="txn-scroll" style={{ flex: 1, minHeight: 0, overflow: "auto", position: "relative", overscrollBehavior: "none", WebkitOverflowScrolling: "auto" }}>
               <div style={{ width: "max-content", minWidth: "100%", paddingRight: ADD_COL_WIDTH, boxSizing: "border-box" }}>
-              <div ref={headerRowRef} style={{ position: "sticky", top: 0, zIndex: 3, display: "grid", gridTemplateColumns: cols, minWidth: "max-content", padding: "14px 0", gap: TABLE_GAP, background: MINT, fontFamily: "Quicksand, sans-serif", fontSize: 13, fontWeight: 600, color: "#fff", alignItems: "center" }}>
+              {/* zIndex 4, above every sticky cell a Row can carry (its select cell is 3): equal
+                  z-index falls back to DOM order, and rows come after the header — which let the
+                  white select cells paint over the mint band as they scrolled under it. */}
+              <div ref={headerRowRef} style={{ position: "sticky", top: 0, zIndex: 4, display: "grid", gridTemplateColumns: cols, minWidth: "max-content", padding: "14px 0", gap: TABLE_GAP, background: MINT, fontFamily: "Quicksand, sans-serif", fontSize: 13, fontWeight: 600, color: "#fff", alignItems: "center" }}>
                 {/* P2-11 — sticky select-all cell (leads the pinned Date/Details columns) */}
                 <div data-col-key="select" style={{ position: "sticky", left: stickyLeft.select, zIndex: 4, background: MINT, boxShadow: `14px 0 0 ${MINT}`, alignSelf: "stretch", display: "flex", alignItems: "center", justifyContent: "flex-start", paddingLeft: TABLE_PAD_X, boxSizing: "border-box" }}>
                   <SelectCheck checked={allSelected} indeterminate={!allSelected && someSelected} onToggle={toggleSelectAll} label={allSelected ? "Deselect all rows" : "Select all rows"}/>
@@ -2979,7 +2990,7 @@ const FieldManagerExplorer = () => {
               </div>
             </div>
             <div style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: ADD_COL_WIDTH, background: "#fff", borderLeft: "1px solid #C0EEE4", zIndex: 5 }}>
-              <div style={{ height: 46, background: MINT, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div style={{ height: headerH, background: MINT, display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <button aria-label="Manage fields" onClick={() => { setActiveManagerTab("fields"); setManagerOpen(true); }} style={{ width: 28, height: 28, borderRadius: 8, border: "none", background: "rgba(255,255,255,.22)", color: "#fff", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", transition: `transform .12s ${EASE}` }} {...press}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14"/></svg>
                 </button>

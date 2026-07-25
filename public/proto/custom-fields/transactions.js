@@ -7127,6 +7127,9 @@ const FieldManagerExplorer = () => {
     date: SELECT_TRACK_WIDTH + TABLE_GAP,
     details: SELECT_TRACK_WIDTH + TABLE_GAP + parseInt(COL_WIDTH.date, 10) + TABLE_GAP
   });
+  /* mint cap on the add-column rail: measured, not assumed. The header row is padding + its
+     tallest cell, so a hard-coded guess drifts the moment the type metrics or a badge change it. */
+  const [headerH, setHeaderH] = React.useState(46);
 
   /* P2-11 — bulk select (indices into rowsState; order is stable, rows are never added/removed) */
   const [selected, setSelected] = React.useState(() => new Set());
@@ -7349,10 +7352,18 @@ const FieldManagerExplorer = () => {
         ...prev,
         ...next
       });
+      setHeaderH(row.offsetHeight);
     };
     measure();
     window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
+    /* watch the row itself, not just orderedVisible: a pending-suggestions badge grows the
+       header without changing the column list, and the rail's cap has to follow it. */
+    const ro = new ResizeObserver(measure);
+    ro.observe(row);
+    return () => {
+      window.removeEventListener("resize", measure);
+      ro.disconnect();
+    };
   }, [orderedVisible]);
 
   /* Feature 2 — one accept-bar per visible assisted column with unconfirmed cells */
@@ -8112,7 +8123,10 @@ const FieldManagerExplorer = () => {
     style: {
       position: "sticky",
       top: 0,
-      zIndex: 3,
+      /* zIndex 4, above every sticky cell a Row can carry (its select cell is 3): equal
+         z-index falls back to DOM order, and rows come after the header — which let the
+         white select cells paint over the mint band as they scrolled under it. */
+      zIndex: 4,
       display: "grid",
       gridTemplateColumns: cols,
       minWidth: "max-content",
@@ -8212,7 +8226,7 @@ const FieldManagerExplorer = () => {
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      height: 46,
+      height: headerH,
       background: MINT,
       display: "flex",
       alignItems: "center",
