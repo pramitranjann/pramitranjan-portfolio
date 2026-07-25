@@ -327,6 +327,12 @@ export function CaseStudyLayout({
   const solutionHeroImage = solutionEmbedUrl ? undefined : rawSolutionHeroImage
   const solutionImages = solutionEmbedUrl ? undefined : rawSolutionImages
   const mediaBlocks = solutionEmbedUrl ? rawMediaBlocks?.filter((b) => b.section !== 'solution') : rawMediaBlocks
+  // ponytail: local /proto/ embeds are our vendored desktop-scale prototypes — unusable in a
+  // phone iframe, so mobile gets a static shot instead. Absolute http(s) embeds are deployed
+  // responsive apps (albers, wander, bowl, sling) and keep their mobile iframe.
+  const isLocalProto = Boolean(solutionEmbedUrl?.startsWith('/proto/'))
+  const mobileShotSrc = `/work/${slug}/mobile.png`
+  const [mobileShotMissing, setMobileShotMissing] = useState(false)
   const [resolvedBackHref, setResolvedBackHref] = useState(backHref)
   const [resolvedBackLabel, setResolvedBackLabel] = useState(backLabel)
   const [fromScad, setFromScad] = useState(false)
@@ -1056,6 +1062,7 @@ export function CaseStudyLayout({
                       />
                     </div>
                   </div>
+                  {isLocalProto && mobileShotMissing ? null : (
                   <div data-reveal className="flex md:hidden" style={{ justifyContent: 'center' }}>
                     <div
                       style={{
@@ -1079,7 +1086,7 @@ export function CaseStudyLayout({
                             color: '#FF3120',
                           }}
                         >
-                          MOBILE LIVE VIEW_
+                          {isLocalProto ? 'MOBILE PREVIEW_' : 'MOBILE LIVE VIEW_'}
                         </span>
                         <div
                           style={{
@@ -1094,34 +1101,54 @@ export function CaseStudyLayout({
                             style={{
                               position: 'relative',
                               width: '100%',
-                              aspectRatio: '9 / 19.5',
+                              aspectRatio: isLocalProto ? undefined : '9 / 19.5',
                               overflow: 'hidden',
                               background: '#0d0d0d',
                               border: '1px solid #1f1f1f',
                             }}
                           >
-                            <iframe
-                              src={solutionEmbedUrl}
-                              title={`${solutionEmbedTitle} mobile`}
-                              loading="lazy"
-                              referrerPolicy="strict-origin-when-cross-origin"
-                              allow="camera; microphone; fullscreen; autoplay"
-                              allowFullScreen
-                              style={{
-                                width: '100%',
-                                height: '100%',
-                                border: 0,
-                                background: '#0d0d0d',
-                              }}
-                            />
+                            {isLocalProto ? (
+                              <img
+                                src={mobileShotSrc}
+                                alt={`${solutionEmbedTitle} on mobile`}
+                                // Not lazy: the block only mounts inside an opened modal, where
+                                // the deferred load never fires — and an image that never loads
+                                // can never fire onError, so the missing-file fallback below
+                                // would never run either.
+                                onError={() => setMobileShotMissing(true)}
+                                style={{
+                                  display: 'block',
+                                  width: '100%',
+                                  height: 'auto',
+                                }}
+                              />
+                            ) : (
+                              <iframe
+                                src={solutionEmbedUrl}
+                                title={`${solutionEmbedTitle} mobile`}
+                                loading="lazy"
+                                referrerPolicy="strict-origin-when-cross-origin"
+                                allow="camera; microphone; fullscreen; autoplay"
+                                allowFullScreen
+                                style={{
+                                  width: '100%',
+                                  height: '100%',
+                                  border: 0,
+                                  background: '#0d0d0d',
+                                }}
+                              />
+                            )}
                           </div>
                         </div>
                         <p className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.04em', color: '#666666', lineHeight: 1.6, margin: 0, textAlign: 'center' }}>
-                          Same live build, framed for the phone viewport.
+                          {isLocalProto
+                            ? 'Desktop-scale prototype — open on a larger screen to try it.'
+                            : 'Same live build, framed for the phone viewport.'}
                         </p>
                       </div>
                     </div>
                   </div>
+                  )}
                   <div data-reveal style={{ display: 'flex', justifyContent: 'flex-end' }}>
                     <a
                       href={solutionEmbedUrl}
