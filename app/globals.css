@@ -121,7 +121,13 @@ html, body {
 /* The Swipey stories render inside a framed overlay on /work/swipey rather
    than as their own pages, so the site nav and footer are redundant there. */
 .swipey-frame .site-nav,
-.swipey-frame footer {
+.swipey-frame footer,
+/* The frame's wrapper is transformed, which makes it the containing block for
+   every position:fixed descendant — so the reading bar lands on the wrapper's
+   top edge, not the viewport's, covering the frame's red top border. It also
+   tracks window scroll, which is locked while the modal is open, so it would
+   sit at 0% forever regardless. */
+.swipey-frame .reading-progress {
   display: none !important;
 }
 
