@@ -2113,6 +2113,39 @@
       "solutionEmbedCalloutLabel": "LIVE PROTOTYPE_",
       "solutionEmbedCalloutTitle": "The working prototype is embedded below.",
       "solutionEmbedCalloutBody": "Sign in with any nine-digit phone number, then any six-digit code, pick a workspace and choose the Admin role. Every admin flow is clickable from there."
+    },
+    {
+      "slug": "swipey-get-started",
+      "section": "work",
+      "hidden": true,
+      "title": "Get Started",
+      "oneliner": "The questions never look like questions.",
+      "type": "PRODUCT DESIGN · 2026",
+      "tags": [
+        "Product Design",
+        "Onboarding",
+        "Conversion",
+        "Front-end",
+        "React"
+      ],
+      "prev": null,
+      "next": null,
+      "heroImage": "/work/swipey-get-started/cover.png",
+      "problemHeadline": "A demo you can explore freely gives people no reason to say who they are. So they skipped the sign-up, and the sales team was left with a visit and no one to follow up with.",
+      "roleHeadline": "Design and front-end on the get-started demo. I built the onboarding tour, the qualifying questions, and the flows they hide inside.",
+      "researchHeadline": "People skip a form when the thing behind it is already open. So the questions couldn't stand in front of the demo as a toll gate. They had to happen inside it, as part of the thing they came to try.",
+      "challengeHeadline": "Qualify a prospect — company, role, monthly spend, team size — without a single moment that feels like a form. Every answer had to hand something back.",
+      "processHeadline": "The questions became the setup. “What's this card for?” and “roughly how much a month?” configure your demo card and capture spend category and budget in the same tap. Identity is a sentence you complete, not a set of fields.",
+      "solutionHeadline": "Questions disguised as card setup, an identity you fill in like a mad-lib, a live feed that re-seeds to vendors from your industry the moment you name it, and a closing line that answers the exact pain you picked.",
+      "outcomesHeadline": "Capture-through-use pulled more answers than the form ever had, because none of them felt like being asked. Next I'd find the questions people still notice and cut those too.",
+      "pullQuote": "The best question doesn't feel like a question. It feels like the thing you came to do.",
+      "solutionEmbedUrl": "/proto/swipey-demo/index.html",
+      "solutionEmbedTitle": "Get Started demo",
+      "solutionEmbedAspectRatio": "16 / 10",
+      "solutionEmbedWidth": "min(100%, 1325px)",
+      "solutionEmbedCalloutLabel": "LIVE PROTOTYPE_",
+      "solutionEmbedCalloutTitle": "The working demo is embedded below.",
+      "solutionEmbedCalloutBody": "This is the real prospect demo. Walk the tour — issue a card, add a teammate — and watch the questions do double duty as you go."
     }
   ]
 }
