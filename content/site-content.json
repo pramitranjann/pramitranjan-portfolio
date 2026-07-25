@@ -203,6 +203,18 @@
     "heroBody": "Projects across UX, UI, and interaction design.",
     "projects": [
       {
+        "title": "Swipey",
+        "oneliner": "Three months designing corporate card software for Malaysian SMEs.",
+        "tags": [
+          "PRODUCT",
+          "INTERNSHIP"
+        ],
+        "href": "/work/swipey",
+        "cover": "/Frame 54.png",
+        "coverPosition": "center",
+        "coverBackground": "#FFFFFF"
+      },
+      {
         "title": "Franklin's",
         "oneliner": "The experience starts before you walk in.",
         "tags": [
@@ -276,18 +288,6 @@
           "COMPETITION"
         ],
         "href": "/work/purcast"
-      },
-      {
-        "title": "Swipey",
-        "oneliner": "Three months designing corporate card software for Malaysian SMEs.",
-        "tags": [
-          "PRODUCT",
-          "INTERNSHIP"
-        ],
-        "href": "/work/swipey",
-        "cover": "/Frame 54.png",
-        "coverPosition": "center",
-        "coverBackground": "#FFFFFF"
       }
     ]
   },
@@ -1327,7 +1327,6 @@
     {
       "slug": "swipey-admin",
       "section": "work",
-      "hidden": true,
       "title": "Swipey Admin",
       "oneliner": "Proven on desktop. Unusable in a pocket.",
       "type": "PRODUCT DESIGN · 2026",
@@ -1372,7 +1371,6 @@
     {
       "slug": "swipey-fields",
       "section": "work",
-      "hidden": true,
       "title": "Custom Fields",
       "oneliner": "People were already tracking projects. Just not anywhere the software could see.",
       "type": "PRODUCT DESIGN · 2026",
@@ -1418,7 +1416,6 @@
     {
       "slug": "swipey-get-started",
       "section": "work",
-      "hidden": true,
       "title": "Get Started",
       "oneliner": "The questions never look like questions.",
       "type": "PRODUCT DESIGN · 2026",
