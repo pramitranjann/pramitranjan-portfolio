@@ -38,7 +38,7 @@ const DEFAULT_SIZE = { w: 1440, h: 730 }
 // their content's natural height; the scale fits that to the stage.
 const DESIGN_SIZE: Record<string, { w: number; h: number }> = {
   'custom-fields': { w: 1440, h: 730 },
-  'swipey-demo': { w: 1440, h: 730 },
+  'swipey-demo': { w: 1440, h: 880 },
   'swipey-admin': { w: 1440, h: 950 },
   'card-rename': { w: 1440, h: 900 },
 }
