@@ -10,6 +10,12 @@ import { ProjectCard } from '@/components/ProjectCard'
 import { RuleLabel } from '@/components/RuleLabel'
 import type { CardStyleSettings, CaseStudyContent, HoverPreviewSettings } from '@/lib/site-content-schema'
 
+// Three columns instead of /work's four makes each card 4/3 wider, so /work's
+// 4:3 cover would be 4/3 taller too and push the page into a scroll. Widening
+// the ratio by the same 4/3 — 4:3 → 16:9 — holds the cover at its /work height
+// at any viewport, since both are proportional to card width.
+const CARD_IMAGE_RATIO = '16 / 9'
+
 // The /work grid uses two-word tags; a case study's full tag list is far too
 // long for a card and wraps to three lines.
 const CARD_TAGS: Record<string, string[]> = {
@@ -38,7 +44,7 @@ const DEFAULT_SIZE = { w: 1440, h: 730 }
 // their content's natural height; the scale fits that to the stage.
 const DESIGN_SIZE: Record<string, { w: number; h: number }> = {
   'custom-fields': { w: 1440, h: 730 },
-  'swipey-demo': { w: 1440, h: 880 },
+  'swipey-demo': { w: 1440, h: 800 },
   'swipey-admin': { w: 1440, h: 950 },
   'card-rename': { w: 1440, h: 900 },
 }
@@ -301,7 +307,7 @@ export function SwipeyHubClient({
         </section>
 
         <section style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter)' }}>
-          <div className="grid grid-cols-2 md:grid-cols-4" style={{ gap: 'var(--layout-card-gap)' }}>
+          <div className="grid grid-cols-2 md:grid-cols-3" style={{ gap: 'var(--layout-card-gap)' }}>
             {stories.map((story) => (
               <div
                 key={story.slug}
@@ -324,7 +330,7 @@ export function SwipeyHubClient({
                   variant="supporting"
                   cover={story.heroImage}
                   coverPosition={story.cardImagePosition}
-                  imageRatio={cardStyle.imageRatio}
+                  imageRatio={CARD_IMAGE_RATIO}
                   titleSize={cardStyle.titleSize}
                   metaSize={cardStyle.metaSize}
                   cardPadding={cardStyle.cardPadding}
