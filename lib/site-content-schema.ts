@@ -441,6 +441,21 @@ export interface CaseStudyContent {
   solutionHeadline?: string
   outcomesHeadline?: string
   pullQuote?: string
+  /* editorial layout: per-section kickers, explainer blocks and artifacts */
+  researchKicker?: string
+  processKicker?: string
+  researchBriefTitle?: string
+  researchBriefBody?: string
+  researchBriefItems?: string[]
+  decisionBriefTitle?: string
+  decisionBriefBody?: string
+  decisionBriefItems?: string[]
+  researchArtifact?: string
+  researchArtifactAlt?: string
+  decisionArtifact?: string
+  decisionArtifactAlt?: string
+  processArtifact?: string
+  processArtifactAlt?: string
   heroImage?: string
   cardImagePosition?: string
   cardImageScale?: string
@@ -1116,6 +1131,20 @@ function isCaseStudyContent(value: unknown): value is CaseStudyContent {
     isOptionalString(item.solutionHeadline) &&
     isOptionalString(item.outcomesHeadline) &&
     isOptionalString(item.pullQuote) &&
+    isOptionalString(item.researchKicker) &&
+    isOptionalString(item.processKicker) &&
+    isOptionalString(item.researchBriefTitle) &&
+    isOptionalString(item.researchBriefBody) &&
+    isOptionalStringArray(item.researchBriefItems) &&
+    isOptionalString(item.decisionBriefTitle) &&
+    isOptionalString(item.decisionBriefBody) &&
+    isOptionalStringArray(item.decisionBriefItems) &&
+    isOptionalString(item.researchArtifact) &&
+    isOptionalString(item.researchArtifactAlt) &&
+    isOptionalString(item.decisionArtifact) &&
+    isOptionalString(item.decisionArtifactAlt) &&
+    isOptionalString(item.processArtifact) &&
+    isOptionalString(item.processArtifactAlt) &&
     isOptionalString(item.heroImage) &&
     isOptionalString(item.cardImagePosition) &&
     isOptionalString(item.cardImageScale) &&

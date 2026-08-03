@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { CaseStudyLayout } from '@/components/CaseStudyLayout'
+import { EditorialCaseStudy } from '@/components/EditorialCaseStudy'
 import { Footer } from '@/components/Footer'
 import { Nav } from '@/components/Nav'
 import { ProjectCard } from '@/components/ProjectCard'
@@ -55,6 +55,84 @@ function designSizeFor(url?: string) {
 }
 
 type Story = CaseStudyContent & { navStyle?: unknown; listeningStyle?: unknown }
+
+/* CaseStudyNav can't be reused here: it listens to window scroll (the
+   body is locked while the frame is open, so it would never fire) and its
+   section list is hardcoded to Franklin's ids. Same markup and classes, so the
+   styling is shared — only the scroll source and the section list differ, and
+   the list is read off whatever the story actually rendered. */
+function FrameNav({
+  frameRef,
+  slug,
+}: {
+  frameRef: React.RefObject<HTMLDivElement | null>
+  slug: string
+}) {
+  const [sections, setSections] = useState<{ id: string; label: string }[]>([])
+  const [activeId, setActiveId] = useState('')
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const frame = frameRef.current
+    if (!frame) return
+
+    const found = Array.from(frame.querySelectorAll<HTMLElement>('section[id][data-section]'))
+      // hero is the page header, not a chapter — CaseStudyNav skips it too
+      .filter((el) => el.id !== 'overview')
+    setSections(found.map((el) => ({ id: el.id, label: el.dataset.section ?? el.id })))
+    if (!found.length) return
+    setActiveId(found[0].id)
+
+    const onScroll = () => {
+      const frameTop = frame.getBoundingClientRect().top
+      const active = found.reduce((current, el) => (
+        el.getBoundingClientRect().top <= frameTop + 150 ? el : current
+      ), found[0])
+      const heroCopy = frame.querySelector('.editorial-hero-copy')
+      setVisible((heroCopy?.getBoundingClientRect().bottom ?? Number.POSITIVE_INFINITY) <= frameTop + 72)
+      setActiveId(active.id)
+    }
+
+    frame.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => frame.removeEventListener('scroll', onScroll)
+  }, [frameRef, slug])
+
+  // A single section is a label, not navigation.
+  if (sections.length < 2) return null
+
+  return (
+    <nav
+      className="editorial-case-study-nav swipey-frame-nav"
+      aria-label={`${slug} sections`}
+      data-visible={visible || undefined}
+    >
+      <span className="font-mono editorial-case-study-nav-title">CONTENTS</span>
+      {sections.map((section, index) => (
+        <button
+          key={section.id}
+          type="button"
+          className="font-mono editorial-case-study-nav-button"
+          aria-current={activeId === section.id ? 'location' : undefined}
+          data-active={activeId === section.id || undefined}
+          data-last={index === sections.length - 1 || undefined}
+          onClick={() => {
+            const frame = frameRef.current
+            // Scoped to the frame: the hub page behind it renders its own
+            // #overview, so document.getElementById would find the wrong one.
+            const target = frame?.querySelector<HTMLElement>(`#${section.id}`)
+            if (!frame || !target) return
+            const delta = target.getBoundingClientRect().top - frame.getBoundingClientRect().top
+            frame.scrollTo({ top: Math.max(0, frame.scrollTop + delta - 40), behavior: 'smooth' })
+          }}
+        >
+          {section.label}
+          {activeId === section.id ? <span className="editorial-case-study-nav-indicator" aria-hidden="true" /> : null}
+        </button>
+      ))}
+    </nav>
+  )
+}
 
 function StoryFrame({ story, onClose }: { story: Story; onClose: () => void }) {
   const frameRef = useRef<HTMLDivElement | null>(null)
@@ -149,7 +227,7 @@ function StoryFrame({ story, onClose }: { story: Story; onClose: () => void }) {
 
     // Watch the host, not just the frame: the iframe's wrapper can gain width
     // after first paint (it is hidden below md), and a bail-out on width 0 with
-    // nothing observing it leaves the iframe at CaseStudyLayout's inline
+    // nothing observing it leaves the iframe at the layout's inline
     // width:100% — a narrow viewport that makes the prototype wrap to pieces.
     fit()
     const ro = new ResizeObserver(fit)
@@ -179,6 +257,9 @@ function StoryFrame({ story, onClose }: { story: Story; onClose: () => void }) {
         inset: 0,
         zIndex: 120,
         padding: FRAME_INSET,
+        // The editorial layout sizes its hero in svh. Inside the frame that
+        // overshoots by the inset, so hand the CSS the inset to subtract.
+        ['--swipey-frame-inset' as string]: FRAME_INSET,
         background: 'rgba(6, 6, 6, 0.66)',
         backdropFilter: 'blur(5px)',
         WebkitBackdropFilter: 'blur(5px)',
@@ -209,12 +290,16 @@ function StoryFrame({ story, onClose }: { story: Story; onClose: () => void }) {
             outline: 'none',
           }}
         >
-          <CaseStudyLayout
-            {...(story as Parameters<typeof CaseStudyLayout>[0])}
+          <EditorialCaseStudy
+            {...story}
+            chrome={false}
             backHref="/work/swipey"
             backLabel="SWIPEY"
           />
         </div>
+        {/* Outside the scroller: the wrapper's transform makes it the containing
+            block for position:fixed, so the rail lands on the frame's edge. */}
+        <FrameNav frameRef={frameRef} slug={story.slug} />
         {/* Outside the scroller, so it can't ride over the content beneath it. */}
         <button
           type="button"
@@ -279,42 +364,42 @@ export function SwipeyHubClient({
   return (
     <>
       <Nav />
-      {/* Clears the fixed nav, matching WorkPageClient. */}
-      <main style={{ paddingTop: '57px' }}>
-        <div style={{ padding: '24px var(--layout-page-gutter) 0' }}>
-          <Link href="/work" className="font-mono back-link" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.14em' }}>
-            <span className="arrow-nudge-back">←</span> WORK
-          </Link>
-        </div>
-
-        {/* Hero — 50/50 grid, matching the case study hero exactly */}
-        <section className="case-study-hero grid grid-cols-2 border-b border-divider" style={{ minHeight: '280px' }}>
-          <div
-            className="case-study-hero-text flex flex-col justify-end border-r border-divider"
-            style={{ padding: '48px var(--layout-page-gutter)' }}
-          >
-            <RuleLabel number="PRODUCT DESIGN · 2026" />
-            <h1
-              className="font-serif"
-              style={{ fontSize: 'var(--text-h1)', fontWeight: 'var(--font-weight-serif)', color: 'var(--color-heading)', lineHeight: 1.1 }}
-            >
-              Swipey
-            </h1>
-            <p
-              className="font-reading mt-3"
-              style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: 'var(--color-heading)', lineHeight: 1.6 }}
-            >
-              Three months designing corporate card software for Malaysian SMEs. Small team, quick
-              handoffs to the engineers — I built these prototypes with AI agents to keep that pace.
-            </p>
-          </div>
-          <div className="case-study-hero-image" style={{ position: 'relative', backgroundColor: coverBackground || '#111111', overflow: 'hidden', minHeight: '280px' }}>
-            <Image src={coverImage} alt="Swipey" fill style={{ objectFit: coverFit ?? 'cover', objectPosition: 'center' }} sizes="50vw" />
+      <main className="editorial-page">
+        {/* Same hero markup as EditorialCaseStudy, so the flagship reads as one system */}
+        <section id="overview" className="editorial-hero" data-section="Overview">
+          <div className="editorial-shell editorial-hero-grid">
+            <div className="editorial-hero-copy">
+              <div className="editorial-back-row">
+                <Link href="/work" className="font-mono editorial-back-link">
+                  <span className="arrow-nudge-back">←</span> WORK
+                </Link>
+              </div>
+              <div className="editorial-hero-lede">
+                <p className="font-mono editorial-kicker">PRODUCT DESIGN · 2026</p>
+                <h1 className="font-serif">Swipey</h1>
+                <p className="font-reading editorial-oneliner">
+                  Three case studies, spanning AI, mobile and onboarding.
+                </p>
+              </div>
+              <div className="editorial-role-line">
+                <span className="font-mono">ROLE</span>
+                <p className="font-reading">
+                  Design intern for three months at a Kuala Lumpur fintech, building corporate card
+                  software for Malaysian SMEs. Small team, quick handoffs to the engineers — I built
+                  these prototypes with AI agents to keep that pace.
+                </p>
+              </div>
+            </div>
+            <figure className="editorial-hero-image" style={{ backgroundColor: coverBackground || '#111111' }}>
+              <Image src={coverImage} alt="Swipey" fill style={{ objectFit: coverFit ?? 'cover', objectPosition: 'center' }} sizes="(max-width: 900px) 100vw, 56vw" />
+            </figure>
           </div>
         </section>
 
-        <section style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter)' }}>
-          <div className="grid grid-cols-2 md:grid-cols-3" style={{ gap: 'var(--layout-card-gap)' }}>
+        <section className="editorial-section">
+          {/* swipey-hub-shell: this hub has no CONTENTS rail, so the left column
+              .editorial-shell reserves for one would read as dead space. */}
+          <div className="swipey-hub-shell editorial-shell grid grid-cols-2 md:grid-cols-3" style={{ gap: 'var(--layout-card-gap)' }}>
             {stories.map((story) => (
               <div
                 key={story.slug}

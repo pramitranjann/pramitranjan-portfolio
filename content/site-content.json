@@ -914,7 +914,31 @@
             }
           ]
         }
-      ]
+      ],
+      "researchKicker": "FOLLOWING THE FIRST VISIT",
+      "processKicker": "MAKING THE FIRST VISIT CLEAR",
+      "researchBriefTitle": "What people needed before walking in",
+      "researchBriefBody": "The warmth was there in person. Online, people first needed clear answers to four practical questions.",
+      "researchBriefItems": [
+        "What can I order?",
+        "Is there seating?",
+        "How does service work?",
+        "When are you open?"
+      ],
+      "decisionBriefTitle": "Task first. Category second.",
+      "decisionBriefBody": "The open card sort moved the site from an internal sitemap to four things visitors could actually look for.",
+      "decisionBriefItems": [
+        "Menu",
+        "Order",
+        "About",
+        "Contact"
+      ],
+      "researchArtifact": "/work/franklins/202620_UXDG101-01_22643_Franklins_Assignment3.jpg",
+      "researchArtifactAlt": "Journey map following a customer's first visit to Franklin's",
+      "decisionArtifact": "/work/franklins/franklins process 2.jpg",
+      "decisionArtifactAlt": "Card-sorting activity used to validate Franklin's navigation",
+      "processArtifact": "/work/franklins/franklins process 1.jpg",
+      "processArtifactAlt": "Hypothesis information architecture for the redesigned Franklin's website"
     },
     {
       "slug": "albers",
@@ -985,7 +1009,19 @@
       "solutionEmbedCtaLabel": "OPEN LIVE APP",
       "solutionEmbedUrl": "https://albers-web.vercel.app",
       "solutionEmbedTitle": "ALBERS live app",
-      "solutionEmbedCalloutTitle": "The shipped Albers build is embedded below."
+      "solutionEmbedCalloutTitle": "The shipped Albers build is embedded below.",
+      "researchKicker": "TAKING THE BRIEF LITERALLY",
+      "processKicker": "ITERATING INSIDE THE APP",
+      "researchBriefTitle": "Interaction as a UI problem",
+      "researchBriefBody": "Most responses to the brief went editorial. Albers's argument that colour has no fixed identity is as much an interface problem as an art one.",
+      "decisionBriefTitle": "An amber terminal HUD",
+      "decisionBriefBody": "Borrowed from instruments that measure rather than create. Spring break was the space to add modes, tighten the interaction model, and build an identity.",
+      "decisionBriefItems": [
+        "Nine modes",
+        "SwiftUI + AppKit",
+        "macOS 13+",
+        "Web build"
+      ]
     },
     {
       "slug": "wander",
@@ -1052,7 +1088,25 @@
       "solutionEmbedCtaLabel": "OPEN LIVE APP",
       "solutionEmbedUrl": "https://wander-nine-tau.vercel.app",
       "solutionEmbedTitle": "Wander live app",
-      "solutionEmbedCalloutTitle": "The shipped Wander build is embedded below."
+      "solutionEmbedCalloutTitle": "The shipped Wander build is embedded below.",
+      "researchKicker": "WHY PEOPLE ALREADY WALK",
+      "processKicker": "PROTOTYPING BOTH MODES",
+      "researchBriefTitle": "Walking already works",
+      "researchBriefBody": "A 15-person survey backed by attention restoration theory and Stanford's work on walking and creative cognition. People already walk to decompress; the tools get in the way.",
+      "researchBriefItems": [
+        "15-person survey",
+        "28 of 34 walk to clear their head",
+        "Kaplan, 1995",
+        "Oppezzo & Schwartz, 2014"
+      ],
+      "decisionBriefTitle": "An app whose job is to get you off the app",
+      "decisionBriefBody": "Two moments to serve — time with no destination, and a destination with no rush — both needing the same reset.",
+      "decisionBriefItems": [
+        "Prompt reveal",
+        "Active walk",
+        "End screen",
+        "Lock screen widget"
+      ]
     },
     {
       "slug": "loomlearn",
@@ -1144,6 +1198,24 @@
             }
           ]
         }
+      ],
+      "researchKicker": "WHERE LEARNERS LOSE TIME",
+      "processKicker": "REDUCING COGNITIVE LOAD",
+      "researchBriefTitle": "The problem was never the tools",
+      "researchBriefBody": "Digital learners, especially those with dyslexia, struggle with context-switching rather than the tools themselves.",
+      "researchBriefItems": [
+        "Cornell notes",
+        "Pomodoro timers",
+        "Mind maps",
+        "Spider charts"
+      ],
+      "decisionBriefTitle": "Borrowed from Scratch",
+      "decisionBriefBody": "The drag-and-drop system came straight from Scratch: familiar, low-threshold, and customisable without adding complexity.",
+      "decisionBriefItems": [
+        "Minimal palette",
+        "Multiple workspaces",
+        "Draggable icons",
+        "One canvas"
       ]
     },
     {
@@ -1231,6 +1303,24 @@
             }
           ]
         }
+      ],
+      "researchKicker": "TWO SIDES OF ONE MARKET",
+      "processKicker": "THE WHOLE FLOW, ONE SURFACE",
+      "researchBriefTitle": "Two users, one platform",
+      "researchBriefBody": "Users struggle to find reliable, affordable help; workers face inconsistent pay and little legal protection.",
+      "researchBriefItems": [
+        "Vetted professionals",
+        "Legal protection",
+        "Training",
+        "Steady income"
+      ],
+      "decisionBriefTitle": "Transparency and speed",
+      "decisionBriefBody": "Booking flows borrowing trust signals from Grab that the Southeast Asian market already reads.",
+      "decisionBriefItems": [
+        "Service",
+        "Location",
+        "Date",
+        "Time"
       ]
     },
     {
@@ -1322,6 +1412,18 @@
             }
           ]
         }
+      ],
+      "researchKicker": "OUT OF EXAM SEASON",
+      "processKicker": "DECIDING WHAT TO WITHHOLD",
+      "researchBriefTitle": "Neither delete nor endure",
+      "researchBriefBody": "Existing solutions either deleted apps outright or were too rigid to adjust. Two users: students under academic pressure, and professionals with social media anxiety.",
+      "decisionBriefTitle": "Limited, not broken",
+      "decisionBriefBody": "Black and white to psychologically reduce the pull of the screen, and limitation that reads as designed.",
+      "decisionBriefItems": [
+        "Screen time",
+        "Usage breakdowns",
+        "Focus mode",
+        "Four widgets"
       ]
     },
     {
