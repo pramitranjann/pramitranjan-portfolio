@@ -15,6 +15,8 @@ export interface WorkProject {
   hoverImagePosition?: string
   hoverImageScale?: string
   previewImages?: string[]
+  /* derived from the linked case study by enrichItems, not authored on the project */
+  panelBody?: string
 }
 
 export interface HomeSection {

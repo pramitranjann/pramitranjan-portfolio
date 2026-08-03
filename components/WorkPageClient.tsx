@@ -7,6 +7,7 @@ import { useMotionSettings } from '@/components/MotionSettingsProvider'
 import { useSiteCopy } from '@/components/SiteCopyProvider'
 import { Nav } from '@/components/Nav'
 import { ProjectCard } from '@/components/ProjectCard'
+import { PcardPanelTweaks } from '@/components/PcardPanelTweaks'
 import type { CardStyleSettings, HoverPreviewSettings, WorkProject } from '@/lib/site-content-schema'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -120,6 +121,7 @@ export function WorkPageClient({
           </div>
         </section>
       </main>
+      {process.env.NODE_ENV === 'development' && <PcardPanelTweaks />}
       <Footer />
     </>
   )

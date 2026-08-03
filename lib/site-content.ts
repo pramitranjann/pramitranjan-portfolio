@@ -59,6 +59,7 @@ function filterWorkProjectsByVisibleCaseStudies(content: SiteContent) {
         ...item,
         hoverImage: item.hoverImage ?? workHoverImage,
         ...(previewImages.length ? { previewImages } : {}),
+        ...(caseStudy?.problemHeadline ? { panelBody: caseStudy.problemHeadline } : {}),
       }
     })
 
