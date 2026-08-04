@@ -45,6 +45,7 @@ function CVButton({ label }: { label: string }) {
         border: '1px solid #FF3120',
         padding: '10px 20px',
         textDecoration: 'none',
+        whiteSpace: 'nowrap',
       }}
     >
       {label} →
@@ -186,9 +187,9 @@ export default async function AboutPage() {
             >
               {content.aboutPage.heroBody}
             </p>
-            <div data-reveal className="flex items-center justify-between">
+            <div data-reveal className="flex items-center justify-between" style={{ gap: '16px' }}>
               <CVButton label={copy.cvLabel} />
-              <span className="font-mono select-none" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.14em', color: '#666666' }}>
+              <span className="font-mono select-none about-scroll-hint" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.14em', color: '#666666' }}>
                 {copy.scrollLabel}
               </span>
             </div>

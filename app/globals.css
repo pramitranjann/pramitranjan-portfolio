@@ -443,13 +443,17 @@ html, body {
 .editorial-case-study-nav a.editorial-case-study-nav-back,
 .editorial-case-study-nav a.editorial-case-study-nav-back:hover,
 .editorial-case-study-nav a.editorial-case-study-nav-back:focus-visible {
+  display: none;
   color: var(--color-red);
   text-decoration: none;
 }
 
 .editorial-case-study-nav-button {
   position: relative;
-  flex-shrink: 0;
+  /* grow to share spare width, never shrink below a floor: keeps "Gap" and
+     "Live" from reading as smaller boxes than the 8-character labels. */
+  flex: 1 0 auto;
+  min-width: 96px;
   padding: 11px 16px;
   color: #9a9a9a;
   background: transparent;
@@ -532,6 +536,7 @@ html, body {
   }
 
   .editorial-case-study-nav a.editorial-case-study-nav-back {
+    display: block;
     margin-top: 20px;
     padding: 0;
     font-size: var(--text-meta);
@@ -730,6 +735,12 @@ html, body {
     display: block;
     min-height: 0;
     padding: 48px 0 100px;
+  }
+
+  /* Stacked, the copy column has no image height to span, so the 1fr lede row
+     collapses and the back link ends up flush against the kicker. */
+  .editorial-back-row {
+    margin-bottom: 32px;
   }
 
   .editorial-hero-image {
@@ -1441,11 +1452,31 @@ body.carousel-reengaging main {
     display: none !important;
   }
 
+  /* VIEW ALL swaps position at the same breakpoint the section stacks:
+     inline with the body text on phone, back to its own row underneath
+     everywhere else — same pattern as the About section's READ MORE. */
+  .photography-view-all-mobile {
+    display: inline !important;
+  }
+  .photography-view-all-desktop {
+    display: none !important;
+  }
+
   /* About section — reduce side padding */
   .about-section {
     grid-template-columns: 1fr !important;
     padding: 48px 24px !important;
     gap: 24px !important;
+  }
+
+  /* READ MORE swaps position at the same breakpoint the section collapses:
+     inline with the body text on phone, back to its own row above the
+     Spotify widget everywhere else. */
+  .about-read-more-mobile {
+    display: inline !important;
+  }
+  .about-read-more-desktop {
+    display: none !important;
   }
 
   /* About page — collapse 2-col layout to single column */
@@ -5337,5 +5368,32 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
      already frame-relative; drop the viewport-derived left from 1480px up. */
   .swipey-frame-nav {
     left: 24px;
+  }
+}
+
+/* The about hero's CTA row: "DOWNLOAD RESUME →" (~219px) plus "SCROLL ↓" (~83px)
+   exceeds the 295px content column on a 375px phone, so they collide. The
+   scroll hint is decorative — drop it rather than shrink the actual action. */
+@media (max-width: 640px) {
+  .about-scroll-hint {
+    display: none;
+  }
+}
+
+/* Phone footer: stays a single flex row (text left, PR_ right, vertically
+   centered against the wrapped 2-line copyright), same as desktop — it
+   never needs to become a stacked grid. Two things do need to change:
+   LAB_/COLOPHON_ crowd that row next to the wrapped text, so they drop; and
+   --layout-page-gutter (40px) is a fixed desktop value with no mobile
+   override, unlike every other section on the site, which steps its
+   horizontal padding down to 24px below 767px — the footer was the one
+   place still sitting at the wider desktop gutter. */
+@media (max-width: 767px) {
+  .footer-link-secondary {
+    display: none;
+  }
+
+  .site-footer {
+    padding-inline: 24px !important;
   }
 }

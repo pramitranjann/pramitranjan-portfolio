@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 type Section = { id: string; label: string }
 
@@ -12,6 +12,7 @@ export function CaseStudyNav({ backHref = '/work', backLabel = 'WORK' }: { backH
   const [sections, setSections] = useState<Section[]>([])
   const [activeId, setActiveId] = useState('')
   const [visible, setVisible] = useState(false)
+  const navRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     const found = Array.from(
@@ -50,10 +51,17 @@ export function CaseStudyNav({ backHref = '/work', backLabel = 'WORK' }: { backH
     return () => window.removeEventListener('scroll', onScroll)
   }, [sections])
 
+  useEffect(() => {
+    if (!activeId || !navRef.current) return
+    const activeBtn = navRef.current.querySelector<HTMLElement>(`[data-nav-id="${activeId}"]`)
+    activeBtn?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+  }, [activeId])
+
   if (sections.length < 2) return null
 
   return (
     <nav
+      ref={navRef}
       className="case-study-section-nav editorial-case-study-nav"
       aria-label="Case study sections"
       data-visible={visible || undefined}
@@ -66,6 +74,7 @@ export function CaseStudyNav({ backHref = '/work', backLabel = 'WORK' }: { backH
           <button
             key={section.id}
             type="button"
+            data-nav-id={section.id}
             className="font-mono case-study-section-nav-button editorial-case-study-nav-button"
             aria-current={isActive ? 'location' : undefined}
             data-active={isActive || undefined}

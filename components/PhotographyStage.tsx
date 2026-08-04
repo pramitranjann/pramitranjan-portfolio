@@ -56,9 +56,17 @@ export function PhotographyStage() {
           />
           <p className="font-reading" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.06em', color: 'var(--color-heading)', lineHeight: 1.9, maxWidth: '340px' }}>
             {copy.photographyBody}
+            {/* Phone only — inline with the text, same link as the desktop one below. */}
+            <Link
+              href="/creative/photography"
+              className="font-mono photography-view-all-mobile"
+              style={{ fontSize: 'var(--text-meta)', color: 'var(--color-red)', letterSpacing: '0.12em', textDecoration: 'none', whiteSpace: 'nowrap', marginLeft: '14px', display: 'none' }}
+            >
+              {copy.photographyCtaLabel}
+            </Link>
           </p>
         </div>
-        <Link href="/creative/photography" className="font-mono" style={{ display: 'inline-block', marginTop: '24px', fontSize: 'var(--text-meta)', color: 'var(--color-red)', letterSpacing: '0.12em', textDecoration: 'none' }}>
+        <Link href="/creative/photography" className="font-mono photography-view-all-desktop" style={{ display: 'inline-block', marginTop: '24px', fontSize: 'var(--text-meta)', color: 'var(--color-red)', letterSpacing: '0.12em', textDecoration: 'none' }}>
           {copy.photographyCtaLabel}
         </Link>
       </div>

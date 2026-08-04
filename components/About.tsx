@@ -62,20 +62,28 @@ export function About({
           style={{ fontSize: 'var(--text-body-lg)', color: 'var(--color-heading)', lineHeight: 1.9, maxWidth: '440px', letterSpacing: '0.04em' }}
         >
           {body}
+          {/* Phone only — inline with the text, same link as the desktop one below. */}
+          <Link
+            href="/about"
+            className="font-mono about-read-more-mobile"
+            style={{ fontSize: 'var(--text-meta)', color: 'var(--color-red)', letterSpacing: '0.12em', textDecoration: 'none', whiteSpace: 'nowrap', marginLeft: '14px', display: 'none' }}
+          >
+            {copy.aboutReadMoreLabel}
+          </Link>
         </p>
       </div>
 
       <div style={{ display: 'grid', alignSelf: 'stretch', minWidth: '250px' }}>
+        <Link
+          href="/about"
+          className="font-mono about-read-more-desktop"
+          style={{ fontSize: 'var(--text-meta)', color: 'var(--color-red)', letterSpacing: '0.12em', textDecoration: 'none', whiteSpace: 'nowrap', justifySelf: 'end', marginBottom: '14px' }}
+        >
+          {copy.aboutReadMoreLabel}
+        </Link>
         <div className="reveal-text" style={{ alignSelf: 'center', minWidth: '250px' }}>
           <SpotifyWidget variant="sidebar" restingLabel={spotifyLabel.replace(/_+$/, '')} styleSettings={listeningStyle} interactionMode="hover-expand" />
         </div>
-        <Link
-          href="/about"
-          className="font-mono"
-          style={{ fontSize: 'var(--text-meta)', color: 'var(--color-red)', letterSpacing: '0.12em', textDecoration: 'none', whiteSpace: 'nowrap', justifySelf: 'end', alignSelf: 'end', marginTop: '14px' }}
-        >
-              {copy.aboutReadMoreLabel}
-        </Link>
       </div>
     </section>
   )

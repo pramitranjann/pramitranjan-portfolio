@@ -70,6 +70,7 @@ function FrameNav({
 }) {
   const [sections, setSections] = useState<{ id: string; label: string }[]>([])
   const [activeId, setActiveId] = useState('')
+  const navRef = useRef<HTMLElement>(null)
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -98,11 +99,20 @@ function FrameNav({
     return () => frame.removeEventListener('scroll', onScroll)
   }, [frameRef, slug])
 
+  // Keep the active button in frame while the pill scrolls horizontally,
+  // matching CaseStudyNav and CaseStudyLayout.
+  useEffect(() => {
+    if (!activeId || !navRef.current) return
+    const activeBtn = navRef.current.querySelector<HTMLElement>(`[data-nav-id="${activeId}"]`)
+    activeBtn?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+  }, [activeId])
+
   // A single section is a label, not navigation.
   if (sections.length < 2) return null
 
   return (
     <nav
+      ref={navRef}
       className="editorial-case-study-nav swipey-frame-nav"
       aria-label={`${slug} sections`}
       data-visible={visible || undefined}
@@ -112,6 +122,7 @@ function FrameNav({
         <button
           key={section.id}
           type="button"
+          data-nav-id={section.id}
           className="font-mono editorial-case-study-nav-button"
           aria-current={activeId === section.id ? 'location' : undefined}
           data-active={activeId === section.id || undefined}
