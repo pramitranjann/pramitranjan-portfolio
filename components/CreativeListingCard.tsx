@@ -23,6 +23,9 @@ type CreativeListingCardProps = {
   cardStyle?: PhotographyCardStyleSettings
   hoverPreviewSettings?: HoverPreviewSettings
   priorityImage?: boolean
+  /* Defaults to the 4-up photography grid. Wider grids must pass their own or
+     the browser picks a source narrower than the slot and upscales it. */
+  sizes?: string
 }
 
 export function CreativeListingCard({
@@ -40,6 +43,7 @@ export function CreativeListingCard({
   cardStyle,
   hoverPreviewSettings,
   priorityImage = false,
+  sizes = '(max-width: 768px) 50vw, 25vw',
 }: CreativeListingCardProps) {
   const cardImages = mergePreviewImages(cover, previewImages)
 
@@ -57,7 +61,7 @@ export function CreativeListingCard({
           overflow: 'hidden',
         }}
         >
-        {cardImages.length ? <Image className="card-media-image" src={cardImages[0]} alt={title} fill priority={priorityImage} style={{ objectFit: cardStyle?.imageFit ?? 'cover', objectPosition: imagePosition, transform: `scale(${imageScale ?? '1'})` }} sizes="(max-width: 768px) 50vw, 25vw" /> : null}
+        {cardImages.length ? <Image className="card-media-image" src={cardImages[0]} alt={title} fill priority={priorityImage} style={{ objectFit: cardStyle?.imageFit ?? 'cover', objectPosition: imagePosition, transform: `scale(${imageScale ?? '1'})` }} sizes={sizes} /> : null}
       </div>
       <h3 className="font-serif" style={{ fontSize: cardStyle?.titleSize ?? 'var(--text-body)', fontWeight: 'var(--font-weight-serif)', color: 'var(--color-heading)', marginBottom: '4px' }}>
         <span className="card-title-inner">{title}</span>
@@ -83,7 +87,7 @@ export function CreativeListingCard({
     return cardBody
   }
 
-  const ctaLabel = href.startsWith('/creative/photography') ? 'OPEN GALLERY' : 'OPEN PROJECT'
+  const ctaLabel = href.startsWith('/play/photography') ? 'OPEN GALLERY' : 'OPEN PROJECT'
   const metadata = tag ? [tag] : []
 
   return (
@@ -125,7 +129,7 @@ export function CreativeListingCard({
                   images={cardImages}
                   alt={title}
                   hovered={hovered}
-                  sizes="(max-width: 768px) 50vw, 25vw"
+                  sizes={sizes}
                   imageFit={cardStyle?.imageFit ?? 'cover'}
                   imagePosition={hovered ? (hoverImagePosition ?? imagePosition) : imagePosition}
                   imageScale={hovered ? (hoverImageScale ?? imageScale ?? '1') : (imageScale ?? '1')}

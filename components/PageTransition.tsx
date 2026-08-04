@@ -11,7 +11,7 @@ CustomEase.create('wipeOut', '0, 0, 0.2, 1')
 
 function getLabel(path: string): string {
   if (path.startsWith('/work')) return 'WORK_'
-  if (path.startsWith('/creative')) return 'CREATIVE_'
+  if (path.startsWith('/play')) return 'PLAY_'
   if (path.startsWith('/about')) return 'ABOUT_'
   return ''
 }

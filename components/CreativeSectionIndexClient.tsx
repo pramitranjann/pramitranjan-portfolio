@@ -13,6 +13,7 @@ export function CreativeSectionIndexClient({
   backHref,
   backLabel,
   columnsClass,
+  imageSizes,
   projects,
   cardStyle,
 }: {
@@ -20,6 +21,9 @@ export function CreativeSectionIndexClient({
   backHref: string
   backLabel: string
   columnsClass: string
+  /* Must track columnsClass. CreativeListingCard defaults to the 4-up
+     photography width, which under-requests badly in a 2-up grid. */
+  imageSizes?: string
   projects: CaseStudyContent[]
   cardStyle: PhotographyCardStyleSettings
 }) {
@@ -43,7 +47,7 @@ export function CreativeSectionIndexClient({
                 title={project.title}
                 desc={project.oneliner}
                 tag={project.type}
-                href={`/creative/${project.section}/${project.slug}`}
+                href={`/play/${project.section}/${project.slug}`}
                 cover={project.heroImage}
                 previewImages={getCaseStudyPreviewImages(project)}
                 imagePosition={project.cardImagePosition ?? 'center'}
@@ -51,6 +55,7 @@ export function CreativeSectionIndexClient({
                 hoverImagePosition={project.cardHoverImagePosition}
                 hoverImageScale={project.cardHoverImageScale}
                 cardStyle={cardStyle}
+                sizes={imageSizes}
                 priorityImage={index < 3}
               />
             ))}

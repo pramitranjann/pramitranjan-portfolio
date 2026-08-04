@@ -29,7 +29,7 @@ function filterVisibleCaseStudies(caseStudies: CaseStudyContent[]) {
 }
 
 function getCaseStudySlugFromHref(href: string) {
-  const match = href.match(/^\/(?:work|creative\/(?:mixed-media|branding))\/([^/]+)$/)
+  const match = href.match(/^\/(?:work|play\/(?:mixed-media|branding))\/([^/]+)$/)
   return match?.[1] ?? null
 }
 

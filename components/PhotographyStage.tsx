@@ -11,11 +11,11 @@ const FRAME_GAP = 5
 const HOLE_COUNT = 26
 
 const frames = [
-  { label: 'KL · 001',  href: '/creative/photography/kl',        cover: '/creative/photography/kl/41.jpg' },
-  { label: 'KL · 002',  href: '/creative/photography/kl',        cover: '/creative/photography/kl/12.jpg' },
-  { label: 'PG · 003',  href: '/creative/photography/penang',    cover: '/creative/photography/penang/07.jpg' },
-  { label: 'SG · 004',  href: '/creative/photography/singapore', cover: '/creative/photography/singapore/03.jpg' },
-  { label: 'HCM · 001', href: '/creative/photography/hcmc',      cover: '/creative/photography/hcmc/01.jpg' },
+  { label: 'KL · 001',  href: '/play/photography/kl',        cover: '/creative/photography/kl/41.jpg' },
+  { label: 'KL · 002',  href: '/play/photography/kl',        cover: '/creative/photography/kl/12.jpg' },
+  { label: 'PG · 003',  href: '/play/photography/penang',    cover: '/creative/photography/penang/07.jpg' },
+  { label: 'SG · 004',  href: '/play/photography/singapore', cover: '/creative/photography/singapore/03.jpg' },
+  { label: 'HCM · 001', href: '/play/photography/hcmc',      cover: '/creative/photography/hcmc/01.jpg' },
 ]
 
 function Holes() {
@@ -58,7 +58,7 @@ export function PhotographyStage() {
             {copy.photographyBody}
             {/* Phone only — inline with the text, same link as the desktop one below. */}
             <Link
-              href="/creative/photography"
+              href="/play/photography"
               className="font-mono photography-view-all-mobile"
               style={{ fontSize: 'var(--text-meta)', color: 'var(--color-red)', letterSpacing: '0.12em', textDecoration: 'none', whiteSpace: 'nowrap', marginLeft: '14px', display: 'none' }}
             >
@@ -66,7 +66,7 @@ export function PhotographyStage() {
             </Link>
           </p>
         </div>
-        <Link href="/creative/photography" className="font-mono photography-view-all-desktop" style={{ display: 'inline-block', marginTop: '24px', fontSize: 'var(--text-meta)', color: 'var(--color-red)', letterSpacing: '0.12em', textDecoration: 'none' }}>
+        <Link href="/play/photography" className="font-mono photography-view-all-desktop" style={{ display: 'inline-block', marginTop: '24px', fontSize: 'var(--text-meta)', color: 'var(--color-red)', letterSpacing: '0.12em', textDecoration: 'none' }}>
           {copy.photographyCtaLabel}
         </Link>
       </div>

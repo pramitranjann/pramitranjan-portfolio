@@ -1048,8 +1048,8 @@ git push`
     : activePage === 'site-pages' ? 'Site Pages'
     : activePage === 'about-page' ? 'About Page'
     : activePage === 'work-page' ? 'Work Page'
-    : activePage === 'play-page' ? 'Play Page'
-    : activePage === 'creative-page' ? 'Creative Page'
+    : activePage === 'play-page' ? 'Play Games'
+    : activePage === 'creative-page' ? 'Play Page'
     : activePage === 'photography-page' ? 'Photography Page'
     : activePage === 'case-study-ui' ? 'Case Study Defaults'
     : activePage === 'design-system' ? 'Design System'
@@ -1226,8 +1226,8 @@ git push`
               <SidebarButton active={activePage === 'site-pages'} label="Site Pages" onClick={() => setActivePage('site-pages')} />
               <SidebarButton active={activePage === 'about-page'} label="About Page" onClick={() => setActivePage('about-page')} />
               <SidebarButton active={activePage === 'work-page'} label="Work Page" onClick={() => setActivePage('work-page')} />
-              <SidebarButton active={activePage === 'play-page'} label="Play Page" onClick={() => setActivePage('play-page')} />
-              <SidebarButton active={activePage === 'creative-page'} label="Creative Page" onClick={() => setActivePage('creative-page')} />
+              <SidebarButton active={activePage === 'play-page'} label="Play Games" onClick={() => setActivePage('play-page')} />
+              <SidebarButton active={activePage === 'creative-page'} label="Play Page" onClick={() => setActivePage('creative-page')} />
               <SidebarButton active={activePage === 'photography-page'} label="Photography Page" onClick={() => setActivePage('photography-page')} />
               <SidebarButton active={activePage === 'case-study-ui'} label="Case Study Defaults" onClick={() => setActivePage('case-study-ui')} />
               <SidebarButton active={activePage === 'design-system'} label="Design System" onClick={() => setActivePage('design-system')} />
@@ -2108,7 +2108,7 @@ function CreativePageEditor({
   updateSection: <K extends keyof SiteContent>(key: K, value: SiteContent[K]) => void
 }) {
   return (
-    <SectionFrame title="Creative Page">
+    <SectionFrame title="Play Page">
       <Field label="Eyebrow">
         <input
           value={content.copy.creativePage.eyebrow}
@@ -2137,6 +2137,26 @@ function CreativePageEditor({
             creativePage: { ...content.copy.creativePage, heroBody: event.target.value },
           })}
           style={inputStyle(true)}
+        />
+      </Field>
+      <Field label="Interactive Label">
+        <input
+          value={content.copy.creativePage.interactiveLabel}
+          onChange={(event) => updateSection('copy', {
+            ...content.copy,
+            creativePage: { ...content.copy.creativePage, interactiveLabel: event.target.value },
+          })}
+          style={inputStyle()}
+        />
+      </Field>
+      <Field label="Interactive Count">
+        <input
+          value={content.copy.creativePage.interactiveCount}
+          onChange={(event) => updateSection('copy', {
+            ...content.copy,
+            creativePage: { ...content.copy.creativePage, interactiveCount: event.target.value },
+          })}
+          style={inputStyle()}
         />
       </Field>
       <Field label="Photography Label">
@@ -2219,7 +2239,7 @@ function CreativePageEditor({
           style={inputStyle()}
         />
       </Field>
-      <Field label="Creative Back Label">
+      <Field label="Play Back Label">
         <input
           value={content.copy.creativePage.backLabel}
           onChange={(event) => updateSection('copy', {
@@ -2256,37 +2276,7 @@ function PlayPageEditor({
 }) {
   return (
     <>
-      <SectionFrame title="Play Page">
-        <Field label="Eyebrow">
-          <input
-            value={content.copy.playPage.eyebrow}
-            onChange={(event) => updateSection('copy', {
-              ...content.copy,
-              playPage: { ...content.copy.playPage, eyebrow: event.target.value },
-            })}
-            style={inputStyle()}
-          />
-        </Field>
-        <Field label="Hero Title">
-          <input
-            value={content.copy.playPage.heroTitle}
-            onChange={(event) => updateSection('copy', {
-              ...content.copy,
-              playPage: { ...content.copy.playPage, heroTitle: event.target.value },
-            })}
-            style={inputStyle()}
-          />
-        </Field>
-        <Field label="Hero Body">
-          <textarea
-            value={content.copy.playPage.heroBody}
-            onChange={(event) => updateSection('copy', {
-              ...content.copy,
-              playPage: { ...content.copy.playPage, heroBody: event.target.value },
-            })}
-            style={inputStyle(true)}
-          />
-        </Field>
+      <SectionFrame title="Play Game Cards">
         <Field label="Card CTA Label">
           <input
             value={content.copy.playPage.cardCtaLabel}

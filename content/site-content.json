@@ -727,24 +727,23 @@
       "emptyStateLabel": "MORE ON THE WAY_"
     },
     "creativePage": {
-      "eyebrow": "CREATIVE_",
+      "eyebrow": "PLAY_",
       "heroTitle": "The other half.",
-      "heroBody": "Photography, mixed media, and more work that exists outside of UX.",
+      "heroBody": "Games, photography, and mixed media. The work that exists outside of UX.",
+      "interactiveLabel": "INTERACTIVE",
+      "interactiveCount": "01",
       "photographyLabel": "PHOTOGRAPHY",
-      "photographyCount": "01",
+      "photographyCount": "02",
       "mixedMediaLabel": "MIXED MEDIA",
-      "mixedMediaCount": "02",
+      "mixedMediaCount": "03",
       "brandingLabel": "BRANDING",
-      "brandingCount": "03",
+      "brandingCount": "04",
       "mixedMediaIndexTitle": "Beyond the screen.",
       "brandingIndexTitle": "Identity work.",
-      "backLabel": "CREATIVE",
+      "backLabel": "PLAY",
       "photoBackLabel": "PHOTOGRAPHY"
     },
     "playPage": {
-      "eyebrow": "PLAY_",
-      "heroTitle": "Games and playable experiments.",
-      "heroBody": "Small interactive systems exploring gesture, timing, motion, and play.",
       "cardCtaLabel": "PLAY NOW"
     },
     "caseStudy": {
@@ -791,18 +790,10 @@
       "constructionCtaHref": "/work"
     },
     {
-      "key": "creative",
-      "label": "CREATIVE",
-      "href": "/creative",
-      "order": 3,
-      "visible": true,
-      "status": "live"
-    },
-    {
       "key": "about",
       "label": "ABOUT",
       "href": "/about",
-      "order": 4,
+      "order": 3,
       "visible": true,
       "status": "live"
     }
@@ -1577,7 +1568,7 @@
         "slug": "faces-of-power",
         "title": "Faces of Power"
       },
-      "backHref": "/creative/mixed-media",
+      "backHref": "/play/mixed-media",
       "backLabel": "MIXED MEDIA",
       "heroImage": "/creative/mixed-media/south-china-sea/hero.png",
       "researchImage": "/creative/mixed-media/south-china-sea/research-processed.png",
@@ -1722,7 +1713,7 @@
         "slug": "mixed-media-project",
         "title": "Untitled project"
       },
-      "backHref": "/creative/mixed-media",
+      "backHref": "/play/mixed-media",
       "backLabel": "MIXED MEDIA",
       "heroImage": "/creative/mixed-media/faces-of-power/hero.png",
       "researchImage": "/creative/mixed-media/faces-of-power/research-processed.png",
@@ -1826,7 +1817,7 @@
         "slug": "soho",
         "title": "SOHO"
       },
-      "backHref": "/creative/branding",
+      "backHref": "/play/branding",
       "backLabel": "BRANDING",
       "problemHeadline": "My first fully self-directed project. No brief, no client, no constraints beyond my own taste, treating branding as world-building rather than identity design.",
       "roleHeadline": "Sole creative director across concept, product design, and marketing.",
@@ -1943,7 +1934,7 @@
         "title": "Oracle"
       },
       "next": null,
-      "backHref": "/creative/branding",
+      "backHref": "/play/branding",
       "backLabel": "BRANDING",
       "heroImage": "/creative/branding/soho/cover.png",
       "solutionHeroImage": "/creative/branding/soho/solution-hero-processed.png",

@@ -271,7 +271,7 @@ export function ScadPageClient({
                 key={city.slug}
                 title={city.title}
                 desc={city.desc}
-                href={city.comingSoon ? undefined : `/creative/photography/${city.slug}?from=scad-scholarship`}
+                href={city.comingSoon ? undefined : `/play/photography/${city.slug}?from=scad-scholarship`}
                 cover={city.cover}
                 previewImages={city.previewImages}
                 comingSoon={city.comingSoon}
@@ -306,7 +306,7 @@ export function ScadPageClient({
                 title={project.title}
                 desc={project.oneliner}
                 tag={project.type}
-                href={`/creative/mixed-media/${project.slug}?from=scad-scholarship`}
+                href={`/play/mixed-media/${project.slug}?from=scad-scholarship`}
                 cover={project.heroImage}
                 previewImages={getCaseStudyPreviewImages(project)}
                 imagePosition={project.cardImagePosition ?? 'center'}

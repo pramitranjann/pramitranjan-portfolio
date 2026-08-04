@@ -32,7 +32,7 @@ export function PlayCard({
     <div className="portfolio-card flex flex-col h-full" style={{ backgroundColor: '#1c1c1c', padding: '16px' }}>
       <div className="play-card-image" style={{ position: 'relative', width: '100%', aspectRatio: '16 / 5', backgroundColor: '#252525', border: '1px solid #333333', overflow: 'hidden', marginBottom: '12px' }}>
         {images.length ? (
-          <Image src={images[0]} alt={title} fill priority={priorityImage} style={{ objectFit: 'cover', objectPosition: 'center center' }} sizes="(max-width: 767px) 100vw, 520px" />
+          <Image src={images[0]} alt={title} fill priority={priorityImage} style={{ objectFit: 'cover', objectPosition: 'center center' }} sizes="(max-width: 767px) 100vw, 50vw" />
         ) : (
           <div className="font-mono" style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#444444', fontSize: 'var(--text-meta)', letterSpacing: '0.12em' }}>
             GAME PREVIEW
@@ -83,7 +83,7 @@ export function PlayCard({
                   images={images}
                   alt={title}
                   hovered={hovered}
-                  sizes="(max-width: 767px) 100vw, 520px"
+                  sizes="(max-width: 767px) 100vw, 50vw"
                   imageFit="cover"
                   imagePosition="center center"
                   priorityFirstFrame={priorityImage}

@@ -9,7 +9,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
     title: 'Mixed Media Projects',
     description: `${content.copy.creativePage.mixedMediaIndexTitle} Mixed media creative work and visual experiments by Pramit Ranjan.`,
-    path: '/creative/mixed-media',
+    path: '/play/mixed-media',
     keywords: ['Pramit Ranjan mixed media', 'mixed media portfolio', 'visual experiments'],
   })
 }
@@ -23,7 +23,7 @@ export default async function MixedMediaPage() {
   return (
     <CreativeSectionIndexClient
       title={content.copy.creativePage.mixedMediaIndexTitle}
-      backHref="/creative"
+      backHref="/play"
       backLabel={content.copy.creativePage.backLabel}
       columnsClass="grid grid-cols-2 md:grid-cols-3"
       projects={projects}

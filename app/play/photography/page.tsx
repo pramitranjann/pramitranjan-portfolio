@@ -9,7 +9,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
     title: 'Photography',
     description: `${content.photography.heroTitle} Analog and digital photography by Pramit Ranjan across Southeast Asia.`,
-    path: '/creative/photography',
+    path: '/play/photography',
     keywords: ['Pramit Ranjan photography', 'Southeast Asia photography', 'film photography portfolio'],
   })
 }

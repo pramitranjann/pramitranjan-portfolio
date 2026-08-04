@@ -12,7 +12,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date()
 
   const workPage = getSitePage(content, 'work')
-  const creativePage = getSitePage(content, 'creative')
   const playPage = getSitePage(content, 'play')
   const aboutPage = getSitePage(content, 'about')
 
@@ -54,28 +53,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     )
   }
 
-  if (creativePage?.visible && creativePage.status === 'live') {
+  if (playPage?.visible && playPage.status === 'live') {
     entries.push(
       {
-        url: absoluteUrl('/creative'),
+        url: absoluteUrl('/play'),
         lastModified: now,
         changeFrequency: 'weekly',
         priority: 0.8,
       },
       {
-        url: absoluteUrl('/creative/photography'),
+        url: absoluteUrl('/play/photography'),
         lastModified: now,
         changeFrequency: 'monthly',
         priority: 0.7,
       },
       {
-        url: absoluteUrl('/creative/mixed-media'),
+        url: absoluteUrl('/play/mixed-media'),
         lastModified: now,
         changeFrequency: 'monthly',
         priority: 0.7,
       },
       {
-        url: absoluteUrl('/creative/branding'),
+        url: absoluteUrl('/play/branding'),
         lastModified: now,
         changeFrequency: 'monthly',
         priority: 0.7,
@@ -84,7 +83,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     entries.push(
       ...content.photography.cities.map((city) => ({
-        url: absoluteUrl(`/creative/photography/${city.slug}`),
+        url: absoluteUrl(`/play/photography/${city.slug}`),
         lastModified: now,
         changeFrequency: 'monthly' as const,
         priority: 0.7,
@@ -101,15 +100,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           priority: 0.75,
         }))
     )
-  }
-
-  if (playPage?.visible && playPage.status === 'live') {
-    entries.push({
-      url: absoluteUrl('/play'),
-      lastModified: now,
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    })
 
     entries.push(
       ...content.caseStudies

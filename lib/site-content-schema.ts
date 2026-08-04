@@ -318,6 +318,8 @@ export interface CreativePageCopy {
   eyebrow: string
   heroTitle: string
   heroBody: string
+  interactiveLabel: string
+  interactiveCount: string
   photographyLabel: string
   photographyCount: string
   mixedMediaLabel: string
@@ -331,9 +333,6 @@ export interface CreativePageCopy {
 }
 
 export interface PlayPageCopy {
-  eyebrow: string
-  heroTitle: string
-  heroBody: string
   cardCtaLabel: string
 }
 
@@ -920,6 +919,8 @@ function isCreativePageCopy(value: unknown): value is CreativePageCopy {
     isString(item.eyebrow) &&
     isString(item.heroTitle) &&
     isString(item.heroBody) &&
+    isString(item.interactiveLabel) &&
+    isString(item.interactiveCount) &&
     isString(item.photographyLabel) &&
     isString(item.photographyCount) &&
     isString(item.mixedMediaLabel) &&
@@ -936,12 +937,7 @@ function isCreativePageCopy(value: unknown): value is CreativePageCopy {
 function isPlayPageCopy(value: unknown): value is PlayPageCopy {
   if (!value || typeof value !== 'object') return false
   const item = value as Record<string, unknown>
-  return (
-    isString(item.eyebrow) &&
-    isString(item.heroTitle) &&
-    isString(item.heroBody) &&
-    isString(item.cardCtaLabel)
-  )
+  return isString(item.cardCtaLabel)
 }
 
 function isCaseStudyUiCopy(value: unknown): value is CaseStudyUiCopy {

@@ -25,7 +25,7 @@ export function PhotographyIndexClient({
       <main style={{ paddingTop: '57px' }}>
         <section style={{ padding: '48px 40px' }}>
           <div style={{ marginBottom: '16px' }}>
-            <Link href="/creative" className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#666666', textDecoration: 'none' }} onPointerDown={playNav}>
+            <Link href="/play" className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#666666', textDecoration: 'none' }} onPointerDown={playNav}>
               <span className="arrow-nudge-back">←</span> {copy.backLabel}
             </Link>
           </div>
@@ -50,7 +50,7 @@ export function PhotographyIndexClient({
               return city.comingSoon ? (
                 <div key={city.slug} className="h-full">{inner}</div>
               ) : (
-                <Link key={city.slug} href={`/creative/photography/${city.slug}`} className="h-full block" onPointerDown={playCardEnter}>{inner}</Link>
+                <Link key={city.slug} href={`/play/photography/${city.slug}`} className="h-full block" onPointerDown={playCardEnter}>{inner}</Link>
               )
             })}
           </div>

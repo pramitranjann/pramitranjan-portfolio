@@ -36,11 +36,28 @@ const protoContentSecurityPolicy = contentSecurityPolicy
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [new URL('https://jqklreasrzeulcsjewav.supabase.co/storage/v1/object/public/**')],
+    // A single allowed quality raises the whole site off the default 75:
+    // findClosestQuality() snaps <Image>'s unset default to the nearest entry,
+    // so every image encodes at 100 without touching a component. Adding 75 back
+    // to this list would silently undo that.
+    qualities: [100],
+    // AVIF first for the browsers that take it — flat UI mockups and gradients
+    // band badly in WebP at any quality. WebP stays as the fallback.
+    formats: ['image/avif', 'image/webp'],
   },
   turbopack: {
     root: projectRoot,
   },
   outputFileTracingRoot: projectRoot,
+  async redirects() {
+    // /creative became /play. Redirects run before public/ is served, so these
+    // stay one segment deep — image assets live at /creative/:section/:slug/:file.
+    return [
+      { source: '/creative', destination: '/play', permanent: true },
+      { source: '/creative/:section', destination: '/play/:section', permanent: true },
+      { source: '/creative/:section/:slug', destination: '/play/:section/:slug', permanent: true },
+    ]
+  },
   async headers() {
     return [
       {

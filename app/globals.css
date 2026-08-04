@@ -440,11 +440,22 @@ html, body {
   pointer-events: auto;
 }
 
-.editorial-case-study-nav a.editorial-case-study-nav-back,
-.editorial-case-study-nav a.editorial-case-study-nav-back:hover,
-.editorial-case-study-nav a.editorial-case-study-nav-back:focus-visible {
+/* `display` stays out of the :hover/:focus group on purpose. Folded together,
+   the hover selector outranked the desktop `display: block` below — media
+   queries add no specificity — so the link hid itself under the cursor, then
+   reappeared once the pointer fell off it, and flickered. */
+.editorial-case-study-nav a.editorial-case-study-nav-back {
   display: none;
   color: var(--color-red);
+  text-decoration: none;
+}
+
+/* Only here to outrank .editorial-case-study-nav-button:hover, which would
+   otherwise repaint the back link cream. The arrow nudge is the affordance. */
+.editorial-case-study-nav a.editorial-case-study-nav-back:hover,
+.editorial-case-study-nav a.editorial-case-study-nav-back:focus-visible {
+  color: var(--color-red);
+  background: transparent;
   text-decoration: none;
 }
 

@@ -2,10 +2,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 const frames = [
-  { label: 'KL · 001',   stock: '35mm',  width: 90, href: '/creative/photography/kl',        cover: '/creative/photography/kl/41.jpg' },
-  { label: 'PG · 002',   stock: 'HP5+',  width: 66, href: '/creative/photography/penang',     cover: '/creative/photography/penang/07.jpg' },
-  { label: 'SG · 003',   stock: 'X-TRA', width: 90, href: '/creative/photography/singapore',  cover: '/creative/photography/singapore/03.jpg' },
-  { label: 'HCM · 004',  stock: '35mm',  width: 90, href: '/creative/photography/hcmc',       cover: '/creative/photography/hcmc/01.jpg' },
+  { label: 'KL · 001',   stock: '35mm',  width: 90, href: '/play/photography/kl',        cover: '/creative/photography/kl/41.jpg' },
+  { label: 'PG · 002',   stock: 'HP5+',  width: 66, href: '/play/photography/penang',     cover: '/creative/photography/penang/07.jpg' },
+  { label: 'SG · 003',   stock: 'X-TRA', width: 90, href: '/play/photography/singapore',  cover: '/creative/photography/singapore/03.jpg' },
+  { label: 'HCM · 004',  stock: '35mm',  width: 90, href: '/play/photography/hcmc',       cover: '/creative/photography/hcmc/01.jpg' },
   { label: '',           stock: '',       width: 50, href: null,                               cover: null, faded: true },
 ]
 

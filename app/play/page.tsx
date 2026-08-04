@@ -1,19 +1,20 @@
 import type { Metadata } from 'next'
 import { UnderConstructionPage } from '@/components/UnderConstructionPage'
-import PlayPageLive from '@/components/PlayPageLive'
+import { PlayPageClient } from '@/components/PlayPageClient'
 import { buildMetadata, shouldIndexPage } from '@/lib/seo'
 import { getPublicSiteContent } from '@/lib/site-content'
 import { getSitePage } from '@/lib/site-pages'
+import { getPhotographyPreviewImages } from '@/lib/preview-images'
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getPublicSiteContent()
   const pageSettings = getSitePage(content, 'play')
 
   return buildMetadata({
-    title: 'Interactive Experiments',
-    description: `${content.copy.playPage.heroTitle}. ${content.copy.playPage.heroBody}`,
+    title: 'Play — Games, Photography & Mixed Media',
+    description: `${content.copy.creativePage.heroTitle}. ${content.copy.creativePage.heroBody}`,
     path: '/play',
-    keywords: ['Pramit Ranjan experiments', 'interactive design projects', 'creative coding portfolio'],
+    keywords: ['Pramit Ranjan experiments', 'interactive design projects', 'Pramit Ranjan photography', 'creative portfolio'],
     noIndex: !shouldIndexPage(pageSettings?.status),
   })
 }
@@ -46,5 +47,19 @@ export default async function PlayPage() {
     )
   }
 
-  return <PlayPageLive content={content} />
+  const galleriesBySlug = new Map(content.photography.galleries.map((gallery) => [gallery.slug, gallery.images]))
+  const cities = content.photography.cities.map((city) => ({
+    ...city,
+    previewImages: getPhotographyPreviewImages(city.cover, galleriesBySlug.get(city.slug)),
+  }))
+
+  return (
+    <PlayPageClient
+      games={content.caseStudies.filter((item) => item.section === 'play')}
+      cities={cities}
+      mixedMediaProjects={content.caseStudies.filter((item) => item.section === 'mixed-media')}
+      cardStyle={content.design.photographyCards}
+      hoverPreviewSettings={content.design.hoverPreviews}
+    />
+  )
 }

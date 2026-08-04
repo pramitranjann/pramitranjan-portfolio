@@ -9,7 +9,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
     title: 'Branding Projects',
     description: `${content.copy.creativePage.brandingIndexTitle} Brand identity and visual design work by Pramit Ranjan.`,
-    path: '/creative/branding',
+    path: '/play/branding',
     keywords: ['Pramit Ranjan branding', 'brand identity portfolio', 'visual design projects'],
   })
 }
@@ -23,9 +23,10 @@ export default async function BrandingPage() {
   return (
     <CreativeSectionIndexClient
       title={content.copy.creativePage.brandingIndexTitle}
-      backHref="/creative"
+      backHref="/play"
       backLabel={content.copy.creativePage.backLabel}
       columnsClass="grid grid-cols-2"
+      imageSizes="(max-width: 767px) 100vw, 50vw"
       projects={projects}
       cardStyle={content.design.photographyCards}
     />

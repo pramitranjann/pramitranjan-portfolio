@@ -14,7 +14,7 @@ export async function generateMetadata({
   return buildCaseStudyMetadata(caseStudy)
 }
 
-export default async function BrandingCaseStudyPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function MixedMediaCaseStudyPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const caseStudy = await getCaseStudyContent(slug)
   return (
@@ -23,9 +23,9 @@ export default async function BrandingCaseStudyPage({ params }: { params: Promis
         data={[
           buildBreadcrumbJsonLd([
             { name: 'Home', path: '/' },
-            { name: 'Creative', path: '/creative' },
-            { name: 'Branding', path: '/creative/branding' },
-            { name: caseStudy.title, path: `/creative/branding/${caseStudy.slug}` },
+            { name: 'Play', path: '/play' },
+            { name: 'Mixed Media', path: '/play/mixed-media' },
+            { name: caseStudy.title, path: `/play/mixed-media/${caseStudy.slug}` },
           ]),
           buildCaseStudyJsonLd(caseStudy),
         ]}

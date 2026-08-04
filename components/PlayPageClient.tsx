@@ -1,177 +1,190 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { GsapReveal } from '@/components/GsapReveal'
 import { Footer } from '@/components/Footer'
-import { Nav } from '@/components/Nav'
-import { PlayCard } from '@/components/PlayCard'
+import { GsapReveal } from '@/components/GsapReveal'
 import { useMotionSettings } from '@/components/MotionSettingsProvider'
+import { useSiteCopy } from '@/components/SiteCopyProvider'
+import { Nav } from '@/components/Nav'
+import { CreativeListingCard } from '@/components/CreativeListingCard'
+import { PlayCard } from '@/components/PlayCard'
+import type { CaseStudyContent, HoverPreviewSettings, PhotographyCardStyleSettings, PhotographyCity } from '@/lib/site-content-schema'
 import { getCaseStudyPreviewImages, mergePreviewImages } from '@/lib/preview-images'
-import type { SiteContent } from '@/lib/site-content-schema'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-export function PlayPageClient({
-  content,
-}: {
-  content: SiteContent
-}) {
-  const gridRef = useRef<HTMLDivElement>(null)
-  const motion = useMotionSettings()
+function SectionHeader({ label, count }: { label: string; count: string }) {
+  return (
+    <div className="flex items-center justify-between" style={{ marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid #1f1f1f' }}>
+      <span className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.14em', color: 'var(--color-heading)' }}>{label}</span>
+      <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.16em', color: 'var(--color-red)' }}>{count}</span>
+    </div>
+  )
+}
 
-  const games = content.caseStudies.filter((item) => item.section === 'play' && !item.hidden)
-  const copy = content.copy.playPage
+export function PlayPageClient({
+  games,
+  cities,
+  mixedMediaProjects,
+  cardStyle,
+  hoverPreviewSettings,
+}: {
+  games: CaseStudyContent[]
+  cities: PhotographyCity[]
+  mixedMediaProjects: CaseStudyContent[]
+  cardStyle: PhotographyCardStyleSettings
+  hoverPreviewSettings: HoverPreviewSettings
+}) {
+  const eyebrowRef = useRef<HTMLDivElement>(null)
+  const gameGridRef = useRef<HTMLDivElement>(null)
+  const photoGridRef = useRef<HTMLDivElement>(null)
+  const mixedGridRef = useRef<HTMLDivElement>(null)
+  const motion = useMotionSettings()
+  const copy = useSiteCopy().creativePage
+  const gameCtaLabel = useSiteCopy().playPage.cardCtaLabel
+
+  useEffect(() => {
+    const el = eyebrowRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add('eyebrow-animate')
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.1 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
-    const grid = gridRef.current
-    if (!grid) return
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const grids = [gameGridRef.current, photoGridRef.current, mixedGridRef.current].filter((grid): grid is HTMLDivElement => grid !== null)
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      const ctx = gsap.context(() => {
+    if (reduced) {
+      const contexts = grids.map((grid) => gsap.context(() => {
         gsap.set(grid.querySelectorAll('.portfolio-card'), { opacity: 1, scale: 1 })
-      }, grid)
-      return () => ctx.revert()
+      }, grid))
+      return () => contexts.forEach((context) => context.revert())
     }
 
-    const ctx = gsap.context(() => {
+    const contexts = grids.map((grid) => gsap.context(() => {
       const cards = grid.querySelectorAll('.portfolio-card')
       gsap.set(cards, { opacity: 0, scale: motion.gridStartScale })
-
       const animateCards = () => {
-        gsap.to(cards, {
-          opacity: 1,
-          scale: 1,
-          duration: motion.gridRevealDuration,
-          ease: 'power2.out',
-          stagger: motion.gridRevealStagger,
-        })
+        gsap.to(cards, { opacity: 1, scale: 1, duration: motion.gridRevealDuration, ease: 'power2.out', stagger: motion.gridRevealStagger })
       }
 
-      const gridAlreadyVisible = grid.getBoundingClientRect().top <= window.innerHeight * 0.85
-
-      if (gridAlreadyVisible) {
+      // The first grid is usually already in view on load, so ScrollTrigger never fires for it.
+      if (grid.getBoundingClientRect().top <= window.innerHeight * 0.85) {
         gsap.delayedCall(0.18, animateCards)
         return
       }
 
-      ScrollTrigger.create({
-        trigger: grid,
-        start: 'top 85%',
-        onEnter: animateCards,
-        once: true,
-      })
-    }, grid)
+      ScrollTrigger.create({ trigger: grid, start: 'top 85%', onEnter: animateCards, once: true })
+    }, grid))
 
-    return () => ctx.revert()
+    return () => contexts.forEach((context) => context.revert())
   }, [motion.gridRevealDuration, motion.gridRevealStagger, motion.gridStartScale])
 
   return (
     <>
       <Nav />
-
       <main style={{ paddingTop: '57px' }}>
-        <section
-          className="creative-hero-section border-b border-divider"
-          style={{
-            padding: '48px var(--layout-page-gutter) 56px',
-          }}
-        >
-          <div
-            className="eyebrow-animate flex items-center"
-            style={{
-              gap: '10px',
-              marginBottom: '24px',
-            }}
-          >
-            <div
-              className="eyebrow-line"
-              style={{
-                width: '32px',
-                height: '1px',
-                backgroundColor: 'var(--color-red)',
-              }}
-            />
-            <span
-              className="eyebrow-label font-mono"
-              style={{
-                fontSize: 'var(--text-eyebrow)',
-                letterSpacing: '0.18em',
-                color: 'var(--color-red)',
-              }}
-            >
-              {copy.eyebrow}
-            </span>
+        <section className="creative-hero-section border-b border-divider" style={{ padding: 'var(--layout-hero-padding-y) var(--layout-page-gutter)' }}>
+          <div ref={eyebrowRef} className="flex items-center" style={{ gap: '10px', marginBottom: '24px' }}>
+            <div className="eyebrow-line" style={{ width: '32px', height: '1px', backgroundColor: 'var(--color-red)' }} />
+            <span className="eyebrow-label font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: 'var(--color-red)' }}>{copy.eyebrow}</span>
           </div>
-
           <GsapReveal>
-            <h1
-              data-reveal
-              className="font-serif"
-              style={{
-                fontSize: 'var(--text-h1)',
-                fontWeight: 'var(--font-weight-serif)',
-                color: 'var(--color-heading)',
-                lineHeight: 1.05,
-                marginBottom: '20px',
-              }}
-            >
+            <h1 data-reveal className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 'var(--font-weight-serif)', color: 'var(--color-heading)', lineHeight: 1.05, marginBottom: '20px' }}>
               {copy.heroTitle}
             </h1>
-
-            <p
-              data-reveal
-              className="font-mono"
-              style={{
-                fontSize: 'var(--text-body-lg)',
-                letterSpacing: '0.04em',
-                color: 'var(--color-body)',
-                lineHeight: 1.9,
-                maxWidth: '480px',
-                margin: 0,
-              }}
-            >
+            <p data-reveal className="font-reading" style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: 'var(--color-heading)', lineHeight: 1.9, maxWidth: '480px' }}>
               {copy.heroBody}
             </p>
           </GsapReveal>
         </section>
 
-        <section
-          className="work-grid-section"
-          style={{ padding: '32px var(--layout-page-gutter) 56px' }}
-        >
-          <div
-            ref={gridRef}
-            className="grid play-card-grid"
-            style={{
-              gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
-              columnGap: '16px',
-              rowGap: '16px',
-              width: '100%',
-              margin: 0,
-            }}
-          >
-            {games.map((game, index) => {
-              const images = mergePreviewImages(game.heroImage, getCaseStudyPreviewImages(game))
-
-              return (
+        {games.length > 0 && (
+          <section className="creative-section border-b border-divider" style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter)' }}>
+            <SectionHeader label={copy.interactiveLabel} count={copy.interactiveCount} />
+            <div ref={gameGridRef} className="grid play-card-grid" style={{ gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 'var(--layout-card-gap)' }}>
+              {games.map((game, index) => (
                 <PlayCard
                   key={game.slug}
                   title={game.title}
                   oneliner={game.oneliner}
                   type={game.type}
                   href={`/play/${game.slug}`}
-                  images={images}
-                  ctaLabel={copy.cardCtaLabel}
-                  hoverPreviewSettings={content.design.hoverPreviews}
+                  images={mergePreviewImages(game.heroImage, getCaseStudyPreviewImages(game))}
+                  ctaLabel={gameCtaLabel}
+                  hoverPreviewSettings={hoverPreviewSettings}
                   priorityImage={index < 2}
                 />
-              )
-            })}
+              ))}
+            </div>
+          </section>
+        )}
+
+        <section className="creative-section border-b border-divider" style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter)' }}>
+          <SectionHeader label={copy.photographyLabel} count={copy.photographyCount} />
+          <div ref={photoGridRef} className="grid grid-cols-2 md:grid-cols-4" style={{ gap: 'var(--layout-card-gap)' }}>
+            {cities.map((city, index) => (
+              <CreativeListingCard
+                key={city.slug}
+                title={city.title}
+                desc={city.desc}
+                href={city.comingSoon ? undefined : `/play/photography/${city.slug}`}
+                cover={city.cover}
+                previewImages={city.previewImages}
+                comingSoon={city.comingSoon}
+                imagePosition={city.imagePosition ?? 'center'}
+                imageScale={city.imageScale}
+                hoverImagePosition={city.hoverImagePosition}
+                hoverImageScale={city.hoverImageScale}
+                cardStyle={cardStyle}
+                hoverPreviewSettings={hoverPreviewSettings}
+                priorityImage={index < 4}
+              />
+            ))}
+          </div>
+        </section>
+
+        <section className="creative-section border-b border-divider" style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter)' }}>
+          <SectionHeader label={copy.mixedMediaLabel} count={copy.mixedMediaCount} />
+          {/* Columns follow the published count so the row always fills the width —
+              with only two projects live, a fixed 3-up left a hole on the right. */}
+          <div
+            ref={mixedGridRef}
+            className="grid play-card-grid"
+            style={{ gridTemplateColumns: `repeat(${Math.min(mixedMediaProjects.length, 3)}, minmax(0, 1fr))`, gap: 'var(--layout-card-gap)' }}
+          >
+            {mixedMediaProjects.map((project, index) => (
+              <CreativeListingCard
+                key={project.slug}
+                title={project.title}
+                desc={project.oneliner}
+                tag={project.type}
+                href={`/play/mixed-media/${project.slug}`}
+                cover={project.heroImage}
+                previewImages={getCaseStudyPreviewImages(project)}
+                imagePosition={project.cardImagePosition ?? 'center'}
+                imageScale={project.cardImageScale}
+                hoverImagePosition={project.cardHoverImagePosition}
+                hoverImageScale={project.cardHoverImageScale}
+                cardStyle={cardStyle}
+                hoverPreviewSettings={hoverPreviewSettings}
+                priorityImage={index < 3}
+                sizes="(max-width: 767px) 100vw, 50vw"
+              />
+            ))}
           </div>
         </section>
       </main>
-
       <Footer />
     </>
   )

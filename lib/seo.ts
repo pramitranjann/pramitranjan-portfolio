@@ -54,9 +54,9 @@ export function getCaseStudyRoute(caseStudy: Pick<CaseStudyContent, 'section' | 
     case 'play':
       return `/play/${caseStudy.slug}`
     case 'branding':
-      return `/creative/branding/${caseStudy.slug}`
+      return `/play/branding/${caseStudy.slug}`
     case 'mixed-media':
-      return `/creative/mixed-media/${caseStudy.slug}`
+      return `/play/mixed-media/${caseStudy.slug}`
     case 'work':
     default:
       return `/work/${caseStudy.slug}`
