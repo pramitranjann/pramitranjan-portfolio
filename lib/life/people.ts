@@ -2,7 +2,7 @@ import 'server-only'
 
 import { OWNER_ID } from '@/lib/life/constants'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
-import type { InteractionKind, InteractionRecord, PersonRecord, PersonRelationship, TaskRecord } from '@/lib/life/types'
+import type { InteractionKind, InteractionRecord, PersonLink, PersonRecord, PersonRelationship, TaskRecord } from '@/lib/life/types'
 
 const RELATIONSHIPS: PersonRelationship[] = ['mentor', 'professor', 'alumni', 'recruiter', 'founder', 'collaborator', 'contact']
 const INTERACTION_KINDS: InteractionKind[] = ['met', 'call', 'message', 'showed_work', 'note']
@@ -39,6 +39,20 @@ export async function getPersonById(id: string): Promise<PersonRecord | null> {
   return (data as PersonRecord | null) ?? null
 }
 
+/** Drops blanks and trims — a stray empty tag from a comma-split is not data. */
+function normalizeTags(value: string[] | null | undefined): string[] {
+  if (!Array.isArray(value)) return []
+  return value.map((tag) => tag.trim()).filter(Boolean)
+}
+
+/** A link needs both halves to be usable; a label with no URL goes nowhere. */
+function normalizeLinks(value: PersonLink[] | null | undefined): PersonLink[] {
+  if (!Array.isArray(value)) return []
+  return value
+    .map((link) => ({ label: link?.label?.trim() ?? '', url: link?.url?.trim() ?? '' }))
+    .filter((link) => link.label && link.url)
+}
+
 export async function createPerson(input: {
   name: string
   role?: string | null
@@ -46,6 +60,12 @@ export async function createPerson(input: {
   why?: string | null
   channel?: string | null
   cadenceDays?: number | null
+  email?: string | null
+  phone?: string | null
+  how?: string | null
+  links?: PersonLink[] | null
+  likes?: string[] | null
+  dislikes?: string[] | null
 }): Promise<PersonRecord> {
   const name = input.name.trim()
   if (!name) throw new Error('Person name is required.')
@@ -61,6 +81,12 @@ export async function createPerson(input: {
       why: input.why?.trim() || null,
       channel: input.channel?.trim() || null,
       cadence_days: normalizeCadenceDays(input.cadenceDays),
+      email: input.email?.trim() || null,
+      phone: input.phone?.trim() || null,
+      how: input.how?.trim() || null,
+      links: normalizeLinks(input.links),
+      likes: normalizeTags(input.likes),
+      dislikes: normalizeTags(input.dislikes),
     })
     .select('*')
     .single()
@@ -79,6 +105,12 @@ export async function updatePerson(
     channel?: string | null
     cadenceDays?: number | null
     archived?: boolean
+    email?: string | null
+    phone?: string | null
+    how?: string | null
+    links?: PersonLink[] | null
+    likes?: string[] | null
+    dislikes?: string[] | null
   },
 ): Promise<PersonRecord> {
   const supabase = getSupabaseAdmin()
@@ -94,6 +126,14 @@ export async function updatePerson(
   if ('channel' in patch) update.channel = patch.channel?.trim() || null
   if ('cadenceDays' in patch) update.cadence_days = normalizeCadenceDays(patch.cadenceDays)
   if (patch.archived !== undefined) update.archived = patch.archived
+  // `in patch`, not `!== undefined`: clearing a field means sending null, and
+  // an undefined check would silently drop the clear.
+  if ('email' in patch) update.email = patch.email?.trim() || null
+  if ('phone' in patch) update.phone = patch.phone?.trim() || null
+  if ('how' in patch) update.how = patch.how?.trim() || null
+  if ('links' in patch) update.links = normalizeLinks(patch.links)
+  if ('likes' in patch) update.likes = normalizeTags(patch.likes)
+  if ('dislikes' in patch) update.dislikes = normalizeTags(patch.dislikes)
 
   const { data, error } = await supabase
     .from('people')

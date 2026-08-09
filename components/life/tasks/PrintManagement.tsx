@@ -2,9 +2,15 @@
 
 import { useMemo, useState } from 'react'
 
+import { LifeMenu } from '@/components/life/ui/LifeMenu'
+import { LifeTable, type TableColumn } from '@/components/life/ui/LifeTable'
 import { shortTaskCode } from '@/lib/life/receipt'
 import { localDateTimeToUtc } from '@/lib/life/time'
 import type { PrintJobRecord, TaskPrintInfo, TaskRecord } from '@/lib/life/types'
+
+// LifeTable's T extends Record<string, unknown>; interfaces (unlike type
+// literals) have no implicit index signature, so the domain types need this
+// intersection to satisfy the constraint. Property types are unaffected.
 
 const PRINT_STATE_LABEL: Record<string, string> = {
   none: 'Not printed',
@@ -84,11 +90,9 @@ export function PrintManagement({
   onRetry: (jobId: string) => Promise<void>
 }) {
   const now = Date.now()
-  const [selected, setSelected] = useState<Set<string>>(new Set())
   const [projectFilter, setProjectFilter] = useState<string>('all')
   const [showDone, setShowDone] = useState(false)
   const [busy, setBusy] = useState(false)
-
   // Project options drawn from whatever the current tasks reference.
   const projectOptions = useMemo(() => {
     const slugs = new Set<string>()
@@ -131,28 +135,12 @@ export function PrintManagement({
         ? 'queued'
         : 'idle'
 
-  function toggle(taskId: string) {
-    setSelected((current) => {
-      const next = new Set(current)
-      if (next.has(taskId)) next.delete(taskId)
-      else next.add(taskId)
-      return next
-    })
-  }
-
-  function toggleAll() {
-    setSelected((current) =>
-      current.size === needsPrinting.length ? new Set() : new Set(needsPrinting.map((task) => task.id)),
-    )
-  }
-
-  async function queueSelected() {
-    const ids = needsPrinting.filter((task) => selected.has(task.id)).map((task) => task.id)
-    if (!ids.length || busy) return
+  async function bulkQueue(ids: string[]) {
+    if (!ids.length || busy) return false
     setBusy(true)
     try {
-      const queued = await onQueueMany(ids)
-      if (queued) setSelected(new Set())
+      // Reported back to LifeTable: a failed queue keeps the rows selected.
+      return Boolean(await onQueueMany(ids))
     } finally {
       setBusy(false)
     }
@@ -198,7 +186,80 @@ export function PrintManagement({
     }
   }
 
-  const selectedCount = needsPrinting.filter((task) => selected.has(task.id)).length
+  const needsPrintingColumns: TableColumn<TaskRecord>[] = [
+    {
+      key: 'title',
+      label: 'Task',
+      title: true,
+      render: (task) => (
+        <span className={`life-print-row-title${task.status === 'done' ? ' is-done' : ''}`}>{task.title}</span>
+      ),
+    },
+    {
+      key: 'project_slug',
+      label: 'Project',
+      render: (task) => (task.project_slug ? <span className="life-tag">{labelFor(task.project_slug)}</span> : null),
+    },
+    {
+      key: 'due_local_date',
+      label: 'Due',
+      render: (task) => {
+        const due = dueLabel(task.due_local_date, timezone)
+        return due ? <span className="life-due-chip">{due}</span> : null
+      },
+    },
+    {
+      key: 'id',
+      label: 'Code',
+      render: (task) => <span className="life-print-code">{shortTaskCode(task.id)}</span>,
+    },
+  ]
+
+  const queueColumns: TableColumn<PrintJobRecord>[] = [
+    { key: 'task_title', label: 'Task', title: true },
+    {
+      key: 'status',
+      label: 'Status',
+      render: (job) => <span className={`life-print-badge state-${job.status}`}>{PRINT_STATE_LABEL[job.status]}</span>,
+    },
+    {
+      key: 'created_at',
+      label: 'Queued',
+      render: (job) => <span className="life-print-when">{whenLabel(job.created_at, timezone)}</span>,
+    },
+  ]
+
+  const attentionColumns: TableColumn<PrintJobRecord>[] = [
+    { key: 'task_title', label: 'Task', title: true },
+    {
+      key: 'status',
+      label: 'Status',
+      render: (job) => (
+        <span className="life-print-badge state-failed">
+          {isLeaseStale(job, now) ? 'Stuck' : isManualCancel(job) ? 'Cancelled' : 'Failed'}
+        </span>
+      ),
+    },
+    {
+      key: 'last_error',
+      label: 'Error',
+      render: (job) => {
+        if (isLeaseStale(job, now)) {
+          return <span className="life-print-error">No completion came back from the ESP board before the lease expired.</span>
+        }
+        return job.last_error ? <span className="life-print-error">{job.last_error}</span> : null
+      },
+    },
+  ]
+
+  const printedColumns: TableColumn<PrintJobRecord>[] = [
+    { key: 'task_title', label: 'Task', title: true },
+    {
+      key: 'printed_at',
+      label: 'Printed',
+      render: (job) => <span className="life-print-when">{whenLabel(job.printed_at, timezone)}</span>,
+    },
+  ]
 
   return (
     <div className="life-print-section">
@@ -226,19 +287,18 @@ export function PrintManagement({
       </section>
 
       <div className="life-print-filterbar">
-        <select
-          className="life-print-select"
+        <LifeMenu
+          ariaLabel="Filter by project"
           value={projectFilter}
-          onChange={(event) => setProjectFilter(event.target.value)}
-          aria-label="Filter by project"
-        >
-          <option value="all">All projects</option>
-          {projectOptions.map((slug) => (
-            <option key={slug} value={slug}>
-              {labelFor(slug)}
-            </option>
-          ))}
-        </select>
+          options={[
+            { value: 'all', label: 'All projects' },
+            ...projectOptions.map((slug) => ({
+              value: slug,
+              label: labelFor(slug),
+            })),
+          ]}
+          onChange={(value) => setProjectFilter(value)}
+        />
         <label className="life-print-check-label">
           <input type="checkbox" checked={showDone} onChange={(event) => setShowDone(event.target.checked)} />
           Show completed
@@ -250,35 +310,18 @@ export function PrintManagement({
         <div className="life-print-bucket-head">
           <h3>Needs Printing</h3>
           <span className="life-print-count">{needsPrinting.length}</span>
-          {needsPrinting.length > 0 ? (
-            <div className="life-print-bucket-actions">
-              <button type="button" className="life-btn ghost" onClick={toggleAll}>
-                {selected.size === needsPrinting.length ? 'Clear' : 'Select all'}
-              </button>
-              <button type="button" className="life-btn primary" disabled={selectedCount === 0 || busy} onClick={queueSelected}>
-                Queue {selectedCount || ''} for desk
-              </button>
-            </div>
-          ) : null}
         </div>
         {needsPrinting.length === 0 ? (
           <div className="life-empty">Nothing waiting to print.</div>
         ) : (
-          <div className="life-print-rows">
-            {needsPrinting.map((task) => (
-              <label className="life-print-row" key={task.id}>
-                <input type="checkbox" checked={selected.has(task.id)} onChange={() => toggle(task.id)} />
-                <span className={`life-print-row-title${task.status === 'done' ? ' is-done' : ''}`}>{task.title}</span>
-                <span className="life-print-row-meta">
-                  {task.project_slug ? <span className="life-tag">{labelFor(task.project_slug)}</span> : null}
-                  {dueLabel(task.due_local_date, timezone) ? (
-                    <span className="life-due-chip">{dueLabel(task.due_local_date, timezone)}</span>
-                  ) : null}
-                  <span className="life-print-code">{shortTaskCode(task.id)}</span>
-                </span>
-              </label>
-            ))}
-          </div>
+          <LifeTable<TaskRecord>
+            columns={needsPrintingColumns}
+            rows={needsPrinting}
+            getRowId={(task) => task.id}
+            selectable
+            onBulk={bulkQueue}
+            bulkLabel="Queue for desk"
+          />
         )}
       </section>
 
@@ -291,20 +334,16 @@ export function PrintManagement({
         {queueJobs.length === 0 ? (
           <div className="life-empty">No jobs waiting for the printer.</div>
         ) : (
-          <div className="life-print-rows">
-            {queueJobs.map((job) => (
-              <div className="life-print-row" key={job.id}>
-                <span className="life-print-row-title">{job.task_title}</span>
-                <span className="life-print-row-meta">
-                  <span className={`life-print-badge state-${job.status}`}>{PRINT_STATE_LABEL[job.status]}</span>
-                  <span className="life-print-when">{whenLabel(job.created_at, timezone)}</span>
-                  <button type="button" className="life-btn ghost" disabled={busy} onClick={() => cancel(job.id)}>
-                    Cancel
-                  </button>
-                </span>
-              </div>
-            ))}
-          </div>
+          <LifeTable<PrintJobRecord>
+            columns={queueColumns}
+            rows={queueJobs}
+            getRowId={(job) => job.id}
+            rowActions={(job) => (
+              <button type="button" className="life-btn ghost" disabled={busy} onClick={() => cancel(job.id)}>
+                Cancel
+              </button>
+            )}
+          />
         )}
       </section>
 
@@ -317,34 +356,26 @@ export function PrintManagement({
         {attentionJobs.length === 0 ? (
           <div className="life-empty">No failed or stuck jobs.</div>
         ) : (
-          <div className="life-print-rows">
-            {attentionJobs.map((job) => {
-              const stale = isLeaseStale(job, now)
-              return (
-                <div className="life-print-row" key={job.id}>
-                  <span className="life-print-row-title">{job.task_title}</span>
-                  <span className="life-print-row-meta">
-                    <span className="life-print-badge state-failed">
-                      {stale ? 'Stuck' : isManualCancel(job) ? 'Cancelled' : 'Failed'}
-                    </span>
-                    {stale ? <span className="life-print-error">No completion came back from the ESP board before the lease expired.</span> : null}
-                    {job.last_error && !stale ? <span className="life-print-error">{job.last_error}</span> : null}
-                    <button type="button" className="life-btn ghost" disabled={busy} onClick={() => retry(job.id)}>
-                      Retry
-                    </button>
-                    {stale ? (
-                      <button type="button" className="life-btn ghost" disabled={busy} onClick={() => cancel(job.id)}>
-                        Cancel
-                      </button>
-                    ) : null}
-                    <button type="button" className="life-btn ghost" disabled={busy} onClick={() => remove(job.id)}>
-                      Delete
-                    </button>
-                  </span>
-                </div>
-              )
-            })}
-          </div>
+          <LifeTable<PrintJobRecord>
+            columns={attentionColumns}
+            rows={attentionJobs}
+            getRowId={(job) => job.id}
+            rowActions={(job) => (
+              <>
+                <button type="button" className="life-btn ghost" disabled={busy} onClick={() => retry(job.id)}>
+                  Retry
+                </button>
+                {isLeaseStale(job, now) ? (
+                  <button type="button" className="life-btn ghost" disabled={busy} onClick={() => cancel(job.id)}>
+                    Cancel
+                  </button>
+                ) : null}
+                <button type="button" className="life-btn ghost" disabled={busy} onClick={() => remove(job.id)}>
+                  Delete
+                </button>
+              </>
+            )}
+          />
         )}
       </section>
 
@@ -357,22 +388,18 @@ export function PrintManagement({
         {printedJobs.length === 0 ? (
           <div className="life-empty">No receipts printed yet.</div>
         ) : (
-          <div className="life-print-rows">
-            {printedJobs.map((job) => (
-              <div className="life-print-row" key={job.id}>
-                <span className="life-print-row-title">{job.task_title}</span>
-                <span className="life-print-row-meta">
-                  <span className="life-print-badge state-printed">Printed</span>
-                  <span className="life-print-when">{whenLabel(job.printed_at, timezone)}</span>
-                  {job.task_id ? (
-                    <button type="button" className="life-btn ghost" disabled={busy} onClick={() => reprint(job.task_id as string)}>
-                      Reprint
-                    </button>
-                  ) : null}
-                </span>
-              </div>
-            ))}
-          </div>
+          <LifeTable<PrintJobRecord>
+            columns={printedColumns}
+            rows={printedJobs}
+            getRowId={(job) => job.id}
+            rowActions={(job) =>
+              job.task_id ? (
+                <button type="button" className="life-btn ghost" disabled={busy} onClick={() => reprint(job.task_id as string)}>
+                  Reprint
+                </button>
+              ) : null
+            }
+          />
         )}
       </section>
     </div>

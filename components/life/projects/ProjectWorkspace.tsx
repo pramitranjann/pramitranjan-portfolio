@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import { LifeCalendar } from '@/components/life/tasks/LifeCalendar'
+import { LifeConfirm } from '@/components/life/ui/LifeConfirm'
 import { fetchJson } from '@/lib/life/client'
 import type {
   CalendarEventRecord,
@@ -23,7 +24,8 @@ import { ProjectTasks } from './ProjectTasks'
 import { ProjectUxTemplates } from './ProjectUxTemplates'
 import { healthTone, progressPct, relativeDueLabel, STATUS_LABEL, STATUS_OPTIONS } from './shared'
 
-type Tab = 'overview' | 'tasks' | 'events' | 'refs' | 'pages'
+// Pages are no longer a tab — they open as documents from the rail.
+type Tab = 'overview' | 'tasks' | 'events' | 'refs'
 
 const PRIORITY_RANK: Record<string, number> = { high: 0, medium: 1, low: 2 }
 const PROJECT_SWATCHES = ['#e9b765', '#7fd899', '#9aa6ff', '#e58fb8', '#6fcfd6', '#c79bff', '#ff6c61']
@@ -62,6 +64,7 @@ export function ProjectWorkspace({
   subprojects,
   events,
   linkedEvents,
+  linkedEventsFailed = false,
   today,
   timezone,
   uxTemplates,
@@ -77,6 +80,8 @@ export function ProjectWorkspace({
   subprojects: ProjectRecord[]
   events: CalendarEventRecord[]
   linkedEvents: Record<string, TaskLinkedEvent>
+  /** Calendar lookup failed server-side; events are missing, not absent. */
+  linkedEventsFailed?: boolean
   today: string
   timezone: string
   uxTemplates: Array<{ key: string; name: string; phase: string; summary: string; color: string }>
@@ -84,13 +89,19 @@ export function ProjectWorkspace({
   const router = useRouter()
   const searchParams = useSearchParams()
   const activePageId = searchParams.get('page')
-  const defaultTab: Tab = activePageId
-    ? 'pages'
-    : project.project_kind === 'ux' && pages.length > 0 && tasks.length === 0
-      ? 'pages'
-      : 'overview'
-  const [tab, setTab] = useState<Tab>(defaultTab)
+  // A page open in the URL takes over the pane entirely, so the tab behind it
+  // only matters once the page is closed — Overview is the right thing to
+  // land back on.
+  const [tab, setTab] = useState<Tab>('overview')
   const [treeOpen, setTreeOpen] = useState(true)
+
+  // On a phone the rail stacks above the project, so leaving it open buries the
+  // thing you navigated to under a full list of everything else. Collapse it on
+  // mount at narrow widths; the toggle still works from there.
+  useEffect(() => {
+    if (window.matchMedia('(max-width: 720px)').matches) setTreeOpen(false)
+  }, [])
+
   const [status, setStatus] = useState<ProjectStatus>(project.status)
   const [projectKind, setProjectKind] = useState(project.project_kind)
   const [targetDate, setTargetDate] = useState<string | null>(project.target_date)
@@ -135,6 +146,8 @@ export function ProjectWorkspace({
   const [subprojectColor, setSubprojectColor] = useState(project.color || PROJECT_SWATCHES[0])
   const [savingSubproject, setSavingSubproject] = useState(false)
   const [deletingSlug, setDeletingSlug] = useState<string | null>(null)
+  const [pendingDelete, setPendingDelete] = useState<{ slug: string; name: string; redirectTo?: string } | null>(null)
+  const [creatingPage, setCreatingPage] = useState(false)
 
   const open = tasks.filter((task) => task.status !== 'done')
   const done = tasks.filter((task) => task.status === 'done')
@@ -261,11 +274,29 @@ export function ProjectWorkspace({
     }
   }
 
-  async function deleteProjectBySlug(slug: string, name: string, redirectTo?: string) {
-    if (deletingSlug) return
-    const confirmed = window.confirm(`Delete "${name}"? Its tasks and entries will keep their history but lose the project label.`)
-    if (!confirmed) return
+  // Pages used to be created from the list inside the Pages tab. That list is
+  // gone, so creation lives next to the pages it produces and opens the new
+  // page straight away — same URL a rail click uses.
+  async function createPage() {
+    if (creatingPage) return
+    setCreatingPage(true)
+    setError(null)
+    try {
+      const payload = await fetchJson<{ page: ProjectPageRecord }>(
+        `/api/life/projects/${project.slug}/pages`,
+        { method: 'POST', body: JSON.stringify({ title: 'Untitled', body: '' }) },
+      )
+      router.push(`/life/projects/${project.slug}?page=${payload.page.id}`)
+      router.refresh()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to create page.')
+    } finally {
+      setCreatingPage(false)
+    }
+  }
 
+  async function deleteProjectBySlug(slug: string, redirectTo?: string) {
+    if (deletingSlug) return
     setDeletingSlug(slug)
     setError(null)
     try {
@@ -321,7 +352,6 @@ export function ProjectWorkspace({
                                 key={page.id}
                                 href={`/life/projects/${root.slug}?page=${page.id}`}
                                 className={`life-project-tree-page${project.slug === root.slug && activePageId === page.id ? ' is-active' : ''}`}
-                                onClick={() => setTab('pages')}
                               >
                                 {page.title}
                               </Link>
@@ -350,7 +380,6 @@ export function ProjectWorkspace({
                                           key={page.id}
                                           href={`/life/projects/${section.slug}?page=${page.id}`}
                                           className={`life-project-tree-page${project.slug === section.slug && activePageId === page.id ? ' is-active' : ''}`}
-                                          onClick={() => setTab('pages')}
                                         >
                                           {page.title}
                                         </Link>
@@ -374,16 +403,26 @@ export function ProjectWorkspace({
 
       <div className="life-project-workspace">
       <div className="life-project-back">
-        <Link href="/life/projects" className="life-back-link">
-          ← Projects
-        </Link>
-        {parentProject ? (
-          <Link href={`/life/projects/${parentProject.slug}`} className="life-back-link">
-            ← {parentProject.name}
+        {activePageId ? (
+          // Reading a page: the only useful exit is back up to its project.
+          <Link href={`/life/projects/${project.slug}`} className="life-back-link">
+            ← {project.name}
           </Link>
-        ) : null}
+        ) : (
+          <>
+            <Link href="/life/projects" className="life-back-link">
+              ← Projects
+            </Link>
+            {parentProject ? (
+              <Link href={`/life/projects/${parentProject.slug}`} className="life-back-link">
+                ← {parentProject.name}
+              </Link>
+            ) : null}
+          </>
+        )}
       </div>
 
+      {activePageId ? null : (
       <div className="life-page-head life-project-head">
         <div className="life-project-head-copy">
           <p className="eyebrow">
@@ -488,7 +527,14 @@ export function ProjectWorkspace({
                     type="button"
                     className="is-danger"
                     disabled={deletingSlug === project.slug}
-                    onClick={() => void deleteProjectBySlug(project.slug, project.name, parentProject ? `/life/projects/${parentProject.slug}` : '/life/projects')}
+                    onClick={() => {
+                      setOverflowOpen(false)
+                      setPendingDelete({
+                        slug: project.slug,
+                        name: project.name,
+                        redirectTo: parentProject ? `/life/projects/${parentProject.slug}` : '/life/projects',
+                      })
+                    }}
                   >
                     {deletingSlug === project.slug ? 'Deleting…' : parentProject ? 'Delete sub-project' : 'Delete project'}
                   </button>
@@ -521,6 +567,20 @@ export function ProjectWorkspace({
           </div>
         </div>
       </div>
+      )}
+
+      <LifeConfirm
+        open={pendingDelete !== null}
+        title={`Delete "${pendingDelete?.name ?? ''}"?`}
+        body="Its tasks and entries keep their history but lose the project label."
+        confirmLabel={deletingSlug ? 'Deleting…' : 'Delete'}
+        onCancel={() => setPendingDelete(null)}
+        onConfirm={() => {
+          const target = pendingDelete
+          setPendingDelete(null)
+          if (target) void deleteProjectBySlug(target.slug, target.redirectTo)
+        }}
+      />
 
       {calOpen ? (
         <LifeCalendar
@@ -532,13 +592,17 @@ export function ProjectWorkspace({
       ) : null}
 
       {error ? <p className="error-text">{error}</p> : null}
+      {linkedEventsFailed ? (
+        <p className="error-text">
+          Couldn’t load linked calendar events — task event chips may be missing. Reload to
+          try again.
+        </p>
+      ) : null}
 
+      {activePageId ? null : (
       <div className="life-project-tabs">
         <button type="button" className={`life-project-tab${tab === 'overview' ? ' is-active' : ''}`} onClick={() => setTab('overview')}>
           Overview
-        </button>
-        <button type="button" className={`life-project-tab${tab === 'pages' ? ' is-active' : ''}`} onClick={() => setTab('pages')}>
-          Pages <span className="chip-count">{pages.length}</span>
         </button>
         <button type="button" className={`life-project-tab${tab === 'tasks' ? ' is-active' : ''}`} onClick={() => setTab('tasks')}>
           Tasks <span className="chip-count">{tasks.length}</span>
@@ -550,7 +614,18 @@ export function ProjectWorkspace({
           Events <span className="chip-count">{events.length}</span>
         </button>
       </div>
+      )}
 
+      {activePageId ? (
+        <ProjectPages
+          projectSlug={project.slug}
+          pages={pages}
+          tasks={tasks}
+          refs={refs}
+          today={today}
+          chromeless
+        />
+      ) : (
       <div key={tab} className="life-project-tab-body">
         {tab === 'overview' ? (
           <div className="life-project-overview">
@@ -638,7 +713,7 @@ export function ProjectWorkspace({
                         className="life-project-child-delete"
                         disabled={deletingSlug === child.slug}
                         aria-label={`Delete ${child.name}`}
-                        onClick={() => void deleteProjectBySlug(child.slug, child.name)}
+                        onClick={() => setPendingDelete({ slug: child.slug, name: child.name })}
                       >
                         {deletingSlug === child.slug ? '…' : '×'}
                       </button>
@@ -651,9 +726,19 @@ export function ProjectWorkspace({
             </div>
 
             <div className="life-overview-section">
-              <div className="life-project-children-heading">
-                <span className="eyebrow">Recent pages</span>
-                <span className="life-project-children-count">{pages.length}</span>
+              <div className="life-project-children-head">
+                <div className="life-project-children-heading">
+                  <span className="eyebrow">Recent pages</span>
+                  <span className="life-project-children-count">{pages.length}</span>
+                </div>
+                <button
+                  type="button"
+                  className="life-btn ghost life-project-child-add"
+                  disabled={creatingPage}
+                  onClick={() => void createPage()}
+                >
+                  {creatingPage ? 'Adding…' : '+ Page'}
+                </button>
               </div>
               <div className="life-list">
                 {recentPages.length === 0 ? <div className="life-empty">No pages yet.</div> : null}
@@ -662,7 +747,6 @@ export function ProjectWorkspace({
                     key={page.id}
                     href={`/life/projects/${project.slug}?page=${page.id}`}
                     className="life-overview-row"
-                    onClick={() => setTab('pages')}
                   >
                     <span className="life-overview-row-title">{page.title}</span>
                     <span className="life-row-aside">{formatPageUpdated(page.updated_at, timezone)}</span>
@@ -703,8 +787,8 @@ export function ProjectWorkspace({
           <ProjectEvents projectSlug={project.slug} events={events} today={today} timezone={timezone} />
         ) : null}
         {tab === 'refs' ? <ProjectRefs projectSlug={project.slug} refs={refs} /> : null}
-        {tab === 'pages' ? <ProjectPages projectSlug={project.slug} pages={pages} tasks={tasks} refs={refs} today={today} /> : null}
       </div>
+      )}
     </div>
     </div>
   )

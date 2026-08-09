@@ -113,7 +113,7 @@ export async function searchLife(rawQuery: string): Promise<LifeSearchResults> {
 
   const events = (eventRes.data || []).map((event) => ({
     id: event.id,
-    href: '/life/review',
+    href: '/life/month',
     title: event.title || '(Untitled event)',
     timeLabel: event.all_day
       ? 'All day'

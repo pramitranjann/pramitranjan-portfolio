@@ -56,6 +56,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
   // Denormalise linked events so task cards can render their time/title.
   const linkedEvents: Record<string, TaskLinkedEvent> = {}
+  let linkedEventsFailed = false
   if (taskEventIds.length > 0) {
     try {
       const linked = await getCalendarEventsByIds(taskEventIds)
@@ -70,6 +71,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       }
     } catch (error) {
       console.error('Failed to load linked events for project', error)
+      // The page used to render as if the events simply didn't exist, which
+      // looks correct and is wrong. Tell the workspace so it can say so.
+      linkedEventsFailed = true
     }
   }
 
@@ -86,6 +90,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       subprojects={subprojects}
       events={events}
       linkedEvents={linkedEvents}
+      linkedEventsFailed={linkedEventsFailed}
       today={today}
       timezone={settings.timezone}
       uxTemplates={UX_TEMPLATE_SECTIONS.map(({ key, name, phase, summary, color }) => ({ key, name, phase, summary, color }))}

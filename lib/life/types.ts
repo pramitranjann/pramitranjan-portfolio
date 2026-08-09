@@ -310,8 +310,21 @@ export interface PersonRecord {
   channel: string | null;
   cadence_days: number | null;
   archived: boolean;
+  email: string | null;
+  phone: string | null;
+  /** How you know them. `why` is the separate question of what you want. */
+  how: string | null;
+  /** Always arrays — the 010 columns default to '[]'/'{}', never null. */
+  links: PersonLink[];
+  likes: string[];
+  dislikes: string[];
   created_at: string;
   updated_at: string;
+}
+
+export interface PersonLink {
+  label: string;
+  url: string;
 }
 
 export type InteractionKind = "met" | "call" | "message" | "showed_work" | "note";

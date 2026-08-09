@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 
 import { LifeHeader } from '@/components/life/LifeHeader'
 import { LifeProjectsProvider } from '@/components/life/LifeProjectsProvider'
+import { LifeToaster } from '@/components/life/ui/LifeToast'
 import { listProjectsClient } from '@/lib/life/projects-db'
 import type { LifeProjectClient } from '@/lib/life/types'
 
@@ -55,6 +56,7 @@ export default async function LifeLayout({ children }: { children: React.ReactNo
           <LifeHeader />
           <main className="content-shell">{children}</main>
         </div>
+        <LifeToaster />
       </LifeProjectsProvider>
     </div>
   )

@@ -1,11 +1,12 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { LifeCalendar } from '@/components/life/tasks/LifeCalendar'
 import { PrintManagement } from '@/components/life/tasks/PrintManagement'
 import { TaskForm } from '@/components/life/tasks/TaskForm'
+import { lifeToast } from '@/components/life/ui/LifeToast'
 import { useViewportMode } from '@/hooks/useViewportMode'
 import { fetchJson } from '@/lib/life/client'
 import { useLifeProjects } from '@/components/life/LifeProjectsProvider'
@@ -315,6 +316,8 @@ export function TasksClient({
   const [printBusyId, setPrintBusyId] = useState<string | null>(null)
   const [printNote, setPrintNote] = useState<string | null>(null)
   const [printLayoutRequest, setPrintLayoutRequest] = useState<PrintLayoutRequest | null>(null)
+  const [swipe, setSwipe] = useState<{ id: string; dx: number; releasing: boolean } | null>(null)
+  const swipeGesture = useRef<{ id: string; startX: number; startY: number; locked: 'x' | 'y' | null } | null>(null)
 
   useEffect(() => {
     setView(readStoredView())
@@ -415,6 +418,71 @@ export function TasksClient({
     setEditId(null)
     setTaskActionError(null)
     router.refresh()
+  }
+
+  // Swipe-to-delete (phone list rows only). Fires the same delete call as the
+  // trash icon, then offers Undo instead of a confirm modal — a swipe that
+  // opens a dialog defeats the gesture.
+  function deleteTaskWithUndo(task: TaskRecord) {
+    const originalStatus = task.status
+    void deleteTask(task.id)
+    lifeToast({
+      message: `Deleted "${task.title}"`,
+      actionLabel: 'Undo',
+      onAction: () => {
+        setItems((current) => (current.some((entry) => entry.id === task.id) ? current : [...current, task]))
+        void updateTaskStatus(task.id, originalStatus, 'Could not restore task.')
+      },
+    })
+  }
+
+  const SWIPE_DELETE_THRESHOLD = 96
+
+  function handleSwipeStart(taskId: string) {
+    return (event: React.TouchEvent) => {
+      const touch = event.touches[0]
+      swipeGesture.current = { id: taskId, startX: touch.clientX, startY: touch.clientY, locked: null }
+    }
+  }
+
+  function handleSwipeMove(taskId: string) {
+    return (event: React.TouchEvent) => {
+      const gesture = swipeGesture.current
+      if (!gesture || gesture.id !== taskId) return
+      const touch = event.touches[0]
+      const dx = touch.clientX - gesture.startX
+      const dy = touch.clientY - gesture.startY
+
+      if (gesture.locked === null) {
+        if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return
+        gesture.locked = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y'
+      }
+      if (gesture.locked !== 'x') return
+
+      // Horizontal intent confirmed — take over the gesture from here on.
+      event.preventDefault()
+      setSwipe({ id: taskId, dx: Math.min(0, dx), releasing: false })
+    }
+  }
+
+  function handleSwipeEnd(taskId: string) {
+    return () => {
+      const gesture = swipeGesture.current
+      swipeGesture.current = null
+      if (!gesture || gesture.locked !== 'x') {
+        setSwipe(null)
+        return
+      }
+      setSwipe((current) => {
+        if (!current || current.id !== taskId) return null
+        if (-current.dx >= SWIPE_DELETE_THRESHOLD) {
+          const task = taskForId(taskId)
+          if (task) deleteTaskWithUndo(task)
+          return null
+        }
+        return { ...current, dx: 0, releasing: true }
+      })
+    }
   }
 
   async function createTask() {
@@ -1026,32 +1094,40 @@ export function TasksClient({
                 )
               }
 
+              const rowSwipe = swipe?.id === task.id ? swipe : null
+
               return (
-                <div
-                  className="life-task-row"
-                  key={task.id}
-                  onClick={() => setEditId(task.id)}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <button
-                    type="button"
-                    className={`life-check${isDone ? ' is-done' : ''}`}
-                    onClick={(event) => {
-                      event.stopPropagation()
-                      void updateTaskStatus(task.id, isDone ? 'open' : 'done')
-                    }}
-                    style={{ borderRadius: 0 }}
-                    aria-label={isDone ? 'Reopen task' : 'Mark task done'}
+                <div className="life-swipe-wrap" key={task.id}>
+                  <div className="life-swipe-action" aria-hidden="true">Delete</div>
+                  <div
+                    className={`life-task-row life-swipe-row${rowSwipe && !rowSwipe.releasing ? ' is-dragging' : ''}`}
+                    onClick={() => setEditId(task.id)}
+                    onTouchStart={handleSwipeStart(task.id)}
+                    onTouchMove={handleSwipeMove(task.id)}
+                    onTouchEnd={handleSwipeEnd(task.id)}
+                    onTouchCancel={handleSwipeEnd(task.id)}
+                    style={{ cursor: 'pointer', transform: rowSwipe ? `translateX(${rowSwipe.dx}px)` : undefined }}
                   >
-                    ✓
-                  </button>
-                  <div className="life-task-main">
-                    <span className={`life-task-title${isDone ? ' is-done' : ''}`}>{task.title}</span>
-                  </div>
-                  <div className="life-task-meta">
-                    <span className="life-tag">{project}</span>
-                    <span className="life-row-aside">{due}</span>
-                    <PrintControl info={printInfo[task.id]} busy={printBusyId === task.id} onQueue={() => queuePrint(task.id)} onReprint={() => reprintTask(task.id)} />
+                    <button
+                      type="button"
+                      className={`life-check${isDone ? ' is-done' : ''}`}
+                      onClick={(event) => {
+                        event.stopPropagation()
+                        void updateTaskStatus(task.id, isDone ? 'open' : 'done')
+                      }}
+                      style={{ borderRadius: 0 }}
+                      aria-label={isDone ? 'Reopen task' : 'Mark task done'}
+                    >
+                      ✓
+                    </button>
+                    <div className="life-task-main">
+                      <span className={`life-task-title${isDone ? ' is-done' : ''}`}>{task.title}</span>
+                    </div>
+                    <div className="life-task-meta">
+                      <span className="life-tag">{project}</span>
+                      <span className="life-row-aside">{due}</span>
+                      <PrintControl info={printInfo[task.id]} busy={printBusyId === task.id} onQueue={() => queuePrint(task.id)} onReprint={() => reprintTask(task.id)} />
+                    </div>
                   </div>
                 </div>
               )

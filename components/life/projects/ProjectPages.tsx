@@ -1,11 +1,13 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } from 'react'
+import { useCallback, useEffect, useMemo, useState, type MouseEvent } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-import { MarkdownCard } from '@/components/life/MarkdownCard'
+import DOMPurify from 'isomorphic-dompurify'
+
 import { fetchJson } from '@/lib/life/client'
-import { mergeLifePageMetadata, splitLifePageBody, stripLifePageMetadata, toggleNthLifeCheckbox } from '@/lib/life/page-body'
+import { LifeRichEditor } from '@/components/life/ui/LifeRichEditor'
+import { mergeLifePageMetadata, splitLifePageBody, stripLifePageMetadata, toggleNthHtmlCheckbox } from '@/lib/life/page-body'
 import type { ProjectPageRecord, ProjectRefRecord, TaskRecord } from '@/lib/life/types'
 
 import { formatYmd, relativeDueLabel } from './shared'
@@ -27,12 +29,15 @@ export function ProjectPages({
   tasks,
   refs,
   today,
+  chromeless = false,
 }: {
   projectSlug: string
   pages: ProjectPageRecord[]
   tasks: TaskRecord[]
   refs: ProjectRefRecord[]
   today: string
+  /** Drop the internal page list — the project rail already shows it. */
+  chromeless?: boolean
 }) {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -43,7 +48,7 @@ export function ProjectPages({
   const [title, setTitle] = useState(initialPage?.title || '')
   const [body, setBody] = useState(stripLifePageMetadata(initialPage?.body || ''))
   const [mode, setMode] = useState<'read' | 'edit'>(initialPage ? 'read' : 'edit')
-  const [saveState, setSaveState] = useState<'saved' | 'saving' | 'error'>('saved')
+  const [saveState, setSaveState] = useState<'saved' | 'unsaved' | 'saving' | 'error'>('saved')
   const [creating, setCreating] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -62,21 +67,17 @@ export function ProjectPages({
   )
 
   useEffect(() => {
+    const nextBody = stripLifePageMetadata(selectedPage?.body || '')
     setTitle(selectedPage?.title || '')
-    setBody(stripLifePageMetadata(selectedPage?.body || ''))
+    setBody(nextBody)
     setSaveState('saved')
+    // A page with nothing in it has nothing to read — that's a page just
+    // created, so put the cursor where the writing happens.
+    if (selectedPage) setMode(nextBody.trim() ? 'read' : 'edit')
   }, [selectedPage?.id])
 
   const selectedDraftBody = selectedPage ? stripLifePageMetadata(selectedPage.body) : ''
   const hasDraftChanges = Boolean(selectedPage && (title !== selectedPage.title || body !== selectedDraftBody))
-
-  const bodyRef = useRef<HTMLTextAreaElement>(null)
-  useEffect(() => {
-    const el = bodyRef.current
-    if (!el) return
-    el.style.height = 'auto'
-    el.style.height = `${el.scrollHeight}px`
-  }, [body, mode, selectedId])
 
   function pageMeta(page: ProjectPageRecord) {
     const { body: visibleBody, templateArchetype } = splitLifePageBody(page.body)
@@ -147,12 +148,32 @@ export function ProjectPages({
 
   useEffect(() => {
     if (!selectedPage || mode !== 'edit' || !hasDraftChanges) return
-    setSaveState('saving')
+    // 'unsaved', not 'saving' — for these 900ms nothing is in flight, and
+    // claiming otherwise is why a lost edit looks like a saved one.
+    setSaveState('unsaved')
     const handle = window.setTimeout(() => {
       void savePageDraft(selectedPage, title, body)
     }, 900)
     return () => window.clearTimeout(handle)
   }, [body, hasDraftChanges, mode, savePageDraft, selectedPage, title])
+
+  // Anything that leaves the page inside the 900ms debounce loses the edit.
+  // In-app page switches already flush via saveSelectedPageNow(); these cover
+  // the rest — closing the tab, and iOS killing a backgrounded PWA, which
+  // never fires beforeunload at all.
+  useEffect(() => {
+    if (!hasDraftChanges) return
+    const onBeforeUnload = (event: BeforeUnloadEvent) => event.preventDefault()
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') void saveSelectedPageNow()
+    }
+    window.addEventListener('beforeunload', onBeforeUnload)
+    document.addEventListener('visibilitychange', onVisibilityChange)
+    return () => {
+      window.removeEventListener('beforeunload', onBeforeUnload)
+      document.removeEventListener('visibilitychange', onVisibilityChange)
+    }
+  }, [hasDraftChanges, saveSelectedPageNow])
 
   async function deletePage() {
     if (!selectedPage) return
@@ -171,22 +192,17 @@ export function ProjectPages({
   function onReaderClick(event: MouseEvent<HTMLElement>) {
     // Don't hijack clicks on links inside the rendered markdown.
     if ((event.target as HTMLElement).closest('a')) return
-    // Task-list checkboxes are disabled + pointer-events:none (clicks on disabled inputs
-    // never fire), so hit-test the click against each rendered checkbox instead. The nth
-    // rendered checkbox corresponds to the nth `- [ ]`/`- [x]` occurrence in the source.
-    const boxes = event.currentTarget.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')
-    for (let i = 0; i < boxes.length; i += 1) {
-      const rect = boxes[i].getBoundingClientRect()
-      if (
-        event.clientX >= rect.left - 4 && event.clientX <= rect.right + 4 &&
-        event.clientY >= rect.top - 4 && event.clientY <= rect.bottom + 4
-      ) {
-        if (!selectedPage) return
-        const next = toggleNthLifeCheckbox(body, i)
-        setBody(next)
-        void savePageDraft(selectedPage, title, next)
-        return
-      }
+    // Task-list checkboxes are disabled + pointer-events:none (clicks on disabled
+    // inputs never fire), so find the item that was clicked and use its position
+    // among its siblings — no geometry, and it survives wrapping and reflow.
+    const item = (event.target as HTMLElement).closest('li[data-checked]')
+    if (item) {
+      if (!selectedPage) return
+      const items = Array.from(event.currentTarget.querySelectorAll('li[data-checked]'))
+      const next = toggleNthHtmlCheckbox(body, items.indexOf(item))
+      setBody(next)
+      void savePageDraft(selectedPage, title, next)
+      return
     }
     setMode('edit')
   }
@@ -211,32 +227,40 @@ export function ProjectPages({
   }
 
   return (
-    <div className="life-project-pages">
-      <div className="life-project-pages-sidebar">
-        <div className="life-project-pages-head">
-          <span className="eyebrow">Pages</span>
-          <button type="button" className="life-btn primary life-project-page-action" disabled={creating} onClick={() => void createPage()}>
-            {creating ? 'Adding…' : '+ Page'}
-          </button>
-        </div>
-        <div className="life-project-pages-list">
-          {items.map((page) => (
-            <button
-              key={page.id}
-              type="button"
-              className={`life-project-page-link${page.id === selectedId ? ' is-active' : ''}`}
-              onClick={() => void selectPage(page.id)}
-            >
-              <span className="life-project-page-link-title">{page.title}</span>
-              <span className="life-project-page-link-meta" suppressHydrationWarning>
-                {pageMeta(page)} · {shortAgo(page.updated_at)}
-              </span>
+    <div className={`life-project-pages${chromeless ? ' is-chromeless' : ''}`}>
+      {chromeless ? null : (
+        <div className="life-project-pages-sidebar">
+          <div className="life-project-pages-head">
+            <span className="eyebrow">Pages</span>
+            <button type="button" className="life-btn primary life-project-page-action" disabled={creating} onClick={() => void createPage()}>
+              {creating ? 'Adding…' : '+ Page'}
             </button>
-          ))}
+          </div>
+          <div className="life-project-pages-list">
+            {items.map((page) => (
+              <button
+                key={page.id}
+                type="button"
+                className={`life-project-page-link${page.id === selectedId ? ' is-active' : ''}`}
+                onClick={() => void selectPage(page.id)}
+              >
+                <span className="life-project-page-link-title">{page.title}</span>
+                <span className="life-project-page-link-meta" suppressHydrationWarning>
+                  {pageMeta(page)} · {shortAgo(page.updated_at)}
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
-      <div className="life-project-page-editor">
+      <div
+        className="life-project-page-editor"
+        onBlur={(event) => {
+          if (event.currentTarget.contains(event.relatedTarget as Node | null)) return
+          void saveSelectedPageNow()
+        }}
+      >
         {selectedPage ? (
           <>
             {mode === 'edit' ? (
@@ -259,29 +283,40 @@ export function ProjectPages({
               <span>updated {shortAgo(selectedPage.updated_at)}</span>
               <span>·</span>
               <span className={`life-project-page-save-state is-${saveState}`}>
-                {saveState === 'saving' ? 'Saving…' : saveState === 'error' ? 'Not saved' : 'Saved'}
+                {saveState === 'saving'
+                  ? 'Saving…'
+                  : saveState === 'unsaved'
+                    ? 'Unsaved'
+                    : saveState === 'error'
+                      ? 'Not saved'
+                      : 'Saved'}
               </span>
+              {saveState === 'error' ? (
+                // Without this the only way out of a failed save is to type
+                // another character, and the draft sits unsaved meanwhile.
+                <button
+                  type="button"
+                  className="life-project-page-retry"
+                  onClick={() => void saveSelectedPageNow()}
+                >
+                  Retry
+                </button>
+              ) : null}
               <button type="button" className="life-project-page-delete" onClick={() => void deletePage()}>
                 Delete
               </button>
             </div>
             {mode === 'edit' ? (
-              <textarea
-                ref={bodyRef}
-                className="life-project-page-body"
-                value={body}
-                placeholder="Write notes, links, references, checklists… Markdown works here."
-                rows={1}
-                onChange={(event) => setBody(event.target.value)}
-                onBlur={() => void saveSelectedPageNow()}
+              <LifeRichEditor docKey={selectedPage.id} content={body} onChange={setBody} />
+            ) : readerBody ? (
+              <article
+                className="life-project-page-reader"
+                onClick={onReaderClick}
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(readerBody) }}
               />
             ) : (
               <article className="life-project-page-reader" onClick={onReaderClick}>
-                {readerBody ? (
-                  <MarkdownCard content={readerBody} />
-                ) : (
-                  <div className="life-project-page-empty-body">Empty page. Click to start writing.</div>
-                )}
+                <div className="life-project-page-empty-body">Empty page. Click to start writing.</div>
               </article>
             )}
             {openTasks.length > 0 || topRefs.length > 0 ? (

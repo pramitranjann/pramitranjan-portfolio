@@ -4,6 +4,9 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
+import { LifeConfirm } from '@/components/life/ui/LifeConfirm'
+import { LifeEmpty } from '@/components/life/ui/LifeEmpty'
+import { LifeMenu } from '@/components/life/ui/LifeMenu'
 import { fetchJson } from '@/lib/life/client'
 import type { ProjectKind, ProjectStatus } from '@/lib/life/types'
 import { healthTone, progressPct, relativeDueLabel, STATUS_LABEL } from './shared'
@@ -49,6 +52,7 @@ export function ProjectsOverview({
   const [projectKind, setProjectKind] = useState<ProjectKind>('general')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [pendingDelete, setPendingDelete] = useState<{ slug: string; name: string } | null>(null)
 
   const totalOpen = items.reduce((sum, item) => sum + item.open, 0)
 
@@ -75,8 +79,8 @@ export function ProjectsOverview({
     }
   }
 
-  async function deleteProject(slug: string, projectName: string) {
-    if (!window.confirm(`Delete "${projectName}"? Its tasks keep their history but lose the project label.`)) return
+  async function deleteProject(slug: string) {
+    setPendingDelete(null)
     try {
       await fetchJson(`/api/life/projects/${slug}`, { method: 'DELETE' })
       router.refresh()
@@ -123,10 +127,15 @@ export function ProjectsOverview({
             rows={2}
             onChange={(event) => setSummary(event.target.value)}
           />
-          <select className="text-input" value={projectKind} onChange={(event) => setProjectKind(event.target.value as ProjectKind)}>
-            <option value="general">General project</option>
-            <option value="ux">UX class / design sprint</option>
-          </select>
+          <LifeMenu
+            ariaLabel="Project kind"
+            value={projectKind}
+            options={[
+              { value: 'general', label: 'General project' },
+              { value: 'ux', label: 'UX class / design sprint' },
+            ]}
+            onChange={(value) => setProjectKind(value as ProjectKind)}
+          />
           <div className="life-project-create-foot">
             <div className="life-swatches">
               {SWATCHES.map((swatch) => (
@@ -190,7 +199,7 @@ export function ProjectsOverview({
                 type="button"
                 className="life-project-delete"
                 aria-label={`Delete ${item.name}`}
-                onClick={() => void deleteProject(item.slug, item.name)}
+                onClick={() => setPendingDelete({ slug: item.slug, name: item.name })}
               >
                 ×
               </button>
@@ -199,7 +208,24 @@ export function ProjectsOverview({
         })}
       </div>
 
-      {items.length === 0 ? <div className="life-empty">No projects yet — add one above.</div> : null}
+      {items.length === 0 ? (
+        <LifeEmpty
+          title="No projects yet"
+          description="A project groups tasks, pages, references and events under one slug."
+          action={{ label: 'New project', onClick: () => setAdding(true) }}
+        />
+      ) : null}
+
+      <LifeConfirm
+        open={!!pendingDelete}
+        title={`Delete ${pendingDelete?.name ?? ''}?`}
+        body="Its tasks keep their history but lose the project label."
+        confirmLabel="Delete project"
+        onCancel={() => setPendingDelete(null)}
+        onConfirm={() => {
+          if (pendingDelete) void deleteProject(pendingDelete.slug)
+        }}
+      />
     </div>
   )
 }

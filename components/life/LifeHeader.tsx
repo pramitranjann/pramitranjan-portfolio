@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 
+import { LifeCommandClient } from '@/components/life/LifeCommandClient'
 import { LifeInlineSearch } from '@/components/life/LifeInlineSearch'
 
 interface NavLeaf {
@@ -23,11 +24,11 @@ const LIFE_NAV_GROUPS: Array<{ label: string; leaves: NavLeaf[] }> = [
     ],
   },
   {
+    // Its own group: this is the phone tab bar as well as the desktop nav, so
+    // Calendar has to stay a peer of Workspace and Library. One leaf now that
+    // the calendar carries its own month/week/day/agenda switcher.
     label: 'Calendar',
-    leaves: [
-      { href: '/life/review', label: 'Week' },
-      { href: '/life/month', label: 'Month' },
-    ],
+    leaves: [{ href: '/life/month', label: 'Calendar' }],
   },
   {
     label: 'Library',
@@ -132,6 +133,8 @@ export function LifeHeader() {
             )
           })}
         </nav>
+
+        <LifeCommandClient />
 
         <LifeInlineSearch
           isOpen={mobileSearchOpen}

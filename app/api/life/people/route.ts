@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { isAuthenticatedLifeRequest, unauthorizedJson } from '@/lib/life/auth'
 import { createPerson, listPeople } from '@/lib/life/people'
+import type { PersonLink } from '@/lib/life/types'
 
 export async function GET(request: NextRequest) {
   if (!isAuthenticatedLifeRequest(request)) {
@@ -30,6 +31,12 @@ export async function POST(request: NextRequest) {
       why?: string | null
       channel?: string | null
       cadenceDays?: number | null
+      email?: string | null
+      phone?: string | null
+      how?: string | null
+      links?: PersonLink[] | null
+      likes?: string[] | null
+      dislikes?: string[] | null
     } | null
 
     if (!body?.name?.trim()) {
@@ -43,6 +50,12 @@ export async function POST(request: NextRequest) {
       why: body.why ?? null,
       channel: body.channel ?? null,
       cadenceDays: body.cadenceDays ?? null,
+      email: body.email ?? null,
+      phone: body.phone ?? null,
+      how: body.how ?? null,
+      links: body.links ?? null,
+      likes: body.likes ?? null,
+      dislikes: body.dislikes ?? null,
     })
 
     return NextResponse.json({ person })

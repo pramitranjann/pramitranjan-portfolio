@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
   let localDate: string | undefined
   let weekStart: string | undefined
   let force: boolean | undefined
-  let redirectTo = '/life/review'
+  let redirectTo = '/life/month'
 
   if (isJsonRequest) {
     const body = (await request.json().catch(() => null)) as { localDate?: string; weekStart?: string; force?: boolean } | null
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!isJsonRequest) {
-      return NextResponse.redirect(new URL(redirectTo.startsWith('/life') ? redirectTo : '/life/review', request.url), {
+      return NextResponse.redirect(new URL(redirectTo.startsWith('/life') ? redirectTo : '/life/month', request.url), {
         status: 303,
       })
     }
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Weekly synthesis failed", error);
     if (!isJsonRequest) {
-      const url = new URL(redirectTo.startsWith('/life') ? redirectTo : '/life/review', request.url)
+      const url = new URL(redirectTo.startsWith('/life') ? redirectTo : '/life/month', request.url)
       url.searchParams.set('error', 'Weekly synthesis failed.')
       return NextResponse.redirect(url, { status: 303 })
     }

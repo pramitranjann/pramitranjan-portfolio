@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { isAuthenticatedLifeRequest, unauthorizedJson } from '@/lib/life/auth'
-import { applyCalendarIntent } from '@/app/api/life/tasks/route'
+import { applyCalendarIntent } from '@/lib/life/calendar-intent'
 import { updateTask, updateTaskStatus } from '@/lib/life/tasks'
 import type { TaskCalendarIntent, TaskStatus } from '@/lib/life/types'
 

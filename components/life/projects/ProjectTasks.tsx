@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 
 import { LifeCalendar } from '@/components/life/tasks/LifeCalendar'
 import { TaskForm } from '@/components/life/tasks/TaskForm'
+import { LifeConfirm } from '@/components/life/ui/LifeConfirm'
+import { LifeTodoList, type Todo, type TodoGroup } from '@/components/life/ui/LifeTodoList'
 import { fetchJson } from '@/lib/life/client'
 import type {
   ProjectMilestoneRecord,
@@ -16,8 +18,19 @@ import type {
 } from '@/lib/life/types'
 import { progressPct, relativeDueLabel } from './shared'
 
-const PRI_LABEL: Record<TaskPriority, string> = { high: 'High', medium: 'Med', low: 'Low' }
 const BACKLOG = '__backlog__'
+const PRIORITY_TO_TODO: Record<TaskPriority, 'high' | 'med' | 'low'> = { high: 'high', medium: 'med', low: 'low' }
+
+function taskToTodo(task: TaskRecord, today: string, linked?: TaskLinkedEvent): Todo {
+  return {
+    id: task.id,
+    title: task.title,
+    done: task.status === 'done',
+    priority: PRIORITY_TO_TODO[task.priority],
+    due: relativeDueLabel(task.due_local_date, today)?.text,
+    event: linked?.title,
+  }
+}
 
 export function ProjectTasks({
   projectSlug,
@@ -37,11 +50,9 @@ export function ProjectTasks({
   const router = useRouter()
   const [items, setItems] = useState<TaskRecord[]>(tasks)
   const [composer, setComposer] = useState<string | null>(null)
-  const [editId, setEditId] = useState<string | null>(null)
-  const [dragId, setDragId] = useState<string | null>(null)
-  const [dragOverGroup, setDragOverGroup] = useState<string | null>(null)
   const [addingMilestone, setAddingMilestone] = useState(false)
   const [milestoneName, setMilestoneName] = useState('')
+  const [pendingDeleteMilestone, setPendingDeleteMilestone] = useState<{ id: string; name: string } | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -84,22 +95,6 @@ export function ProjectTasks({
     router.refresh()
   }
 
-  async function saveEdit(taskId: string, draft: TaskDraft) {
-    await fetchJson(`/api/life/tasks/${taskId}`, {
-      method: 'PATCH',
-      body: JSON.stringify({
-        title: draft.title,
-        details: draft.details,
-        projectSlug: draft.projectSlug,
-        priority: draft.priority,
-        dueLocalDate: draft.dueLocalDate,
-        calendar: draft.calendar,
-      }),
-    })
-    setEditId(null)
-    router.refresh()
-  }
-
   async function toggleDone(task: TaskRecord) {
     const next: TaskStatus = task.status === 'done' ? 'open' : 'done'
     const previous = items
@@ -124,26 +119,26 @@ export function ProjectTasks({
     }
   }
 
-  async function moveTask(taskId: string, milestoneId: string | null) {
-    const task = items.find((entry) => entry.id === taskId)
-    if (!task || (task.milestone_id || null) === milestoneId) return
-    setItems((current) => current.map((entry) => (entry.id === taskId ? { ...entry, milestone_id: milestoneId } : entry)))
-    try {
-      await fetchJson(`/api/life/tasks/${taskId}`, { method: 'PATCH', body: JSON.stringify({ milestoneId }) })
-      router.refresh()
-    } catch {
-      setError('Failed to move task.')
-      router.refresh()
-    }
-  }
+  // LifeTodoList hands back the whole (single-group) list on every toggle,
+  // delete, and drag reorder. Diff it against the milestone's previous tasks
+  // and route each change through the same endpoints the old rows used.
+  function handleGroupChange(previousItems: TaskRecord[], nextTodos: Todo[]) {
+    const nextIds = new Set(nextTodos.map((todo) => todo.id))
+    const byId = new Map(previousItems.map((task) => [task.id, task]))
 
-  // Drop a dragged task onto a phase section (or the backlog).
-  function handleDropOnGroup(groupKey: string, isBacklog: boolean) {
-    const taskId = dragId
-    setDragId(null)
-    setDragOverGroup(null)
-    if (!taskId) return
-    void moveTask(taskId, isBacklog ? null : groupKey)
+    for (const task of previousItems) {
+      if (!nextIds.has(task.id)) void deleteTask(task.id)
+    }
+    for (const todo of nextTodos) {
+      const task = byId.get(todo.id)
+      if (task && (task.status === 'done') !== todo.done) void toggleDone(task)
+    }
+
+    // TaskRecord has no persisted order field, so a drag reorder is reflected
+    // locally only — nothing to send to the API for that part of the diff.
+    const reordered = nextTodos.map((todo) => byId.get(todo.id)).filter((t): t is TaskRecord => !!t)
+    const previousIds = new Set(previousItems.map((task) => task.id))
+    setItems((current) => [...current.filter((task) => !previousIds.has(task.id)), ...reordered])
   }
 
   async function createMilestone() {
@@ -159,8 +154,7 @@ export function ProjectTasks({
     }
   }
 
-  async function deleteMilestone(id: string, name: string) {
-    if (!window.confirm(`Delete phase "${name}"? Its tasks move to the backlog.`)) return
+  async function deleteMilestone(id: string) {
     try {
       await fetchJson(`/api/life/projects/${projectSlug}/milestones/${id}`, { method: 'DELETE' })
       router.refresh()
@@ -209,26 +203,13 @@ export function ProjectTasks({
         const groupDone = group.items.filter((task) => task.status === 'done').length
         const pct = progressPct(groupDone, group.items.length)
         const groupDue = relativeDueLabel(group.targetDate, today)
+        const todoGroup: TodoGroup = {
+          id: group.key,
+          title: group.name,
+          todos: group.items.map((task) => taskToTodo(task, today, linkedEvents[task.id])),
+        }
         return (
-          <section
-            className={`life-milestone${dragOverGroup === group.key ? ' is-dragover' : ''}`}
-            key={group.key}
-            onDragOver={(event) => {
-              if (!dragId) return
-              event.preventDefault()
-              if (dragOverGroup !== group.key) setDragOverGroup(group.key)
-            }}
-            onDragLeave={(event) => {
-              const next = event.relatedTarget
-              if (!(next instanceof Node) || !event.currentTarget.contains(next)) {
-                setDragOverGroup((current) => (current === group.key ? null : current))
-              }
-            }}
-            onDrop={(event) => {
-              event.preventDefault()
-              handleDropOnGroup(group.key, group.isBacklog)
-            }}
-          >
+          <section className="life-milestone" key={group.key}>
             <div className="life-milestone-head">
               <span className="life-milestone-name">{group.name}</span>
               {groupDue ? <span className={`life-due-chip due-${groupDue.tone}`}>{groupDue.text}</span> : null}
@@ -253,7 +234,7 @@ export function ProjectTasks({
                   type="button"
                   className="life-milestone-delete"
                   aria-label={`Delete phase ${group.name}`}
-                  onClick={() => void deleteMilestone(group.key, group.name)}
+                  onClick={() => setPendingDeleteMilestone({ id: group.key, name: group.name })}
                 >
                   ×
                 </button>
@@ -275,97 +256,25 @@ export function ProjectTasks({
               </div>
             ) : null}
 
-            <div className="life-list life-milestone-list">
-              {group.items.length === 0 && composer !== group.key ? (
-                <div className="life-empty">Nothing here yet.</div>
-              ) : null}
-              {group.items.map((task) => {
-                const isDone = task.status === 'done'
-                const taskDue = relativeDueLabel(task.due_local_date, today)
-                const linked = task.calendar_event_id ? linkedEvents[task.calendar_event_id] : null
-
-                if (editId === task.id) {
-                  return (
-                    <div className="life-task-row life-task-row-editing" key={task.id}>
-                      <TaskForm
-                        mode="edit"
-                        today={today}
-                        timezone={timezone}
-                        initial={{
-                          title: task.title,
-                          details: task.details,
-                          projectSlug: task.project_slug,
-                          priority: task.priority,
-                          dueLocalDate: task.due_local_date,
-                          calendarEventId: task.calendar_event_id,
-                        }}
-                        linkedEventLabel={linked?.title}
-                        onSubmit={(draft) => saveEdit(task.id, draft)}
-                        onCancel={() => setEditId(null)}
-                        onDelete={() => deleteTask(task.id)}
-                        LifeCalendarComponent={LifeCalendar}
-                      />
-                    </div>
-                  )
-                }
-
-                return (
-                  <div
-                    className={`life-list-row is-draggable pri-edge-${task.priority}${isDone ? ' is-done' : ''}${dragId === task.id ? ' is-dragging' : ''}`}
-                    key={task.id}
-                    draggable
-                    onClick={() => setEditId(task.id)}
-                    onDragStart={(event) => {
-                      event.dataTransfer.effectAllowed = 'move'
-                      event.dataTransfer.setData('text/plain', task.id)
-                      setDragId(task.id)
-                    }}
-                    onDragEnd={() => {
-                      setDragId(null)
-                      setDragOverGroup(null)
-                    }}
-                  >
-                    <button
-                      type="button"
-                      className={`life-check${isDone ? ' is-done' : ''}`}
-                      style={{ borderRadius: 0 }}
-                      aria-label={isDone ? 'Reopen task' : 'Mark task done'}
-                      onClick={(event) => {
-                        event.stopPropagation()
-                        void toggleDone(task)
-                      }}
-                    >
-                      ✓
-                    </button>
-                    <div className="life-list-row-body">
-                      <div className={`life-task-title${isDone ? ' is-done' : ''}`}>{task.title}</div>
-                      {task.details ? <div className="life-task-details">{task.details}</div> : null}
-                    </div>
-                    <div className="life-list-row-meta">
-                      <span className="life-kanban-pri">
-                        <span className={`pri-dot pri-${task.priority}`} /> {PRI_LABEL[task.priority]}
-                      </span>
-                      {linked ? <span className="life-ev-chip">📅</span> : null}
-                      {taskDue ? <span className={`life-due-chip${isDone ? '' : ` due-${taskDue.tone}`}`}>{taskDue.text}</span> : null}
-                      <button
-                        type="button"
-                        className="life-kanban-delete"
-                        aria-label="Delete task"
-                        onClick={(event) => {
-                          event.stopPropagation()
-                          void deleteTask(task.id)
-                        }}
-                      >
-                        ×
-                      </button>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
+            <LifeTodoList
+              groups={[todoGroup]}
+              onChange={(next) => handleGroupChange(group.items, next[0]?.todos ?? [])}
+            />
           </section>
         )
       })}
+
+      <LifeConfirm
+        open={!!pendingDeleteMilestone}
+        title={`Delete phase "${pendingDeleteMilestone?.name ?? ''}"?`}
+        body="Its tasks move to the backlog."
+        confirmLabel="Delete phase"
+        onCancel={() => setPendingDeleteMilestone(null)}
+        onConfirm={() => {
+          if (pendingDeleteMilestone) void deleteMilestone(pendingDeleteMilestone.id)
+          setPendingDeleteMilestone(null)
+        }}
+      />
     </div>
   )
 }
