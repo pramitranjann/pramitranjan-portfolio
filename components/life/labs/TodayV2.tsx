@@ -10,6 +10,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 import { MarkdownCard } from '@/components/life/MarkdownCard'
+import { VoiceCaptureControl } from '@/components/life/VoiceCaptureControl'
 import { LifeHoverCard } from '@/components/life/ui/LifeHoverCard'
 
 export interface TodayEvent {
@@ -44,6 +45,7 @@ interface TodayScreenProps {
   tasks: TodayTask[]
   entries: TodayEntry[]
   briefContent: string | null
+  formError?: string | null
 }
 
 /** Same card for Up next and each schedule row, so one event reads one way. */
@@ -98,7 +100,7 @@ function TaskCard({ task }: { task: TodayTask }) {
 // ponytail: no JS height measurement. It computed `innerHeight - top - 24`,
 // which ignored .life-app-shell's own bottom padding and so ran ~24px too
 // tall — that was the scroll that kept coming back. The CSS height in
-// today-v2.css is correct, and `overflow: hidden` on .t2 means a wrong guess
+// app/life/today.css is correct, and `overflow: hidden` on .t2 means a wrong guess
 // clips instead of scrolling the page.
 
 /* ── Shared pieces ─────────────────────────────────────────────────────── */
@@ -162,12 +164,17 @@ function TodayHead({
   )
 }
 
-function Capture() {
-  const [note, setNote] = useState('')
-  const [holding, setHolding] = useState(false)
+// The ids are the contract with VoiceCaptureControl: it writes the transcript
+// into the textarea and flips the source field by getElementById, so the
+// textarea stays uncontrolled. A useState-controlled value would be reverted
+// by React the moment voice wrote to it.
+const TEXTAREA_ID = 'life-entry-textarea'
+const SOURCE_INPUT_ID = 'life-entry-source'
 
+function Capture({ formError }: { formError: string | null }) {
   return (
-    <div className="t2-capture">
+    <form className="t2-capture" action="/api/life/entries" method="post">
+      <input id={SOURCE_INPUT_ID} name="source" type="hidden" defaultValue="text" />
       {/* rows={1} is load-bearing: a textarea's rows attribute is an intrinsic
           height floor that minmax(0, 1fr) cannot override, and it defaults to 2.
           With the default, the box refused to shrink and pushed the footer —
@@ -176,27 +183,27 @@ function Capture() {
       <textarea
         className="t2-input"
         rows={1}
-        value={note}
+        id={TEXTAREA_ID}
+        name="content"
         placeholder="What happened?"
-        onChange={(e) => setNote(e.target.value)}
       />
       <div className="t2-capture-foot">
-        <button
-          type="button"
-          className={`t2-hold${holding ? ' is-holding' : ''}`}
-          onPointerDown={() => setHolding(true)}
-          onPointerUp={() => setHolding(false)}
-          onPointerLeave={() => setHolding(false)}
-        >
-          <span className="t2-hold-dot" aria-hidden="true" />
-          {holding ? 'Listening…' : 'Hold to capture'}
-        </button>
+        {/* The real hold-to-capture, not the lab's mock button. It also owns the
+            2s autosave chip, so voice entries post without touching Save. */}
+        <VoiceCaptureControl
+          sourceInputId={SOURCE_INPUT_ID}
+          textareaId={TEXTAREA_ID}
+          liveTranscriptId="life-live-transcript"
+        />
         <span className="life-kbd">⌘↵</span>
-        <button type="button" className="life-btn primary" disabled={!note.trim()}>
+        <button type="submit" className="life-btn primary">
           Save
         </button>
       </div>
-    </div>
+      {/* Visually hidden (position: absolute), so it costs no grid row. */}
+      <div id="life-live-transcript" className="life-live-transcript" aria-live="polite" />
+      {formError ? <p className="error-text">{formError}</p> : null}
+    </form>
   )
 }
 
@@ -205,12 +212,14 @@ function Card({
   title,
   count,
   action,
+  href,
   children,
   className = '',
 }: {
   title: string
   count?: number
   action?: string
+  href?: string
   children: React.ReactNode
   className?: string
 }) {
@@ -221,11 +230,11 @@ function Card({
         {count != null ? <span className="count-pill">{count}</span> : null}
       </div>
       {children}
-      {action ? (
+      {action && href ? (
         <div className="life-card-foot">
-          <a className="life-card-action" href="#preview">
+          <Link className="life-card-action" href={href}>
             {action} →
-          </a>
+          </Link>
         </div>
       ) : null}
     </section>
@@ -240,17 +249,25 @@ function TasksBody({ tasks }: { tasks: TodayTask[] }) {
     <div className="t2-tasks">
       {tasks.map((task) => (
         <LifeHoverCard key={task.id} card={<TaskCard task={task} />}>
-          {/* A link like the schedule rows: a row whose hover card is clickable
-              but which isn't clickable itself is a dead spot in the middle. */}
-          <Link href="/life/tasks" className="t2-task">
-            <span className="t2-check" role="checkbox" aria-checked="false" tabIndex={0}>
-              ✓
-            </span>
-            <span className={`pri-dot pri-${task.pri}`} aria-hidden="true" />
-            <span className="t2-task-title">{task.title}</span>
-            <span className="t2-task-project">{task.project}</span>
-            {task.late > 0 ? <span className="t2-task-late">+{task.late}d</span> : null}
-          </Link>
+          {/* The row is a div, not a link: the checkbox has to be a real submit
+              button, and a button inside an anchor is invalid — every tick
+              would navigate instead of completing the task. So the check is a
+              sibling form and the rest of the row is the link. */}
+          <div className="t2-task">
+            <form action={`/api/life/tasks/${task.id}`} method="post" className="t2-check-form">
+              <input type="hidden" name="redirectTo" value="/life" />
+              <input type="hidden" name="status" value="done" />
+              <button type="submit" className="t2-check" aria-label={`Mark "${task.title}" done`}>
+                ✓
+              </button>
+            </form>
+            <Link href="/life/tasks" className="t2-task-link">
+              <span className={`pri-dot pri-${task.pri}`} aria-hidden="true" />
+              <span className="t2-task-title">{task.title}</span>
+              <span className="t2-task-project">{task.project}</span>
+              {task.late > 0 ? <span className="t2-task-late">+{task.late}d</span> : null}
+            </Link>
+          </div>
         </LifeHoverCard>
       ))}
     </div>
@@ -293,7 +310,15 @@ function CapturedBody({ entries }: { entries: TodayEntry[] }) {
 
 /* ── The screen ────────────────────────────────────────────────────────── */
 
-export function TodayScreen({ dateLabel, events, nextEvent, tasks, entries, briefContent }: TodayScreenProps) {
+export function TodayScreen({
+  dateLabel,
+  events,
+  nextEvent,
+  tasks,
+  entries,
+  briefContent,
+  formError = null,
+}: TodayScreenProps) {
   const lateCount = tasks.filter((task) => task.late > 0).length
   return (
     <div className="t2">
@@ -301,16 +326,16 @@ export function TodayScreen({ dateLabel, events, nextEvent, tasks, entries, brie
 
       <div className="t2-console">
         <div className="t2-console-left">
-          <Capture />
+          <Capture formError={formError} />
         </div>
         <div className="t2-console-right">
-          <Card title="Today’s tasks" count={tasks.length} action="View all tasks">
+          <Card title="Today’s tasks" count={tasks.length} action="View all tasks" href="/life/tasks">
             <TasksBody tasks={tasks} />
           </Card>
-          <Card title="Schedule" count={events.length} action="Open calendar">
+          <Card title="Schedule" count={events.length} action="Open calendar" href="/life/month">
             <ScheduleBody events={events} />
           </Card>
-          <Card title="Captured today" count={entries.length} action="View entries">
+          <Card title="Captured today" count={entries.length} action="View entries" href="/life/history">
             <CapturedBody entries={entries} />
           </Card>
           <Card title="Morning brief" className="t2-brief-card">

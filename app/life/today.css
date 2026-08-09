@@ -174,7 +174,7 @@
 .life-shell .t2-task-project { color: var(--life-muted); }
 .life-shell .t2-input::placeholder { color: var(--life-muted); }
 /* A button is the last thing that should sit under AA. */
-.life-shell .t2-hold { color: var(--life-muted); }
+.life-shell .t2-capture-foot .life-mic { color: var(--life-muted); }
 .life-shell .t2-check:hover { color: var(--life-muted); border-color: var(--life-muted); }
 
 /* 10px is the floor in Life (81 uses vs 23 at 9px); 9px was the outlier. */

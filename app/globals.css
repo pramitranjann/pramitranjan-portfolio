@@ -6521,9 +6521,15 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
 .life-shell .t2-input:focus { outline: none; }
 .life-shell .t2-input::placeholder { color: var(--life-label); }
 .life-shell .t2-capture-foot { display: flex; align-items: center; gap: 10px; }
-.life-shell .t2-hold { display: inline-flex; align-items: center; gap: 8px; min-height: 32px; padding: 0 12px; border: 1px solid var(--life-border); background: transparent; color: var(--life-label); cursor: pointer; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; transition-property: color, border-color, transform; transition-duration: 0.14s; }
-.life-shell .t2-hold-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-.life-shell .t2-hold.is-holding { color: var(--life-accent); border-color: var(--life-accent); transform: scale(0.98); }
+/* The lab's mock `.t2-hold` button was replaced by the real VoiceCaptureControl
+   (`.life-mic`), which ships the same dot + label anatomy. Rather than add a
+   second look, the t2 sizing is retargeted onto .life-mic inside this footer —
+   3 classes, so it outranks the 40px accent-filled `.life-shell .life-mic`
+   default used on the old capture screen. */
+.life-shell .t2-capture-foot .life-mic { display: inline-flex; align-items: center; gap: 8px; min-height: 32px; padding: 0 12px; border: 1px solid var(--life-border); background: transparent; color: var(--life-label); cursor: pointer; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; transition-property: color, border-color, transform; transition-duration: 0.14s; }
+.life-shell .t2-capture-foot .life-mic-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.life-shell .t2-capture-foot .life-mic:hover { color: var(--life-muted); border-color: var(--life-muted); background: transparent; }
+.life-shell .t2-capture-foot .life-mic.is-live { color: var(--life-accent); border-color: var(--life-accent); background: transparent; transform: scale(0.98); }
 .life-shell .t2-capture-foot .life-btn { margin-left: auto; }
 
 .life-shell .t2-card { display: grid; gap: 10px; align-content: start; }
@@ -6531,7 +6537,11 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
 
 .life-shell .t2-tasks { display: grid; gap: 2px; }
 .life-shell .t2-task { display: flex; align-items: center; gap: 10px; min-width: 0; padding: 6px 0; }
-.life-shell .t2-check { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; flex: 0 0 auto; border: 1px solid var(--life-border); color: transparent; cursor: pointer; font-size: 11px; transition-property: color, border-color; transition-duration: 0.14s; }
+/* The check is a submit button in its own form, so the rest of the row is a
+   separate link that has to take the remaining width itself. */
+.life-shell .t2-check-form { display: flex; flex: 0 0 auto; }
+.life-shell .t2-task-link { display: flex; align-items: center; gap: 10px; flex: 1 1 auto; min-width: 0; }
+.life-shell .t2-check { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; flex: 0 0 auto; padding: 0; border: 1px solid var(--life-border); background: transparent; color: transparent; cursor: pointer; font-size: 11px; transition-property: color, border-color; transition-duration: 0.14s; }
 .life-shell .t2-check:hover { color: var(--life-label); border-color: var(--life-label); }
 .life-shell .t2-task-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; color: var(--life-text); }
 .life-shell .t2-task-project { flex: 0 0 auto; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--life-label); }
