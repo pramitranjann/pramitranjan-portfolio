@@ -50,3 +50,6 @@ hardware/**/config.h
 # 20MB of derived output that churns on every code change; .graphifyignore
 # (the config that drives it) stays tracked.
 graphify-out/
+
+# Local backups of config files (settings.json.bak etc) — never useful to anyone else.
+*.bak
