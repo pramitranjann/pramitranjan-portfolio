@@ -270,7 +270,12 @@
 @media (max-width: 699px) {
   .life-shell .t2-desktop { display: none; }
   .life-shell .t2-phone { display: grid; gap: var(--s-4); padding: 18px 0 0; }
-  .life-shell .t2-phone .t2-capture { grid-template-rows: auto auto; min-height: 15rem; }
+  .life-shell .t2-phone .t2-capture { grid-template-rows: auto auto auto; min-height: 15rem; }
+  .life-shell .t2-phone .t2-phone-voice { width: 100%; }
+  .life-shell .t2-phone .t2-phone-voice .life-mic { width: 100%; min-height: 54px; justify-content: center; border-color: var(--life-accent); color: var(--life-accent); background: var(--life-accent-soft); font-size: var(--t-body); }
+  .life-shell .t2-phone .t2-phone-voice .life-mic:active { transform: scale(0.96); }
+  .life-shell .t2-phone .t2-phone-voice .autosave-chip,
+  .life-shell .t2-phone .t2-phone-voice .error-text { margin-top: var(--s-2); }
   .life-shell .t2-phone .t2-input { height: auto; min-height: 9rem; resize: vertical; }
   .life-shell .t2-phone .t2-capture-foot { flex-wrap: wrap; }
   .life-shell .t2-phone .t2-capture-foot .life-mic { min-height: 44px; }

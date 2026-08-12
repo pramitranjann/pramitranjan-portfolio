@@ -194,7 +194,7 @@ export function LifeCommand({
 
   return (
     <>
-      <button type="button" className="life-btn ghost" onClick={() => setOpen(true)}>
+      <button type="button" className="life-btn ghost life-command-trigger" onClick={() => setOpen(true)}>
         Search
         <kbd className="life-kbd">⌘K</kbd>
       </button>

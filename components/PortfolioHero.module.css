@@ -38,6 +38,8 @@
 .showcase {
   width: min(100%, 672px);
   justify-self: end;
+  touch-action: pan-y;
+  overscroll-behavior-x: contain;
 }
 
 .stage {
@@ -67,6 +69,7 @@
     0 0 0 1px rgb(255 255 255 / 0.025),
     0 22px 60px rgb(0 0 0 / 0.5);
   scale: 1;
+  translate: var(--carousel-drag-x, 0px) 0;
   transform-origin: center;
   will-change: transform, opacity;
   transition-property: transform, opacity, filter, border-color, scale, translate;
@@ -76,6 +79,15 @@
 
 .showcase[data-instant='true'] .card {
   transition-duration: 0ms;
+}
+
+.showcase[data-dragging='true'] .card {
+  cursor: grabbing;
+  transition: none;
+}
+
+.showcase[data-dragging='true'] .card:active {
+  scale: 1;
 }
 
 .card[data-position='current'] {
@@ -128,12 +140,12 @@
 
 .card[data-position='previous']:hover,
 .card[data-position='previous']:focus-visible {
-  translate: 6px 0;
+  translate: calc(var(--carousel-drag-x, 0px) + 6px) 0;
 }
 
 .card[data-position='next']:hover,
 .card[data-position='next']:focus-visible {
-  translate: -6px 0;
+  translate: calc(var(--carousel-drag-x, 0px) - 6px) 0;
 }
 
 .card:active {
@@ -229,6 +241,7 @@
   .showcase {
     width: min(82vw, 390px);
     justify-self: center;
+    cursor: grab;
   }
 
   .card {

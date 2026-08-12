@@ -14,14 +14,22 @@
   width: 18%;
   height: 1px;
   background: var(--color-red);
-  transform: translateX(-110%);
+  transform: translate3d(-110%, 0, 0);
+  will-change: transform;
+}
+
+.track[data-active='true'] .runner {
   animation: transition-rail-runner 2.6s cubic-bezier(0.77, 0, 0.175, 1) infinite;
 }
 
 @keyframes transition-rail-runner {
+  0% {
+    transform: translate3d(-110%, 0, 0);
+  }
+
   72%,
   100% {
-    transform: translateX(660%);
+    transform: translate3d(660%, 0, 0);
   }
 }
 
@@ -29,6 +37,7 @@
   .runner {
     width: 100%;
     animation: none;
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
+    will-change: auto;
   }
 }

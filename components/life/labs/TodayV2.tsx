@@ -176,15 +176,31 @@ function TodayHead({
 // into the textarea and flips the source field by getElementById, so the
 // textarea stays uncontrolled. A useState-controlled value would be reverted
 // by React the moment voice wrote to it.
-function Capture({ formError, idSuffix }: { formError: string | null; idSuffix: string }) {
+function Capture({
+  formError,
+  idSuffix,
+  phone = false,
+}: {
+  formError: string | null
+  idSuffix: string
+  phone?: boolean
+}) {
   const { projects } = useLifeProjects()
   const textareaId = `life-entry-textarea-${idSuffix}`
   const sourceInputId = `life-entry-source-${idSuffix}`
   const transcriptId = `life-live-transcript-${idSuffix}`
+  const voiceControl = (
+    <VoiceCaptureControl
+      sourceInputId={sourceInputId}
+      textareaId={textareaId}
+      liveTranscriptId={transcriptId}
+    />
+  )
 
   return (
     <form className="t2-capture" action="/api/life/entries" method="post">
       <input id={sourceInputId} name="source" type="hidden" defaultValue="text" />
+      {phone ? <div className="t2-phone-voice">{voiceControl}</div> : null}
       {/* rows={1} is load-bearing: a textarea's rows attribute is an intrinsic
           height floor that minmax(0, 1fr) cannot override, and it defaults to 2.
           With the default, the box refused to shrink and pushed the footer —
@@ -200,11 +216,7 @@ function Capture({ formError, idSuffix }: { formError: string | null; idSuffix: 
       <div className="t2-capture-foot">
         {/* The real hold-to-capture, not the lab's mock button. It also owns the
             2s autosave chip, so voice entries post without touching Save. */}
-        <VoiceCaptureControl
-          sourceInputId={sourceInputId}
-          textareaId={textareaId}
-          liveTranscriptId={transcriptId}
-        />
+        {!phone ? voiceControl : null}
         <label className="t2-capture-project">
           <span>Project</span>
           <select name="projectSlug" defaultValue="" aria-label="Project for this capture">
@@ -471,7 +483,7 @@ export function TodayScreen({
     <>
       {desktop}
       <div className="t2-phone">
-        <Capture formError={formError} idSuffix="phone" />
+        <Capture formError={formError} idSuffix="phone" phone />
         <div className="t2-phone-actions"><TaskQuickAdd label /><EventQuickAdd localDate={localDate} label /></div>
         <Card title="Today’s tasks" count={tasks.length} action="View all tasks" href="/life/tasks"><TasksBody tasks={tasks} /></Card>
         <Card title="Schedule" count={events.length} action="Open calendar" href="/life/month"><ScheduleBody events={events} /></Card>

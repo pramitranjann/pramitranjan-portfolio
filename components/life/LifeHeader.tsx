@@ -56,6 +56,7 @@ export function LifeHeader() {
   const activeGroup =
     LIFE_NAV_GROUPS.find((group) => group.leaves.some((leaf) => isLeafActive(leaf.href, pathname))) ||
     LIFE_NAV_GROUPS[0]
+  const mobileMenuGroup = LIFE_NAV_GROUPS.find((group) => group.label === mobileOpenGroup) || null
 
   useEffect(() => {
     setMobileOpenGroup(null)
@@ -86,11 +87,10 @@ export function LifeHeader() {
       router.push(href)
       return
     }
-    if (label === activeGroup.label) {
-      setMobileOpenGroup((current) => (current === label ? null : label))
-      return
-    }
-    router.push(href)
+    // A section button reveals its destinations first. Navigating straight to
+    // the first leaf made Workspace/Library feel like links instead of menus
+    // and caused the bottom bar to jump before a destination was chosen.
+    setMobileOpenGroup((current) => (current === label ? null : label))
   }
 
   return (
@@ -173,16 +173,16 @@ export function LifeHeader() {
               key={group.label}
               type="button"
               className={`life-bottom-nav-link${group === activeGroup ? ' active' : ''}`}
-              aria-expanded={group.label === activeGroup.label && mobileOpenGroup === group.label}
+              aria-expanded={mobileOpenGroup === group.label}
               onClick={() => onMobileGroupPress(group.label, group.leaves[0].href)}
             >
               {group.label}
             </button>
           ))}
         </div>
-        {mobileOpenGroup === activeGroup.label && activeGroup.leaves.length > 1 ? (
-          <nav className="life-bottom-subnav" aria-label={`${activeGroup.label} views`}>
-            {activeGroup.leaves.map((leaf) => (
+        {mobileMenuGroup && mobileMenuGroup.leaves.length > 1 ? (
+          <nav className="life-bottom-subnav" aria-label={`${mobileMenuGroup.label} views`}>
+            {mobileMenuGroup.leaves.map((leaf) => (
               <Link
                 key={leaf.href}
                 href={leaf.href}

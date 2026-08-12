@@ -6582,6 +6582,7 @@ button.life-cal-day:hover { border-color: #232323; background: #111111; color: #
 .life-shell .life-event-chip:focus-visible { outline: 2px solid var(--life-accent); outline-offset: 2px; }
 .life-shell .life-event-help { margin: var(--s-1) 0 0; color: var(--life-muted); font-size: var(--t-meta); }
 @media (max-width: 699px) {
+  .life-shell .life-command-trigger { display: none; }
   .life-shell .life-app-shell { padding-inline: 0; }
   .life-shell .content-shell { padding-inline: var(--life-gutter); }
   .life-shell .life-tasks-shell,
