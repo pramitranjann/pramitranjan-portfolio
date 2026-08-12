@@ -1,0 +1,34 @@
+.track {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 1px;
+  overflow: hidden;
+  background: #303030;
+}
+
+.runner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 18%;
+  height: 1px;
+  background: var(--color-red);
+  transform: translateX(-110%);
+  animation: transition-rail-runner 2.6s cubic-bezier(0.77, 0, 0.175, 1) infinite;
+}
+
+@keyframes transition-rail-runner {
+  72%,
+  100% {
+    transform: translateX(660%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .runner {
+    width: 100%;
+    animation: none;
+    transform: translateX(0);
+  }
+}

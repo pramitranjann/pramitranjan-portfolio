@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import { RuleLabel } from './RuleLabel'
+import { TransitionRail } from './TransitionRail'
 import { useSiteCopy } from '@/components/SiteCopyProvider'
 
 export function HeroCarousel() {
@@ -20,6 +21,16 @@ export function HeroCarousel() {
   const touchStartY = useRef<number | null>(null)
   // Track whether carousel has ever released so re-engagement doesn't re-hide main
   const hasReleasedRef = useRef(false)
+  const returnToWorkRef = useRef(false)
+
+  useEffect(() => {
+    if (window.location.hash !== '#selected-work') return
+    returnToWorkRef.current = true
+    releasedRef.current = true
+    hasReleasedRef.current = true
+    readyToRelease.current = true
+    setReleased(true)
+  }, [])
 
   useEffect(() => {
     setReducedMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches)
@@ -53,6 +64,16 @@ export function HeroCarousel() {
     } else {
       hasReleasedRef.current = true
       document.body.classList.remove('carousel-active')
+      if (returnToWorkRef.current) {
+        holdingRef.current = false
+        document.body.classList.remove('carousel-releasing')
+        document.body.style.overflow = ''
+        const frame = window.requestAnimationFrame(() => {
+          document.getElementById('selected-work')?.scrollIntoView()
+          returnToWorkRef.current = false
+        })
+        return () => window.cancelAnimationFrame(frame)
+      }
       window.scrollTo(0, 0)
       if (reducedMotion) {
         // Skip slide animation — unlock scroll immediately
@@ -185,7 +206,7 @@ export function HeroCarousel() {
         overflow: 'hidden',
         zIndex: 10,
         transform: released ? 'translateY(-100%)' : 'translateY(0)',
-        transition: reducedMotion ? 'none' : 'transform 0.85s cubic-bezier(0.77, 0, 0.175, 1)',
+        transition: reducedMotion || returnToWorkRef.current ? 'none' : 'transform 0.85s cubic-bezier(0.77, 0, 0.175, 1)',
         backgroundColor: '#0d0d0d',
       }}
     >
@@ -229,7 +250,7 @@ export function HeroCarousel() {
               </div>
             ) : (
               <div className="flex items-center" style={{ gap: '12px', marginTop: '48px' }}>
-                <div style={{ flex: 1, height: '1px', backgroundColor: '#1f1f1f' }} />
+                <TransitionRail style={{ flex: 1 }} />
                 <span className="font-mono" style={{ fontSize: '9px', color: '#FF3120', letterSpacing: '0.16em', whiteSpace: 'nowrap' }}>
                   {stage.footerLabel}
                 </span>

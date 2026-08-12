@@ -1,5 +1,6 @@
 {
   "home": {
+    "heroMode": "portfolio-carousel",
     "selectedWork": {
       "heading": "Research to resolution. ",
       "body": "Four projects in UX — each one starting with a question worth asking. One shipped.",

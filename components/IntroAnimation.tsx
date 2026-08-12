@@ -1,111 +1,84 @@
 'use client'
-import { useEffect, useState } from 'react'
-import { useMotionSettings } from '@/components/MotionSettingsProvider'
+
+import { useEffect, useRef, useState } from 'react'
 import { playIntroKey, playIntroLift } from '@/lib/sounds'
+import styles from './IntroAnimation.module.css'
 
-// Module-level flag: resets on every hard reload, persists through SPA navigation.
-// This means the animation plays once per page load but not on navigating back.
-let _played = false
+let played = false
 
-export function IntroAnimation() {
-  const [done, setDone] = useState(false)
-  const [text, setText] = useState('')
-  const [cursorHidden, setCursorHidden] = useState(false)
-  const [lifting, setLifting] = useState(false)
-  const [reducedMotion, setReducedMotion] = useState(false)
-  const motion = useMotionSettings()
+export function IntroAnimation({
+  forcePlay = false,
+  onComplete,
+}: {
+  forcePlay?: boolean
+  onComplete?: () => void
+}) {
+  const [done, setDone] = useState(() => played && !forcePlay)
+  const [leaving, setLeaving] = useState(false)
+  const timersRef = useRef<ReturnType<typeof setTimeout>[]>([])
+  const onCompleteRef = useRef(onComplete)
 
   useEffect(() => {
-    setReducedMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches)
-  }, [])
+    onCompleteRef.current = onComplete
+  }, [onComplete])
+
+  const finish = () => {
+    timersRef.current.forEach(clearTimeout)
+    timersRef.current = []
+    if (!forcePlay) played = true
+    setDone(true)
+    onCompleteRef.current?.()
+  }
 
   useEffect(() => {
-    if (_played) {
+    if (played && !forcePlay) {
       setDone(true)
+      onCompleteRef.current?.()
       return
     }
 
-    if (done) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      if (!forcePlay) played = true
+      setDone(true)
+      onCompleteRef.current?.()
+      return
+    }
 
-    const ids: ReturnType<typeof setTimeout>[] = []
-    const firstKeyDelay = motion.introStartDelay
-    const secondKeyDelay = motion.introStartDelay + motion.introKeyGap
-    const cursorHideDelay = motion.introStartDelay + motion.introKeyGap * 2
-    const liftStartDelay = cursorHideDelay + motion.introPauseBeforeLift
-    const finishDelay = liftStartDelay + motion.introLiftDuration + 50
-
-    ids.push(setTimeout(() => { setText('P'); playIntroKey('P') }, firstKeyDelay))
-    ids.push(setTimeout(() => { setText('PR'); playIntroKey('R') }, secondKeyDelay))
-    ids.push(setTimeout(() => setCursorHidden(true), cursorHideDelay))
-    ids.push(setTimeout(() => { setLifting(true); playIntroLift() }, liftStartDelay))
-    ids.push(
+    timersRef.current = [
+      setTimeout(() => playIntroKey('P'), 0),
+      setTimeout(() => playIntroKey('R'), 150),
       setTimeout(() => {
-        _played = true
+        setLeaving(true)
+        playIntroLift()
+      }, 760),
+      setTimeout(() => {
+        if (!forcePlay) played = true
         setDone(true)
-      }, finishDelay)
-    )
+        onCompleteRef.current?.()
+      }, 1400),
+    ]
 
-    return () => ids.forEach(clearTimeout) // prevents StrictMode double-fire
-  }, [done, motion.introKeyGap, motion.introLiftDuration, motion.introPauseBeforeLift, motion.introStartDelay])
+    return () => {
+      timersRef.current.forEach(clearTimeout)
+      timersRef.current = []
+    }
+  }, [forcePlay])
 
   if (done) return null
 
-  const liftStyle: React.CSSProperties = lifting
-    ? reducedMotion
-      ? { opacity: 0, transition: 'opacity 300ms ease' }
-      : {
-          transform: 'translateY(-100%)',
-          transition: `transform ${motion.introLiftDuration}ms cubic-bezier(0.77, 0, 0.175, 1)`,
-        }
-    : {}
-
   return (
-    <div
-      style={{
-        position: 'fixed',
-        top: '57px',
-        left: 0,
-        right: 0,
-        height: 'calc(100vh - 57px)',
-        background: '#060606',
-        zIndex: 30,
-        display: 'flex',
-        alignItems: 'center',
-        padding: '0 56px',
-        ...liftStyle,
-      }}
+    <button
+      type="button"
+      className={styles.intro}
+      data-leaving={leaving}
+      aria-label="Skip PR intro"
+      onClick={finish}
     >
-      <span
-        style={{
-          fontFamily: '"DM Mono", "Courier New", monospace',
-          fontSize: 'clamp(80px, 11vw, 130px)',
-          letterSpacing: '0.14em',
-          color: '#FF3120',
-          fontWeight: 400,
-          lineHeight: 1,
-        }}
-      >
-        {text}
-        <span
-          style={{
-            display: 'inline-block',
-            width: '4px',
-            height: '0.8em',
-            background: '#FF3120',
-            verticalAlign: 'middle',
-            marginLeft: '6px',
-            opacity: cursorHidden ? 0 : 1,
-            animation: cursorHidden ? 'none' : 'pr-cursor-blink 0.7s step-end infinite',
-          }}
-        />
+      <span className={`${styles.mark} font-mono`} aria-hidden="true">
+        <span>P</span>
+        <span>R</span>
       </span>
-
-      <style>{`
-        @keyframes pr-cursor-blink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0; }
-        }
-      `}</style>
-    </div>
+      <span className={`${styles.skip} font-mono`}>CLICK TO SKIP</span>
+    </button>
   )
 }

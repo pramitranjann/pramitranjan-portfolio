@@ -478,8 +478,11 @@ export interface CaseStudyContent {
   spotify?: ProjectSpotifyMedia
 }
 
+export type HomeHeroMode = 'staged' | 'portfolio-carousel'
+
 export interface SiteContent {
   home: {
+    heroMode: HomeHeroMode
     selectedWork: HomeSection
     moreWork: HomeSection
     about: HomeAboutContent
@@ -1185,6 +1188,7 @@ export function isSiteContent(value: unknown): value is SiteContent {
   const copy = content.copy as Record<string, unknown>
 
   return (
+    (home.heroMode === 'staged' || home.heroMode === 'portfolio-carousel') &&
     isHomeSection(home.selectedWork) &&
     isHomeSection(home.moreWork) &&
     !!home.about &&

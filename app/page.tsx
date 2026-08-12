@@ -7,6 +7,7 @@ import { About }            from '@/components/About'
 import { Contact }          from '@/components/Contact'
 import { Footer }          from '@/components/Footer'
 import { IntroAnimation }  from '@/components/IntroAnimation'
+import { PortfolioHero } from '@/components/PortfolioHero'
 import { DEFAULT_DESCRIPTION, PERSON_KEYWORDS, buildMetadata } from '@/lib/seo'
 import { getPublicSiteContent } from '@/lib/site-content'
 
@@ -24,13 +25,15 @@ export default async function HomePage() {
     <>
       <Nav />
       <IntroAnimation />
-      <HeroCarousel />
+      {content.home.heroMode === 'portfolio-carousel' ? <PortfolioHero /> : <HeroCarousel />}
       <main style={{ paddingTop: '57px' }}>
-        <SelectedWork
-          content={content.home.selectedWork}
-          cardStyle={content.design.supportingCards}
-          hoverPreviewSettings={content.design.hoverPreviews}
-        />
+        <div id="selected-work" style={{ scrollMarginTop: '57px' }}>
+          <SelectedWork
+            content={content.home.selectedWork}
+            cardStyle={content.design.supportingCards}
+            hoverPreviewSettings={content.design.hoverPreviews}
+          />
+        </div>
         <PhotographyStage />
         <About
           body={content.home.about.body}

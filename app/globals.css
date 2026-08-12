@@ -1089,6 +1089,21 @@ body.carousel-reengaging main {
   text-wrap: balance;
 }
 
+.dashboard-hero-mode-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.dashboard-hero-mode-option {
+  scale: 1;
+  transition-property: border-color, background-color, scale;
+  transition-duration: 140ms;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+.dashboard-hero-mode-option:active {
+  scale: 0.96;
+}
+
 @media (max-width: 900px) {
 
   .qr-card-grid {
@@ -1210,6 +1225,10 @@ body.carousel-reengaging main {
 
   .dashboard-grid {
     gap: 16px !important;
+  }
+
+  .dashboard-hero-mode-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 

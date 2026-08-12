@@ -22,7 +22,7 @@ export function Nav() {
       }}
     >
       <Link
-        href="/"
+        href="/#selected-work"
         className="font-mono"
         style={{ fontSize: 'var(--nav-logo-size)', letterSpacing: '0.14em', color: 'var(--nav-logo-color)', textDecoration: 'none' }}
         onPointerDown={playNav}

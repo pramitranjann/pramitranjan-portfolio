@@ -19,6 +19,7 @@ import type {
   EntryItem,
   GalleryStyleSettings,
   HeroStageCopy,
+  HomeHeroMode,
   HoverPreviewSettings,
   LayoutSettings,
   ListeningCardStyleSettings,
@@ -1430,6 +1431,66 @@ function HomepageEditor({
   return (
     <>
       <SectionFrame title="Homepage Hero">
+        <Field label="Active Hero">
+          <div
+            className="dashboard-hero-mode-grid"
+            role="radiogroup"
+            aria-label="Active homepage hero"
+            style={{ display: 'grid', gap: '10px' }}
+          >
+            {([
+              {
+                value: 'staged' as HomeHeroMode,
+                label: 'Three stages',
+                description: 'The current scroll-controlled 01–03 sequence.',
+              },
+              {
+                value: 'portfolio-carousel' as HomeHeroMode,
+                label: 'Portfolio carousel · 03',
+                description: 'One hero with the continuous portfolio deck.',
+              },
+            ]).map((option) => {
+              const active = content.home.heroMode === option.value
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  className="dashboard-hero-mode-option"
+                  role="radio"
+                  aria-checked={active}
+                  onClick={() => updateSection('home', { ...content.home, heroMode: option.value })}
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'minmax(0, 1fr) auto',
+                    gap: '8px 12px',
+                    minHeight: '92px',
+                    padding: '14px',
+                    border: `1px solid ${active ? '#FF3120' : '#2a2a2a'}`,
+                    background: active ? '#18110f' : '#0d0d0d',
+                    color: '#f5f2ed',
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <span className="font-mono" style={{ fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                    {option.label}
+                  </span>
+                  <span aria-hidden="true" style={{ color: active ? '#FF3120' : '#555555', fontSize: '11px' }}>
+                    {active ? '●' : '○'}
+                  </span>
+                  <span className="font-reading" style={{ gridColumn: '1 / -1', color: '#777777', fontSize: '12px', lineHeight: 1.5 }}>
+                    {option.description}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+        </Field>
+
+        <p className="font-mono" style={{ margin: 0, color: '#666666', fontSize: '10px', letterSpacing: '0.1em', lineHeight: 1.6 }}>
+          Save changes to publish the selected hero on the homepage. The inactive three-stage copy stays editable below.
+        </p>
+
         <HeroStageListEditor
           items={content.copy.home.heroStages}
           onChange={(heroStages) => updateSection('copy', {
