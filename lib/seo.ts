@@ -102,7 +102,9 @@ export function buildMetadata({
   const imageUrl = toAbsoluteImageUrl(imagePath)
 
   return {
-    title: fullTitle,
+    // The root layout owns the `| Pramit Ranjan` suffix via Next's metadata
+    // title template. Keep the page title raw so it is not appended twice.
+    ...(title ? { title } : {}),
     description: resolvedDescription,
     keywords: unique([...PERSON_KEYWORDS, ...keywords]),
     alternates: {

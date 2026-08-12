@@ -2,8 +2,7 @@
 
 // Select replacement, built on the existing .life-pill / .life-pill-menu
 // pattern from TaskForm so there is only ever one dropdown look in Life.
-// Wires into the 9 raw <select>s: QuickAdd, PrintManagement, ProjectsOverview,
-// PeopleIndex, PersonDetail, HistoryClient.
+// Shared by PrintManagement, ProjectsOverview, PersonDetail, and HistoryClient.
 
 import { useEffect, useId, useRef, useState } from 'react'
 
