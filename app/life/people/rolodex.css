@@ -2,23 +2,12 @@
    here win by source order, so this file overrides the lab-* styles that
    live in globals.css rather than editing them directly. */
 
-/* ── 1. Type hierarchy: primary / secondary / tertiary / state ──────────── */
-
-/* List */
+/* ── List hierarchy ────────────────────────────────────────────────────── */
 .life-shell .lab-clist-name { font-size: 15px; }
 .life-shell .lab-clist-role { font-size: 12px; color: var(--life-muted); }
-/* Overdue rows get exactly one extra signal beyond the accent color already
-   on the state chip: heavier name weight. */
 .life-shell .lab-clist-row.is-over .lab-clist-name { font-weight: 600; }
 
-/* Ledger */
-.life-shell .lab-ledger-name { font-size: 15px; }
-.life-shell .lab-ledger-role { font-size: 12px; color: var(--life-muted); }
-/* Ledger rows have no identity stripe to compete with, so the extra signal
-   is a left accent rule instead of a weight change. */
-.life-shell .lab-ledger-row.is-over { box-shadow: inset 3px 0 0 0 var(--life-accent); }
-
-/* Person header role */
+/* ── Person header role ────────────────────────────────────────────────── */
 .life-shell .lab-person-id p { color: var(--life-muted); }
 
 /* ── 2. Add-person modal ──────────────────────────────────────────────── */

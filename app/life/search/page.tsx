@@ -32,7 +32,7 @@ export default async function LifeSearchPage({
           name="q"
           defaultValue={results.query}
           autoFocus
-          placeholder="Search tasks, notes, and events…"
+          placeholder="Search projects, people, tasks, notes, and events…"
           className="text-input"
         />
         <button type="submit" className="primary-button">
@@ -41,11 +41,53 @@ export default async function LifeSearchPage({
       </form>
 
       {!results.hasQuery ? (
-        <p className="muted-text">Find anything across tasks, captured notes, and calendar events.</p>
+        <p className="muted-text">Find projects, people, tasks, captured notes, and calendar events.</p>
       ) : results.totalResults === 0 ? (
         <div className="life-empty">No matches for “{results.query}”.</div>
       ) : (
         <div className="life-search-results">
+          {results.projects.length ? (
+            <section className="life-card">
+              <div className="life-card-head">
+                <h2>Projects</h2>
+                <span className="count-pill">{results.projects.length}</span>
+              </div>
+              <ul className="life-rows">
+                {results.projects.map((project) => (
+                  <li className="life-row" key={project.id} style={{ gridTemplateColumns: '1fr' }}>
+                    <Link href={project.href} className="life-row-body">
+                      <span className="life-row-title">{project.name}</span>
+                      {project.summary ? <span className="life-row-meta">{project.summary}</span> : null}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+
+          {results.people.length ? (
+            <section className="life-card">
+              <div className="life-card-head">
+                <h2>People</h2>
+                <span className="count-pill">{results.people.length}</span>
+              </div>
+              <ul className="life-rows">
+                {results.people.map((person) => (
+                  <li className="life-row" key={person.id} style={{ gridTemplateColumns: '1fr' }}>
+                    <Link href={person.href} className="life-row-body">
+                      <span className="life-row-title">{person.name}</span>
+                      {person.role || person.relationship || person.email ? (
+                        <span className="life-row-meta">
+                          {[person.role, person.relationship, person.email].filter(Boolean).join(' · ')}
+                        </span>
+                      ) : null}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+
           {results.tasks.length ? (
             <section className="life-card">
               <div className="life-card-head">
@@ -60,7 +102,7 @@ export default async function LifeSearchPage({
                         {task.title}
                       </span>
                       <span className="life-row-meta">
-                        <span className={`pri-dot pri-${task.priority}`} />
+                        {!task.isHome ? <span className={`pri-dot pri-${task.priority}`} /> : null}
                         {task.projectLabel}
                       </span>
                     </Link>

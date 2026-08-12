@@ -14,6 +14,24 @@ interface LifeCalendarSource {
   selected: boolean
 }
 
+const MAX_REMINDER_MINUTES = 40_320
+
+export function normalizeAttendeeEmails(value: unknown): string[] {
+  if (!Array.isArray(value)) return []
+  return Array.from(new Set(value
+    .filter((email): email is string => typeof email === 'string')
+    .map((email) => email.trim().toLowerCase())
+    .filter((email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))))
+}
+
+export function normalizeReminderMinutes(value: unknown): number[] {
+  if (!Array.isArray(value)) return []
+  return Array.from(new Set(value
+    .filter((minutes): minutes is number => typeof minutes === 'number' && Number.isInteger(minutes))
+    .filter((minutes) => minutes > 0 && minutes <= MAX_REMINDER_MINUTES)))
+    .sort((a, b) => a - b)
+}
+
 function getCalendarClient() {
   const { googleClientId, googleClientSecret, googleRefreshToken } = getLifeServerEnv()
   const oauth2Client = new google.auth.OAuth2(googleClientId, googleClientSecret);
@@ -89,6 +107,8 @@ function buildEventRequestBody(
     allDay?: boolean
     location?: string | null
     notes?: string | null
+    attendeeEmails?: string[]
+    reminderMinutes?: number[]
   },
   timeZone: string,
 ) {
@@ -101,6 +121,11 @@ function buildEventRequestBody(
     description?: string
     start: { date?: string; dateTime?: string; timeZone?: string }
     end: { date?: string; dateTime?: string; timeZone?: string }
+    attendees?: Array<{ email: string }>
+    reminders?: {
+      useDefault: boolean
+      overrides?: Array<{ method: 'popup'; minutes: number }>
+    }
   }
 
   if (input.allDay || !input.startTime) {
@@ -133,6 +158,15 @@ function buildEventRequestBody(
     }
   }
 
+  const attendeeEmails = normalizeAttendeeEmails(input.attendeeEmails)
+  const reminderMinutes = normalizeReminderMinutes(input.reminderMinutes)
+  if (attendeeEmails.length > 0) {
+    requestBody.attendees = attendeeEmails.map((email) => ({ email }))
+  }
+  requestBody.reminders = reminderMinutes.length > 0
+    ? { useDefault: false, overrides: reminderMinutes.map((minutes) => ({ method: 'popup', minutes })) }
+    : { useDefault: true }
+
   return requestBody
 }
 
@@ -150,6 +184,8 @@ export async function createCalendarEvent(input: {
   calendarId?: string | null
   location?: string | null
   notes?: string | null
+  attendeeEmails?: string[]
+  reminderMinutes?: number[]
 }) {
   const settings = await getOwnerSettings()
   const timeZone = settings.timezone
@@ -207,6 +243,8 @@ export async function updateCalendarEvent(
     calendarId?: string | null
     location?: string | null
     notes?: string | null
+    attendeeEmails?: string[]
+    reminderMinutes?: number[]
   },
   currentCalendarId?: string | null,
 ) {
@@ -402,6 +440,8 @@ export async function syncCalendarEvents(
         location: event.location || null,
         notes: event.description || null,
         html_link: event.htmlLink || null,
+        attendee_emails: normalizeAttendeeEmails(event.attendees?.map((attendee) => attendee.email)),
+        reminder_minutes: normalizeReminderMinutes(event.reminders?.overrides?.map((override) => override.minutes)),
         start_time: isAllDay && startDate
           ? localDateTimeToUtc(startDate, timeZone, 0, 0, 0).toISOString()
           : startTime || null,

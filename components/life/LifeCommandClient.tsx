@@ -14,9 +14,9 @@ export function LifeCommandClient() {
 
   const items: CommandItem[] = [
     { id: 'nav-today', group: 'Go to', label: 'Today', onRun: () => router.push('/life') },
-    { id: 'nav-tasks', group: 'Go to', label: 'Tasks', onRun: () => router.push('/life/tasks') },
-    { id: 'nav-projects', group: 'Go to', label: 'Projects', onRun: () => router.push('/life/projects') },
-    { id: 'nav-people', group: 'Go to', label: 'People', onRun: () => router.push('/life/people') },
+    { id: 'nav-tasks', group: 'Go to', label: 'Tasks', drillCategory: 'tasks', onRun: () => router.push('/life/tasks') },
+    { id: 'nav-projects', group: 'Go to', label: 'Projects', drillCategory: 'projects', onRun: () => router.push('/life/projects') },
+    { id: 'nav-people', group: 'Go to', label: 'People', drillCategory: 'people', onRun: () => router.push('/life/people') },
     { id: 'nav-studio', group: 'Go to', label: 'Studio', onRun: () => router.push('/life/studio') },
     { id: 'nav-calendar', group: 'Go to', label: 'Calendar', onRun: () => router.push('/life/month') },
     { id: 'nav-reports', group: 'Go to', label: 'Reports', onRun: () => router.push('/life/report') },
@@ -24,5 +24,5 @@ export function LifeCommandClient() {
     { id: 'nav-search', group: 'Go to', label: 'Search', onRun: () => router.push('/life/search') },
   ]
 
-  return <LifeCommand items={items} />
+  return <LifeCommand items={items} onNavigate={(href) => router.push(href)} />
 }

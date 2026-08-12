@@ -125,7 +125,7 @@ export function LifeInlineSearch({
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search"
+            placeholder="Search projects, people, tasks…"
             className="text-input"
             aria-label="Search life"
           />
@@ -155,6 +155,48 @@ export function LifeInlineSearch({
                 <span className="life-page-stat">{totalResults} results</span>
               </div>
 
+              {results?.projects.length ? (
+                <section className="life-card">
+                  <div className="life-card-head">
+                    <h2>Projects</h2>
+                    <span className="count-pill">{results.projects.length}</span>
+                  </div>
+                  <ul className="life-rows">
+                    {results.projects.map((project) => (
+                      <li className="life-row" key={project.id} style={{ gridTemplateColumns: '1fr' }}>
+                        <Link href={project.href} className="life-row-body" onClick={onClose}>
+                          <span className="life-row-title">{project.name}</span>
+                          {project.summary ? <span className="life-row-meta">{project.summary}</span> : null}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ) : null}
+
+              {results?.people.length ? (
+                <section className="life-card">
+                  <div className="life-card-head">
+                    <h2>People</h2>
+                    <span className="count-pill">{results.people.length}</span>
+                  </div>
+                  <ul className="life-rows">
+                    {results.people.map((person) => (
+                      <li className="life-row" key={person.id} style={{ gridTemplateColumns: '1fr' }}>
+                        <Link href={person.href} className="life-row-body" onClick={onClose}>
+                          <span className="life-row-title">{person.name}</span>
+                          {person.role || person.relationship || person.email ? (
+                            <span className="life-row-meta">
+                              {[person.role, person.relationship, person.email].filter(Boolean).join(' · ')}
+                            </span>
+                          ) : null}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ) : null}
+
               {results?.tasks.length ? (
                 <section className="life-card">
                   <div className="life-card-head">
@@ -169,7 +211,7 @@ export function LifeInlineSearch({
                             {task.title}
                           </span>
                           <span className="life-row-meta">
-                            <span className={`pri-dot pri-${task.priority}`} />
+                            {!task.isHome ? <span className={`pri-dot pri-${task.priority}`} /> : null}
                             {task.projectLabel}
                           </span>
                         </Link>

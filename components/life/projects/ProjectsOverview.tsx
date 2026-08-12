@@ -24,6 +24,10 @@ export interface ProjectOverviewItem {
   overdue: number
   total: number
   lastUpdated: string
+  parentSlug: string | null
+  parentName: string | null
+  childCount: number
+  depth: number
 }
 
 /** "updated 3d ago" — day granularity keeps SSR/client renders in step. */
@@ -91,16 +95,20 @@ export function ProjectsOverview({
 
   return (
     <div className="life-projects-shell">
-      <div className="life-page-head life-projects-head">
-        <div>
-          <p className="eyebrow">Projects</p>
-          <h1>By project</h1>
-          <p className="life-tasks-stat life-projects-stat">
-            <b>{items.length} projects</b> · {totalOpen} open
+      <div className="life-projects-head">
+        <div className="life-projects-heading">
+          <p className="eyebrow">Workspace</p>
+          <div className="life-projects-title-row">
+            <h1>Projects</h1>
+            <span className="count-pill">{items.length}</span>
+          </div>
+          <p className="life-projects-stat">
+            {totalOpen === 0 ? 'No open tasks across projects' : `${totalOpen} open task${totalOpen === 1 ? '' : 's'} across projects`}
           </p>
         </div>
-        <button type="button" className="life-btn primary" onClick={() => setAdding((value) => !value)} aria-expanded={adding}>
-          + New project
+        <button type="button" className="life-project-new" onClick={() => setAdding((value) => !value)} aria-expanded={adding}>
+          <span aria-hidden="true">+</span>
+          <span>New project</span>
         </button>
       </div>
 
@@ -161,39 +169,50 @@ export function ProjectsOverview({
 
       {error ? <p className="error-text">{error}</p> : null}
 
-      <div className="life-projects-grid">
+      <div className="life-project-index">
+        <div className="life-project-index-head" aria-hidden="true">
+          <span>Project</span>
+          <span>Progress</span>
+          <span>Tasks</span>
+          <span>Updated</span>
+          <span />
+        </div>
         {items.map((item) => {
           const tone = healthTone(item)
           const pct = progressPct(item.done, item.total)
           const due = relativeDueLabel(item.targetDate, today)
           return (
-            <div key={item.slug} className="life-card life-project-card">
+            <div key={item.slug} className={`life-project-row${item.depth > 0 ? ' is-child' : ''}`}>
               <span className="life-project-strip" style={{ background: item.color || 'var(--life-label)' }} aria-hidden />
-              <Link href={`/life/projects/${item.slug}`} className="life-project-card-link">
-                <div className="life-project-card-top">
-                  <div className="life-card-head">
+              <Link href={`/life/projects/${item.slug}`} className="life-project-row-link">
+                <div className="life-project-row-identity" style={{ paddingLeft: `${item.depth * 22}px` }}>
+                  <div className="life-project-row-title">
+                    {item.depth > 0 ? <span className="life-project-branch" aria-hidden="true">↳</span> : null}
                     <h2>{item.name}</h2>
                     <span className={`life-health-dot health-${tone}`} aria-label={`Health: ${tone}`} />
                   </div>
-                  <div className="life-project-card-meta">
+                  {item.summary ? <p className="life-project-summary">{item.summary}</p> : null}
+                  <div className="life-project-row-meta">
+                    {item.parentName ? <span className="life-project-parent-label">In {item.parentName}</span> : null}
+                    {item.childCount > 0 ? <span>{item.childCount} nested</span> : null}
                     {item.projectKind === 'ux' ? <span className="life-project-kind-chip">UX</span> : null}
                     {item.status !== 'active' ? <span className="life-project-badge">{STATUS_LABEL[item.status]}</span> : null}
                     {due ? <span className={`life-due-chip due-${due.tone}`}>{due.text}</span> : null}
                   </div>
                 </div>
-                {item.summary ? <p className="life-project-summary">{item.summary}</p> : null}
-                <div className="life-project-progress">
+                <div className="life-project-row-progress">
                   <div className="life-progress-track">
                     <div className="life-progress-fill" style={{ width: `${pct}%` }} />
                   </div>
                   <span className="life-progress-label">{pct}%</span>
                 </div>
-                <div className="life-project-card-foot">
+                <div className="life-project-row-tasks">
                   <span className="life-project-stat">{item.open} open</span>
                   <span className="life-project-stat">{item.done} done</span>
                   {item.overdue > 0 ? <span className="life-project-stat is-overdue">{item.overdue} overdue</span> : null}
-                  <span className="life-project-updated">{relativeUpdatedLabel(item.lastUpdated)}</span>
                 </div>
+                <span className="life-project-updated">{relativeUpdatedLabel(item.lastUpdated)}</span>
+                <span className="life-project-row-arrow" aria-hidden="true">→</span>
               </Link>
               <button
                 type="button"

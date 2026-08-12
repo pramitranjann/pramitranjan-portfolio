@@ -76,6 +76,8 @@ export interface CalendarEventRecord {
   location: string | null;
   notes: string | null;
   html_link: string | null;
+  attendee_emails: string[];
+  reminder_minutes: number[];
   start_time: string | null;
   end_time: string | null;
   all_day: boolean;
@@ -155,10 +157,29 @@ export interface LifeSearchTaskHit {
   id: string;
   href: string;
   title: string;
+  isHome: boolean;
   status: TaskStatus;
   priority: TaskPriority;
   projectLabel: string;
   dueLabel: string | null;
+}
+
+export interface LifeSearchProjectHit {
+  id: string;
+  href: string;
+  name: string;
+  summary: string | null;
+  isHome: boolean;
+}
+
+export interface LifeSearchPersonHit {
+  id: string;
+  href: string;
+  name: string;
+  role: string | null;
+  relationship: PersonRelationship | null;
+  email: string | null;
+  isHome: boolean;
 }
 
 export interface LifeSearchEntryHit {
@@ -184,6 +205,8 @@ export interface LifeSearchResults {
   query: string;
   hasQuery: boolean;
   totalResults: number;
+  projects: LifeSearchProjectHit[];
+  people: LifeSearchPersonHit[];
   tasks: LifeSearchTaskHit[];
   entries: LifeSearchEntryHit[];
   events: LifeSearchEventHit[];

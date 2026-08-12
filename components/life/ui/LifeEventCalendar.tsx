@@ -24,6 +24,10 @@ export interface CalEvent {
   end: number | null
   title: string
   calendar?: 'personal' | 'work' | 'health'
+  location?: string
+  notes?: string
+  attendeeEmails?: string[]
+  reminderMinutes?: number[]
 }
 
 type View = 'month' | 'week' | 'day' | 'agenda'
@@ -255,33 +259,35 @@ export function LifeEventCalendar({
           </button>
         </div>
 
-        <div className="life-evcal-toolbar-end">
+        <div className="life-evcal-actions">
+          <div className="segmented life-evcal-views" role="tablist" aria-label="Calendar view">
+            {VIEWS.map((v) => (
+              <button
+                key={v.id}
+                type="button"
+                role="tab"
+                aria-selected={view === v.id}
+                className={`segmented-item${view === v.id ? ' is-active' : ''}`}
+                onClick={() => setView(v.id)}
+              >
+                {v.label}
+              </button>
+            ))}
+          </div>
+
           {/* reui's own note on variant 2: a stray drag shouldn't carve out a
               booking — creation is a button. Same call here. */}
           <button
             type="button"
-            className="life-btn primary"
+            className="life-evcal-new"
             onClick={() =>
               setEditing({ id: '', date: cursor, start: 540, end: 600, title: '', calendar: 'personal' })
             }
+            aria-label="New event"
+            title="New event"
           >
-            New event
+            <span aria-hidden="true">+</span>
           </button>
-        </div>
-
-        <div className="segmented life-evcal-views" role="tablist" aria-label="Calendar view">
-          {VIEWS.map((v) => (
-            <button
-              key={v.id}
-              type="button"
-              role="tab"
-              aria-selected={view === v.id}
-              className={`segmented-item${view === v.id ? ' is-active' : ''}`}
-              onClick={() => setView(v.id)}
-            >
-              {v.label}
-            </button>
-          ))}
         </div>
       </div>
 

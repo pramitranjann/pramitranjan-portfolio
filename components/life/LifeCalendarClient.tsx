@@ -59,6 +59,10 @@ function toCalEvent(record: CalendarEventRecord, timezone: string): CalEvent {
     end: allDay || !record.end_time ? null : minutesInZone(record.end_time, timezone),
     title: record.title || 'Untitled',
     calendar: toneFor(record.calendar_name),
+    location: record.location || '',
+    notes: record.notes || '',
+    attendeeEmails: record.attendee_emails || [],
+    reminderMinutes: record.reminder_minutes || [],
   }
 }
 
@@ -69,11 +73,18 @@ function toBody(event: CalEvent) {
     allDay: event.start === null,
     startTime: event.start === null ? null : hhmm(event.start),
     endTime: event.end === null ? null : hhmm(event.end),
+    location: event.location || null,
+    notes: event.notes || null,
+    attendeeEmails: event.attendeeEmails || [],
+    reminderMinutes: event.reminderMinutes || [],
   }
 }
 
 function sameEvent(a: CalEvent, b: CalEvent) {
   return a.date === b.date && a.start === b.start && a.end === b.end && a.title === b.title
+    && a.location === b.location && a.notes === b.notes
+    && JSON.stringify(a.attendeeEmails || []) === JSON.stringify(b.attendeeEmails || [])
+    && JSON.stringify(a.reminderMinutes || []) === JSON.stringify(b.reminderMinutes || [])
 }
 
 export function LifeCalendarClient({
@@ -161,9 +172,11 @@ export function LifeCalendarClient({
               { method: 'POST', body: JSON.stringify(toBody(event)) },
             )
             // Swap the client-side temp id for the real one, or the next edit
-            // would read as another create.
+            // would read as another create. The POST returns Google's event
+            // shape, not the Supabase mirror shape, so preserve the optimistic
+            // event fields and take only the confirmed Google id here.
             if (saved?.event?.id) {
-              const real = toCalEvent(saved.event, timezone)
+              const real = { ...event, id: saved.event.id }
               setEvents((current) => current.map((e) => (e.id === event.id ? real : e)))
               next = next.map((e) => (e.id === event.id ? real : e))
             }

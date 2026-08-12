@@ -101,33 +101,31 @@ function byUrgency(a: RolodexPerson, b: RolodexPerson) {
   return av - bv
 }
 
-/* ── Mode 1: the list, redesigned ──────────────────────────────────────── */
-
 function ContactList({ rows, onOpen }: { rows: RolodexPerson[]; onOpen: (id: string) => void }) {
   return (
     <div className="lab-clist">
-      {rows.map((c) => {
-        const due = dueIn(c)
-        const over = due != null && due < 0
+      {rows.map((person) => {
+        const due = dueIn(person)
+        const overdue = due != null && due < 0
         return (
-          <button key={c.id} type="button" className={`lab-clist-row${over ? ' is-over' : ''}`} onClick={() => onOpen(c.id)}>
-            {/* Tone stripe rather than an avatar: it reads as identity at a
-                glance and matches how projects are already colour-coded. */}
-            <span className="lab-clist-stripe" style={{ background: c.tone }} />
+          <button
+            key={person.id}
+            type="button"
+            className={`lab-clist-row${overdue ? ' is-over' : ''}`}
+            onClick={() => onOpen(person.id)}
+          >
+            <span className="lab-clist-stripe" style={{ background: person.tone }} />
             <span className="lab-clist-id">
-              <span className="lab-clist-name">{c.name}</span>
-              <span className="lab-clist-role">{c.role}</span>
+              <span className="lab-clist-name">{person.name}</span>
+              <span className="lab-clist-role">{person.role}</span>
             </span>
-            <span className="lab-clist-channel">{c.channel}</span>
-            <span className="lab-clist-last">{agoLabel(c.since)}</span>
-            <span className={`lab-clist-state${over ? ' is-over' : ''}`}>
-              {c.cadence == null ? (
+            <span className="lab-clist-channel">{person.channel}</span>
+            <span className="lab-clist-last">{agoLabel(person.since)}</span>
+            <span className={`lab-clist-state${overdue ? ' is-over' : ''}`}>
+              {person.cadence == null ? (
                 <span className="lab-clist-nocadence">no cadence</span>
               ) : (
-                <>
-                  <span className="lab-clist-state-dot" />
-                  {dayLabel(due)}
-                </>
+                <><span className="lab-clist-state-dot" />{dayLabel(due)}</>
               )}
             </span>
           </button>
@@ -137,64 +135,16 @@ function ContactList({ rows, onOpen }: { rows: RolodexPerson[]; onOpen: (id: str
   )
 }
 
-/* ── Mode 2: the decay ledger ──────────────────────────────────────────── */
-
 const METER_CELLS = 12
 
-function meter(c: RolodexPerson) {
-  if (c.cadence == null || c.since == null) return '·'.repeat(METER_CELLS)
-  const left = Math.max(0, Math.min(1, (c.cadence - c.since) / c.cadence))
-  const filled = Math.round(left * METER_CELLS)
+function meter(person: RolodexPerson) {
+  if (person.cadence == null || person.since == null) return '·'.repeat(METER_CELLS)
+  const remaining = Math.max(0, Math.min(1, (person.cadence - person.since) / person.cadence))
+  const filled = Math.round(remaining * METER_CELLS)
   return '█'.repeat(filled) + '░'.repeat(METER_CELLS - filled)
 }
 
-function LedgerGroup({ label, rows }: { label: string; rows: RolodexPerson[] }) {
-  if (!rows.length) return null
-  return (
-    <>
-      <div className="lab-ledger-group">
-        <span>{label}</span>
-        <span className="lab-ledger-rule" />
-        <span>{rows.length}</span>
-      </div>
-      {rows.map((c) => {
-        const due = dueIn(c)
-        const over = due != null && due < 0
-        return (
-          <div key={c.id} className={`lab-ledger-row${over ? ' is-over' : ''}`}>
-            <span className="lab-ledger-name">{c.name}</span>
-            <span className="lab-ledger-role">{c.role}</span>
-            <span className={`lab-ledger-meter${over ? ' is-over' : ''}`}>{meter(c)}</span>
-            <span className={`lab-ledger-days${over ? ' is-over' : ''}`}>{dayLabel(due)}</span>
-          </div>
-        )
-      })}
-    </>
-  )
-}
-
-function ContactLedger({ rows }: { rows: RolodexPerson[] }) {
-  return (
-    <div className="lab-ledger">
-      <LedgerGroup label="Overdue" rows={rows.filter((c) => (dueIn(c) ?? 1) < 0)} />
-      <LedgerGroup
-        label="Due this week"
-        rows={rows.filter((c) => (dueIn(c) ?? -1) >= 0 && (dueIn(c) ?? 99) <= 7)}
-      />
-      <LedgerGroup label="Warm" rows={rows.filter((c) => (dueIn(c) ?? -1) > 7)} />
-      {/* Has a cadence but nothing logged. Without this group they matched no
-          bucket at all — every `?? fallback` above rejects a null — and simply
-          vanished from the ledger. */}
-      <LedgerGroup
-        label="Never contacted"
-        rows={rows.filter((c) => c.cadence != null && c.since == null)}
-      />
-      <LedgerGroup label="No cadence" rows={rows.filter((c) => c.cadence == null)} />
-    </div>
-  )
-}
-
-/* ── Mode 3: the contact horizon ───────────────────────────────────────── */
+/* ── Contact horizon ───────────────────────────────────────────────────── */
 
 // Same values drive the footer labels and the per-row gridlines, so a line
 // always sits directly under the tick that names it.
@@ -752,11 +702,10 @@ const BLANK_ADD = {
   email: '', phone: '', link: '', how: '', why: '', likes: '', dislikes: '',
 }
 
-type Mode = 'list' | 'ledger' | 'horizon'
+type Mode = 'list' | 'horizon'
 
 const MODES: { id: Mode; label: string }[] = [
   { id: 'list', label: 'List' },
-  { id: 'ledger', label: 'Ledger' },
   { id: 'horizon', label: 'Horizon' },
 ]
 
@@ -892,19 +841,17 @@ export function RolodexScreen({
         >
           Due only
         </button>
-        {/* Mode is a view of the same rows, not a different dataset — the
-            search and filter above stay applied across all three. */}
         <div className="lab-rolodex-modes" role="tablist" aria-label="View mode">
-          {MODES.map((m) => (
+          {MODES.map((option) => (
             <button
-              key={m.id}
+              key={option.id}
               type="button"
               role="tab"
-              aria-selected={mode === m.id}
-              className={`lab-rolodex-mode${mode === m.id ? ' is-active' : ''}`}
-              onClick={() => setMode(m.id)}
+              aria-selected={mode === option.id}
+              className={`lab-rolodex-mode${mode === option.id ? ' is-active' : ''}`}
+              onClick={() => setMode(option.id)}
             >
-              {m.label}
+              {option.label}
             </button>
           ))}
         </div>
@@ -1011,8 +958,6 @@ export function RolodexScreen({
         <div className="life-empty">No one matches that.</div>
       ) : mode === 'list' ? (
         <ContactList rows={rows} onOpen={setOpenId} />
-      ) : mode === 'ledger' ? (
-        <ContactLedger rows={rows} />
       ) : (
         <ContactHorizon rows={rows} onOpen={setOpenId} />
       )}

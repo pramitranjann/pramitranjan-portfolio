@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 import { isAuthenticatedLifeRequest, unauthorizedJson } from '@/lib/life/auth'
-import { deleteCalendarEvent, syncCalendarEvents, updateCalendarEvent } from '@/lib/life/calendar'
+import { deleteCalendarEvent, normalizeAttendeeEmails, normalizeReminderMinutes, syncCalendarEvents, updateCalendarEvent } from '@/lib/life/calendar'
 import { OWNER_ID } from '@/lib/life/constants'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
 
@@ -18,10 +18,16 @@ async function getStoredEvent(eventId: string) {
   const supabase = getSupabaseAdmin()
   const { data, error } = await supabase
     .from('calendar_events')
-    .select('id, local_date, calendar_id')
+    .select('id, local_date, calendar_id, attendee_emails, reminder_minutes')
     .eq('user_id', OWNER_ID)
     .eq('id', eventId)
-    .maybeSingle<{ id: string; local_date: string; calendar_id: string | null }>()
+    .maybeSingle<{
+      id: string
+      local_date: string
+      calendar_id: string | null
+      attendee_emails: string[]
+      reminder_minutes: number[]
+    }>()
 
   if (error) throw error
   return data
@@ -52,6 +58,8 @@ export async function PATCH(
       calendarId?: string | null
       location?: string | null
       notes?: string | null
+      attendeeEmails?: string[]
+      reminderMinutes?: number[]
     } | null
 
     const localDate = normalizeLocalDate(body?.localDate) || stored.local_date
@@ -69,6 +77,14 @@ export async function PATCH(
       calendarId: normalizeOptionalText(body?.calendarId),
       location: normalizeOptionalText(body?.location),
       notes: normalizeOptionalText(body?.notes),
+      // Older callers only send the fields their form exposes. Preserve mirror
+      // details when omitted; an explicit [] intentionally clears them.
+      attendeeEmails: body?.attendeeEmails === undefined
+        ? stored.attendee_emails
+        : normalizeAttendeeEmails(body.attendeeEmails),
+      reminderMinutes: body?.reminderMinutes === undefined
+        ? stored.reminder_minutes
+        : normalizeReminderMinutes(body.reminderMinutes),
     }, stored.calendar_id)
 
     const syncStart = stored.local_date < localDate ? stored.local_date : localDate

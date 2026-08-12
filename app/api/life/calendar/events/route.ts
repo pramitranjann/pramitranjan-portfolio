@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 import { isAuthenticatedLifeRequest, unauthorizedJson } from '@/lib/life/auth'
-import { createCalendarEvent, listUpcomingCalendarEvents, syncCalendarEvents } from '@/lib/life/calendar'
+import { createCalendarEvent, listUpcomingCalendarEvents, normalizeAttendeeEmails, normalizeReminderMinutes, syncCalendarEvents } from '@/lib/life/calendar'
 import { getOwnerSettings } from '@/lib/life/settings'
 import { getCurrentLocalDate } from '@/lib/life/time'
 
@@ -54,6 +54,8 @@ export async function POST(request: NextRequest) {
     let calendarId: string | null = null
     let location: string | null = null
     let notes: string | null = null
+    let attendeeEmails: string[] = []
+    let reminderMinutes: number[] = []
 
     if (isJsonRequest) {
       const body = (await request.json().catch(() => null)) as {
@@ -65,6 +67,8 @@ export async function POST(request: NextRequest) {
         calendarId?: string | null
         location?: string | null
         notes?: string | null
+        attendeeEmails?: string[]
+        reminderMinutes?: number[]
         redirectTo?: string | null
       } | null
       title = body?.title?.trim() || ''
@@ -75,6 +79,8 @@ export async function POST(request: NextRequest) {
       calendarId = normalizeOptionalText(body?.calendarId)
       location = normalizeOptionalText(body?.location)
       notes = normalizeOptionalText(body?.notes)
+      attendeeEmails = normalizeAttendeeEmails(body?.attendeeEmails)
+      reminderMinutes = normalizeReminderMinutes(body?.reminderMinutes)
       redirectTo = getSafeRedirectTo(body?.redirectTo)
     } else {
       const formData = await request.formData().catch(() => null)
@@ -109,6 +115,8 @@ export async function POST(request: NextRequest) {
       calendarId,
       location,
       notes,
+      attendeeEmails,
+      reminderMinutes,
     })
 
     try {

@@ -7,11 +7,15 @@
 // capture, morning brief, captured feed, today's tasks, schedule.
 
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 
+import { useRouter } from 'next/navigation'
 import { MarkdownCard } from '@/components/life/MarkdownCard'
+import { useLifeProjects } from '@/components/life/LifeProjectsProvider'
 import { VoiceCaptureControl } from '@/components/life/VoiceCaptureControl'
+import { fetchJson } from '@/lib/life/client'
 import { LifeHoverCard } from '@/components/life/ui/LifeHoverCard'
+import { LifeEventDialog } from '@/components/life/ui/LifeEventDialog'
 
 export interface TodayEvent {
   id: string
@@ -36,10 +40,14 @@ export interface TodayEntry {
   id: string
   at: string
   text: string
+  kind: string
+  kindColor: string
+  project: string | null
 }
 
 interface TodayScreenProps {
   dateLabel: string
+  localDate: string
   events: TodayEvent[]
   nextEvent?: TodayEvent & { countdown: string }
   tasks: TodayTask[]
@@ -168,13 +176,15 @@ function TodayHead({
 // into the textarea and flips the source field by getElementById, so the
 // textarea stays uncontrolled. A useState-controlled value would be reverted
 // by React the moment voice wrote to it.
-const TEXTAREA_ID = 'life-entry-textarea'
-const SOURCE_INPUT_ID = 'life-entry-source'
+function Capture({ formError, idSuffix }: { formError: string | null; idSuffix: string }) {
+  const { projects } = useLifeProjects()
+  const textareaId = `life-entry-textarea-${idSuffix}`
+  const sourceInputId = `life-entry-source-${idSuffix}`
+  const transcriptId = `life-live-transcript-${idSuffix}`
 
-function Capture({ formError }: { formError: string | null }) {
   return (
     <form className="t2-capture" action="/api/life/entries" method="post">
-      <input id={SOURCE_INPUT_ID} name="source" type="hidden" defaultValue="text" />
+      <input id={sourceInputId} name="source" type="hidden" defaultValue="text" />
       {/* rows={1} is load-bearing: a textarea's rows attribute is an intrinsic
           height floor that minmax(0, 1fr) cannot override, and it defaults to 2.
           With the default, the box refused to shrink and pushed the footer —
@@ -183,7 +193,7 @@ function Capture({ formError }: { formError: string | null }) {
       <textarea
         className="t2-input"
         rows={1}
-        id={TEXTAREA_ID}
+        id={textareaId}
         name="content"
         placeholder="What happened?"
       />
@@ -191,19 +201,123 @@ function Capture({ formError }: { formError: string | null }) {
         {/* The real hold-to-capture, not the lab's mock button. It also owns the
             2s autosave chip, so voice entries post without touching Save. */}
         <VoiceCaptureControl
-          sourceInputId={SOURCE_INPUT_ID}
-          textareaId={TEXTAREA_ID}
-          liveTranscriptId="life-live-transcript"
+          sourceInputId={sourceInputId}
+          textareaId={textareaId}
+          liveTranscriptId={transcriptId}
         />
+        <label className="t2-capture-project">
+          <span>Project</span>
+          <select name="projectSlug" defaultValue="" aria-label="Project for this capture">
+            <option value="">No project</option>
+            {projects.map((project) => (
+              <option key={project.slug} value={project.slug}>{project.name}</option>
+            ))}
+          </select>
+        </label>
         <span className="life-kbd">⌘↵</span>
         <button type="submit" className="life-btn primary">
           Save
         </button>
       </div>
       {/* Visually hidden (position: absolute), so it costs no grid row. */}
-      <div id="life-live-transcript" className="life-live-transcript" aria-live="polite" />
+      <div id={transcriptId} className="life-live-transcript" aria-live="polite" />
       {formError ? <p className="error-text">{formError}</p> : null}
     </form>
+  )
+}
+
+function TaskQuickAdd({ label = false }: { label?: boolean }) {
+  const router = useRouter()
+  const { projects } = useLifeProjects()
+  const [open, setOpen] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  async function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (saving) return
+    const form = event.currentTarget
+    const data = new FormData(form)
+    const title = String(data.get('title') || '').trim()
+    if (!title) return
+    setSaving(true)
+    setError(null)
+    try {
+      await fetchJson('/api/life/tasks', {
+        method: 'POST',
+        body: JSON.stringify({
+          title,
+          projectSlug: String(data.get('projectSlug') || '') || null,
+          priority: String(data.get('priority') || 'medium'),
+          dueLocalDate: String(data.get('dueLocalDate') || '') || null,
+        }),
+      })
+      form.reset()
+      setOpen(false)
+      router.refresh()
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'Task creation failed.')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <div className="t2-card-add">
+      <button type="button" className="t2-add-button" onClick={() => setOpen((value) => !value)} aria-expanded={open}>
+        <span aria-hidden="true">+</span>{label ? <span>Add task</span> : <span className="sr-only">Add task</span>}
+      </button>
+      {open ? (
+        <form className="t2-quick-form" onSubmit={submit}>
+          <input className="text-input" name="title" autoFocus placeholder="What needs doing?" aria-label="Task title" />
+          <div className="t2-quick-fields">
+            <select className="text-input" name="projectSlug" defaultValue="" aria-label="Task project">
+              <option value="">No project</option>
+              {projects.map((project) => <option key={project.slug} value={project.slug}>{project.name}</option>)}
+            </select>
+            <select className="text-input" name="priority" defaultValue="medium" aria-label="Task priority">
+              <option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option>
+            </select>
+            <input className="text-input" name="dueLocalDate" type="date" aria-label="Task due date" />
+          </div>
+          <div className="t2-quick-actions">
+            {error ? <span className="error-text" role="alert">{error}</span> : null}
+            <button type="button" className="life-btn ghost" onClick={() => setOpen(false)}>Cancel</button>
+            <button type="submit" className="life-btn primary" disabled={saving}>{saving ? 'Adding…' : 'Add task'}</button>
+          </div>
+        </form>
+      ) : null}
+    </div>
+  )
+}
+
+function EventQuickAdd({ localDate, label = false }: { localDate: string; label?: boolean }) {
+  const [open, setOpen] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
+
+  return (
+    <div className="t2-card-add">
+      <button type="button" className="t2-add-button" onClick={() => setOpen(true)} aria-label="Add event">
+        <span aria-hidden="true">+</span>{label ? <span>Add event</span> : null}
+      </button>
+      {error ? <span className="error-text" role="alert">{error}</span> : null}
+      <LifeEventDialog
+        event={{ id: '', date: localDate, start: 540, end: 600, title: '', calendar: 'personal', attendeeEmails: [], reminderMinutes: [] }}
+        open={open}
+        onCancel={() => setOpen(false)}
+        onDelete={() => undefined}
+        onSave={(event) => {
+          void fetchJson('/api/life/calendar/events', { method: 'POST', body: JSON.stringify({
+            title: event.title, localDate: event.date, allDay: event.start === null,
+            startTime: event.start === null ? null : `${String(Math.floor(event.start / 60)).padStart(2, '0')}:${String(event.start % 60).padStart(2, '0')}`,
+            endTime: event.end === null ? null : `${String(Math.floor(event.end / 60)).padStart(2, '0')}:${String(event.end % 60).padStart(2, '0')}`,
+            location: event.location || null, notes: event.notes || null,
+            attendeeEmails: event.attendeeEmails || [], reminderMinutes: event.reminderMinutes || [],
+          }) }).then(() => { setOpen(false); setError(null); router.refresh() }).catch((cause: unknown) => setError(cause instanceof Error ? cause.message : 'Event creation failed.'))
+        }}
+      />
+    </div>
   )
 }
 
@@ -213,6 +327,7 @@ function Card({
   count,
   action,
   href,
+  headAction,
   children,
   className = '',
 }: {
@@ -220,6 +335,7 @@ function Card({
   count?: number
   action?: string
   href?: string
+  headAction?: ReactNode
   children: React.ReactNode
   className?: string
 }) {
@@ -227,7 +343,7 @@ function Card({
     <section className={`life-card t2-card ${className}`}>
       <div className="life-card-head">
         <h3>{title}</h3>
-        {count != null ? <span className="count-pill">{count}</span> : null}
+        <span className="t2-card-head-meta">{count != null ? <span className="count-pill">{count}</span> : null}{headAction}</span>
       </div>
       {children}
       {action && href ? (
@@ -302,6 +418,7 @@ function CapturedBody({ entries }: { entries: TodayEntry[] }) {
         <div key={entry.id} className="t2-feed">
           <span className="t2-at">{entry.at}</span>
           <span className="t2-feed-text">{entry.text}</span>
+          <span className="t2-entry-tags"><span style={{ color: entry.kindColor }}>{entry.kind}</span>{entry.project ? <span>{entry.project}</span> : null}</span>
         </div>
       ))}
     </div>
@@ -312,6 +429,7 @@ function CapturedBody({ entries }: { entries: TodayEntry[] }) {
 
 export function TodayScreen({
   dateLabel,
+  localDate,
   events,
   nextEvent,
   tasks,
@@ -320,19 +438,19 @@ export function TodayScreen({
   formError = null,
 }: TodayScreenProps) {
   const lateCount = tasks.filter((task) => task.late > 0).length
-  return (
-    <div className="t2">
+  const desktop = (
+    <div className="t2 t2-desktop">
       <TodayHead dateLabel={dateLabel} nextEvent={nextEvent} taskCount={tasks.length} lateCount={lateCount} />
 
       <div className="t2-console">
         <div className="t2-console-left">
-          <Capture formError={formError} />
+          <Capture formError={formError} idSuffix="desktop" />
         </div>
         <div className="t2-console-right">
-          <Card title="Today’s tasks" count={tasks.length} action="View all tasks" href="/life/tasks">
+          <Card title="Today’s tasks" count={tasks.length} headAction={<TaskQuickAdd />} action="View all tasks" href="/life/tasks">
             <TasksBody tasks={tasks} />
           </Card>
-          <Card title="Schedule" count={events.length} action="Open calendar" href="/life/month">
+          <Card title="Schedule" count={events.length} headAction={<EventQuickAdd localDate={localDate} />} action="Open calendar" href="/life/month">
             <ScheduleBody events={events} />
           </Card>
           <Card title="Captured today" count={entries.length} action="View entries" href="/life/history">
@@ -348,5 +466,16 @@ export function TodayScreen({
         </div>
       </div>
     </div>
+  )
+  return (
+    <>
+      {desktop}
+      <div className="t2-phone">
+        <Capture formError={formError} idSuffix="phone" />
+        <div className="t2-phone-actions"><TaskQuickAdd label /><EventQuickAdd localDate={localDate} label /></div>
+        <Card title="Today’s tasks" count={tasks.length} action="View all tasks" href="/life/tasks"><TasksBody tasks={tasks} /></Card>
+        <Card title="Schedule" count={events.length} action="Open calendar" href="/life/month"><ScheduleBody events={events} /></Card>
+      </div>
+    </>
   )
 }

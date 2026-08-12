@@ -80,6 +80,12 @@ export function LifeHeader() {
 
   function onMobileGroupPress(label: string, href: string) {
     setMobileSearchOpen(false)
+    const group = LIFE_NAV_GROUPS.find((item) => item.label === label)
+    if (group?.leaves.length === 1) {
+      setMobileOpenGroup(null)
+      router.push(href)
+      return
+    }
     if (label === activeGroup.label) {
       setMobileOpenGroup((current) => (current === label ? null : label))
       return
@@ -101,7 +107,21 @@ export function LifeHeader() {
         >
           {LIFE_NAV_GROUPS.map((group) => {
             const isGroupActive = group.leaves.some((leaf) => isLeafActive(leaf.href, pathname))
+            const onlyLeaf = group.leaves.length === 1 ? group.leaves[0] : null
             const isOpen = openMenu === group.label
+            if (onlyLeaf) {
+              return (
+                <div key={group.label} className="life-nav-bar-item">
+                  <Link
+                    href={onlyLeaf.href}
+                    className={`life-nav-bar-trigger life-nav-bar-direct${isGroupActive ? ' group-active' : ''}`}
+                    onMouseEnter={() => setOpenMenu(null)}
+                  >
+                    {group.label}
+                  </Link>
+                </div>
+              )
+            }
             return (
               <div key={group.label} className="life-nav-bar-item">
                 <button

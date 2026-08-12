@@ -5,6 +5,7 @@ import { TodayScreen, type TodayEvent, type TodayTask, type TodayEntry } from '@
 import { isAdminSession } from '@/lib/admin-auth'
 import { OWNER_ID } from '@/lib/life/constants'
 import { getProjectMap } from '@/lib/life/projects-db'
+import { getEntryPresentation } from '@/lib/life/entries'
 import { getOwnerSettings } from '@/lib/life/settings'
 import { getSupabaseAdmin } from '@/lib/life/supabase'
 import { generateMorningBrief } from '@/lib/life/synthesis'
@@ -140,17 +141,24 @@ export default async function LifeTodayPage({
     late: task.due_local_date && task.due_local_date < localDate ? daysBetween(task.due_local_date, localDate) : 0,
   }))
 
-  const entries: TodayEntry[] = ((entriesResult.data || []) as EntryRecord[]).map((entry) => ({
-    id: entry.id,
-    at: getLocalTimeLabel(entry.created_at, timezone),
-    text: entry.content,
-  }))
+  const entries: TodayEntry[] = ((entriesResult.data || []) as EntryRecord[]).map((entry) => {
+    const presentation = getEntryPresentation(entry)
+    return {
+      id: entry.id,
+      at: getLocalTimeLabel(entry.created_at, timezone),
+      text: entry.content,
+      kind: presentation.kind,
+      kindColor: presentation.color,
+      project: entry.project_slug ? projectMap.get(entry.project_slug)?.name || entry.project_slug : null,
+    }
+  })
 
   const morningReport = ((reportsResult.data || []) as ReportRecord[]).find((r) => r.type === 'morning') || null
 
   return (
     <TodayScreen
       dateLabel={shortDate(localDate, timezone)}
+      localDate={localDate}
       events={events}
       nextEvent={nextEvent}
       tasks={tasks}

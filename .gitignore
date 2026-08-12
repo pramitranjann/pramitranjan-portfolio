@@ -53,3 +53,10 @@ graphify-out/
 
 # Local backups of config files (settings.json.bak etc) — never useful to anyone else.
 *.bak
+
+# Local-only Life UI lab. Keep prototypes available at /life/calendar-preview
+# without shipping the route or its mock-only components.
+/app/life/calendar-preview/
+/components/life/CalendarPreview.tsx
+/components/life/UiLab.tsx
+/components/life/labs/ProjectsVariants.tsx
