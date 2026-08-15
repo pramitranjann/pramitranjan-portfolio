@@ -25,7 +25,11 @@ export default async function HomePage() {
     <>
       <Nav />
       <IntroAnimation />
-      {content.home.heroMode === 'portfolio-carousel' ? <PortfolioHero /> : <HeroCarousel />}
+      {content.home.heroMode === 'portfolio-carousel' ? (
+        <PortfolioHero items={content.home.portfolioCarousel.items} />
+      ) : (
+        <HeroCarousel />
+      )}
       <main style={{ paddingTop: '57px' }}>
         <div id="selected-work" style={{ scrollMarginTop: '57px' }}>
           <SelectedWork

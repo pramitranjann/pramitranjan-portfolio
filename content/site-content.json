@@ -1,6 +1,50 @@
 {
   "home": {
     "heroMode": "portfolio-carousel",
+    "portfolioCarousel": {
+      "items": [
+        {
+          "label": "About",
+          "title": "Camera before Figma.",
+          "description": "A third-culture kid who still thinks in frames.",
+          "href": "/about",
+          "image": "/creative/photography/kl/41.jpg",
+          "imageFit": "cover",
+          "imagePosition": "center",
+          "imageBackground": "#111111"
+        },
+        {
+          "label": "UX work",
+          "title": "Research to resolution.",
+          "description": "Franklin’s · Reframing a Savannah institution’s digital front door.",
+          "href": "/work/franklins",
+          "image": "/work/franklins/Home Page.png",
+          "imageFit": "contain",
+          "imagePosition": "center",
+          "imageBackground": "#f5f2ed"
+        },
+        {
+          "label": "Photography",
+          "title": "Always looking.",
+          "description": "Ho Chi Minh City · Motion, heat and the street.",
+          "href": "/play/photography/hcmc",
+          "image": "/creative/photography/hcmc/14.jpg",
+          "imageFit": "cover",
+          "imagePosition": "center",
+          "imageBackground": "#111111"
+        },
+        {
+          "label": "Mixed media",
+          "title": "Beyond the screen.",
+          "description": "South China Sea · Cyanotypes, photograms and a seven-foot detective board.",
+          "href": "/play/mixed-media/south-china-sea",
+          "image": "/creative/mixed-media/south-china-sea/solution-2.png",
+          "imageFit": "contain",
+          "imagePosition": "center",
+          "imageBackground": "#060606"
+        }
+      ]
+    },
     "selectedWork": {
       "heading": "Research to resolution. ",
       "body": "Four projects in UX — each one starting with a question worth asking. One shipped.",

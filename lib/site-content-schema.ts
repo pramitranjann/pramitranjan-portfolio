@@ -30,6 +30,21 @@ export interface HomeAboutContent {
   spotifyLabel: string
 }
 
+export interface PortfolioCarouselItem {
+  label: string
+  title: string
+  description: string
+  href: string
+  image: string
+  imageFit: 'cover' | 'contain'
+  imagePosition: string
+  imageBackground: string
+}
+
+export interface PortfolioCarouselContent {
+  items: PortfolioCarouselItem[]
+}
+
 export interface EntryItem {
   org: string
   role: string
@@ -483,6 +498,7 @@ export type HomeHeroMode = 'staged' | 'portfolio-carousel'
 export interface SiteContent {
   home: {
     heroMode: HomeHeroMode
+    portfolioCarousel: PortfolioCarouselContent
     selectedWork: HomeSection
     moreWork: HomeSection
     about: HomeAboutContent
@@ -610,6 +626,32 @@ function isHomeSection(value: unknown): value is HomeSection {
   if (!value || typeof value !== 'object') return false
   const item = value as Record<string, unknown>
   return isString(item.heading) && isString(item.body) && Array.isArray(item.items) && item.items.every(isWorkProject)
+}
+
+function isPortfolioCarouselItem(value: unknown): value is PortfolioCarouselItem {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return (
+    isString(item.label) &&
+    isString(item.title) &&
+    isString(item.description) &&
+    isString(item.href) &&
+    isSafeLinkHref(item.href) &&
+    isString(item.image) &&
+    (item.imageFit === 'cover' || item.imageFit === 'contain') &&
+    isString(item.imagePosition) &&
+    isString(item.imageBackground)
+  )
+}
+
+function isPortfolioCarouselContent(value: unknown): value is PortfolioCarouselContent {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return (
+    Array.isArray(item.items) &&
+    item.items.length >= 3 &&
+    item.items.every(isPortfolioCarouselItem)
+  )
 }
 
 function isPhotographyGallery(value: unknown): value is PhotographyGallery {
@@ -1189,6 +1231,7 @@ export function isSiteContent(value: unknown): value is SiteContent {
 
   return (
     (home.heroMode === 'staged' || home.heroMode === 'portfolio-carousel') &&
+    isPortfolioCarouselContent(home.portfolioCarousel) &&
     isHomeSection(home.selectedWork) &&
     isHomeSection(home.moreWork) &&
     !!home.about &&

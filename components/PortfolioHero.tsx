@@ -2,54 +2,14 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { animate, motion, motionValue, useReducedMotion } from 'motion/react'
 import { useRouter } from 'next/navigation'
-import type { CSSProperties, PointerEvent as ReactPointerEvent } from 'react'
+import type { MotionValue } from 'motion/react'
+import type { PointerEvent as ReactPointerEvent } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { TransitionRail } from './TransitionRail'
+import type { PortfolioCarouselItem } from '@/lib/site-content-schema'
 import styles from './PortfolioHero.module.css'
-
-const carouselFeatures = [
-  {
-    label: 'About',
-    title: 'Camera before Figma.',
-    description: 'A third-culture kid who still thinks in frames.',
-    href: '/about',
-    image: '/creative/photography/kl/41.jpg',
-    imageFit: 'cover',
-    imagePosition: 'center',
-    imageBackground: '#111111',
-  },
-  {
-    label: 'UX work',
-    title: 'Research to resolution.',
-    description: 'Franklin’s · Reframing a Savannah institution’s digital front door.',
-    href: '/work/franklins',
-    image: '/work/franklins/Home Page.png',
-    imageFit: 'contain',
-    imagePosition: 'center',
-    imageBackground: '#f5f2ed',
-  },
-  {
-    label: 'Photography',
-    title: 'Always looking.',
-    description: 'Ho Chi Minh City · Motion, heat and the street.',
-    href: '/play/photography/hcmc',
-    image: '/creative/photography/hcmc/14.jpg',
-    imageFit: 'cover',
-    imagePosition: 'center',
-    imageBackground: '#111111',
-  },
-  {
-    label: 'Mixed media',
-    title: 'Beyond the screen.',
-    description: 'South China Sea · Cyanotypes, photograms and a seven-foot detective board.',
-    href: '/play/mixed-media/south-china-sea',
-    image: '/creative/mixed-media/south-china-sea/solution-2.png',
-    imageFit: 'contain',
-    imagePosition: 'center',
-    imageBackground: '#060606',
-  },
-] as const
 
 const CAROUSEL_TRANSITION_MS = 560
 const SWIPE_VELOCITY_THRESHOLD = 0.45
@@ -57,6 +17,7 @@ const SWIPE_MIN_VELOCITY_DISTANCE = 18
 
 type CarouselGesture = {
   pointerId: number
+  cardIndex: number
   startX: number
   startY: number
   lastX: number
@@ -66,25 +27,40 @@ type CarouselGesture = {
   axis: 'pending' | 'horizontal' | 'vertical'
 }
 
-export function PortfolioCarousel({ headingId }: { headingId?: string }) {
+export function PortfolioCarousel({
+  items,
+  headingId,
+}: {
+  items: PortfolioCarouselItem[]
+  headingId?: string
+}) {
   const router = useRouter()
   const [activeIndex, setActiveIndex] = useState(1)
   const [oppositeSide, setOppositeSide] = useState<'before' | 'after'>('after')
   const [instantPositioning, setInstantPositioning] = useState(false)
-  const [dragOffset, setDragOffset] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
+  const reducedMotion = useReducedMotion()
   const animatingRef = useRef(false)
+  const swipeSettlingRef = useRef(false)
   const resetTimerRef = useRef<number | null>(null)
   const clickResetTimerRef = useRef<number | null>(null)
+  const dragAnimationRef = useRef<ReturnType<typeof animate> | null>(null)
   const suppressClickRef = useRef(false)
   const gestureRef = useRef<CarouselGesture | null>(null)
-  const featureCount = carouselFeatures.length
+  const dragValuesRef = useRef<MotionValue<number>[] | null>(null)
+  if (dragValuesRef.current === null) {
+    dragValuesRef.current = items.map(() => motionValue(0))
+  }
+  const dragValues = dragValuesRef.current
+  const featureCount = items.length
   const previousIndex = (activeIndex - 1 + featureCount) % featureCount
   const nextIndex = (activeIndex + 1) % featureCount
 
   useEffect(() => () => {
     if (resetTimerRef.current !== null) window.clearTimeout(resetTimerRef.current)
     if (clickResetTimerRef.current !== null) window.clearTimeout(clickResetTimerRef.current)
+    dragAnimationRef.current?.stop()
   }, [])
 
   const moveCarousel = (direction: 'previous' | 'next') => {
@@ -130,10 +106,18 @@ export function PortfolioCarousel({ headingId }: { headingId?: string }) {
   }
 
   const startSwipe = (event: ReactPointerEvent<HTMLDivElement>) => {
-    if (event.pointerType === 'mouse' || !event.isPrimary || animatingRef.current) return
+    if (
+      event.pointerType === 'mouse'
+      || !event.isPrimary
+      || animatingRef.current
+      || swipeSettlingRef.current
+    ) return
 
+    dragAnimationRef.current?.stop()
+    setDraggedIndex(activeIndex)
     gestureRef.current = {
       pointerId: event.pointerId,
+      cardIndex: activeIndex,
       startX: event.clientX,
       startY: event.clientY,
       lastX: event.clientX,
@@ -174,7 +158,7 @@ export function PortfolioCarousel({ headingId }: { headingId?: string }) {
     gesture.lastTime = event.timeStamp
 
     const maxDrag = Math.min(96, gesture.width * 0.26)
-    setDragOffset(Math.max(-maxDrag, Math.min(maxDrag, deltaX)))
+    dragValues[gesture.cardIndex].set(Math.max(-maxDrag, Math.min(maxDrag, deltaX)))
   }
 
   const finishSwipe = (event: ReactPointerEvent<HTMLDivElement>, cancelled = false) => {
@@ -189,10 +173,34 @@ export function PortfolioCarousel({ headingId }: { headingId?: string }) {
     const deltaX = event.clientX - gesture.startX
     const velocityX = event.timeStamp - gesture.lastTime > 80 ? 0 : gesture.velocityX
     const wasHorizontal = gesture.axis === 'horizontal'
-    setIsDragging(false)
-    setDragOffset(0)
+    const dragValue = dragValues[gesture.cardIndex]
 
-    if (!wasHorizontal || cancelled) return
+    if (!wasHorizontal) {
+      setIsDragging(false)
+      setDraggedIndex(null)
+      return
+    }
+
+    if (cancelled) {
+      if (reducedMotion) {
+        dragValue.set(0)
+        setIsDragging(false)
+        setDraggedIndex(null)
+        return
+      }
+
+      dragAnimationRef.current = animate(dragValue, 0, {
+        type: 'spring',
+        stiffness: 520,
+        damping: 40,
+        mass: 0.55,
+      })
+      dragAnimationRef.current.then(() => {
+        setIsDragging(false)
+        setDraggedIndex(null)
+      })
+      return
+    }
 
     suppressClickRef.current = true
     clickResetTimerRef.current = window.setTimeout(() => {
@@ -206,8 +214,59 @@ export function PortfolioCarousel({ headingId }: { headingId?: string }) {
       && Math.abs(velocityX) >= SWIPE_VELOCITY_THRESHOLD
 
     if (passedDistance || passedVelocity) {
-      moveCarousel(deltaX < 0 ? 'next' : 'previous')
+      const direction = deltaX < 0 ? 'next' : 'previous'
+      const releaseTarget = direction === 'next'
+        ? -Math.min(112, gesture.width * 0.3)
+        : Math.min(112, gesture.width * 0.3)
+
+      swipeSettlingRef.current = true
+      if (reducedMotion) {
+        dragValue.set(0)
+        setIsDragging(false)
+        setDraggedIndex(null)
+        swipeSettlingRef.current = false
+        moveCarousel(direction)
+        return
+      }
+
+      dragAnimationRef.current = animate(dragValue, releaseTarget, {
+        duration: 0.14,
+        ease: [0.2, 0, 0, 1],
+      })
+      dragAnimationRef.current.then(() => {
+        setIsDragging(false)
+        moveCarousel(direction)
+        dragAnimationRef.current = animate(dragValue, 0, {
+          type: 'spring',
+          stiffness: 440,
+          damping: 38,
+          mass: 0.6,
+        })
+        dragAnimationRef.current.then(() => {
+          setDraggedIndex(null)
+          swipeSettlingRef.current = false
+        })
+      })
+      return
     }
+
+    if (reducedMotion) {
+      dragValue.set(0)
+      setIsDragging(false)
+      setDraggedIndex(null)
+      return
+    }
+
+    dragAnimationRef.current = animate(dragValue, 0, {
+      type: 'spring',
+      stiffness: 520,
+      damping: 40,
+      mass: 0.55,
+    })
+    dragAnimationRef.current.then(() => {
+      setIsDragging(false)
+      setDraggedIndex(null)
+    })
   }
 
   return (
@@ -223,7 +282,6 @@ export function PortfolioCarousel({ headingId }: { headingId?: string }) {
         role="group"
         aria-roledescription="carousel"
         aria-label="Portfolio highlights"
-        style={{ '--carousel-drag-x': `${dragOffset}px` } as CSSProperties}
         onPointerDown={startSwipe}
         onPointerMove={updateSwipe}
         onPointerUp={(event) => finishSwipe(event)}
@@ -238,7 +296,7 @@ export function PortfolioCarousel({ headingId }: { headingId?: string }) {
         }}
       >
         <div className={styles.stage}>
-          {carouselFeatures.map((feature, index) => {
+          {items.map((feature, index) => {
             const position = index === activeIndex
               ? 'current'
               : index === previousIndex
@@ -250,11 +308,12 @@ export function PortfolioCarousel({ headingId }: { headingId?: string }) {
             const isHidden = position === 'before' || position === 'after'
 
             return (
-              <button
+              <motion.button
                 key={feature.label}
                 type="button"
                 className={styles.card}
                 data-position={position}
+                style={draggedIndex === index ? { x: dragValues[index] } : undefined}
                 tabIndex={isHidden ? -1 : 0}
                 aria-hidden={isHidden}
                 aria-label={isCurrent ? `Open ${feature.label}` : `Show ${feature.label} in the centre`}
@@ -286,7 +345,7 @@ export function PortfolioCarousel({ headingId }: { headingId?: string }) {
                   <span className={`${styles.description} font-reading`}>{feature.description}</span>
                   <span className={`${styles.open} font-mono`}>OPEN ↗</span>
                 </span>
-              </button>
+              </motion.button>
             )
           })}
         </div>
@@ -295,11 +354,11 @@ export function PortfolioCarousel({ headingId }: { headingId?: string }) {
   )
 }
 
-export function PortfolioHero() {
+export function PortfolioHero({ items }: { items: PortfolioCarouselItem[] }) {
   return (
     <section className={styles.hero} aria-labelledby="portfolio-hero-title">
       <div className={styles.shell}>
-        <PortfolioCarousel headingId="portfolio-hero-title" />
+        <PortfolioCarousel items={items} headingId="portfolio-hero-title" />
         <Link className={styles.transition} href="#selected-work" aria-label="Continue to selected work">
           <TransitionRail className={styles.transitionTrack} />
         </Link>

@@ -32,6 +32,7 @@ import type {
   PhotographyCity,
   PhotographyGallery,
   PhotographyImageDetails,
+  PortfolioCarouselItem,
   ProjectSpotifyMedia,
   ProjectLink,
   SiteContent,
@@ -1488,16 +1489,27 @@ function HomepageEditor({
         </Field>
 
         <p className="font-mono" style={{ margin: 0, color: '#666666', fontSize: '10px', letterSpacing: '0.1em', lineHeight: 1.6 }}>
-          Save changes to publish the selected hero on the homepage. The inactive three-stage copy stays editable below.
+          Save changes to publish the selected hero on the homepage. The editor below follows the selected hero.
         </p>
 
-        <HeroStageListEditor
-          items={content.copy.home.heroStages}
-          onChange={(heroStages) => updateSection('copy', {
-            ...content.copy,
-            home: { ...content.copy.home, heroStages },
-          })}
-        />
+        {content.home.heroMode === 'portfolio-carousel' ? (
+          <PortfolioCarouselListEditor
+            items={content.home.portfolioCarousel.items}
+            localWriteEnabled={localWriteEnabled}
+            onChange={(items) => updateSection('home', {
+              ...content.home,
+              portfolioCarousel: { ...content.home.portfolioCarousel, items },
+            })}
+          />
+        ) : (
+          <HeroStageListEditor
+            items={content.copy.home.heroStages}
+            onChange={(heroStages) => updateSection('copy', {
+              ...content.copy,
+              home: { ...content.copy.home, heroStages },
+            })}
+          />
+        )}
       </SectionFrame>
 
       <SectionFrame title="Homepage">
@@ -3827,6 +3839,103 @@ function HeroStageListEditor({
             style={{ justifySelf: 'start', background: 'transparent', border: '1px solid #2a2a2a', color: '#999999', padding: '8px 12px', cursor: 'pointer', letterSpacing: '0.1em' }}
           >
             REMOVE STAGE
+          </button>
+        </EditorItemCard>
+      ))}
+    </div>
+  )
+}
+
+function PortfolioCarouselListEditor({
+  items,
+  localWriteEnabled,
+  onChange,
+}: {
+  items: PortfolioCarouselItem[]
+  localWriteEnabled: boolean
+  onChange: (items: PortfolioCarouselItem[]) => void
+}) {
+  return (
+    <div style={{ display: 'grid', gap: '12px' }}>
+      <div className="flex items-center justify-between" style={{ gap: '12px' }}>
+        <span className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#999999', letterSpacing: '0.1em' }}>
+          Portfolio Carousel Cards
+        </span>
+        <button
+          type="button"
+          onClick={() => onChange([...items, {
+            label: '',
+            title: '',
+            description: '',
+            href: '',
+            image: '',
+            imageFit: 'cover',
+            imagePosition: 'center',
+            imageBackground: '#111111',
+          }])}
+          className="font-mono"
+          style={{ background: 'transparent', border: '1px solid #2a2a2a', color: '#FF3120', padding: '8px 12px', cursor: 'pointer', letterSpacing: '0.1em' }}
+        >
+          ADD CARD
+        </button>
+      </div>
+      <p className="font-mono" style={{ margin: 0, color: '#666666', fontSize: '10px', letterSpacing: '0.1em', lineHeight: 1.6 }}>
+        Keep at least three cards so the previous, current, and next positions remain distinct.
+      </p>
+      {items.map((item, index) => (
+        <EditorItemCard
+          key={`portfolio-carousel-${index}`}
+          title={item.label || `Carousel card ${index + 1}`}
+          subtitle={item.title || item.href || 'Portfolio highlight'}
+          defaultOpen={index === 0}
+        >
+          <ReorderButtons index={index} length={items.length} onMove={(direction) => onChange(moveItem(items, index, direction))} />
+          <Field label="Label">
+            <input value={item.label} onChange={(event) => onChange(updateAt(items, index, { ...item, label: event.target.value }))} style={inputStyle()} />
+          </Field>
+          <Field label="Title">
+            <input value={item.title} onChange={(event) => onChange(updateAt(items, index, { ...item, title: event.target.value }))} style={inputStyle()} />
+          </Field>
+          <Field label="Description">
+            <textarea value={item.description} onChange={(event) => onChange(updateAt(items, index, { ...item, description: event.target.value }))} style={inputStyle(true)} />
+          </Field>
+          <Field label="Href">
+            <input value={item.href} onChange={(event) => onChange(updateAt(items, index, { ...item, href: event.target.value }))} style={inputStyle()} />
+          </Field>
+          <SourcePathField
+            label="Image Path"
+            value={item.image}
+            localWriteEnabled={localWriteEnabled}
+            onChange={(value) => onChange(updateAt(items, index, { ...item, image: value }))}
+          />
+          <Field label="Image Fit">
+            <select value={item.imageFit} onChange={(event) => onChange(updateAt(items, index, { ...item, imageFit: event.target.value === 'contain' ? 'contain' : 'cover' }))} style={inputStyle()}>
+              <option value="cover">cover</option>
+              <option value="contain">contain</option>
+            </select>
+          </Field>
+          <Field label="Image Position">
+            <input value={item.imagePosition} onChange={(event) => onChange(updateAt(items, index, { ...item, imagePosition: event.target.value }))} placeholder="center / center top / 50% 20%" style={inputStyle()} />
+          </Field>
+          <Field label="Image Background">
+            <input value={item.imageBackground} onChange={(event) => onChange(updateAt(items, index, { ...item, imageBackground: event.target.value }))} placeholder="#111111" style={inputStyle()} />
+          </Field>
+          <button
+            type="button"
+            disabled={items.length <= 3}
+            onClick={() => onChange(removeAt(items, index))}
+            className="font-mono"
+            style={{
+              justifySelf: 'start',
+              background: 'transparent',
+              border: '1px solid #2a2a2a',
+              color: items.length <= 3 ? '#444444' : '#999999',
+              padding: '8px 12px',
+              cursor: items.length <= 3 ? 'not-allowed' : 'pointer',
+              letterSpacing: '0.1em',
+            }}
+          >
+            REMOVE CARD
           </button>
         </EditorItemCard>
       ))}

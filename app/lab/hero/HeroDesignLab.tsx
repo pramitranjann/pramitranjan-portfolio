@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { IntroAnimation } from '@/components/IntroAnimation'
 import { PortfolioCarousel } from '@/components/PortfolioHero'
 import { TransitionRail } from '@/components/TransitionRail'
+import type { PortfolioCarouselItem } from '@/lib/site-content-schema'
 
 const variations = [
   { id: 'direct', number: '01', label: 'Direct' },
@@ -104,12 +105,14 @@ function MotionMark() {
 function HeroVariation({
   variation,
   projects,
+  carouselItems,
 }: {
   variation: VariationId
   projects: HeroShowcaseProject[]
+  carouselItems: PortfolioCarouselItem[]
 }) {
   if (variation === 'product') return <ProductShowcase projects={projects} />
-  if (variation === 'carousel') return <PortfolioCarousel />
+  if (variation === 'carousel') return <PortfolioCarousel items={carouselItems} />
   if (variation === 'motion') return <MotionMark />
 
   return (
@@ -120,7 +123,13 @@ function HeroVariation({
   )
 }
 
-export function HeroDesignLab({ projects }: { projects: HeroShowcaseProject[] }) {
+export function HeroDesignLab({
+  projects,
+  carouselItems,
+}: {
+  projects: HeroShowcaseProject[]
+  carouselItems: PortfolioCarouselItem[]
+}) {
   const [variation, setVariation] = useState<VariationId>('carousel')
   const [labOpen, setLabOpen] = useState(false)
   const [introRun, setIntroRun] = useState(0)
@@ -145,7 +154,7 @@ export function HeroDesignLab({ projects }: { projects: HeroShowcaseProject[] })
       <section className={`hero-lab-hero hero-lab-variation-${variation}`} aria-labelledby="hero-lab-title">
         <div className="hero-lab-shell">
           <div id="hero-lab-title" className="hero-lab-copy">
-            <HeroVariation variation={variation} projects={projects} />
+            <HeroVariation variation={variation} projects={projects} carouselItems={carouselItems} />
           </div>
 
           <Link

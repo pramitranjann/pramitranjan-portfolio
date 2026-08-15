@@ -2,6 +2,22 @@ import type { NextConfig } from "next";
 
 const projectRoot = __dirname
 
+function optionalHttpOrigin(name: string) {
+  const value = process.env[name]?.trim()
+  if (!value) return null
+
+  const url = new URL(value)
+  if (url.protocol !== 'https:' && url.protocol !== 'http:') {
+    throw new Error(`${name} must use http or https`)
+  }
+  return url.origin
+}
+
+// Both are intentionally opt-in. Production stays on the embedded Life app
+// until the standalone deployment is verified and these variables are set.
+const lifeWebOrigin = optionalHttpOrigin('LIFE_WEB_ORIGIN')
+const lifeApiProxyOrigin = optionalHttpOrigin('LIFE_API_PROXY_ORIGIN')
+
 const isProduction = process.env.NODE_ENV === 'production'
 const scriptSrc = [
   "'self'",
@@ -53,10 +69,30 @@ const nextConfig: NextConfig = {
     // /creative became /play. Redirects run before public/ is served, so these
     // stay one segment deep — image assets live at /creative/:section/:slug/:file.
     return [
+      ...(lifeWebOrigin
+        ? [
+            { source: '/life', destination: lifeWebOrigin, permanent: false },
+            { source: '/life/:path*', destination: `${lifeWebOrigin}/:path*`, permanent: false },
+          ]
+        : []),
       { source: '/creative', destination: '/play', permanent: true },
       { source: '/creative/:section', destination: '/play/:section', permanent: true },
       { source: '/creative/:section/:slug', destination: '/play/:section/:slug', permanent: true },
     ]
+  },
+  async rewrites() {
+    return {
+      beforeFiles: lifeApiProxyOrigin
+        ? [
+            {
+              source: '/api/life/:path*',
+              destination: `${lifeApiProxyOrigin}/api/life/:path*`,
+            },
+          ]
+        : [],
+      afterFiles: [],
+      fallback: [],
+    }
   },
   async headers() {
     return [

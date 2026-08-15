@@ -69,11 +69,11 @@
     0 0 0 1px rgb(255 255 255 / 0.025),
     0 22px 60px rgb(0 0 0 / 0.5);
   scale: 1;
-  translate: var(--carousel-drag-x, 0px) 0;
+  translate: -50% -50%;
   transform-origin: center;
   will-change: transform, opacity;
-  transition-property: transform, opacity, filter, border-color, scale, translate;
-  transition-duration: 560ms, 260ms, 260ms, 140ms, 140ms, 150ms;
+  transition-property: translate, scale, opacity, filter, border-color, transform;
+  transition-duration: 560ms, 560ms, 260ms, 260ms, 140ms, 150ms;
   transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
@@ -81,13 +81,13 @@
   transition-duration: 0ms;
 }
 
-.showcase[data-dragging='true'] .card {
+.showcase[data-dragging='true'] .card[data-position='current'] {
   cursor: grabbing;
   transition: none;
 }
 
-.showcase[data-dragging='true'] .card:active {
-  scale: 1;
+.showcase[data-dragging='true'] .card[data-position='current']:active {
+  transform: none;
 }
 
 .card[data-position='current'] {
@@ -95,7 +95,8 @@
   border-color: var(--color-red);
   opacity: 1;
   filter: brightness(1) saturate(1);
-  transform: translate(-50%, -50%) scale(1.2);
+  translate: -50% -50%;
+  scale: 1.2;
 }
 
 .card[data-position='previous'],
@@ -106,11 +107,11 @@
 }
 
 .card[data-position='previous'] {
-  transform: translate(-80%, -50%);
+  translate: -80% -50%;
 }
 
 .card[data-position='next'] {
-  transform: translate(-20%, -50%);
+  translate: -20% -50%;
 }
 
 .card[data-position='before'],
@@ -122,11 +123,13 @@
 }
 
 .card[data-position='before'] {
-  transform: translate(-110%, -50%) scale(0.94);
+  translate: -110% -50%;
+  scale: 0.94;
 }
 
 .card[data-position='after'] {
-  transform: translate(10%, -50%) scale(0.94);
+  translate: 10% -50%;
+  scale: 0.94;
 }
 
 .card[data-position='previous']:hover,
@@ -140,16 +143,16 @@
 
 .card[data-position='previous']:hover,
 .card[data-position='previous']:focus-visible {
-  translate: calc(var(--carousel-drag-x, 0px) + 6px) 0;
+  transform: translateX(6px);
 }
 
 .card[data-position='next']:hover,
 .card[data-position='next']:focus-visible {
-  translate: calc(var(--carousel-drag-x, 0px) - 6px) 0;
+  transform: translateX(-6px);
 }
 
 .card:active {
-  scale: 0.96;
+  transform: scale(0.96);
 }
 
 .image {
