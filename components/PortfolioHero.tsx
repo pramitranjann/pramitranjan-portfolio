@@ -215,9 +215,6 @@ export function PortfolioCarousel({
 
     if (passedDistance || passedVelocity) {
       const direction = deltaX < 0 ? 'next' : 'previous'
-      const releaseTarget = direction === 'next'
-        ? -Math.min(112, gesture.width * 0.3)
-        : Math.min(112, gesture.width * 0.3)
 
       swipeSettlingRef.current = true
       if (reducedMotion) {
@@ -229,23 +226,21 @@ export function PortfolioCarousel({
         return
       }
 
-      dragAnimationRef.current = animate(dragValue, releaseTarget, {
-        duration: 0.14,
-        ease: [0.2, 0, 0, 1],
+      // Change the card roles and settle the finger offset in the same frame.
+      // A separate release throw made the card switch coordinate systems midway
+      // through the gesture, which read as a jump on mobile Safari.
+      setIsDragging(false)
+      moveCarousel(direction)
+      dragAnimationRef.current = animate(dragValue, 0, {
+        type: 'spring',
+        stiffness: 390,
+        damping: 38,
+        mass: 0.62,
+        velocity: Math.max(-900, Math.min(900, velocityX * 1000)),
       })
       dragAnimationRef.current.then(() => {
-        setIsDragging(false)
-        moveCarousel(direction)
-        dragAnimationRef.current = animate(dragValue, 0, {
-          type: 'spring',
-          stiffness: 440,
-          damping: 38,
-          mass: 0.6,
-        })
-        dragAnimationRef.current.then(() => {
-          setDraggedIndex(null)
-          swipeSettlingRef.current = false
-        })
+        setDraggedIndex(null)
+        swipeSettlingRef.current = false
       })
       return
     }

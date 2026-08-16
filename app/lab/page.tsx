@@ -59,7 +59,7 @@ function ArchitectureDiagram() {
       viewBox="0 0 720 320"
       xmlns="http://www.w3.org/2000/svg"
       role="img"
-      aria-label="PR Life architecture: voice capture and quick add feed a Next.js app at /life, backed by Supabase in sin1, surfacing a week view, reports, a studio gallery, and a BLE thermal receipt printer driven by an ESP32 worker."
+      aria-label="PR Life architecture: voice capture and quick add feed a standalone Next.js app, backed by Supabase in sin1, surfacing a week view, reports, a studio gallery, and a BLE thermal receipt printer driven by an ESP32 worker."
       style={{ width: '100%', maxWidth: '720px', height: 'auto', display: 'block' }}
     >
       <defs>
@@ -186,8 +186,8 @@ export default function LabPage() {
               style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: '#999999', lineHeight: 1.9, maxWidth: '560px', marginBottom: '32px' }}
             >
               A private life-OS I designed and built for myself — tasks, projects, week and month
-              views, reports, a studio gallery. It lives at /life behind a login and runs my actual
-              days. This page is as much of it as you get.
+              views, reports, a studio gallery. It lives at life.pramitranjan.com behind a login and
+              runs my actual days. This page is as much of it as you get.
             </p>
             <p data-reveal className="font-mono" style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.12em', color: '#666666' }}>
               Designed and built solo. Next.js, Supabase, Claude Code.

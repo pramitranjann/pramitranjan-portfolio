@@ -1,95 +1,59 @@
 # PROJECT.md — portfolio
 
-<!-- Live memory for this repo. Every agent reads this first, updates it last.
-     Keep under 150 lines. Replace superseded lines; don't append forever. -->
+<!-- Live memory for this repo. Keep under 150 lines. -->
 
 ## Goal
 Pramit's portfolio site (Next.js App Router), content-driven via `content/site-content.json` — the public record of his design work.
 
 ## Non-goals
-- No CMS or database; all content lives in the JSON file.
-- No per-case-study route files; `app/work/[slug]/page.tsx` renders every slug found in `caseStudies[]`.
-- The three Swipey stories are deliberately **not** routes — they are modal content on one hub page.
+- No CMS or database; public content lives in the JSON file.
+- No per-case-study route files; `app/work/[slug]/page.tsx` renders every slug in `caseStudies[]`.
+- The three Swipey stories are modal content on one hub page, not separate public routes.
+- PR Life application code, data services, cron, hardware, and private configuration belong to `/Users/pramitranjan/life-web`.
 
 ## Current state
-2026-07-24 — Site live. Built on local branch `swipey-case-studies`, never pushed.
+2026-08-17 — The embedded PR Life application has been removed. Its standalone deployment is live at `life.pramitranjan.com`; this repo keeps only temporary old-link and API compatibility rules in `next.config.ts`. The portfolio cron is removed. The public Lab story about the product remains portfolio content.
 
-Three Swipey internship case studies — `swipey-fields`, `swipey-admin`, `swipey-get-started` — exist as `caseStudies[]` entries, all `hidden: true`. They render as framed modals from the hub at `/work/swipey` (`app/work/swipey/page.tsx` → `components/SwipeyHubClient.tsx`), which is the single entry in `workPage.projects[]`. Spec: `docs/superpowers/specs/2026-07-24-swipey-case-studies-design.md` — read its two amendment blocks at the top, they supersede the body.
+Three Swipey internship case studies — `swipey-fields`, `swipey-admin`, `swipey-get-started` — exist as hidden `caseStudies[]` entries. They render as framed modals from `/work/swipey` (`app/work/swipey/page.tsx` → `components/SwipeyHubClient.tsx`), which is the single Swipey entry in `workPage.projects[]`.
 
-Four prototypes vendored under `public/proto/` (`custom-fields`, `swipey-admin`, `card-rename`, `swipey-demo`), ~15MB, all sanitised via `scripts/sanitise-proto.mjs`, all making zero external network requests.
+Four prototypes are vendored under `public/proto/` (`custom-fields`, `swipey-admin`, `card-rename`, `swipey-demo`), sanitised through `scripts/sanitise-proto.mjs`, and make no external network requests.
 
-### PR Life (`/life`) — private personal OS in the same repo
-2026-08-13 — Life is being extracted into `/Users/pramitranjan/life-web` for a separate Vercel project at `life.pramitranjan.com`. This repo keeps its implementation live until the new deployment passes verification. Browser redirects and the legacy API proxy are opt-in through `LIFE_WEB_ORIGIN` and `LIFE_API_PROXY_ORIGIN`, so source preparation cannot switch production early.
-
-2026-08-12 — Life's live Today surface is the V2 console on desktop and a separate capture-first view on phones. Capture Save, task completion, project labels, task quick-add, and schedule quick-add are wired to real APIs. Calendar creation supports location, notes, attendees, and popup reminders; search returns navigable task, project, and people results; the Rolodex offers List and Horizon. None of this batch has been visually verified.
-
-The shared Life shell now owns responsive gutters. Desktop no longer narrows into a centered max-width island on large screens; phone routes receive one consistent outer gutter from `.content-shell`, with page roots deliberately neutralized so they cannot double-pad or drift independently.
-
-Projects home is a single hierarchy-aware index rather than an auto-fill field of floating cards. It includes nested projects in parent order, keeps per-project task/progress semantics, and stacks the same information deliberately on phone.
-
-`/life/ui-lab` is the single component playground. It currently holds only the sortable board and popover demos; duplicate Calendar and Projects mock screens were removed.
-
-## Decisions (with why)
-- 2026-08-13 — **Life cutover is environment-gated.** `LIFE_WEB_ORIGIN` enables server redirects for `/life/*`; `LIFE_API_PROXY_ORIGIN` enables a before-files proxy for `/api/life/*`. Why: the new web app, native host migration, cron move, and domain must be verified before production traffic changes, while older native builds still need their original endpoint to work.
-- 2026-08-13 — **Phone Today is voice-first and phone navigation opens before it routes.** Hold-to-capture sits above the typed capture box as the primary action. The desktop Search/`⌘K` trigger is hidden on touch layouts because the phone header already owns a search icon. Multi-destination bottom-nav sections reveal their submenu on first press instead of silently routing to the first leaf; single-page Calendar remains direct.
-- 2026-08-12 — **The root metadata template owns the `| Pramit Ranjan` title suffix.** `buildMetadata` returns the child title only; Open Graph and Twitter titles keep the composed full title. Why: Next applies a layout `title.template` to child metadata, so composing the suffix in both places duplicated the name.
-- 2026-08-12 — **The root site and `/life` share one generated favicon.** The root icon re-exports Life's icon generator so the two route shells cannot drift visually.
-- 2026-08-13 — **The homepage hero is dashboard-selectable and editable, with Portfolio Carousel (03) active by default.** `home.heroMode` is either `staged` or `portfolio-carousel`; `home.portfolioCarousel.items` owns the carousel card copy, destinations, and image presentation. The Homepage dashboard exposes both hero modes, shows the matching editor, and saves through the existing content pipeline. The current three-stage scroll-controlled hero remains intact and is hash-aware when used as the fallback. The approved Portfolio Carousel is shared by `/` and `/lab/hero`, loops continuously through About, UX, Photography, and Mixed Media, and has no navigation chrome; its centre card is 20% larger, owns the red position border, and overlaps 80% of each neighbour. Its full-width transition rail appears alone before production Selected Work, begins when it enters the viewport, and uses explicit `translate3d` keyframes so phone Safari composites it reliably. On touch screens only the centre card tracks the horizontal drag through a Motion value; release advances on a distance or velocity threshold, undersized gestures spring back, and `touch-action: pan-y` preserves vertical page scrolling. Anime.js was evaluated but not added: its Draggable API overlaps the repo's existing Motion dependency, which already owns React gestures and springs across Portfolio and Life. The PR logo links to `/#selected-work`, returning explorers directly to the portfolio grid; they can scroll upward to revisit the hero. `/` and the Lab share one compressed 1.4-second PR intro component, while the Lab can still force-replay it. The Lab remains a full homepage simulation with production Photography, About, Contact, and Footer below the experimental hero.
-- 2026-08-12 — **Life has one UI Lab, not a collection of mock routes.** Reusable component experiments live at `/life/ui-lab`; Calendar Preview and Projects Variants were deleted because they duplicated production surfaces and left mock-only code and CSS behind. Orphaned pre-V2 components are removed once their live replacement owns the workflow.
-- 2026-08-12 — **Projects home is an index, not a dashboard card grid.** One bordered surface carries Project / Progress / Tasks / Updated columns; nested projects appear directly beneath parents with explicit context. Why: six sparse transparent cards scattered across a large viewport made hierarchy and comparison harder, and the old mobile cascade hid summaries. Phone keeps summary, parent context, progress, task counts, updated time, and its delete utility in a stacked row.
-- 2026-08-12 — **Life uses one responsive gutter contract.** `.life-shell` defines `--life-gutter: clamp(16px, 2.5vw, 40px)`, `.life-app-shell` consumes it without a desktop `max-width`, and at `<= 699px` `.content-shell` is the only owner of horizontal page padding. Route roots must not add another phone gutter. Why: desktop edits repeatedly accumulated one-off margins and broke phone layouts. New desktop work must be checked structurally at 375px and must not alter the phone flow through broad selectors. Today on phone remains capture-first, even when desktop Today changes.
-- 2026-08-12 — Calendar event detail fields live in Google Calendar and are mirrored locally for Life surfaces and PR Life Mobile. Migration `011_calendar_event_details.sql` adds `location`, `notes`, `attendee_emails`, and `reminder_minutes`; Pramit runs it in the Supabase SQL editor. Reminder values are popup minutes before the event. Attendees are email addresses sent through Google's native event API.
-- 2026-08-12 — Search category actions drill into real results instead of closing the command palette: Projects, People, and Tasks each expose their home route plus individual records. Rolodex keeps the old List plus Horizon; Ledger is removed.
-- 2026-08-09 — **Rolodex gets six new `people` columns** (`supabase/migrations/010_rolodex_contact_details.sql`): `email`, `phone`, `how`, `links` jsonb, `likes`/`dislikes` text[]. Why: the person page collected all of them and migration 008 allocated none, so the data had nowhere to land. `how` joins the existing `why` because the page asks two different questions — how you know someone (fixed history) versus what you want from them (a live intention) — and one column made both labels show the same sentence. Arrays/jsonb default to empty, never null, so readers never branch on "missing vs empty". `PersonRecord`, `createPerson`/`updatePerson` and both API routes carry them. **DDL cannot go through the service-role REST API — Pramit runs the migration in the Supabase SQL editor.**
-- 2026-08-09 — "Last contacted" is derived from `interactions`, not a column on `people`. Consequence when seeding: a person with no interaction row reads as never-contacted and sits permanently overdue, so the decay model is dead for them. Every seeded person needs at least one dated entry. Seeder: `scripts/seed-rolodex.mjs` (plain-text blocks in, dry-run by default, upserts by name so re-runs edit rather than duplicate).
-- 2026-08-09 — **Killed the "decision maker" feature outright, at his call.** Two builds, both rejected — a weekly triage board ("this does nothing"), then a live decision box ("this shits ass"). Why it's worth recording: the idea kept passing the design conversation and failing on contact, and the second build was rebuilt on a wrong premise even after probing the data. Do not resurrect this without him raising it first.
-- 2026-08-08 — **The scale is locked, in `.life-shell` at the top of `globals.css`.** Six type sizes (`--t-micro` 10 / `--t-meta` 11 / `--t-small` 12 / `--t-body` 14 / `--t-lead` 15 / `--t-title` 18), six spaces (`--s-1`..`--s-6`, 4→32), two trackings. **If a size isn't in the scale it does not go in a rule.** Why: every screen was picking its own 9/10/11/12px and 8/14/22/28px, so each edit drifted further from the others and Pramit paid for a round-trip per drift. 9px is deliberately absent — `--life-label` (#6f6f6f) is 3.9:1 on `--life-bg`, so a 9px label failed AA on both size and contrast. **Labels at 10–11px take `--life-muted` (7.9:1), never `--life-label`.**
-- 2026-08-08 — `LifePopover` stays mounted past close (`EXIT_MS = 170`) and exposes `data-open`, so enter/exit can be animated in CSS (`@starting-style` in, 0.15s out). Why: it previously mounted and unmounted outright, so there was no motion either way — which reads as "linear". **`EXIT_MS` must stay ahead of the CSS exit duration**; unmount early and the animation is cut mid-flight, which looks identical to having none. Every popover in Life inherits this — menus, task-form calendar, hover cards.
-- 2026-08-08 — **Exits get their own curve, not `--life-ease-out`.** That token is `cubic-bezier(0.23, 1, 0.32, 1)`, an expo-out that spends ~90% of its distance in the first third — right for an arrival, and on a departure it blinks the element out. Exits use `cubic-bezier(0.4, 0, 0.7, 0.2)` (gentle start, accelerates away). Corollary learned twice this session: "exits should be subtler than enters" is real guidance, but 2px/`scale(0.99)`/0.12s and a 6% hover overlay both fell below the threshold of reading as anything. Subtler, not invisible.
-- 2026-08-08 — One hover card for the whole app: `.life-hc` in `globals.css` (title / sub / rows), used by schedule events, tasks and rolodex dots. Why: `.t2-evcard` and `.lab-horizon-hc` were two implementations of the same object with different padding, row sizes and label colours, so fixing one moved it further from the other. **The card root is itself the control** — `<Link>` for a route, `<button>` for in-page state — so it carries the element resets. There is no "Open X →" footer: that was a second control for the thing the pointer was already on.
-- 2026-08-08 — Rejected installing shadcn/ui for the Rolodex. Why: `LifeHoverCard`/`LifePopover`/`LifeConfirm` already exist, and shadcn puts its tokens on `:root` while every `--life-*` var lives on `.life-shell` — the exact mismatch that made the popover render unstyled.
-- 2026-08-08 — Lab routes get their own CSS file rather than more `globals.css`. Why: `globals.css` is one 6.5k-line file, so two agents editing it serialise; a per-route sheet loads after it and wins on source order.
-- 2026-07-24 — Prototypes vendored as static files into `public/proto/<name>/`, embedded via the existing `solutionEmbedUrl` iframe path. Why: no new routes or schema needed.
-- 2026-07-24 — All Swipey case studies ship `"hidden": true`. Why: interactive embeds need Swipey sign-off before anything is public.
-- 2026-07-24 — Umbrella hub with modal stories rather than three sibling pages. Why: one Swipey entry on `/work` instead of three, and the stories read as one internship.
-- 2026-07-24 — Mobile shows a still for `/proto/` embeds, keeps the iframe for absolute `http(s)` ones. Why: the vendored prototypes are desktop-scale and unusable in a phone iframe; Albers and Wander are genuinely responsive.
+## Decisions
+- 2026-08-17 — **PR Life is a separate product boundary.** Its application source, APIs, cron, migrations, docs, firmware, and secrets live in `life-web`. The portfolio retains a public Lab story and temporary compatibility redirects/proxy only.
+- 2026-08-17 — **The root favicon owns its generator.** It renders black `PR` text on an edge-to-edge signal-red background and no longer imports from another route.
+- 2026-08-12 — **The root metadata template owns the `| Pramit Ranjan` title suffix.** `buildMetadata` returns the child title only; Open Graph and Twitter keep the composed full title.
+- 2026-08-13 — **The homepage hero is dashboard-selectable and editable, with Portfolio Carousel active by default.** `home.heroMode` is `staged` or `portfolio-carousel`; `home.portfolioCarousel.items` owns card copy, destinations, and image presentation. `/`, `/lab/hero`, and the hero lab share the same public content. On touch screens only the centre card tracks the drag. A successful release changes card roles and springs the finger offset home in one frame; the mobile card ratio must keep its complete label, title, description, and action visible. The PR logo links to `/#selected-work`. The Lab remains a full homepage simulation below the experimental hero.
+- 2026-07-24 — **Swipey prototypes are vendored static files.** Existing iframe support is reused; no new content schema or routes are needed.
+- 2026-07-24 — **Swipey stories stay hidden until sign-off.** Static prototype assets are publicly addressable even when content entries are hidden.
+- 2026-07-24 — **Swipey uses one umbrella hub with modal stories.** It remains one `/work` entry rather than three sibling pages.
+- 2026-07-24 — **Mobile uses stills for vendored prototypes.** The desktop-scale builds are unusable in a phone iframe; absolute responsive embeds keep their iframe.
 
 ## Open threads
-- Run Supabase migrations 010 (Rolodex contact details, if still pending) and 011 (calendar event details) before judging people search or calendar detail persistence.
-- Pramit visually verifies this Life batch on a large desktop and phone; implementation was checked statically only.
-- Swipey sign-off pending on **interactive embeds** (a bigger ask than screenshots). Until then: case studies stay hidden and the `swipey-case-studies` branch is never pushed — `public/` assets are served statically in production regardless of the `hidden` flag. On sign-off: flip the three flags in one commit, then push.
-- Cover and mobile images are flat placeholder PNGs. Real captures pending — Pramit does them.
-- The hub hero still uses `/work/swipey-fields/cover.png`; it wants its own image.
+- Swipey sign-off is pending on interactive embeds. Until then, case studies stay hidden.
+- Cover and mobile images remain placeholder PNGs; Pramit owns final captures.
+- The Swipey hub hero still uses `/work/swipey-fields/cover.png` and wants its own image.
+- Remove the temporary PR Life compatibility bridge after old native installations and saved browser links have aged out.
 
 ## How Pramit works
-<!-- Written from observed sessions, not from asking him. Add only what you
-     have evidence for; delete anything that stops being true. -->
-
-- **His bug reports are diagnoses, not just symptoms.** "When the time doesn't load, the page doesn't have a scroll" was the whole answer — no hydration meant no JS, so the JS was *causing* the scroll it was meant to fix. He is non-technical and will describe what he saw, not what's wrong; read the observation as evidence and follow it before writing your own theory. Three fix attempts died ignoring one of these.
-- **He does all visual verification himself. Never claim you did it.** Ask before loading his dev server; reference sites are fine unasked. Measuring a fact in the browser (a rect, a computed value) is allowed — judging how something looks is not. Say plainly when work is unverified.
-- **One message is a batch of separate items.** He writes long, comma-joined critiques where every clause is its own bug. Deliver all of them, or say explicitly which you didn't and why. Do not cherry-pick the easy ones.
-- **He notices when two things state the same fact, and when two things look alike but aren't.** "Why are there two types of data like 6w ago and +12d", "Contact font size is the same as email". Say a thing once, and make different kinds of things differ on more than one axis — colour *and* size *and* label, not one of the three.
-- **Symptom → root cause, every time.** "The hover should be on the dot" was a shared component measuring its own wrapper, not a Rolodex bug. Fix it where all callers route through.
-- **New screens get prototyped in a lab route** (`/life/today-v2`) with its own stylesheet, iterated on until he signs off, and only then replace the live screen.
-- **Decide for him.** He is non-technical: make implementation and trade-off calls yourself and state them. Blocking questions only when proceeding would be unsafe or wasted.
-- **Never commit or push unless he explicitly asks.** He pushes on his own.
-- **He asks for cheap subagents on implementation work.** Do it — but verify their claims against the code before repeating them. In this repo they have reported browser verification that was false, called a component non-existent from a stale graphify index, and one killed his dev server with `preview_stop`. Tell every agent never to call it.
-- **Craft is the point, not the deliverable count.** He'd rather one screen be right than three be present, and he will name the exact thing that's off. Comments explaining *why* a non-obvious rule exists are welcome; prose defending a decision is not.
+- Treat bug reports as evidence: follow the observed symptom before proposing a theory.
+- Pramit owns visual acceptance. Static or browser measurements are evidence, not visual sign-off.
+- Treat comma-joined feedback as separate requirements; deliver each or name what remains.
+- Fix shared root causes at the component or system boundary, not at one caller.
+- Prototype major homepage changes under `/lab/hero` before replacing production.
+- Make implementation and architecture calls directly; ask only when proceeding would be unsafe.
+- Never commit or push unless explicitly requested.
+- Preserve unrelated and uncommitted work.
 
 ## Gotchas
-- **`/life`'s task table is effectively empty — 17 rows, 0 active (checked 2026-08-09).** Projects exist (`swipey, ops, albers, robin, scad, health`) but hold no open tasks, and there are no rows for classes, clubs or the job. Any feature that ranks, triages, or summarises "his tasks" renders blank against real data. Probe the table before designing on top of it — a whole feature was built and binned partly for missing this.
-- `lib/site-content.ts` throws on malformed content — a broken JSON entry 500s the whole site. Loading the page is the test.
-- `CaseStudyLayout` drops `solution`-section media blocks when `solutionEmbedUrl` is set; `useEmbedPreview` is only read by the game layout.
-- `workPage.projects[]` is a separate array from `caseStudies[]` — a case study missing from it is unreachable from `/work`.
-- **Scale embedded iframes with `transform`, never `zoom`.** Safari applies `zoom` to an iframe's internal viewport as well as its box, so a zoomed 1440px iframe lays out at ~1000px and the prototype wraps and clips itself. Cost several rounds to find because Chromium doesn't do this.
-- `GsapReveal` drives off window `ScrollTrigger`, which never fires inside the modal's own scroll container — `.swipey-frame [data-reveal]` is forced visible in `globals.css` or every section below the fold sits at `opacity: 0`.
-- **`/life` gotchas.** Every `--life-*` var is on `.life-shell`, never `:root` — portalling to `document.body` drops all of them. A bare `1fr` in a grid is `minmax(auto, 1fr)` and refuses to shrink below its content; it caused several horizontal-overflow bugs, so always `minmax(0, 1fr)`. A `<textarea>`'s `rows` attribute is an intrinsic height floor `minmax(0, 1fr)` cannot override, and defaults to 2. `LifeHoverCard` measures its own wrapper `div`, so an absolutely-positioned child leaves the anchor box behind at the container's edge — put the positioning on the wrapper via its `className`/`style`.
-- **`--life-label` (`#6f6f6f`) is 3.9:1 on `--life-bg` and 3.8:1 on `--life-panel` — under AA on its own, and most of Life uses it at 9–11px.** Do not reach for it for anything that must be read, and never for a control. `--life-muted` (`#a4a4a4`) is 7.9:1. 10px is the size floor (81 uses vs 23 at 9px). Building a hierarchy by making each tier fainter than the last bottoms out in unreadable grey — separate tiers by size, family and rule instead, and keep only one tier muted.
-- `/life` pages are strictly no-scroll: size the root to the viewport, end `grid-template-rows` in `minmax(0, 1fr)`, `min-height: 0` down the whole ancestor chain, panes scroll internally. Do **not** measure heights in JS — a hook doing `innerHeight - top - 24` ignored `.life-app-shell`'s own bottom padding and was itself the cause of a scroll that survived three fix attempts.
-- `graphify` excludes `public/proto/**`; without it the vendored minified bundles flood the index (40k nodes) and queries return `pdf.worker.min.mjs` internals.
+- `lib/site-content.ts` throws on malformed content; loading the page is the practical check.
+- `CaseStudyLayout` drops solution-section media blocks when `solutionEmbedUrl` is set; `useEmbedPreview` is only read by the game layout.
+- `workPage.projects[]` is separate from `caseStudies[]`; a case study missing from it is unreachable from `/work`.
+- Scale embedded iframes with `transform`, never `zoom`; Safari applies `zoom` to the iframe's internal viewport.
+- `GsapReveal` observes window scroll, not the modal scroll container; framed stories force reveal nodes visible in `globals.css`.
+- Graphify excludes `public/proto/**`; indexing vendored bundles floods the graph.
 
 ## Next action
-Run migrations 010/011, then Pramit visually checks `/life`, `/life/month`, `/life/search`, `/life/people`, and `/life/projects` at phone and large-desktop widths. The decision-maker feature remains dead — deleted, not paused.
+Verify the portfolio build and old-link compatibility locally, then deploy the portfolio cutover when Pramit explicitly asks to push.
 
 ## Last session
-2026-08-12 — Consolidated prototypes into `/life/ui-lab`; removed Calendar Preview, Projects Variants, five zero-import components superseded by current Life screens, and their dead CSS. The live usability batch remains: compact quick-add controls, direct Calendar navigation, matched calendar controls, a horizontal desktop event dialog, hierarchy-aware Projects, and List + Horizon Rolodex. Pramit owns the visual QA; no commit or push was performed for this cleanup.
+2026-08-17 — Removed the embedded PR Life implementation and portfolio cron, migrated the remaining printer firmware to `life-web`, retained temporary compatibility routing, and made the portfolio favicon self-contained. No commit or push was performed.

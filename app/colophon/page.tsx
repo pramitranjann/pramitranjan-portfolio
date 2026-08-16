@@ -11,7 +11,7 @@ export function generateMetadata(): Metadata {
   return buildMetadata({
     title: 'Colophon',
     description:
-      'How this site works: Next.js App Router, a JSON content system with a live editing dashboard, GSAP and Motion, Supabase behind /life, deployed on Vercel.',
+      'How this site works: Next.js App Router, a JSON content system with a live editing dashboard, GSAP and Motion, deployed on Vercel.',
     path: '/colophon',
     keywords: ['colophon', 'how this site is built', 'Next.js portfolio'],
   })
@@ -22,7 +22,7 @@ const STACK: Array<{ label: string; value: string }> = [
   { label: 'CONTENT', value: 'One JSON file — copy and design tokens, edited live from a private dashboard' },
   { label: 'TYPE', value: 'DM Serif Display, DM Mono' },
   { label: 'MOTION', value: 'GSAP, Motion — respects reduced-motion' },
-  { label: 'DATA', value: 'Supabase, behind the private /life section' },
+  { label: 'DATA', value: 'A local JSON content system with a private editor' },
   { label: 'HOSTING', value: 'Vercel' },
 ]
 
@@ -60,8 +60,8 @@ export default function ColophonPage() {
             >
               Built solo. Every word and design token on this site — type scale, spacing, colors —
               lives in one JSON file, edited live through a private dashboard. Nothing is hardcoded
-              copy. Supabase sits behind /life, the personal system documented in the lab. Deployed
-              on Vercel.
+              copy. The private editor and public site share that same content source. Deployed on
+              Vercel.
             </p>
           </GsapReveal>
         </section>
