@@ -373,19 +373,35 @@ html, body {
   margin-top: clamp(36px, 4vw, 56px);
 }
 
-/* Deployed case-study apps are responsive documents, not fixed-ratio images.
-   Without an explicit host size, the browser falls back to a 300 × 150 iframe
-   and leaves the surrounding editorial section looking empty. Swipey's local
-   prototype keeps its separate measured scaler in SwipeyHubClient. */
-.editorial-embed-live {
-  height: clamp(560px, 72svh, 900px);
-  overflow: hidden;
-  background: #080808;
-  border: 1px solid oklch(1 0 0 / 0.1);
+.editorial-embed {
+  position: relative;
+  width: 100%;
+  padding: 12px;
+  background-color: #111111;
+  border: 1px solid var(--color-red);
 }
 
-.editorial-embed-live .editorial-embed-surface,
-.editorial-embed-live iframe {
+/* Deployed case-study apps need the larger internal viewport they had before
+   the Life extraction. Transform preserves that viewport in Safari; zoom would
+   shrink the iframe's layout viewport and make the app wrap or clip. */
+.editorial-embed-live .editorial-embed-surface {
+  height: 660px;
+}
+
+.editorial-embed.editorial-embed-live iframe {
+  width: 133.3333%;
+  height: 880px;
+  transform: scale(0.75);
+  transform-origin: top left;
+}
+
+.editorial-embed-surface {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.editorial-embed iframe {
   display: block;
   width: 100%;
   height: 100%;
@@ -913,6 +929,58 @@ html, body {
 /* No live app to open — these prototypes only exist inside the frame. */
 .swipey-frame a[href^="/proto/"] {
   display: none !important;
+}
+
+/* Framed stories are not browser pages. These overrides make the editorial
+   layout measure itself against the modal rather than the full viewport. */
+.swipey-frame .editorial-page {
+  --case-nav-clearance: 0px;
+  padding-top: 0;
+}
+
+@media (min-width: 901px) {
+  .swipey-frame .editorial-hero {
+    min-height: calc(100svh - (var(--swipey-frame-inset, 0px) * 2));
+  }
+}
+
+@media (min-width: 1200px) {
+  .swipey-frame .editorial-shell {
+    width: min(calc(100% - 312px), 1120px);
+    margin-right: auto;
+    margin-left: 272px;
+  }
+
+  .swipey-frame .editorial-shell.editorial-narrow {
+    width: min(100%, 800px);
+    margin-right: auto;
+    margin-left: 272px;
+  }
+
+  .swipey-frame .editorial-hero > .editorial-shell {
+    width: min(100% - 80px, 1240px);
+    margin-inline: auto;
+  }
+
+  .swipey-frame-nav {
+    left: 24px;
+  }
+}
+
+@media (max-width: 640px) {
+  .about-scroll-hint {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .footer-link-secondary {
+    display: none;
+  }
+
+  .site-footer {
+    padding-inline: 24px !important;
+  }
 }
 
 /* Hide scrollbar — prevents layout shift on the fixed nav */

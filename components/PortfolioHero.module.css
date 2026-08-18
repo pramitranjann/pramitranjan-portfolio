@@ -72,8 +72,8 @@
     0 22px 60px rgb(0 0 0 / 0.5);
   translate: -50% -50%;
   transform-origin: center;
-  transition-property: translate, opacity, filter, border-color;
-  transition-duration: 560ms, 260ms, 260ms, 140ms;
+  transition-property: width, translate, opacity, filter, border-color;
+  transition-duration: 560ms, 560ms, 260ms, 260ms, 140ms;
   transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
@@ -99,6 +99,10 @@
 
 .card[data-position='previous'],
 .card[data-position='next'] {
+  /* Background cards are laid out at their reference size rather than scaled
+     after paint. That preserves their smaller depth cue without softening the
+     active card's screenshot or type. */
+  width: 63%;
   z-index: 1;
   opacity: 0.76;
   filter: brightness(0.82) saturate(0.82);
