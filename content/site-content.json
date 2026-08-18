@@ -5,12 +5,12 @@
     "portfolioCarousel": {
       "heading": {
         "lead": "Hello, I'm Pramit—",
-        "emphasis": "a UX designer who builds the work."
+        "emphasis": "a Product designer working at the intersection of Design & Code"
       },
       "items": [
         {
           "label": "About",
-          "title": "Camera before Figma.",
+          "title": "Film before Figma.",
           "description": "Third-culture, always framing.",
           "href": "/about",
           "image": "/creative/photography/kl/41.jpg",
@@ -1493,7 +1493,7 @@
       },
       "heroImage": "/work/swipey-admin/cover copy.png",
       "problemHeadline": "Every admin flow already worked on desktop: deposit, top up, clawback, issue card, invite, approve. None of it was reachable from a phone. The people who needed it were away from their desks.",
-      "roleHeadline": "Design and design QA on the first admin-facing mobile release, built with AI agents and prototyped for stakeholders and an audience aged 30 to 60.",
+      "roleHeadline": "Design and design QA on the first admin-facing mobile release, built with AI agents and prototyped for stakeholders and a wide ranged audience age.",
       "researchHeadline": "The desktop product was the research. Every rule, status and edge case already had a proven answer, so the job was translation, not invention.",
       "challengeHeadline": "Port the business rules, don't reinvent them. Writing new validation for flows that already worked would have been risk with extra steps.",
       "processHeadline": "I reviewed it screen by screen, giving every finding a stable ID and a severity tier, and tagging the ones engineering had to build as requirements rather than visual edits.",
@@ -2176,7 +2176,7 @@
     {
       "slug": "bowl",
       "section": "play",
-      "title": "bowl",
+      "title": "Bowl",
       "oneliner": "A Malaysian inspired reddition of Fruit Ninja",
       "type": "WEB GAME · 2026",
       "tags": [
@@ -2207,7 +2207,7 @@
     {
       "slug": "sling",
       "section": "play",
-      "title": "sling",
+      "title": "Sling",
       "oneliner": "A webcam-controlled demolition game",
       "type": "WEB GAME · 2026",
       "tags": [
