@@ -47,8 +47,19 @@
     },
     "selectedWork": {
       "heading": "Research to resolution. ",
-      "body": "Four projects in UX — each one starting with a question worth asking. One shipped.",
+      "body": "UX Projects — each one starting with a question worth asking.",
       "items": [
+        {
+          "title": "Swipey",
+          "oneliner": "Three months designing corporate card software for Malaysian SMEs.",
+          "tags": [
+            "PRODUCT",
+            "INTERNSHIP"
+          ],
+          "href": "/work/swipey",
+          "cover": "/Frame 54.png",
+          "coverPosition": "center"
+        },
         {
           "title": "Franklin's",
           "oneliner": "The experience starts before you walk in.",
@@ -82,17 +93,6 @@
           "cover": "/work/Wander/Mockup-123.png",
           "coverPosition": "center",
           "hoverImage": "/work/Wander/cover image.png"
-        },
-        {
-          "title": "LoomLearn",
-          "oneliner": "One learning space for students who think differently.",
-          "tags": [
-            "UX",
-            "ED-TECH"
-          ],
-          "href": "/work/loomlearn",
-          "cover": "/work/loomlearn/cover-hor.png",
-          "coverPosition": "center"
         }
       ]
     },
@@ -132,12 +132,12 @@
       ]
     },
     "about": {
-      "body": "UX design student at SCAD, product intern at Swipey. I design in Figma and ship working software. ",
+      "body": "UX design student at SCAD, product intern at Swipey.",
       "spotifyLabel": "LAST PLAYED_"
     }
   },
   "aboutPage": {
-    "heroBody": "UX design student at SCAD, product intern at Swipey. I design in Figma and ship working software. Trained as an artist first, and it still shapes everything.",
+    "heroBody": "UX design student at SCAD, product intern at Swipey. Trained as an artist first, and it still shapes everything I do.",
     "whoIAm": "A third culture kid, currently surviving Savannah. I picked up a camera before I picked up Figma, and I still think in frames: who, what, when, where. At SCAD I study UX. Outside class I build various experiences such as — a macOS app, this site, and a system that runs my days.",
     "experience": [
       {
@@ -736,7 +736,7 @@
       "aboutReadMoreLabel": "READ MORE →",
       "photographyEyebrow": "THE EYE CAME FIRST.",
       "photographyTitleHtml": "Before <span style=\"color: #FF3120\">Figma,</span><br />there was <span style=\"color: #FF3120\">film.</span>",
-      "photographyBody": "Street photography across Southeast Asia. Shot on 35mm and medium format. Always looking.",
+      "photographyBody": "Street photography across Southeast Asia. Shot on 35mm and Digital.",
       "photographyCtaLabel": "VIEW ALL →",
       "contactTitle": "You made it this far.",
       "contactAccent": "Say hello.",
@@ -1252,7 +1252,8 @@
         "Multiple workspaces",
         "Draggable icons",
         "One canvas"
-      ]
+      ],
+      "hidden": true
     },
     {
       "slug": "helpoh",
@@ -1357,7 +1358,8 @@
         "Location",
         "Date",
         "Time"
-      ]
+      ],
+      "hidden": true
     },
     {
       "slug": "atom",
@@ -1460,7 +1462,8 @@
         "Usage breakdowns",
         "Focus mode",
         "Four widgets"
-      ]
+      ],
+      "hidden": true
     },
     {
       "slug": "swipey-admin",
