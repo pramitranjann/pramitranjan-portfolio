@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { isValidElement, useEffect, useMemo, useState } from 'react'
 import type { DashboardWriteMode } from '@/lib/dashboard-storage'
 import { deriveCaseStudyMediaBlocks } from '@/lib/case-study-media'
 import { applyTemplate, CASE_STUDY_TEMPLATES } from '@/lib/case-study-templates'
@@ -242,7 +242,99 @@ function getImageExportGuide({
   }
 }
 
+type FieldPreviewKind = 'color' | 'type' | 'measure' | 'value'
+
+function getEditableFieldValue(children: React.ReactNode) {
+  if (!isValidElement<{ value?: unknown }>(children)) return null
+  if (typeof children.type !== 'string' || !['input', 'textarea', 'select'].includes(children.type)) return null
+  return typeof children.props.value === 'string' ? children.props.value : null
+}
+
+function getFieldPreviewKind(label: string, value: string): FieldPreviewKind {
+  const fieldLabel = label.toLowerCase()
+  const looksLikeColor = /^(#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})|rgba?\(|hsla?\(|oklch\(|var\(--)/i.test(value.trim())
+
+  if (looksLikeColor || /color|colour|background|border|fill|accent|surface|dot|track|rule/.test(fieldLabel)) return 'color'
+  if (/font|type|title|heading|body|label|text|copy|description|caption|name|serif|mono|weight/.test(fieldLabel)) return 'type'
+  if (/gap|padding|gutter|height|width|size|radius|offset|distance|scale|line height|space/.test(fieldLabel)) return 'measure'
+  return 'value'
+}
+
+function getMeasurePreviewSize(value: string) {
+  const number = Number(value.match(/\d+(?:\.\d+)?/)?.[0])
+  if (!Number.isFinite(number)) return 20
+  return Math.max(7, Math.min(34, Math.round(number / 3)))
+}
+
+function FieldValuePreview({ label, value }: { label: string; value: string }) {
+  const kind = getFieldPreviewKind(label, value)
+  const shellStyle = {
+    minWidth: kind === 'type' ? '92px' : '44px',
+    minHeight: '44px',
+    display: 'grid',
+    placeItems: 'center',
+    overflow: 'hidden',
+    border: '1px solid #2a2a2a',
+    background: '#141414',
+  }
+
+  if (kind === 'color') {
+    return (
+      <span aria-hidden="true" style={shellStyle}>
+        <span
+          style={{
+            width: '100%',
+            height: '100%',
+            background: value || 'repeating-conic-gradient(#222 0 25%, #171717 0 50%) 50% / 8px 8px',
+            boxShadow: 'inset 0 0 0 1px rgb(255 255 255 / 0.12)',
+          }}
+        />
+      </span>
+    )
+  }
+
+  if (kind === 'type') {
+    const isDisplayType = /font|title|heading|display|serif/i.test(label)
+    return (
+      <span aria-hidden="true" style={shellStyle}>
+        <span
+          style={{
+            maxWidth: '84px',
+            overflow: 'hidden',
+            color: '#f5f2ed',
+            fontFamily: isDisplayType ? 'var(--font-display), var(--font-dm-serif), serif' : 'var(--font-cabinet-grotesk), sans-serif',
+            fontSize: isDisplayType ? '20px' : '14px',
+            lineHeight: 1,
+            textOverflow: 'clip',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          {value || 'Aa'}
+        </span>
+      </span>
+    )
+  }
+
+  if (kind === 'measure') {
+    const size = getMeasurePreviewSize(value)
+    return (
+      <span aria-hidden="true" style={shellStyle}>
+        <span style={{ width: `${size}px`, height: `${Math.max(3, Math.min(28, size / 2))}px`, border: '1px solid #ff3120', background: 'rgb(255 49 32 / 0.14)' }} />
+      </span>
+    )
+  }
+
+  return (
+    <span aria-hidden="true" style={shellStyle}>
+      <span className="font-mono" style={{ color: '#777777', fontSize: '12px', letterSpacing: '0.04em' }}>↳</span>
+    </span>
+  )
+}
+
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  const value = getEditableFieldValue(children)
+  const previewKind = value === null ? null : getFieldPreviewKind(label, value)
+
   return (
     <label style={{ display: 'grid', gap: '8px' }}>
       <span
@@ -257,7 +349,12 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       >
         {label}
       </span>
-      {children}
+      {value !== null ? (
+        <div style={{ display: 'grid', gridTemplateColumns: `${previewKind === 'type' ? '92px' : '44px'} minmax(0, 1fr)`, alignItems: 'stretch', gap: '8px', minWidth: 0 }}>
+          <FieldValuePreview label={label} value={value} />
+          {children}
+        </div>
+      ) : children}
     </label>
   )
 }
@@ -1493,14 +1590,42 @@ function HomepageEditor({
         </p>
 
         {content.home.heroMode === 'portfolio-carousel' ? (
-          <PortfolioCarouselListEditor
-            items={content.home.portfolioCarousel.items}
-            localWriteEnabled={localWriteEnabled}
-            onChange={(items) => updateSection('home', {
-              ...content.home,
-              portfolioCarousel: { ...content.home.portfolioCarousel, items },
-            })}
-          />
+          <>
+            <Field label="Carousel Hero Text">
+              <input
+                value={content.home.portfolioCarousel.heading.lead}
+                onChange={(event) => updateSection('home', {
+                  ...content.home,
+                  portfolioCarousel: {
+                    ...content.home.portfolioCarousel,
+                    heading: { ...content.home.portfolioCarousel.heading, lead: event.target.value },
+                  },
+                })}
+                style={inputStyle()}
+              />
+            </Field>
+            <Field label="Carousel Hero Italic Text">
+              <input
+                value={content.home.portfolioCarousel.heading.emphasis}
+                onChange={(event) => updateSection('home', {
+                  ...content.home,
+                  portfolioCarousel: {
+                    ...content.home.portfolioCarousel,
+                    heading: { ...content.home.portfolioCarousel.heading, emphasis: event.target.value },
+                  },
+                })}
+                style={inputStyle()}
+              />
+            </Field>
+            <PortfolioCarouselListEditor
+              items={content.home.portfolioCarousel.items}
+              localWriteEnabled={localWriteEnabled}
+              onChange={(items) => updateSection('home', {
+                ...content.home,
+                portfolioCarousel: { ...content.home.portfolioCarousel, items },
+              })}
+            />
+          </>
         ) : (
           <HeroStageListEditor
             items={content.copy.home.heroStages}
@@ -1513,6 +1638,19 @@ function HomepageEditor({
       </SectionFrame>
 
       <SectionFrame title="Homepage">
+        <Field label="Browser Tab Title">
+          <input
+            value={content.home.browserTitle}
+            onChange={(event) => updateSection('home', {
+              ...content.home,
+              browserTitle: event.target.value,
+            })}
+            style={inputStyle()}
+          />
+        </Field>
+        <p className="font-mono" style={{ margin: 0, color: '#666666', fontSize: '10px', letterSpacing: '0.1em', lineHeight: 1.6 }}>
+          Shown in the browser tab as “{content.home.browserTitle || 'Your title'} | Pramit Ranjan”.
+        </p>
         <Field label="Selected Work Heading">
           <input
             value={content.home.selectedWork.heading}

@@ -8,7 +8,7 @@ import type { MotionValue } from 'motion/react'
 import type { PointerEvent as ReactPointerEvent } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { TransitionRail } from './TransitionRail'
-import type { PortfolioCarouselItem } from '@/lib/site-content-schema'
+import type { PortfolioCarouselContent, PortfolioCarouselItem } from '@/lib/site-content-schema'
 import styles from './PortfolioHero.module.css'
 
 const CAROUSEL_TRANSITION_MS = 560
@@ -29,9 +29,11 @@ type CarouselGesture = {
 
 export function PortfolioCarousel({
   items,
+  heading,
   headingId,
 }: {
   items: PortfolioCarouselItem[]
+  heading: PortfolioCarouselContent['heading']
   headingId?: string
 }) {
   const router = useRouter()
@@ -267,7 +269,7 @@ export function PortfolioCarousel({
   return (
     <div className={styles.layout}>
       <h1 id={headingId} className={`${styles.headline} font-serif`}>
-        Hello, I&apos;m Pramit—<em>a UX designer who builds the work.</em>
+        {heading.lead}<em>{heading.emphasis}</em>
       </h1>
 
       <div
@@ -330,7 +332,10 @@ export function PortfolioCarousel({
                     alt=""
                     fill
                     priority={index < 2}
-                    sizes="(max-width: 767px) 52vw, 31vw"
+                    /* Screens and detailed visual work should not be passed
+                       through another resampling step before this hero paints. */
+                    unoptimized
+                    sizes="(max-width: 767px) 62vw, 720px"
                     style={{ objectFit: feature.imageFit, objectPosition: feature.imagePosition }}
                   />
                 </span>
@@ -349,11 +354,15 @@ export function PortfolioCarousel({
   )
 }
 
-export function PortfolioHero({ items }: { items: PortfolioCarouselItem[] }) {
+export function PortfolioHero({ content }: { content: PortfolioCarouselContent }) {
   return (
     <section className={styles.hero} aria-labelledby="portfolio-hero-title">
       <div className={styles.shell}>
-        <PortfolioCarousel items={items} headingId="portfolio-hero-title" />
+        <PortfolioCarousel
+          items={content.items}
+          heading={content.heading}
+          headingId="portfolio-hero-title"
+        />
         <Link className={styles.transition} href="#selected-work" aria-label="Continue to selected work">
           <TransitionRail className={styles.transitionTrack} />
         </Link>

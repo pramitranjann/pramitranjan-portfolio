@@ -1,7 +1,12 @@
 {
   "home": {
+    "browserTitle": "UX Designer",
     "heroMode": "portfolio-carousel",
     "portfolioCarousel": {
+      "heading": {
+        "lead": "Hello, I'm Pramit—",
+        "emphasis": "a UX designer who builds the work."
+      },
       "items": [
         {
           "label": "About",

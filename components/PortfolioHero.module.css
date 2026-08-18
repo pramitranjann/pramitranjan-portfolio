@@ -54,7 +54,9 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 62.5%;
+  /* Keep the active card at its final rendered size. Scaling a composited card
+     after paint softens both its UI screenshot and the type inside it. */
+  width: 75%;
   display: grid;
   grid-template-columns: minmax(0, 1.55fr) minmax(0, 0.85fr);
   gap: 8px;
@@ -68,12 +70,10 @@
   box-shadow:
     0 0 0 1px rgb(255 255 255 / 0.025),
     0 22px 60px rgb(0 0 0 / 0.5);
-  scale: 1;
   translate: -50% -50%;
   transform-origin: center;
-  will-change: transform, opacity;
-  transition-property: translate, scale, opacity, filter, border-color;
-  transition-duration: 560ms, 560ms, 260ms, 260ms, 140ms;
+  transition-property: translate, opacity, filter, border-color;
+  transition-duration: 560ms, 260ms, 260ms, 140ms;
   transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
@@ -94,9 +94,7 @@
   z-index: 3;
   border-color: var(--color-red);
   opacity: 1;
-  filter: brightness(1) saturate(1);
   translate: -50% -50%;
-  scale: 1.2;
 }
 
 .card[data-position='previous'],
@@ -124,12 +122,10 @@
 
 .card[data-position='before'] {
   translate: -110% -50%;
-  scale: 0.94;
 }
 
 .card[data-position='after'] {
   translate: 10% -50%;
-  scale: 0.94;
 }
 
 .card[data-position='previous']:hover,
@@ -238,7 +234,7 @@
   }
 
   .card {
-    width: 68%;
+    width: 75%;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
     aspect-ratio: 1.24 / 1;
   }

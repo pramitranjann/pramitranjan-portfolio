@@ -27,7 +27,7 @@ export default async function HomepageHeroLabPage() {
       <Nav />
       <div className="hero-lab-page">
         <HeroDesignLab
-          carouselItems={content.home.portfolioCarousel.items}
+          carousel={content.home.portfolioCarousel}
           projects={projects.slice(0, 3).map(({ title, href, cover, coverPosition, tags }) => ({
             title,
             href,

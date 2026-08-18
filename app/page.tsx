@@ -11,12 +11,16 @@ import { PortfolioHero } from '@/components/PortfolioHero'
 import { DEFAULT_DESCRIPTION, PERSON_KEYWORDS, buildMetadata } from '@/lib/seo'
 import { getPublicSiteContent } from '@/lib/site-content'
 
-export const metadata: Metadata = buildMetadata({
-  title: 'UX Designer',
-  description: DEFAULT_DESCRIPTION,
-  path: '/',
-  keywords: PERSON_KEYWORDS,
-})
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPublicSiteContent()
+
+  return buildMetadata({
+    title: content.home.browserTitle,
+    description: DEFAULT_DESCRIPTION,
+    path: '/',
+    keywords: PERSON_KEYWORDS,
+  })
+}
 
 export default async function HomePage() {
   const content = await getPublicSiteContent()
@@ -26,7 +30,7 @@ export default async function HomePage() {
       <Nav />
       <IntroAnimation />
       {content.home.heroMode === 'portfolio-carousel' ? (
-        <PortfolioHero items={content.home.portfolioCarousel.items} />
+        <PortfolioHero content={content.home.portfolioCarousel} />
       ) : (
         <HeroCarousel />
       )}

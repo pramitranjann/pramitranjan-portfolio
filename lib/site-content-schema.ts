@@ -41,7 +41,13 @@ export interface PortfolioCarouselItem {
   imageBackground: string
 }
 
+export interface PortfolioCarouselHeading {
+  lead: string
+  emphasis: string
+}
+
 export interface PortfolioCarouselContent {
+  heading: PortfolioCarouselHeading
   items: PortfolioCarouselItem[]
 }
 
@@ -497,6 +503,7 @@ export type HomeHeroMode = 'staged' | 'portfolio-carousel'
 
 export interface SiteContent {
   home: {
+    browserTitle: string
     heroMode: HomeHeroMode
     portfolioCarousel: PortfolioCarouselContent
     selectedWork: HomeSection
@@ -644,10 +651,17 @@ function isPortfolioCarouselItem(value: unknown): value is PortfolioCarouselItem
   )
 }
 
+function isPortfolioCarouselHeading(value: unknown): value is PortfolioCarouselHeading {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return isString(item.lead) && isString(item.emphasis)
+}
+
 function isPortfolioCarouselContent(value: unknown): value is PortfolioCarouselContent {
   if (!value || typeof value !== 'object') return false
   const item = value as Record<string, unknown>
   return (
+    isPortfolioCarouselHeading(item.heading) &&
     Array.isArray(item.items) &&
     item.items.length >= 3 &&
     item.items.every(isPortfolioCarouselItem)
@@ -1230,6 +1244,7 @@ export function isSiteContent(value: unknown): value is SiteContent {
   const copy = content.copy as Record<string, unknown>
 
   return (
+    isString(home.browserTitle) &&
     (home.heroMode === 'staged' || home.heroMode === 'portfolio-carousel') &&
     isPortfolioCarouselContent(home.portfolioCarousel) &&
     isHomeSection(home.selectedWork) &&
