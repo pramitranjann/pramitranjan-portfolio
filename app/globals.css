@@ -373,6 +373,25 @@ html, body {
   margin-top: clamp(36px, 4vw, 56px);
 }
 
+/* Deployed case-study apps are responsive documents, not fixed-ratio images.
+   Without an explicit host size, the browser falls back to a 300 × 150 iframe
+   and leaves the surrounding editorial section looking empty. Swipey's local
+   prototype keeps its separate measured scaler in SwipeyHubClient. */
+.editorial-embed-live {
+  height: clamp(560px, 72svh, 900px);
+  overflow: hidden;
+  background: #080808;
+  border: 1px solid oklch(1 0 0 / 0.1);
+}
+
+.editorial-embed-live .editorial-embed-surface,
+.editorial-embed-live iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
 .editorial-artifact {
   aspect-ratio: 16 / 9;
   background: #080808;
@@ -614,6 +633,13 @@ html, body {
     width: min(100% - 80px, 1240px);
     margin-inline: auto;
   }
+
+  /* Swipey's hub has no contents rail. Keep its card row on the same canvas as
+     the opening composition instead of inheriting the editorial reading offset. */
+  .swipey-hub-shell.editorial-shell {
+    width: min(100% - 80px, 1240px);
+    margin-inline: auto;
+  }
 }
 
 @media (min-width: 1200px) {
@@ -691,7 +717,7 @@ html, body {
 
 .editorial-outcomes-section {
   padding: clamp(88px, 10vw, 136px) 0;
-  background: #151412;
+  background: var(--color-bg);
 }
 
 .editorial-tags {

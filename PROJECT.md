@@ -26,6 +26,8 @@ Four prototypes are vendored under `public/proto/` (`custom-fields`, `swipey-adm
 - 2026-08-18 — **Carousel fidelity takes precedence over transform-led enlargement.** The active card renders at its final dimensions rather than scaling a composited layer; carousel images use their original source so screen captures and the card typography remain crisp.
 - 2026-08-18 — **The homepage browser title is dashboard-editable.** `home.browserTitle` supplies the root page metadata; the layout remains the sole owner of the `| Pramit Ranjan` suffix.
 - 2026-08-18 — **Dashboard value fields carry an inline visual preview.** Reuse the shared `Field` primitive: color values show swatches, typography values show type, and measure values show proportional markers beside their editable value.
+- 2026-08-18 — **Swipey keeps one visual canvas from hub to story.** Its large-screen card grid uses the same full-width shell as its hero, and editorial outcomes inherit the active page background rather than introducing a hard-coded second dark tone.
+- 2026-08-18 — **Deployed case-study apps own a responsive live canvas.** The shared external iframe host supplies a viewport-height-aware frame; local Swipey prototypes retain their separate measured scaler.
 - 2026-07-24 — **Swipey prototypes are vendored static files.** Existing iframe support is reused; no new content schema or routes are needed.
 - 2026-07-24 — **Swipey stories stay hidden until sign-off.** Static prototype assets are publicly addressable even when content entries are hidden.
 - 2026-07-24 — **Swipey uses one umbrella hub with modal stories.** It remains one `/work` entry rather than three sibling pages.
