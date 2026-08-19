@@ -2,7 +2,9 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { AnimatedEyebrow } from '@/components/AnimatedEyebrow'
 import { useSiteCopy } from '@/components/SiteCopyProvider'
+import type { PhotographyCity } from '@/lib/site-content-schema'
 
 const FRAME_W = 124
 const FRAME_H = 268
@@ -10,45 +12,51 @@ const SIDE_PAD = 12
 const FRAME_GAP = 5
 const HOLE_COUNT = 26
 
-const frames = [
-  { label: 'KL · 001',  href: '/play/photography/kl',        cover: '/creative/photography/kl/41.jpg' },
-  { label: 'KL · 002',  href: '/play/photography/kl',        cover: '/creative/photography/kl/12.jpg' },
-  { label: 'PG · 003',  href: '/play/photography/penang',    cover: '/creative/photography/penang/07.jpg' },
-  { label: 'SG · 004',  href: '/play/photography/singapore', cover: '/creative/photography/singapore/03.jpg' },
-  { label: 'HCM · 001', href: '/play/photography/hcmc',      cover: '/creative/photography/hcmc/01.jpg' },
-]
+/* One frame per city, numbered in order. The covers and routes were previously written out
+   again here, so adding a city updated /play but never this strip. */
+function buildFrames(cities: PhotographyCity[]) {
+  let frame = 0
+  return cities.flatMap((city) =>
+    (city.stripCovers ?? (city.cover ? [city.cover] : [])).map((cover) => {
+      frame += 1
+      return {
+        label: `${city.shortCode ?? city.title.toUpperCase()} · ${String(frame).padStart(3, '0')}`,
+        href: `/play/photography/${city.slug}`,
+        cover,
+      }
+    })
+  )
+}
 
 function Holes() {
   return (
     <div className="flex" style={{ gap: '14px', padding: `0 ${SIDE_PAD}px` }}>
       {Array.from({ length: HOLE_COUNT }).map((_, i) => (
-        <div key={i} className="flex-shrink-0" style={{ width: '10px', height: '7px', backgroundColor: '#0d0d0d', border: '1px solid #1f1f1f', borderRadius: '2px' }} />
+        <div key={i} className="flex-shrink-0" style={{ width: '10px', height: '7px', backgroundColor: 'var(--color-bg)', border: '1px solid var(--color-divider)', borderRadius: '2px' }} />
       ))}
     </div>
   )
 }
 
-export function PhotographyStage() {
+export function PhotographyStage({ cities }: { cities: PhotographyCity[] }) {
   const copy = useSiteCopy().home
+  const frames = buildFrames(cities)
 
   return (
     <section className="photography-section" style={{
-      borderTop: '1px solid #1f1f1f',
-      borderBottom: '1px solid #1f1f1f',
+      borderTop: '1px solid var(--color-divider)',
+      borderBottom: '1px solid var(--color-divider)',
       display: 'grid',
       gridTemplateColumns: '1fr 1fr',
       minHeight: '480px',
       alignItems: 'stretch',
-      padding: 'var(--layout-hero-padding-y) var(--layout-page-gutter)',
+      padding: 'var(--layout-section-padding-y) var(--layout-page-gutter)',
       gap: '56px',
     }}>
       {/* Text left */}
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
         <div>
-          <div className="flex items-center" style={{ gap: '10px', marginBottom: '22px' }}>
-            <div style={{ width: '32px', height: '1px', backgroundColor: 'var(--color-red)' }} />
-            <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: 'var(--color-red)' }}>{copy.photographyEyebrow}</span>
-          </div>
+          <AnimatedEyebrow label={copy.photographyEyebrow} marginBottom="22px" />
           <h2
             className="font-serif"
             style={{ fontSize: 'var(--text-h2)', fontWeight: 'var(--font-weight-serif)', fontStyle: 'italic', color: 'var(--color-heading)', lineHeight: 1.1, marginBottom: '24px' }}
@@ -78,7 +86,7 @@ export function PhotographyStage() {
           <div className="flex" style={{ gap: `${FRAME_GAP}px`, padding: `8px ${SIDE_PAD}px` }}>
             {frames.map((frame) => (
               <Link key={frame.label} href={frame.href} className="portfolio-card flex-shrink-0" style={{ display: 'block' }}>
-                <div style={{ position: 'relative', width: `${FRAME_W}px`, height: `${FRAME_H}px`, backgroundColor: '#161616', border: '1px solid #222222', overflow: 'hidden' }}>
+                <div style={{ position: 'relative', width: `${FRAME_W}px`, height: `${FRAME_H}px`, backgroundColor: 'var(--color-placeholder)', border: '1px solid #222222', overflow: 'hidden' }}>
                   <Image
                     src={frame.cover}
                     alt={frame.label}

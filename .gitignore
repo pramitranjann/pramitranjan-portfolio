@@ -50,3 +50,6 @@ graphify-out/
 
 # Local backups of config files (settings.json.bak etc) — never useful to anyone else.
 *.bak
+
+# Design labs — local-only prototypes. Never deployed; see PROJECT.md.
+/app/lab/

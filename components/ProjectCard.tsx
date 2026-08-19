@@ -71,9 +71,25 @@ export function ProjectCard({
     height: '100%',
   }
 
+  /* The description absorbs the card's leftover height so the CTA row always lands on the
+     bottom edge, and reserves two lines so a short one-liner cannot pull it up. Cards in a
+     row are the same height, so every CTA and tag line agrees across the grid. */
+  const descriptionStyle = {
+    fontSize: bodySize ?? 'var(--text-meta)',
+    color: 'var(--color-body)',
+    lineHeight: 1.6,
+    marginTop: '6px',
+    flex: '1 1 auto',
+    minHeight: '2lh',
+    display: '-webkit-box',
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: 'vertical' as const,
+    overflow: 'hidden',
+  }
+
   const inner =
     variant === 'supporting' ? (
-      <div className="portfolio-card" style={cardBase}>
+      <div className="portfolio-card" style={{ ...cardBase, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <div
           className="work-card-image"
           style={{
@@ -85,6 +101,7 @@ export function ProjectCard({
             border: `${imageBorderWidth ?? '1px'} solid ${imageBorderColor ?? '#333333'}`,
             marginBottom: '12px',
             overflow: 'hidden',
+            flex: '0 0 auto',
           }}
         >
           {cardImages.length ? (
@@ -105,12 +122,16 @@ export function ProjectCard({
             </div>
           )}
         </div>
-        <div className="font-serif" style={{ fontSize: titleSize ?? 'var(--text-body)', color: 'var(--color-heading)' }}>
+        <div className="font-serif" style={{ fontSize: titleSize ?? 'var(--text-body)', color: 'var(--color-heading)', flex: '0 0 auto' }}>
           <span className="card-title-inner">{title}</span>
         </div>
-        <div className="font-mono" style={{ fontSize: metaSize ?? 'var(--text-meta)', color: 'var(--color-body)', marginTop: '4px', letterSpacing: '0.1em' }}>{category}</div>
-        <div className="font-mono" style={{ fontSize: metaSize ?? 'var(--text-meta)', color: 'var(--color-red)', letterSpacing: '0.1em', marginTop: '8px' }}>
-          <span className="card-cta-inner">VIEW</span> <span className="arrow-nudge">→</span>
+        <p className="font-reading" style={descriptionStyle}>{oneliner}</p>
+        {/* CTA left, tags hard right — one row of chrome at the foot of the card. */}
+        <div className="flex items-baseline justify-between" style={{ gap: '12px', marginTop: '10px', flex: '0 0 auto' }}>
+          <span className="font-mono" style={{ fontSize: metaSize ?? 'var(--text-meta)', color: comingSoon ? 'var(--color-body)' : 'var(--color-red)', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>
+            {comingSoon ? 'COMING SOON' : <><span className="card-cta-inner">VIEW</span> <span className="arrow-nudge">→</span></>}
+          </span>
+          <span className="font-mono" style={{ fontSize: metaSize ?? 'var(--text-meta)', color: 'var(--color-label)', letterSpacing: '0.1em', textAlign: 'right' }}>{category}</span>
         </div>
         {!comingSoon && (
           <div className="pcard-hover" aria-hidden="true" style={{ padding: cardPadding ?? '16px' }}>

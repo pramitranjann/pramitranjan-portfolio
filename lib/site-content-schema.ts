@@ -73,6 +73,12 @@ export interface PhotographyCity {
   slug: string
   title: string
   desc: string
+  /* Card meta line, same "MEDIUM · YEAR" shape as CaseStudyContent.type */
+  type?: string
+  /* Abbreviation for the homepage film strip's frame labels; falls back to the title */
+  shortCode?: string
+  /* Covers this city contributes to the homepage film strip; falls back to [cover] */
+  stripCovers?: string[]
   cover: string
   previewImages?: string[]
   imagePosition?: string

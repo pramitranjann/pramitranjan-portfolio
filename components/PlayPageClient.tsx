@@ -2,10 +2,10 @@
 
 import { useEffect, useRef } from 'react'
 import { Footer } from '@/components/Footer'
-import { GsapReveal } from '@/components/GsapReveal'
 import { useMotionSettings } from '@/components/MotionSettingsProvider'
 import { useSiteCopy } from '@/components/SiteCopyProvider'
 import { Nav } from '@/components/Nav'
+import { PageHero } from '@/components/PageHero'
 import { CreativeListingCard } from '@/components/CreativeListingCard'
 import { PlayCard } from '@/components/PlayCard'
 import type { CaseStudyContent, HoverPreviewSettings, PhotographyCardStyleSettings, PhotographyCity } from '@/lib/site-content-schema'
@@ -13,13 +13,27 @@ import { getCaseStudyPreviewImages, mergePreviewImages } from '@/lib/preview-ima
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-function SectionHeader({ label, count }: { label: string; count: string }) {
-  return (
-    <div className="flex items-center justify-between" style={{ marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid #1f1f1f' }}>
-      <span className="font-mono" style={{ fontSize: 'var(--text-body)', letterSpacing: '0.14em', color: 'var(--color-heading)' }}>{label}</span>
-      <span className="font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.16em', color: 'var(--color-red)' }}>{count}</span>
-    </div>
-  )
+type PlayItem =
+  | { key: string; medium: 'game'; game: CaseStudyContent }
+  | { key: string; medium: 'photo'; city: PhotographyCity }
+  | { key: string; medium: 'mixed'; project: CaseStudyContent }
+
+/* A curated order rather than an algorithm — every row is meant to carry more than one
+   medium. Anything the recipe does not name is appended, so new content still shows up. */
+function buildWall({ games, cities, mixedMediaProjects }: { games: CaseStudyContent[]; cities: PhotographyCity[]; mixedMediaProjects: CaseStudyContent[] }) {
+  const g = games.map<PlayItem>((game) => ({ key: `game-${game.slug}`, medium: 'game', game }))
+  const p = cities.map<PlayItem>((city) => ({ key: `photo-${city.slug}`, medium: 'photo', city }))
+  const m = mixedMediaProjects.map<PlayItem>((project) => ({ key: `mixed-${project.slug}`, medium: 'mixed', project }))
+
+  const seq: PlayItem[] = []
+  for (const item of [g[0], p[0], m[0], p[1], g[1], p[2], m[1], p[3]]) {
+    if (item) seq.push(item)
+  }
+  const used = new Set(seq.map((item) => item.key))
+  for (const item of [...g, ...p, ...m]) {
+    if (!used.has(item.key)) seq.push(item)
+  }
+  return seq
 }
 
 export function PlayPageClient({
@@ -35,34 +49,15 @@ export function PlayPageClient({
   cardStyle: PhotographyCardStyleSettings
   hoverPreviewSettings: HoverPreviewSettings
 }) {
-  const eyebrowRef = useRef<HTMLDivElement>(null)
-  const gameGridRef = useRef<HTMLDivElement>(null)
-  const photoGridRef = useRef<HTMLDivElement>(null)
-  const mixedGridRef = useRef<HTMLDivElement>(null)
+  const wallRef = useRef<HTMLDivElement>(null)
   const motion = useMotionSettings()
   const copy = useSiteCopy().creativePage
   const gameCtaLabel = useSiteCopy().playPage.cardCtaLabel
 
   useEffect(() => {
-    const el = eyebrowRef.current
-    if (!el) return
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          el.classList.add('eyebrow-animate')
-          observer.disconnect()
-        }
-      },
-      { threshold: 0.1 }
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
-
-  useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const grids = [gameGridRef.current, photoGridRef.current, mixedGridRef.current].filter((grid): grid is HTMLDivElement => grid !== null)
+    const grids = [wallRef.current].filter((grid): grid is HTMLDivElement => grid !== null)
 
     if (reduced) {
       const contexts = grids.map((grid) => gsap.context(() => {
@@ -90,100 +85,69 @@ export function PlayPageClient({
     return () => contexts.forEach((context) => context.revert())
   }, [motion.gridRevealDuration, motion.gridRevealStagger, motion.gridStartScale])
 
+  const wall = buildWall({ games, cities, mixedMediaProjects })
+
   return (
     <>
       <Nav />
       <main style={{ paddingTop: '57px' }}>
-        <section className="creative-hero-section border-b border-divider" style={{ padding: 'var(--layout-hero-padding-y) var(--layout-page-gutter)' }}>
-          <div ref={eyebrowRef} className="flex items-center" style={{ gap: '10px', marginBottom: '24px' }}>
-            <div className="eyebrow-line" style={{ width: '32px', height: '1px', backgroundColor: 'var(--color-red)' }} />
-            <span className="eyebrow-label font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: 'var(--color-red)' }}>{copy.eyebrow}</span>
-          </div>
-          <GsapReveal>
-            <h1 data-reveal className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 'var(--font-weight-serif)', color: 'var(--color-heading)', lineHeight: 1.05, marginBottom: '20px' }}>
-              {copy.heroTitle}
-            </h1>
-            <p data-reveal className="font-reading" style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: 'var(--color-heading)', lineHeight: 1.9, maxWidth: '480px' }}>
-              {copy.heroBody}
-            </p>
-          </GsapReveal>
-        </section>
+        <PageHero eyebrow={copy.eyebrow} title={copy.heroTitle} body={copy.heroBody} sectionClassName="creative-hero-section" variant="compact" />
 
-        {games.length > 0 && (
-          <section className="creative-section border-b border-divider" style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter)' }}>
-            <SectionHeader label={copy.interactiveLabel} count={copy.interactiveCount} />
-            <div ref={gameGridRef} className="grid play-card-grid" style={{ gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 'var(--layout-card-gap)' }}>
-              {games.map((game, index) => (
+        {/* One wall, no chapters. Medium is carried by each card's own meta line. */}
+        <div ref={wallRef} className="play-wall">
+          {wall.map((item, index) => (
+            <div key={item.key} className="play-wall-item" data-medium={item.medium}>
+              {item.medium === 'game' ? (
                 <PlayCard
-                  key={game.slug}
-                  title={game.title}
-                  oneliner={game.oneliner}
-                  type={game.type}
-                  href={`/play/${game.slug}`}
-                  images={mergePreviewImages(game.heroImage, getCaseStudyPreviewImages(game))}
+                  title={item.game.title}
+                  oneliner={item.game.oneliner}
+                  type={item.game.type}
+                  href={`/play/${item.game.slug}`}
+                  images={mergePreviewImages(item.game.heroImage, getCaseStudyPreviewImages(item.game))}
                   ctaLabel={gameCtaLabel}
                   hoverPreviewSettings={hoverPreviewSettings}
-                  priorityImage={index < 2}
+                  priorityImage={index < 4}
                 />
-              ))}
+              ) : item.medium === 'photo' ? (
+                <CreativeListingCard
+                  title={item.city.title}
+                  desc={item.city.desc}
+                  tag={item.city.type}
+                  href={item.city.comingSoon ? undefined : `/play/photography/${item.city.slug}`}
+                  cover={item.city.cover}
+                  previewImages={item.city.previewImages}
+                  comingSoon={item.city.comingSoon}
+                  imagePosition={item.city.imagePosition ?? 'center'}
+                  imageScale={item.city.imageScale}
+                  hoverImagePosition={item.city.hoverImagePosition}
+                  hoverImageScale={item.city.hoverImageScale}
+                  cardStyle={cardStyle}
+                  hoverPreviewSettings={hoverPreviewSettings}
+                  priorityImage={index < 4}
+                  sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 25vw"
+                />
+              ) : (
+                <CreativeListingCard
+                  title={item.project.title}
+                  desc={item.project.oneliner}
+                  tag={item.project.type}
+                  href={`/play/mixed-media/${item.project.slug}`}
+                  cover={item.project.heroImage}
+                  previewImages={getCaseStudyPreviewImages(item.project)}
+                  comingSoon={!item.project.heroImage}
+                  imagePosition={item.project.cardImagePosition ?? 'center'}
+                  imageScale={item.project.cardImageScale}
+                  hoverImagePosition={item.project.cardHoverImagePosition}
+                  hoverImageScale={item.project.cardHoverImageScale}
+                  cardStyle={cardStyle}
+                  hoverPreviewSettings={hoverPreviewSettings}
+                  priorityImage={index < 4}
+                  sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 25vw"
+                />
+              )}
             </div>
-          </section>
-        )}
-
-        <section className="creative-section border-b border-divider" style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter)' }}>
-          <SectionHeader label={copy.photographyLabel} count={copy.photographyCount} />
-          <div ref={photoGridRef} className="grid grid-cols-2 md:grid-cols-4" style={{ gap: 'var(--layout-card-gap)' }}>
-            {cities.map((city, index) => (
-              <CreativeListingCard
-                key={city.slug}
-                title={city.title}
-                desc={city.desc}
-                href={city.comingSoon ? undefined : `/play/photography/${city.slug}`}
-                cover={city.cover}
-                previewImages={city.previewImages}
-                comingSoon={city.comingSoon}
-                imagePosition={city.imagePosition ?? 'center'}
-                imageScale={city.imageScale}
-                hoverImagePosition={city.hoverImagePosition}
-                hoverImageScale={city.hoverImageScale}
-                cardStyle={cardStyle}
-                hoverPreviewSettings={hoverPreviewSettings}
-                priorityImage={index < 4}
-              />
-            ))}
-          </div>
-        </section>
-
-        <section className="creative-section border-b border-divider" style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter)' }}>
-          <SectionHeader label={copy.mixedMediaLabel} count={copy.mixedMediaCount} />
-          {/* Columns follow the published count so the row always fills the width —
-              with only two projects live, a fixed 3-up left a hole on the right. */}
-          <div
-            ref={mixedGridRef}
-            className="grid play-card-grid"
-            style={{ gridTemplateColumns: `repeat(${Math.min(mixedMediaProjects.length, 3)}, minmax(0, 1fr))`, gap: 'var(--layout-card-gap)' }}
-          >
-            {mixedMediaProjects.map((project, index) => (
-              <CreativeListingCard
-                key={project.slug}
-                title={project.title}
-                desc={project.oneliner}
-                tag={project.type}
-                href={`/play/mixed-media/${project.slug}`}
-                cover={project.heroImage}
-                previewImages={getCaseStudyPreviewImages(project)}
-                imagePosition={project.cardImagePosition ?? 'center'}
-                imageScale={project.cardImageScale}
-                hoverImagePosition={project.cardHoverImagePosition}
-                hoverImageScale={project.cardHoverImageScale}
-                cardStyle={cardStyle}
-                hoverPreviewSettings={hoverPreviewSettings}
-                priorityImage={index < 3}
-                sizes="(max-width: 767px) 100vw, 50vw"
-              />
-            ))}
-          </div>
-        </section>
+          ))}
+        </div>
       </main>
       <Footer />
     </>

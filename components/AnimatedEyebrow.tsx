@@ -33,7 +33,6 @@ export function AnimatedEyebrow({
 
   return (
     <div ref={eyebrowRef} className="flex items-center" style={{ gap: '10px', marginBottom }}>
-      <div className="eyebrow-line" style={{ width: '32px', height: '1px', backgroundColor: color }} />
       <span className="eyebrow-label font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color }}>
         {label}
       </span>

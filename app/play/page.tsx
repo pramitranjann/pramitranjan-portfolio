@@ -55,7 +55,7 @@ export default async function PlayPage() {
 
   return (
     <PlayPageClient
-      games={content.caseStudies.filter((item) => item.section === 'play')}
+      games={content.caseStudies.filter((item) => item.section === 'play' && !item.hidden)}
       cities={cities}
       mixedMediaProjects={content.caseStudies.filter((item) => item.section === 'mixed-media')}
       cardStyle={content.design.photographyCards}

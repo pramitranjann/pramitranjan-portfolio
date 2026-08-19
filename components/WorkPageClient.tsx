@@ -2,10 +2,10 @@
 
 import { useEffect, useRef } from 'react'
 import { Footer } from '@/components/Footer'
-import { GsapReveal } from '@/components/GsapReveal'
 import { useMotionSettings } from '@/components/MotionSettingsProvider'
 import { useSiteCopy } from '@/components/SiteCopyProvider'
 import { Nav } from '@/components/Nav'
+import { PageHero } from '@/components/PageHero'
 import { ProjectCard } from '@/components/ProjectCard'
 import type { CardStyleSettings, HoverPreviewSettings, WorkProject } from '@/lib/site-content-schema'
 import gsap from 'gsap'
@@ -24,26 +24,9 @@ export function WorkPageClient({
   cardStyle: CardStyleSettings
   hoverPreviewSettings: HoverPreviewSettings
 }) {
-  const eyebrowRef = useRef<HTMLDivElement>(null)
   const gridRef = useRef<HTMLDivElement>(null)
   const motion = useMotionSettings()
   const copy = useSiteCopy().workPage
-
-  useEffect(() => {
-    const el = eyebrowRef.current
-    if (!el) return
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          el.classList.add('eyebrow-animate')
-          observer.disconnect()
-        }
-      },
-      { threshold: 0.1 }
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
@@ -80,20 +63,7 @@ export function WorkPageClient({
     <>
       <Nav />
       <main style={{ paddingTop: '57px' }}>
-        <section className="work-hero-section border-b border-divider" style={{ padding: 'var(--layout-hero-padding-y) var(--layout-page-gutter)' }}>
-          <div ref={eyebrowRef} className="flex items-center" style={{ gap: '10px', marginBottom: '24px' }}>
-            <div className="eyebrow-line" style={{ width: '32px', height: '1px', backgroundColor: 'var(--color-red)' }} />
-            <span className="eyebrow-label font-mono" style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: 'var(--color-red)' }}>{copy.eyebrow}</span>
-          </div>
-          <GsapReveal>
-            <h1 data-reveal className="font-serif" style={{ fontSize: 'var(--text-h1)', fontWeight: 'var(--font-weight-serif)', color: 'var(--color-heading)', lineHeight: 1.05, marginBottom: '20px' }}>
-              {heroTitle}
-            </h1>
-            <p data-reveal className="font-reading" style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: 'var(--color-heading)', lineHeight: 1.9, maxWidth: '480px' }}>
-              {heroBody}
-            </p>
-          </GsapReveal>
-        </section>
+        <PageHero eyebrow={copy.eyebrow} title={heroTitle} body={heroBody} sectionClassName="work-hero-section" variant="compact" />
 
         <section className="work-grid-section work-grid-phone-contain" style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter)' }}>
           <div ref={gridRef} className="grid grid-cols-2 md:grid-cols-4" style={{ gap: 'var(--layout-card-gap)' }}>

@@ -2,6 +2,7 @@
 import { useEffect, useRef } from 'react'
 import { useMotionSettings } from '@/components/MotionSettingsProvider'
 import { useSiteCopy } from '@/components/SiteCopyProvider'
+import { AnimatedEyebrow } from '@/components/AnimatedEyebrow'
 import Link from 'next/link'
 import { SpotifyWidget } from '@/components/SpotifyWidget'
 import type { ListeningCardStyleSettings } from '@/lib/site-content-schema'
@@ -40,16 +41,10 @@ export function About({
     <section
       ref={secRef}
       className="about-section"
-      style={{ padding: 'var(--layout-compact-section-padding-y) var(--layout-page-gutter)', display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) auto', alignItems: 'center', gap: '48px' }}
+      style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter)', display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) auto', alignItems: 'stretch', gap: 'var(--about-aside-gap, 48px)' }}
     >
       <div style={{ minWidth: 0 }}>
-        {/* WCAG AA: #666 on #0d0d0d = 3.1:1 — decorative label, large enough */}
-        <div
-          className="font-mono"
-          style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.18em', color: 'var(--color-label)', marginBottom: '16px' }}
-        >
-          {copy.aboutEyebrow}
-        </div>
+        <AnimatedEyebrow label={copy.aboutEyebrow} marginBottom="16px" />
 
         <h2
           className="reveal-text font-serif"
@@ -73,17 +68,26 @@ export function About({
         </p>
       </div>
 
-      <div style={{ display: 'grid', alignSelf: 'stretch', minWidth: '250px' }}>
+      <div
+        className="about-aside"
+        style={{
+          display: 'grid',
+          alignSelf: 'stretch',
+          alignContent: 'space-between',
+          gap: 'var(--about-aside-stack-gap, 14px)',
+          minWidth: 'var(--about-aside-width, 250px)',
+        }}
+      >
+        <div className="reveal-text" style={{ transform: 'translateY(var(--about-widget-nudge, 0px))' }}>
+          <SpotifyWidget variant="sidebar" restingLabel={spotifyLabel.replace(/_+$/, '')} styleSettings={listeningStyle} interactionMode="hover-expand" />
+        </div>
         <Link
           href="/about"
           className="font-mono about-read-more-desktop"
-          style={{ fontSize: 'var(--text-meta)', color: 'var(--color-red)', letterSpacing: '0.12em', textDecoration: 'none', whiteSpace: 'nowrap', justifySelf: 'end', marginBottom: '14px' }}
+          style={{ fontSize: 'var(--text-meta)', color: 'var(--color-red)', letterSpacing: '0.12em', textDecoration: 'none', whiteSpace: 'nowrap', justifySelf: 'var(--about-link-justify, end)', transform: 'translateY(var(--about-link-nudge, 0px))' }}
         >
           {copy.aboutReadMoreLabel}
         </Link>
-        <div className="reveal-text" style={{ alignSelf: 'center', minWidth: '250px' }}>
-          <SpotifyWidget variant="sidebar" restingLabel={spotifyLabel.replace(/_+$/, '')} styleSettings={listeningStyle} interactionMode="hover-expand" />
-        </div>
       </div>
     </section>
   )

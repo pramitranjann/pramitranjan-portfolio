@@ -42,7 +42,7 @@ export default async function HomePage() {
             hoverPreviewSettings={content.design.hoverPreviews}
           />
         </div>
-        <PhotographyStage />
+        <PhotographyStage cities={content.photography.cities} />
         <About
           body={content.home.about.body}
           spotifyLabel={content.home.about.spotifyLabel}

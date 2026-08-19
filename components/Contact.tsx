@@ -28,7 +28,7 @@ export function Contact() {
   return (
     <section
       ref={secRef}
-      style={{ borderTop: '1px solid #1f1f1f', padding: 'var(--layout-compact-section-padding-y) var(--layout-page-gutter)', textAlign: 'center' }}
+      style={{ borderTop: '1px solid #1f1f1f', padding: 'var(--layout-section-padding-y) var(--layout-page-gutter)', textAlign: 'center' }}
     >
       <div
         className="reveal-text font-serif italic"

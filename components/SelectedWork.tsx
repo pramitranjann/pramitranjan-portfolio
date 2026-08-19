@@ -1,6 +1,8 @@
 'use client'
 import { useEffect, useRef } from 'react'
+import { AnimatedEyebrow } from '@/components/AnimatedEyebrow'
 import { useMotionSettings } from '@/components/MotionSettingsProvider'
+import { useSiteCopy } from '@/components/SiteCopyProvider'
 import { ProjectCard } from './ProjectCard'
 import type { CardStyleSettings, HomeSection, HoverPreviewSettings } from '@/lib/site-content-schema'
 
@@ -15,6 +17,7 @@ export function SelectedWork({
 }) {
   const gridRef = useRef<HTMLDivElement>(null)
   const motion = useMotionSettings()
+  const workEyebrow = useSiteCopy().workPage.eyebrow
 
   useEffect(() => {
     const grid = gridRef.current
@@ -36,15 +39,16 @@ export function SelectedWork({
   return (
     <section>
       <div style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter) 24px' }}>
+        <AnimatedEyebrow label={workEyebrow} />
         <h2
           className="font-serif"
-          style={{ fontSize: 'var(--text-h2)', fontWeight: 'var(--font-weight-serif)', color: 'var(--color-red)', lineHeight: 1.1, marginBottom: '12px' }}
+          style={{ fontSize: 'var(--text-h1)', fontWeight: 'var(--font-weight-serif)', color: 'var(--color-heading)', lineHeight: 1.05, marginBottom: '20px' }}
         >
-          {content.heading}
+          {content.heading.trim()}
         </h2>
         <p
           className="font-reading"
-          style={{ fontSize: 'var(--text-body)', letterSpacing: '0.04em', color: 'var(--color-heading)', lineHeight: 1.7, maxWidth: '480px' }}
+          style={{ fontSize: 'var(--text-body-lg)', letterSpacing: '0.04em', color: 'var(--color-heading)', lineHeight: 1.9, maxWidth: '480px' }}
         >
           {content.body}
         </p>
