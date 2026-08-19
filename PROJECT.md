@@ -80,6 +80,7 @@ Four prototypes are vendored under `public/proto/` (`custom-fields`, `swipey-adm
 - Scale embedded iframes with `transform`, never `zoom`; Safari applies `zoom` to the iframe's internal viewport.
 - `GsapReveal` observes window scroll, not the modal scroll container; framed stories force reveal nodes visible in `globals.css`.
 - Graphify excludes `public/proto/**`; indexing vendored bundles floods the graph.
+- **A dashboard tab left open across a code push republishes stale content on the next "Publish."** It's a full-document editor with no reload-before-save — every publish overwrites `content/site-content.json` from whatever it loaded, silently dropping any field added by a git commit since. Happened twice this session: a `git push` rejection from a mid-session publish, then (2026-08-19) a second publish that reverted the Swipey tag fix and stripped `photography.cities[].type/shortCode/stripCovers` because the open tab predated the commit that added them — recovered by diffing against the merge base and re-adding the missing fields by hand. If a push is rejected with unfamiliar remote commits, diff against the merge base before merging — don't assume the remote side is empty of surprises.
 
 ## Next action
 Fix any further phone-view regressions Pramit finds on the newly-ported `/about`, `/play`, `/work` pages; otherwise idle until he flags something.
