@@ -2050,12 +2050,13 @@ body.carousel-reengaging main {
   gap: 14px;
 }
 
+/* One 3:4 frame for every slide, so the block never changes height mid-rotation.
+   Signed-off width: 450px. */
 .about-portrait {
   width: 100%;
-  max-width: 390px;
-  aspect-ratio: 4 / 5;
+  max-width: 450px;
+  aspect-ratio: 3 / 4;
   background: var(--color-placeholder);
-  border: 1px solid var(--color-divider);
   display: grid;
   overflow: hidden;
 }
@@ -2079,10 +2080,34 @@ body.carousel-reengaging main {
   object-fit: cover;
 }
 
-.about-portrait-slide > span {
+/* Caption left, dots right, the two vertically centered on each other. */
+.about-portrait-foot {
+  width: 100%;
+  max-width: 450px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.about-portrait-caption {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.about-portrait-caption > span:first-child {
   font-size: var(--text-meta);
-  letter-spacing: 0.16em;
-  color: var(--color-meta);
+  letter-spacing: 0.02em;
+  color: var(--color-heading);
+  line-height: 1.5;
+}
+
+.about-portrait-caption > span:last-child {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--color-label);
 }
 
 /* Rows — experience and education share one shape */

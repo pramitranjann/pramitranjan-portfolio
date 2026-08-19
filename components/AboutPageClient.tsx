@@ -3,9 +3,14 @@
 import { useEffect, useState } from 'react'
 import type { EntryItem, LinkItem } from '@/lib/site-content-schema'
 
-/* Drop file paths in here (e.g. '/about/portrait-01.jpg' for public/about/portrait-01.jpg)
-   and the placeholders are replaced automatically. Any count works. */
-const PORTRAIT_IMAGES: string[] = []
+/* 01–03 and the new BBQ shot are 3:4 (or near it); 04 is 9:16 and needs the crop control
+   below so it matches the shared frame instead of forcing every slide to its own aspect. */
+const PORTRAITS: Array<{ src: string; caption: string; meta: string }> = [
+  { src: '/about/portrait-01.jpg', caption: 'My first time being on a film set.', meta: 'MAY 2026' },
+  { src: '/about/portrait-02.jpg', caption: 'The banchan spread I always order.', meta: 'MAY 2026' },
+  { src: '/about/portrait-03.jpg', caption: 'A photo from my recent travels to Vietnam.', meta: 'JUL 2026' },
+  { src: '/about/portrait-04.jpg', caption: 'My first snow in Savannah.', meta: 'JAN 2026' },
+]
 
 type NowCard = { label: string; value: string; sub: string; art?: string | null }
 
@@ -121,21 +126,33 @@ function RightNow({ cards }: { cards: NowCard[] }) {
   )
 }
 
-/* Slots, not decoration — real photos replace the placeholders with no layout change. */
+/* One 3:4 frame for every slide, so the block never changes height mid-rotation. Only
+   photo 04 (9:16) needs the crop control — the rest are already 3:4 and it does nothing
+   to them. */
 function PortraitCarousel() {
-  const slides = PORTRAIT_IMAGES.length ? PORTRAIT_IMAGES : ['', '', '']
-  const [index, setIndex] = useCycle(slides.length, 3600)
+  const [index, setIndex] = useCycle(PORTRAITS.length, 3600)
+  const current = PORTRAITS[index]
 
   return (
     <figure className="about-portrait-figure">
       <div className="about-portrait">
-        {slides.map((src, i) => (
-          <div key={src || i} className="about-portrait-slide" data-active={i === index}>
-            {src ? <img src={src} alt="" /> : <span className="font-mono">PORTRAIT {String(i + 1).padStart(2, '0')}</span>}
+        {PORTRAITS.map((portrait, i) => (
+          <div key={portrait.src} className="about-portrait-slide" data-active={i === index}>
+            <img
+              src={portrait.src}
+              alt={portrait.caption}
+              style={i === 3 ? { objectPosition: '50% 50%' } : undefined}
+            />
           </div>
         ))}
       </div>
-      <Dots count={slides.length} active={index} onPick={setIndex} label="Portrait" />
+      <div className="about-portrait-foot">
+        <figcaption className="about-portrait-caption">
+          <span className="font-reading">{current.caption}</span>
+          <span className="font-mono">{current.meta}</span>
+        </figcaption>
+        <Dots count={PORTRAITS.length} active={index} onPick={setIndex} label="Portrait" />
+      </div>
     </figure>
   )
 }
