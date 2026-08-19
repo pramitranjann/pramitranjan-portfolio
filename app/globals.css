@@ -1994,13 +1994,6 @@ body.carousel-reengaging main {
   line-height: 1.6;
 }
 
-.about-now-caption {
-  font-size: var(--text-meta);
-  letter-spacing: 0.02em;
-  color: var(--color-label);
-  margin-top: 10px;
-}
-
 .about-dots {
   display: flex;
   gap: 4px;

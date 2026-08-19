@@ -17,7 +17,6 @@ interface AboutPageClientProps {
   professionalActivities: EntryItem[]
   tools: string[]
   nowCards: NowCard[]
-  nowDescription: string
   contactTitleHtml: string
   contactBody: string
   contactLinks: LinkItem[]
@@ -94,7 +93,7 @@ function Dots({ count, active, onPick, label }: { count: number; active: number;
 
 /* Slides share one grid cell, so the block's height is the tallest card's and never jumps
    mid-rotation — the subs differ a lot in length. */
-function RightNow({ cards, description }: { cards: NowCard[]; description: string }) {
+function RightNow({ cards }: { cards: NowCard[] }) {
   const nowPlaying = useNowPlaying()
   const slides = nowPlaying ? [...cards, nowPlaying] : cards
   const [index, setIndex] = useCycle(slides.length, 4200)
@@ -118,7 +117,6 @@ function RightNow({ cards, description }: { cards: NowCard[]; description: strin
         ))}
       </div>
       <Dots count={slides.length} active={index} onPick={setIndex} label="Right now" />
-      <p className="font-mono about-now-caption">{description}</p>
     </div>
   )
 }
@@ -191,7 +189,6 @@ export function AboutPageClient({
   professionalActivities,
   tools,
   nowCards,
-  nowDescription,
   contactTitleHtml,
   contactBody,
   contactLinks,
@@ -207,7 +204,7 @@ export function AboutPageClient({
         {tail ? <>. <span className="about-statement-accent">{tail}</span></> : null}
       </h1>
 
-      {nowCards.length ? <RightNow cards={nowCards} description={nowDescription} /> : null}
+      {nowCards.length ? <RightNow cards={nowCards} /> : null}
 
       <p className="font-reading about-body">{whoIAm}</p>
 

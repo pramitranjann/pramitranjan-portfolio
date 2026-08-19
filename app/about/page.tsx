@@ -86,7 +86,6 @@ export default async function AboutPage() {
           professionalActivities={content.aboutPage.professionalActivities}
           tools={content.aboutPage.tools}
           nowCards={content.aboutPage.nowCards}
-          nowDescription={content.aboutPage.nowDescription}
           contactTitleHtml={content.aboutPage.contactTitleHtml}
           contactBody={content.aboutPage.contactBody}
           contactLinks={content.aboutPage.contactLinks}
