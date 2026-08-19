@@ -4,8 +4,8 @@
     "heroMode": "portfolio-carousel",
     "portfolioCarousel": {
       "heading": {
-        "lead": "Hello, I'm Pramit—",
-        "emphasis": "a Product designer working at the intersection of Design & Code"
+        "lead": "Hello, I'm Pramit— a Product designer working at the ",
+        "emphasis": "intersection of Design & Code"
       },
       "items": [
         {
@@ -348,12 +348,6 @@
         "slug": "kl",
         "title": "KL",
         "desc": "Street life and quiet corners of a city in motion.",
-        "type": "PHOTOGRAPHY",
-        "shortCode": "KL",
-        "stripCovers": [
-          "/creative/photography/kl/41.jpg",
-          "/creative/photography/kl/12.jpg"
-        ],
         "cover": "/creative/photography/kl/41.jpg",
         "imagePosition": "center 34%",
         "comingSoon": false
@@ -362,8 +356,6 @@
         "slug": "penang",
         "title": "Penang",
         "desc": "Heritage streets and the texture of an older world.",
-        "type": "PHOTOGRAPHY",
-        "shortCode": "PG",
         "cover": "/creative/photography/penang/07.jpg",
         "imagePosition": "center center",
         "comingSoon": false
@@ -372,8 +364,6 @@
         "slug": "singapore",
         "title": "Singapore",
         "desc": "The duality of a city-state — dense and lush at once.",
-        "type": "PHOTOGRAPHY",
-        "shortCode": "SG",
         "cover": "/creative/photography/singapore/03.jpg",
         "comingSoon": false
       },
@@ -381,8 +371,6 @@
         "slug": "hcmc",
         "title": "Ho Chi Minh",
         "desc": "Noise, heat, and the city that never slows down.",
-        "type": "PHOTOGRAPHY",
-        "shortCode": "HCM",
         "cover": "/creative/photography/hcmc/01.jpg",
         "imagePosition": "center 42%",
         "comingSoon": false
