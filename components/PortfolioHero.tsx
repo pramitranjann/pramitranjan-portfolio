@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { animate, motion, motionValue, useReducedMotion } from 'motion/react'
 import { useRouter } from 'next/navigation'
 import type { MotionValue } from 'motion/react'
-import type { PointerEvent as ReactPointerEvent } from 'react'
+import type { CSSProperties, PointerEvent as ReactPointerEvent } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { TransitionRail } from './TransitionRail'
 import type { PortfolioCarouselContent, PortfolioCarouselItem } from '@/lib/site-content-schema'
@@ -268,7 +268,11 @@ export function PortfolioCarousel({
 
   return (
     <div className={styles.layout}>
-      <h1 id={headingId} className={`${styles.headline} font-serif`}>
+      <h1
+        id={headingId}
+        className={`${styles.headline} font-serif`}
+        style={heading.headlineSize ? ({ '--hero-headline-size': heading.headlineSize } as CSSProperties) : undefined}
+      >
         {heading.lead}<em>{heading.emphasis}</em>
       </h1>
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type TouchEvent } from 'react'
 import type { EntryItem, LinkItem } from '@/lib/site-content-schema'
 
 /* 01–03 and the new BBQ shot are 3:4 (or near it); 04 is 9:16 and needs the crop control
@@ -76,6 +76,23 @@ function useNowPlaying(): NowCard | null {
   return card
 }
 
+/* Horizontal drag beyond a small threshold advances/rewinds — reusing `setIndex` from
+   `useCycle` re-arms its auto-advance timer, same as a dot click does. */
+function useSwipe(setIndex: (updater: (i: number) => number) => void, length: number) {
+  const [startX, setStartX] = useState<number | null>(null)
+  return {
+    onTouchStart: (e: TouchEvent) => setStartX(e.touches[0].clientX),
+    onTouchEnd: (e: TouchEvent) => {
+      if (startX === null) return
+      const delta = e.changedTouches[0].clientX - startX
+      if (Math.abs(delta) > 40) {
+        setIndex((i) => (delta < 0 ? (i + 1) % length : (i - 1 + length) % length))
+      }
+      setStartX(null)
+    },
+  }
+}
+
 function Dots({ count, active, onPick, label }: { count: number; active: number; onPick: (index: number) => void; label: string }) {
   return (
     <div className="about-dots" role="tablist" aria-label={label}>
@@ -102,10 +119,11 @@ function RightNow({ cards }: { cards: NowCard[] }) {
   const nowPlaying = useNowPlaying()
   const slides = nowPlaying ? [...cards, nowPlaying] : cards
   const [index, setIndex] = useCycle(slides.length, 4200)
+  const swipe = useSwipe(setIndex, slides.length)
 
   return (
     <div className="about-now">
-      <div className="about-now-stack">
+      <div className="about-now-stack" {...swipe}>
         {slides.map((card, i) => (
           <div key={card.label} className="about-now-slide" data-active={i === index}>
             <span className="font-mono about-now-label">
@@ -132,10 +150,11 @@ function RightNow({ cards }: { cards: NowCard[] }) {
 function PortraitCarousel() {
   const [index, setIndex] = useCycle(PORTRAITS.length, 3600)
   const current = PORTRAITS[index]
+  const swipe = useSwipe(setIndex, PORTRAITS.length)
 
   return (
     <figure className="about-portrait-figure">
-      <div className="about-portrait">
+      <div className="about-portrait" {...swipe}>
         {PORTRAITS.map((portrait, i) => (
           <div key={portrait.src} className="about-portrait-slide" data-active={i === index}>
             <img
@@ -167,7 +186,7 @@ function EntryRows({ label, items }: { label: string; items: EntryItem[] }) {
       <span className="font-mono about-section-label">{cleanLabel(label)}</span>
       {items.map((item) => (
         <div key={item.org} className="about-row">
-          <div className="flex items-baseline justify-between about-row-head">
+          <div className="flex items-start justify-between about-row-head">
             <span className="font-serif about-row-title">{item.org}</span>
             <span className="font-mono about-row-date">{item.date}</span>
           </div>

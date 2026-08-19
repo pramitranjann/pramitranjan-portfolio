@@ -44,6 +44,10 @@ export interface PortfolioCarouselItem {
 export interface PortfolioCarouselHeading {
   lead: string
   emphasis: string
+  /* Any CSS font-size value (px or a clamp() expression). Falls back to the shipped
+     desktop size when unset. Only affects widths above the mobile breakpoint — the
+     mobile size is a separate safety-tuned constant, not dashboard-editable. */
+  headlineSize?: string
 }
 
 export interface PortfolioCarouselContent {
@@ -660,7 +664,7 @@ function isPortfolioCarouselItem(value: unknown): value is PortfolioCarouselItem
 function isPortfolioCarouselHeading(value: unknown): value is PortfolioCarouselHeading {
   if (!value || typeof value !== 'object') return false
   const item = value as Record<string, unknown>
-  return isString(item.lead) && isString(item.emphasis)
+  return isString(item.lead) && isString(item.emphasis) && (item.headlineSize === undefined || isString(item.headlineSize))
 }
 
 function isPortfolioCarouselContent(value: unknown): value is PortfolioCarouselContent {

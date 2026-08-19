@@ -1617,6 +1617,23 @@ function HomepageEditor({
                 style={inputStyle()}
               />
             </Field>
+            <Field label="Carousel Hero Text Size">
+              <input
+                value={content.home.portfolioCarousel.heading.headlineSize ?? ''}
+                onChange={(event) => updateSection('home', {
+                  ...content.home,
+                  portfolioCarousel: {
+                    ...content.home.portfolioCarousel,
+                    heading: { ...content.home.portfolioCarousel.heading, headlineSize: event.target.value || undefined },
+                  },
+                })}
+                placeholder="clamp(54px, 6.2vw, 94px)"
+                style={inputStyle()}
+              />
+            </Field>
+            <p className="font-mono" style={{ margin: '-4px 0 0', color: '#666666', fontSize: '10px', letterSpacing: '0.1em', lineHeight: 1.6 }}>
+              A CSS length (e.g. 72px) or clamp() expression. Applies above the mobile breakpoint only — mobile keeps its own safe size. Leave blank for the default.
+            </p>
             <PortfolioCarouselListEditor
               items={content.home.portfolioCarousel.items}
               localWriteEnabled={localWriteEnabled}

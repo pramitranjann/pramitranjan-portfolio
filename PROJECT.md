@@ -48,17 +48,15 @@ Four prototypes are vendored under `public/proto/` (`custom-fields`, `swipey-adm
 - 2026-07-24 — **Swipey stories stay hidden until sign-off.** Static prototype assets are publicly addressable even when content entries are hidden.
 - 2026-07-24 — **Swipey uses one umbrella hub with modal stories.** It remains one `/work` entry rather than three sibling pages.
 - 2026-07-24 — **Mobile uses stills for vendored prototypes.** The desktop-scale builds are unusable in a phone iframe; absolute responsive embeds keep their iframe.
+- 2026-08-19 — **A flex row head that may wrap either side uses `items-start`, not `items-baseline`.** `.about-row-head` (org title + date) used `items-baseline` with the date forced `nowrap`; on narrow phones that starves the title of width and forces it to wrap, then baseline alignment drags the date down beside the title's wrapped second line instead of staying pinned top-right. Fixed by letting the date wrap too (dropped its `nowrap`, kept `text-align: right`) and switching to `items-start` so either side can wrap without dragging the other out of position. Applies to any two-sided row head with variable-length text on both ends.
+- 2026-08-19 — **Touch swipe on the About carousels reuses `useCycle`'s `setIndex`, not a new index source.** Added `useSwipe(setIndex, length)` in `AboutPageClient.tsx`: a >40px horizontal drag advances/rewinds via the same setter dot-clicks use, so the auto-advance timer re-arms identically either way. Wired onto `.about-now-stack` and `.about-portrait`. No library — plain touchstart/touchend delta.
+- 2026-08-19 — **Homepage hero text size is dashboard-editable, desktop only.** `design.typography.heroSize` (`--text-hero`) already existed but only feeds the inactive `HeroCarousel` ('staged' mode); the live `PortfolioHero` headline had its own hardcoded `clamp(54px, 6.2vw, 94px)`, so that dashboard field did nothing for the hero Pramit actually sees. Rather than repoint the shared token (risk to the other hero) or collapse both breakpoints into one clamp (risk of a real size shift on phones), added a new optional `PortfolioCarouselHeading.headlineSize` field, wired through as a `--hero-headline-size` inline CSS var with the old clamp as its fallback — unset (the default) renders byte-identical to before. Deliberately left mobile untouched: its `clamp(40px, 10vw, 58px)` is a safety-tuned constant for the standing "mobile card ratio must keep everything visible" rule, not something this field reaches.
 
 ## Open threads
-- Hero convention undecided: `/lab/work`, `/lab/play`, and `/lab/about` can each dial the shared `PageHero`. Pramit hasn't picked whether About gains one or Work/Play lose theirs.
 - `photography.cities[].type` is seeded as bare `PHOTOGRAPHY` — the years are unknown and were deliberately not invented. Pramit owns filling them in as `PHOTOGRAPHY · YYYY`.
 - `aboutPage.nowCards` "BUILDING_" copy reads "Custom transaction Fields for Swipey" — stray capital F, and its `sub` has no closing period. Content fix, not code.
-- About needs real portrait photos — `PORTRAIT_IMAGES` in `AboutDesignLab.tsx` is still empty, so the carousel shows labelled placeholders.
-- Neither lab direction is ported to production `/about`, `/play`, or `/work` yet. Signed-off geometry: About 800px column / 390px portrait / 58px album art / 45px statement, statement hero, Right-now block, left aligned. Play minimal head, card meta inline, 4 cols, 360px tile / 205px image / 19px spacing / 24px gap. Work compact hero, 96px padding.
-- `/lab/home`'s work section is accepted in the lab but not ported to `/`. It converges on `CreativeListingCard`; if that lands, decide whether `ProjectCard` survives at all.
-- Pending Pramit's call: whether `RuleLabel` keeps its 32px rule (see decision above), whether to add `PortfolioHero`'s type to `/lab/home` behind the version toggle, and whether `/lab/work`'s compact hero keeps its `8 PROJECTS` count now that the homepage's is gone.
-- Porting Work's compact head means replacing its CSS-string `::after` count with real markup, and `--lab-*` vars with settled values.
-- Production `/play` shows `Game Three`/`Game Four` (placeholder copy) even though they're `hidden: true` — `PlayPageClient`'s games filter never checks that flag. Known, not yet fixed on production.
+- Pending Pramit's call: whether `RuleLabel` keeps its 32px rule (see decision above), and whether to add `PortfolioHero`'s type to the `--text-*` scale (risks the mobile card ratio rule — see decision above).
+- Résumé-button placement inside the About contact block is unresolved; Pramit was unsure when asked, currently sits beside LinkedIn/Email as a matching bordered button.
 - Swipey sign-off is pending on interactive embeds. Until then, case studies stay hidden.
 - Cover and mobile images remain placeholder PNGs; Pramit owns final captures.
 - The Swipey hub hero still uses `/work/swipey-fields/cover.png` and wants its own image.
@@ -84,7 +82,7 @@ Four prototypes are vendored under `public/proto/` (`custom-fields`, `swipey-adm
 - Graphify excludes `public/proto/**`; indexing vendored bundles floods the graph.
 
 ## Next action
-Get Pramit's call on the hero toggle and About's text width, plus a real portrait photo; then port both lab directions into production `/about` and `/play`.
+Fix any further phone-view regressions Pramit finds on the newly-ported `/about`, `/play`, `/work` pages; otherwise idle until he flags something.
 
 ## Last session
-2026-08-19 — `/about`'s portrait carousel now shows four real photos (a film-set moment, a Korean BBQ banchan spread, a Vietnam trip shot, first Savannah snow) with real captions, replacing the placeholder boxes. Fixed a real HEIC decode bug along the way: `sips` was dropping iPhone EXIF rotation on 3 of 4 source photos, silently rendering them sideways before crop — caught by diffing candidate rotations against a Quick Look render rather than guessing. Frame settled at one fixed 3:4 ratio, 450px, caption left / dots right vertically centered. Ported from `/lab/about` into `components/AboutPageClient.tsx` and committed (`58eee43`) on top of the earlier full-page port (`3695af9`, `1fad56f`). Branch pushed and merged to `main`.
+2026-08-19 — Fixed three phone-view bugs on the now-live pages (Swipey tag wrap, About experience-row date collision, non-swipeable About carousels — see decisions above) and added a dashboard field ("Carousel Hero Text Size") so Pramit can change the homepage hero headline's desktop font size without a code change. All committed and pushed to `main`.
