@@ -22,6 +22,7 @@ type CreativeListingCardProps = {
   hoverImageScale?: string
   cardStyle?: PhotographyCardStyleSettings
   hoverPreviewSettings?: HoverPreviewSettings
+  ambientIndex?: number
   priorityImage?: boolean
   /* Defaults to the 4-up photography grid. Wider grids must pass their own or
      the browser picks a source narrower than the slot and upscales it. */
@@ -42,6 +43,7 @@ export function CreativeListingCard({
   hoverImageScale,
   cardStyle,
   hoverPreviewSettings,
+  ambientIndex,
   priorityImage = false,
   sizes = '(max-width: 768px) 50vw, 25vw',
 }: CreativeListingCardProps) {
@@ -129,6 +131,7 @@ export function CreativeListingCard({
                   images={cardImages}
                   alt={title}
                   hovered={hovered}
+                  ambientIndex={ambientIndex}
                   sizes={sizes}
                   imageFit={cardStyle?.imageFit ?? 'cover'}
                   imagePosition={hovered ? (hoverImagePosition ?? imagePosition) : imagePosition}

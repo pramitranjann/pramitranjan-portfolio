@@ -365,6 +365,9 @@ export interface CreativePageCopy {
 
 export interface PlayPageCopy {
   cardCtaLabel: string
+  /* Explicit play-wall order as card keys (`game-<slug>`, `photo-<slug>`, `mixed-<slug>`),
+     set from the dashboard. Absent or empty falls back to the curated interleave. */
+  cardOrder?: string[]
 }
 
 export interface CaseStudyUiCopy {
@@ -448,6 +451,27 @@ export interface CaseStudyMediaBlock {
   images: CaseStudyMediaImage[]
 }
 
+export type EditorialMediaSection = 'research' | 'decision' | 'process' | 'solution'
+export type EditorialMediaKind = 'image' | 'video'
+
+/* Optional media for the editorial story template. `src` may be omitted while
+   a story is being written; the renderer simply skips that slot until an image
+   or video is supplied. */
+export interface EditorialMediaItem {
+  id: string
+  section: EditorialMediaSection
+  kind: EditorialMediaKind
+  src?: string
+  carouselLabel?: string
+  poster?: string
+  alt?: string
+  caption?: string
+  aspectRatio?: string
+  fit?: 'contain' | 'cover'
+  background?: string
+  frame?: boolean
+}
+
 export interface CaseStudyContent {
   slug: string
   section: CaseStudySection
@@ -474,6 +498,7 @@ export interface CaseStudyContent {
   /* editorial layout: per-section kickers, explainer blocks and artifacts */
   researchKicker?: string
   processKicker?: string
+  solutionKicker?: string
   researchBriefTitle?: string
   researchBriefBody?: string
   researchBriefItems?: string[]
@@ -487,6 +512,9 @@ export interface CaseStudyContent {
   processArtifact?: string
   processArtifactAlt?: string
   heroImage?: string
+  /* Looping silent clip for the Play wall card, replacing the still/rotation in that slot.
+     heroImage stays the poster so the card is never blank while the clip loads. */
+  cardVideo?: string
   cardImagePosition?: string
   cardImageScale?: string
   cardHoverImagePosition?: string
@@ -497,6 +525,7 @@ export interface CaseStudyContent {
   solutionImages?: string[]
   mediaSettings?: CaseStudyMediaSettings
   mediaBlocks?: CaseStudyMediaBlock[]
+  editorialMedia?: EditorialMediaItem[]
   uiCopy?: CaseStudyUiCopy
   solutionEmbedUrl?: string
   solutionEmbedTitle?: string
@@ -1006,7 +1035,7 @@ function isCreativePageCopy(value: unknown): value is CreativePageCopy {
 function isPlayPageCopy(value: unknown): value is PlayPageCopy {
   if (!value || typeof value !== 'object') return false
   const item = value as Record<string, unknown>
-  return isString(item.cardCtaLabel)
+  return isString(item.cardCtaLabel) && isOptionalStringArray(item.cardOrder)
 }
 
 function isCaseStudyUiCopy(value: unknown): value is CaseStudyUiCopy {
@@ -1116,6 +1145,24 @@ function isCaseStudyMediaBlock(value: unknown): value is CaseStudyMediaBlock {
   )
 }
 
+function isEditorialMediaItem(value: unknown): value is EditorialMediaItem {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  return (
+    isString(item.id) &&
+    (item.section === 'research' || item.section === 'decision' || item.section === 'process' || item.section === 'solution') &&
+    (item.kind === 'image' || item.kind === 'video') &&
+    isOptionalString(item.src) &&
+    isOptionalString(item.poster) &&
+    isOptionalString(item.alt) &&
+    isOptionalString(item.caption) &&
+    isOptionalString(item.aspectRatio) &&
+    (item.fit === undefined || item.fit === 'contain' || item.fit === 'cover') &&
+    isOptionalString(item.background) &&
+    (item.frame === undefined || typeof item.frame === 'boolean')
+  )
+}
+
 function isMotionSettings(value: unknown): value is MotionSettings {
   if (!value || typeof value !== 'object') return false
   const item = value as Record<string, unknown>
@@ -1198,6 +1245,7 @@ function isCaseStudyContent(value: unknown): value is CaseStudyContent {
     isOptionalString(item.pullQuote) &&
     isOptionalString(item.researchKicker) &&
     isOptionalString(item.processKicker) &&
+    isOptionalString(item.solutionKicker) &&
     isOptionalString(item.researchBriefTitle) &&
     isOptionalString(item.researchBriefBody) &&
     isOptionalStringArray(item.researchBriefItems) &&
@@ -1211,6 +1259,7 @@ function isCaseStudyContent(value: unknown): value is CaseStudyContent {
     isOptionalString(item.processArtifact) &&
     isOptionalString(item.processArtifactAlt) &&
     isOptionalString(item.heroImage) &&
+    isOptionalString(item.cardVideo) &&
     isOptionalString(item.cardImagePosition) &&
     isOptionalString(item.cardImageScale) &&
     isOptionalString(item.cardHoverImagePosition) &&
@@ -1221,6 +1270,7 @@ function isCaseStudyContent(value: unknown): value is CaseStudyContent {
     isOptionalStringArray(item.solutionImages) &&
     (item.mediaSettings === undefined || isCaseStudyMediaSettings(item.mediaSettings)) &&
     (item.mediaBlocks === undefined || (Array.isArray(item.mediaBlocks) && item.mediaBlocks.every(isCaseStudyMediaBlock))) &&
+    (item.editorialMedia === undefined || (Array.isArray(item.editorialMedia) && item.editorialMedia.every(isEditorialMediaItem))) &&
     (item.uiCopy === undefined || isCaseStudyUiCopy(item.uiCopy)) &&
     (item.useEmbedPreview === undefined || typeof item.useEmbedPreview === 'boolean') &&
     (item.solutionEmbedUrl === undefined || (isString(item.solutionEmbedUrl) && isSafeEmbedUrl(item.solutionEmbedUrl))) &&

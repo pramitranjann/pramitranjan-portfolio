@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
-    "agentation": "^3.0.2",
     "gsap": "^3.14.2",
     "motion": "^12.38.0",
     "next": "16.2.6",

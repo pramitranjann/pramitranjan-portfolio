@@ -11,19 +11,20 @@ const scriptSrc = [
   "'self'",
   "'unsafe-inline'",
   ...(!isProduction ? ["'unsafe-eval'"] : []),
+  ...(!isProduction ? ['https://mcp.figma.com'] : []),
   'https://va.vercel-scripts.com',
 ].join(' ')
 const contentSecurityPolicy = [
   "default-src 'self'",
   "base-uri 'self'",
-  "frame-ancestors 'none'",
+  `frame-ancestors ${isProduction ? "'none'" : "'self'"}`,
   "form-action 'self'",
   "object-src 'none'",
   `script-src ${scriptSrc}`,
   "style-src 'self' 'unsafe-inline' https://api.fontshare.com",
   "font-src 'self' data: https:",
   "img-src 'self' data: blob: https:",
-  "connect-src 'self' https://api.github.com https://accounts.spotify.com https://api.spotify.com https://vitals.vercel-insights.com https://va.vercel-scripts.com",
+  `connect-src 'self' https://api.github.com https://accounts.spotify.com https://api.spotify.com https://vitals.vercel-insights.com https://va.vercel-scripts.com${isProduction ? '' : ' https://mcp.figma.com'}`,
   "frame-src 'self' https://open.spotify.com https://*.vercel.app https://www.pramitranjan.com",
   "manifest-src 'self'",
   "worker-src 'self' blob:",
@@ -84,7 +85,7 @@ const nextConfig: NextConfig = {
           { key: 'Content-Security-Policy', value: contentSecurityPolicy },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'X-Frame-Options', value: isProduction ? 'DENY' : 'SAMEORIGIN' },
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(self), geolocation=(), browsing-topics=()' },
           ...(isProduction
             ? [{ key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains; preload' }]

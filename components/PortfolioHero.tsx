@@ -6,12 +6,14 @@ import { animate, motion, motionValue, useReducedMotion } from 'motion/react'
 import { useRouter } from 'next/navigation'
 import type { MotionValue } from 'motion/react'
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from 'react'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { TransitionRail } from './TransitionRail'
 import type { PortfolioCarouselContent, PortfolioCarouselItem } from '@/lib/site-content-schema'
 import styles from './PortfolioHero.module.css'
 
 const CAROUSEL_TRANSITION_MS = 560
+const AUTO_ROTATE_FIRST_MS = 4200
+const AUTO_ROTATE_MS = 6200
 const SWIPE_VELOCITY_THRESHOLD = 0.45
 const SWIPE_MIN_VELOCITY_DISTANCE = 18
 
@@ -42,7 +44,12 @@ export function PortfolioCarousel({
   const [instantPositioning, setInstantPositioning] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
+  const [isHovering, setIsHovering] = useState(false)
+  const [isFocusWithin, setIsFocusWithin] = useState(false)
+  const [isPointerActive, setIsPointerActive] = useState(false)
+  const [isPageVisible, setIsPageVisible] = useState(true)
   const reducedMotion = useReducedMotion()
+  const hasAdvancedRef = useRef(false)
   const animatingRef = useRef(false)
   const swipeSettlingRef = useRef(false)
   const resetTimerRef = useRef<number | null>(null)
@@ -65,8 +72,9 @@ export function PortfolioCarousel({
     dragAnimationRef.current?.stop()
   }, [])
 
-  const moveCarousel = (direction: 'previous' | 'next') => {
+  const moveCarousel = useCallback((direction: 'previous' | 'next') => {
     if (animatingRef.current) return
+    hasAdvancedRef.current = true
 
     const requiredStartSide = direction === 'next' ? 'after' : 'before'
     const transitionEndSide = direction === 'next' ? 'before' : 'after'
@@ -105,7 +113,32 @@ export function PortfolioCarousel({
         window.requestAnimationFrame(startTransition)
       })
     })
-  }
+  }, [featureCount, oppositeSide])
+
+  useEffect(() => {
+    const syncVisibility = () => setIsPageVisible(document.visibilityState === 'visible')
+    syncVisibility()
+    document.addEventListener('visibilitychange', syncVisibility)
+    return () => document.removeEventListener('visibilitychange', syncVisibility)
+  }, [])
+
+  useEffect(() => {
+    const paused = reducedMotion
+      || featureCount <= 1
+      || isHovering
+      || isFocusWithin
+      || isPointerActive
+      || !isPageVisible
+
+    if (paused) return
+
+    const delay = hasAdvancedRef.current ? AUTO_ROTATE_MS : AUTO_ROTATE_FIRST_MS
+    const timer = window.setTimeout(() => {
+      moveCarousel('next')
+    }, delay)
+
+    return () => window.clearTimeout(timer)
+  }, [featureCount, isFocusWithin, isHovering, isPageVisible, isPointerActive, moveCarousel, reducedMotion])
 
   const startSwipe = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (
@@ -283,10 +316,27 @@ export function PortfolioCarousel({
         role="group"
         aria-roledescription="carousel"
         aria-label="Portfolio highlights"
-        onPointerDown={startSwipe}
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
+        onFocusCapture={() => setIsFocusWithin(true)}
+        onBlurCapture={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+            setIsFocusWithin(false)
+          }
+        }}
+        onPointerDown={(event) => {
+          if (event.pointerType !== 'mouse') setIsPointerActive(true)
+          startSwipe(event)
+        }}
         onPointerMove={updateSwipe}
-        onPointerUp={(event) => finishSwipe(event)}
-        onPointerCancel={(event) => finishSwipe(event, true)}
+        onPointerUp={(event) => {
+          setIsPointerActive(false)
+          finishSwipe(event)
+        }}
+        onPointerCancel={(event) => {
+          setIsPointerActive(false)
+          finishSwipe(event, true)
+        }}
         onClickCapture={(event) => {
           if (!suppressClickRef.current) return
           event.preventDefault()

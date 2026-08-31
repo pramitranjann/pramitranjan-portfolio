@@ -186,7 +186,7 @@ function EntryRows({ label, items }: { label: string; items: EntryItem[] }) {
       <span className="font-mono about-section-label">{cleanLabel(label)}</span>
       {items.map((item) => (
         <div key={item.org} className="about-row">
-          <div className="flex items-start justify-between about-row-head">
+          <div className="about-row-head">
             <span className="font-serif about-row-title">{item.org}</span>
             <span className="font-mono about-row-date">{item.date}</span>
           </div>
@@ -206,12 +206,43 @@ function InlineList({ label, entries }: { label: string; entries: Array<{ text: 
       <span className="font-mono about-section-label">{cleanLabel(label)}</span>
       <p className="font-mono about-inline-list">
         {entries.map((entry, index) => (
-          <span key={entry.text}>
-            {entry.text}
-            {entry.meta ? <span className="about-inline-meta"> {entry.meta}</span> : null}
-            {index < entries.length - 1 ? '  ·  ' : ''}
+          <span key={entry.text} className="about-inline-entry">
+            <span>{entry.text}</span>
+            {entry.meta ? <span className="about-inline-meta">{entry.meta}</span> : null}
+            {index < entries.length - 1 ? <span className="about-inline-separator" aria-hidden="true">·</span> : null}
           </span>
         ))}
+      </p>
+    </div>
+  )
+}
+
+function ActivityList({ label, entries }: { label: string; entries: EntryItem[] }) {
+  return (
+    <div className="about-rows about-rows-inline">
+      <span className="font-mono about-section-label">{cleanLabel(label)}</span>
+      <p className="font-mono about-inline-list">
+        {entries.map((entry, index) => {
+          const descriptionId = `activity-description-${index}`
+
+          return (
+            <span key={entry.org} className="about-inline-entry about-activity">
+              <span
+                className="about-activity-trigger"
+                tabIndex={0}
+                aria-describedby={descriptionId}
+              >
+                {entry.org}
+              </span>
+              <span className="about-inline-meta">{entry.date}</span>
+              <span id={descriptionId} role="tooltip" className="font-reading about-activity-card">
+                <span className="font-mono about-activity-role">{entry.role}</span>
+                {entry.desc}
+              </span>
+              {index < entries.length - 1 ? <span className="about-inline-separator" aria-hidden="true">·</span> : null}
+            </span>
+          )
+        })}
       </p>
     </div>
   )
@@ -248,7 +279,7 @@ export function AboutPageClient({
 
       <EntryRows label={labels.experience} items={experience} />
       <EntryRows label={labels.education} items={education} />
-      <InlineList label={labels.activities} entries={professionalActivities.map((item) => ({ text: item.org, meta: item.date }))} />
+      <ActivityList label={labels.activities} entries={professionalActivities} />
       <InlineList label={labels.tools} entries={tools.map((tool) => ({ text: tool }))} />
 
       <div className="about-contact">

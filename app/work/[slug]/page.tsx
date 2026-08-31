@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
 import { JsonLd } from '@/components/JsonLd'
 import { CaseStudyLayout } from '@/components/CaseStudyLayout'
+import { EditorialCaseStudy } from '@/components/EditorialCaseStudy'
 import { buildBreadcrumbJsonLd, buildCaseStudyJsonLd, buildCaseStudyMetadata } from '@/lib/seo'
-import { getCaseStudyContent } from '@/lib/site-content'
+import { getCaseStudyContent, isSwipeyStorySlug } from '@/lib/site-content'
 
 export async function generateMetadata({
   params,
@@ -29,7 +30,11 @@ export default async function WorkCaseStudyPage({ params }: { params: Promise<{ 
           buildCaseStudyJsonLd(caseStudy),
         ]}
       />
-      <CaseStudyLayout {...caseStudy} />
+      {isSwipeyStorySlug(caseStudy.slug) ? (
+        <EditorialCaseStudy {...caseStudy} backHref="/work/swipey" backLabel="SWIPEY" />
+      ) : (
+        <CaseStudyLayout {...caseStudy} />
+      )}
     </>
   )
 }

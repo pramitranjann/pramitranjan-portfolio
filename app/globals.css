@@ -51,7 +51,15 @@
   --text-body:    16px;
   --text-meta:    14px;
 
-  /* Shared layout + shell */
+  /* Shared layout + shell.
+     The desktop composition is one canvas carrying three columns: the contents
+     rail, then the content column, then the gutter. Above 1480px the canvas
+     grows with the viewport (see that breakpoint) so a large monitor gains
+     reading width instead of side margin. */
+  --layout-canvas: 1240px;
+  --layout-hero-canvas: 1240px;
+  --layout-rail: 272px;
+  --layout-narrow: 800px;
   --layout-page-gutter: 40px;
   --layout-hero-padding-y: 64px;
   --layout-section-padding-y: 40px;
@@ -123,7 +131,7 @@ html, body {
 }
 
 .editorial-shell {
-  width: min(100% - 80px, 1240px);
+  width: min(100% - 80px, var(--layout-canvas));
   margin-inline: auto;
 }
 
@@ -131,7 +139,7 @@ html, body {
    272px contents-rail column — so the link sits on the same left edge as the
    kicker and title directly below it. Mirrors .editorial-hero > .editorial-shell. */
 .editorial-back-row {
-  padding: 0;
+  padding: 0 0 clamp(32px, 4vw, 56px);
 }
 
 .editorial-back-link {
@@ -139,6 +147,13 @@ html, body {
   font-size: var(--text-meta);
   letter-spacing: 0.12em;
   text-decoration: none;
+  transition-property: color;
+  transition-duration: 120ms;
+}
+
+.editorial-back-link:hover,
+.editorial-back-link:focus-visible {
+  color: var(--color-red);
 }
 
 .editorial-hero {
@@ -158,6 +173,11 @@ html, body {
   /* stretch, not center: the copy column has to span the image's full height so
      the back link can sit on its top edge and the role line on its bottom. */
   align-items: stretch;
+}
+
+.editorial-hero-grid-text-only {
+  grid-template-columns: minmax(0, 760px);
+  justify-content: center;
 }
 
 .editorial-hero-copy {
@@ -257,15 +277,15 @@ html, body {
 }
 
 .editorial-narrow {
-  max-width: 800px;
-  margin-inline: max(40px, calc((100vw - 1240px) / 2));
+  max-width: var(--layout-narrow);
+  margin-inline: max(40px, calc((100vw - var(--layout-canvas)) / 2));
 }
 
 .editorial-statement {
-  max-width: 760px;
+  max-width: min(100%, calc(var(--layout-narrow) - 40px));
   margin: 24px 0 0;
   color: var(--color-heading);
-  font-size: clamp(30px, 3.35vw, 48px);
+  font-size: var(--editorial-statement-size, 36px);
   font-weight: 400;
   letter-spacing: -0.025em;
   line-height: 1.2;
@@ -373,6 +393,38 @@ html, body {
   margin-top: clamp(36px, 4vw, 56px);
 }
 
+.editorial-live-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  width: fit-content;
+  padding: 10px 14px;
+  color: var(--color-red);
+  background: transparent;
+  border: 1px solid var(--color-red);
+  font-size: var(--text-meta);
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  transition-property: color, background-color;
+  transition-duration: 120ms;
+}
+
+.editorial-live-action-wrap {
+  margin-top: 16px;
+}
+
+.editorial-live-link:hover,
+.editorial-live-link:focus-visible {
+  color: var(--color-red);
+  background: rgb(255 49 32 / 10%);
+}
+
+.editorial-live-link:focus-visible {
+  outline: 2px solid var(--color-red);
+  outline-offset: 2px;
+}
+
 .editorial-embed {
   position: relative;
   width: 100%;
@@ -418,6 +470,227 @@ html, body {
 .editorial-artifact img,
 .editorial-screen img {
   object-fit: contain;
+}
+
+.editorial-story-media-list {
+  display: grid;
+  gap: var(--layout-card-gap);
+}
+
+.editorial-story-media {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border: 0;
+}
+
+.editorial-story-media-image-content > img,
+.editorial-story-media > video {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.editorial-story-media-image-content {
+  position: absolute;
+  inset: 0;
+}
+
+.editorial-story-media > video {
+  cursor: pointer;
+}
+
+/* object-fit: contain paints the figure's background wherever the media does
+   not reach, and a 16:9 clip in a 16:9 figure misses by a sub-pixel once the
+   canvas is fluid and the column width is fractional — leaving the light
+   product canvas as a hairline against the dark page. The figure already
+   clips, so overfilling it by a pixel closes the seam and hides nothing that
+   was ever visible. */
+.editorial-story-media > video {
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  margin: -1px;
+}
+
+.editorial-story-media > video:focus-visible {
+  outline: 2px solid var(--color-red);
+  outline-offset: -2px;
+}
+
+/* Shared media frame: a structural red edge, a dark inset, then the media. */
+.editorial-story-media-video,
+.editorial-story-media-framed {
+  padding: 12px;
+  background: #111111 !important;
+  border: 1px solid var(--color-red);
+}
+
+.editorial-story-media-video > video {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.editorial-story-media-framed .editorial-story-media-image-content {
+  inset: 12px;
+}
+
+.editorial-video-carousel-wrap {
+  display: grid;
+  width: 100%;
+}
+
+.editorial-video-carousel {
+  width: 100%;
+  padding: 12px;
+  color: var(--color-heading);
+  background: #111111;
+  border: 1px solid var(--color-red);
+}
+
+.editorial-video-carousel-stage {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  isolation: isolate;
+  background: #080808;
+  touch-action: pan-y;
+}
+
+.editorial-video-carousel-slide {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 92%;
+  aspect-ratio: var(--slide-aspect, 9 / 16);
+  overflow: hidden;
+  opacity: 0;
+  translate: -50% -50%;
+  pointer-events: none;
+  transition-property: height, translate, opacity, filter;
+  transition-duration: 420ms, 420ms, 180ms, 180ms;
+  transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.editorial-video-carousel-slide[data-position='current'] {
+  z-index: 3;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.editorial-video-carousel-slide[data-position='previous'],
+.editorial-video-carousel-slide[data-position='next'] {
+  z-index: 1;
+  height: 78%;
+  filter: brightness(0.7) saturate(0.72);
+}
+
+.editorial-video-carousel-slide[data-position='previous'] {
+  translate: -108% -50%;
+}
+
+.editorial-video-carousel-slide[data-position='next'] {
+  translate: 8% -50%;
+}
+
+.editorial-video-carousel-slide video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.editorial-video-carousel-slide:not([data-position='current']) video {
+  cursor: default;
+}
+
+.editorial-video-carousel-slide video:focus-visible,
+.editorial-video-carousel button:focus-visible {
+  outline: 2px solid var(--color-red);
+  outline-offset: 2px;
+}
+
+.editorial-video-carousel-meta {
+  display: grid;
+  padding-top: 12px;
+}
+
+.editorial-video-carousel-meta > div:first-child {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.editorial-video-carousel-meta > div:first-child > span {
+  color: var(--color-red);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.editorial-video-carousel-meta strong {
+  overflow: hidden;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.editorial-video-carousel-tabs button:active {
+  scale: 0.96;
+}
+
+.editorial-video-carousel-tabs {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.editorial-video-carousel-tabs button {
+  min-width: 0;
+  min-height: 44px;
+  padding: 8px 4px;
+  overflow: hidden;
+  color: var(--color-label);
+  background: transparent;
+  border: 1px solid var(--color-divider);
+  cursor: pointer;
+  transition-property: color, background-color, border-color, scale;
+  transition-duration: 150ms;
+}
+
+.editorial-video-carousel-tabs button:hover {
+  color: var(--color-heading);
+  border-color: var(--color-heading);
+}
+
+.editorial-video-carousel-tabs button[data-active] {
+  color: #ffffff;
+  background: var(--color-red);
+  border-color: var(--color-red);
+}
+
+.editorial-video-carousel-tabs span {
+  display: block;
+  overflow: hidden;
+  font-size: 10px;
+  line-height: 1.25;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.editorial-story-media-caption {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  left: 12px;
+  padding: 8px 10px;
+  color: var(--color-heading);
+  background: rgb(13 13 13 / 82%);
+  font-size: var(--text-meta);
+  letter-spacing: 0.08em;
 }
 
 .editorial-ia-list {
@@ -534,8 +807,21 @@ html, body {
   background: var(--color-red);
 }
 
+.editorial-case-study-nav-progress {
+  display: none;
+}
+
 .editorial-case-study-nav-title {
   display: none;
+}
+
+/* Phone layouts rely on the page's natural chapter flow. Both case-study
+   systems keep their contents controls for tablet/desktop only. */
+@media (max-width: 767px) {
+  .editorial-case-study-nav,
+  .case-study-section-nav {
+    display: none !important;
+  }
 }
 
 /* The contents rail borrows the useful part of Sydney's pattern: it gives the
@@ -549,13 +835,13 @@ html, body {
   }
 
   .editorial-shell.editorial-narrow {
-    width: min(100%, 800px);
+    width: min(100%, var(--layout-narrow));
     margin-right: auto;
     margin-left: 272px;
   }
 
   .editorial-case-study-nav {
-    top: 140px;
+    top: 50%;
     right: auto;
     left: 24px;
     display: grid;
@@ -568,7 +854,7 @@ html, body {
     border: 0;
     box-shadow: none;
     backdrop-filter: none;
-    transform: none;
+    transform: translateY(-50%);
   }
 
   .editorial-case-study-nav::before {
@@ -579,6 +865,26 @@ html, body {
     width: 1px;
     background: var(--color-divider);
     content: '';
+  }
+
+  .editorial-case-study-nav-progress {
+    position: absolute;
+    top: var(--case-study-nav-progress-y, 0px);
+    left: -2px;
+    display: block;
+    width: 5px;
+    height: 5px;
+    background: var(--color-red);
+    border-radius: 999px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-50%);
+    transition-property: opacity;
+    transition-duration: 150ms;
+  }
+
+  .editorial-case-study-nav[data-progress-ready] .editorial-case-study-nav-progress {
+    opacity: 1;
   }
 
   .editorial-case-study-nav a.editorial-case-study-nav-back {
@@ -592,7 +898,7 @@ html, body {
   .editorial-case-study-nav-title {
     display: block;
     margin-bottom: 10px;
-    color: var(--color-label);
+    color: var(--color-red);
     font-size: 12px;
     letter-spacing: 0.14em;
   }
@@ -617,28 +923,77 @@ html, body {
   }
 
   .editorial-case-study-nav-indicator {
-    top: 50%;
-    right: auto;
-    bottom: auto;
-    left: -25px;
-    width: 5px;
-    height: 5px;
-    background: var(--color-red);
-    border-radius: 999px;
-    transform: translateY(-50%);
+    display: none;
   }
 }
 
+/* ── Desktop scale ──────────────────────────────────────────────────────────
+   Above 1480px the page stops being a fixed 1400px strip. The canvas takes
+   60% of every pixel the viewport gains and leaves 40% to the margins, so the
+   side gutter settles into a 7–13% band instead of the two extremes either
+   fixed rule produces: a frozen 1400px canvas strands 30% of a 3440px screen
+   in dead margin, and a true edge-to-edge canvas collapses the gutter to 1%.
+   Everything else interpolates linearly from its 1480px setting to its 2560px
+   setting, then holds:
+
+     canvas    1400px + 60% of the width gained past 1480px
+               (1664 at 1920, 1863 at 2252, 2048 at 2560)
+     rail       280 →  364px   1.30x
+     measure    800 →  920px
+     h1          52 →   56px   ┐
+     h2          38 →   41px   │
+     h3          24 →   26px   ├ 1.08x type scale
+     body        16 →   17px   │
+     meta/eyebrow 14 →  15px   ┘
+     statement   36 →   39px
+     rail label  12 →   16px   ┐ 1.30x, so the contents rail scales with the
+     rail item   17 →   22px   ┘ screen rather than staying laptop-sized
+
+   Every floor equals the 1479px value, so the breakpoint is seamless. */
 @media (min-width: 1480px) {
+  :root {
+    --desktop-run: calc((100vw - 1480px) / 1080);
+
+    --layout-canvas: calc(1400px + (100vw - 1480px) * 0.6);
+    --layout-hero-canvas: var(--layout-canvas);
+    --layout-rail: clamp(280px, calc(280px + 84 * var(--desktop-run)), 364px);
+    --layout-narrow: clamp(800px, calc(800px + 120 * var(--desktop-run)), 920px);
+
+    --text-h1:       clamp(52px, calc(52px + 4 * var(--desktop-run)), 56px);
+    --text-h2:       clamp(38px, calc(38px + 3 * var(--desktop-run)), 41px);
+    --text-h3:       clamp(24px, calc(24px + 2 * var(--desktop-run)), 26px);
+    --text-eyebrow:  clamp(14px, calc(14px + 1 * var(--desktop-run)), 15px);
+    --text-body-lg:  clamp(18px, calc(18px + 1 * var(--desktop-run)), 19px);
+    --text-body:     clamp(16px, calc(16px + 1 * var(--desktop-run)), 17px);
+    --text-meta:     clamp(14px, calc(14px + 1 * var(--desktop-run)), 15px);
+    --nav-link-size: clamp(13px, calc(13px + 1 * var(--desktop-run)), 14px);
+    --nav-logo-size: clamp(16px, calc(16px + 1 * var(--desktop-run)), 17px);
+    --editorial-statement-size: clamp(36px, calc(36px + 3 * var(--desktop-run)), 39px);
+  }
+
   .editorial-shell,
   .editorial-shell.editorial-narrow {
-    margin-right: max(40px, calc((100vw - 1400px) / 2));
-    margin-left: calc(50vw - 420px);
+    margin-right: max(40px, calc((100vw - var(--layout-canvas)) / 2));
+    margin-left: calc((100vw - var(--layout-canvas)) / 2 + var(--layout-rail));
+  }
+
+  .editorial-shell {
+    width: min(calc(100% - var(--layout-rail) - 40px), calc(var(--layout-canvas) - var(--layout-rail)));
   }
 
   .editorial-case-study-nav {
-    left: max(24px, calc((100vw - 1400px) / 2));
+    left: max(24px, calc((100vw - var(--layout-canvas)) / 2));
+    width: calc(var(--layout-rail) - 60px);
   }
+
+  .editorial-case-study-nav-title {
+    font-size: clamp(12px, calc(12px + 4 * var(--desktop-run)), 16px);
+  }
+
+  .editorial-case-study-nav-button {
+    font-size: clamp(17px, calc(17px + 5 * var(--desktop-run)), 22px);
+  }
+
 }
 
 /* The contents rail intentionally arrives after the opening composition. Until
@@ -646,14 +1001,14 @@ html, body {
    remains optically centered. */
 @media (min-width: 1200px) {
   .editorial-hero > .editorial-shell {
-    width: min(100% - 80px, 1240px);
+    width: min(100% - 80px, var(--layout-hero-canvas));
     margin-inline: auto;
   }
 
   /* Swipey's hub has no contents rail. Keep its card row on the same canvas as
      the opening composition instead of inheriting the editorial reading offset. */
   .swipey-hub-shell.editorial-shell {
-    width: min(100% - 80px, 1240px);
+    width: min(100% - 80px, var(--layout-hero-canvas));
     margin-inline: auto;
   }
 }
@@ -691,7 +1046,7 @@ html, body {
 }
 
 .editorial-gallery-canvas {
-  width: min(100% - 80px, 1240px);
+  width: min(100% - 80px, var(--layout-canvas));
   margin-inline: auto;
 }
 
@@ -725,9 +1080,9 @@ html, body {
 
 @media (min-width: 1480px) {
   .editorial-gallery-canvas {
-    width: 1120px;
-    margin-right: max(40px, calc((100vw - 1400px) / 2));
-    margin-left: calc(50vw - 420px);
+    width: calc(var(--layout-canvas) - var(--layout-rail));
+    margin-right: max(40px, calc((100vw - var(--layout-canvas)) / 2));
+    margin-left: calc((100vw - var(--layout-canvas)) / 2 + var(--layout-rail));
   }
 }
 
@@ -793,7 +1148,7 @@ html, body {
   /* Stacked, the copy column has no image height to span, so the 1fr lede row
      collapses and the back link ends up flush against the kicker. */
   .editorial-back-row {
-    margin-bottom: 32px;
+    margin-bottom: 0;
   }
 
   .editorial-hero-image {
@@ -875,6 +1230,12 @@ html, body {
   }
 }
 
+/* Outcomes already owns its top and bottom transition padding. Do not stack
+   the generic chapter-to-chapter margin on top of it after a build/embed. */
+.editorial-section + .editorial-outcomes-section {
+  margin-top: 0;
+}
+
 /* The single statement that carries each case study section.
    One measure for every section — 640px at 20px is ~65 characters. Lives here,
    not on the per-section wrappers, so no section can drift off it. */
@@ -883,88 +1244,8 @@ html, body {
   max-width: 640px;
 }
 
-/* The Swipey stories render inside a framed overlay on /work/swipey rather
-   than as their own pages, so the site nav and footer are redundant there. */
-.swipey-frame .site-nav,
-.swipey-frame footer,
-/* The frame's wrapper is transformed, which makes it the containing block for
-   every position:fixed descendant — so the reading bar lands on the wrapper's
-   top edge, not the viewport's, covering the frame's red top border. It also
-   tracks window scroll, which is locked while the modal is open, so it would
-   sit at 0% forever regardless. */
-.swipey-frame .reading-progress {
-  display: none !important;
-}
-
-/* The prev/next pair is page navigation. Inside a modal there is nowhere to
-   navigate to — the stories aren't routes — so it goes. (The section nav is a
-   different case: it moves within the frame, so SwipeyHubClient renders its own
-   frame-scoped one, .swipey-frame-nav, below.)
-   :has() targets the prev/next grid wrapper, which has no class of its own,
-   so its divider goes with it rather than leaving a stray rule. */
-.swipey-frame .case-study-section-nav,
-.swipey-frame .grid:has(> .case-study-prev-next) {
-  display: none !important;
-}
-
-/* GsapReveal drives its reveals off ScrollTrigger, which watches window
-   scroll. Inside the frame's own scroll container that never fires, so every
-   section below the fold would sit at opacity 0 forever. Show them outright —
-   a scroll-reveal inside a modal earns nothing anyway. */
-.swipey-frame [data-reveal] {
-  opacity: 1 !important;
-  transform: none !important;
-}
-
-/* The prototypes are desktop-scale. Give the iframe a wider internal viewport
-   than its box, then zoom back down so the content fits the frame uncramped.
-   zoom (unlike transform) scales the layout box too, so no phantom gap. */
-/* Size and scale are set per-prototype in SwipeyHubClient — each one is
-   rendered at its own design size, then scaled to fit. Only centring lives
-   here; !important because CaseStudyLayout sets display/margin inline. */
-.swipey-frame iframe {
-  display: block !important;
-}
-
-/* No live app to open — these prototypes only exist inside the frame. */
-.swipey-frame a[href^="/proto/"] {
-  display: none !important;
-}
-
-/* Framed stories are not browser pages. These overrides make the editorial
-   layout measure itself against the modal rather than the full viewport. */
-.swipey-frame .editorial-page {
-  --case-nav-clearance: 0px;
-  padding-top: 0;
-}
-
-@media (min-width: 901px) {
-  .swipey-frame .editorial-hero {
-    min-height: calc(100svh - (var(--swipey-frame-inset, 0px) * 2));
-  }
-}
-
-@media (min-width: 1200px) {
-  .swipey-frame .editorial-shell {
-    width: min(calc(100% - 312px), 1120px);
-    margin-right: auto;
-    margin-left: 272px;
-  }
-
-  .swipey-frame .editorial-shell.editorial-narrow {
-    width: min(100%, 800px);
-    margin-right: auto;
-    margin-left: 272px;
-  }
-
-  .swipey-frame .editorial-hero > .editorial-shell {
-    width: min(100% - 80px, 1240px);
-    margin-inline: auto;
-  }
-
-  .swipey-frame-nav {
-    left: 24px;
-  }
+.swipey-hub-stories {
+  padding-bottom: var(--layout-section-padding-y);
 }
 
 @media (max-width: 640px) {
@@ -1038,6 +1319,17 @@ body.carousel-reengaging main {
     border-color: #FF3120;
     transform: translateY(-2px);
   }
+}
+
+/* HoverImageCarousel stacks its frames with z-index 1/2/3 (see lib/crossfade-layer.ts)
+   to hold the outgoing frame opaque under the incoming one. Those values are internal to
+   the image stack, but the wrapper was not a stacking context, so they also outranked
+   .pcard-hover (z-index: auto) and the cover painted over the hover panel's title.
+   Isolating the wrapper keeps the crossfade's ordering to itself. :has() covers both
+   the legacy direct-image shape and the opaque frame wrapper. */
+.portfolio-card :has(> .card-media-image),
+.portfolio-card :has(> .card-media-frame) {
+  isolation: isolate;
 }
 
 /* Rises from the bottom edge on hover; sizes itself to its own content, so the
@@ -1737,27 +2029,6 @@ body.carousel-reengaging main {
     padding: 20px 24px !important;
   }
 
-  /* Case study — section nav becomes a horizontal mobile tray */
-  .case-study-section-nav {
-    left: 16px !important;
-    right: 16px !important;
-    top: auto !important;
-    bottom: 16px !important;
-    transform: none !important;
-    width: calc(100vw - 32px) !important;
-    max-width: calc(100vw - 32px) !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-  .case-study-section-nav::-webkit-scrollbar {
-    display: none;
-  }
-  .case-study-section-nav-button {
-    font-size: 10px !important;
-    padding: 10px 12px !important;
-  }
   .case-study-inline-layout {
     grid-template-columns: 1fr !important;
     gap: 16px !important;
@@ -2131,6 +2402,10 @@ body.carousel-reengaging main {
 }
 
 .about-row-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
   margin-bottom: 4px;
 }
 
@@ -2141,10 +2416,12 @@ body.carousel-reengaging main {
 }
 
 .about-row-date {
+  flex: 0 0 auto;
   font-size: var(--text-meta);
   letter-spacing: 0.06em;
   color: var(--color-label);
   text-align: right;
+  white-space: nowrap;
 }
 
 .about-row-role {
@@ -2155,17 +2432,13 @@ body.carousel-reengaging main {
   margin-bottom: 6px;
 }
 
-/* Two lines is the whole point of the compact layout — the full text lives on the row's
-   own page where there is room for it. */
+/* Experience and education are the page's complete record, so their descriptions
+   remain readable in full instead of truncating at an arbitrary line count. */
 .about-row-desc {
   font-size: var(--text-body);
   letter-spacing: 0.02em;
   color: var(--color-body);
   line-height: 1.6;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
 /* Closes the list above it — experience and education end on a row, not a rule. */
@@ -2181,9 +2454,88 @@ body.carousel-reengaging main {
   line-height: 1.9;
 }
 
+.about-inline-entry {
+  display: inline;
+}
+
 .about-inline-meta {
+  margin-left: 0.45em;
   color: var(--color-label);
   font-size: var(--text-meta);
+}
+
+.about-inline-separator {
+  margin-inline: 0.65em;
+}
+
+.about-activity {
+  position: relative;
+  display: inline-block;
+}
+
+.about-activity-trigger {
+  cursor: help;
+  transition-property: color;
+  transition-duration: 120ms;
+}
+
+.about-activity-trigger::after {
+  display: inline-block;
+  margin-left: 0.3em;
+  color: var(--color-red);
+  content: '↙';
+  font-size: 0.78em;
+  line-height: 0;
+  transform: rotate(0deg);
+  transform-origin: center;
+  transition: transform 120ms cubic-bezier(0.2, 0, 0, 1);
+  vertical-align: super;
+}
+
+.about-activity-trigger:hover,
+.about-activity-trigger:focus-visible {
+  color: var(--color-heading);
+  outline: none;
+}
+
+.about-activity:hover .about-activity-trigger::after,
+.about-activity:focus-within .about-activity-trigger::after {
+  transform: rotate(135deg);
+}
+
+.about-activity-card {
+  position: absolute;
+  z-index: 12;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  width: min(320px, calc(100vw - 40px));
+  padding: 14px 16px 15px;
+  color: var(--color-body);
+  background: #171717;
+  border: 1px solid var(--color-red);
+  box-shadow: 0 14px 36px rgb(0 0 0 / 36%);
+  font-size: 14px;
+  letter-spacing: 0;
+  line-height: 1.45;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 4px);
+  transition-property: opacity, transform;
+  transition-duration: 120ms;
+}
+
+.about-activity:hover .about-activity-card,
+.about-activity:focus-within .about-activity-card {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.about-activity-role {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--color-red);
+  font-size: 10px;
+  letter-spacing: 0.1em;
 }
 
 /* Contact — kept sleek: the title is a step down from the statement, not a second hero */
@@ -2251,12 +2603,93 @@ body.carousel-reengaging main {
     font-size: var(--text-body);
   }
 
+  .about-now-slide {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .about-now-line {
+    align-self: center;
+  }
+
+  .about-rows {
+    margin-top: 56px;
+  }
+
+  .about-row {
+    padding: 24px 0;
+  }
+
+  .about-row-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .about-row-title {
+    line-height: 1.25;
+  }
+
+  .about-row-date {
+    text-align: left;
+  }
+
+  .about-inline-list {
+    display: grid;
+    gap: 14px;
+    line-height: 1.45;
+  }
+
+  .about-inline-entry {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .about-inline-entry > span:first-child {
+    min-width: 0;
+  }
+
+  .about-inline-meta {
+    flex: 0 0 auto;
+    margin-left: 0;
+    white-space: nowrap;
+  }
+
+  .about-inline-separator {
+    display: none;
+  }
+
+  .about-activity {
+    display: flex;
+  }
+
+  .about-activity-card {
+    right: 0;
+    left: 0;
+    width: auto;
+    transform: translateY(4px);
+  }
+
+  .about-activity:hover .about-activity-card,
+  .about-activity:focus-within .about-activity-card {
+    transform: translateY(0);
+  }
+
 }
 
 @media (prefers-reduced-motion: reduce) {
   .about-portrait-slide,
   .about-now-slide,
   .about-dots button > span {
+    transition: none;
+  }
+
+  .about-activity-trigger,
+  .about-activity-trigger::after,
+  .about-activity-card {
     transition: none;
   }
 }

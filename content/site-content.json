@@ -806,7 +806,18 @@
       "photoBackLabel": "PHOTOGRAPHY"
     },
     "playPage": {
-      "cardCtaLabel": "PLAY NOW"
+      "cardCtaLabel": "PLAY NOW",
+      "cardOrder": [
+        "game-bowl",
+        "photo-kl",
+        "mixed-south-china-sea",
+        "photo-penang",
+        "photo-singapore",
+        "game-sling",
+        "mixed-faces-of-power",
+        "photo-hcmc",
+        "mixed-the-lines-in-between"
+      ]
     },
     "caseStudy": {
       "problemLabel": "PROBLEM_",
@@ -1015,11 +1026,6 @@
         "title": "Wander"
       },
       "heroImage": "/work/albers/cover-hor.png",
-      "solutionHeroImage": "/work/albers/img-6-processed.png",
-      "solutionImages": [
-        "/work/albers/img-4-processed.png",
-        "/work/albers/img-5-processed.png"
-      ],
       "problemHeadline": "Colour theory gets taught with static swatches. Albers turns each perceptual effect into an instrument you can push until it clicks. It shipped twice: native on macOS in SwiftUI, and as the web build below.",
       "roleHeadline": "Sole designer and developer. Concept, UI in Figma, built in SwiftUI with Claude Code.",
       "researchHeadline": "The brief said 'interaction of colours.' Most people went editorial; I kept catching on the word interaction. Albers's argument that colour has no fixed identity is a UI problem as much as an art one.",
@@ -1027,26 +1033,63 @@
       "challengeHeadline": "The first submission was a lean prototype. Spring break was the space to add modes, tighten the interaction model, and build an identity: an amber terminal HUD, borrowed from instruments that measure rather than create.",
       "processHeadline": "Figma set the visual direction, then iteration happened inside the app with Claude Code handling implementation while I focused on how the interaction should feel.",
       "solutionHeadline": "Nine modes, each isolating one perceptual colour phenomenon with real-time controls. Built in SwiftUI with AppKit for macOS 13+.",
+      "solutionKicker": "THE BUILD",
       "solution": "",
       "outcomesHeadline": "Claude Code forced me to be precise about intent upfront, and committing hard to the HUD made every other decision easier. I'd like to publish it on the Mac App Store as a real teaching tool.",
       "outcomes": "",
-      "mediaBlocks": [
+      "editorialMedia": [
         {
-          "id": "albers-solution-3",
+          "id": "albers-research-sidebar-components",
+          "section": "research",
+          "kind": "image",
+          "src": "/work/albers/research-sidebar-components.png",
+          "alt": "Albers Colour Panel, Colour Values, and Colour Harmonies controls isolated from the instrument sidebar",
+          "aspectRatio": "16 / 9",
+          "fit": "contain",
+          "background": "#0d0d0d"
+        },
+        {
+          "id": "albers-decision-colour-harmonies",
+          "section": "decision",
+          "kind": "image",
+          "src": "/work/albers/decision-colour-harmonies.png",
+          "alt": "The Albers analogous colour-harmony study generated from the selected sidebar colour",
+          "aspectRatio": "16 / 9",
+          "fit": "contain",
+          "background": "#0d0d0d"
+        },
+        {
+          "id": "albers-live-colour-scales",
           "section": "solution",
-          "layout": "single",
-          "width": "100%",
-          "gap": "2px",
-          "align": "center",
-          "images": [
-            {
-              "src": "/work/albers/img-1.png",
-              "fit": "contain",
-              "aspectRatio": "4 / 3",
-              "background": "#0d0d0d",
-              "alt": ""
-            }
-          ]
+          "kind": "video",
+          "src": "/work/albers/colour-scales.mp4",
+          "carouselLabel": "COLOUR SCALES",
+          "alt": "Adjusting the base colour and generating shade, tint, and tone scales",
+          "aspectRatio": "2880 / 1628",
+          "fit": "cover",
+          "background": "#0d0d0d"
+        },
+        {
+          "id": "albers-live-relativity",
+          "section": "solution",
+          "kind": "video",
+          "src": "/work/albers/relativity.mp4",
+          "carouselLabel": "RELATIVITY",
+          "alt": "Placing the same colour across contrasting surroundings to reveal its perceptual relativity",
+          "aspectRatio": "2880 / 1628",
+          "fit": "cover",
+          "background": "#0d0d0d"
+        },
+        {
+          "id": "albers-live-optical-mixing",
+          "section": "solution",
+          "kind": "video",
+          "src": "/work/albers/optical-mixing.mp4",
+          "carouselLabel": "OPTICAL MIXING",
+          "alt": "Changing the density and scale of two-colour patterns until the colours mix perceptually",
+          "aspectRatio": "2880 / 1628",
+          "fit": "cover",
+          "background": "#0d0d0d"
         }
       ],
       "mediaSettings": {
@@ -1055,14 +1098,9 @@
           "fit": "contain"
         }
       },
-      "solutionEmbedAspectRatio": "4 / 3",
-      "solutionEmbedWidth": "min(100%, 1325px)",
-      "solutionEmbedCalloutLabel": "LIVE APP_",
-      "solutionEmbedCalloutBody": "This is the actual live app — the web port of the macOS build, not a mockup. Interact with it right here, or open it in its own tab.",
       "solutionEmbedCtaLabel": "OPEN LIVE APP",
       "solutionEmbedUrl": "https://albers-web.vercel.app",
       "solutionEmbedTitle": "ALBERS live app",
-      "solutionEmbedCalloutTitle": "The shipped Albers build is embedded below.",
       "researchKicker": "TAKING THE BRIEF LITERALLY",
       "processKicker": "ITERATING INSIDE THE APP",
       "researchBriefTitle": "Interaction as a UI problem",
@@ -1512,13 +1550,61 @@
       "solutionHeadline": "Every admin flow on a phone, with a legibility floor, 44px targets, an AA contrast system, and one status vocabulary instead of two.",
       "outcomesHeadline": "Three blockers survived seventy-four findings of review. An audit is not the same job as a review. Next I'd test with actual sixty-year-olds instead of designing for them.",
       "pullQuote": "Grey doesn't read as \"done\" to someone who's sixty. It reads as something went wrong.",
-      "solutionEmbedUrl": "/proto/swipey-admin/index.html",
-      "solutionEmbedTitle": "Swipey Admin mobile prototype",
-      "solutionEmbedAspectRatio": "16 / 10",
-      "solutionEmbedWidth": "min(100%, 1325px)",
-      "solutionEmbedCalloutLabel": "LIVE PROTOTYPE_",
-      "solutionEmbedCalloutTitle": "The working prototype is embedded below.",
-      "solutionEmbedCalloutBody": "Sign in with any nine-digit phone number, then any six-digit code, pick a workspace and choose the Admin role. Every admin flow is clickable from there.",
+      "editorialMedia": [
+        {
+          "id": "swipey-admin-research-media",
+          "section": "research",
+          "kind": "image",
+          "src": "/work/swipey-admin/research-admin-system.png",
+          "alt": "Swipey Admin overview, transactions, cards, and team screens",
+          "aspectRatio": "1848 / 988",
+          "fit": "contain",
+          "background": "#0d0d0d"
+        },
+        {
+          "id": "swipey-admin-decision-media",
+          "section": "decision",
+          "kind": "image",
+          "src": "/work/swipey-admin/decision-admin-workflows.png",
+          "alt": "Swipey Admin transaction detail, Manage fields, activity history, and card top-up screens",
+          "aspectRatio": "1848 / 988",
+          "fit": "contain",
+          "background": "#0d0d0d"
+        },
+        {
+          "id": "swipey-admin-solution-issue-card",
+          "section": "solution",
+          "kind": "video",
+          "src": "/work/swipey-admin/issue-card.mp4",
+          "carouselLabel": "ISSUE CARD",
+          "alt": "Selecting a card, assigning it to a team member, reviewing the details, and confirming issuance",
+          "aspectRatio": "9 / 16",
+          "fit": "cover",
+          "background": "#0d0d0d"
+        },
+        {
+          "id": "swipey-admin-solution-manage-fields",
+          "section": "solution",
+          "kind": "video",
+          "src": "/work/swipey-admin/manage-fields.mp4",
+          "carouselLabel": "MANAGE FIELDS",
+          "alt": "Opening Manage fields from a transaction and saving the visible field configuration",
+          "aspectRatio": "9 / 16",
+          "fit": "cover",
+          "background": "#0d0d0d"
+        },
+        {
+          "id": "swipey-admin-solution-card-top-up",
+          "section": "solution",
+          "kind": "video",
+          "src": "/work/swipey-admin/card-top-up.mp4",
+          "carouselLabel": "CARD TOP-UP",
+          "alt": "Opening a card top-up, selecting RM 5,000 from the deposit account, and confirming the deposit",
+          "aspectRatio": "9 / 16",
+          "fit": "cover",
+          "background": "#0d0d0d"
+        }
+      ],
       "mediaSettings": {
         "hero": {
           "background": "#e4edeb",
@@ -1557,13 +1643,83 @@
       "solutionHeadline": "A field you create in one click from a nudge that cites its evidence, filled by Alfie, confirmed by a human, filterable the moment it exists.",
       "outcomesHeadline": "A new column landed off screen — one of eleven findings I only caught by using the prototype as the admin who'd live in it. Next, the same lens on the mobile table.",
       "pullQuote": "The structure was already there. It was just sitting in a text box where nothing could reach it.",
-      "solutionEmbedUrl": "/proto/custom-fields/index.html",
-      "solutionEmbedTitle": "Custom Fields prototype",
-      "solutionEmbedAspectRatio": "16 / 10",
-      "solutionEmbedWidth": "min(100%, 1325px)",
-      "solutionEmbedCalloutLabel": "LIVE PROTOTYPE_",
-      "solutionEmbedCalloutTitle": "The working prototype is embedded below.",
-      "solutionEmbedCalloutBody": "This is the real exploration, not a mockup. Open the Alfie nudge to create a Project field, then accept or edit what it fills in.",
+      "editorialMedia": [
+        {
+          "id": "swipey-fields-research-gap",
+          "section": "research",
+          "kind": "image",
+          "src": "/work/swipey-fields/research-gap.png",
+          "alt": "The transactions table has no Project column, while Alfie reports that projects were mentioned in the notes of 14 transactions",
+          "aspectRatio": "2200 / 1238",
+          "fit": "cover",
+          "background": "#e4edeb"
+        },
+        {
+          "id": "swipey-fields-decision-manage-fields",
+          "section": "decision",
+          "kind": "image",
+          "src": "/work/swipey-fields/decision-manage-fields.png",
+          "alt": "Manage fields, restricted to admins, listing every org-wide field with its visibility and required toggles beside Alfie's suggested fields",
+          "aspectRatio": "2200 / 1238",
+          "fit": "cover",
+          "background": "#e4edeb"
+        },
+        {
+          "id": "swipey-fields-process-suggestions",
+          "section": "process",
+          "kind": "image",
+          "src": "/work/swipey-fields/process-suggestions.png",
+          "alt": "A new Project column filled with dashed Falcon, Atlas and Orbit suggestion pills, with Alfie offering to accept all eight values at once",
+          "aspectRatio": "2200 / 1238",
+          "fit": "cover",
+          "background": "#e4edeb"
+        },
+        {
+          "id": "swipey-fields-solution-alfie-nudge",
+          "section": "solution",
+          "kind": "video",
+          "src": "/work/swipey-fields/alfie-nudge.mp4",
+          "carouselLabel": "ALFIE NOTICES",
+          "alt": "Alfie flags projects mentioned in the notes of 14 transactions and suggests fields drawn from those notes",
+          "aspectRatio": "16 / 9",
+          "fit": "cover",
+          "background": "#0d0d0d"
+        },
+        {
+          "id": "swipey-fields-solution-create-field",
+          "section": "solution",
+          "kind": "video",
+          "src": "/work/swipey-fields/create-field.mp4",
+          "carouselLabel": "CREATE FIELD",
+          "alt": "Creating a field from an Alfie suggestion, choosing its type, and watching the new column land in the transactions table",
+          "aspectRatio": "16 / 9",
+          "fit": "cover",
+          "background": "#0d0d0d"
+        },
+        {
+          "id": "swipey-fields-solution-accept-all",
+          "section": "solution",
+          "kind": "video",
+          "src": "/work/swipey-fields/accept-all.mp4",
+          "carouselLabel": "ACCEPT ALL",
+          "alt": "Eight dashed suggestion pills accepted in one action, then confirmed on the transaction",
+          "aspectRatio": "16 / 9",
+          "fit": "cover",
+          "background": "#0d0d0d"
+        },
+        {
+          "id": "swipey-fields-solution-field-rules",
+          "section": "solution",
+          "kind": "video",
+          "src": "/work/swipey-fields/field-rules.mp4",
+          "poster": "/work/swipey-fields/manage-fields.jpg",
+          "carouselLabel": "FIELD RULES",
+          "alt": "Manage fields is admin-gated: an admin reviews the org-wide field list and the Alfie-drafted rule that fills it",
+          "aspectRatio": "16 / 9",
+          "fit": "cover",
+          "background": "#0d0d0d"
+        }
+      ],
       "mediaSettings": {
         "hero": {
           "background": "#e4edeb",
@@ -1616,6 +1772,100 @@
       }
     },
     {
+      "slug": "swipey-rbac",
+      "section": "work",
+      "title": "Role-based access",
+      "oneliner": "Twelve people held admin access. The product treated them like twelve equal kings.",
+      "type": "PRODUCT DESIGN · 2026",
+      "tags": [
+        "Product Design",
+        "Access Control",
+        "Information Architecture",
+        "Prototyping",
+        "AI Interaction"
+      ],
+      "prev": {
+        "slug": "swipey-get-started",
+        "title": "Get Started"
+      },
+      "next": null,
+      "problemHeadline": "Swipey had one people-access permission. Give it to a department head and they could manage everyone, not just the people below them. The permission said what they could do. Nothing said whose access they could touch.",
+      "roleHeadline": "Product design and prototyping for Swipey's access model. I defined the permissions, reporting-chain reach, safeguards and connected admin flow, then built the prototype with AI agents.",
+      "researchHeadline": "The permissions already existed: twenty-five actions across seven product areas. The missing part was the boundary around them — who can invite, who can change access, and whose access they can change.",
+      "challengeHeadline": "A separate Roles page and location scope both looked tidy. Both modelled the company wrong. A role answers what someone can do. The reporting chain answers whose work they can reach.",
+      "processHeadline": "I started with one person's effective access, reused the same grant model for custom roles, invitations and overrides, then derived reach from who reports to whom. Nobody can grant or remove a permission they do not hold.",
+      "solutionHeadline": "One Users workspace for people, the org chart and custom roles — with effective access that reads before it edits, reachable branches that stay visible, and impact checks before anything consequential changes.",
+      "solutionKicker": "THE BUILD",
+      "outcomesHeadline": "A sixty-six-person test company could move through users, roles, delegation and AI-assisted changes without switching access models. Next I would test the boundaries with owners, finance leads and department heads.",
+      "pullQuote": "Twelve people holding access are twelve equal kings. That was the bug.",
+      "heroImage": "/work/swipey-rbac/cover.png",
+      "editorialMedia": [
+        {
+          "id": "swipey-rbac-research-users",
+          "section": "research",
+          "kind": "image",
+          "src": "/work/swipey-rbac/research-users.png",
+          "alt": "The Users table listing every member with their department, role, how many product areas they act in, and eKYC status",
+          "aspectRatio": "16 / 9",
+          "fit": "cover",
+          "background": "#f2f2f2"
+        },
+        {
+          "id": "swipey-rbac-decision-roles",
+          "section": "decision",
+          "kind": "image",
+          "src": "/work/swipey-rbac/decision-roles.png",
+          "alt": "The Custom roles view, where access is defined once as a reusable role rather than per person",
+          "aspectRatio": "16 / 9",
+          "fit": "cover",
+          "background": "#f2f2f2"
+        },
+        {
+          "id": "swipey-rbac-process-org-chart",
+          "section": "process",
+          "kind": "image",
+          "src": "/work/swipey-rbac/process-org-chart.png",
+          "alt": "The org chart showing the reporting chain, with lit nodes marking the people whose access the current admin can change",
+          "aspectRatio": "16 / 9",
+          "fit": "cover",
+          "background": "#f2f2f2"
+        },
+        {
+          "id": "swipey-rbac-solution-access-configuration",
+          "section": "solution",
+          "kind": "video",
+          "src": "/work/swipey-rbac/access-configuration.mp4",
+          "carouselLabel": "ACCESS CONFIG",
+          "alt": "Configuring a team member's role and reviewing their effective access",
+          "aspectRatio": "16 / 9",
+          "fit": "cover",
+          "background": "#0d0d0d"
+        },
+        {
+          "id": "swipey-rbac-solution-custom-role",
+          "section": "solution",
+          "kind": "video",
+          "src": "/work/swipey-rbac/custom-role.mp4",
+          "carouselLabel": "CUSTOM ROLE",
+          "alt": "Creating a custom role and selecting permissions across Swipey's product areas",
+          "aspectRatio": "16 / 9",
+          "fit": "cover",
+          "background": "#0d0d0d"
+        },
+        {
+          "id": "swipey-rbac-solution-reporting-chain",
+          "section": "solution",
+          "kind": "video",
+          "src": "/work/swipey-rbac/reporting-chain.mp4",
+          "carouselLabel": "REPORTING CHAIN",
+          "alt": "Exploring the reporting chain that determines whose access a manager can reach",
+          "aspectRatio": "16 / 9",
+          "fit": "cover",
+          "background": "#0d0d0d"
+        }
+      ]
+    },
+    {
       "slug": "south-china-sea",
       "section": "mixed-media",
       "title": "South China Sea",
@@ -1633,8 +1883,8 @@
         "slug": "faces-of-power",
         "title": "Faces of Power"
       },
-      "backHref": "/play/mixed-media",
-      "backLabel": "MIXED MEDIA",
+      "backHref": "/play",
+      "backLabel": "PLAY",
       "heroImage": "/creative/mixed-media/south-china-sea/hero.png",
       "researchImage": "/creative/mixed-media/south-china-sea/research-processed.png",
       "challengeImages": [
@@ -1778,8 +2028,8 @@
         "slug": "mixed-media-project",
         "title": "Untitled project"
       },
-      "backHref": "/play/mixed-media",
-      "backLabel": "MIXED MEDIA",
+      "backHref": "/play",
+      "backLabel": "PLAY",
       "heroImage": "/creative/mixed-media/faces-of-power/hero.png",
       "researchImage": "/creative/mixed-media/faces-of-power/research-processed.png",
       "challengeImages": [
@@ -1882,8 +2132,8 @@
         "slug": "soho",
         "title": "SOHO"
       },
-      "backHref": "/play/branding",
-      "backLabel": "BRANDING",
+      "backHref": "/play",
+      "backLabel": "PLAY",
       "problemHeadline": "My first fully self-directed project. No brief, no client, no constraints beyond my own taste, treating branding as world-building rather than identity design.",
       "roleHeadline": "Sole creative director across concept, product design, and marketing.",
       "researchHeadline": "I mapped the Matrix's visual language, glitch aesthetics, green code and retro-digital imagery, onto current digital culture: nostalgia, memes, lo-fi irony. The audience wasn't a demographic, it was an attitude.",
@@ -1999,8 +2249,8 @@
         "title": "Oracle"
       },
       "next": null,
-      "backHref": "/play/branding",
-      "backLabel": "BRANDING",
+      "backHref": "/play",
+      "backLabel": "PLAY",
       "heroImage": "/creative/branding/soho/cover.png",
       "solutionHeroImage": "/creative/branding/soho/solution-hero-processed.png",
       "solutionImages": [
@@ -2214,7 +2464,8 @@
         "hero": {
           "fit": "cover"
         }
-      }
+      },
+      "cardVideo": "/Play/bowl-demo.mp4"
     },
     {
       "slug": "sling",
@@ -2246,7 +2497,8 @@
         "hero": {
           "fit": "cover"
         }
-      }
+      },
+      "cardVideo": "/Play/sling-demo.mp4"
     },
     {
       "slug": "game-three",

@@ -1,0 +1,94 @@
+{
+  "version": 1,
+  "pages": {
+    "/": [
+      {
+        "sel": "body > section > div",
+        "x": 0,
+        "y": 0,
+        "scale": 1
+      },
+      {
+        "sel": "body > section > div > div > h1 > em",
+        "x": 0,
+        "y": 0,
+        "scale": 1
+      },
+      {
+        "sel": "body > section > div > div > div > div > button:nth-of-type(2) > span:nth-of-type(1) > img",
+        "x": -4,
+        "y": 0,
+        "scale": 1
+      },
+      {
+        "sel": "#portfolio-hero-title",
+        "x": 0,
+        "y": 0,
+        "scale": 1
+      },
+      {
+        "sel": "#selected-work",
+        "x": 0,
+        "y": 0,
+        "scale": 1,
+        "visible": false
+      },
+      {
+        "sel": "body > main > section:nth-of-type(2)",
+        "x": 0,
+        "y": 0,
+        "scale": 1,
+        "visible": false
+      },
+      {
+        "sel": "body > main > section:nth-of-type(1)",
+        "x": 0,
+        "y": 0,
+        "scale": 1,
+        "visible": false
+      },
+      {
+        "sel": "body > main > section:nth-of-type(3)",
+        "x": 0,
+        "y": 0,
+        "scale": 1,
+        "visible": false
+      },
+      {
+        "sel": "body > main",
+        "x": 0,
+        "y": 0,
+        "scale": 1,
+        "visible": false
+      }
+    ],
+    "/about": [
+      {
+        "sel": "body > nav > a",
+        "x": 0,
+        "y": 0,
+        "scale": 1
+      },
+      {
+        "sel": "body > nav",
+        "x": 610,
+        "y": 270,
+        "scale": 1,
+        "deleted": true
+      },
+      {
+        "sel": "body > main > div > h1 > span",
+        "x": 0,
+        "y": -16,
+        "scale": 1
+      },
+      {
+        "sel": "body > main > div > h1",
+        "x": -470,
+        "y": -270,
+        "scale": 1
+      }
+    ]
+  },
+  "guides": {}
+}

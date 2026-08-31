@@ -324,6 +324,9 @@ export function CaseStudyLayout({
   solutionEmbedUrl, solutionEmbedTitle = 'Live experience', solutionEmbedAspectRatio = '4 / 3', solutionEmbedCtaLabel = 'OPEN LIVE APP',
   solutionEmbedWidth = 'min(100%, 1120px)', solutionEmbedCalloutLabel, solutionEmbedCalloutTitle, solutionEmbedCalloutBody, spotify, listeningStyle,
 }: CaseStudyLayoutProps) {
+  const creativeDetail = section !== 'work'
+  const defaultBackHref = creativeDetail ? '/play' : backHref
+  const defaultBackLabel = creativeDetail ? 'PLAY' : backLabel
   const solutionHeroImage = solutionEmbedUrl ? undefined : rawSolutionHeroImage
   const solutionImages = solutionEmbedUrl ? undefined : rawSolutionImages
   const mediaBlocks = solutionEmbedUrl ? rawMediaBlocks?.filter((b) => b.section !== 'solution') : rawMediaBlocks
@@ -333,8 +336,8 @@ export function CaseStudyLayout({
   const isLocalProto = Boolean(solutionEmbedUrl?.startsWith('/proto/'))
   const mobileShotSrc = `/work/${slug}/mobile.png`
   const [mobileShotMissing, setMobileShotMissing] = useState(false)
-  const [resolvedBackHref, setResolvedBackHref] = useState(backHref)
-  const [resolvedBackLabel, setResolvedBackLabel] = useState(backLabel)
+  const [resolvedBackHref, setResolvedBackHref] = useState(defaultBackHref)
+  const [resolvedBackLabel, setResolvedBackLabel] = useState(defaultBackLabel)
   const [fromScad, setFromScad] = useState(false)
 
   useEffect(() => {

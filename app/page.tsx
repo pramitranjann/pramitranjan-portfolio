@@ -28,7 +28,7 @@ export default async function HomePage() {
   return (
     <>
       <Nav />
-      <IntroAnimation />
+      {/* Temporarily disabled while generating clean Figma references. */}
       {content.home.heroMode === 'portfolio-carousel' ? (
         <PortfolioHero content={content.home.portfolioCarousel} />
       ) : (

@@ -127,11 +127,11 @@ export function ProjectCard({
         </div>
         <p className="font-reading" style={descriptionStyle}>{oneliner}</p>
         {/* CTA left, tags hard right — one row of chrome at the foot of the card. */}
-        <div className="flex items-baseline justify-between" style={{ gap: '12px', marginTop: '10px', flex: '0 0 auto' }}>
-          <span className="font-mono" style={{ fontSize: metaSize ?? 'var(--text-meta)', color: comingSoon ? 'var(--color-body)' : 'var(--color-red)', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>
+        <div className="flex items-baseline justify-between" style={{ gap: '4px', marginTop: '10px', flex: '0 0 auto' }}>
+          <span className="font-mono" style={{ fontSize: metaSize ?? 'var(--text-meta)', color: comingSoon ? 'var(--color-body)' : 'var(--color-red)', letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>
             {comingSoon ? 'COMING SOON' : <><span className="card-cta-inner">VIEW</span> <span className="arrow-nudge">→</span></>}
           </span>
-          <span className="font-mono" style={{ fontSize: metaSize ?? 'var(--text-meta)', color: 'var(--color-label)', letterSpacing: '0.1em', textAlign: 'right' }}>{category}</span>
+          <span className="font-mono" style={{ minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', fontSize: `calc(${metaSize ?? 'var(--text-meta)'} - 1px)`, color: 'var(--color-label)', letterSpacing: '0.02em', textAlign: 'right', whiteSpace: 'nowrap', flexShrink: 1 }}>{category}</span>
         </div>
         {!comingSoon && (
           <div className="pcard-hover" aria-hidden="true" style={{ padding: cardPadding ?? '16px' }}>

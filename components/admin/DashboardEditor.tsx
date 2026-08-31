@@ -4,6 +4,7 @@ import { isValidElement, useEffect, useMemo, useState } from 'react'
 import type { DashboardWriteMode } from '@/lib/dashboard-storage'
 import { deriveCaseStudyMediaBlocks } from '@/lib/case-study-media'
 import { applyTemplate, CASE_STUDY_TEMPLATES } from '@/lib/case-study-templates'
+import { buildPlayWall, getPlayWallSources } from '@/lib/play-wall'
 import type {
   AudioSettings,
   CardStyleSettings,
@@ -2328,6 +2329,74 @@ function SitePagesEditor({
   )
 }
 
+const PLAY_WALL_MEDIUM_LABEL = { game: 'GAME', photo: 'PHOTO', mixed: 'MIXED MEDIA' } as const
+
+function PlayWallArrangement({
+  content,
+  updateSection,
+}: {
+  content: SiteContent
+  updateSection: <K extends keyof SiteContent>(key: K, value: SiteContent[K]) => void
+}) {
+  const wall = buildPlayWall(getPlayWallSources(content), content.copy.playPage.cardOrder)
+
+  const saveOrder = (cardOrder: string[]) => updateSection('copy', {
+    ...content.copy,
+    playPage: { ...content.copy.playPage, cardOrder },
+  })
+
+  return (
+    <SectionFrame title="Card Arrangement">
+      <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#999999', lineHeight: 1.7 }}>
+        The order cards appear in the Play wall, top-left to bottom-right. Games, photography and
+        mixed media share one wall. Anything added later joins the end until you place it here.
+      </p>
+
+      {wall.length ? (
+        <div style={{ display: 'grid', gap: '8px' }}>
+          {wall.map((item, index) => (
+            <div
+              key={item.key}
+              className="flex items-center"
+              style={{ gap: '12px', border: '1px solid #1f1f1f', background: '#0d0d0d', padding: '12px 14px' }}
+            >
+              <span className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#444444', width: '24px', flexShrink: 0 }}>
+                {index + 1}
+              </span>
+              <span className="font-mono" style={{ flex: 1, minWidth: 0, fontSize: 'var(--text-body)', color: '#f5f2ed', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {item.title}
+              </span>
+              <span className="font-mono" style={{ fontSize: 'var(--text-meta)', color: '#666666', letterSpacing: '0.12em', flexShrink: 0 }}>
+                {PLAY_WALL_MEDIUM_LABEL[item.medium]}
+              </span>
+              <ReorderButtons
+                index={index}
+                length={wall.length}
+                onMove={(direction) => saveOrder(moveItem(wall, index, direction).map((entry) => entry.key))}
+              />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="font-mono" style={{ fontSize: 'var(--text-body)', color: '#666666', lineHeight: 1.7 }}>
+          No cards on the Play wall yet.
+        </p>
+      )}
+
+      {content.copy.playPage.cardOrder?.length ? (
+        <button
+          type="button"
+          onClick={() => saveOrder([])}
+          className="font-mono"
+          style={{ justifySelf: 'start', background: 'transparent', border: '1px solid #2a2a2a', color: '#999999', padding: '8px 12px', cursor: 'pointer', letterSpacing: '0.1em', fontSize: 'var(--text-meta)' }}
+        >
+          RESET TO DEFAULT ORDER
+        </button>
+      ) : null}
+    </SectionFrame>
+  )
+}
+
 function CreativePageEditor({
   content,
   updateSection,
@@ -2336,7 +2405,10 @@ function CreativePageEditor({
   updateSection: <K extends keyof SiteContent>(key: K, value: SiteContent[K]) => void
 }) {
   return (
-    <SectionFrame title="Play Page">
+    <>
+      <PlayWallArrangement content={content} updateSection={updateSection} />
+
+      <SectionFrame title="Play Page">
       <Field label="Eyebrow">
         <input
           value={content.copy.creativePage.eyebrow}
@@ -2487,7 +2559,8 @@ function CreativePageEditor({
           style={inputStyle()}
         />
       </Field>
-    </SectionFrame>
+      </SectionFrame>
+    </>
   )
 }
 

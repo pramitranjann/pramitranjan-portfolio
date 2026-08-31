@@ -11,9 +11,6 @@ export function Footer() {
         Designed between meals and gym sets. My mum thinks it looks nice. © 2026
       </span>
       <span className="shrink-0 flex items-center" style={{ gap: '20px' }}>
-        <a href="/lab" className="footer-link footer-link-secondary" style={{ fontSize: '10px', letterSpacing: '0.14em' }}>
-          LAB_
-        </a>
         <a href="/colophon" className="footer-link footer-link-secondary" style={{ fontSize: '10px', letterSpacing: '0.14em' }}>
           COLOPHON_
         </a>

@@ -1,9 +1,10 @@
+import { PixleNudge } from "../components/PixleNudge";
 import type { Metadata } from 'next'
 import type { CSSProperties } from 'react'
+import Script from 'next/script'
 import { DM_Serif_Display, DM_Mono } from 'next/font/google'
 import localFont from 'next/font/local'
 import { Analytics } from '@vercel/analytics/next'
-import { Agentation } from 'agentation'
 import './globals.css'
 import { JsonLd } from '@/components/JsonLd'
 import { MotionSettingsProvider } from '@/components/MotionSettingsProvider'
@@ -176,7 +177,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       suppressHydrationWarning
     >
       <head>
-        <script dangerouslySetInnerHTML={{ __html: `document.documentElement.classList.add('js-ready')` }} />
+        {process.env.NODE_ENV === 'development' ? (
+          <Script src="https://mcp.figma.com/mcp/html-to-design/capture.js" strategy="afterInteractive" />
+        ) : null}
+        <Script id="js-ready" strategy="beforeInteractive">
+          {`document.documentElement.classList.add('js-ready')`}
+        </Script>
         <JsonLd
           data={[
             buildWebSiteJsonLd(DEFAULT_DESCRIPTION),
@@ -197,7 +203,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </SiteCopyProvider>
         </MotionSettingsProvider>
         <Analytics />
-        {process.env.NODE_ENV === 'development' && <Agentation />}
       </body>
     </html>
   )

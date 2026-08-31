@@ -9,32 +9,15 @@ import { PageHero } from '@/components/PageHero'
 import { CreativeListingCard } from '@/components/CreativeListingCard'
 import { PlayCard } from '@/components/PlayCard'
 import type { CaseStudyContent, HoverPreviewSettings, PhotographyCardStyleSettings, PhotographyCity } from '@/lib/site-content-schema'
+import { buildPlayWall } from '@/lib/play-wall'
 import { getCaseStudyPreviewImages, mergePreviewImages } from '@/lib/preview-images'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-type PlayItem =
-  | { key: string; medium: 'game'; game: CaseStudyContent }
-  | { key: string; medium: 'photo'; city: PhotographyCity }
-  | { key: string; medium: 'mixed'; project: CaseStudyContent }
-
-/* A curated order rather than an algorithm — every row is meant to carry more than one
-   medium. Anything the recipe does not name is appended, so new content still shows up. */
-function buildWall({ games, cities, mixedMediaProjects }: { games: CaseStudyContent[]; cities: PhotographyCity[]; mixedMediaProjects: CaseStudyContent[] }) {
-  const g = games.map<PlayItem>((game) => ({ key: `game-${game.slug}`, medium: 'game', game }))
-  const p = cities.map<PlayItem>((city) => ({ key: `photo-${city.slug}`, medium: 'photo', city }))
-  const m = mixedMediaProjects.map<PlayItem>((project) => ({ key: `mixed-${project.slug}`, medium: 'mixed', project }))
-
-  const seq: PlayItem[] = []
-  for (const item of [g[0], p[0], m[0], p[1], g[1], p[2], m[1], p[3]]) {
-    if (item) seq.push(item)
-  }
-  const used = new Set(seq.map((item) => item.key))
-  for (const item of [...g, ...p, ...m]) {
-    if (!used.has(item.key)) seq.push(item)
-  }
-  return seq
-}
+/* Ambient image rotation is opt-in per card, not a property of the wall. bowl and sling
+   now render a looping clip instead (cardVideo), which bypasses the image rotation
+   entirely — they stay listed so removing their clip restores rotation rather than a still. */
+const AMBIENT_SLUGS = new Set(['bowl', 'sling', 'south-china-sea', 'hcmc'])
 
 export function PlayPageClient({
   games,
@@ -52,7 +35,8 @@ export function PlayPageClient({
   const wallRef = useRef<HTMLDivElement>(null)
   const motion = useMotionSettings()
   const copy = useSiteCopy().creativePage
-  const gameCtaLabel = useSiteCopy().playPage.cardCtaLabel
+  const playCopy = useSiteCopy().playPage
+  const gameCtaLabel = playCopy.cardCtaLabel
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
@@ -85,7 +69,7 @@ export function PlayPageClient({
     return () => contexts.forEach((context) => context.revert())
   }, [motion.gridRevealDuration, motion.gridRevealStagger, motion.gridStartScale])
 
-  const wall = buildWall({ games, cities, mixedMediaProjects })
+  const wall = buildPlayWall({ games, cities, mixedMediaProjects }, playCopy.cardOrder)
 
   return (
     <>
@@ -105,7 +89,9 @@ export function PlayPageClient({
                   href={`/play/${item.game.slug}`}
                   images={mergePreviewImages(item.game.heroImage, getCaseStudyPreviewImages(item.game))}
                   ctaLabel={gameCtaLabel}
+                  cardVideo={item.game.cardVideo}
                   hoverPreviewSettings={hoverPreviewSettings}
+                  ambientIndex={AMBIENT_SLUGS.has(item.game.slug) ? index : undefined}
                   priorityImage={index < 4}
                 />
               ) : item.medium === 'photo' ? (
@@ -123,6 +109,7 @@ export function PlayPageClient({
                   hoverImageScale={item.city.hoverImageScale}
                   cardStyle={cardStyle}
                   hoverPreviewSettings={hoverPreviewSettings}
+                  ambientIndex={AMBIENT_SLUGS.has(item.city.slug) ? index : undefined}
                   priorityImage={index < 4}
                   sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 25vw"
                 />
@@ -141,6 +128,7 @@ export function PlayPageClient({
                   hoverImageScale={item.project.cardHoverImageScale}
                   cardStyle={cardStyle}
                   hoverPreviewSettings={hoverPreviewSettings}
+                  ambientIndex={AMBIENT_SLUGS.has(item.project.slug) ? index : undefined}
                   priorityImage={index < 4}
                   sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 25vw"
                 />

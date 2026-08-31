@@ -126,15 +126,14 @@ export async function getSwipeyCaseStudies() {
     .filter((item): item is CaseStudyContent => Boolean(item))
 }
 
-// The Swipey stories render inside the /work/swipey hub as modals, never as
-// standalone pages — so they stay `hidden`, which correctly 404s them as routes.
-// The hub still has to read them, hence this narrow bypass: it reads the raw
-// file for these slugs only, leaving filterVisibleCaseStudies untouched for
-// everything else.
-export const SWIPEY_STORY_SLUGS = ['swipey-fields', 'swipey-admin', 'swipey-get-started'] as const
+export const SWIPEY_STORY_SLUGS = ['swipey-fields', 'swipey-admin', 'swipey-get-started', 'swipey-rbac'] as const
+
+export function isSwipeyStorySlug(slug: string) {
+  return SWIPEY_STORY_SLUGS.some((storySlug) => storySlug === slug)
+}
 
 export async function getSwipeyStories() {
-  const content = await readSiteContentFile()
+  const content = await getPublicSiteContent()
   return SWIPEY_STORY_SLUGS.map((slug) => content.caseStudies.find((item) => item.slug === slug)).filter(
     (item): item is CaseStudyContent => Boolean(item),
   )
