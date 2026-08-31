@@ -1769,7 +1769,8 @@
           "background": "#e4edeb",
           "fit": "contain"
         }
-      }
+      },
+      "hidden": true
     },
     {
       "slug": "swipey-rbac",
