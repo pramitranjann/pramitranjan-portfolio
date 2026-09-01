@@ -1260,7 +1260,7 @@ html, body {
   }
 
   .site-footer {
-    padding-inline: 24px !important;
+    padding-inline: var(--layout-page-gutter) !important;
   }
 }
 
@@ -1402,7 +1402,7 @@ body.carousel-reengaging main {
 
 @media (max-width: 767px) {
   .game-intro-section {
-    padding: 28px 24px 40px !important;
+    padding: 28px var(--layout-page-gutter) 40px !important;
     min-height: auto !important;
   }
 
@@ -1839,6 +1839,20 @@ body.carousel-reengaging main {
 
 /* ─── Mobile responsive overrides (< 768px) ──────────────────────────────── */
 @media (max-width: 767px) {
+  /* One phone gutter. Every horizontal inset at this breakpoint reads the token
+     instead of repeating a literal — that drift is what put the nav at 20px, the
+     hero and About at 24px and everything token-driven at 40px on one screen.
+     !important because layout.tsx writes the desktop value inline on <body>. */
+  body {
+    --layout-page-gutter: 24px !important;
+  }
+
+  /* Case-study shells: the <=900px rule leaves 20px per side on phones. */
+  .editorial-shell,
+  .editorial-shell.editorial-narrow {
+    width: min(100% - var(--layout-page-gutter) * 2, 680px);
+  }
+
   /* Type scale — clamp large sizes for small screens */
   :root {
     --text-h1:      36px;
@@ -1850,18 +1864,18 @@ body.carousel-reengaging main {
 
   /* Nav — reduce side padding */
   .site-nav {
-    padding: 18px 20px !important;
+    padding: 18px var(--layout-page-gutter) !important;
   }
 
   /* Hero stages — reduce side padding so text doesn't clip */
   .hero-stage {
-    padding: 60px 24px !important;
+    padding: 60px var(--layout-page-gutter) !important;
   }
 
   /* Photography section — stack vertically, hide film strip */
   .photography-section {
     grid-template-columns: 1fr !important;
-    padding: 48px 24px !important;
+    padding: 48px var(--layout-page-gutter) !important;
     gap: 40px !important;
     min-height: unset !important;
   }
@@ -1882,7 +1896,7 @@ body.carousel-reengaging main {
   /* About section — reduce side padding */
   .about-section {
     grid-template-columns: 1fr !important;
-    padding: 48px 24px !important;
+    padding: 48px var(--layout-page-gutter) !important;
     gap: 24px !important;
   }
 
@@ -1898,7 +1912,7 @@ body.carousel-reengaging main {
 
   /* About page — collapse 2-col layout to single column */
   .about-page-section {
-    padding: 48px 24px !important;
+    padding: 48px var(--layout-page-gutter) !important;
   }
   .about-page-grid {
     grid-template-columns: 1fr !important;
@@ -1907,10 +1921,10 @@ body.carousel-reengaging main {
 
   /* Creative page — reduce section padding and hero padding */
   .creative-hero-section {
-    padding: 40px 24px !important;
+    padding: 40px var(--layout-page-gutter) !important;
   }
   .creative-section {
-    padding: 32px 24px !important;
+    padding: 32px var(--layout-page-gutter) !important;
   }
 
   /* Creative cards — shorter image on mobile (2-col layout) */
@@ -1920,10 +1934,10 @@ body.carousel-reengaging main {
 
   /* Work page — reduce hero and grid padding on mobile */
   .work-hero-section {
-    padding: 40px 24px !important;
+    padding: 40px var(--layout-page-gutter) !important;
   }
   .work-grid-section {
-    padding: 24px !important;
+    padding: 24px var(--layout-page-gutter) !important;
   }
 
   /* Work grid — single column on mobile */
@@ -1961,7 +1975,7 @@ body.carousel-reengaging main {
 
   /* Case study — back link padding */
   .case-study-back {
-    padding: 20px 24px 0 !important;
+    padding: 20px var(--layout-page-gutter) 0 !important;
   }
 
   /* Case study — hero collapses to single column, image hidden */
@@ -1970,7 +1984,7 @@ body.carousel-reengaging main {
     min-height: unset !important;
   }
   .case-study-hero-text {
-    padding: 32px 24px !important;
+    padding: 32px var(--layout-page-gutter) !important;
     border-right: none !important;
   }
   .case-study-hero-image {
@@ -1979,7 +1993,7 @@ body.carousel-reengaging main {
 
   /* Case study — all content sections reduce padding */
   .case-study-section {
-    padding: 32px 24px !important;
+    padding: 32px var(--layout-page-gutter) !important;
   }
 
   /* Case study — meta grids (OVERVIEW, MY ROLE) collapse to single column */
@@ -2027,7 +2041,7 @@ body.carousel-reengaging main {
 
   /* Case study — prev/next padding */
   .case-study-prev-next {
-    padding: 20px 24px !important;
+    padding: 20px var(--layout-page-gutter) !important;
   }
 
   .case-study-inline-layout {
@@ -2155,8 +2169,8 @@ body.carousel-reengaging main {
 
 @media (max-width: 639px) {
   .play-wall {
-    padding-left: 24px;
-    padding-right: 24px;
+    padding-left: var(--layout-page-gutter);
+    padding-right: var(--layout-page-gutter);
     grid-template-columns: minmax(0, 1fr);
     grid-auto-rows: auto;
   }
