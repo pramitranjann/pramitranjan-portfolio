@@ -30,7 +30,9 @@ function CardVideo({ src, poster, label }: { src: string; poster?: string; label
       loop
       muted
       playsInline
-      preload="metadata"
+      /* `metadata` tells the browser not to fetch any media, so an autoplaying card sat on
+         its poster while it went back for the first frames. These clips are 1–2.4MB. */
+      preload="auto"
       style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
     />
   )

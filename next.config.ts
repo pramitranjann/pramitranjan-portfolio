@@ -39,6 +39,10 @@ const protoContentSecurityPolicy = contentSecurityPolicy
   .replace(`script-src ${scriptSrc}`, `script-src ${scriptSrc}${isProduction ? " 'unsafe-eval'" : ''}`)
 
 const nextConfig: NextConfig = {
+  /* Phone testing hits the dev server over the LAN; without this Next blocks its own dev
+     resources from that origin and the page never hydrates. The host lives in the ignored
+     .env.local so no machine's address is committed. Dev-only. */
+  allowedDevOrigins: process.env.DEV_ORIGIN ? [process.env.DEV_ORIGIN] : [],
   images: {
     remotePatterns: [new URL('https://jqklreasrzeulcsjewav.supabase.co/storage/v1/object/public/**')],
     // A single allowed quality raises the whole site off the default 75:

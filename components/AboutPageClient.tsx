@@ -204,7 +204,7 @@ function InlineList({ label, entries }: { label: string; entries: Array<{ text: 
   return (
     <div className="about-rows about-rows-inline">
       <span className="font-mono about-section-label">{cleanLabel(label)}</span>
-      <p className="font-mono about-inline-list">
+      <p className="font-mono about-inline-list about-inline-list-wrap">
         {entries.map((entry, index) => (
           <span key={entry.text} className="about-inline-entry">
             <span>{entry.text}</span>
@@ -218,25 +218,47 @@ function InlineList({ label, entries }: { label: string; entries: Array<{ text: 
 }
 
 function ActivityList({ label, entries }: { label: string; entries: EntryItem[] }) {
+  /* ponytail: one open index instead of pure CSS hover — a tap has no "un-hover", so on
+     phones the card could only be opened, never closed. */
+  const [openIndex, setOpenIndex] = useState<number | null>(null)
+
   return (
     <div className="about-rows about-rows-inline">
       <span className="font-mono about-section-label">{cleanLabel(label)}</span>
       <p className="font-mono about-inline-list">
         {entries.map((entry, index) => {
           const descriptionId = `activity-description-${index}`
+          const open = openIndex === index
+          /* A trailing parenthetical is format detail, not the name — carrying it in the
+             card's role line keeps every row one line tall. */
+          const parenthetical = entry.org.match(/^(.*?)\s*\((.+)\)$/)
+          const name = parenthetical ? parenthetical[1] : entry.org
+          const role = parenthetical ? `${entry.role} · ${parenthetical[2].toUpperCase()}` : entry.role
 
           return (
-            <span key={entry.org} className="about-inline-entry about-activity">
-              <span
-                className="about-activity-trigger"
-                tabIndex={0}
-                aria-describedby={descriptionId}
+            <span
+              key={entry.org}
+              className="about-inline-entry about-activity"
+              data-open={open || undefined}
+              onPointerLeave={(event) => {
+                /* Touch pointers are destroyed on lift, so they fire pointerleave straight
+                   after the tap — only a real mouse leaving should close the card. */
+                if (event.pointerType !== 'mouse') return
+                setOpenIndex((current) => (current === index ? null : current))
+              }}
+            >
+              <button
+                type="button"
+                className="font-mono about-activity-trigger"
+                aria-expanded={open}
+                aria-controls={descriptionId}
+                onClick={() => setOpenIndex(open ? null : index)}
               >
-                {entry.org}
-              </span>
+                {name}
+              </button>
               <span className="about-inline-meta">{entry.date}</span>
-              <span id={descriptionId} role="tooltip" className="font-reading about-activity-card">
-                <span className="font-mono about-activity-role">{entry.role}</span>
+              <span id={descriptionId} className="font-reading about-activity-card">
+                <span className="font-mono about-activity-role">{role}</span>
                 {entry.desc}
               </span>
               {index < entries.length - 1 ? <span className="about-inline-separator" aria-hidden="true">·</span> : null}

@@ -1845,6 +1845,7 @@ body.carousel-reengaging main {
     --text-h2:      28px;
     --text-h3:      20px;
     --text-body-lg: 16px;
+    --editorial-statement-size: 28px;
   }
 
   /* Nav — reduce side padding */
@@ -2474,16 +2475,26 @@ body.carousel-reengaging main {
 }
 
 .about-activity-trigger {
-  cursor: help;
+  padding: 0;
+  color: inherit;
+  background: none;
+  border: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: left;
+  cursor: pointer;
   transition-property: color;
   transition-duration: 120ms;
 }
 
+/* U+FE0E forces text presentation — without it iOS substitutes a colour emoji arrow that
+   ignores `color`, so the cue rendered grey on the phone and red everywhere else. */
 .about-activity-trigger::after {
   display: inline-block;
   margin-left: 0.3em;
   color: var(--color-red);
-  content: '↙';
+  content: '↙\FE0E';
+  font-family: var(--font-mono);
   font-size: 0.78em;
   line-height: 0;
   transform: rotate(0deg);
@@ -2498,9 +2509,14 @@ body.carousel-reengaging main {
   outline: none;
 }
 
-.about-activity:hover .about-activity-trigger::after,
-.about-activity:focus-within .about-activity-trigger::after {
+.about-activity[data-open] .about-activity-trigger::after {
   transform: rotate(135deg);
+}
+
+@media (hover: hover) {
+  .about-activity:hover .about-activity-trigger::after {
+    transform: rotate(135deg);
+  }
 }
 
 .about-activity-card {
@@ -2521,13 +2537,20 @@ body.carousel-reengaging main {
   pointer-events: none;
   transform: translate(-50%, 4px);
   transition-property: opacity, transform;
-  transition-duration: 120ms;
+  transition-duration: 220ms;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
 }
 
-.about-activity:hover .about-activity-card,
-.about-activity:focus-within .about-activity-card {
+.about-activity[data-open] .about-activity-card {
   opacity: 1;
   transform: translate(-50%, 0);
+}
+
+@media (hover: hover) {
+  .about-activity:hover .about-activity-card {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }
 
 .about-activity-role {
@@ -2662,6 +2685,23 @@ body.carousel-reengaging main {
     display: none;
   }
 
+  /* Tools are short credits — running text that wraps fills the line instead of leaving
+     one word per row. */
+  .about-inline-list-wrap {
+    display: block;
+    line-height: 1.9;
+  }
+
+  .about-inline-list-wrap .about-inline-entry {
+    display: inline;
+  }
+
+  .about-inline-list-wrap .about-inline-separator {
+    display: inline;
+  }
+
+  /* The card overlays the list — it never enters the row flow, so opening one cannot
+     change the spacing of the rows around it. */
   .about-activity {
     display: flex;
   }
@@ -2673,9 +2713,20 @@ body.carousel-reengaging main {
     transform: translateY(4px);
   }
 
-  .about-activity:hover .about-activity-card,
-  .about-activity:focus-within .about-activity-card {
+  .about-activity[data-open] .about-activity-card {
+    pointer-events: auto;
     transform: translateY(0);
+  }
+
+  /* Tabs sit two-up so full clip names fit instead of truncating mid-word. */
+  .editorial-video-carousel-tabs {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .editorial-video-carousel-tabs span {
+    font-size: 11px;
+    white-space: normal;
   }
 
 }
