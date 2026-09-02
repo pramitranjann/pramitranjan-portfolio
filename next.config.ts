@@ -6,6 +6,15 @@ const projectRoot = __dirname
 // own deployment; old browser and native-client URLs continue to resolve.
 const lifeWebOrigin = 'https://life.pramitranjan.com'
 
+// Vercel Hobby does not expose UTM reporting. Keep campaign attribution in
+// the pathname instead: the visitor sees the normal homepage while Web
+// Analytics records each source as a separate page.
+const campaignRewrites = [
+  { source: '/portfolio', destination: '/' },
+  { source: '/hello', destination: '/' },
+  { source: '/latest', destination: '/' },
+]
+
 const isProduction = process.env.NODE_ENV === 'production'
 const scriptSrc = [
   "'self'",
@@ -72,6 +81,7 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return {
       beforeFiles: [
+        ...campaignRewrites,
         {
           source: '/api/life/:path*',
           destination: `${lifeWebOrigin}/api/life/:path*`,
