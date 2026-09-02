@@ -12,7 +12,7 @@ const lifeWebOrigin = 'https://life.pramitranjan.com'
 const campaignRewrites = [
   { source: '/portfolio', destination: '/' },
   { source: '/hello', destination: '/' },
-  { source: '/latest', destination: '/' },
+  { source: '/work/swipey/latest', destination: '/work/swipey' },
 ]
 
 const isProduction = process.env.NODE_ENV === 'production'
