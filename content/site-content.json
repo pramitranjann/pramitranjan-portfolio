@@ -59,7 +59,7 @@
           "oneliner": "Three months designing corporate card software for Malaysian SMEs.",
           "tags": [
             "SaaS",
-            "Internship"
+            "INTERNSHIP"
           ],
           "href": "/work/swipey",
           "cover": "/Frame 54.png",
@@ -148,8 +148,8 @@
       {
         "org": "Swipey",
         "role": "PRODUCT INTERN",
-        "date": "JUN 2026 - PRESENT",
-        "desc": "Designing Swipey's admin mobile app from scratch: research, wireframes, and high-fidelity screens on their existing design system. I also rebuilt the core flows as an interactive demo, with onboarding questions that qualify incoming leads."
+        "date": "JUN 2026 - SEP 2026",
+        "desc": "Designed Swipey’s admin mobile experience and tackled RBAC, transaction custom fields, desktop improvements, and AI-assisted workflows across the product."
       },
       {
         "org": "Vircle Malaysia",
@@ -2440,7 +2440,7 @@
       "slug": "bowl",
       "section": "play",
       "title": "Bowl",
-      "oneliner": "A Malaysian inspired reddition of Fruit Ninja",
+      "oneliner": "A Malaysian inspired renddition of Fruit Ninja",
       "type": "WEB GAME · 2026",
       "tags": [
         "MediaPipe",
