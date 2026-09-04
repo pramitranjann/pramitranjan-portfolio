@@ -25,6 +25,7 @@ type EditorialCaseStudyProps = Pick<
   | 'outcomesHeadline'
   | 'pullQuote'
   | 'heroImage'
+  | 'mediaSettings'
   | 'researchKicker'
   | 'processKicker'
   | 'solutionKicker'
@@ -205,6 +206,7 @@ export function EditorialCaseStudy({
   outcomesHeadline,
   pullQuote,
   heroImage,
+  mediaSettings,
   researchKicker,
   processKicker,
   solutionKicker = 'WHAT SHIPPED',
@@ -237,6 +239,12 @@ export function EditorialCaseStudy({
   const liveApp = solutionEmbedUrl?.startsWith('http') ?? false
   const solutionMedia = editorialMedia?.filter((item) => item.section === 'solution')
   const hasSolutionMedia = solutionMedia?.some((item) => item.src) ?? false
+  const heroMedia = {
+    aspectRatio: mediaSettings?.hero?.aspectRatio ?? '4 / 3',
+    fit: mediaSettings?.hero?.fit ?? 'contain',
+    position: mediaSettings?.hero?.position ?? 'center center',
+    background: mediaSettings?.hero?.background ?? '#ffffff',
+  }
 
   return (
     <>
@@ -265,8 +273,18 @@ export function EditorialCaseStudy({
               ) : null}
             </div>
             {heroImage ? (
-              <figure className="editorial-hero-image">
-                <Image src={heroImage} alt={`${title} case study`} fill priority sizes="(max-width: 900px) 100vw, 56vw" />
+              <figure
+                className="editorial-hero-image"
+                style={{ aspectRatio: heroMedia.aspectRatio, background: heroMedia.background }}
+              >
+                <Image
+                  src={heroImage}
+                  alt={`${title} case study`}
+                  fill
+                  priority
+                  sizes="(max-width: 900px) 100vw, 56vw"
+                  style={{ objectFit: heroMedia.fit, objectPosition: heroMedia.position }}
+                />
               </figure>
             ) : null}
           </div>

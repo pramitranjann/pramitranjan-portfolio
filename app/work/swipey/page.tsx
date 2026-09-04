@@ -12,6 +12,7 @@ export default async function SwipeyPage() {
       coverImage={project?.cover || '/work/swipey-fields/cover.png'}
       coverBackground={project?.coverBackground}
       coverFit={project?.coverFit}
+      coverAspectRatio={project?.coverAspectRatio}
     />
   )
 }

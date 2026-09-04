@@ -3442,6 +3442,9 @@ function MediaSlotEditor({
       <Field label={`Height (${title})`}>
         <input value={next.height ?? ''} onChange={(event) => update({ height: event.target.value || undefined })} placeholder={defaultHeight} style={inputStyle()} />
       </Field>
+      <Field label={`Aspect Ratio (${title})`}>
+        <input value={next.aspectRatio ?? ''} onChange={(event) => update({ aspectRatio: event.target.value || undefined })} placeholder="4 / 3 or 16 / 9" style={inputStyle()} />
+      </Field>
       <Field label={`Background (${title})`}>
         <input value={next.background ?? ''} onChange={(event) => update({ background: event.target.value || undefined })} placeholder="#161616" style={inputStyle()} />
       </Field>
@@ -4294,6 +4297,9 @@ function WorkProjectListEditor({
               <option value="cover">cover</option>
               <option value="contain">contain</option>
             </select>
+          </Field>
+          <Field label="Cover Aspect Ratio">
+            <input value={item.coverAspectRatio ?? ''} onChange={(event) => onChange(updateAt(items, index, { ...item, coverAspectRatio: event.target.value || undefined }))} placeholder="4 / 3 or 16 / 9" style={inputStyle()} />
           </Field>
           <SourcePathField
             label="Hover Image Path"

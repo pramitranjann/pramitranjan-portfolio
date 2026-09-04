@@ -9,6 +9,7 @@ export interface WorkProject {
   cover?: string
   coverBackground?: string
   coverFit?: 'cover' | 'contain'
+  coverAspectRatio?: string
   hoverImage?: string
   coverPosition?: string
   coverScale?: string
@@ -405,6 +406,7 @@ export type CaseStudyMediaPlacement = 'below' | 'side-right' | 'between-solution
 
 export interface CaseStudyMediaSlotSettings {
   height?: string
+  aspectRatio?: string
   fit?: 'contain' | 'cover'
   position?: string
   background?: string
@@ -624,6 +626,7 @@ function isWorkProject(value: unknown): value is WorkProject {
     (item.cover === undefined || isString(item.cover)) &&
     isOptionalString(item.coverBackground) &&
     (item.coverFit === undefined || item.coverFit === 'cover' || item.coverFit === 'contain') &&
+    isOptionalString(item.coverAspectRatio) &&
     (item.hoverImage === undefined || isString(item.hoverImage)) &&
     (item.coverPosition === undefined || isString(item.coverPosition)) &&
     isOptionalString(item.coverScale) &&
@@ -1069,6 +1072,7 @@ function isCaseStudyMediaSlotSettings(value: unknown): value is CaseStudyMediaSl
   const item = value as Record<string, unknown>
   return (
     isOptionalString(item.height) &&
+    isOptionalString(item.aspectRatio) &&
     (item.fit === undefined || item.fit === 'contain' || item.fit === 'cover') &&
     isOptionalString(item.position) &&
     isOptionalString(item.background)

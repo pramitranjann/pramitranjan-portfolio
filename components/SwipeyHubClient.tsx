@@ -23,6 +23,7 @@ export function SwipeyHubClient({
   coverImage,
   coverBackground,
   coverFit,
+  coverAspectRatio,
 }: {
   stories: Story[]
   cardStyle: CardStyleSettings
@@ -30,6 +31,7 @@ export function SwipeyHubClient({
   coverImage: string
   coverBackground?: string
   coverFit?: 'cover' | 'contain'
+  coverAspectRatio?: string
 }) {
   return (
     <>
@@ -59,11 +61,18 @@ export function SwipeyHubClient({
                 </p>
               </div>
             </div>
-            <figure className="editorial-hero-image" style={{ backgroundColor: coverBackground || '#111111' }}>
+            <figure
+              className="editorial-hero-image"
+              style={{
+                aspectRatio: coverAspectRatio ?? '4 / 3',
+                backgroundColor: coverBackground || '#111111',
+              }}
+            >
               <Image
                 src={coverImage}
                 alt="Swipey"
                 fill
+                loading="eager"
                 style={{ objectFit: coverFit ?? 'cover', objectPosition: 'center' }}
                 sizes="(max-width: 900px) 100vw, 56vw"
               />

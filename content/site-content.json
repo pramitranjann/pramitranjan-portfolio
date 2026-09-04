@@ -261,6 +261,8 @@
         ],
         "href": "/work/swipey",
         "cover": "/Frame 54.png",
+        "coverFit": "contain",
+        "coverAspectRatio": "16 / 9",
         "coverPosition": "center",
         "coverBackground": "#FFFFFF"
       },
@@ -905,6 +907,7 @@
       "outcomes": "",
       "mediaSettings": {
         "hero": {
+          "aspectRatio": "4 / 3",
           "fit": "contain",
           "background": "#FFFFFF"
         }
@@ -1094,6 +1097,7 @@
       ],
       "mediaSettings": {
         "hero": {
+          "aspectRatio": "4 / 3",
           "background": "#FFFFFF",
           "fit": "contain"
         }
@@ -1168,6 +1172,7 @@
       "heroImage": "/work/Wander/Mockup-123.png",
       "mediaSettings": {
         "hero": {
+          "aspectRatio": "4 / 3",
           "fit": "contain",
           "background": "#FFFFFF"
         }
@@ -1607,6 +1612,7 @@
       ],
       "mediaSettings": {
         "hero": {
+          "aspectRatio": "16 / 9",
           "background": "#e4edeb",
           "fit": "contain"
         }
@@ -1722,6 +1728,7 @@
       ],
       "mediaSettings": {
         "hero": {
+          "aspectRatio": "16 / 9",
           "background": "#e4edeb",
           "fit": "contain"
         }
@@ -1800,6 +1807,13 @@
       "outcomesHeadline": "A sixty-six-person test company could move through users, roles, delegation and AI-assisted changes without switching access models. Next I would test the boundaries with owners, finance leads and department heads.",
       "pullQuote": "Twelve people holding access are twelve equal kings. That was the bug.",
       "heroImage": "/work/swipey-rbac/cover.png",
+      "mediaSettings": {
+        "hero": {
+          "aspectRatio": "16 / 9",
+          "background": "#e4edeb",
+          "fit": "contain"
+        }
+      },
       "editorialMedia": [
         {
           "id": "swipey-rbac-research-users",
