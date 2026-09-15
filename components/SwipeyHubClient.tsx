@@ -84,6 +84,7 @@ export function SwipeyHubClient({
           <div
             className="swipey-hub-shell editorial-shell grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4"
             style={{ gap: 'var(--layout-card-gap)' }}
+            data-story-count={Math.min(stories.length, 4)}
           >
             {stories.map((story) => (
               <ProjectCard

@@ -1015,6 +1015,19 @@ html, body {
   }
 }
 
+/* The public site excludes hidden stories, but the hub used a fixed four-track
+   desktop grid. Let two or three published stories share the full hero canvas;
+   retain the intentional single-card treatment instead of making it a banner. */
+@media (min-width: 1280px) {
+  .swipey-hub-shell[data-story-count='2'] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .swipey-hub-shell[data-story-count='3'] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 @media (min-width: 1200px) {
 }
 
