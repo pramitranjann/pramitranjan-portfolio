@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, type CSSProperties } from 'react'
 
 const DEFAULT_SIZE = { width: 1440, height: 730 }
 
@@ -21,11 +21,13 @@ export function EditorialEmbed({
   title,
   aspectRatio,
   live,
+  liveHeight,
 }: {
   src: string
   title: string
   aspectRatio: string
   live: boolean
+  liveHeight?: string
 }) {
   const outerRef = useRef<HTMLDivElement>(null)
 
@@ -74,11 +76,17 @@ export function EditorialEmbed({
     }
   }, [live, src])
 
+  const embedStyle: CSSProperties | undefined = live
+    ? liveHeight
+      ? ({ '--editorial-embed-live-height': liveHeight } as CSSProperties)
+      : undefined
+    : { aspectRatio }
+
   return (
     <div
       ref={outerRef}
       className={`editorial-embed${live ? ' editorial-embed-live' : ''}`}
-      style={live ? undefined : { aspectRatio }}
+      style={embedStyle}
     >
       <div className="editorial-embed-surface">
         <iframe src={src} title={title} loading="lazy" />

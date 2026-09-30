@@ -60,9 +60,9 @@ export function WorkPageClient({
   }, [motion.gridRevealDuration, motion.gridRevealStagger, motion.gridStartScale])
 
   return (
-    <>
+    <div className="listing-page">
       <Nav />
-      <main style={{ paddingTop: '57px' }}>
+      <main className="listing-page-main" style={{ paddingTop: '57px' }}>
         <PageHero eyebrow={copy.eyebrow} title={heroTitle} body={heroBody} sectionClassName="work-hero-section" variant="compact" />
 
         <section className="work-grid-section work-grid-phone-contain" style={{ padding: 'var(--layout-section-padding-y) var(--layout-page-gutter)' }}>
@@ -91,6 +91,6 @@ export function WorkPageClient({
         </section>
       </main>
       <Footer />
-    </>
+    </div>
   )
 }

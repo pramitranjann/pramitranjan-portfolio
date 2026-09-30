@@ -23,9 +23,18 @@ interface SpotifyWidgetProps {
 }
 
 const HOVER_QUERY = '(hover: hover) and (pointer: fine)'
+const UNAVAILABLE_TRACK: Track = {
+  isPlaying: false,
+  title: 'Spotify',
+  artist: 'Latest track unavailable',
+  album: '',
+  albumArt: null,
+  externalUrl: null,
+}
 
 export function SpotifyWidget({ variant, restingLabel, styleSettings, interactionMode = 'static' }: SpotifyWidgetProps) {
-  const [track, setTrack] = useState<Track | null>(null)
+  const [currentTrack, setTrack] = useState<Track | null>(null)
+  const track = currentTrack ?? UNAVAILABLE_TRACK
   const [liveProgress, setLiveProgress] = useState<number | undefined>(undefined)
   const [canHover, setCanHover] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
@@ -39,7 +48,7 @@ export function SpotifyWidget({ variant, restingLabel, styleSettings, interactio
       fetch('/api/spotify')
         .then(r => r.ok ? r.json() : null)
         .then(data => {
-          if (data && !data.error) {
+          if (data?.title && !data.error) {
             setTrack(data)
             setLiveProgress(data.progress)
           }
@@ -87,14 +96,12 @@ export function SpotifyWidget({ variant, restingLabel, styleSettings, interactio
     }
   }, [canHover])
 
-  if (!track) return null  // parent renders static content as fallback
-
   const progress = liveProgress ?? track.progress
   const pct = progress !== undefined && track.duration !== undefined
     ? Math.min(Math.round((progress / track.duration) * 100), 100)
     : 0
-  const isHoverInteractive = variant === 'sidebar' && interactionMode === 'hover-expand' && canHover
-  const isTapInteractive = variant === 'sidebar' && interactionMode === 'hover-expand' && !canHover
+  const isHoverInteractive = Boolean(currentTrack) && variant === 'sidebar' && interactionMode === 'hover-expand' && canHover
+  const isTapInteractive = Boolean(currentTrack) && variant === 'sidebar' && interactionMode === 'hover-expand' && !canHover
   const isExpanded = isHoverInteractive ? isHovered : isTapInteractive ? isTapExpanded : false
 
   const handlePointerEnter = isHoverInteractive

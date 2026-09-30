@@ -439,13 +439,13 @@ html, body {
    the Life extraction. Transform preserves that viewport in Safari; zoom would
    shrink the iframe's layout viewport and make the app wrap or clip. */
 .editorial-embed-live .editorial-embed-surface {
-  height: 660px;
+  height: var(--editorial-embed-live-height, 660px);
 }
 
 .editorial-embed.editorial-embed-live iframe {
-  width: 133.3333%;
-  height: 880px;
-  transform: scale(0.75);
+  width: 117.6471%;
+  height: 117.6471%;
+  transform: scale(0.85);
   transform-origin: top left;
 }
 
@@ -996,6 +996,26 @@ html, body {
     font-size: clamp(17px, calc(17px + 5 * var(--desktop-run)), 22px);
   }
 
+  /* Work and Play are card walls, but they still belong to the same desktop canvas as
+     the editorial pages. Without this cap they keep growing to the viewport edge on
+     27-inch displays, turning their signed-off laptop cards into oversized tiles. */
+  .work-grid-section > .grid {
+    width: min(100%, var(--layout-canvas));
+    margin-inline: auto;
+  }
+
+  .work-grid-section .card-link {
+    /* 338px columns at the Mac breakpoint, including the existing 4:3
+       image and text area. Let the entire card grow in that proportion. */
+    aspect-ratio: 338 / 382;
+    height: auto !important;
+  }
+
+  .play-wall {
+    width: min(100%, calc(var(--layout-canvas) + (var(--layout-page-gutter) * 2)));
+    margin-inline: auto;
+  }
+
 }
 
 /* The contents rail intentionally arrives after the opening composition. Until
@@ -1091,6 +1111,19 @@ html, body {
     margin-right: 40px;
     margin-left: 272px;
   }
+}
+
+/* Work and Play can be only one or two rows tall. Keep their footer on the
+   viewport edge in that case, without imposing a height on longer card walls. */
+.listing-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.listing-page-main {
+  flex: 1 0 auto;
 }
 
 @media (min-width: 1480px) {
@@ -2174,6 +2207,25 @@ body.carousel-reengaging main {
   right: 16px;
   bottom: 16px;
   margin-bottom: 0 !important;
+}
+
+/* At the Mac desktop breakpoint each tile is 332 × 360px, with a 205px
+   image band. Keep those proportions as the shared canvas grows. This lives
+   after the base wall rules so its row height actually wins the cascade. */
+@media (min-width: 1480px) {
+  .play-wall {
+    grid-auto-rows: auto;
+  }
+
+  .play-wall-item {
+    aspect-ratio: 332 / 360;
+    container-type: inline-size;
+  }
+
+  .play-wall-item .creative-card-image,
+  .play-wall-item .play-card-image {
+    height: calc(100cqw * 205 / 332);
+  }
 }
 
 @media (max-width: 1023px) {

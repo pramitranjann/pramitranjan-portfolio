@@ -45,6 +45,7 @@ type EditorialCaseStudyProps = Pick<
   | 'solutionEmbedUrl'
   | 'solutionEmbedTitle'
   | 'solutionEmbedAspectRatio'
+  | 'solutionEmbedHeight'
   | 'solutionEmbedCtaLabel'
 > & {
   /* the Swipey hub renders this inside a modal that already has page chrome */
@@ -226,6 +227,7 @@ export function EditorialCaseStudy({
   solutionEmbedUrl,
   solutionEmbedTitle = 'Live experience',
   solutionEmbedAspectRatio = '4 / 3',
+  solutionEmbedHeight,
   solutionEmbedCtaLabel = 'OPEN LIVE APP',
   chrome = true,
   gallery = false,
@@ -379,6 +381,7 @@ export function EditorialCaseStudy({
                 title={solutionEmbedTitle}
                 aspectRatio={solutionEmbedAspectRatio}
                 live={liveApp}
+                liveHeight={solutionEmbedHeight}
               />
             </div>
           </section>

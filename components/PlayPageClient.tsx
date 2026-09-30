@@ -72,9 +72,9 @@ export function PlayPageClient({
   const wall = buildPlayWall({ games, cities, mixedMediaProjects }, playCopy.cardOrder)
 
   return (
-    <>
+    <div className="listing-page">
       <Nav />
-      <main style={{ paddingTop: '57px' }}>
+      <main className="listing-page-main" style={{ paddingTop: '57px' }}>
         <PageHero eyebrow={copy.eyebrow} title={copy.heroTitle} body={copy.heroBody} sectionClassName="creative-hero-section" variant="compact" />
 
         {/* One wall, no chapters. Medium is carried by each card's own meta line. */}
@@ -138,6 +138,6 @@ export function PlayPageClient({
         </div>
       </main>
       <Footer />
-    </>
+    </div>
   )
 }

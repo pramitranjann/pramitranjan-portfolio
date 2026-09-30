@@ -532,6 +532,7 @@ export interface CaseStudyContent {
   solutionEmbedUrl?: string
   solutionEmbedTitle?: string
   solutionEmbedAspectRatio?: string
+  solutionEmbedHeight?: string
   solutionEmbedWidth?: string
   solutionEmbedCalloutLabel?: string
   solutionEmbedCalloutTitle?: string
@@ -1280,6 +1281,7 @@ function isCaseStudyContent(value: unknown): value is CaseStudyContent {
     (item.solutionEmbedUrl === undefined || (isString(item.solutionEmbedUrl) && isSafeEmbedUrl(item.solutionEmbedUrl))) &&
     isOptionalString(item.solutionEmbedTitle) &&
     isOptionalString(item.solutionEmbedAspectRatio) &&
+    isOptionalString(item.solutionEmbedHeight) &&
     isOptionalString(item.solutionEmbedWidth) &&
     isOptionalString(item.solutionEmbedCalloutLabel) &&
     isOptionalString(item.solutionEmbedCalloutTitle) &&

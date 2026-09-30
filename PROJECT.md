@@ -1,7 +1,5 @@
 # PROJECT.md — portfolio
-
 <!-- Live memory for this repo. Keep under 150 lines. -->
-
 ## Goal
 Pramit's portfolio site (Next.js App Router), content-driven via `content/site-content.json` — the public record of his design work.
 
@@ -12,6 +10,10 @@ Pramit's portfolio site (Next.js App Router), content-driven via `content/site-c
 - PR Life application code, data services, cron, hardware, and private configuration belong to `/Users/pramitranjan/life-web`.
 
 ## Current state
+2026-09-29 — Missing Spotify cards were caused by service failure followed by the homepage widget returning null, rather than a mobile removal. The public endpoint returned HTTP 500; a direct check of local credentials returned `invalid_grant: Refresh token revoked`. The homepage now retains its existing Spotify card with an honest unavailable state, and About keeps its music slide in the existing carousel. Real track data requires Spotify reauthorization; no deployment performed. Play's wide-screen tiles now retain the 1480px Mac desktop proportions (332:360 card, 205:332 image height), replacing the fixed wide-screen row height and putting the override after the base CSS.
+
+2026-09-29 — Work and Play walls cap their 4-column grids to the existing fluid desktop canvas above 1480px. Wide-screen cards retain the Mac desktop proportions: Work 338:382 with its existing 4:3 image; Play 332:360 with a 205:332 image band. Their shared listing-page shell carries short grids to the bottom of the viewport before the footer. Wander’s live-app frame has an optional per-case height, tuned from 660px to 880px over the wide-desktop range; its 0.85-scale iframe fills the surface without internal bands. About’s Right Now section stays carousel-only and always includes a Spotify slide, which updates with the latest track when the service responds.
+
 2026-09-14 — The desktop Swipey hub sizes its card-grid tracks from the number of public stories. Two and three live cards now occupy two and three equal tracks across the hero canvas rather than leaving unused four-column space; the one-card layout deliberately remains card-sized. Hidden stories remain available locally but are excluded from the public count.
 
 2026-09-09 — Apple Wallet backend added at `GET /api/wallet`, with signed generic contact passes, fixed card identity, website QR and existing `/tap` contact details. UI is deferred. Server-only environment credentials are validated for identifier/key/intermediate matching and validity; missing or invalid configuration returns an uncached 503. `npm run test:wallet` passes archive, hash, signature and HTTP checks using ephemeral non-Apple test certificates; TypeScript and production build pass. No Wallet environment keys are configured locally: real Apple signing setup and iPhone acceptance remain pending. Setup: `docs/apple-wallet.md`. No deployment or push. Dependency audit reports four existing high-severity packages (Next.js, PostCSS, nanoid, sharp), none from the new Wallet dependencies; upgrading that stack is separate work.

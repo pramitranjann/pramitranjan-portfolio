@@ -3240,6 +3240,9 @@ function CaseStudyEditor({
         <Field label="Width">
           <input value={caseStudy.solutionEmbedWidth ?? ''} onChange={(event) => onChange((current) => ({ ...current, solutionEmbedWidth: event.target.value || undefined }))} style={inputStyle()} placeholder="min(100%, 1325px)" />
         </Field>
+        <Field label="Live Frame Height">
+          <input value={caseStudy.solutionEmbedHeight ?? ''} onChange={(event) => onChange((current) => ({ ...current, solutionEmbedHeight: event.target.value || undefined }))} style={inputStyle()} placeholder="clamp(660px, calc(21.25vw + 336px), 880px)" />
+        </Field>
         <Field label="Callout Label">
           <input value={caseStudy.solutionEmbedCalloutLabel ?? ''} onChange={(event) => onChange((current) => ({ ...current, solutionEmbedCalloutLabel: event.target.value || undefined }))} style={inputStyle()} placeholder="LIVE APP_" />
         </Field>

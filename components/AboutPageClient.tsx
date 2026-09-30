@@ -14,6 +14,12 @@ const PORTRAITS: Array<{ src: string; caption: string; meta: string }> = [
 
 type NowCard = { label: string; value: string; sub: string; art?: string | null }
 
+const MUSIC_CARD: NowCard = {
+  label: 'LAST PLAYED_',
+  value: 'Spotify',
+  sub: 'Latest track unavailable',
+}
+
 interface AboutPageClientProps {
   heroBody: string
   whoIAm: string
@@ -48,11 +54,10 @@ function useCycle(length: number, ms: number) {
   return [index, setIndex] as const
 }
 
-/* The track joins the rotation as a card in the same shape as the rest, rather than the
-   bordered SpotifyWidget cell, whose chrome reads as foreign beside plain text slides.
-   Nothing is appended until the fetch resolves, so there is never a blank beat. */
-function useNowPlaying(): NowCard | null {
-  const [card, setCard] = useState<NowCard | null>(null)
+/* Music stays in the rotation even when Spotify is unavailable. A successful fetch
+   replaces its fallback with the latest track, using the same plain-text slide. */
+function useNowPlaying(): NowCard {
+  const [card, setCard] = useState<NowCard>(MUSIC_CARD)
 
   useEffect(() => {
     let live = true
@@ -117,7 +122,7 @@ function Dots({ count, active, onPick, label }: { count: number; active: number;
    mid-rotation — the subs differ a lot in length. */
 function RightNow({ cards }: { cards: NowCard[] }) {
   const nowPlaying = useNowPlaying()
-  const slides = nowPlaying ? [...cards, nowPlaying] : cards
+  const slides = [...cards, nowPlaying]
   const [index, setIndex] = useCycle(slides.length, 4200)
   const swipe = useSwipe(setIndex, slides.length)
 
