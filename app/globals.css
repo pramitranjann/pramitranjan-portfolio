@@ -1616,8 +1616,19 @@ body.carousel-reengaging main {
   }
 
   .tap-page-stage {
+    padding-top: 12px !important;
     padding-bottom: max(12px, env(safe-area-inset-bottom)) !important;
   }
+
+  .tap-portrait { padding-top: 18px !important; }
+  .tap-portrait-frame { width: calc(100% - 36px) !important; }
+  .tap-page-shell .qr-card-copy { padding: 18px !important; }
+  .tap-page-shell .qr-card-copy .flex.items-center { margin-bottom: 12px !important; }
+  .tap-page-shell .qr-card-title { margin-bottom: 10px !important; }
+  .tap-page-shell .qr-card-body { line-height: 1.5 !important; margin-bottom: 14px !important; }
+  .tap-page-shell .qr-card-actions { padding: 16px 18px !important; }
+  .tap-page-shell .qr-actions-grid { gap: 10px !important; }
+  .tap-page-shell .qr-actions-grid > a { padding: 12px 16px !important; }
 
   .dashboard-shell {
     padding: 20px 12px 32px !important;

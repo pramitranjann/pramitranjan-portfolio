@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import { TapPortrait } from '@/components/TapPortrait'
+import portraitFocus from './portrait-focus.json'
 import { AnimatedEyebrow } from '@/components/AnimatedEyebrow'
 import { GsapReveal } from '@/components/GsapReveal'
 
@@ -19,9 +21,9 @@ const tapActions = [
     tone: 'primary',
   },
   {
-    label: 'EMAIL ME',
-    href: 'mailto:pramitranjann@gmail.com',
-    external: false,
+    label: 'LINKEDIN',
+    href: 'https://www.linkedin.com/in/pramitranjann/',
+    external: true,
     tone: 'priority',
   },
   {
@@ -31,9 +33,9 @@ const tapActions = [
     tone: 'secondary',
   },
   {
-    label: 'LINKEDIN',
-    href: 'https://www.linkedin.com/in/pramitranjann/',
-    external: true,
+    label: 'EMAIL ME',
+    href: 'mailto:pramitranjann@gmail.com',
+    external: false,
     tone: 'secondary',
   },
 ] as const
@@ -64,53 +66,55 @@ export default function TapPage() {
             background: 'var(--color-card)',
           }}
         >
-          <div className="qr-card-copy" style={{ padding: 'clamp(28px, 4vw, 44px)', borderRight: '1px solid var(--color-divider)' }}>
-            <GsapReveal>
-              <div data-reveal>
-                <AnimatedEyebrow label="CONTACT_" marginBottom="20px" />
-              </div>
-              <h1
-                data-reveal
-                className="font-serif qr-card-title"
-                style={{
-                  fontSize: 'clamp(42px, 6vw, 68px)',
-                  fontWeight: 'var(--font-weight-serif)',
-                  color: 'var(--color-heading)',
-                  lineHeight: 0.96,
-                  marginBottom: '14px',
-                  maxWidth: '10ch',
-                  textWrap: 'balance',
-                }}
-              >
-                Pramit Ranjan.
-              </h1>
-              <p
-                data-reveal
-                className="font-mono qr-card-body"
-                style={{
-                  fontSize: 'var(--text-body)',
-                  letterSpacing: '0.03em',
-                  color: 'var(--color-body)',
-                  lineHeight: 1.7,
-                  maxWidth: '28ch',
-                  marginBottom: '18px',
-                  textWrap: 'pretty',
-                }}
-              >
-                UX design student at SCAD. Student with an artist&apos;s eye.
-              </p>
-              <div
-                data-reveal
-                className="font-mono"
-                style={{
-                  fontSize: 'var(--text-meta)',
-                  letterSpacing: '0.14em',
-                  color: 'var(--color-label)',
-                }}
-              >
-                KUALA LUMPUR / SAVANNAH
-              </div>
-            </GsapReveal>
+          <div style={{ borderRight: '1px solid var(--color-divider)' }}>
+            <TapPortrait positionY={portraitFocus.positionY} size={portraitFocus.size} />
+            <div className="qr-card-copy" style={{ padding: 'clamp(28px, 4vw, 44px)' }}>
+              <GsapReveal>
+                <div data-reveal>
+                  <AnimatedEyebrow label="CONTACT_" marginBottom="20px" />
+                </div>
+                <h1
+                  data-reveal
+                  className="font-serif qr-card-title"
+                  style={{
+                    fontSize: 'clamp(42px, 6vw, 68px)',
+                    fontWeight: 'var(--font-weight-serif)',
+                    color: 'var(--color-heading)',
+                    lineHeight: 0.96,
+                    marginBottom: '14px',
+                    maxWidth: '10ch',
+                    textWrap: 'balance',
+                  }}
+                >
+                  Hi, I’m Pramit.
+                </h1>
+                <p
+                  data-reveal
+                  className="font-mono qr-card-body"
+                  style={{
+                    fontSize: 'var(--text-body)',
+                    letterSpacing: '0.03em',
+                    color: 'var(--color-body)',
+                    lineHeight: 1.7,
+                    maxWidth: '28ch',
+                    marginBottom: '18px',
+                    textWrap: 'pretty',
+                  }}
+                >
+                  Thanks for joining the intern panel. Let&apos;s stay in touch.
+                </p>
+                <div
+                  data-reveal
+                  className="font-mono"
+                  style={{
+                    fontSize: 'var(--text-meta)',
+                    letterSpacing: '0.14em',
+                    color: 'var(--color-label)',
+                  }}
+                >
+                </div>
+              </GsapReveal>
+            </div>
           </div>
 
           <div className="qr-card-actions" style={{ padding: 'clamp(24px, 3vw, 32px)', display: 'grid', alignContent: 'space-between', gap: '24px' }}>
