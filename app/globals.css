@@ -1620,8 +1620,6 @@ body.carousel-reengaging main {
     padding-bottom: max(12px, env(safe-area-inset-bottom)) !important;
   }
 
-  .tap-portrait { padding-top: 18px !important; }
-  .tap-portrait-frame { width: calc(100% - 36px) !important; }
   .tap-page-shell .qr-card-copy { padding: 18px !important; }
   .tap-page-shell .qr-card-copy .flex.items-center { margin-bottom: 12px !important; }
   .tap-page-shell .qr-card-title { margin-bottom: 10px !important; }

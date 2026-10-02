@@ -1,6 +1,4 @@
 import type { Metadata } from 'next'
-import { TapPortrait } from '@/components/TapPortrait'
-import portraitFocus from './portrait-focus.json'
 import { AnimatedEyebrow } from '@/components/AnimatedEyebrow'
 import { GsapReveal } from '@/components/GsapReveal'
 
@@ -67,7 +65,6 @@ export default function TapPage() {
           }}
         >
           <div style={{ borderRight: '1px solid var(--color-divider)' }}>
-            <TapPortrait positionY={portraitFocus.positionY} size={portraitFocus.size} />
             <div className="qr-card-copy" style={{ padding: 'clamp(28px, 4vw, 44px)' }}>
               <GsapReveal>
                 <div data-reveal>
